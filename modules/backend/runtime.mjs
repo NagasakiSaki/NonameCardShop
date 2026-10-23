@@ -9,10 +9,11 @@ import {validateMap,pathfind,moveActor,canStand} from './navigation.mjs';
 import {initialiseManagement,configureManagement,validateManagement,managementEffects,shelfUsed,upgradesView,purchaseUpgrade,ensureRegulars,tickManagement,peopleView,neighborAct} from './management.mjs';
 import {tickNpcTables,backgroundState} from './npc-tables.mjs';
 import {voidNpcMatch} from './matches.mjs';
-import {inventoryView,cardDetailView,ledgerView,retailView,marketView,archiveMeta} from './views.mjs';
+import {inventoryView,cardDetailView,ledgerView,retailView,marketView,archiveMeta,sealedInventoryView} from './views.mjs';
 import {DEFAULT_DISTRIBUTION,productEnabled} from './distribution.mjs';
 import {PLAYER_SKINS} from './appearances.mjs';
 import {migrateCustomerIdentity} from './customer-identity.mjs';
+import {basketQuote,placeBasketOrder} from './basket.mjs';
 
 const tasks=[
   {taskId:'first-order',title:'第一次进货',metric:'ordered',target:3,reward:40,guide:'store.counter'},
@@ -106,8 +107,10 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
         case 'catalog.list':data=catalogList(catalog,p);break;
         case 'catalog.detail':{const c=catalog.byKey.get(p.cardKey);need(c,'NOT_FOUND','卡牌不存在。');data=cardDetailView(w(),catalog,c,['bo3','kof'].map(mode=>stats(c.cardKey,mode)));break;}
         case 'inventory.list':data=p.grouped?inventoryView(w(),catalog,p):inventoryList(w(),catalog,p);break;
+        case 'inventory.sealedSummary':data=sealedInventoryView(w());break;
         case 'products.list':data=page(w().products.filter(x=>productEnabled(w().rules,x.productId)&&(!p.themeId||x.themeId===p.themeId)).map(productDTO),p);break;
         case 'products.quote':case 'market.quote':data=quote(p);break;
+        case 'supplier.basketQuote':{const value=basketQuote(w(),p);data={...value,quoteId:token(quotes,value)};break;}
         case 'supplier.orders':data=page(w().orders.filter(o=>!p.status||o.status===p.status).map(({product,...o})=>({...clone(o),themeName:product.name,productVersion:product.productVersion,total:o.cost,product:productDTO(product)})),p);break;
         case 'retail.list':data=retailView(w());break;
         case 'opening.preview':{const value=openingPreview(w(),p);data={...value,previewId:token(previews,value)};break;}
@@ -176,6 +179,10 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
         for(const o of world.orders)if(o.status==='pending'&&o.dueAt<=world.clock.day*1440+480)o.status='arrived';
         if(world.management){world.management.nextRestockAt=world.clock.day*1440+480+world.management.config.restockIntervalMinutes;tickManagement(world,buildCatalog(source,world.rules));}
         saveArchive(next,'start');return {};
+      }
+      case 'supplier.placeBasketOrder':{
+        need(Object.keys(p).length===0,'INVALID_INPUT','购物篮下单仅使用冻结报价，payload 应为空对象。');
+        return placeBasketOrder(world,lookup(quotes,input.quoteId,'supplier-basket'));
       }
       case 'supplier.placeOrder':{
         need(world.clock.phase!=='closed','SHOP_CLOSED','请在准备或营业时下单。');const q=lookup(quotes,input.quoteId);need(q.action==='purchase'&&q.productId===p.productId&&q.quantity===p.quantity&&q.unit===(p.unit||'pack'),'QUOTE_EXPIRED','采购参数与报价不一致。');

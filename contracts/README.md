@@ -22,12 +22,23 @@
 | supplier.orders | 分页；行含 orderId、themeName、productVersion、quantity、unit、total、status（pending/arrived/received）；仅 arrived 可签收 |
 | supplier.placeOrder / receive | 成功返回 orderId / `{inventoryRefs,stock:{packs}}` |
 | inventory.list | 默认每个实物一行；指定 grouped:true 返回按 cardKey/printVersion/printedRarity/location 聚合的卡片行；含 inventoryRefs、owned、available、protected、locked、listed。状态可重叠，available 由后端计算 |
+| inventory.sealedSummary | `{items,total}`；按 productId/productVersion/kind 聚合包/盒；含 owned/warehouse/available/onShelf/protected/locked、可用仓库 inventoryRefs、可用货架 retailRefs、公开 spec。不得包含 cards/packets 等密封内容 |
 | catalog.detail | 输入 cardKey、可选 includeCode；返回真实 holdings、copies、printings、referencePrice.amount、当前全局分级、技能、stats.bo3/kof（games/sessions、胜负平）、流通和准入说明 |
 | opening.preview | 输入 quantity?、includeBoxes?、inventoryRefs?、productId?；省略 quantity 为全部可用包；返回 previewId、packs、cards、boxes、excluded。部分拆盒剩余包保持原内容 |
 | opening.execute | 顶层 previewId；返回 `{operationId,cards,packs,opening:{packs,byRarity,results}}`；results 含名字/卡图/印刷稀有度/isNew 与实物引用 |
 | inventory.surplusPreview | 返回 previewId、keep=1、newListings、alreadyListed、lockedExcluded、estimatedFee、quantity；market.listSurplus 带顶层 previewId，返回 created 与真实 listings |
 
+## 原子采购购物篮（2026-10-24）
+
+- `supplier.basketQuote({lines:[{productId,unit:'pack'|'box',quantity}]})` 只冻结报价，不扣款、不订货、不改变存档。1 至 38 行，每行 quantity 为严格整数 1 至 20，禁止数字字符串、缺失单位和重复的 productId + unit；客户端应先合并同商品同单位的数量，超过 20 需减少数量。
+- 返回 `SupplierBasketQuote`：`quoteId`、`kind:'supplier-basket'`、`lines`（productId/themeName/unit/quantity/unitAmount/total/productVersion/priceVersion）、`totalDebit`、`cashDebit`、`creditDebit`、`availableCash`、`supplierCreditAvailable`、`validUntil:{day,minute:1200}`。金额全部来自当前商品批发价；包和盒是独立商品行。cashDebit/creditDebit 为询价当时的现金与授信补差预估，不冻结余额。
+- 下单 `command({requestId,type:'supplier.placeBasketOrder',quoteId,payload:{}})`；站位、准备/营业期间限制与旧采购相同。现金不足部分自动使用剩余供应商授信，仅记欠款，不增加现金；确认 UI 应明确显示可能使用的授信。
+- 命令重新核对当前可售状态、商品版本、价格版本、实际单价及资金。所有行在一次事务内创建普通订单；任意行或总资金不合格则全部拒绝。返回 `{orderIds,orders,totalDebit,cashDebit,creditDebit}`，现金与授信金额为实际扣款；订单沿用普通延迟和签收入口。
+- 跨日、读档/导入建立新分支后旧报价无效；成功下单重试必须复用原 requestId 和参数，返回原结果，不重复扣款或下单。其他来源报价不能用于购物篮下单。旧单行接口保持原语义。
+
 ## 零售、市场、账目
+
+2026-10-24 交易视图补充：聚合库存行新增 `availableRefs`（仅未保护、未锁定的可售收藏）与 `referencePrice.amount`；`retail.list.shelves` 新增 productId，unitAmount 对应第一件在架实物；`market.list` 行新增玩家实际 holdings。买入/本店挂单的 rarity 筛选实际印刷版，求购与成交历史筛选当前全局分级。新旧字段兼容，正式入口说明见 [真实交易接入](../docs/真实交易界面接入与维护.md)。
 
 - 查询 `retail.list` 是货架视图 `{shelves,capacity,used,note}`；每组含 inventoryRefs（在架实物）、stockRefs（可补货实物）、warehouse、stock、unitAmount。命令 `retail.list` 是上架单个 inventoryRef，两者不能混为一谈。
 - `retail.setPrice({inventoryRef,amount})` 改指定在架实物；withdraw 同样指定 inventoryRef。包/盒以外不能进入正店货架。

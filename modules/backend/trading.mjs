@@ -34,7 +34,7 @@ export function inventoryList(w,catalog,p={}){
   const rows=(p.location==='trash'?trashItems(w):owned(w)).filter(i=>(!p.location||i.location===p.location)&&(!p.kind||i.kind===p.kind)).map(i=>{
     const card=i.kind==='card'?catalog.byKey.get(i.cardKey):null;
     return {inventoryRef:i.inventoryRef,kind:i.kind,cardKey:i.cardKey,productId:i.productId,printVersion:i.printVersion||i.productVersion,printedRarity:i.printedRarity,
-      name:card?.name||i.productId,imageUrl:card?.imageUrl,globalScore:card?.globalScore,currentRarity:card?.currentRarity,location:i.location,owned:1,available:free(i)&&!['market','retail'].includes(i.location)?1:0,protected:i.protected?1:0,locked:i.lock?1:0,listed:i.location==='market'||i.location==='retail'?1:0,
+      name:card?.name||i.productId,imageUrl:card?.imageUrl,referencePrice:card?{amount:referencePrice(w,catalog,i.cardKey)}:undefined,globalScore:card?.globalScore,currentRarity:card?.currentRarity,location:i.location,owned:1,available:free(i)&&!['market','retail'].includes(i.location)?1:0,protected:i.protected?1:0,locked:i.lock?1:0,listed:i.location==='market'||i.location==='retail'?1:0,
       cost:i.cost,eligible:!!w.circulation[i.cardKey],discardedBy:i.trash?.discardedBy??(i.location==='trash'?i.ownerId:undefined),discardedByName:i.trash?.discardedBy==='player'?'店长':w.npcs.find(n=>n.actorId===i.trash?.discardedBy)?.name,discardedDay:i.trash?.day,disabledReasons:!free(i)?[{code:'ITEM_LOCKED',message:'该实物有收藏保护或正在交易/参赛。'}]:[]};
   }).filter(i=>(!p.search||`${i.name} ${i.cardKey}`.includes(p.search))&&(!p.rarity||i.printedRarity===p.rarity));
   return page(rows,p);

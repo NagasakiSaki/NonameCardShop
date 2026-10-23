@@ -20,11 +20,13 @@ export function createWindowManager({ host, mount, onChange } = {}) {
     for (const item of [...stack].reverse()) item.handle.close();
   }
 
-  function open({ id, title, subtitle, width = "", render, footer, onClose, pauseReason } = {}) {
+  function open({ id, title, subtitle, width = "", render, footer, onClose, pauseReason, refreshOnReuse = false } = {}) {
     const key = id || "window-" + (seq += 1);
     const existing = stack.find((item) => item.id === key);
     if (existing) {
+      stack.splice(stack.indexOf(existing),1);stack.push(existing);mount.append(existing.handle.element);notify();
       existing.handle.focus();
+      if(refreshOnReuse)void existing.handle.refresh();
       return existing.handle;
     }
 
@@ -71,6 +73,7 @@ export function createWindowManager({ host, mount, onChange } = {}) {
     };
 
     async function submit(input) {
+      if (closed) return { ok: false, error: { code: "WINDOW_CLOSED", message: "窗口已关闭，请重新打开后操作", retryable: false } };
       if (busy) return { ok: false, error: { code: "BUSY", message: "上一个操作还没结束", retryable: true } };
       if (!leaseOk) return { ok: false, error: { code: "NOT_PAUSED", message: "世界尚未成功暂停，暂时不能提交", retryable: true } };
       busy = true;

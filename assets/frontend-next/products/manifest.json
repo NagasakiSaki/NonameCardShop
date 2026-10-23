@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "source": "Original code-drawn packaging; GPL-3.0 project artwork",
+  "nativeSizes": {
+    "pack": [
+      64,
+      96
+    ],
+    "box": [
+      96,
+      96
+    ]
+  },
+  "products": {
+    "refresh": {
+      "pack": "/assets/frontend-next/products/refresh-pack.108bb0f538.png",
+      "box": "/assets/frontend-next/products/refresh-box.66e6aa4bb3.png"
+    },
+    "yijiang": {
+      "pack": "/assets/frontend-next/products/yijiang-pack.2c39385c25.png",
+      "box": "/assets/frontend-next/products/yijiang-box.d5926b63a0.png"
+    },
+    "shenhua": {
+      "pack": "/assets/frontend-next/products/shenhua-pack.7f37c9d1e1.png",
+      "box": "/assets/frontend-next/products/shenhua-box.6ac2c0a25d.png"
+    },
+    "standard": {
+      "pack": "/assets/frontend-next/products/standard-pack.2c39385c25.png",
+      "box": "/assets/frontend-next/products/standard-box.d5926b63a0.png"
+    },
+    "extra": {
+      "pack": "/assets/frontend-next/products/extra-pack.bd28fd2d07.png",
+      "box": "/assets/frontend-next/products/extra-box.9f61171b14.png"
+    },
+    "sp": {
+      "pack": "/assets/frontend-next/products/sp-pack.fca285404e.png",
+      "box": "/assets/frontend-next/products/sp-box.787a97712c.png"
+    },
+    "sp2": {
+      "pack": "/assets/frontend-next/products/sp2-pack.108bb0f538.png",
+      "box": "/assets/frontend-next/products/sp2-box.66e6aa4bb3.png"
+    },
+    "newjiang": {
+      "pack": "/assets/frontend-next/products/newjiang-pack.fca285404e.png",
+      "box": "/assets/frontend-next/products/newjiang-box.787a97712c.png"
+    },
+    "mobile": {
+      "pack": "/assets/frontend-next/products/mobile-pack.bd28fd2d07.png",
+      "box": "/assets/frontend-next/products/mobile-box.9f61171b14.png"
+    },
+    "tw": {
+      "pack": "/assets/frontend-next/products/tw-pack.108bb0f538.png",
+      "box": "/assets/frontend-next/products/tw-box.66e6aa4bb3.png"
+    },
+    "huicui": {
+      "pack": "/assets/frontend-next/products/huicui-pack.fca285404e.png",
+      "box": "/assets/frontend-next/products/huicui-box.787a97712c.png"
+    },
+    "sb": {
+      "pack": "/assets/frontend-next/products/sb-pack.2c39385c25.png",
+      "box": "/assets/frontend-next/products/sb-box.d5926b63a0.png"
+    },
+    "shiji": {
+      "pack": "/assets/frontend-next/products/shiji-pack.108bb0f538.png",
+      "box": "/assets/frontend-next/products/shiji-box.66e6aa4bb3.png"
+    },
+    "clan": {
+      "pack": "/assets/frontend-next/products/clan-pack.673f8aba09.png",
+      "box": "/assets/frontend-next/products/clan-box.4700a9c6fd.png"
+    },
+    "bingshi": {
+      "pack": "/assets/frontend-next/products/bingshi-pack.bd28fd2d07.png",
+      "box": "/assets/frontend-next/products/bingshi-box.9f61171b14.png"
+    },
+    "yingbian": {
+      "pack": "/assets/frontend-next/products/yingbian-pack.2c39385c25.png",
+      "box": "/assets/frontend-next/products/yingbian-box.d5926b63a0.png"
+    },
+    "offline": {
+      "pack": "/assets/frontend-next/products/offline-pack.108bb0f538.png",
+      "box": "/assets/frontend-next/products/offline-box.66e6aa4bb3.png"
+    },
+    "jsrg": {
+      "pack": "/assets/frontend-next/products/jsrg-pack.673f8aba09.png",
+      "box": "/assets/frontend-next/products/jsrg-box.4700a9c6fd.png"
+    },
+    "sxrm": {
+      "pack": "/assets/frontend-next/products/sxrm-pack.bd28fd2d07.png",
+      "box": "/assets/frontend-next/products/sxrm-box.9f61171b14.png"
+    }
+  }
+}

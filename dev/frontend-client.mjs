@@ -12,7 +12,7 @@ if(window.__CARD_SHOP_DEV__){
   document.body.append(panel);
   const events=new EventSource('/__dev/events');
   events.addEventListener('ready',event=>{const data=JSON.parse(event.data);status.textContent='自动刷新已连接 · 新世界进度保留';if(instance!==data.instanceId){instance=data.instanceId;pending=true;}});
-  events.addEventListener('change',event=>{const data=JSON.parse(event.data);if(data.files.every(f=>f.endsWith('.css'))){for(const link of document.querySelectorAll('link[rel=stylesheet]')){const url=new URL(link.href);url.searchParams.set('devRevision',data.revision);link.href=url.href;}status.textContent='样式已更新，牌局保留。';}else{pending=true;status.textContent='修改已收到，等待关闭窗口或结束玩家牌局。';}});
+  events.addEventListener('change',event=>{const data=JSON.parse(event.data);if(data.files.every(f=>f.endsWith('.css')&&!f.startsWith('frontend-next/'))){for(const link of document.querySelectorAll('link[rel=stylesheet]')){const url=new URL(link.href);url.searchParams.set('devRevision',data.revision);link.href=url.href;}status.textContent='样式已更新，牌局保留。';}else{pending=true;status.textContent='修改已收到，等待关闭窗口或结束玩家牌局。';}});
   events.onerror=()=>status.textContent='等待开发服务重连。';
   const timer=setInterval(()=>{if(pending&&!reloading)safeToReload().then(ok=>{if(ok){pending=false;reload();}}).catch(e=>status.textContent=e.message);},750);
   window.addEventListener('beforeunload',()=>{clearInterval(timer);events.close();},{once:true});

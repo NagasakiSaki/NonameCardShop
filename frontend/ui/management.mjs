@@ -1,8 +1,8 @@
 // frontend/ui/management.mjs — 保留的经营入口：设施升级、员工与街坊、待处理订单。
 import { el, clear, stateView, errorView, newRequestId, busyButton, imgWithFallback } from "./components.mjs";
 
-export async function openManagement(app) {
-  const state = { tab: "upgrades" };
+export async function openManagement(app, options={}) {
+  const state = { tab: ['upgrades','people','orders'].includes(options.tab)?options.tab:'upgrades' };
 
   return app.windows.open({
     id: "management",

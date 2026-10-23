@@ -2,6 +2,33 @@ export type Rarity = 'N' | 'R' | 'SR' | 'SSR';
 export type HostError = { code: string; message: string; retryable: boolean; details?: unknown };
 export type Result<T = unknown> = {ok:true; revision:number; data:T} | {ok:false; error:HostError};
 export interface CommandRequest { requestId:string; type:string; payload?:Record<string,unknown>; quoteId?:string; previewId?:string }
+/** Distinct productId + unit rows only; duplicate rows are INVALID_INPUT. Quantity is a strict integer, 1..20. */
+export interface SupplierBasketLine {productId:string;unit:'pack'|'box';quantity:number}
+export interface SupplierBasketQuote {
+  quoteId:string;kind:'supplier-basket';
+  lines:Array<SupplierBasketLine & {themeName:string;unitAmount:number;total:number;productVersion:string;priceVersion:string}>;
+  totalDebit:number;cashDebit:number;creditDebit:number;availableCash:number;supplierCreditAvailable:number;validUntil:{day:number;minute:number};
+}
+/** supplier.placeBasketOrder has empty payload and automatically uses supplier credit for the cash shortfall. */
+export interface SupplierBasketOrderResult {
+  orderIds:string[];
+  orders:Array<{orderId:string;productId:string;themeName:string;productVersion:string;unit:'pack'|'box';quantity:number;unitCost:number;cost:number;total:number;status:'pending';dueAt:number;product:Record<string,unknown>}>;
+  totalDebit:number;cashDebit:number;creditDebit:number;
+}
+/** inventory.list({grouped:true}); each group is one card + printing + location. */
+export interface GroupedCardInventory {
+  cardKey:string;name:string;imageUrl?:string;currentRarity:Rarity;printedRarity:Rarity;
+  printVersion:string;location:string;inventoryRef:string;inventoryRefs:string[];availableRefs:string[];
+  owned:number;available:number;protected:number;locked:number;listed:number;referencePrice:{amount:number};
+}
+/** inventory.sealedSummary never contains manufactured card/packet results. */
+export interface SealedInventoryGroup {
+  groupId:string;productId:string;productVersion:string;kind:'pack'|'box';name:string;
+  owned:number;warehouse:number;available:number;onShelf:number;protected:number;locked:number;
+  inventoryRefs:string[];retailRefs:string[];retired:boolean;suggestedRetail:number|null;
+  spec:{cardsPerPack?:number;packsPerBox?:number;boxCounts?:Record<Rarity,number>;guarantees?:string[]};
+}
+export interface SealedInventorySummary {items:SealedInventoryGroup[];total:number}
 /** query('player.skins'); command({type:'player.setSkin',payload:{appearanceId}}). Cosmetic, archived with world.player. */
 export interface PlayerSkins { current:string; items:Array<{appearanceId:string;name:string;selected:boolean}> }
 export interface HostEvent { contractVersion:'card-shop-ui/1.0'; worldId:string; branchId:string; seq:number; revision:number; type:string; data:unknown }

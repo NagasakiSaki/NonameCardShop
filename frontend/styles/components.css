@@ -61,6 +61,10 @@
 }
 .window--narrow { width: min(620px, 94vw); }
 .window--wide { width: min(1080px, 96vw); }
+.window--trade { width: min(1320px, 97vw); max-height: 95dvh; }
+.window--trade > .window__body { padding: 0; display: block; }
+.window--trade > .window__head .window__sub { max-width: 52%; }
+@media(max-width:640px){.window--trade{width:100vw;max-height:100dvh;border-radius:0}.window--trade>.window__head .window__sub{display:none}}
 
 @keyframes window-in {
   from { transform: translateY(8px) scale(0.99); opacity: 0; }

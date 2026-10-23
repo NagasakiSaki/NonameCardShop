@@ -9,12 +9,13 @@ import { setSceneContext, createWorldSceneClass, worldSceneZoom } from "./scenes
 import { nearestInteraction, exitAt } from "./world/map-loader.mjs";
 import { normalizeQuery } from "./host/normalize.mjs";
 
+const classicTrades = new URLSearchParams(location.search).get('tradeUI') === 'classic';
 const PANEL_LOADERS = {
-  inventory: () => import("./ui/inventory.mjs").then((m) => m.openInventory),
-  cardDetail: () => import("./ui/card-detail.mjs").then((m) => m.openCardDetail),
-  supplier: () => import("./ui/supplier.mjs").then((m) => m.openSupplier),
-  opening: () => import("./ui/opening.mjs").then((m) => m.openOpening),
-  market: () => import("./ui/secondary-market.mjs").then((m) => m.openMarket),
+  inventory: () => classicTrades?import("./ui/inventory.mjs").then(m=>m.openInventory):import('../frontend-next/screens/cards.mjs').then(m=>m.openCollection),
+  cardDetail: () => classicTrades?import("./ui/card-detail.mjs").then(m=>m.openCardDetail):import('../frontend-next/screens/card-detail.mjs').then(m=>m.openCardDetail),
+  supplier: () => classicTrades?import("./ui/supplier.mjs").then(m=>m.openSupplier):import('../frontend-next/screens/supplier.mjs').then(m=>m.openSupply),
+  opening: () => classicTrades?import("./ui/opening.mjs").then(m=>m.openOpening):import('../frontend-next/screens/opening.mjs').then(m=>m.openOpening),
+  market: () => classicTrades?import("./ui/secondary-market.mjs").then(m=>m.openMarket):import('../frontend-next/screens/cards.mjs').then(m=>m.openCards),
   combat: () => import("./ui/combat-room.mjs").then((m) => m.openCombat),
   tasks: () => import("./ui/tasks.mjs").then((m) => m.openTasks),
   report: () => import("./ui/day-report.mjs").then((m) => m.openDayReport),
@@ -402,7 +403,7 @@ export async function startApp({ host, connection, mode, fixture }) {
 
   // ---- 键盘 ----
   const onGlobalKeyDown=(event) => {
-    const target = event.target;
+    const target = event.composedPath?.()[0] || event.target;
     const typing = target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable);
     if (event.key === "Escape") {
       if (windows.depth > 0) {

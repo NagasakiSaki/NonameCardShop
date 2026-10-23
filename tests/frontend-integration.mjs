@@ -20,7 +20,8 @@ try{
     const w=createWorld(rules);w.products=publishProducts(buildCatalog(source,rules),rules,1);
     const repo=browserRepository();await repo.commit({schemaVersion:2,revision:0,world:w,archives:[],requests:{},legacyResetDone:true},null);await repo.close();
   });
-  await page.goto(server.origin);await page.waitForFunction(()=>window.__cardShopReady===true,null,{timeout:25000});
+  // Keep the original UI as a compatibility/reference regression. Formal new trading has its own real-Host test.
+  await page.goto(server.origin+'/?tradeUI=classic');await page.waitForFunction(()=>window.__cardShopReady===true,null,{timeout:25000});
   assert.match(page.url(),/frontend\/index.html/);assert.equal(await page.locator('#mode-badge').isVisible(),false);
   // Exercise the public config contract in this isolated test world, keeping the foreground opponent free.
   await page.evaluate(async()=>{const h=__cardShopApp.host,c=(await h.query('config.list')).data.items.find(c=>c.configId==='backend-rules'),value=JSON.parse(c.text);value.npcAutoBattles=false;const r=await h.command({requestId:'integration-ai-config',type:'config.apply',payload:{configId:c.configId,value}});if(!r.ok)throw Error(JSON.stringify(r));});

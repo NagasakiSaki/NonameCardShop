@@ -5,7 +5,7 @@ export function createMovementView({host,sessionId,getRoom,isBlocked,onManualMov
   function send(payload){if(isBlocked()&&!payload.stop)return;const room=getRoom();host.world.input({sessionId,inputSeq:++inputSeq,roomId:room.mapId,navVersion:room.navVersion||'',...payload});}
   function vector(){let x=0,y=0;for(const key of pressed){x+=KEYS[key][0];y+=KEYS[key][1];}for(const v of touches.values()){x+=v[0];y+=v[1];}x=Math.sign(x);y=Math.sign(y);const n=Math.hypot(x,y)||1;return {x:x/n,y:y/n};}
   function publish(force=false){const v=vector(),key=v.x+','+v.y;if(force||key!==lastVector){lastVector=key;send(v.x||v.y?{vector:v}:{stop:true});}}
-  function onKeyDown(event){if(!KEYS[event.code]||/^(INPUT|TEXTAREA|SELECT)$/.test(event.target?.tagName)||event.target?.isContentEditable)return;event.preventDefault();if(isBlocked())return;pressed.add(event.code);onManualMove?.();publish();}
+  function onKeyDown(event){const target=event.composedPath?.()[0]||event.target;if(!KEYS[event.code]||/^(INPUT|TEXTAREA|SELECT)$/.test(target?.tagName)||target?.isContentEditable)return;event.preventDefault();if(isBlocked())return;pressed.add(event.code);onManualMove?.();publish();}
   function onKeyUp(event){if(!KEYS[event.code])return;pressed.delete(event.code);publish();}
   function releaseAll(){pressed.clear();touches.clear();lastVector='0,0';send({stop:true});}
   function moveTo(x,y){pressed.clear();touches.clear();lastVector='0,0';send({destination:{x:Math.round(x),y:Math.round(y)}});}

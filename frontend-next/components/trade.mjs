@@ -7,14 +7,15 @@ export function art(url,name,className=''){
   image.addEventListener('error',missing,{once:true});if(url){image.src=url;frame.append(image);}else missing();return frame;
 }
 export function rarity(value){return el('span',{class:'rarity rarity--'+value,text:value});}
-export function CardTile(card,{selected=false,onSelect,format=money,selling=false}={}){
+export function CardTile(card,{selected=false,onSelect,format=money,selling=false,metaText,metadataLabel}={}){
   return el('button',{class:'card-tile'+(selected?' is-selected':''),'aria-pressed':selected?'true':'false','data-card':card.id,'aria-label':card.name+' '+card.rarity+' 查看详情',onclick:()=>onSelect?.(card.id)},[
     el('div',{class:'card-tile__image'},[art(card.artUrl,card.name,'card-art'),rarity(card.rarity),el('span',{class:'owned',text:'×'+card.ownedCount})]),
-    el('div',{class:'card-tile__line'},[el('strong',{text:card.name}),el('span',{class:'price',text:format(card.price)})]),
-    el('div',{class:'card-tile__meta'},[el('span',{text:card.faction||'单卡'}),el('span',{text:selling?'可上架 '+card.availableCount+' 张':'在售 '+card.marketStock+' 张'})])
+    el('div',{class:'card-tile__line'},[el('strong',{text:card.name}),el('span',{class:'price',text:Number.isSafeInteger(card.price)?format(card.price):'—'})]),
+    el('div',{class:'card-tile__meta'},[el('span',{text:metadataLabel??card.faction??'单卡'}),el('span',{text:metaText??(selling?'可上架 '+card.availableCount+' 张':'在售 '+card.marketStock+' 张')})])
   ]);
 }
 export function ProductTile(product,{onAdd,onDetail,format=money}={}){
+  const unavailable=product.available===false||product.stock!=null&&product.stock<=0;
   return el('article',{class:'product-tile','data-product':product.id},[
     el('button',{class:'product-visual','aria-label':product.name+' 商品信息',onclick:()=>onDetail?.(product)},[art(product.artUrl,product.name,'product-art product-art--'+product.kind),el('span',{class:'product-kind',text:product.kind==='box'?'密封卡盒':'独立散包'})]),
     el('strong',{class:'product-name',text:product.name}),
@@ -22,7 +23,7 @@ export function ProductTile(product,{onAdd,onDetail,format=money}={}){
     el('div',{class:'product-price'},[el('strong',{text:format(product.unitPrice)}),el('span',{class:'muted',text:' / '+(product.kind==='box'?'盒':'包')})]),
     el('p',{class:'muted compact',text:'建议售 '+format(product.suggestedRetail)}),
     el('p',{class:'muted compact',text:`仓库 ${product.warehouse} · 在架 ${product.onShelf} · 在途 ${product.inTransit}`}),
-    el('div',{class:'product-foot'},[el('span',{class:'muted',text:'供货 '+product.stock}),el('button',{class:'button button--small',disabled:product.stock<=0,onclick:()=>onAdd?.(product.id),text:product.stock>0?'＋ 加入购物篮':'暂时缺货'})])
+    el('div',{class:'product-foot'},[el('span',{class:'muted',text:product.stock==null?'持续供货':'供货 '+product.stock}),el('button',{class:'button button--small',disabled:unavailable,onclick:()=>onAdd?.(product.id),text:unavailable?'暂时缺货':'＋ 加入购物篮'})])
   ]);
 }
 export function CardDetailPanel(card,{format=money,onExpand,onBuy,onList,selling=false,canBuy=true,listed=0}={}){

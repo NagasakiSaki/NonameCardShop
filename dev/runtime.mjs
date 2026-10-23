@@ -4,7 +4,7 @@ import crypto from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {startShopServer} from '../server.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
-export function watchedFile(name){const f=String(name).replaceAll('\\','/');return /^(app\.js|battle\.js|shop[^/]*\.js|business-ui\.js|management-ui\.js|save-history-ui\.js|index\.html|legacy\.html|[^/]+\.css|data\/[^/]+\.json|modules\/[^/]+\.js|integration\/(duel|engine-preload)\.js|assets\/shop\/[^/]+|dev\/(client\.js|fixtures\.json|frontend-client\.mjs))$/.test(f)||/^(frontend|assets\/frontend|modules\/backend|contracts)\/.+\.(mjs|js|css|html|json|png|d\.ts)$/.test(f)||/^integration\/[^/]+\.mjs$/.test(f);}
+export function watchedFile(name){const f=String(name).replaceAll('\\','/');return /^(app\.js|battle\.js|shop[^/]*\.js|business-ui\.js|management-ui\.js|save-history-ui\.js|index\.html|legacy\.html|[^/]+\.css|data\/[^/]+\.json|modules\/[^/]+\.js|integration\/(duel|engine-preload)\.js|assets\/shop\/[^/]+|dev\/(client\.js|fixtures\.json|frontend-client\.mjs))$/.test(f)||/^(frontend|frontend-next|assets\/frontend|assets\/frontend-next|modules\/backend|contracts)\/.+\.(mjs|js|css|html|json|png|d\.ts)$/.test(f)||/^integration\/[^/]+\.mjs$/.test(f);}
 export async function startDevelopmentServer({port=5190,enginePort=5191,watch=true}={}){
   const clients=new Set(),instanceId=crypto.randomUUID();let revision=0,debounce,watcher,changed=new Set();
   const status=()=>({application:'noname-card-shop-development',instanceId,revision,development:true});

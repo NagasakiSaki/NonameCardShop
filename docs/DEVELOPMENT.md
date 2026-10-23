@@ -84,6 +84,8 @@ npm run publish:private
 
 ## 发布与模块扩展
 
+2026-10-24：交易页面已从 Mock 样稿接入正式 Host，默认入口使用新采购/收藏/开包/市场/详情。接口、模块和截图见 [真实交易接入与维护](真实交易界面接入与维护.md)。`npm run test:trading` 单独验证相关业务与界面；`npm run art:products` 重建原创像素包装图。`?tradeUI=classic` 仅用于同存档兼容回归，不能作为隔离试玩环境。
+
 开发入口直接运行源码；安装包是构建时的快照，改代码不会更新已经生成的 exe。打包命令自动设置 NSIS 所需的 `ELECTRON_BUILDER_7Z_FILTER=BCJ`，使用锁定依赖并禁用自动发布；输出在 `desktop/dist`。现有 0.7.1 安装包保留，开发工具改动后发布需重新构建。
 
 游戏规则接口继续见 [MODULES.md](MODULES.md)、[TASK_AUTHORING.md](TASK_AUTHORING.md)、[BALANCE-V07.md](BALANCE-V07.md)。评分和卡池数据修改后运行 `npm run balance:build`，再运行对应回归。新增测试注册到 `tests/run.mjs` 的 `groups`；测试路径和端口通过环境传递，禁止写死个人目录或正式桌面端口。
