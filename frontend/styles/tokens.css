@@ -1,0 +1,47 @@
+:root {
+  /* 色板与 assets/frontend/manifest.json 的 palette 同源，改这里要同步素材 */
+  --ink: #20182a;
+  --ink-soft: #3a2d47;
+  --night: #1d2340;
+  --paper: #f3ead7;
+  --paper-2: #e8dfc8;
+  --paper-dim: #c3b294;
+  --wood: #9a6f4a;
+  --wood-dark: #74502f;
+  --gold: #e8b64a;
+  --gold-shade: #b3862a;
+  --red: #c2503c;
+  --green: #4a7654;
+  --blue: #3d5c96;
+  --teal: #3d7a78;
+  --purple: #6a4988;
+  --surface: rgba(24, 19, 32, 0.92);
+  --surface-2: rgba(26, 20, 36, 0.985);
+  --line: rgba(232, 182, 74, 0.28);
+  --line-strong: rgba(232, 182, 74, 0.6);
+
+  --font-ui: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", sans-serif;
+  --font-pixel: "Zpix", "Fusion Pixel 12px", "Microsoft YaHei", monospace;
+
+  --step-1: 4px;
+  --step-2: 8px;
+  --step-3: 12px;
+  --step-4: 16px;
+  --step-5: 24px;
+  --step-6: 32px;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  --shadow-panel: 0 18px 48px rgba(0, 0, 0, 0.5), 0 2px 0 rgba(255, 255, 255, 0.06) inset;
+  --text-sm: 12px;
+  --text-md: 14px;
+  --text-lg: 16px;
+  --text-xl: 20px;
+  --text-2xl: 26px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}

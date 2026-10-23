@@ -1,0 +1,531 @@
+{
+  "schemaVersion": 1,
+  "artVersion": "pixel-shop-1",
+  "generatedBy": "tools/frontend-art/build.mjs",
+  "tileSize": 16,
+  "mapSize": {
+    "width": 30,
+    "height": 20,
+    "tileSize": 16,
+    "pixelWidth": 480,
+    "pixelHeight": 320
+  },
+  "navVersion": "nav-2026-10-23a",
+  "palette": {
+    "ink": "#20182a",
+    "inkSoft": "#3a2d47",
+    "skinLight": "#f7d3ab",
+    "skin": "#e5ac7c",
+    "skinShade": "#c07d4d",
+    "blush": "#e58f7e",
+    "hairBrown": "#8a5230",
+    "hairBrownLight": "#b37a4a",
+    "hairBlack": "#2d2637",
+    "hairBlackLight": "#4a4159",
+    "hairBlonde": "#e9c67a",
+    "hairBlondeLight": "#f6dfa8",
+    "hairRed": "#b05138",
+    "hairRedLight": "#d4735a",
+    "hairSilver": "#cbd0dc",
+    "hairSilverLight": "#e8ecf4",
+    "clothRed": "#c2503c",
+    "clothRedLight": "#e07a62",
+    "clothBlue": "#3d5c96",
+    "clothBlueLight": "#5b80c2",
+    "clothGreen": "#4a7654",
+    "clothGreenLight": "#6c9c70",
+    "clothMustard": "#c19a48",
+    "clothMustardLight": "#dbb96a",
+    "clothPurple": "#6a4988",
+    "clothPurpleLight": "#8d68ac",
+    "clothCream": "#e8dfc8",
+    "clothCreamLight": "#f6f0e0",
+    "clothGray": "#8b8b98",
+    "clothGrayLight": "#adb0bd",
+    "clothTeal": "#3d7a78",
+    "clothTealLight": "#5a9c96",
+    "apron": "#e6dfcd",
+    "apronShade": "#c8bda4",
+    "strap": "#7a5236",
+    "wood": "#9a6f4a",
+    "woodLight": "#b98a5f",
+    "woodDark": "#74502f",
+    "woodDeep": "#573a24",
+    "wall": "#e4d7ba",
+    "wallShade": "#c3b294",
+    "wainscot": "#8a6242",
+    "wainscotShade": "#6b4a30",
+    "carpet": "#7c3f4a",
+    "carpetLight": "#9a5058",
+    "carpetTrim": "#e0c98c",
+    "metal": "#b8bec9",
+    "metalShade": "#7d8494",
+    "gold": "#e8b64a",
+    "goldShade": "#b3862a",
+    "white": "#f7f4ec",
+    "glass": "#9fd2da",
+    "glassShade": "#6fa9b6",
+    "leaf": "#4f8757",
+    "leafLight": "#74ab6d",
+    "night": "#1d2340",
+    "warmLamp": "#ffd27a"
+  },
+  "characters": {
+    "owner": {
+      "sheet": "/assets/frontend/characters/owner.png",
+      "portrait": "/assets/frontend/portraits/owner.png",
+      "frameWidth": 24,
+      "frameHeight": 32,
+      "anchorPx": [
+        12,
+        30
+      ],
+      "directions": {
+        "down": 0,
+        "left": 1,
+        "right": 2,
+        "up": 3
+      },
+      "idleColumn": 1,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        1
+      ],
+      "displayName": "店长",
+      "role": "店主",
+      "traits": [
+        "帆布围裙",
+        "胸前店徽",
+        "腰间钥匙"
+      ],
+      "skinTone": "warm"
+    },
+    "rookie": {
+      "sheet": "/assets/frontend/characters/rookie.png",
+      "portrait": "/assets/frontend/portraits/rookie.png",
+      "frameWidth": 24,
+      "frameHeight": 32,
+      "anchorPx": [
+        12,
+        30
+      ],
+      "directions": {
+        "down": 0,
+        "left": 1,
+        "right": 2,
+        "up": 3
+      },
+      "idleColumn": 1,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        1
+      ],
+      "displayName": "新手顾客",
+      "role": "新手",
+      "traits": [
+        "绿色鸭舌帽",
+        "手拎入门牌盒"
+      ],
+      "skinTone": "fair"
+    },
+    "collector": {
+      "sheet": "/assets/frontend/characters/collector.png",
+      "portrait": "/assets/frontend/portraits/collector.png",
+      "frameWidth": 24,
+      "frameHeight": 32,
+      "anchorPx": [
+        12,
+        30
+      ],
+      "directions": {
+        "down": 0,
+        "left": 1,
+        "right": 2,
+        "up": 3
+      },
+      "idleColumn": 1,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        1
+      ],
+      "displayName": "收藏家",
+      "role": "收藏",
+      "traits": [
+        "银灰长发",
+        "金边领口",
+        "腋下收藏册"
+      ],
+      "skinTone": "fair"
+    },
+    "competitor": {
+      "sheet": "/assets/frontend/characters/competitor.png",
+      "portrait": "/assets/frontend/portraits/competitor.png",
+      "frameWidth": 24,
+      "frameHeight": 32,
+      "anchorPx": [
+        12,
+        30
+      ],
+      "directions": {
+        "down": 0,
+        "left": 1,
+        "right": 2,
+        "up": 3
+      },
+      "idleColumn": 1,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        1
+      ],
+      "displayName": "竞技玩家",
+      "role": "竞技",
+      "traits": [
+        "红色头带",
+        "运动短裤",
+        "腰侧牌盒"
+      ],
+      "skinTone": "tan"
+    },
+    "passerby": {
+      "sheet": "/assets/frontend/characters/passerby.png",
+      "portrait": "/assets/frontend/portraits/passerby.png",
+      "frameWidth": 24,
+      "frameHeight": 32,
+      "anchorPx": [
+        12,
+        30
+      ],
+      "directions": {
+        "down": 0,
+        "left": 1,
+        "right": 2,
+        "up": 3
+      },
+      "idleColumn": 1,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        1
+      ],
+      "displayName": "路过顾客",
+      "role": "路过",
+      "traits": [
+        "短袖便装",
+        "布拖鞋"
+      ],
+      "skinTone": "deep"
+    },
+    "regular": {
+      "sheet": "/assets/frontend/characters/regular.png",
+      "portrait": "/assets/frontend/portraits/regular.png",
+      "frameWidth": 24,
+      "frameHeight": 32,
+      "anchorPx": [
+        12,
+        30
+      ],
+      "directions": {
+        "down": 0,
+        "left": 1,
+        "right": 2,
+        "up": 3
+      },
+      "idleColumn": 1,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        1
+      ],
+      "displayName": "熟客",
+      "role": "熟客",
+      "traits": [
+        "高马尾与发夹",
+        "米色围巾"
+      ],
+      "skinTone": "warm"
+    },
+    "bigspender": {
+      "sheet": "/assets/frontend/characters/bigspender.png",
+      "portrait": "/assets/frontend/portraits/bigspender.png",
+      "frameWidth": 24,
+      "frameHeight": 32,
+      "anchorPx": [
+        12,
+        30
+      ],
+      "directions": {
+        "down": 0,
+        "left": 1,
+        "right": 2,
+        "up": 3
+      },
+      "idleColumn": 1,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        1
+      ],
+      "displayName": "高预算顾客",
+      "role": "大客户",
+      "traits": [
+        "宽檐礼帽",
+        "亮面高领外套",
+        "手提收藏箱"
+      ],
+      "skinTone": "fair"
+    }
+  },
+  "characterOrder": [
+    "owner",
+    "rookie",
+    "collector",
+    "competitor",
+    "passerby",
+    "regular",
+    "bigspender"
+  ],
+  "tileset": {
+    "image": "/assets/frontend/tiles/tileset.png",
+    "tileSize": 16,
+    "columns": 8,
+    "rows": 3,
+    "tiles": [
+      "floor_wood_a",
+      "floor_wood_b",
+      "floor_tile",
+      "floor_carpet",
+      "wall_top",
+      "wall_base",
+      "wall_window",
+      "wall_door",
+      "wall_shadow",
+      "floor_rug_edge",
+      "floor_stone",
+      "floor_stone_b",
+      "wall_door_side",
+      "corner_nw",
+      "corner_ne",
+      "corner_sw",
+      "corner_se"
+    ]
+  },
+  "props": {
+    "image": "/assets/frontend/props/props.png",
+    "cellSize": 48,
+    "columns": 4,
+    "rows": 5,
+    "list": [
+      {
+        "prop": "counter_retail",
+        "cell": 0,
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 32,
+        "footY": 32,
+        "occludes": true
+      },
+      {
+        "prop": "counter_service",
+        "cell": 1,
+        "x": 48,
+        "y": 0,
+        "w": 48,
+        "h": 32,
+        "footY": 32,
+        "occludes": true
+      },
+      {
+        "prop": "shelf",
+        "cell": 2,
+        "x": 96,
+        "y": 0,
+        "w": 32,
+        "h": 40,
+        "footY": 40,
+        "occludes": true
+      },
+      {
+        "prop": "display_packs",
+        "cell": 3,
+        "x": 144,
+        "y": 0,
+        "w": 16,
+        "h": 24,
+        "footY": 24,
+        "occludes": true
+      },
+      {
+        "prop": "display_boxes",
+        "cell": 4,
+        "x": 0,
+        "y": 48,
+        "w": 16,
+        "h": 24,
+        "footY": 24,
+        "occludes": true
+      },
+      {
+        "prop": "trash",
+        "cell": 5,
+        "x": 48,
+        "y": 48,
+        "w": 16,
+        "h": 20,
+        "footY": 20,
+        "occludes": false
+      },
+      {
+        "prop": "table",
+        "cell": 6,
+        "x": 96,
+        "y": 48,
+        "w": 40,
+        "h": 32,
+        "footY": 32,
+        "occludes": true
+      },
+      {
+        "prop": "chair",
+        "cell": 7,
+        "x": 144,
+        "y": 48,
+        "w": 16,
+        "h": 20,
+        "footY": 20,
+        "occludes": false
+      },
+      {
+        "prop": "lamp",
+        "cell": 8,
+        "x": 0,
+        "y": 96,
+        "w": 16,
+        "h": 32,
+        "footY": 32,
+        "occludes": false
+      },
+      {
+        "prop": "sign",
+        "cell": 9,
+        "x": 48,
+        "y": 96,
+        "w": 32,
+        "h": 16,
+        "footY": 16,
+        "occludes": false
+      },
+      {
+        "prop": "plant",
+        "cell": 10,
+        "x": 96,
+        "y": 96,
+        "w": 16,
+        "h": 24,
+        "footY": 24,
+        "occludes": true
+      },
+      {
+        "prop": "rug",
+        "cell": 11,
+        "x": 144,
+        "y": 96,
+        "w": 48,
+        "h": 24,
+        "footY": 24,
+        "occludes": false
+      },
+      {
+        "prop": "register",
+        "cell": 12,
+        "x": 0,
+        "y": 144,
+        "w": 16,
+        "h": 16,
+        "footY": 16,
+        "occludes": false
+      },
+      {
+        "prop": "case_stack",
+        "cell": 13,
+        "x": 48,
+        "y": 144,
+        "w": 16,
+        "h": 24,
+        "footY": 24,
+        "occludes": true
+      },
+      {
+        "prop": "door_mat",
+        "cell": 14,
+        "x": 96,
+        "y": 144,
+        "w": 16,
+        "h": 16,
+        "footY": 16,
+        "occludes": false
+      },
+      {
+        "prop": "kiosk",
+        "cell": 15,
+        "x": 144,
+        "y": 144,
+        "w": 48,
+        "h": 32,
+        "footY": 32,
+        "occludes": true
+      },
+      {
+        "prop": "bench",
+        "cell": 16,
+        "x": 0,
+        "y": 192,
+        "w": 40,
+        "h": 20,
+        "footY": 20,
+        "occludes": false
+      },
+      {
+        "prop": "board",
+        "cell": 17,
+        "x": 48,
+        "y": 192,
+        "w": 24,
+        "h": 32,
+        "footY": 32,
+        "occludes": true
+      }
+    ]
+  },
+  "fx": {
+    "lampGlow": "/assets/frontend/fx/glow.png",
+    "shadow": "/assets/frontend/fx/shadow.png"
+  },
+  "maps": {
+    "store": "/assets/frontend/maps/store.json",
+    "battle-room": "/assets/frontend/maps/battle-room.json"
+  },
+  "ui": {
+    "fontStack": "\"Noto Sans SC\", \"Microsoft YaHei\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
+    "pixelDisplay": {
+      "sampling": "nearest",
+      "integerScaleOnly": true,
+      "allowedScales": [
+        1,
+        2,
+        3
+      ]
+    }
+  }
+}

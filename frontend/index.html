@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>无名小店 · 像素卡店</title>
+<link rel="stylesheet" href="./styles/tokens.css" />
+<link rel="stylesheet" href="./styles/layout.css" />
+<link rel="stylesheet" href="./styles/components.css" />
+</head>
+<body>
+  <div id="boot" class="boot" role="status" aria-live="polite">
+    <div class="boot__card">
+      <p class="boot__logo">无名小店</p>
+      <p class="boot__hint" id="boot-hint">正在连接经营世界…</p>
+      <p class="boot__error" id="boot-error" hidden></p>
+      <button class="btn btn--primary" id="boot-retry" hidden type="button">重试连接</button>
+    </div>
+  </div>
+
+  <div id="app" class="app" hidden>
+    <header class="hud" id="hud">
+      <div class="hud__brand">
+        <span class="hud__mark" aria-hidden="true"></span>
+        <span class="hud__title">无名小店</span>
+        <span class="badge badge--mock" id="mode-badge" hidden>前端演示数据</span>
+      </div>
+      <div class="hud__clock" id="hud-clock"></div>
+      <div class="hud__wallet" id="hud-wallet"></div>
+      <nav class="hud__actions" id="hud-actions" aria-label="主要操作"></nav>
+    </header>
+
+    <main class="stage" id="stage">
+      <div class="stage__frame" id="stage-frame">
+        <div class="stage__canvas" id="game-mount" aria-label="像素店面"></div>
+        <div class="stage__overlay" id="stage-overlay">
+          <div class="interaction-hint" id="interaction-hint" hidden></div>
+          <div class="paused-banner" id="paused-banner" hidden></div>
+        </div>
+      </div>
+      <aside class="notebook" id="notebook" aria-label="店主手账">
+        <button class="notebook__toggle" id="notebook-toggle" type="button" aria-expanded="true">手账</button>
+        <div class="notebook__body" id="notebook-body"></div>
+      </aside>
+    </main>
+
+    <div class="toasts" id="toasts" aria-live="polite"></div>
+    <div class="windows" id="windows" aria-live="polite"></div>
+    <div class="touchpad" id="touchpad" hidden></div>
+  </div>
+
+  <!-- Phaser 由项目本地提供（vendor/phaser），只读引用，不修改、不走 CDN -->
+  <script src="../vendor/phaser/phaser.min.js"></script>
+  <script type="module" src="./main.mjs"></script>
+</body>
+</html>

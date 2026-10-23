@@ -1,0 +1,205 @@
+*, *::before, *::after { box-sizing: border-box; }
+
+/* hidden 属性必须胜过组件的 display 声明，否则启动页永远盖在上面 */
+[hidden] { display: none !important; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: radial-gradient(120% 120% at 20% 0%, #2a2236 0%, #171320 55%, #0e0b14 100%);
+  color: var(--paper);
+  font-family: var(--font-ui);
+  font-size: var(--text-md);
+  -webkit-font-smoothing: antialiased;
+}
+
+body { overflow: hidden; }
+
+button { font-family: inherit; }
+
+.app {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100%;
+  min-height: 0;
+}
+
+/* ---------- HUD ---------- */
+.hud {
+  display: flex;
+  align-items: center;
+  gap: var(--step-4);
+  padding: var(--step-2) var(--step-4);
+  background: linear-gradient(180deg, rgba(35, 27, 47, 0.98), rgba(24, 19, 32, 0.92));
+  border-bottom: 2px solid var(--line);
+  flex-wrap: wrap;
+}
+
+.hud__brand { display: flex; align-items: center; gap: var(--step-2); }
+.hud__mark {
+  width: 18px; height: 18px;
+  background:
+    linear-gradient(90deg, var(--gold) 0 6px, transparent 6px 12px, var(--gold) 12px 18px) top left / 100% 4px no-repeat,
+    linear-gradient(180deg, var(--red) 0 100%);
+  border: 2px solid var(--ink);
+  image-rendering: pixelated;
+}
+.hud__title { font-family: var(--font-pixel); font-size: var(--text-lg); letter-spacing: 1px; }
+.hud__clock { display: flex; align-items: baseline; gap: var(--step-2); font-variant-numeric: tabular-nums; }
+.hud__day { color: var(--gold); font-weight: 700; }
+.hud__time { color: var(--paper-2); }
+.hud__phase { color: var(--paper-dim); font-size: var(--text-sm); }
+.hud__wallet { display: flex; gap: var(--step-3); margin-left: auto; align-items: center; }
+.wallet__amount { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--gold); }
+.wallet__debt { color: #e08a7a; font-size: var(--text-sm); }
+.hud__actions { display: flex; gap: var(--step-1); flex-wrap: wrap; }
+
+/* ---------- 舞台 ---------- */
+.stage {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: var(--step-3);
+  padding: var(--step-3);
+  min-height: 0;
+  overflow: hidden;
+}
+
+.stage__frame {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  min-width: 0;
+  background:
+    repeating-linear-gradient(45deg, rgba(255,255,255,0.02) 0 8px, transparent 8px 16px),
+    #0d0a13;
+  border: 2px solid var(--line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-panel);
+}
+
+.stage__canvas { position: relative; width: 100%; height: 100%; }
+.stage__canvas canvas {
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.stage__overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: grid;
+  place-items: end center;
+  padding: var(--step-4);
+}
+
+/* ---------- 手账 ---------- */
+.notebook {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 0;
+  background: var(--surface);
+  border: 2px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-panel);
+  overflow: hidden;
+}
+.notebook__toggle {
+  appearance: none;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--paper-2);
+  font-family: var(--font-pixel);
+  font-size: var(--text-sm);
+  padding: var(--step-2);
+  text-align: left;
+  cursor: pointer;
+}
+.notebook__toggle:hover { color: var(--gold); }
+.notebook__body { overflow-y: auto; padding: var(--step-3); display: grid; gap: var(--step-3); align-content: start; }
+.notebook.collapsed .notebook__body { display: none; }
+
+/* ---------- 弹窗层 ---------- */
+.windows {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: var(--step-4);
+}
+.windows > * { pointer-events: auto; }
+
+.toasts {
+  position: fixed;
+  right: var(--step-4);
+  bottom: var(--step-4);
+  display: grid;
+  gap: var(--step-2);
+  z-index: 60;
+  max-width: min(420px, 90vw);
+}
+
+/* ---------- 触屏方向键 ---------- */
+.touchpad {
+  position: fixed;
+  left: var(--step-4);
+  bottom: var(--step-4);
+  display: grid;
+  grid-template-columns: repeat(3, 56px);
+  grid-template-rows: repeat(3, 56px);
+  gap: var(--step-1);
+  z-index: 30;
+}
+.touchpad button {
+  border: 2px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  background: rgba(24, 19, 32, 0.86);
+  color: var(--paper);
+  font-size: var(--text-lg);
+  touch-action: none;
+}
+.touchpad button:active { background: rgba(232, 182, 74, 0.28); }
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 1180px) {
+  .stage { grid-template-columns: 1fr; grid-template-rows: 1fr auto; }
+  .notebook { max-height: 34vh; }
+  .hud { gap: var(--step-2); }
+  .hud__wallet { margin-left: 0; }
+}
+
+@media (max-width: 720px) {
+  .hud { padding: var(--step-1) var(--step-2); }
+  .hud__title { font-size: var(--text-md); }
+  .stage { padding: var(--step-2); }
+  .notebook { max-height: 28vh; }
+  .windows { padding: var(--step-2); }
+}
+
+/* ---------- 启动页 ---------- */
+.boot {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(90% 90% at 50% 20%, #2a2236, #100d17 70%);
+  z-index: 80;
+}
+.boot__card {
+  text-align: center;
+  display: grid;
+  gap: var(--step-3);
+  padding: var(--step-6);
+  border: 2px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  min-width: min(360px, 86vw);
+}
+.boot__logo { font-family: var(--font-pixel); font-size: var(--text-2xl); color: var(--gold); margin: 0; letter-spacing: 2px; }
+.boot__hint { margin: 0; color: var(--paper-2); }
+.boot__error { margin: 0; color: #f0a08a; font-size: var(--text-sm); white-space: pre-wrap; text-align: left; }
