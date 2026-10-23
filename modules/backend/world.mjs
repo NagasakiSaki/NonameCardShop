@@ -11,6 +11,7 @@ export function createWorld(rules){
 export function note(world,type,data={}){world.log.push({eventId:serial(world,'event'),type,day:world.clock.day,minute:world.clock.minute,...clone(data)});world.log=world.log.slice(-1000);}
 export function validateWorld(world){
   if(world?.schemaVersion!==2||!world.worldId||!world.branchId||!world.items||!world.clock||!world.wallet||!Array.isArray(world.products))throw new Error('新版世界存档格式不完整，未覆盖原数据。');
+  if(!Number.isSafeInteger(world.clock.day)||world.clock.day<1||!Number.isFinite(world.clock.minute)||world.clock.minute<0||world.clock.minute>=1440||!['preparing','open','closing','closed'].includes(world.clock.phase)||![1,2,4].includes(world.clock.speed))throw new Error('营业日期或时钟状态不合法。');
   if(!Number.isSafeInteger(world.wallet.available)||world.wallet.available<0||!Number.isSafeInteger(world.wallet.escrowLiability)||world.wallet.escrowLiability<0)throw new Error('资金账目不合法。');
   for(const key of ['orders','listings','npcs','matches'])if(!Array.isArray(world[key]))throw new Error(`世界缺少 ${key}。`);
   if(!Number.isSafeInteger(world.wallet.debt)||world.wallet.debt<0)throw new Error('欠款数据不合法。');
@@ -27,4 +28,4 @@ export function validateWorld(world){
 }
 export function snapshot(world,pauseReasons=[]){return {worldId:world.worldId,branchId:world.branchId,revision:world.revision,
   clock:{...clone(world.clock),running:!world.clock.manualPaused&&!pauseReasons.length&&(world.clock.phase==='open'||world.clock.phase==='preparing'&&world.clock.minute<540),pauseReasons:[...(world.clock.manualPaused?[{code:'manual',label:'手动暂停'}]:[]),...pauseReasons]},
-  wallet:clone(world.wallet),daily:clone(world.daily),allowedActions:world.clock.phase==='preparing'?['business.open']:world.clock.phase==='open'?['business.close']:['business.nextDay']};}
+  wallet:clone(world.wallet),daily:clone(world.daily),actors:[world.player,...world.npcs].map(({wallet,trip,...actor})=>clone(actor)),allowedActions:world.clock.phase==='preparing'?['business.open']:['open','closing'].includes(world.clock.phase)?['business.close']:['business.nextDay']};}

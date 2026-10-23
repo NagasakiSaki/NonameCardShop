@@ -1,0 +1,16 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "title":"Card shop authoritative navigation metadata",
+  "type":"object",
+  "required":["mapId","navVersion","width","height","tileSize","walkable"],
+  "anyOf":[{"required":["anchors"]},{"required":["spawn","interactions","exits"]}],
+  "properties":{
+    "mapId":{"type":"string","enum":["store","battle-room"]},
+    "navVersion":{"type":"string","minLength":1},
+    "tileSize":{"const":16},
+    "width":{"type":"integer","minimum":1,"maximum":200},
+    "height":{"type":"integer","minimum":1,"maximum":200},
+    "walkable":{"anyOf":[{"type":"array","items":{"type":"string","pattern":"^[01]+$"}},{"type":"array","items":{"type":"integer","enum":[0,1]}}],"description":"Rows of 0/1 strings, or row-major flat width*height integers. 1=walkable. Runtime normalizes frontend spawn/interactions/exits into anchors."},
+    "anchors":{"type":"object","additionalProperties":{"type":"object","required":["x","y"],"properties":{"x":{"type":"number"},"y":{"type":"number"},"radius":{"type":"number","minimum":1},"targetRoom":{"type":"string"},"targetAnchor":{"type":"string"}}}}
+  }
+}

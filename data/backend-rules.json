@@ -3,6 +3,12 @@
   "ratingVersion": "global-power-2",
   "thresholds": {"R":57,"SR":65,"SSR":78},
   "modeWeights": {"bo3":0.5,"kof":0.5},
+  "scoring": {
+    "baseline":50,
+    "hpPoint":6,
+    "hpCap":6,
+    "weights":{"cards":10,"damage":16,"guard":14,"heal":13,"control":12,"quality":5,"cost":-10,"hpLoss":-16,"burst":3,"carry":3}
+  },
   "rarityWeights": {"N":1,"R":0.8,"SR":0.5,"SSR":0.25},
   "referenceValues": {"N":8,"R":48,"SR":160,"SSR":480},
   "cardsPerPack":5,

@@ -1,4 +1,4 @@
-import {RARITIES,clone,need,sum,shuffle,pick,serial} from './common.mjs';
+import {RARITIES,clone,need,sum,shuffle,pick,serial,clamp} from './common.mjs';
 
 function allocate(n,weights){
   const total=sum(RARITIES.map(r=>weights[r]||0));need(total>0,'EMPTY_POOL','没有可发行的卡池。');
@@ -8,7 +8,8 @@ function allocate(n,weights){
   for(let left=n-sum(Object.values(out)),i=0;left>0;left--,i++)out[order[i%order.length].r]++;
   return out;
 }
-export function publishProducts(catalog,rules,day){
+export function publishProducts(catalog,rules,day,marketPrices={}){
+  const ratingVersion=catalog.cards[0]?.ratingVersion||rules.ratingVersion;
   return catalog.packs.map(pack=>{
     const local=Object.fromEntries(RARITIES.map(r=>[r,catalog.cards.filter(c=>c.pack===pack.id&&c.currentRarity===r).map(c=>c.cardKey)]));
     const poolSummary=Object.fromEntries(RARITIES.map(r=>[r,local[r].length]));
@@ -22,12 +23,12 @@ export function publishProducts(catalog,rules,day){
     const remainder=allocate(rules.packsPerBox*(rules.cardsPerPack-1),weights);
     const boxCounts=Object.fromEntries(RARITIES.map(r=>[r,remainder[r]+guaranteed[r]]));
     const packSlots=[...Array.from({length:4},()=>Object.fromEntries(RARITIES.map(r=>[r,remainder[r]/96]))),Object.fromEntries(RARITIES.map(r=>[r,guaranteed[r]/24]))];
-    const values=Object.fromEntries(RARITIES.map(r=>[r,pools[r].length?sum(pools[r].map(k=>catalog.byKey.get(k).issuanceValue))/pools[r].length:0]));
+    const values=Object.fromEntries(RARITIES.map(r=>[r,pools[r].length?sum(pools[r].map(k=>{const base=catalog.byKey.get(k).issuanceValue;return clamp(marketPrices[k]??base,base*.85,base*1.15);}))/pools[r].length:0]));
     const boxValue=sum(RARITIES.map(r=>boxCounts[r]*values[r]));
     const round=n=>Math.ceil(n/rules.roundTo)*rules.roundTo;
     const boxWholesale=round(boxValue/rules.openingReturn),packWholesale=round(boxValue/24/rules.openingReturn);
     const substitutions=RARITIES.filter(r=>boxCounts[r]>0&&!local[r].length);
-    return {productId:pack.id,themeId:pack.id,name:pack.name,productVersion:`${rules.ratingVersion}-day${day}`,ratingVersion:rules.ratingVersion,priceVersion:`supply-day${day}`,
+    return {productId:pack.id,themeId:pack.id,name:pack.name,productVersion:`${ratingVersion}-day${day}`,ratingVersion,priceVersion:`supply-day${day}`,
       cardsPerPack:5,packsPerBox:24,poolSummary,boxCounts,guaranteed,remainder,pools,values,packSlots,
       packExpectedCounts:Object.fromEntries(RARITIES.map(r=>[r,boxCounts[r]/24])),packAtLeastOneProbabilities:Object.fromEntries(RARITIES.map(r=>[r,1-packSlots.reduce((n,s)=>n*(1-s[r]),1)])),
       guarantees:['每包至少一张 R+','完整盒固定配额，至少一张 SSR；独立散包无累计大保底'],

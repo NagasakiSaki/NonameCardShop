@@ -20,6 +20,7 @@
     "test:desktop":"node tests/run.mjs desktop",
     "test:release":"node tests/run.mjs release",
     "test:saves":"node tests/run.mjs history",
+    "test:backend":"node tests/run.mjs backend",
     "test:dev":"node tests/run.mjs dev",
     "verify:engine":"node tools/verify-engine.mjs",
     "balance:build":"node tools/build-balance.cjs",
