@@ -59,7 +59,7 @@ const server = http.createServer((req, res) => {
     return res.end("forbidden");
   }
   const relative=path.relative(ROOT,file).replaceAll('\\','/');
-  if(relative.split('/').some(part=>part.startsWith('.'))||/^(desktop|node_modules|test-results|dev|tests)(\/|$)/.test(relative)){
+  if(relative.split('/').some(part=>part.startsWith('.'))||/^(desktop|node_modules|test-results|dev|tests)(\/|$)/.test(relative)||/^vendor\/noname\/Home(?:\/|$)/i.test(relative)){
     res.writeHead(404);return res.end('not found');
   }
   send(res, file, MIME[path.extname(file).toLowerCase()]);

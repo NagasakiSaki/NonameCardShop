@@ -11,7 +11,7 @@ fs.mkdirSync(path.dirname(destination),{recursive:true});
 if(!fs.existsSync(destination))git(['init','--bare','--initial-branch=main',destination]);
 if(git(['rev-parse','--is-bare-repository'],destination)!=='true')throw new Error('发布副本必须是独立裸仓库。');
 await new Promise((resolve,reject)=>{
-  const exporter=spawn('git',['fast-export','--all','--signed-tags=strip','--tag-of-filtered-object=rewrite','--','.',' :(exclude)vendor/noname/Home'.trim()],{cwd:root,stdio:['ignore','pipe','pipe'],windowsHide:true});
+  const exporter=spawn('git',['fast-export','--all','--signed-tags=strip','--tag-of-filtered-object=rewrite','--','.',':(exclude)vendor/noname/Home'],{cwd:root,stdio:['ignore','pipe','pipe'],windowsHide:true});
   const importer=spawn('git',['fast-import','--quiet'],{cwd:destination,stdio:['pipe','ignore','pipe'],windowsHide:true});
   const errors=[];exporter.stderr.on('data',d=>errors.push(d.toString()));importer.stderr.on('data',d=>errors.push(d.toString()));exporter.stdout.pipe(importer.stdin);
   importer.stdin.on('error',()=>{});let exits=0,failed=false;
@@ -22,7 +22,7 @@ const files=git(['rev-list','--objects','--all'],destination);
 if(/ vendor\/noname\/Home(?:\/|$)/im.test(files))throw new Error('发布副本仍包含上游用户缓存，已停止上传。');
 git(['config','lfs.storage',path.join(root,'.git/lfs')],destination);
 git(['config','lfs.concurrenttransfers','32'],destination);
-git(['config','credential.https://github.com.helper',''],destination);
+git(['config','--replace-all','credential.https://github.com.helper',''],destination);
 git(['config','--add','credential.https://github.com.helper','!gh auth git-credential'],destination);
 const url=`https://github.com/${repository}.git`;
 if(git(['remote'],destination).split('\n').includes('origin'))git(['remote','set-url','origin',url],destination);else git(['remote','add','origin',url],destination);
