@@ -1,4 +1,5 @@
 import {RARITIES,clamp,need,page} from './common.mjs';
+import {DEFAULT_CUSTOMER_BEHAVIOR} from './trash.mjs';
 
 export function validateRules(r){
   need(r?.version===1,'INVALID_CONFIG','不支持的后端规则版本。');
@@ -15,6 +16,16 @@ export function validateRules(r){
   if(r.npcAutoBattles!==undefined)need(typeof r.npcAutoBattles==='boolean','INVALID_CONFIG','NPC 自动对战开关不正确。');
   for(const key of ['npcSinglePriceCeiling','npcSealedPriceCeiling'])if(r[key]!==undefined)need(Number.isFinite(r[key])&&r[key]>=1&&r[key]<=3,'INVALID_CONFIG',`${key} 必须在 1～3 之间。`);
   for(const key of ['npcMatchIntervalMinutes','npcMatchCooldownMinutes','npcRoundLimit'])if(r[key]!==undefined)need(Number.isSafeInteger(r[key])&&r[key]>=10&&r[key]<=1440,'INVALID_CONFIG',`${key} 超出支持范围。`);
+  if(r.customerBehavior!==undefined){
+    need(r.customerBehavior&&typeof r.customerBehavior==='object'&&!Array.isArray(r.customerBehavior),'INVALID_CONFIG','顾客行为参数必须是对象。');
+    const c={...DEFAULT_CUSTOMER_BEHAVIOR,...r.customerBehavior};
+    for(const key of ['openingSeconds','sortingSeconds','searchSeconds'])need(Number.isFinite(c[key])&&c[key]>=.25&&c[key]<=60,'INVALID_CONFIG',`${key} 必须在 0.25～60 秒之间。`);
+    for(const key of ['keepCopies','minimumKeptCards','pickupLimit'])need(Number.isSafeInteger(c[key])&&c[key]>=1&&c[key]<=120,'INVALID_CONFIG',`${key} 必须在 1～120 之间。`);
+    for(const key of ['poorWallet','poorInitialWallet','pickupCooldownMinutes'])need(Number.isSafeInteger(c[key])&&c[key]>=0&&c[key]<=1000000,'INVALID_CONFIG',`${key} 必须是支持范围内的非负整数。`);
+    need(c.pickupCooldownMinutes>0&&Number.isFinite(c.scavengerChance)&&c.scavengerChance>=0&&c.scavengerChance<=1,'INVALID_CONFIG','拾荒比例必须在 0～1 之间，冷却时间必须大于零。');
+    if(r.customerBehavior.discardChance!==undefined)need(r.customerBehavior.discardChance&&typeof r.customerBehavior.discardChance==='object'&&!Array.isArray(r.customerBehavior.discardChance),'INVALID_CONFIG','弃牌概率必须是稀有度对象。');
+    for(const v of Object.values({...DEFAULT_CUSTOMER_BEHAVIOR.discardChance,...r.customerBehavior.discardChance}))need(Number.isFinite(v)&&v>=0&&v<=1,'INVALID_CONFIG','各稀有度弃牌概率必须在 0～1 之间。');
+  }
   return r;
 }
 export function buildCatalog(source,rules){

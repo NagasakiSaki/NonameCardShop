@@ -46,8 +46,8 @@ export class ActorView {
         sprite.setDepth(actor.y);
         entry = { sprite, shadow, targetX: actor.x, targetY: actor.y, direction: actor.direction, moving: actor.moving, label: null };
         this.sprites.set(actor.actorId, entry);
-        if (actor.label) {
-          entry.label = this.scene.add.text(actor.x, actor.y - 34, actor.label, {
+        {
+          entry.label = this.scene.add.text(actor.x, actor.y - 34, actor.label || '', {
             fontFamily: '"Microsoft YaHei", sans-serif',
             fontSize: "9px",
             color: "#f6e6b8",
@@ -61,6 +61,7 @@ export class ActorView {
       entry.direction = actor.direction;
       entry.moving = actor.moving;
       entry.activity = actor.activity;
+      if(entry.label){entry.label.setText(actor.label || '');entry.label.setVisible(!!actor.label);}
       const anim = (actor.moving ? "walk-" : "idle-") + appearance + "-" + (DIRECTIONS[actor.direction] == null ? "down" : actor.direction);
       if (entry.sprite.anims.currentAnim?.key !== anim) entry.sprite.play(anim, true);
       if (actor.actorId === playerActorId) entry.sprite.setDepth(actor.y + 1);

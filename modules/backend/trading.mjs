@@ -1,6 +1,8 @@
 import {clone,need,integer,serial,sum,credit,debit,clamp,random,page} from './common.mjs';
 import {openPacket,unsealBox,makeSealed} from './products.mjs';
-import {note} from './world.mjs';
+import {note,enterCirculation} from './world.mjs';
+export {enterCirculation} from './world.mjs';
+import {trashItems,discardCard,customerBehavior,ensureCustomerTraits,canScavenge,unwantedCards,scavenge} from './trash.mjs';
 import {pathfind,moveActor} from './navigation.mjs';
 import {managementEffects} from './management.mjs';
 
@@ -9,7 +11,6 @@ export const free=i=>!i.lock&&!i.protected;
 export function playerItem(w,ref){const item=w.items[ref];need(item?.ownerId==='player','OUT_OF_STOCK','未持有这件商品。');return item;}
 export function wallet(w,ownerId){if(ownerId==='player')return w.wallet;const npc=w.npcs.find(n=>n.actorId===ownerId);need(npc,'NOT_FOUND','顾客不存在。');return npc.wallet;}
 export function income(w,amount){const paid=Math.min(w.wallet.debt,amount);w.wallet.debt-=paid;credit(w.wallet,amount-paid);}
-export function enterCirculation(w,cardKey,source,reference){if(!w.circulation[cardKey]){w.circulation[cardKey]={day:w.clock.day,source,reference};note(w,'cardEnteredCirculation',{cardKey,source,reference});}}
 export function referencePrice(w,catalog,cardKey){
   if(w.prices[cardKey])return w.prices[cardKey];
   const c=catalog.byKey.get(cardKey);need(c,'NOT_FOUND','卡牌不存在。');
@@ -28,11 +29,11 @@ export function updatePrices(w,catalog){
   }
 }
 export function inventoryList(w,catalog,p={}){
-  const rows=owned(w).filter(i=>(!p.location||i.location===p.location)&&(!p.kind||i.kind===p.kind)).map(i=>{
+  const rows=(p.location==='trash'?trashItems(w):owned(w)).filter(i=>(!p.location||i.location===p.location)&&(!p.kind||i.kind===p.kind)).map(i=>{
     const card=i.kind==='card'?catalog.byKey.get(i.cardKey):null;
     return {inventoryRef:i.inventoryRef,kind:i.kind,cardKey:i.cardKey,productId:i.productId,printVersion:i.printVersion||i.productVersion,printedRarity:i.printedRarity,
       name:card?.name||i.productId,imageUrl:card?.imageUrl,globalScore:card?.globalScore,currentRarity:card?.currentRarity,location:i.location,owned:1,available:free(i)&&!['market','retail'].includes(i.location)?1:0,protected:i.protected?1:0,locked:i.lock?1:0,listed:i.location==='market'||i.location==='retail'?1:0,
-      cost:i.cost,eligible:!!w.circulation[i.cardKey],disabledReasons:!free(i)?[{code:'ITEM_LOCKED',message:'该实物有收藏保护或正在交易/参赛。'}]:[]};
+      cost:i.cost,eligible:!!w.circulation[i.cardKey],discardedBy:i.trash?.discardedBy??(i.location==='trash'?i.ownerId:undefined),discardedByName:i.trash?.discardedBy==='player'?'店长':w.npcs.find(n=>n.actorId===i.trash?.discardedBy)?.name,discardedDay:i.trash?.day,disabledReasons:!free(i)?[{code:'ITEM_LOCKED',message:'该实物有收藏保护或正在交易/参赛。'}]:[]};
   }).filter(i=>(!p.search||`${i.name} ${i.cardKey}`.includes(p.search))&&(!p.rarity||i.printedRarity===p.rarity));
   return page(rows,p);
 }
@@ -93,48 +94,101 @@ export function receiveOrder(w,order){
   const refs=[];for(let i=0;i<order.quantity;i++)refs.push(makeSealed(w,order.product,order.unit,order.unitCost).inventoryRef);
   order.status='received';w.lifetime.received+=order.quantity*(order.unit==='box'?24:1);note(w,'goodsReceived',{orderId:order.orderId,quantity:refs.length});return {inventoryRefs:refs,stock:{packs:order.quantity*(order.unit==='box'?24:1)}};
 }
-export function purchaseRetail(w,npc,item){
-  need(item.ownerId==='player'&&item.location==='retail'&&!item.lock,'OUT_OF_STOCK','商品已售完。');
+export function openCustomerPurchase(w,catalog,npc,inventoryRef){
+  const item=w.items[inventoryRef];
+  if(!item||item.ownerId!==npc.actorId||!['pack','box'].includes(item.kind))return [];
+  const packets=item.kind==='box'?unsealBox(w,item):[item],cards=[];
+  for(const packet of packets)for(const card of openPacket(w,packet)){cards.push(card);enterCirculation(w,card.cardKey,'customerPackOpened',packet.inventoryRef);}
+  note(w,'customerPacksOpened',{actorId:npc.actorId,packs:packets.length,quantity:cards.length});
+  return cards.map(i=>i.inventoryRef);
+}
+export function purchaseRetail(w,npc,item,{deferOpening=false}={}){
+  need(item.ownerId==='player'&&['pack','box'].includes(item.kind)&&item.location==='retail'&&free(item),'OUT_OF_STOCK','商品已售完或不可出售。');
   debit(npc.wallet,item.retailPrice);income(w,item.retailPrice);w.daily.goods+=item.retailPrice;w.daily.sealedSales=(w.daily.sealedSales||0)+item.retailPrice;w.daily.cogs+=item.cost;w.lifetime.sales++;
   item.ownerId=npc.actorId;item.location='stock';item.cost=item.retailPrice;
-  const packets=item.kind==='box'?unsealBox(w,item):[item];
-  for(const packet of packets)for(const card of openPacket(w,packet))enterCirculation(w,card.cardKey,'customerPackOpened',packet.inventoryRef);
   note(w,'packSaleCompleted',{buyerId:npc.actorId,amount:item.retailPrice,productId:item.productId});
+  if(!deferOpening)openCustomerPurchase(w,null,npc,item.inventoryRef);
+  return item.inventoryRef;
 }
 function acceptableListing(w,catalog,npc,l){return l.status==='active'&&l.ownerId!==npc.actorId&&l.unitAmount<=npc.wallet.available&&l.unitAmount<=referencePrice(w,catalog,l.cardKey)*(w.rules.npcSinglePriceCeiling??1.4);}
-function acceptableRetail(w,npc,i){const suggested=i.suggestedRetail??i.cost/(1-w.rules.retailMargin);return i.location==='retail'&&!i.lock&&i.retailPrice<=npc.wallet.available&&i.retailPrice<=suggested*(w.rules.npcSealedPriceCeiling??1.4);}
-function customerPurchase(w,catalog,npc){
+function acceptableRetail(w,npc,i){const suggested=i.suggestedRetail??i.cost/(1-w.rules.retailMargin);return ['pack','box'].includes(i.kind)&&i.location==='retail'&&free(i)&&i.retailPrice<=npc.wallet.available&&i.retailPrice<=suggested*(w.rules.npcSealedPriceCeiling??1.4);}
+function consignSurplus(w,catalog,npc){
+  const cards=owned(w,npc.actorId).filter(i=>i.kind==='card'&&i.location==='collection'&&free(i));
+  if(cards.length>customerBehavior(w).minimumKeptCards&&w.listings.filter(l=>l.ownerId===npc.actorId&&l.status==='active').length<2){const item=[...cards].sort((a,b)=>referencePrice(w,catalog,a.cardKey)-referencePrice(w,catalog,b.cardKey))[0];placeListing(w,catalog,item,referencePrice(w,catalog,item.cardKey));}
+}
+function customerPurchase(w,catalog,npc,{deferOpening=false}={}){
   const listing=w.listings.find(l=>acceptableListing(w,catalog,npc,l));
   if(listing)settleTrade(w,listing,npc.actorId);
-  else {const item=owned(w).filter(i=>acceptableRetail(w,npc,i)).sort((a,b)=>a.retailPrice-b.retailPrice)[0];if(item)purchaseRetail(w,npc,item);}
-  const cards=owned(w,npc.actorId).filter(i=>i.kind==='card'&&free(i));
-  if(cards.length>3&&w.listings.filter(l=>l.ownerId===npc.actorId&&l.status==='active').length<2){const item=cards.at(-1);placeListing(w,catalog,item,referencePrice(w,catalog,item.cardKey));}
+  else {
+    const item=owned(w).filter(i=>acceptableRetail(w,npc,i)).sort((a,b)=>a.retailPrice-b.retailPrice)[0];
+    if(item){const ref=purchaseRetail(w,npc,item,{deferOpening:true});if(deferOpening)return ref;const refs=openCustomerPurchase(w,catalog,npc,ref);for(const ref of unwantedCards(w,catalog,npc,refs))discardCard(w,w.items[ref],npc.actorId);}
+  }
+  consignSurplus(w,catalog,npc);return null;
+}
+function exitShop(map,npc){const exit=map.anchors['store.entry'];npc.trip=exit?{stage:'exit',path:pathfind(map,npc,exit)}:null;npc.activity='leaving';npc.label='离店';}
+function discardSelected(w,npc,refs){for(const ref of refs||[]){const i=w.items[ref];if(i?.ownerId===npc.actorId&&i.location==='collection'&&free(i))discardCard(w,i,npc.actorId);}}
+// A manual early close completes paid visits once, so saves never strand sealed purchases or discard references across days.
+export function finishCustomerVisits(w,catalog){
+  for(const npc of w.npcs){const t=npc.trip;if(!t||t.kind==='match')continue;
+    if(t.stage==='opening'){const refs=openCustomerPurchase(w,catalog,npc,t.purchaseRef);discardSelected(w,npc,unwantedCards(w,catalog,npc,refs));}
+    else if(t.stage==='sorting'||t.stage==='discard')discardSelected(w,npc,t.discardRefs);
+    npc.trip=null;npc.activity='idle';npc.label='';npc.moving=false;
+  }
 }
 export function tickEconomy(w,catalog,{map=null,seconds=0}={}){
-  if(w.clock.phase!=='open')return;
+  if(!['open','closing'].includes(w.clock.phase))return;
   for(const order of w.orders)if(order.status==='pending'&&w.clock.day*1440+w.clock.minute>=order.dueAt)order.status='arrived';
   if(map)for(const npc of w.npcs.filter(n=>n.trip&&n.trip.kind!=='match')){
     moveActor(map,npc,npc.trip,seconds*w.clock.speed);
     if(!npc.trip.path.length){
       if(npc.trip.stage==='checkout'){
+        if(w.clock.phase!=='open'){exitShop(map,npc);continue;}
         if(npc.trip.waitSeconds==null)npc.trip.waitSeconds=managementEffects(w).checkoutSeconds;
         npc.trip.waitSeconds-=seconds*w.clock.speed;if(npc.trip.waitSeconds>0)continue;
-        customerPurchase(w,catalog,npc);const exit=map.anchors['store.entry'];
-        npc.trip=exit?{stage:'exit',path:pathfind(map,npc,exit)}:null;npc.activity='leaving';
-      }else {npc.trip=null;npc.activity='idle';npc.moving=false;}
+        const purchaseRef=customerPurchase(w,catalog,npc,{deferOpening:true});
+        if(purchaseRef){npc.trip={stage:'opening',path:[],purchaseRef,waitSeconds:customerBehavior(w).openingSeconds};npc.activity='opening';npc.label='拆卡包';}
+        else exitShop(map,npc);
+      }else if(npc.trip.stage==='opening'){
+        npc.trip.waitSeconds-=seconds*w.clock.speed;if(npc.trip.waitSeconds>0)continue;
+        const refs=openCustomerPurchase(w,catalog,npc,npc.trip.purchaseRef),discardRefs=unwantedCards(w,catalog,npc,refs);
+        npc.trip={stage:'sorting',path:[],discardRefs,waitSeconds:customerBehavior(w).sortingSeconds};npc.activity='sorting';npc.label='挑选卡牌';
+      }else if(npc.trip.stage==='sorting'){
+        npc.trip.waitSeconds-=seconds*w.clock.speed;if(npc.trip.waitSeconds>0)continue;
+        const anchor=map.anchors['store.trash'];
+        if(npc.trip.discardRefs.length&&anchor){npc.trip={stage:'discard',discardRefs:npc.trip.discardRefs,path:pathfind(map,npc,anchor)};npc.activity='discarding';npc.label='去丢弃卡牌';}
+        else {consignSurplus(w,catalog,npc);exitShop(map,npc);}
+      }else if(npc.trip.stage==='discard'){
+        discardSelected(w,npc,npc.trip.discardRefs);consignSurplus(w,catalog,npc);exitShop(map,npc);
+      }else if(npc.trip.stage==='scavenge'){
+        npc.trip.waitSeconds-=seconds*w.clock.speed;if(npc.trip.waitSeconds>0)continue;
+        const picked=scavenge(w,catalog,npc);npc.trip={stage:'pickup-result',path:[],waitSeconds:1};npc.activity='scavenging';npc.label=picked.length?`捡到 ${picked.length} 张卡`:'桶里没合适的卡';
+      }else if(npc.trip.stage==='pickup-result'){
+        npc.trip.waitSeconds-=seconds*w.clock.speed;if(npc.trip.waitSeconds>0)continue;exitShop(map,npc);
+      }else {npc.trip=null;npc.activity='idle';npc.label='';npc.moving=false;}
     }
+  }
+  if(w.clock.phase!=='open')return;
+  const effects=managementEffects(w);
+  for(const n of w.npcs)ensureCustomerTraits(w,n);
+  // Scavenging has its own cooldown and uses the same customer capacity and navigation as shopping.
+  for(const npc of w.npcs.filter(n=>!n.trip&&!n.currentMatchId&&n.roomId==='store'&&canScavenge(w,n))){
+    if(!trashItems(w).length||w.npcs.filter(n=>n.trip&&n.trip.kind!=='match').length>=effects.concurrentCustomers)break;
+    const anchor=map?.anchors['store.trash'];
+    if(map&&anchor){npc.trip={stage:'scavenge',path:pathfind(map,npc,anchor),waitSeconds:customerBehavior(w).searchSeconds};npc.activity='scavenging';npc.label='去翻垃圾桶';}
+    else if(!map)scavenge(w,catalog,npc);
   }
   if(w.clock.minute<w.nextNpcMinute)return;
   w.nextNpcMinute=w.clock.minute+w.rules.npcIntervalMinutes;
   let npc;
-  const effects=managementEffects(w);if(w.npcs.filter(n=>n.trip&&n.trip.kind!=='match').length>=effects.concurrentCustomers)return;
-  if(w.npcs.length<w.rules.maxNpcs){const appearances=['rookie','collector','competitor','passerby','regular','bigspender'];const i=w.npcs.length,initialWallet=Math.round(w.rules.npcInitialWallet*effects.newCustomerWalletMultiplier);npc={actorId:serial(w,'npc'),name:`顾客 ${i+1}`,appearanceId:appearances[i%appearances.length],wallet:{available:initialWallet},roomId:'store',x:240,y:272,direction:'up',moving:false,activity:'shopping'};w.npcs.push(npc);note(w,'npcArrived',{actorId:npc.actorId,externalFunds:initialWallet});}
+  if(w.npcs.filter(n=>n.trip&&n.trip.kind!=='match').length>=effects.concurrentCustomers)return;
+  if(w.npcs.length<w.rules.maxNpcs){const appearances=['rookie','collector','competitor','passerby','regular','bigspender'];const i=w.npcs.length,scavenger=random(w)<customerBehavior(w).scavengerChance,initialWallet=Math.round((scavenger?customerBehavior(w).poorInitialWallet:w.rules.npcInitialWallet)*effects.newCustomerWalletMultiplier);npc={actorId:serial(w,'npc'),name:`顾客 ${i+1}`,appearanceId:scavenger?'rookie':appearances[i%appearances.length],wallet:{available:initialWallet},roomId:'store',x:240,y:272,direction:'up',moving:false,activity:'shopping',scavenger};w.npcs.push(npc);note(w,'npcArrived',{actorId:npc.actorId,externalFunds:initialWallet});}
   else {const available=w.npcs.filter(n=>!n.trip&&!n.currentMatchId&&n.roomId==='store');if(!available.length)return;npc=available[Math.floor(random(w)*available.length)];}
+  if(canScavenge(w,npc)&&trashItems(w).length){const anchor=map?.anchors['store.trash'];if(anchor){npc.trip={stage:'scavenge',path:pathfind(map,npc,anchor),waitSeconds:customerBehavior(w).searchSeconds};npc.activity='scavenging';npc.label='去翻垃圾桶';return;}if(!map){scavenge(w,catalog,npc);npc.activity='idle';return;}}
   if(map){
     const entry=map.anchors['store.entry'];if((npc.activity==='idle'||!npc.navVersion)&&entry){npc.x=entry.x;npc.y=entry.y;}
     const hasMarket=w.listings.some(l=>acceptableListing(w,catalog,npc,l));
     const anchor=map.anchors[hasMarket?'store.secondaryMarket':'store.counter'];
-    if(anchor){npc.trip={stage:'checkout',path:pathfind(map,npc,anchor)};npc.navVersion=map.navVersion;npc.activity='walking';return;}
+    if(anchor){npc.trip={stage:'checkout',path:pathfind(map,npc,anchor)};npc.navVersion=map.navVersion;npc.activity='walking';npc.label='选购卡牌';return;}
   }
   customerPurchase(w,catalog,npc);npc.activity='idle';
 }

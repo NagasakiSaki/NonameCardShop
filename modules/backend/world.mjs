@@ -9,6 +9,7 @@ export function createWorld(rules){
   return world;
 }
 export function note(world,type,data={}){world.log.push({eventId:serial(world,'event'),type,day:world.clock.day,minute:world.clock.minute,...clone(data)});world.log=world.log.slice(-1000);}
+export function enterCirculation(w,cardKey,source,reference){if(!w.circulation[cardKey]){w.circulation[cardKey]={day:w.clock.day,source,reference};note(w,'cardEnteredCirculation',{cardKey,source,reference});}}
 export function validateWorld(world){
   if(world?.schemaVersion!==2||!world.worldId||!world.branchId||!world.items||!world.clock||!world.wallet||!Array.isArray(world.products))throw new Error('新版世界存档格式不完整，未覆盖原数据。');
   if(!Number.isSafeInteger(world.clock.day)||world.clock.day<1||!Number.isFinite(world.clock.minute)||world.clock.minute<0||world.clock.minute>=1440||!['preparing','open','closing','closed'].includes(world.clock.phase)||![1,2,4].includes(world.clock.speed))throw new Error('营业日期或时钟状态不合法。');
@@ -26,7 +27,8 @@ export function validateWorld(world){
   const owners=new Set(['player',...world.npcs.map(n=>n.actorId)]);
   for(const n of world.npcs)if(!Number.isSafeInteger(n.wallet?.available)||n.wallet.available<0)throw new Error('NPC 余额不合法。');
   for(const [ref,i] of Object.entries(world.items)){
-    if(i?.inventoryRef!==ref||!owners.has(i.ownerId)||!['pack','box','card'].includes(i.kind)||!Number.isSafeInteger(i.cost)||i.cost<0)throw new Error('库存实物或成本数据不合法。');
+    const publicTrash=i?.ownerId==='public:trash'&&i.kind==='card'&&i.location==='trash'&&!i.lock&&!i.protected&&owners.has(i.trash?.discardedBy);
+    if(i?.inventoryRef!==ref||!(owners.has(i.ownerId)||publicTrash)||!['pack','box','card'].includes(i.kind)||!Number.isSafeInteger(i.cost)||i.cost<0)throw new Error('库存实物或成本数据不合法。');
     if(i.kind==='card'&&(!i.cardKey||!['N','R','SR','SSR'].includes(i.printedRarity)))throw new Error('印刷卡数据不完整。');
     if(i.kind==='pack'&&(!Array.isArray(i.cards)||i.cards.length!==5)||i.kind==='box'&&(!Array.isArray(i.packets)||i.packets.length!==24||i.packets.some(p=>p.length!==5)))throw new Error('密封商品内容不完整。');
   }

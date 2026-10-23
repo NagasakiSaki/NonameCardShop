@@ -4,7 +4,7 @@ import {spawn} from 'node:child_process';
 import {root} from '../dev/process.mjs';
 import {startShopServer} from '../server.mjs';
 const groups={unit:['tools/test-business.cjs','tools/test-modules.cjs','tools/test-balance.cjs','tests/server.mjs','tests/boxes.cjs'],ui:['tests/frontend-integration.mjs'],frontend:['tests/frontend-integration.mjs'],legacy:['tests/economy.cjs','tests/management.cjs','tests/boxes-ui.cjs','tests/saves-ui.cjs'],engine:['tests/duel.cjs'],dev:['tests/frontend-development.mjs'],desktop:['tests/desktop.cjs','tests/desktop-development.cjs'],history:['tests/frontend-integration.mjs'],backend:['tests/backend.mjs','tests/backend-views.mjs','tests/backend-browser.mjs','tests/backend-management.mjs','tests/npc-engine-browser.mjs'],release:['tests/desktop.cjs']};
-groups.audit=['tests/backend-edge-cases.mjs','tests/battle-lifecycle.mjs','tests/storage-archives-browser.mjs'];groups.backend.push(...groups.audit);
+groups.audit=['tests/backend-edge-cases.mjs','tests/battle-lifecycle.mjs','tests/storage-archives-browser.mjs'];groups.backend.push('tests/customer-trash.mjs',...groups.audit);groups.frontend.push('tests/customer-trash-browser.mjs');
 const selection=process.argv[2]||'all';if(selection!=='all'&&!groups[selection])throw new Error(`未知测试组：${selection}`);
 const output=path.join(root,'test-results',new Date().toISOString().replace(/[:.]/g,'-')+`-${process.pid}`);fs.mkdirSync(output,{recursive:true});
 const results=[],summary={selection,output,startedAt:new Date().toISOString(),results};let runtime;

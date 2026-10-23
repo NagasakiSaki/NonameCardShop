@@ -34,6 +34,13 @@
   "npcSinglePriceCeiling":1.4,
   "npcSealedPriceCeiling":1.4,
   "npcDailyIncome":300,
+  "customerBehavior": {
+    "openingSeconds":3,"sortingSeconds":2,"searchSeconds":2,
+    "keepCopies":1,"minimumKeptCards":3,
+    "discardChance":{"N":0.65,"R":0.25,"SR":0,"SSR":0},
+    "scavengerChance":0.3,"poorWallet":400,"poorInitialWallet":200,
+    "pickupLimit":2,"pickupCooldownMinutes":90
+  },
   "maxNpcs":12,
   "priceDailyLimit":0.15,
   "wageringEnabled":false,

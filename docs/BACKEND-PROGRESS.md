@@ -126,4 +126,10 @@ Host 连接后，`integration/npc-engine.mjs` 调度一个独立无名杀 iframe
 - `node tests/backend-management.mjs`：设施容量、员工效果/工资、每日对话、实物预约与托管到期退款、自动补货；NPC 实际持卡、暂停中结果持久化与重连、BO3 一次收费/战绩、未入座取消时安全返店。
 - `node tests/npc-engine-browser.mjs`：真实引擎 NPC 托管 AI 与暂停恢复，实际引擎 BO3 2:0 只收费记账一次，玩家桌仍为手动。为压缩耗时，在确认 AI 已开始实际回合后，通过引擎角色阵亡完成后续结算；不把它当作长时间 AI 胜率或全部技能压力测试。
 - 第三批新增 `tests/backend-views.mjs`（局部拆盒守恒、真实聚合持仓、市场分流、现金流与利润分开）和 `tests/frontend-integration.mjs`（真实新版页面的一天与 BO3、文件读写）；`tests/frontend-development.mjs` 验证开发自动刷新和端口存档隔离。
-- `npm run test:backend` 现包含八项（含新增异常审计）；`npm run test:audit` 可单独跑三套异常/载入/存储检查。`npm run test:frontend` 验证正式集成，`npm run test:dev` 验证新版开发服务。历史 UI 套件使用 `npm run test:legacy`；本批没有重建 exe。
+- `npm run test:backend` 包含基础业务、管理、视图、引擎、顾客弃牌与异常审计；`npm run test:audit` 可单独跑三套异常/载入/存储检查。`npm run test:frontend` 验证正式集成与顾客拾牌，`npm run test:dev` 验证新版开发服务。历史 UI 套件使用 `npm run test:legacy`；本批没有重建 exe。
+
+## 2026-10-23 顾客拆包与拾牌
+
+已实现顾客在店内真实拆包、挑牌、走到共享垃圾桶丢弃，店长与部分低预算 NPC 拾取原卡并登记流通。通过独立 `trash.mjs` 和 `customerBehavior` 参数保留调整入口；旧存档兼容，打烊收尾与次日全桶清空已接通。详见 [顾客拆包与共享垃圾桶](顾客拆包与共享垃圾桶.md)。
+
+本批通过新增业务/实际浏览器流程、原有后端基础/经营/异常检查和真实新版前端经营与 BO3 集成。未重打 EXE。

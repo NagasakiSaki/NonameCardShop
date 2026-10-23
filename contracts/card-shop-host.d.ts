@@ -4,6 +4,18 @@ export type Result<T = unknown> = {ok:true; revision:number; data:T} | {ok:false
 export interface CommandRequest { requestId:string; type:string; payload?:Record<string,unknown>; quoteId?:string; previewId?:string }
 export interface HostEvent { contractVersion:'card-shop-ui/1.0'; worldId:string; branchId:string; seq:number; revision:number; type:string; data:unknown }
 export interface PauseLease {leaseId:string; ownerId:string; reason:string}
+/** inventory.list({location:'trash'}) returns the shared bin, one row per actual card. */
+export interface TrashCardView {
+  inventoryRef:string; kind:'card'; cardKey:string; name:string; imageUrl?:string;
+  printedRarity:Rarity; location:'trash'; owned:1; discardedBy?:string; discardedByName?:string; discardedDay?:number;
+}
+/** backend-rules.customerBehavior; missing fields use the shipped defaults, including in old saves. */
+export interface CustomerBehaviorConfig {
+  openingSeconds:number; sortingSeconds:number; searchSeconds:number;
+  keepCopies:number; minimumKeptCards:number; discardChance:Record<Rarity,number>;
+  scavengerChance:number; poorWallet:number; poorInitialWallet:number;
+  pickupLimit:number; pickupCooldownMinutes:number;
+}
 export interface UpgradeView {
   upgradeId:string; name:string; description:string; level:number; maxLevel:number;
   nextCost:number; dailyCost:number; effect:string; unlocked:boolean; unlockHint:string;

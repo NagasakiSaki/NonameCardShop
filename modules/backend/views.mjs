@@ -2,9 +2,10 @@ import {clone,page,sum} from './common.mjs';
 import {cardSummary} from './catalog.mjs';
 import {owned,free,referencePrice} from './trading.mjs';
 import {managementEffects,shelfUsed} from './management.mjs';
+import {trashItems} from './trash.mjs';
 
 export function inventoryView(w,catalog,input={}){
-  let items=owned(w).filter(i=>i.kind==='card'&&(input.location?i.location===input.location:i.location!=='trash'));
+  let items=(input.location==='trash'?trashItems(w):owned(w)).filter(i=>i.kind==='card'&&(input.location?i.location===input.location:i.location!=='trash'));
   const groups=new Map();
   for(const item of items){
     const key=`${item.cardKey}|${item.printVersion}|${item.printedRarity}|${item.location}`;

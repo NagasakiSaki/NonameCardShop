@@ -45,3 +45,11 @@
 - saves.create 返回 archiveId；load 输入 archiveId；export 返回 fileName/mimeType/content；import 输入 content 文件文本。前端负责文件选择/下载，后端负责格式校验、备份、全量恢复和建立分支。
 - NPC 后台比赛不阻止存读档：档案保留已完成比分、费用和实际持卡，读档后当前小局重开，并返回 recoveryNote。玩家仍在运行的小局先关闭视图或完成。日档按 ID 独立保存，旧内嵌格式自动转存，不需清档。
 - capabilities.wagering=false 是当前真实能力限制，不能通过 UI、配置或导入存档绕过。
+
+## 顾客拆包与共享垃圾桶（2026-10-23）
+
+- 顾客购买密封商品后分阶段拆包、挑牌、走到垃圾桶弃牌；`actorsUpdated` 的 `activity` 和 `label` 表达当前行为。
+- `inventory.list({location:'trash'})` 查询全店共享实物，含来源 `discardedBy/discardedByName/discardedDay`；桶内卡不计入任何人的收藏/阵容。按 `cursor/limit` 分页，`grouped:true` 可聚合。
+- `inventory.recover({inventoryRef})` 或 `{all:true}` 拾取共享桶内原卡，登记流通资格；仍需到桶旁。拾取自己原卡保留原成本，拾取他人弃卡以零成本入库，不产生交易收入。
+- 部分低预算 NPC 按习惯、余额门槛、每次数量和冷却主动拾取。下一天清空全部剩余垃圾，已拾取者保留实物。
+- 行为参数在 `backend-rules.customerBehavior`，缺字段沿用默认，支持旧存档。详细流程、事件与配置见 [顾客拆包与共享垃圾桶](../docs/顾客拆包与共享垃圾桶.md)。

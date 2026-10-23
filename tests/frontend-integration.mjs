@@ -45,7 +45,7 @@ try{
   assert.equal((await query('market.list',{tab:'mine'})).total,preview.quantity);await close();
   await until(async()=>(await query('management.people')).customers.some(n=>n.ownedCards>0),'actual NPC ownership',20000);
   await until(async()=>(await query('market.list',{tab:'history'})).total>0,'real secondary sale',25000);
-  await go('store.trash');await page.getByRole('button',{name:'丢弃所选卡',exact:true}).click();assert.equal((await query('inventory.list',{location:'trash'})).total,1);
+  await go('store.trash');const trashBefore=(await query('inventory.list',{location:'trash'})).total;await page.getByRole('button',{name:'丢弃所选卡',exact:true}).click();assert.equal((await query('inventory.list',{location:'trash'})).total,trashBefore+1);
   await page.getByRole('button',{name:'全部捡回',exact:true}).click();assert.equal((await query('inventory.list',{location:'trash'})).total,0);
   await page.getByRole('button',{name:'丢弃所选卡',exact:true}).click();await close();
   await page.evaluate(()=>__cardShopApp.navigateScene('battle-room'));await until(()=>page.evaluate(()=>__cardShopApp.currentMap().mapId==='battle-room'&&__cardShopApp.getPlayer().roomId==='battle-room'),'authoritative room switch',20000);
