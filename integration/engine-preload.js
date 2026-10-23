@@ -9,6 +9,7 @@ const parentOrigin = params.get("parentOrigin");
 const general = params.get("general");
 const opponent = params.get("opponent");
 const collectionBattle = embedded && general && opponent;
+const backgroundBattle = collectionBattle && params.get('shopBackground') === '1';
 const notify = (type, data = {}) => {
   if (embedded && /^http:\/\/127\.0\.0\.1:\d+$/.test(parentOrigin || "")) {
     parent.postMessage({ channel: "noname-packer", matchId, type, ...data }, parentOrigin);
@@ -38,13 +39,14 @@ async function seedConfig(prefix, values) {
 export default async function preload(context) {
   const { lib, game, ui, get, _status } = context;
   await browserReady(context);
-  lib.configprefix = collectionBattle ? "packer_match_v1_" : "packer_classic_v1_";
+  lib.configprefix = collectionBattle ? (backgroundBattle?'packer_npc_match_v1_':"packer_match_v1_") : "packer_classic_v1_";
   if (!embedded) return;
   notify("loading", { text: "正在载入原版规则、武将和卡牌…" });
   window.addEventListener("error", (event) => { if (event.error) notify("error", { text: event.message }); });
   window.addEventListener("unhandledrejection", (event) => notify("error", { text: String(event.reason?.message || event.reason) }));
   if (collectionBattle) {
     const config = {
+      ...(backgroundBattle?{game_speed:'vvfast',background_audio:false,volumn_audio:0}:{}),
       mode: "identity", show_splash: "off", new_tutorial: true, version: "1.11.6",
       extensions: [], hiddenCharacterPack: [], characters: Object.keys((await import("/game/package.js"), window.noname_package.character)),
       cards: ["standard", "extra"], background_music: "music_off", confirm_exit: false,
@@ -62,7 +64,24 @@ export default async function preload(context) {
     const roster=readTeam("roster",general),opponentRoster=readTeam("opponentRoster",opponent),mode=params.get("duelMode")==="kof"?"kof":"bo3";
     if(roster.length!==(mode==="kof"?3:1)||opponentRoster.length!==roster.length)throw new Error("阵容人数不符合赛制");
     const first=params.get("first")==="1"?1:0,initialHand=Math.min(8,Math.max(1,Number(params.get("initialHand"))||4)),firstDrawPenalty=Math.min(2,Math.max(0,Number(params.get("firstDrawPenalty"))||0));
-    installCollectionDuel(context,{roster,opponentRoster,mode,first,initialHand,firstDrawPenalty},notify);
+    installCollectionDuel(context,{roster,opponentRoster,mode,first,initialHand,firstDrawPenalty,background:backgroundBattle},notify);
+    if(backgroundBattle){
+      const token=params.get('shopControlToken');
+      window.addEventListener('message',event=>{
+        const message=event.data;
+        if(event.source!==parent||event.origin!==parentOrigin||message?.channel!=='noname-shop-engine-control'||message.matchId!==matchId||message.token!==token)return;
+        if(message.action==='pause')game.pause2();
+        if(message.action==='resume')game.resume2();
+      });
+      // Mark AI before any seat requests input. The parent initially keeps pause2 set.
+      _status.auto=true;
+      const roundLimit=Math.max(10,Math.min(200,Number(params.get('shopRoundLimit'))||60));
+      lib.onload2.push(()=>{
+        lib.skill._shop_npc_round_limit={trigger:{global:'phaseBefore'},forced:true,silent:true,charlotte:true,priority:100000,
+          filter(){return (game.roundNumber||0)>roundLimit;},async content(){game.over();}};
+        game.addGlobalSkill('_shop_npc_round_limit');
+      });
+    }
   } else {
     await seedConfig(lib.configprefix, { new_tutorial: true, version: "1.11.6", show_splash: "always", confirm_exit: false, background_music: "music_off", card_style: "default" });
   }

@@ -70,6 +70,7 @@ export function installCollectionDuel(context, options, notify) {
           async content(event,trigger){notify('playing',{round:game.roundNumber||1,phase:trigger.name,players:teams.map(t=>({name:t.player.name,hp:t.player.hp,maxHp:t.player.maxHp,hand:t.player.countCards('h'),index:t.index,side:t.side}))});}};
         game.addGlobalSkill('_shop_first_draw');game.addGlobalSkill('_packer_bridge');
         notify('ready',{general:roster[0],opponent:opponentRoster[0],mode,engine:lib.version});
+        if(options.background){_status.auto=true;game.pause2();}
       });
     };
   });

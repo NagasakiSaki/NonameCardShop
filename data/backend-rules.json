@@ -35,5 +35,9 @@
   "maxNpcs":12,
   "priceDailyLimit":0.15,
   "wageringEnabled":false,
+  "npcAutoBattles":true,
+  "npcMatchIntervalMinutes":45,
+  "npcMatchCooldownMinutes":90,
+  "npcRoundLimit":60,
   "compatibilityBlocks":{}
 }

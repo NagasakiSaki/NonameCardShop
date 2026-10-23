@@ -12,6 +12,8 @@ export function validateRules(r){
   need(r.roundTo>0&&r.npcIntervalMinutes>0&&r.maxNpcs>0&&r.maxArchives>0&&r.maxDays>0&&Number.isFinite(r.openingReturn)&&r.openingReturn>0&&r.openingReturn<=1.2&&Number.isFinite(r.minutesPerSecond)&&r.minutesPerSecond>0,'INVALID_CONFIG','时间、客流和取整参数必须大于零，回报系数不超过 1.2。');
   need(r.modeWeights?.bo3>=0&&r.modeWeights?.kof>=0&&Math.abs(r.modeWeights.bo3+r.modeWeights.kof-1)<1e-8,'INVALID_CONFIG','模式权重合计必须为 1。');
   need(r.wageringEnabled===false,'FEATURE_UNAVAILABLE','当前仅开放无赌注比赛；完整引擎恢复完成前不能启用下注。');
+  if(r.npcAutoBattles!==undefined)need(typeof r.npcAutoBattles==='boolean','INVALID_CONFIG','NPC 自动对战开关不正确。');
+  for(const key of ['npcMatchIntervalMinutes','npcMatchCooldownMinutes','npcRoundLimit'])if(r[key]!==undefined)need(Number.isSafeInteger(r[key])&&r[key]>=10&&r[key]<=1440,'INVALID_CONFIG',`${key} 超出支持范围。`);
   return r;
 }
 export function buildCatalog(source,rules){

@@ -1,6 +1,6 @@
 # 新版后端逐步清单与接入说明
 
-更新日期：2026-10-23。当前是独立后端首批实现，根页面尚未切换，exe 未更新。
+更新日期：2026-10-23。当前已完成独立后端第二批实现，根页面尚未切换，exe 未更新。
 
 ## 逐步清单
 
@@ -11,16 +11,17 @@
 | 3 | 全局评分、四档、各主题动态配方与报价 | 已完成；全目录重算，模型变更生成新评分版本，下一营业日发行新品 |
 | 4 | 进货、送达、签收、密封零售、实体盒、批量开包、留一上架 | 已完成基础闭环；真实实物、固定内容与成本守恒 |
 | 5 | 二级市场、流通登记、NPC 钱包与持卡 | 已完成基础闭环；顾客购买后开包、真实持卡、有效挂单开放流通资格 |
-| 6 | 对战房、战绩、托管、按天存档 | 无赌注玩家对战与日档已接入；下注托管原语已写，下注仍关闭；NPC 自动对战待接入 |
+| 6 | 对战房、战绩、托管、按天存档 | 无赌注玩家与 NPC 自动对战、整场战绩与日档已接入；下注托管原语已写，实际下注仍关闭 |
+| 7 | 设施、员工、街坊预约 | 已完成基础闭环；实际容量/服务效果、轮班、日结工资、预付款托管、交卡与到期退款 |
 
-不把最后一项笼统标为“全部完成”。下一批继续：NPC 对 NPC 的真实引擎后台比赛、完整牌局恢复与下注开放、设施/员工/街坊预约的新接口适配、与新前端正式联调。
+下一批继续：完整牌局恢复与下注开放、特殊技能兼容、与新前端正式联调。已有基础闭环不代表所有数值平衡或全部武将技能均已验证。
 
 ## 文件边界
 
-- 后端：`modules/backend/*.mjs`、`data/backend-rules.json`、`integration/frontend-host.mjs`、`integration/host-battle.mjs`。
+- 后端：`modules/backend/*.mjs`、`data/backend-*.json`、`integration/frontend-host.mjs`、`integration/host-battle.mjs`、`integration/npc-engine.mjs`；共用引擎适配仅修改 `integration/engine-preload.js` 与 `integration/duel.js`。
 - 正式类型：`contracts/card-shop-host.d.ts`；地图元数据规格：`contracts/map.schema.json`。
 - 前端、美术和美术工具目录由另一模型负责，本批没有修改或提交它们。
-- 本批只给静态服务补充 `.mjs` 正确 MIME，未切换根 HTML、旧 UI 或安装包。
+- 静态服务已支持 `.mjs`；未切换根 HTML、旧 UI 或安装包。
 
 ## 前端现在可以接入
 
@@ -52,15 +53,36 @@ const unsubscribe = host.subscribe(event => {
 - `inventory.setProtection`：`{inventoryRef,protected:true|false}`。
 - `market.placeListing`：`{inventoryRef,amount?}`，省略 amount 使用当前后端参考价。
 - `market.quote`：`{listingId,quantity:1}`；`market.acceptTrade` 带同一 listingId 和顶层 quoteId。
-- `combat.preview`：`{mode,opponentId,inventoryRefs,tableId?,withStake:false}`，对手必须来自 `management.people` 且实际有可用牌。
-- `combat.register`：顶层 previewId；随后 `combat.start` 的 payload 为 `{matchId}`。
-- `host.battle.mount({container,matchId})` 在 start 成功后调用；BO3 下一局先 dispose 旧挂载，再 `combat.continue` 和重新 mount。
+- `combat.eligible` 返回 `{mode,slots,items}`。`combat.preview`：`{mode,opponentId?,inventoryRefs,tableId?,withStake:false}`，对手来自 `management.people.customers` 且实际有可用牌；省略 opponentId 时选择空闲且实际持卡的 NPC。
+- `combat.register`：顶层 previewId；返回顶层 matchId 与 `data.match` 兼容别名。`combat.start` 的 payload 为 `{matchId}`。
+- `host.battle.mount({container,matchId})` 可在 start 成功后调用，也可自动启动已登记/中断/待下一局的玩家比赛；BO3 下一局先 dispose 旧挂载，再 continue 或重新 mount。不能挂载/认输 NPC 自主比赛。
 - `combat.cancel`：取消未开局比赛并退还托管费用。`combat.surrender` 的 scope 为 `bout` 时认输 BO3 小局，其他情况按整场退赛。
 - `saves.export` 返回 `{fileName,mimeType,content}`，由前端下载；`saves.import` 接收 `{content:文件文本}`。
 
 响应的 `ok=false` 是业务失败，不当成空列表；异常/断线后通过 `operations.get` 查询原 requestId。成功命令记录在数据库中，刷新后重复请求不会再次扣款。库存变动会使批量预览失效。
 
 暂停采用 `host.pause.acquire({ownerId,reason})` / `release(leaseId)`。背包、详情、确认框分别持有自己的令牌，全部关闭后才恢复；玩家战斗独立执行，店铺时间暂停。
+
+玩家显示实体 ID 为 `actor:owner`；库存归属仍为 `ownerId:'player'`，两者不要混用。
+
+### 设施、员工和街坊接口
+
+- `management.upgrades` 返回 `{available,capacity,items}`；每行含 upgradeId、name、level、maxLevel、nextCost、dailyCost、effect、unlocked。`upgrades.purchase({upgradeId})` 实扣购置费。
+- `management.people` 返回 `{items:员工,neighbors:街坊,customers:实际顾客}`。员工行含 personId、role、wage、hired、mood；街坊行含 personId、relation、dialog、pending；customers 含 actorId、budget、ownedCards。
+- `management.orders` 返回 `{items}`，含未签收进货单及有效街坊请求；单卡请求以 kind 区分 purchase（街坊求购）和 offer（街坊出售已有实物）。
+- `neighbors.act({personId:'staff:cashier'|'staff:stocker',action:'hire'|'schedule',onDuty?})` 雇用/排班；休息停用效果，合同工资仍在日结支付一次。
+- `neighbors.act({personId,action:'talk'})` 每天只增加一次关系；`action:'accept',orderId` 扣买家钱包转入托管；`action:'deliver',orderId,inventoryRef?` 交付同卡种的可用收藏副本并结算；`decline` 或过期退还预付款。街坊出售自己的卡必须明确 `action:'buy'`，不会因接任务自动扣店主钱。
+- `config.list` 返回 `{items,permissions}`。`config.validate` / `config.apply` 接受 `{configId,value}` 或 `{configId,draft:JSON文本}`；支持 backend-rules 与 backend-management。已报价订单冻结金额与到期日，不允许删去有有效订单的街坊、删除已购设施或改写已雇员工工资合同。
+
+`data/backend-management.json` 留出容量、员工效果、补货周期/目标/仓库保留量、工资、解锁日、街坊预算/台词/报价/期限的调整接口。当前基础货架 36 位，一盒占 4 位；升级货架每级增加 12 位。补货员每 30 游戏分钟从真实仓库补到每种 3 包，并保留至少 1 包；不生成商品。展示柜影响新客初始资金，外部资金有记录。牌桌升级增加服务费，不创建地图外的桌位。
+
+### NPC 真实引擎后台比赛
+
+Host 连接后，`integration/npc-engine.mjs` 调度一个独立无名杀 iframe。只选实际持有可用流通卡且付得起桌费的两名 NPC，走门口路径入座，再由原引擎托管 AI 完成 BO3。NPC 保留自己的钱包、卡片与冷却；店主比赛不会占用该后台控制器。
+
+当前最多一场后台比赛，默认每 45 游戏分钟尝试开桌、每位 NPC 冷却 90 分钟。每局最多 60 回合，三次平局结束整场；这些参数在 backend-rules 内。技术错误或停滞按中断作废处理，不生成随机胜负。开局前退款；引擎 ready 后服务费已经取得，技术作废不新增胜率。
+
+任一交互暂停令牌会暂停后台引擎与经济更新。暂停期间已经到达的 ready/result 先持久化排队，恢复后按顺序应用；重连保留这些待处理事件。玩家桌和 NPC 桌分别使用 `packer_match_v1_` 与 `packer_npc_match_v1_` 引擎配置前缀，玩家桌不会开启全自动。BO3 整场只收费一次、各参赛武将只登记一次整场战绩；NPC 统计不触发店主亲自参赛任务。
 
 ## 全局评分与产品版本
 
@@ -87,15 +109,19 @@ const unsubscribe = host.subscribe(event => {
 ## 尚未开放的部分
 
 1. **下注：** 托管、退款、整场分配、NPC 稀有度倍率提议已有独立实现；当前规则和能力开关强制禁用实际下注。原因是现有无名杀运行事件栈、全部随机源与操作日志尚不能完整恢复。不能通过配置或导入档案绕过。
-2. **NPC 自动比赛：** 尚未让两名 NPC 自动开桌并驱动真实引擎，不制造模拟胜负作为实际战绩。
+2. **完整恢复：** 无赌注中断局当前可重开小局，已经完成的小局、费用与待处理事件保留；尚不能恢复引擎完整事件栈、手牌与每一步随机状态。
 3. **技能全适配：** 已移除 25 将白名单，按持有与流通准入；特殊技能仍需逐项兼容。可用 `compatibilityBlocks` 明确记录故障原因，不宣称 2563 位均已实测。
-4. **旧经营扩展适配：** 新 Host 暂时将 upgrades/neighbors 设为 false；旧根页面功能原样保留，后续接入。
-5. **最终前端合并：** 未修改另一模型的资源与页面；拿到交付后再切入口、接完整菜单和做最终联调。
+4. **最终前端合并：** 已适配新前端当前的经营/对战/配置 DTO，upgrades/neighbors 能力已开放；未修改另一模型的资源与页面，完整菜单联调和根入口切换仍待交付后完成。
 
 ## 本批验证
 
-只验证本次新增链路，不跑旧版全套大回归：
+第一批已通过以下基础链路，本次没有重复跑旧版全套大回归：
 
 - `node tests/backend.mjs`：全局评分权重、26 主题盒配额、小保底、暂停、失败回滚、重复请求、成本、市场、NPC 购卡、次日清桶与读档分支。
 - `node tests/backend-browser.mjs`：真实 IndexedDB 重连、旧卡店键定向清理且保留无关键、真实无名杀 BO3 2:0、只计一次战绩和开桌费。
-- 以后用 `npm run test:backend` 执行上述两项；本批没有重建 exe。
+
+第二批只验证新增链路：
+
+- `node tests/backend-management.mjs`：设施容量、员工效果/工资、每日对话、实物预约与托管到期退款、自动补货；NPC 实际持卡、暂停中结果持久化与重连、BO3 一次收费/战绩、未入座取消时安全返店。
+- `node tests/npc-engine-browser.mjs`：真实引擎 NPC 托管 AI 与暂停恢复，实际引擎 BO3 2:0 只收费记账一次，玩家桌仍为手动。为压缩耗时，在确认 AI 已开始实际回合后，通过引擎角色阵亡完成后续结算；不把它当作长时间 AI 胜率或全部技能压力测试。
+- `npm run test:backend` 现在包含上述四项；本批没有重建 exe。

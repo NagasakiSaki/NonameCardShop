@@ -2,6 +2,7 @@ import {clone,need,integer,serial,sum,credit,debit,clamp,random,page} from './co
 import {openPacket,unsealBox,makeSealed} from './products.mjs';
 import {note} from './world.mjs';
 import {pathfind,moveActor} from './navigation.mjs';
+import {managementEffects} from './management.mjs';
 
 export const owned=(w,ownerId='player')=>Object.values(w.items).filter(i=>i.ownerId===ownerId);
 export const free=i=>!i.lock&&!i.protected;
@@ -102,10 +103,12 @@ function customerPurchase(w,catalog,npc){
 export function tickEconomy(w,catalog,{map=null,seconds=0}={}){
   if(w.clock.phase!=='open')return;
   for(const order of w.orders)if(order.status==='pending'&&w.clock.day*1440+w.clock.minute>=order.dueAt)order.status='arrived';
-  if(map)for(const npc of w.npcs.filter(n=>n.trip)){
+  if(map)for(const npc of w.npcs.filter(n=>n.trip&&n.trip.kind!=='match')){
     moveActor(map,npc,npc.trip,seconds*w.clock.speed);
     if(!npc.trip.path.length){
       if(npc.trip.stage==='checkout'){
+        if(npc.trip.waitSeconds==null)npc.trip.waitSeconds=managementEffects(w).checkoutSeconds;
+        npc.trip.waitSeconds-=seconds*w.clock.speed;if(npc.trip.waitSeconds>0)continue;
         customerPurchase(w,catalog,npc);const exit=map.anchors['store.entry'];
         npc.trip=exit?{stage:'exit',path:pathfind(map,npc,exit)}:null;npc.activity='leaving';
       }else {npc.trip=null;npc.activity='idle';npc.moving=false;}
@@ -114,8 +117,9 @@ export function tickEconomy(w,catalog,{map=null,seconds=0}={}){
   if(w.clock.minute<w.nextNpcMinute)return;
   w.nextNpcMinute=w.clock.minute+w.rules.npcIntervalMinutes;
   let npc;
-  if(w.npcs.length<w.rules.maxNpcs){const appearances=['novice','collector','competitive','casual','regular','premium'];const i=w.npcs.length;npc={actorId:serial(w,'npc'),name:`顾客 ${i+1}`,appearanceId:appearances[i%appearances.length],wallet:{available:w.rules.npcInitialWallet},roomId:'store',x:240,y:272,direction:'up',moving:false,activity:'shopping'};w.npcs.push(npc);note(w,'npcArrived',{actorId:npc.actorId,externalFunds:w.rules.npcInitialWallet});}
-  else {const available=w.npcs.filter(n=>!n.trip);if(!available.length)return;npc=available[Math.floor(random(w)*available.length)];}
+  const effects=managementEffects(w);if(w.npcs.filter(n=>n.trip&&n.trip.kind!=='match').length>=effects.concurrentCustomers)return;
+  if(w.npcs.length<w.rules.maxNpcs){const appearances=['novice','collector','competitive','casual','regular','premium'];const i=w.npcs.length,initialWallet=Math.round(w.rules.npcInitialWallet*effects.newCustomerWalletMultiplier);npc={actorId:serial(w,'npc'),name:`顾客 ${i+1}`,appearanceId:appearances[i%appearances.length],wallet:{available:initialWallet},roomId:'store',x:240,y:272,direction:'up',moving:false,activity:'shopping'};w.npcs.push(npc);note(w,'npcArrived',{actorId:npc.actorId,externalFunds:initialWallet});}
+  else {const available=w.npcs.filter(n=>!n.trip&&!n.currentMatchId&&n.roomId==='store');if(!available.length)return;npc=available[Math.floor(random(w)*available.length)];}
   if(map){
     const entry=map.anchors['store.entry'];if((npc.activity==='idle'||!npc.navVersion)&&entry){npc.x=entry.x;npc.y=entry.y;}
     const hasMarket=w.listings.some(l=>l.status==='active'&&l.ownerId!==npc.actorId&&l.unitAmount<=npc.wallet.available);

@@ -8,7 +8,12 @@ export function createBattleMount(runtime){
     const response=await fetch('/api/runtime',{signal:AbortSignal.timeout(6000)});
     need(response.ok,'ENGINE_UNAVAILABLE','本地引擎服务无法连接。');const engine=await response.json();
     need(engine.ready&&engine.integrationVersion===2,'ENGINE_UNAVAILABLE','引擎服务尚未就绪或版本不匹配。');
-    const state=runtime.inspect().world,match=state.matches.find(m=>m.matchId===matchId);
+    let state=runtime.inspect().world,match=state.matches.find(m=>m.matchId===matchId);
+    need(match&&!match.background,'INVALID_STATE','玩家视图不能接管 NPC 后台牌局。');
+    if(['prepared','awaitingNext','interrupted'].includes(match.status)){
+      const started=await runtime.command({requestId:`mount-${match.matchId}-${match.bout}-${match.gameId||'new'}`.slice(-150),type:match.status==='prepared'?'combat.start':'combat.continue',payload:{matchId}});
+      need(started.ok,started.error?.code||'ENGINE_UNAVAILABLE',started.error?.message||'比赛不能开始。');state=runtime.inspect().world;match=state.matches.find(m=>m.matchId===matchId);
+    }
     need(match?.status==='running','INVALID_STATE','请先调用 combat.start / combat.continue。');
     const frame=document.createElement('iframe');frame.title='无名杀原版对局';frame.allow='autoplay; fullscreen';frame.style.cssText='width:100%;height:100%;border:0;min-height:480px';
     const lease=await runtime.pause.acquire({ownerId:`battle:${matchId}`,reason:'玩家对局'});
