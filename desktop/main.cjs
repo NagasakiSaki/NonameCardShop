@@ -1,7 +1,9 @@
 const {app,BrowserWindow,Menu,dialog,shell}=require('electron');
 const fs=require('node:fs'),path=require('node:path'),{pathToFileURL}=require('node:url');
 const testMode=process.env.CARD_SHOP_TEST_MODE==='1';
-const profile=testMode?process.env.CARD_SHOP_TEST_PROFILE:path.join(app.getPath('appData'),'NonameCardShop');
+const development=!app.isPackaged&&process.env.CARD_SHOP_DEVELOPMENT==='1';
+const gameRoot=app.isPackaged?path.join(process.resourcesPath,'game'):path.resolve(__dirname,'..');
+const profile=testMode?process.env.CARD_SHOP_TEST_PROFILE:development?path.join(gameRoot,'.local/desktop-dev'):path.join(app.getPath('appData'),'NonameCardShop');
 if(!profile)throw new Error('缺少桌面存档目录');fs.mkdirSync(profile,{recursive:true});app.setPath('userData',profile);
 app.setName('无名卡店');app.setAppUserModelId('org.noname.cardshop');
 let win,runtime,quitting=false,quitReady=false,backupTimer;
@@ -24,7 +26,7 @@ async function importSave(){try{
 }catch(error){await reportError(error);}}
 function installMenu(){Menu.setApplicationMenu(Menu.buildFromTemplate([
   {label:'存档',submenu:[{label:'导入存档…',click:()=>importSave()},{label:'导出存档…',click:()=>exportSave()},{type:'separator'},{label:'打开存档与备份目录',click:()=>shell.openPath(profile)},{type:'separator'},{label:'退出',accelerator:'Alt+F4',click:()=>app.quit()}]},
-  {label:'显示',submenu:[{role:'reload',label:'重新载入'},{role:'togglefullscreen',label:'全屏',accelerator:'F11'},{role:'resetzoom',label:'恢复缩放'},{role:'zoomin',label:'放大'},{role:'zoomout',label:'缩小'}]},
+  {label:'显示',submenu:[{role:'reload',label:'重新载入'},...(development?[{label:'重启桌面开发进程',click:()=>{app.relaunch();app.quit();}},{role:'toggleDevTools',label:'开发者工具'}]:[]),{role:'togglefullscreen',label:'全屏',accelerator:'F11'},{role:'resetzoom',label:'恢复缩放'},{role:'zoomin',label:'放大'},{role:'zoomout',label:'缩小'}]},
   {label:'帮助',submenu:[{label:'操作与版本',click:()=>dialog.showMessageBox(win,{type:'info',title:'无名卡店',message:`无名卡店 ${app.getVersion()} · Windows x64`,detail:'WASD/方向键移动，E交互，B背包，F11全屏。\n本程序自带页面运行环境与无名杀v1.11.6引擎，无需安装Node.js。\n试玩版存档可在游戏「库存账本」导出，再从桌面菜单「存档」导入。\n自由软件许可证及源码说明见安装目录 resources/game。'})}]}
 ]));}
 if(!app.requestSingleInstanceLock()){app.quit();}else{
@@ -32,9 +34,10 @@ app.on('second-instance',()=>{if(win){if(win.isMinimized())win.restore();win.sho
 app.on('before-quit',event=>{if(quitReady)return;event.preventDefault();if(quitting)return;quitting=true;clearInterval(backupTimer);(async()=>{try{await backup();win?.webContents.session.flushStorageData();}catch(error){log(`退出备份：${error.message}`);}try{await runtime?.close();}finally{quitReady=true;app.quit();}})();});
 app.on('window-all-closed',()=>app.quit());
 app.whenReady().then(async()=>{
-  const gameRoot=app.isPackaged?path.join(process.resourcesPath,'game'):path.resolve(__dirname,'..');
-  const {startShopServer}=await import(pathToFileURL(path.join(gameRoot,'server.mjs')).href);
-  runtime=await startShopServer({port:51740,enginePort:51741});log(`启动 ${app.getVersion()} ${runtime.origin} / ${runtime.engineOrigin}`);
+  const port=testMode?Number(process.env.CARD_SHOP_TEST_PORT||0):development?5192:51740,enginePort=testMode?Number(process.env.CARD_SHOP_TEST_ENGINE_PORT||0):development?5193:51741;
+  if(development){const {startDevelopmentServer}=await import(pathToFileURL(path.join(gameRoot,'dev/runtime.mjs')).href);runtime=await startDevelopmentServer({port,enginePort});}
+  else{const {startShopServer}=await import(pathToFileURL(path.join(gameRoot,'server.mjs')).href);runtime=await startShopServer({port,enginePort});}
+  log(`启动 ${app.getVersion()} ${runtime.origin} / ${runtime.engineOrigin}`);
   win=new BrowserWindow({title:'无名卡店',width:1440,height:960,minWidth:1040,minHeight:720,show:false,backgroundColor:'#10271e',icon:path.join(__dirname,'build/icon.ico'),webPreferences:{nodeIntegration:false,contextIsolation:true,sandbox:true,webSecurity:true,backgroundThrottling:true}});
   win.on('close',event=>{if(!quitReady){event.preventDefault();app.quit();}});
   win.webContents.on('render-process-gone',(_,details)=>{log(`页面进程退出：${JSON.stringify(details)}`);});
@@ -44,5 +47,5 @@ app.whenReady().then(async()=>{
   win.webContents.session.setPermissionRequestHandler((contents,permission,callback)=>callback(permission==='clipboard-sanitized-write'&&permitted(contents.getURL())));
   installMenu();win.once('ready-to-show',()=>win.show());await win.loadURL(runtime.origin+'/?desktop=1');
   backupTimer=setInterval(()=>backup().catch(error=>log(`自动备份：${error.message}`)),30000);backupTimer.unref();
-}).catch(async error=>{await reportError(new Error(error.code==='EADDRINUSE'?'桌面版专用端口51740或51741被其他程序占用。请关闭另一份无名卡店后重新打开。':error.message));quitReady=true;await runtime?.close();app.quit();});
+}).catch(async error=>{await reportError(new Error(error.code==='EADDRINUSE'?`桌面版专用端口${development?'5192或5193':'51740或51741'}被其他程序占用。请关闭占用程序后重新打开。`:error.message));quitReady=true;await runtime?.close();app.quit();});
 }

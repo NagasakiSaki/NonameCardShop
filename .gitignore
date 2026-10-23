@@ -1,7 +1,5 @@
-# Installed tooling, retaining the two original extraction adapters for the baseline.
-/node_modules/*
-!/node_modules/noname/
-!/node_modules/dedent/
+# Installed tooling; the extraction adapter sources are in tools/adapters.
+/node_modules/
 /desktop/node_modules/
 /desktop/dist/
 /desktop/build/desktop-source/

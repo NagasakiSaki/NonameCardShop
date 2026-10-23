@@ -1,0 +1,5 @@
+[
+  {"id":"empty","name":"空店 · 初始资金","save":{"collection":{},"shop":{"cash":1200},"business":{"paused":true}}},
+  {"id":"stocked","name":"经营测试 · 卡牌与库存","save":{"collection":{"caocao":3,"liubei":2,"sunquan":2,"zhangfei":2,"guanyu":2,"zhaoyun":2},"stock":{"standard":10,"extra":3},"shop":{"cash":10000},"business":{"paused":true}}},
+  {"id":"tournament","name":"第7天 · 店赛牌桌","save":{"collection":{"caocao":2,"liubei":2,"sunquan":2,"guanyu":2,"zhangfei":2},"stock":{"standard":8},"shop":{"cash":20000},"business":{"day":7,"paused":true},"modules":{"upgrades":{"version":1,"data":{"levels":{"table":1,"shelf":1}}}}}}
+]

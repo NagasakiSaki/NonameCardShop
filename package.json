@@ -1,0 +1,29 @@
+{
+  "name":"noname-card-shop-development",
+  "version":"0.7.1",
+  "private":true,
+  "type":"commonjs",
+  "license":"GPL-3.0-only",
+  "engines":{"node":">=22.12.0"},
+  "scripts":{
+    "start":"node server.mjs",
+    "setup":"node dev/setup.mjs",
+    "doctor":"node dev/doctor.mjs",
+    "dev":"node --watch --watch-preserve-output dev/launch.mjs",
+    "dev:open":"node --watch --watch-preserve-output dev/launch.mjs --open",
+    "dev:desktop":"node dev/desktop.mjs",
+    "test":"node tests/run.mjs all",
+    "test:unit":"node tests/run.mjs unit",
+    "test:ui":"node tests/run.mjs ui",
+    "test:engine":"node tests/run.mjs engine",
+    "test:desktop":"node tests/run.mjs desktop",
+    "test:release":"node tests/run.mjs release",
+    "test:dev":"node tests/run.mjs dev",
+    "verify:engine":"node tools/verify-engine.mjs",
+    "balance:build":"node tools/build-balance.cjs",
+    "build:dir":"node dev/build.mjs dir",
+    "build:exe":"node dev/build.mjs exe"
+  },
+  "dependencies":{"noname":"file:tools/adapters/noname","dedent":"file:tools/adapters/dedent"},
+  "devDependencies":{"playwright":"1.64.1"}
+}

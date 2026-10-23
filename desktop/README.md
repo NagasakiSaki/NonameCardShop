@@ -10,6 +10,8 @@ Windows x64 安装版，自带 Electron 45.0.0、Chromium、Node 运行环境、
 
 游戏资源与可编辑模块位于安装目录 `resources/game`。核心参数继续维护 data/balance.json、power-model.json 等，评分修改后需重建卡表。桌面启动源码和锁定依赖位于 `resources/desktop-source`，Electron本体与Chromium许可证在安装目录。无名杀GPL及来源清单位于 resources/game/NONAME-LICENSE 和 data/engine-manifest.json。
 
-重建：将 desktop-source 复制为 game/desktop，在此目录用 Node.js 22.12+ 执行 `npm ci`；`npm run pack` 生成解包目录；PowerShell执行 `$env:ELECTRON_BUILDER_7Z_FILTER='BCJ'` 后运行 `npm run dist` 生成NSIS安装包。构建使用锁文件；安装后的玩家无需这些开发工具。开发模式首次运行需要 `npx install-electron`，或先运行pack自动下载运行环境。
+源码开发：在游戏根目录执行 `npm ci`、`npm run setup`，之后双击根目录“桌面开发.cmd”。它使用5192/5193和项目 `.local/desktop-dev`，不覆盖正式桌面存档。界面自动刷新；原生菜单/主进程修改后从“显示”菜单重启桌面开发进程。详细流程见 `docs/DEVELOPMENT.md`。
+
+重建：安装版内将 desktop-source 复制为 game/desktop，再在 game 根目录初始化开发环境；`npm run build:dir` 生成解包目录，`npm run build:exe` 生成NSIS安装包，自动设置 BCJ 压缩过滤器。构建使用锁文件；安装后的玩家无需这些开发工具。
 
 本地构建未购买发布者代码签名证书，exe没有发布者数字签名。未添加更新器、联网账号或遥测。

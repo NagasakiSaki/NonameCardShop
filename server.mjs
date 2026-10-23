@@ -31,9 +31,10 @@ function send(res, file, type) {
   });
 }
 
-export async function startShopServer({port=Number(process.env.PORT||5174),enginePort=Number(process.env.ENGINE_PORT||port+1)}={}) {
+export async function startShopServer({port=Number(process.env.PORT||5174),enginePort=Number(process.env.ENGINE_PORT||port+1),interceptRequest=null}={}) {
 const engineServer = createEngineServer();
 const server = http.createServer((req, res) => {
+  if(interceptRequest?.(req,res))return;
   let url;
   try { url = decodeURIComponent((req.url || "/").split("?")[0]); }
   catch { res.writeHead(400); return res.end("bad request"); }
@@ -56,6 +57,10 @@ const server = http.createServer((req, res) => {
   if (file !== ROOT && !file.startsWith(ROOT + path.sep)) {
     res.writeHead(403);
     return res.end("forbidden");
+  }
+  const relative=path.relative(ROOT,file).replaceAll('\\','/');
+  if(relative.split('/').some(part=>part.startsWith('.'))||/^(desktop|node_modules|test-results|dev|tests)(\/|$)/.test(relative)){
+    res.writeHead(404);return res.end('not found');
   }
   send(res, file, MIME[path.extname(file).toLowerCase()]);
 });

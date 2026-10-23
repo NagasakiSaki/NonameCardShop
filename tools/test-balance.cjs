@@ -39,5 +39,6 @@ const altered=structuredClone(data);altered.cards.push(...data.cards.filter(c=>c
 assert.equal(B.quote(data.packs.find(p=>p.id==='standard'),prices).ev,120.8);
 // Live recipe modification changes the quote and the draws together.
 const changed=structuredClone(cfg);changed.recipes.standard.slots[4]={R:.9,SR:.09,UR:.01};B.configure(changed,data);assert.ok(B.quote(data.packs.find(p=>p.id==='standard'),prices).ev<120.8);B.configure(cfg,data);
-fs.writeFileSync(path.join(root,'data/balance-simulation.json'),JSON.stringify({seed:20261023,samplesPerPack:n,totalPacks:n*data.packs.length,results},null,2)+'\n');
+const resultsDir=process.env.CARD_SHOP_TEST_RESULTS||path.join(root,'test-results');fs.mkdirSync(resultsDir,{recursive:true});
+fs.writeFileSync(path.join(resultsDir,'balance-simulation.json'),JSON.stringify({seed:20261023,samplesPerPack:n,totalPacks:n*data.packs.length,results},null,2)+'\n');
 console.log(`PASS: scoring costs/format/lord/HP/labels, catalogue integrity, config rejection, ${n*data.packs.length} packs, rarity slots/guarantee/fallback, EV/rate confidence bounds, return/margin, live rule/quote parity.`);
