@@ -17,6 +17,8 @@
 
 ## 常用命令
 
+2026-10-24 已新增零依赖的 `tools/character-kit/`：部件枚举、结构化配置校验、分团图册和素材审计。开始前先读该目录 README；可以直接使用 `node tools/character-kit/cli.mjs list-parts --json`，校验后再调用下面的既有绘制器。此包装不会自行安装或修改正式人物包。
+
 在工程根目录运行：
 
 ```powershell

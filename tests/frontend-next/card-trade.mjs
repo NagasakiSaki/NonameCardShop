@@ -1,0 +1,40 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {chromium} from 'playwright';
+import {startShopServer} from '../../server.mjs';
+const out='.local/collaboration/QA-02/card-trade';fs.mkdirSync(out,{recursive:true});
+const server=await startShopServer({port:0,enginePort:0});let browser;
+try{
+  browser=await chromium.launch();const context=await browser.newContext({viewport:{width:1366,height:768}}),page=await context.newPage(),errors=[],badResponses=[],businessRequests=[];
+  page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)badResponses.push(r.status()+' '+r.url());});
+  page.on('request',r=>{if(r.url().includes('/api/')||r.url().includes('/modules/backend/'))businessRequests.push(r.url());});
+  await page.goto(server.origin+'/frontend-next/experiments/card-trade/index.html');await page.locator('[data-card="caocao"]').waitFor();
+  await page.waitForFunction(()=>[...document.querySelectorAll('.card-art img')].every(i=>i.complete&&i.naturalWidth>0));
+  assert.equal(await page.locator('.card-tile').count(),12);
+  const geometry=await page.evaluate(()=>{const cards=[...document.querySelectorAll('.card-tile')].slice(0,8).map(e=>{const r=e.getBoundingClientRect();return {x:r.x,y:r.y,bottom:r.bottom};}),catalog=document.querySelector('.catalog').getBoundingClientRect(),art=document.querySelector('.card-art').getBoundingClientRect();return {cards,bottom:catalog.bottom,ratio:art.width/art.height,overflow:document.documentElement.scrollWidth-innerWidth};});
+  assert.equal(new Set(geometry.cards.map(c=>c.x)).size,4,'desktop must have four columns');assert.ok(geometry.cards.every(c=>c.bottom<=geometry.bottom+2),'desktop first two card rows must be visible');assert.ok(Math.abs(geometry.ratio-.75)<.01);assert.ok(geometry.overflow<=1);
+  await page.screenshot({path:out+'/market-desktop.png',fullPage:true});
+  await page.setViewportSize({width:1280,height:720});
+  assert.ok(await page.evaluate(()=>[...document.querySelectorAll('.card-tile')].slice(0,8).every(e=>e.getBoundingClientRect().bottom<=document.querySelector('.catalog').getBoundingClientRect().bottom+2)),'compact desktop retains 4×2 cards');
+  await page.screenshot({path:out+'/market-compact.png'});await page.setViewportSize({width:1366,height:768});
+  await page.locator('.detail-panel').getByRole('button',{name:'查看大图与完整技能 ↗'}).click();assert.equal(await page.locator('#card-dialog').getAttribute('open'),'');assert.ok((await page.locator('.skill').allInnerTexts()).join('\n').includes('奸雄'));await page.locator('#dialog-close').click();
+  await page.locator('input[aria-label="搜索单卡"]').fill('龙胆');assert.equal(await page.locator('.card-tile').count(),1);await page.locator('input[aria-label="搜索单卡"]').fill('');
+  const before=await page.locator('#balance').innerText();await page.locator('.detail-panel').getByRole('button',{name:'模拟买入 1 张',exact:true}).click();assert.notEqual(await page.locator('#balance').innerText(),before);assert.ok((await page.locator('[data-card="caocao"]').innerText()).includes('×4'));
+  await page.getByRole('button',{name:'我的收藏 / 上架',exact:true}).click();const balance=await page.locator('#balance').innerText();await page.getByRole('button',{name:'保留 1 张，其余模拟上架',exact:true}).click();assert.equal(await page.locator('#balance').innerText(),balance,'listing must not credit revenue');assert.ok((await page.locator('[data-card="caocao"]').innerText()).includes('可上架 0 张'));
+  await page.locator('[data-screen="supplier"]').click();assert.equal(await page.locator('.product-tile').count(),6);await page.locator('[data-product="standard-box"]').getByRole('button',{name:'＋ 加入购物篮',exact:true}).click();await page.getByRole('spinbutton',{name:'标准 · 密封盒 数量',exact:true}).fill('2');await page.getByRole('spinbutton',{name:'标准 · 密封盒 数量',exact:true}).dispatchEvent('change');
+  assert.equal(await page.locator('[data-total]').getAttribute('data-total'),'105600');
+  await page.screenshot({path:out+'/supplier-desktop.png',fullPage:true});
+  await page.getByRole('button',{name:'模拟下单 · ¥1,056',exact:true}).click();assert.equal(await page.locator('#pending-count').innerText(),'1');const paid=await page.locator('#balance').innerText();
+  await page.locator('[data-screen="receipts"]').click();await page.getByRole('button',{name:'模拟签收本单',exact:true}).click();assert.equal(await page.locator('#balance').innerText(),paid);assert.equal(await page.locator('#pending-count').innerText(),'0');assert.equal(await page.getByRole('button',{name:'模拟签收本单'}).count(),0);assert.ok((await page.locator('.receipt-summary').innerText()).includes('2 件'));
+  await page.setViewportSize({width:406,height:1000});await page.reload();await page.locator('[data-card="caocao"]').waitFor();assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+  await page.locator('[data-card="caocao"]').click();assert.equal(await page.locator('#card-dialog').getAttribute('open'),'');assert.ok(await page.evaluate(()=>document.querySelector('#card-dialog').scrollWidth<=document.querySelector('#card-dialog').clientWidth+1));await page.locator('#dialog-close').click();
+  await page.screenshot({path:out+'/market-mobile.png'});
+  await page.locator('[data-screen="supplier"]').click();await page.locator('[data-product="standard-box"]').getByRole('button',{name:'＋ 加入购物篮',exact:true}).click();assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));assert.ok(await page.locator('#mobile-checkout').isVisible());await page.locator('#basket-jump').click();await page.screenshot({path:out+'/supplier-mobile.png'});
+  // Exercise image fallback without producing a fake HTTP 404.
+  await page.evaluate(async()=>{const {art}=await import('/frontend-next/components/trade.mjs');document.querySelector('#workspace').prepend(art('','缺图占位检查','card-art'));});assert.equal(await page.locator('.art-frame--missing').count(),1);
+  assert.equal(await page.evaluate(()=>localStorage.length),0);assert.equal(await page.evaluate(async()=>(await indexedDB.databases()).length),0);
+  await page.reload();await page.locator('[data-card="caocao"]').waitFor();assert.ok((await page.locator('[data-card="caocao"]').innerText()).includes('×3'));assert.equal(await page.locator('#balance').innerText(),'¥56,200');
+  assert.deepEqual(errors,[]);assert.deepEqual(badResponses,[]);assert.deepEqual(businessRequests,[]);
+  fs.writeFileSync(out+'/report.json',JSON.stringify({passed:true,viewports:['1366×768','1280×720','406×1000'],errors,badResponses,businessRequests,checks:['4×2 visible card grid on both desktop sizes','original card images','skills and search','mock buy/list with no listing revenue','basket quantity and total','paid receipt signed once without duplicate debit','narrow screen/dialog and checkout bar','missing-image identity','no storage writes','refresh reset']},null,2));
+  console.log('PASS card-trade: card-first desktop/mobile; skills/search; mock trade, basket, receipt; no business requests, storage writes, HTTP errors or page errors. Screenshots: '+out);
+}finally{await browser?.close();await server.close();}

@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>无名小店 · 卡面交易样稿</title><link rel="stylesheet" href="../../styles/trade.css"></head>
+<body>
+  <div class="demo-ribbon"><span>界面样稿 / 模拟数据</span><span>不连接正式交易 · 刷新恢复</span></div>
+  <div class="shop-shell">
+    <aside class="shop-nav"><a class="brand" href="/frontend-next/experiments/card-trade/index.html"><span class="brand-mark" aria-hidden="true">▱</span><span>無名小店<small>THE CARD ATELIER</small></span></a><p class="eyebrow nav-caption">店长工作台</p><nav aria-label="工作区"><button data-screen="market" class="nav-button is-active">◇ 单卡市场</button><button data-screen="supplier" class="nav-button">▤ 采购补货</button><button data-screen="receipts" class="nav-button">▥ 收货仓库 <span id="pending-count">0</span></button></nav><div class="nav-note"><span class="status-dot"></span>样稿已就绪<p>看卡、采购和收货，<br>各有一张清楚的工作台。</p></div><a class="back-link" href="/experiments/character-art/index.html">← 人物试验室</a></aside>
+    <main>
+      <header class="workspace-header"><div><p class="eyebrow" id="page-kicker">THE SECONDARY MARKET</p><h1 id="page-title">每张卡，都值得看清。</h1></div><div class="wallet"><span>演示余额</span><strong id="balance"></strong></div></header>
+      <div id="toolbar"></div>
+      <div id="workspace" class="workspace"></div>
+      <footer class="workspace-footer"><span><span class="status-dot"></span>交互展示 · 营业时间暂停</span><span id="footer-note">只在二级市场交易单卡</span></footer>
+    </main>
+  </div>
+  <div id="mobile-checkout" class="mobile-checkout" hidden></div>
+  <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+  <dialog id="card-dialog" aria-labelledby="dialog-title"><div class="dialog-toolbar"><span class="eyebrow">CARD DETAIL</span><button id="dialog-close" class="icon-button" aria-label="关闭详情">✕</button></div><div id="dialog-body"></div></dialog>
+  <script type="module" src="./app.mjs"></script>
+</body></html>
