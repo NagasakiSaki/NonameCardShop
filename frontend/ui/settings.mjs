@@ -1,5 +1,5 @@
 // frontend/ui/settings.mjs — 设置：前端偏好（本地前缀存储）与独立的开发配置区（提交经 Host 校验）。
-import { el, clear, stateView, errorView, newRequestId, busyButton } from "./components.mjs";
+import { el, clear, stateView, errorView, newRequestId, busyButton, imgWithFallback } from "./components.mjs";
 
 const PREF_KEY = "noname-card-shop-frontend-preview:prefs";
 
@@ -32,7 +32,6 @@ export function applyPrefs() {
 }
 
 export async function openSettings(app) {
-  const prefs = readPrefs();
   return app.windows.open({
     id: "settings",
     title: "设置",
@@ -41,6 +40,15 @@ export async function openSettings(app) {
     pauseReason: "打开设置",
     render: async (ctx) => {
       const body = ctx.body;
+      const prefs=readPrefs(),skins=await ctx.query('player.skins');
+      if(skins.ok)body.append(el('section',{class:'section'},[
+        el('h4',{class:'section__title',text:'店长换装'}),
+        el('p',{class:'small muted',text:'外观免费切换并随存档保存，只改变店长外形。'}),
+        el('div',{class:'skin-grid'},skins.data.items.map(s=>el('button',{
+          class:'skin-option'+(s.selected?' is-selected':''),type:'button','aria-label':'换装：'+s.name,'aria-pressed':String(s.selected),'data-skin':s.appearanceId,
+          onclick:async event=>{const restore=busyButton(event.currentTarget,'换装中…');const r=await ctx.submit({requestId:newRequestId('skin'),type:'player.setSkin',payload:{appearanceId:s.appearanceId}});restore();if(!r.ok)app.toast('error',r.error.code,r.error.message);else {await app.refreshSnapshot();ctx.refresh();}}
+        },[imgWithFallback(app.manifest.characters[s.appearanceId].portrait,s.name,'skin-option__portrait'),el('strong',{text:s.name}),el('span',{class:'small muted',text:s.selected?'当前穿着':'点击换装'})])))
+      ]));
 
       body.append(el("div", { class: "section" }, [
         el("h4", { class: "section__title", text: "前端偏好" }),

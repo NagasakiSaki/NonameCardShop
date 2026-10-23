@@ -13,6 +13,8 @@
 
 ## 目录、库存、开包
 
+第三版配盒：新发行仅保留 19 主题，商品含 `collationVersion`，每包 4 个 N/R 基础槽与 1 个 R/SR/SSR 进阶槽；配比、价格与历史实物兼容见 [卡包配盒与角色第三版](../docs/卡包配盒与角色第三版.md)。`catalog.list` 默认在售目录，`includeRetired:true` 查询历史完整卡种；旧 `catalog.detail` 引用保持有效。
+
 | 接口 | 具体约定 |
 | --- | --- |
 | products.list | 分页 `{items,total,nextCursor}`；商品含 themeName/name、unitAmounts（采购价）、prices.pack/box.wholesale/retail、全局评分版本、配比与盒定额；unavailable 商品不能询价 |
@@ -37,6 +39,7 @@
 ## 移动、对局、档案
 
 - 玩家 actorId='actor:owner'，库存 ownerId='player'；两者不同。外观使用 owner/rookie/collector/competitor/passerby/regular/bigspender。
+- 查询 `player.skins` 返回 `{current,items:[{appearanceId,name,selected}]}`；命令 `player.setSkin({appearanceId})` 免费修改店长外观，非法 ID 原子拒绝。外观随世界存档恢复，身份、资金和持卡不变。
 - world.input 的 inputSeq 单调递增，仅为移动意图；不能通过 roomId 让角色瞬移。跨房先到出口，command `world.changeRoom({anchorId})`，确认权威 actorsUpdated 后换场景。
 - combat.register 返回顶层 matchId 及 match 兼容对象；battle.mount 只接已登记玩家比赛。玩家/后台引擎配置隔离，dispose 可重复调用并返回清理 Promise。
 - BO3 小局结束为 awaitingNext；重新 mount 或 combat.continue 后开始下一局。关窗中断当前无赌注小局，重开界面可继续。只有一整场结束才计一份胜率。

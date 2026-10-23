@@ -1,6 +1,7 @@
 import {clone,need,integer,serial,debit,credit,random,sum} from './common.mjs';
 import {owned,free,referencePrice,income,enterCirculation} from './trading.mjs';
 import {note} from './world.mjs';
+import {productEnabled} from './distribution.mjs';
 
 export function validateManagement(c){
   need(c?.version===1&&Array.isArray(c.upgrades)&&Array.isArray(c.regulars),'INVALID_CONFIG','经营扩展配置格式不正确。');
@@ -61,7 +62,7 @@ export function tickManagement(w,catalog){
   const e=managementEffects(w),stamp=w.clock.day*1440+w.clock.minute;
   if(e.stocker&&stamp>=m.nextRestockAt){
     m.nextRestockAt=stamp+m.config.restockIntervalMinutes;
-    for(const productId of new Set(owned(w).filter(i=>i.kind==='pack'&&i.location==='stock').map(i=>i.productId))){
+    for(const productId of new Set(owned(w).filter(i=>i.kind==='pack'&&i.location==='stock'&&productEnabled(w.rules,i.productId)).map(i=>i.productId))){
       const stock=owned(w).filter(i=>i.kind==='pack'&&i.productId===productId&&i.location==='stock'&&free(i));let target=m.config.restockTargetPerProduct-owned(w).filter(i=>i.kind==='pack'&&i.productId===productId&&i.location==='retail').length;
       for(const item of stock.slice(m.config.warehouseReservePerProduct)){if(target<=0||shelfUsed(w)>=e.shelfCapacity)break;item.location='retail';target--;m.restocked++;note(w,'employeeRestocked',{inventoryRef:item.inventoryRef});}
     }

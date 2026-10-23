@@ -60,8 +60,8 @@ check("至少七套角色，且都带有四向/待机/立绘声明", () => {
     for (const key of ["sheet", "portrait", "frameWidth", "frameHeight", "anchorPx", "directions", "idleColumn", "walkColumns"]) {
       if (!(key in entry)) throw new Error(id + " 缺字段 " + key);
     }
-    if (entry.frameWidth !== 48 || entry.frameHeight !== 64) throw new Error(id + " 帧尺寸必须 48×64");
-    if (entry.anchorPx[0] !== 24 || entry.anchorPx[1] !== 60) throw new Error(id + " 落脚点必须 (24,60)");
+    if (entry.frameWidth !== 96 || entry.frameHeight !== 128) throw new Error(id + " 帧尺寸必须 96×128");
+    if (entry.anchorPx[0] !== 48 || entry.anchorPx[1] !== 120) throw new Error(id + " 落脚点必须 (48,120)");
     const dirs = entry.directions;
     if (!(dirs.down === 0 && dirs.left === 1 && dirs.right === 2 && dirs.up === 3)) throw new Error(id + " 行序必须是 下/左/右/上");
     if (entry.idleColumn !== 1) throw new Error(id + " 待机必须是第 1 列");
@@ -69,16 +69,16 @@ check("至少七套角色，且都带有四向/待机/立绘声明", () => {
   }
 });
 
-check("角色图集为 144×256、立绘为 128×128、均为透明背景", () => {
+check("角色图集为 288×512、立绘为 256×256、均为透明背景", () => {
   for (const [id, entry] of Object.entries(manifest.characters)) {
     const sheet = readImage(entry.sheet);
-    const sheetOk = sheet.width === 144 && sheet.height === 256;
+    const sheetOk = sheet.width === 288 && sheet.height === 512;
     if (!sheetOk) throw new Error(id + " 图集尺寸 " + sheet.width + "x" + sheet.height);
     const sheetAlpha = alphaStats(sheet);
     if (sheetAlpha.transparent < 500) throw new Error(id + " 图集不是透明底");
     if (sheetAlpha.opaque < 2000) throw new Error(id + " 图集内容过少");
     const portrait = readImage(entry.portrait);
-    if (portrait.width !== 128 || portrait.height !== 128) throw new Error(id + " 立绘不是 128×128");
+    if (portrait.width !== 256 || portrait.height !== 256) throw new Error(id + " 立绘不是 256×256");
     const portraitAlpha = alphaStats(portrait);
     if (portraitAlpha.transparent < 800) throw new Error(id + " 立绘不是透明底");
     info.push({ 角色: id, 图集颜色数: colorsOf(sheet), 立绘颜色数: colorsOf(portrait), 图集字节: sheet.bytes, 立绘字节: portrait.bytes });
@@ -257,7 +257,7 @@ for (const row of results) {
 }
 console.log("");
 console.log("素材总量: " + (totalBytes / 1024).toFixed(1) + " KB（不含清单）");
-console.log("美术 v2：原生角色 48×64，导航 16，瓦片图像 32，设施图集 768×1152。");
+console.log("美术 v3：原生角色 96×128，导航 16，瓦片图像 32，设施图集 768×1152。");
 if (info.length) console.table ? console.table(info) : console.log(info);
 console.log((results.length - failed.length) + "/" + results.length + " 项通过");
 if (failed.length) process.exitCode = 1;

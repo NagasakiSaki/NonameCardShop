@@ -303,3 +303,7 @@
   text-align: center;
   padding: var(--step-4);
 }
+.skin-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px; }
+.skin-option { display:grid;justify-items:center;gap:7px;padding:10px 6px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--paper);cursor:pointer; }
+.skin-option:hover,.skin-option.is-selected { border-color:var(--gold);background:rgba(232,182,74,.09); }
+.skin-option__portrait { width:96px;height:96px;object-fit:contain;image-rendering:pixelated; }

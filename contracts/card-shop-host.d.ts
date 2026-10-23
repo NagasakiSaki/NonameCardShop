@@ -2,6 +2,8 @@ export type Rarity = 'N' | 'R' | 'SR' | 'SSR';
 export type HostError = { code: string; message: string; retryable: boolean; details?: unknown };
 export type Result<T = unknown> = {ok:true; revision:number; data:T} | {ok:false; error:HostError};
 export interface CommandRequest { requestId:string; type:string; payload?:Record<string,unknown>; quoteId?:string; previewId?:string }
+/** query('player.skins'); command({type:'player.setSkin',payload:{appearanceId}}). Cosmetic, archived with world.player. */
+export interface PlayerSkins { current:string; items:Array<{appearanceId:string;name:string;selected:boolean}> }
 export interface HostEvent { contractVersion:'card-shop-ui/1.0'; worldId:string; branchId:string; seq:number; revision:number; type:string; data:unknown }
 export interface PauseLease {leaseId:string; ownerId:string; reason:string}
 /** inventory.list({location:'trash'}) returns the shared bin, one row per actual card. */

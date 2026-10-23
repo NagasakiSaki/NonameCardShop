@@ -1,7 +1,9 @@
 import {RARITIES,clamp,need,page} from './common.mjs';
 import {DEFAULT_CUSTOMER_BEHAVIOR} from './trash.mjs';
+import {productEnabled,validateDistribution} from './distribution.mjs';
 
 export function validateRules(r){
+  validateDistribution(r||{});
   need(r?.version===1,'INVALID_CONFIG','不支持的后端规则版本。');
   need(['R','SR','SSR'].every(k=>Number.isFinite(r.thresholds?.[k])),'INVALID_CONFIG','分数界线必须是有限数值。');
   need(r.thresholds?.R<r.thresholds?.SR&&r.thresholds.SR<r.thresholds.SSR,'INVALID_CONFIG','全局稀有度界线必须递增。');
@@ -44,11 +46,12 @@ export function buildCatalog(source,rules){
       imageUrl:`/img/${encodeURIComponent(card.img)}`,reviewStatus:card.power?.method==='规则校准估算'?'calibrated':'estimated',
       issuanceValue:Math.max(1,Math.round(rules.referenceValues[rarity]*clamp(score/65,.8,1.35)))};
   });
-  return {cards,packs:source.packs,byKey:new Map(cards.map(c=>[c.cardKey,c])),byId:new Map(cards.map(c=>[c.id,c])),pools:Object.fromEntries(RARITIES.map(r=>[r,cards.filter(c=>c.currentRarity===r).map(c=>c.cardKey)]))};
+  const activeCards=cards.filter(c=>productEnabled(rules,c.pack));
+  return {cards,activeCards,packs:source.packs.filter(p=>productEnabled(rules,p.id)),byKey:new Map(cards.map(c=>[c.cardKey,c])),byId:new Map(cards.map(c=>[c.id,c])),pools:Object.fromEntries(RARITIES.map(r=>[r,activeCards.filter(c=>c.currentRarity===r).map(c=>c.cardKey)]))};
 }
 export function cardSummary(c){return {cardKey:c.cardKey,generalId:c.generalId,skillVersion:c.skillVersion,name:c.name,imageUrl:c.imageUrl,currentRarity:c.currentRarity,globalScore:c.globalScore,ratingVersion:c.ratingVersion,reviewStatus:c.reviewStatus,themeId:c.pack,group:c.group,hp:c.hp};}
 export function catalogList(catalog,p={}){
-  let rows=catalog.cards.filter(c=>(!p.search||`${c.name} ${c.generalId}`.toLowerCase().includes(String(p.search).toLowerCase()))&&(!p.rarity||c.currentRarity===p.rarity)&&(!p.themeId||c.pack===p.themeId));
+  let rows=(p.includeRetired?catalog.cards:catalog.activeCards||catalog.cards).filter(c=>(!p.search||`${c.name} ${c.generalId}`.toLowerCase().includes(String(p.search).toLowerCase()))&&(!p.rarity||c.currentRarity===p.rarity)&&(!p.themeId||c.pack===p.themeId));
   rows.sort(p.sort==='score'?(a,b)=>b.globalScore-a.globalScore:(a,b)=>a.name.localeCompare(b.name,'zh'));
   return {...page(rows.map(cardSummary),p),ratingVersion:catalog.cards[0]?.ratingVersion};
 }

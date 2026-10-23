@@ -70,4 +70,4 @@ const closingWorld=createWorld(rules);closingWorld.products=products;closingWorl
 const closing=await createRuntime({source,rules,repository:memoryRepository({schemaVersion:2,revision:0,world:closingWorld,archives:[],requests:{},legacyResetDone:true})});
 await closing.connect({contractVersion:'card-shop-ui/1.0',clientId:'closing'});await closing.advance(1);assert.equal((await closing.query('shop.snapshot')).data.clock.phase,'closing');
 assert.equal((await closing.command({requestId:'close-at-20',type:'business.close'})).ok,true);await closing.disconnect();
-console.log('PASS backend: global rating, theme recipes, 26 box quotas, pause leases, order/open idempotency, atomic rejection, cost conservation, circulation, NPC purchase, trash and day branches.');
+console.log(`PASS backend: global rating, theme recipes, ${products.length} box quotas, pause leases, order/open idempotency, atomic rejection, cost conservation, circulation, NPC purchase, trash and day branches.`);

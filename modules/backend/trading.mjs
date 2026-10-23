@@ -5,6 +5,7 @@ export {enterCirculation} from './world.mjs';
 import {trashItems,discardCard,customerBehavior,ensureCustomerTraits,canScavenge,unwantedCards,scavenge} from './trash.mjs';
 import {pathfind,moveActor} from './navigation.mjs';
 import {managementEffects} from './management.mjs';
+import {productEnabled} from './distribution.mjs';
 
 export const owned=(w,ownerId='player')=>Object.values(w.items).filter(i=>i.ownerId===ownerId);
 export const free=i=>!i.lock&&!i.protected;
@@ -39,7 +40,7 @@ export function inventoryList(w,catalog,p={}){
 }
 export function openingPreview(w,p){
   const refs=p.inventoryRefs?new Set(p.inventoryRefs):null;
-  const items=owned(w).filter(i=>i.location==='stock'&&free(i)&&(!refs||refs.has(i.inventoryRef))&&(!p.productId||i.productId===p.productId)&&(i.kind==='pack'||p.includeBoxes&&i.kind==='box'));
+  const items=owned(w).filter(i=>i.location==='stock'&&free(i)&&(refs||productEnabled(w.rules,i.productId))&&(!refs||refs.has(i.inventoryRef))&&(!p.productId||i.productId===p.productId)&&(i.kind==='pack'||p.includeBoxes&&i.kind==='box'));
   let remaining=p.quantity===undefined?Infinity:integer(p.quantity,1,10000);const plan=[];
   for(const item of items){if(remaining<=0)break;const packs=Math.min(remaining,item.kind==='box'?24:1);plan.push({inventoryRef:item.inventoryRef,packs});remaining-=packs;}
   const selected=plan.map(p=>w.items[p.inventoryRef]),packs=sum(plan.map(p=>p.packs));
@@ -103,6 +104,7 @@ export function openCustomerPurchase(w,catalog,npc,inventoryRef){
   return cards.map(i=>i.inventoryRef);
 }
 export function purchaseRetail(w,npc,item,{deferOpening=false}={}){
+  need(productEnabled(w.rules,item.productId),'PRODUCT_UNAVAILABLE','该主题已停产，不再出售。');
   need(item.ownerId==='player'&&['pack','box'].includes(item.kind)&&item.location==='retail'&&free(item),'OUT_OF_STOCK','商品已售完或不可出售。');
   debit(npc.wallet,item.retailPrice);income(w,item.retailPrice);w.daily.goods+=item.retailPrice;w.daily.sealedSales=(w.daily.sealedSales||0)+item.retailPrice;w.daily.cogs+=item.cost;w.lifetime.sales++;
   item.ownerId=npc.actorId;item.location='stock';item.cost=item.retailPrice;
@@ -111,7 +113,7 @@ export function purchaseRetail(w,npc,item,{deferOpening=false}={}){
   return item.inventoryRef;
 }
 function acceptableListing(w,catalog,npc,l){return l.status==='active'&&l.ownerId!==npc.actorId&&l.unitAmount<=npc.wallet.available&&l.unitAmount<=referencePrice(w,catalog,l.cardKey)*(w.rules.npcSinglePriceCeiling??1.4);}
-function acceptableRetail(w,npc,i){const suggested=i.suggestedRetail??i.cost/(1-w.rules.retailMargin);return ['pack','box'].includes(i.kind)&&i.location==='retail'&&free(i)&&i.retailPrice<=npc.wallet.available&&i.retailPrice<=suggested*(w.rules.npcSealedPriceCeiling??1.4);}
+function acceptableRetail(w,npc,i){const suggested=i.suggestedRetail??i.cost/(1-w.rules.retailMargin);return productEnabled(w.rules,i.productId)&&['pack','box'].includes(i.kind)&&i.location==='retail'&&free(i)&&i.retailPrice<=npc.wallet.available&&i.retailPrice<=suggested*(w.rules.npcSealedPriceCeiling??1.4);}
 function consignSurplus(w,catalog,npc){
   const cards=owned(w,npc.actorId).filter(i=>i.kind==='card'&&i.location==='collection'&&free(i));
   if(cards.length>customerBehavior(w).minimumKeptCards&&w.listings.filter(l=>l.ownerId===npc.actorId&&l.status==='active').length<2){const item=[...cards].sort((a,b)=>referencePrice(w,catalog,a.cardKey)-referencePrice(w,catalog,b.cardKey))[0];placeListing(w,catalog,item,referencePrice(w,catalog,item.cardKey));}

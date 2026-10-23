@@ -3,12 +3,12 @@ import fs from "node:fs";
 import path from "node:path";
 import { encodePng } from "./png.mjs";
 import { PALETTE, Img } from "./pixkit.mjs";
-import { CHARACTERS, drawActorSheet, drawPortrait, FRAME_W, FRAME_H, ANCHOR, DIRECTIONS, WALK_COLUMNS } from "./characters-v2.mjs";
+import { CHARACTERS, drawActorSheet, drawPortrait, FRAME_W, FRAME_H, ANCHOR, DIRECTIONS, WALK_COLUMNS, DISPLAY_SCALE } from "./characters-v3.mjs";
 import { TILES, PROPS, PROP_META, buildTileset, buildProps, buildGlow, buildBlobShadow, ART_SCALE, PROP_CELL } from "./props-v2.mjs";
 import { buildStoreMap, buildBattleRoomMap, MAP_W, MAP_H, TILE, NAV_VERSION } from "./maps-v2.mjs";
 
 const OUT = "assets/frontend";
-const ART_VERSION = "pixel-shop-2-band-inspired";
+const ART_VERSION = "pixel-shop-3-profile-skins";
 const dirs = ["characters", "portraits", "tiles", "props", "maps", "fx", "fonts"];
 
 function ensureDirs() {
@@ -35,7 +35,7 @@ export function buildAll() {
       portrait: portrait.path,
       frameWidth: FRAME_W,
       frameHeight: FRAME_H,
-      displayScale: 0.6,
+      displayScale: DISPLAY_SCALE,
       anchorPx: ANCHOR,
       directions: { down: 0, left: 1, right: 2, up: 3 },
       idleColumn: 1,

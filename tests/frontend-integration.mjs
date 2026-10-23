@@ -13,6 +13,13 @@ try{
   async function until(fn,message,timeout=15000){const start=Date.now();while(Date.now()-start<timeout){const value=await fn();if(value)return value;await page.waitForTimeout(150);}console.error('STATE',await page.evaluate(()=>({player:__cardShopApp.getPlayer(),clock:__cardShopApp.snapshot().clock,map:__cardShopApp.currentMap().mapId,windows:__cardShopApp.windows.depth,text:document.querySelector('#toasts')?.innerText})));await page.screenshot({path:path.join(output,'failure.png')});throw Error('Timeout: '+message);}
   const close=async()=>{await page.evaluate(()=>__cardShopApp.windows.closeAll());await until(async()=>!(await query('shop.snapshot')).clock.pauseReasons.length,'release windows');};
   const go=async id=>{await page.evaluate(id=>__cardShopApp.goToInteraction(id),id);await until(()=>page.evaluate(id=>__cardShopApp.isNearInteraction(id)&&__cardShopApp.windows.depth>0,id),'walk to '+id,20000);await page.waitForTimeout(180);};
+  // Fund this isolated commerce/combat fixture independently of live supply-price tuning.
+  await page.goto(server.origin+'/data/backend-rules.json');await page.evaluate(async()=>{
+    const [{createWorld},{buildCatalog},{publishProducts},{browserRepository}]=await Promise.all([import('/modules/backend/world.mjs'),import('/modules/backend/catalog.mjs'),import('/modules/backend/products.mjs'),import('/modules/backend/storage.mjs')]);
+    const [source,rules]=await Promise.all(['/data/cards.json','/data/backend-rules.json'].map(p=>fetch(p).then(r=>r.json())));rules.startingCash=50000;
+    const w=createWorld(rules);w.products=publishProducts(buildCatalog(source,rules),rules,1);
+    const repo=browserRepository();await repo.commit({schemaVersion:2,revision:0,world:w,archives:[],requests:{},legacyResetDone:true},null);await repo.close();
+  });
   await page.goto(server.origin);await page.waitForFunction(()=>window.__cardShopReady===true,null,{timeout:25000});
   assert.match(page.url(),/frontend\/index.html/);assert.equal(await page.locator('#mode-badge').isVisible(),false);
   // Exercise the public config contract in this isolated test world, keeping the foreground opponent free.

@@ -62,7 +62,7 @@ export class ActorView {
       entry.direction = actor.direction;
       entry.moving = actor.moving;
       entry.activity = actor.activity;
-      const meta=this.scene.characterMeta[appearance],parts=(actor.name||meta.displayName).split(/[·｜|]/).map(s=>s.trim());
+      const meta=this.scene.characterMeta[appearance],parts=(actor.name||(actor.actorId===playerActorId?'店长':meta.displayName)).split(/[·｜|]/).map(s=>s.trim());
       const role=actor.actorId===playerActorId?'店主':(parts[1]||meta.role)+(actor.scavenger?' / 拾荒客':'');
       const text=parts[0]+'\n'+role+(actor.label?'\n'+actor.label:'');
       if(entry.label&&entry.label.text!==text)entry.label.setText(text);

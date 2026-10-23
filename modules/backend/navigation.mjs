@@ -36,13 +36,13 @@ export function moveActor(map,actor,intent,seconds){
   if(intent.direction||intent.vector){
     const [rawX,rawY]=intent.vector?[intent.vector.x,intent.vector.y]:{up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]}[intent.direction]||[0,0];
     const magnitude=Math.hypot(rawX,rawY),dx=rawX/Math.max(1,magnitude),dy=rawY/Math.max(1,magnitude);
-    if(magnitude)actor.direction=Math.abs(dx)>Math.abs(dy)?dx>0?'right':'left':dy>0?'down':'up';
+    if(magnitude)actor.direction=Math.abs(dx)>=Math.abs(dy)?dx>0?'right':'left':dy>0?'down':'up';
     const parts=Math.max(1,Math.ceil(step/3));for(let i=0;i<parts;i++){
       const sx=dx*step/parts,sy=dy*step/parts;
       if(clearSegment(map,actor,{x:actor.x+sx,y:actor.y+sy})){actor.x+=sx;actor.y+=sy;}
       else {if(canStand(map,actor.x+sx,actor.y))actor.x+=sx;if(canStand(map,actor.x,actor.y+sy))actor.y+=sy;}
     }
   }
-  else if(intent.path?.length){const p=intent.path[0],dx=p.x-actor.x,dy=p.y-actor.y,d=Math.hypot(dx,dy);actor.direction=Math.abs(dx)>Math.abs(dy)?dx>0?'right':'left':dy>0?'down':'up';if(d<=step){actor.x=p.x;actor.y=p.y;intent.path.shift();}else {actor.x+=dx/d*step;actor.y+=dy/d*step;}}
+  else if(intent.path?.length){const p=intent.path[0],dx=p.x-actor.x,dy=p.y-actor.y,d=Math.hypot(dx,dy);actor.direction=Math.abs(dx)>=Math.abs(dy)?dx>0?'right':'left':dy>0?'down':'up';if(d<=step){actor.x=p.x;actor.y=p.y;intent.path.shift();}else {actor.x+=dx/d*step;actor.y+=dy/d*step;}}
   actor.moving=Math.abs(actor.x-old.x)+Math.abs(actor.y-old.y)>.01;
 }

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "artVersion": "pixel-shop-2-band-inspired",
+  "artVersion": "pixel-shop-3-profile-skins",
   "generatedBy": "tools/frontend-art/build.mjs",
   "tileSize": 16,
   "mapSize": {
@@ -74,12 +74,12 @@
     "owner": {
       "sheet": "/assets/frontend/characters/owner.png",
       "portrait": "/assets/frontend/portraits/owner.png",
-      "frameWidth": 48,
-      "frameHeight": 64,
-      "displayScale": 0.6,
+      "frameWidth": 96,
+      "frameHeight": 128,
+      "displayScale": 0.38,
       "anchorPx": [
-        24,
-        60
+        48,
+        120
       ],
       "directions": {
         "down": 0,
@@ -107,12 +107,12 @@
     "rookie": {
       "sheet": "/assets/frontend/characters/rookie.png",
       "portrait": "/assets/frontend/portraits/rookie.png",
-      "frameWidth": 48,
-      "frameHeight": 64,
-      "displayScale": 0.6,
+      "frameWidth": 96,
+      "frameHeight": 128,
+      "displayScale": 0.38,
       "anchorPx": [
-        24,
-        60
+        48,
+        120
       ],
       "directions": {
         "down": 0,
@@ -140,12 +140,12 @@
     "collector": {
       "sheet": "/assets/frontend/characters/collector.png",
       "portrait": "/assets/frontend/portraits/collector.png",
-      "frameWidth": 48,
-      "frameHeight": 64,
-      "displayScale": 0.6,
+      "frameWidth": 96,
+      "frameHeight": 128,
+      "displayScale": 0.38,
       "anchorPx": [
-        24,
-        60
+        48,
+        120
       ],
       "directions": {
         "down": 0,
@@ -173,12 +173,12 @@
     "competitor": {
       "sheet": "/assets/frontend/characters/competitor.png",
       "portrait": "/assets/frontend/portraits/competitor.png",
-      "frameWidth": 48,
-      "frameHeight": 64,
-      "displayScale": 0.6,
+      "frameWidth": 96,
+      "frameHeight": 128,
+      "displayScale": 0.38,
       "anchorPx": [
-        24,
-        60
+        48,
+        120
       ],
       "directions": {
         "down": 0,
@@ -206,12 +206,12 @@
     "passerby": {
       "sheet": "/assets/frontend/characters/passerby.png",
       "portrait": "/assets/frontend/portraits/passerby.png",
-      "frameWidth": 48,
-      "frameHeight": 64,
-      "displayScale": 0.6,
+      "frameWidth": 96,
+      "frameHeight": 128,
+      "displayScale": 0.38,
       "anchorPx": [
-        24,
-        60
+        48,
+        120
       ],
       "directions": {
         "down": 0,
@@ -239,12 +239,12 @@
     "regular": {
       "sheet": "/assets/frontend/characters/regular.png",
       "portrait": "/assets/frontend/portraits/regular.png",
-      "frameWidth": 48,
-      "frameHeight": 64,
-      "displayScale": 0.6,
+      "frameWidth": 96,
+      "frameHeight": 128,
+      "displayScale": 0.38,
       "anchorPx": [
-        24,
-        60
+        48,
+        120
       ],
       "directions": {
         "down": 0,
@@ -272,12 +272,12 @@
     "bigspender": {
       "sheet": "/assets/frontend/characters/bigspender.png",
       "portrait": "/assets/frontend/portraits/bigspender.png",
-      "frameWidth": 48,
-      "frameHeight": 64,
-      "displayScale": 0.6,
+      "frameWidth": 96,
+      "frameHeight": 128,
+      "displayScale": 0.38,
       "anchorPx": [
-        24,
-        60
+        48,
+        120
       ],
       "directions": {
         "down": 0,

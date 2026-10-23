@@ -1,6 +1,7 @@
 {
   "version": 1,
   "ratingVersion": "global-power-2",
+  "distribution":{"version":"tcg-slots-3","excludedPacks":["diy","old","key","collab","sixiang","onlyOL","xianding"],"baseCounts":{"N":60,"R":42,"SR":15,"SSR":3},"bounds":{"N":[54,66],"SR":[14,18],"SSR":[2,4]},"themeScoreSpan":12},
   "thresholds": {"R":57,"SR":65,"SSR":78},
   "modeWeights": {"bo3":0.5,"kof":0.5},
   "scoring": {

@@ -2,12 +2,12 @@
 import fs from "node:fs";
 import path from "node:path";
 import { Img } from "./pixkit.mjs";
-import { CHARACTERS, drawActorSheet, drawPortrait, FRAME_W, FRAME_H } from "./characters-v2.mjs";
+import { CHARACTERS, drawActorSheet, drawPortrait, FRAME_W, FRAME_H, ANCHOR, PORTRAIT_SIZE } from "./characters-v3.mjs";
 import { buildTileset, buildProps, PROPS, PROP_CELL } from "./props-v2.mjs";
 import { buildStoreMap, buildBattleRoomMap, MAP_W, MAP_H, TILE } from "./maps-v2.mjs";
 import { encodePng } from "./png.mjs";
 
-const OUT = path.join(".local", "frontend-v2", "art");
+const OUT = path.join(".local", "frontend-v3", "art");
 fs.mkdirSync(OUT, { recursive: true });
 
 function checker(w, h, size = 8) {
@@ -39,13 +39,13 @@ write("art-characters.png", all);
 const ownerBig = checker(FRAME_W * 3 * 4 + 40, FRAME_H * 4 * 4 + 40, 16);
 ownerBig.blit(drawActorSheet(CHARACTERS[0]).scale(4), 20, 20);
 for (let row = 0; row < 4; row += 1) {
-  ownerBig.hline(20, 20 + FRAME_W * 3 * 4 - 1, 20 + row * FRAME_H * 4 + 60 * 4, "#d0326e");
+  ownerBig.hline(20, 20 + FRAME_W * 3 * 4 - 1, 20 + row * FRAME_H * 4 + ANCHOR[1] * 4, "#d0326e");
 }
 write("art-animation-owner.png", ownerBig);
 
 // 立绘（2×）
-const portraitSheet = checker(128 * 2 * CHARACTERS.length, 128 * 2);
-CHARACTERS.forEach((spec, index) => portraitSheet.blit(drawPortrait(spec).scale(2), index * 256, 0));
+const portraitSheet = checker(PORTRAIT_SIZE * CHARACTERS.length, PORTRAIT_SIZE);
+CHARACTERS.forEach((spec, index) => portraitSheet.blit(drawPortrait(spec), index * PORTRAIT_SIZE, 0));
 write("art-portraits.png", portraitSheet);
 
 // 瓦片集与道具图集

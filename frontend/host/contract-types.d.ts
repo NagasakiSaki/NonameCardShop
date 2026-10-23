@@ -5,6 +5,8 @@
 export type ContractVersion = "card-shop-ui/1.0";
 export type Rarity = "N" | "R" | "SR" | "SSR";
 export type CardKey = string; // 不透明业务 ID，禁止从中文名或文件名推导
+export type PlayerSkin = { appearanceId:string; name:string; selected:boolean };
+export type PlayerSkins = { current:string; items:PlayerSkin[] };
 
 export type HostError = {
   code: string;
@@ -110,6 +112,7 @@ export type ProductSummary = {
   productVersion: string;
   ratingVersion: string;
   priceVersion: string;
+  collationVersion: string;
   cardsPerPack: number;
   packsPerBox: number;
   poolSummary: Record<Rarity, number>;

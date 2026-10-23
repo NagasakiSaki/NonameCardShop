@@ -3,6 +3,7 @@ import {cardSummary} from './catalog.mjs';
 import {owned,free,referencePrice} from './trading.mjs';
 import {managementEffects,shelfUsed} from './management.mjs';
 import {trashItems} from './trash.mjs';
+import {productEnabled} from './distribution.mjs';
 
 export function inventoryView(w,catalog,input={}){
   let items=(input.location==='trash'?trashItems(w):owned(w)).filter(i=>i.kind==='card'&&(input.location?i.location===input.location:i.location!=='trash'));
@@ -41,7 +42,7 @@ export function ledgerView(w,catalog,report){
 }
 export function retailView(w){
   const groups=new Map(),e=managementEffects(w);
-  for(const item of owned(w).filter(i=>['pack','box'].includes(i.kind)&&['stock','retail'].includes(i.location))){
+  for(const item of owned(w).filter(i=>['pack','box'].includes(i.kind)&&['stock','retail'].includes(i.location)&&productEnabled(w.rules,i.productId))){
     const key=`${item.productId}|${item.productVersion}|${item.kind}`;
     if(!groups.has(key))groups.set(key,{shelfId:key,label:w.products.find(p=>p.productId===item.productId)?.name||item.productId,productVersion:item.productVersion,kind:item.kind==='box'?'sealed-box':'sealed-pack',stock:0,warehouse:0,capacity:e.shelfCapacity,unitAmount:item.retailPrice,inventoryRefs:[],stockRefs:[]});
     const row=groups.get(key);if(item.location==='retail'){row.stock++;if(free(item))row.inventoryRefs.push(item.inventoryRef);}else if(free(item)){row.warehouse++;row.stockRefs.push(item.inventoryRef);}

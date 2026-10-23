@@ -1,13 +1,6 @@
 import {RARITIES,clone,need,sum,shuffle,pick,serial,clamp} from './common.mjs';
+import {boxRecipe,distribution} from './distribution.mjs';
 
-function allocate(n,weights){
-  const total=sum(RARITIES.map(r=>weights[r]||0));need(total>0,'EMPTY_POOL','没有可发行的卡池。');
-  const exact=RARITIES.map(r=>({r,x:n*(weights[r]||0)/total}));
-  const out=Object.fromEntries(exact.map(({r,x})=>[r,Math.floor(x)]));
-  const order=[...exact].sort((a,b)=>(b.x-Math.floor(b.x))-(a.x-Math.floor(a.x))||RARITIES.indexOf(a.r)-RARITIES.indexOf(b.r));
-  for(let left=n-sum(Object.values(out)),i=0;left>0;left--,i++)out[order[i%order.length].r]++;
-  return out;
-}
 export function publishProducts(catalog,rules,day,marketPrices={}){
   const ratingVersion=catalog.cards[0]?.ratingVersion||rules.ratingVersion;
   return catalog.packs.map(pack=>{
@@ -17,21 +10,18 @@ export function publishProducts(catalog,rules,day,marketPrices={}){
     const weights=Object.fromEntries(RARITIES.map(r=>[r,local[r].length*rules.rarityWeights[r]]));
     const available=pools.SSR.length>0&&sum(Object.values(weights))>0;
     if(!available)return {productId:pack.id,themeId:pack.id,name:pack.name,availability:'unavailable',unavailableReason:'全局卡池缺少 SSR，无法履行整盒保底。',poolSummary};
-    const rareWeights={N:0,R:weights.R,SR:weights.SR,SSR:weights.SSR};
-    if(sum(Object.values(rareWeights))===0){const r=RARITIES.slice(1).find(r=>pools[r].length);rareWeights[r]=1;}
-    const guaranteed=allocate(rules.packsPerBox-1,rareWeights);guaranteed.SSR++;
-    const remainder=allocate(rules.packsPerBox*(rules.cardsPerPack-1),weights);
-    const boxCounts=Object.fromEntries(RARITIES.map(r=>[r,remainder[r]+guaranteed[r]]));
+    const {guaranteed,remainder,boxCounts}=boxRecipe(catalog,rules,catalog.cards.filter(c=>c.pack===pack.id));
     const packSlots=[...Array.from({length:4},()=>Object.fromEntries(RARITIES.map(r=>[r,remainder[r]/96]))),Object.fromEntries(RARITIES.map(r=>[r,guaranteed[r]/24]))];
     const values=Object.fromEntries(RARITIES.map(r=>[r,pools[r].length?sum(pools[r].map(k=>{const base=catalog.byKey.get(k).issuanceValue;return clamp(marketPrices[k]??base,base*.85,base*1.15);}))/pools[r].length:0]));
     const boxValue=sum(RARITIES.map(r=>boxCounts[r]*values[r]));
     const round=n=>Math.ceil(n/rules.roundTo)*rules.roundTo;
     const boxWholesale=round(boxValue/rules.openingReturn),packWholesale=round(boxValue/24/rules.openingReturn);
     const substitutions=RARITIES.filter(r=>boxCounts[r]>0&&!local[r].length);
-    return {productId:pack.id,themeId:pack.id,name:pack.name,productVersion:`${ratingVersion}-day${day}`,ratingVersion,priceVersion:`supply-day${day}`,
+    const collationVersion=distribution(rules).version;
+    return {productId:pack.id,themeId:pack.id,name:pack.name,productVersion:`${ratingVersion}-${collationVersion}-day${day}`,ratingVersion,priceVersion:`supply-${collationVersion}-day${day}`,collationVersion,
       cardsPerPack:5,packsPerBox:24,poolSummary,boxCounts,guaranteed,remainder,pools,values,packSlots,
       packExpectedCounts:Object.fromEntries(RARITIES.map(r=>[r,boxCounts[r]/24])),packAtLeastOneProbabilities:Object.fromEntries(RARITIES.map(r=>[r,1-packSlots.reduce((n,s)=>n*(1-s[r]),1)])),
-      guarantees:['每包至少一张 R+','完整盒固定配额，至少一张 SSR；独立散包无累计大保底'],
+      guarantees:['每包 4 张 N/R 基础槽 + 1 张 R/SR/SSR 进阶槽',`整盒固定 ${boxCounts.N}N / ${boxCounts.R}R / ${boxCounts.SR}SR / ${boxCounts.SSR}SSR；散包无累计大保底`],
       substitutionSummary:substitutions.length?`${substitutions.join('/')} 缺档，使用全局同档补位。`:null,availability:'available',unavailableReason:null,
       prices:{box:{wholesale:boxWholesale,retail:round(boxWholesale/(1-rules.retailMargin))},pack:{wholesale:packWholesale,retail:round(packWholesale/(1-rules.retailMargin))}},effectiveDay:day};
   });
