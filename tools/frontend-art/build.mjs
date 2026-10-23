@@ -6,6 +6,7 @@ import { PALETTE, Img } from "./pixkit.mjs";
 import { CHARACTERS, drawActorSheet, drawPortrait, FRAME_W, FRAME_H, ANCHOR, DIRECTIONS, WALK_COLUMNS, DISPLAY_SCALE } from "./characters-v3.mjs";
 import { TILES, PROPS, PROP_META, buildTileset, buildProps, buildGlow, buildBlobShadow, ART_SCALE, PROP_CELL } from "./props-v2.mjs";
 import { buildStoreMap, buildBattleRoomMap, MAP_W, MAP_H, TILE, NAV_VERSION } from "./maps-v2.mjs";
+import {applyCharacterPack} from './character-pack.mjs';
 
 const OUT = "assets/frontend";
 const ART_VERSION = "pixel-shop-3-profile-skins";
@@ -27,6 +28,7 @@ export function buildAll() {
   const charset = {};
 
   for (const spec of CHARACTERS) {
+    if(spec.id==='owner')continue; // Installed from the approved LPC sheet below.
     const sheet = writePng(path.join("characters", spec.id + ".png"), drawActorSheet(spec));
     const portrait = writePng(path.join("portraits", spec.id + ".png"), drawPortrait(spec));
     written.push(sheet, portrait);
@@ -109,6 +111,7 @@ export function buildAll() {
       pixelDisplay: { sampling: "nearest", integerScaleOnly: false, allowedScales: [1, 1.5, 2, 2.5, 3] },
     },
   };
+  applyCharacterPack(manifest);
   fs.writeFileSync(path.join(OUT, "manifest.json"), JSON.stringify(manifest, null, 2));
 
   const total = written.reduce((sum, item) => sum + item.bytes, 0);

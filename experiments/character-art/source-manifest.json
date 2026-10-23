@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-23",
+  "date": "2026-10-24",
   "portraitSource": {
     "repository": "https://github.com/V-ktor/pixel-art-portraits",
     "commit": "99d7f5b3dca3cbca4b2671ad8dbd1af1734f0da6",
@@ -9,7 +9,13 @@
   "walkSource": {
     "repository": "https://github.com/ElizaWy/LPC",
     "commit": "f07f7f5892e67c932c68f70bb04472f2c64e46bc",
-    "selectedArtLicense": "OGA-BY-3.0"
+    "selectedArtLicense": "OGA-BY-3.0",
+    "additionalComponents": {
+      "hair-bangs.png": "Characters/Hair/Medium 08 - Bob, Bangs/Silver/Walk.png",
+      "hair-page.png": "Characters/Hair/Medium 01 - Page/Silver/Walk.png",
+      "hair-curly.png": "Characters/Hair/Medium 02 - Curly/Silver/Walk.png",
+      "jacket.png": "Characters/Clothing/Feminine, Thin/Torso/Shirt 07 - Buttoned Longsleeve Shirt/White/Walk.png"
+    }
   },
   "files": [
     {
@@ -25,8 +31,20 @@
       "sha256": "00db8d30dca94253a963158b3c252229b098e4feb87663bb30a432462fe3352a"
     },
     {
+      "file": "sources/lpc/hair-bangs.png",
+      "sha256": "1aeb4828f438c1ca3b4de08b687dd09dcfd67e490abc3df284d7fe3bc2f5eec3"
+    },
+    {
       "file": "sources/lpc/hair-credits.txt",
       "sha256": "4ee8559427d19931a39341539ccc44fca512806928534c985d29de62585e981a"
+    },
+    {
+      "file": "sources/lpc/hair-curly.png",
+      "sha256": "bcddfc5931af0348064a8c4d21ff2d561d8da2eaf355f5c9c939c130028143b2"
+    },
+    {
+      "file": "sources/lpc/hair-page.png",
+      "sha256": "0fde9a5a33b6eae5efb7f6981211cbab36e56c4f911f1455cef1d2cd33980f08"
     },
     {
       "file": "sources/lpc/hair-pink.png",
@@ -43,6 +61,10 @@
     {
       "file": "sources/lpc/head.png",
       "sha256": "3f7e3c92e1224313602b7db1007f55817479b266f53e028dc0c08a48aa0d0dc2"
+    },
+    {
+      "file": "sources/lpc/jacket.png",
+      "sha256": "1c5137e14127b7c96b9b87c5b1418a57d0fb3517e0bb3f534683bef75a6f7099"
     },
     {
       "file": "sources/lpc/pants.png",
@@ -97,6 +119,50 @@
       "sha256": "cdcd4346e9bfabc935aacafe87f9a1861e1662bcf8d66939c1048f9977d1bb7f"
     },
     {
+      "file": "sources/portraits/cloths/female03_primary.png",
+      "sha256": "c7cbed4d0241ee492995c43fea1c0086f693881a9e0a123132eac1d295457a22"
+    },
+    {
+      "file": "sources/portraits/cloths/female03_shadow.png",
+      "sha256": "5c326ec233ae4239ffce16dcd3764de99b6a767726afb14fb61d6b6606c63bb7"
+    },
+    {
+      "file": "sources/portraits/cloths/female04_primary.png",
+      "sha256": "673f245d97cc6e6b57c1f136d85c15b6c8e20cf82c3201c0423a0c3b74d055e3"
+    },
+    {
+      "file": "sources/portraits/cloths/female04_secondary.png",
+      "sha256": "c8378a0d1e495348425a1e4fdd08eb80b04423a87cf3612d3760ccc281c736cd"
+    },
+    {
+      "file": "sources/portraits/cloths/female04_shadow.png",
+      "sha256": "c4244e4025fcd1a46768849d417151b50cd0a2c2501ed6cd976331541792ad81"
+    },
+    {
+      "file": "sources/portraits/cloths/female05_primary.png",
+      "sha256": "9022e913b20db7b381e0f333a9d897e93dba6d0548bfb693b8f65ee32a7ccb65"
+    },
+    {
+      "file": "sources/portraits/cloths/female05_secondary.png",
+      "sha256": "e3121ff3c4b7412989b14ec91ac0c1e681299fc9cf9b38eabf81384e30d134ff"
+    },
+    {
+      "file": "sources/portraits/cloths/female05_shadow.png",
+      "sha256": "47734361805f0a64003bdce59b59440cc36cce96f6d57d2b6a41690a485921fa"
+    },
+    {
+      "file": "sources/portraits/cloths/female06_primary.png",
+      "sha256": "7848e7093c54289bbb26290d9a0d534acd08520cd1c29751cc4d2952becf98ef"
+    },
+    {
+      "file": "sources/portraits/cloths/female06_secondary.png",
+      "sha256": "574b6f48a43edee5426bdf361a295a2a13adc6b4b3e92c47fc6118064455e74e"
+    },
+    {
+      "file": "sources/portraits/cloths/female06_shadow.png",
+      "sha256": "3eee34cc966c746f56f760be63bc7c14a3b907e350fa81c54f3ad7e74c3ef42b"
+    },
+    {
       "file": "sources/portraits/cloths/female07_primary.png",
       "sha256": "7848e7093c54289bbb26290d9a0d534acd08520cd1c29751cc4d2952becf98ef"
     },
@@ -109,12 +175,192 @@
       "sha256": "3561865f9b1bba991f717d96e27aed65306128aeb3c142dc5d3a4477bdf1f162"
     },
     {
+      "file": "sources/portraits/cloths/female08_primary.png",
+      "sha256": "b48c373017a6bb3c57f430126956ce17ee9d7f9a109525aca75b7056d74ed73c"
+    },
+    {
+      "file": "sources/portraits/cloths/female08_shadow.png",
+      "sha256": "7098b02ee0bf46da7b02a8e168a30f0c3b74dc6944da269afd829404e950738c"
+    },
+    {
+      "file": "sources/portraits/cloths/female09_primary.png",
+      "sha256": "36673a2b3d0ddf55fcc8338b11099e28bdb594e425d34b2598048ccd469f2252"
+    },
+    {
+      "file": "sources/portraits/cloths/female09_shadow.png",
+      "sha256": "73da89abfce04360924a0fc6c305bfe139666defc3630ed5f77ac6b999fe843e"
+    },
+    {
+      "file": "sources/portraits/cloths/female10_primary.png",
+      "sha256": "d0b4869629224e5980baa048ccd72558fc9d0e86098ed0f7057fb32a48e19b4d"
+    },
+    {
+      "file": "sources/portraits/cloths/female10_shadow.png",
+      "sha256": "27541943b7c7cbd33a5626f8b7cc749230a0862c1d0b81765e92ad47fff8c5f1"
+    },
+    {
+      "file": "sources/portraits/cloths/female11_primary.png",
+      "sha256": "fabfacf57ce290f4514b5eb62b13f4f0878e16c2c6e7d13727dd2c683e45c151"
+    },
+    {
+      "file": "sources/portraits/cloths/female11_secondary.png",
+      "sha256": "b1e0dd229a8ca79cbfc208d7b281a7f3f4157bf01e05546f740261b9f46ca323"
+    },
+    {
+      "file": "sources/portraits/cloths/female11_shadow.png",
+      "sha256": "27541943b7c7cbd33a5626f8b7cc749230a0862c1d0b81765e92ad47fff8c5f1"
+    },
+    {
+      "file": "sources/portraits/cloths/female12_details.png",
+      "sha256": "5780efeaa09beae09ef5c4eaff2f44cf970269d78db6f94651828ff39d7e6634"
+    },
+    {
+      "file": "sources/portraits/cloths/female12_primary.png",
+      "sha256": "c1ef3fc8058d61880e9806ae935694d26fac9166b5334db6d32f7e706dc51f33"
+    },
+    {
+      "file": "sources/portraits/cloths/female12_secondary.png",
+      "sha256": "263d7aeaec54a974b21624297b5888fa4d700f33ab405de5199d16505c2b9400"
+    },
+    {
+      "file": "sources/portraits/cloths/female12_shadow.png",
+      "sha256": "3514064a8367c757d45d30444a60c73ccdb1692bd3aebe6f7b9f9cc7d521c959"
+    },
+    {
+      "file": "sources/portraits/cloths/male01_primary.png",
+      "sha256": "510cb93c4e61c7e7630b857b8bcae1c373176fe96b31cf0bdea72b9fcda99dad"
+    },
+    {
+      "file": "sources/portraits/cloths/male01_shadow.png",
+      "sha256": "ee3fc5154489140655477f41334c0450d4dfc6a2e4cf296d4db80a1cfeb982c6"
+    },
+    {
+      "file": "sources/portraits/cloths/male02_primary.png",
+      "sha256": "3a7d9b5251250e7a1e3f4b4f9cdc370212919d6a4d1ee96b3c9f3d19df91efbd"
+    },
+    {
+      "file": "sources/portraits/cloths/male02_shadow.png",
+      "sha256": "a58c8f5e48b03541bbe49ff1802d63b0322fb07271fd3f94716df1b02362b1b0"
+    },
+    {
+      "file": "sources/portraits/cloths/male03_primary.png",
+      "sha256": "5ed43d68d4e0205c9cd6fa78fbbbb1c5e2c4cceaa3cf904b740e2dfba5553921"
+    },
+    {
+      "file": "sources/portraits/cloths/male03_secondary.png",
+      "sha256": "abd563ed04f7849c88bf19d28085c4c0489018fbe6cbb931a5b6bd27e1baf1d6"
+    },
+    {
+      "file": "sources/portraits/cloths/male03_shadow.png",
+      "sha256": "a58c8f5e48b03541bbe49ff1802d63b0322fb07271fd3f94716df1b02362b1b0"
+    },
+    {
+      "file": "sources/portraits/cloths/male04_primary.png",
+      "sha256": "5ed43d68d4e0205c9cd6fa78fbbbb1c5e2c4cceaa3cf904b740e2dfba5553921"
+    },
+    {
+      "file": "sources/portraits/cloths/male04_secondary.png",
+      "sha256": "9b069e5b7d0c4c7f652b07ee6026ce208b3cae4192d2078c0bd6c84329d32635"
+    },
+    {
+      "file": "sources/portraits/cloths/male04_shadow.png",
+      "sha256": "ee3fc5154489140655477f41334c0450d4dfc6a2e4cf296d4db80a1cfeb982c6"
+    },
+    {
+      "file": "sources/portraits/cloths/male05_details.png",
+      "sha256": "b573e4fe85bc01c816b09d604e6ead34352a2970d2ba4ab9447cb761d4b25112"
+    },
+    {
+      "file": "sources/portraits/cloths/male05_primary.png",
+      "sha256": "98655e5679e34a572c0bf5394db7034960ad1e8ea85952385b93c426081c68c4"
+    },
+    {
+      "file": "sources/portraits/cloths/male05_secondary.png",
+      "sha256": "6c6864b6474f09c9f9a8d53ec6e1869b83a60a64cfd50f0f4642727d185c6383"
+    },
+    {
+      "file": "sources/portraits/cloths/male05_shadow.png",
+      "sha256": "2685248dbadfdb9ea75458bac05885d059528b70cb2ee5d4f1aeebad6e3fda5f"
+    },
+    {
+      "file": "sources/portraits/cloths/male06_primary.png",
+      "sha256": "06849e8b4bf584a1f9c3dbb746f67844e7e534698d9d747e12fd4171c910bba2"
+    },
+    {
+      "file": "sources/portraits/cloths/male06_secondary.png",
+      "sha256": "6b7c7bbd81b979504add33c00718c1c25a0cdc2f1af2e17deee559c996cbcb1d"
+    },
+    {
+      "file": "sources/portraits/cloths/male06_shadow.png",
+      "sha256": "a58c8f5e48b03541bbe49ff1802d63b0322fb07271fd3f94716df1b02362b1b0"
+    },
+    {
+      "file": "sources/portraits/cloths/male07_primary.png",
+      "sha256": "b268c8994bb53b791a4cf9becf8a84595f68e12332e5be5097ed81eb88b95db7"
+    },
+    {
+      "file": "sources/portraits/cloths/male07_shadow.png",
+      "sha256": "984e3b5899c14056c30674adfa969ab448a73ee29562195a3e6840b43e6a56fb"
+    },
+    {
+      "file": "sources/portraits/cloths/male08_details.png",
+      "sha256": "e04b49bd5410ff2fcfe6f72ab6a1e574c2759ea59f8ac5d2c4c881fb0cf47b2e"
+    },
+    {
+      "file": "sources/portraits/cloths/male08_primary.png",
+      "sha256": "005536f839fdecfd0e67956c7a7b8b183a40063c6c1175390782de81f0219083"
+    },
+    {
+      "file": "sources/portraits/cloths/male08_secondary.png",
+      "sha256": "066cb19da890a5cd08bb4cca29e66340d60bf677a9a9627b9dc268c9e4b76f97"
+    },
+    {
+      "file": "sources/portraits/cloths/male08_shadow.png",
+      "sha256": "740eace5da71d39bf537833c27c1dd0ed4bfbd5b3401415edbafd6b16aa212c0"
+    },
+    {
       "file": "sources/portraits/CODE-LICENSE.txt",
       "sha256": "3cd30219030f0b27f56e766f6db169369e0f353a091ad5822f63a43ee654e55d"
     },
     {
+      "file": "sources/portraits/eyes/angled01.png",
+      "sha256": "ad1331b200eebb8164e3eabb8f225f916e2cfb77e2e3b4c7e6226bcb6bf7e095"
+    },
+    {
+      "file": "sources/portraits/eyes/angled01_shadow.png",
+      "sha256": "0b6e0b0d25e2b5789e8823116d212306470f178ad47183fd4fcce82f576a77b7"
+    },
+    {
       "file": "sources/portraits/eyes/closed01.png",
       "sha256": "ef5c5f7fd270849ac0c4231a53b9a8348168e7e6f6aaa8025ccad0ecbb92f970"
+    },
+    {
+      "file": "sources/portraits/eyes/closed01_shadow.png",
+      "sha256": "05de875363ca3af94beb05fa79fb66edd14467b8f1ac40fc052d583447ba07b3"
+    },
+    {
+      "file": "sources/portraits/eyes/closed02.png",
+      "sha256": "8f87ce00f8f3d3317a592a04f2d7ff91905eed93ff172dc0de89352e8f7dfc7c"
+    },
+    {
+      "file": "sources/portraits/eyes/closed02_shadow.png",
+      "sha256": "2758a1c1cdea4a20bc4153145f6583dfce67575aee3cecf93a7cb6e449a185f6"
+    },
+    {
+      "file": "sources/portraits/eyes/closed03.png",
+      "sha256": "1d3e7cf78daa5876149373735585fd09754c0a1bc8b8f0797e31a24cf6099268"
+    },
+    {
+      "file": "sources/portraits/eyes/closed03_shadow.png",
+      "sha256": "c43c44a4407047e29358668f49af606d7c0cad81e95be8bb0769c93f159f1285"
+    },
+    {
+      "file": "sources/portraits/eyes/closed04.png",
+      "sha256": "10e0b8cb18b57b14246181416955eb20db9bd25f144e2895a46359dedfd890ea"
+    },
+    {
+      "file": "sources/portraits/eyes/closed04_shadow.png",
+      "sha256": "9a94664ee04a44716ab709bdb6b673de5463904b0b572fd627fecec31f8f5caa"
     },
     {
       "file": "sources/portraits/eyes/female01.png",
@@ -125,40 +371,404 @@
       "sha256": "382960dd9ca537d6a81e3c8a6667fb35ab38431f7cbbab0b3e5a8a6fce66e36c"
     },
     {
+      "file": "sources/portraits/eyes/female03.png",
+      "sha256": "6c39a0f9cd4350b70fe16bc4a0f11c13e30811e76cc12ebce6c784c8db81b48d"
+    },
+    {
+      "file": "sources/portraits/eyes/flat01.png",
+      "sha256": "c5622afe17e5ba816667007f00d66fa8855df5b56b3fb16ccd50fd91dece9ce0"
+    },
+    {
+      "file": "sources/portraits/eyes/flat02.png",
+      "sha256": "c02bebf948dab60aabfaf848a05f53f852656c7fe343c7f0953b6ac9db715173"
+    },
+    {
+      "file": "sources/portraits/eyes/male01.png",
+      "sha256": "f06f6ee4ffb5b651bb828dae32eb44e379ea79c99b04641fbec850057f3974f1"
+    },
+    {
+      "file": "sources/portraits/eyes/male01_shadow.png",
+      "sha256": "f7492d64f37e3a639cb433b44454ae5f1821dacdd3230ee62fe6161ce3416217"
+    },
+    {
+      "file": "sources/portraits/eyes/male02.png",
+      "sha256": "0d2d3c12a61e1fb636c78cb8540fdc5d83d310feb232c442fa90b66a039000b1"
+    },
+    {
+      "file": "sources/portraits/eyes/male02_shadow.png",
+      "sha256": "0cbfb255c65f1bf51040c3654c189e94d2dfe0d4890af07911c0677a29693dd2"
+    },
+    {
+      "file": "sources/portraits/eyes/male03.png",
+      "sha256": "1dc00831f2900f1d63fa7ad35afd45b67240e20e6566f2ddd4daaf3db2f97eee"
+    },
+    {
+      "file": "sources/portraits/eyes/male03_shadow.png",
+      "sha256": "40299b2bf38a772b3f5d2b7a1796f580e72e2b10db2bbb68e754822eac017e6e"
+    },
+    {
+      "file": "sources/portraits/eyes/tall01.png",
+      "sha256": "ff928da3ec7fc2bfb1f89a95a14642da0bc3aad1f8b2fb5dc0e6afc5d070bfb7"
+    },
+    {
+      "file": "sources/portraits/hair/back/curly01.png",
+      "sha256": "39440bec0e89e032c2a3177198d2313fe21348be9cf730e7a775572ab8fc3dda"
+    },
+    {
       "file": "sources/portraits/hair/back/long01.png",
       "sha256": "4210422cd3ebaaa939c5e26f7920263a5e68ee331c08573f39d13119d342a561"
+    },
+    {
+      "file": "sources/portraits/hair/back/long02.png",
+      "sha256": "8e558866d57da71cc0241f71ee6d989b525a21a25139f36b36f4034affc190de"
+    },
+    {
+      "file": "sources/portraits/hair/back/long03.png",
+      "sha256": "f412e1c174519ad54ba55618e29339a41a870534686fdf47c11476fa58fe584d"
+    },
+    {
+      "file": "sources/portraits/hair/back/medium01.png",
+      "sha256": "ed13c0666535f819c259a7f3b3450de4356ec82ae638d0fa40e2203df0412db5"
+    },
+    {
+      "file": "sources/portraits/hair/back/medium02.png",
+      "sha256": "68e34f189e4e2d9a297b0ee8e0dd22ffcb59a1b0d27a84f54ededb7111df0b29"
+    },
+    {
+      "file": "sources/portraits/hair/back/medium03.png",
+      "sha256": "52eb40bb462b1a6fd0af6bc0f452d845ae94d2ff344ebaaa5136ef79ba13b8b8"
     },
     {
       "file": "sources/portraits/hair/back/pigtails01.png",
       "sha256": "d11279a534c8427bb0ed21941a8a91d3606d8eff9a8186d478855a4df749efa9"
     },
     {
+      "file": "sources/portraits/hair/back/ponytail.png",
+      "sha256": "d4956cb2c9f882f54ae1f256b4d4fde2fa4f353ddf4eec538c9f0f632c26850b"
+    },
+    {
+      "file": "sources/portraits/hair/back/right01.png",
+      "sha256": "a5bd341287a3f2ca6c7aa848592298763143d6078cfa26d3e45021423ee124ad"
+    },
+    {
       "file": "sources/portraits/hair/back/short01.png",
       "sha256": "8119c4506fcd046e1883a83ae6498ee2642f8c5404d8e3e0ee0f05784a55ea93"
+    },
+    {
+      "file": "sources/portraits/hair/base/earrings.png",
+      "sha256": "a38ad51144a1c386fc6679e3d60e4e3322903b517602b40fe858b310e3059306"
     },
     {
       "file": "sources/portraits/hair/base/female01.png",
       "sha256": "0a7de95be7ad756bf1e1e297737524a2fe99fe849199b98072b07b71355deb36"
     },
     {
+      "file": "sources/portraits/hair/base/female01_decoration01.png",
+      "sha256": "373c9ac33057e17f00aa95b4d006bd841bc4807721153eb89eb436794fb398ef"
+    },
+    {
       "file": "sources/portraits/hair/base/female01_shadow.png",
       "sha256": "c5695699008753640a41f6a63f7d4ba1fb291a369f67727fc85ac67a2d8c1432"
+    },
+    {
+      "file": "sources/portraits/hair/base/female02.png",
+      "sha256": "5d21a0fe53ec9d1a299554cd818322d6875ff22158fa64c584ed3fc9f2e2f1fa"
+    },
+    {
+      "file": "sources/portraits/hair/base/female02_decoration01.png",
+      "sha256": "5c9ca5b983e8370dee6372de44d94de9bd6898022efc1c4f3c015acc55e4753e"
+    },
+    {
+      "file": "sources/portraits/hair/base/female02_shadow.png",
+      "sha256": "a5c249062fe73452330d13e0d4531dadde55b69e7a7965e4f6026cc13de8c8b3"
     },
     {
       "file": "sources/portraits/hair/base/female03.png",
       "sha256": "ddf343358c8362a3fe4cb873a2e35516a6960cd6aedd019f4d382c5a3051f3a7"
     },
     {
+      "file": "sources/portraits/hair/base/female03_decoration01.png",
+      "sha256": "73a3566a7657c5ffa6c36769a100d9af889e121970100b950e4395f2d5c432ff"
+    },
+    {
       "file": "sources/portraits/hair/base/female03_shadow.png",
       "sha256": "0cfbe1cdbb131ac8a8eb570a48a819107ff794e5db548ab507bee13f566bbd48"
+    },
+    {
+      "file": "sources/portraits/hair/base/female04.png",
+      "sha256": "289bb3f115e1c2ba2e721b57a103a9c101beb6732b083450b29c67b510610817"
+    },
+    {
+      "file": "sources/portraits/hair/base/female04_decoration01.png",
+      "sha256": "97a8b18d838cee507665072cccce23e30deb75e4ff84497fedb6d3329e34fc71"
+    },
+    {
+      "file": "sources/portraits/hair/base/female04_shadow.png",
+      "sha256": "d4219022c32afd8b575301c41bf71d74163f4c679ff757506fb9cae836e53050"
+    },
+    {
+      "file": "sources/portraits/hair/base/female06.png",
+      "sha256": "dfa1b7c03d8dbbc6cc8bb390fd039e58d87018083c0d58b33b90837b93849dda"
+    },
+    {
+      "file": "sources/portraits/hair/base/female06_decoration01.png",
+      "sha256": "694aa970e88bfffefc7195fb28bc338637fb77ae4d71481dc2a2953191a63b4f"
+    },
+    {
+      "file": "sources/portraits/hair/base/female06_shadow.png",
+      "sha256": "b92dfcc7c0bd8c22243b3f7a6542e4a3162b23fc44b60e3ed3aede79f128e9b7"
     },
     {
       "file": "sources/portraits/hair/base/female07.png",
       "sha256": "ff74eb2ecafb85f3c24bd5708b49dc71feb3a7491a1d8ccb64db0ca7f860101c"
     },
     {
+      "file": "sources/portraits/hair/base/female07_decoration01.png",
+      "sha256": "f7cd36d4fc4baf67a516fd672e9d69a463f8e9a71d821088a7377bcd0fadc75c"
+    },
+    {
       "file": "sources/portraits/hair/base/female07_shadow.png",
       "sha256": "e8f1a12a69efe4e7e0af44794ea397c6303aa49c05e6cd35921dc69cec42beed"
+    },
+    {
+      "file": "sources/portraits/hair/base/female08.png",
+      "sha256": "9f459646b95df00f34eaabf542be6f298f949f68d278cd1793de9794fa64fe61"
+    },
+    {
+      "file": "sources/portraits/hair/base/female08_decoration01.png",
+      "sha256": "8eac86b5a93900991e12a804f5b32d8ea381009cd45f6c96c2f5d64b3d6f0f65"
+    },
+    {
+      "file": "sources/portraits/hair/base/female08_shadow.png",
+      "sha256": "2c054cccb70f3ecf54987d07b1d7a37378358fa257655aae134920b7604be840"
+    },
+    {
+      "file": "sources/portraits/hair/base/female09.png",
+      "sha256": "a4ddf5527c733d1309490153f1367a6830652f1599cd78cf57177c3915ddbd3f"
+    },
+    {
+      "file": "sources/portraits/hair/base/female09_decoration01.png",
+      "sha256": "552f698cccfbf7ae79c1e7008ae946990d1947b51b63baba33d112c907681fc7"
+    },
+    {
+      "file": "sources/portraits/hair/base/female09_shadow.png",
+      "sha256": "28de94ede866f3b6e9d5b3e51f5cdfde396ac230efa1c18285fe9ef431def187"
+    },
+    {
+      "file": "sources/portraits/hair/base/female10.png",
+      "sha256": "1bf8cae41626f2e782f7f9e6c3c0301474caf179e066a1c73bab1c30c67488f2"
+    },
+    {
+      "file": "sources/portraits/hair/base/female10_decoration01.png",
+      "sha256": "9fd96042cca0b2aff043c83729aaf6c79c7e46464b8fd166687889a57795554b"
+    },
+    {
+      "file": "sources/portraits/hair/base/female10_shadow.png",
+      "sha256": "feb5843f152bf159e1a1393219ac04392f19223da66317a7cf470bd2c0da30d2"
+    },
+    {
+      "file": "sources/portraits/hair/base/female11.png",
+      "sha256": "cc0e4162b6e63dd5cb9caed4def9d5e10060746e96d8e34bfe921871a2db0b7b"
+    },
+    {
+      "file": "sources/portraits/hair/base/female11_decoration01.png",
+      "sha256": "a3015f1fcb216dd03e0145c0e664a3ce75e4fcef86b96b68c910f70faeefe15d"
+    },
+    {
+      "file": "sources/portraits/hair/base/female11_shadow.png",
+      "sha256": "0508d78507aefd19132c0973c3dcbb8099152debce7f262924b96c01bc026875"
+    },
+    {
+      "file": "sources/portraits/hair/base/female12.png",
+      "sha256": "da9ce7f97979424cfd8a6b83de57d3683ef75c2d77f1ef2143e1d9cc20c07934"
+    },
+    {
+      "file": "sources/portraits/hair/base/female12_decoration01.png",
+      "sha256": "69797657314736c871e82bee90adc745f683259169847487d4751f7c70721d0f"
+    },
+    {
+      "file": "sources/portraits/hair/base/female12_shadow.png",
+      "sha256": "d5b5239c5ac32a39cec65229c150861608c4835795672d61f5fe9c94aaabeb78"
+    },
+    {
+      "file": "sources/portraits/hair/base/female13.png",
+      "sha256": "c51d0f6def8efa9018a5071dc3e0227f3f572598859890260bad4c61f82d13f6"
+    },
+    {
+      "file": "sources/portraits/hair/base/female13_decoration01.png",
+      "sha256": "641dbfa5bcfe407dfeea7584740f24bbe0792e1731cb721fdbae742bbeaaa344"
+    },
+    {
+      "file": "sources/portraits/hair/base/female13_shadow.png",
+      "sha256": "757b536034f8edfbd12beb635221715ef3df39f2eb6976d41e3b3bbb6a0027d8"
+    },
+    {
+      "file": "sources/portraits/hair/base/female14.png",
+      "sha256": "b76b1d03406241ccc43a1ffc92cb1c277522c3d8eed8adadfeed6548f2bca3df"
+    },
+    {
+      "file": "sources/portraits/hair/base/female14_decoration01.png",
+      "sha256": "7da915d8affabc9169e8ed5fd7f9fdb5f1bb691b3851033b6d0e5415a076c7e6"
+    },
+    {
+      "file": "sources/portraits/hair/base/female14_shadow.png",
+      "sha256": "0caebee9436e2e0c11f3714fbe05a6a28cbb68e2bd317ccbebff252bce6bc001"
+    },
+    {
+      "file": "sources/portraits/hair/base/headset.png",
+      "sha256": "c9557eb56215a7b4fbb41474de64f68971a2457b309a0273270feffb34875403"
+    },
+    {
+      "file": "sources/portraits/hair/base/male01.png",
+      "sha256": "5f078332d83361b9c86bafb1c11fcfb777569093814b771f2cafcfdad258e0f4"
+    },
+    {
+      "file": "sources/portraits/hair/base/male01_decoration01.png",
+      "sha256": "026f7776346e4dc3c8255b11846a4fab19352137c3b3239e78cb33ff1428d188"
+    },
+    {
+      "file": "sources/portraits/hair/base/male01_shadow.png",
+      "sha256": "1a7bba86f3b9e2c5e87732fe9bfdb987493f81b62b4eb758e4fc3eda76893a10"
+    },
+    {
+      "file": "sources/portraits/hair/base/male02.png",
+      "sha256": "b23c238d53d2037d89c584dd9c1a0f52c654fda939769461863345eae8d9c383"
+    },
+    {
+      "file": "sources/portraits/hair/base/male02_decoration01.png",
+      "sha256": "21dc7df558c0fcc789293f8aad4b34908a3620df060eb8fffb690b429743ca86"
+    },
+    {
+      "file": "sources/portraits/hair/base/male02_shadow.png",
+      "sha256": "02afe73c2fb7710e5dd77a5b07b0a6924bc53f529d441c35564abd03b0ae0a2b"
+    },
+    {
+      "file": "sources/portraits/hair/base/male03.png",
+      "sha256": "7df48c435a39266d6abfbda2c9f3eedf215de463083cb81309e67a900a4858c3"
+    },
+    {
+      "file": "sources/portraits/hair/base/male03_decoration01.png",
+      "sha256": "eb69e461205c8b34dc6a19c3cfbe62503ef2222267e24a0ca705a1b82846151f"
+    },
+    {
+      "file": "sources/portraits/hair/base/male03_shadow.png",
+      "sha256": "12071e18e90a6fbf9d387a66faacf452dcfacd6cb16b5fe1f64955c2e29915b7"
+    },
+    {
+      "file": "sources/portraits/hair/base/male04.png",
+      "sha256": "99be442bcbbf0d0732546d914a57365e3e037b60722c4329202b14b8bedb58e9"
+    },
+    {
+      "file": "sources/portraits/hair/base/male04_decoration01.png",
+      "sha256": "f3d51d0b273ab74348acb4b23a9a9297e93647724e3d1a55cf9ba34e12123cc1"
+    },
+    {
+      "file": "sources/portraits/hair/base/male04_shadow.png",
+      "sha256": "35f3213923946a994626e21ca519ee4fd5f9b3ea0514197149d29d35aaa834c1"
+    },
+    {
+      "file": "sources/portraits/hair/base/male05.png",
+      "sha256": "5b7f2c5e3890518804ce7d6727285a26a34708c2c85ae34fa34d3ca77ad64578"
+    },
+    {
+      "file": "sources/portraits/hair/base/male05_decoration01.png",
+      "sha256": "f314230e40844e3186208d7369142f9158aed4127c27d50c5d5ad85bec3fde87"
+    },
+    {
+      "file": "sources/portraits/hair/base/male05_shadow.png",
+      "sha256": "6df3b7d3f50bafba174052cb18809762cda39c9e44e738f518700e09631cfb50"
+    },
+    {
+      "file": "sources/portraits/hair/base/male06.png",
+      "sha256": "c3a271e2e7f76e84c7756d8ec8ae19c4f0220bbf71c0ae96e757b2fa082d47cb"
+    },
+    {
+      "file": "sources/portraits/hair/base/male06_decoration01.png",
+      "sha256": "fb3d4db607924cfb84f8a3016a80e12ee45ab4d986b7ad6ede1bfca55db1d081"
+    },
+    {
+      "file": "sources/portraits/hair/base/male06_shadow.png",
+      "sha256": "0c854d71cd783eda6eb2f89aca8c45f65bd5ad6a863254f1605dbef6d55a47a7"
+    },
+    {
+      "file": "sources/portraits/hair/base/male07.png",
+      "sha256": "6a266948cad6fbcb85803881620b3edde01f546262354287f5bce54144f896ba"
+    },
+    {
+      "file": "sources/portraits/hair/base/male07_decoration01.png",
+      "sha256": "0cfb5d775f5901201f53906c882f4a15446ebe841d666d1b47c19999e5bc7cf8"
+    },
+    {
+      "file": "sources/portraits/hair/base/male07_shadow.png",
+      "sha256": "050a5f3b693356e8d5377cc9fbd503237de3b251a59e15c65fb13c2f7ee753b3"
+    },
+    {
+      "file": "sources/portraits/hair/base/male08.png",
+      "sha256": "63858adca35eeb52b18b5b63e28bf705ea91eb4026731c1c8a8a371b9d33e129"
+    },
+    {
+      "file": "sources/portraits/hair/base/male08_decoration01.png",
+      "sha256": "11ccd7d7c10ffe0eaf315b575df812c5fbcd3ecff0bd6bca173c0793606ddba1"
+    },
+    {
+      "file": "sources/portraits/hair/base/male08_shadow.png",
+      "sha256": "01ce9d473f773229dd3d63d58f6371aa58433221c67e45207522b38f1eb7a811"
+    },
+    {
+      "file": "sources/portraits/hair/base/male09.png",
+      "sha256": "87db0333e9906dd44274b44cadfe3f25f30a9042a748660ba742c54b953f5b40"
+    },
+    {
+      "file": "sources/portraits/hair/base/male09_decoration01.png",
+      "sha256": "4f80896398648a7898c1f65d91b6d2dfda023afa521758b295a4b6d69d7ab985"
+    },
+    {
+      "file": "sources/portraits/hair/base/male09_shadow.png",
+      "sha256": "596f0ac8361cf328fb76b32c3efdebd2ae0c1c2be133241662617f96369a79da"
+    },
+    {
+      "file": "sources/portraits/hair/base/male10.png",
+      "sha256": "01241d97a7adc4b98170940d527f5954b567f5d7eb0ee14ee53b270ab07104e2"
+    },
+    {
+      "file": "sources/portraits/hair/base/male10_decoration01.png",
+      "sha256": "7bf23fc18bde1670c66a87c4adad1c500df85f77f4a3d8ab6bd9153c613a2dc3"
+    },
+    {
+      "file": "sources/portraits/hair/base/male10_shadow.png",
+      "sha256": "f07331db1f026bd92a69ea7811b7762a3778676b7ef3c2186d79e4b88ca84a59"
+    },
+    {
+      "file": "sources/portraits/hair/base/ponytail01.png",
+      "sha256": "6e66844e9f1150bdce10d1ccfed60a6c4c37b292b4437bbed8f08d20b339fba8"
+    },
+    {
+      "file": "sources/portraits/hair/base/ponytail01_decoration01.png",
+      "sha256": "f1f1c8c49a1e6d2af4181172f6d8a23544d5cf98e097714dede1d19a0f44d20c"
+    },
+    {
+      "file": "sources/portraits/hair/base/ponytail01_shadow.png",
+      "sha256": "40943835e1b2663c0a7ab5e2bb87f7576e639d56cb453646b322e349b57d082f"
+    },
+    {
+      "file": "sources/portraits/hair/base/ribbon.png",
+      "sha256": "3d1098fded193247b5ca1563d6c71b319a516ed3acea62765c5adc5265cfac54"
+    },
+    {
+      "file": "sources/portraits/hair/front/ear_cover01.png",
+      "sha256": "2b1d744b881680eccc4e66ddf9dba40a901ec3f54ad06cf00a88993e06a8248e"
+    },
+    {
+      "file": "sources/portraits/hair/front/ear_cover02.png",
+      "sha256": "16c58d2a54b1e0d778bf04c71fd660353bbe58549ac1afba3980722d6725eae8"
+    },
+    {
+      "file": "sources/portraits/hair/front/ear_cover03.png",
+      "sha256": "9bfa9a7a5f58eea5ac64187423fa112c47095f3a68bc43e0e0aa9a1655890be2"
+    },
+    {
+      "file": "sources/portraits/hair/front/ear_cover04.png",
+      "sha256": "343a956ada0b3933fffe569029645ae93468705943826781680ad105b57959cd"
     },
     {
       "file": "sources/portraits/hair/front/female01.png",
@@ -177,12 +787,96 @@
       "sha256": "cd2c1dcdd67f1d8c5075bed4db075b180918de9a65a780829d10cd506eb85292"
     },
     {
+      "file": "sources/portraits/hair/front/female03.png",
+      "sha256": "db14017517fc901a3141bc51338e93d11c26aa77463d65488db90481f7ea6003"
+    },
+    {
+      "file": "sources/portraits/hair/front/female03_shadow.png",
+      "sha256": "1f5421f857924fe1ce0dfea6fdbe25e2e9272a47df508e00a9cbaa5bc37aa02b"
+    },
+    {
       "file": "sources/portraits/hair/front/female04.png",
       "sha256": "f5013a1d833315b7331a8f557eb2355b8169d7796084a2641dbcaf6aab65ef39"
     },
     {
       "file": "sources/portraits/hair/front/female04_shadow.png",
       "sha256": "3856f993286a85d346c048a6f9ab30a7da79a660c203af5349c383d84fecc3f0"
+    },
+    {
+      "file": "sources/portraits/hair/front/female05.png",
+      "sha256": "68ee40a4e5e1f4e5f0a087fec5f3797e29a98609af70540c7067007891cfc16a"
+    },
+    {
+      "file": "sources/portraits/hair/front/female05_shadow.png",
+      "sha256": "ddde8b97c4f303f74f0de8ae63014effc5be7347a1a8125c49e2360c54d46c70"
+    },
+    {
+      "file": "sources/portraits/hair/front/female06.png",
+      "sha256": "72e6f0f36e209d437f1eeaf64cbc1cad6e2d7caf4771cd3698e7893040419284"
+    },
+    {
+      "file": "sources/portraits/hair/front/female06_shadow.png",
+      "sha256": "3b1b31adebcad4ae4f5e2b9d74f8b53258e24071711f448d0eb20a63beee1a4d"
+    },
+    {
+      "file": "sources/portraits/hair/front/female07.png",
+      "sha256": "083b438dbf5b9295967bc7283dc0e9c3783a788aaf176efa12c2f45261a250bd"
+    },
+    {
+      "file": "sources/portraits/hair/front/female07_shadow.png",
+      "sha256": "9e3fac8104a9ec1cdd1a64fcb284f7cb305b56b4defcfeae607c85224ea3a6bb"
+    },
+    {
+      "file": "sources/portraits/hair/front/female08.png",
+      "sha256": "e6e9de94b5389f257433b7b70886956b99253dc684e0392cc63e5de410bffd69"
+    },
+    {
+      "file": "sources/portraits/hair/front/female09.png",
+      "sha256": "7773b962e2c581d528e051ffcb40e8e80e12e782b2c679b92a6701b520c46674"
+    },
+    {
+      "file": "sources/portraits/hair/front/female10.png",
+      "sha256": "d74e6a1d2173de72a7c93cf55445e02d8d67586e0b357ba290b83cc84a3a8ad0"
+    },
+    {
+      "file": "sources/portraits/hair/front/female10_shadow.png",
+      "sha256": "981c70792fc5c144f513f026971283e9d638faeb0d0c9b06c61c9e6a786fcbde"
+    },
+    {
+      "file": "sources/portraits/hair/front/female11.png",
+      "sha256": "3452e3115fa0170a902a116ceea45de84c2b0f24c5a91e4e62810d470fa5f558"
+    },
+    {
+      "file": "sources/portraits/hair/front/female11_shadow.png",
+      "sha256": "f008c30681cb7c357aaa4c65602c32a9e8892a37f6f2b7b85f3d1bfbbae5e5f2"
+    },
+    {
+      "file": "sources/portraits/hair/front/female12.png",
+      "sha256": "9bf20e4150763930a4d22720e42193e3c0323a00152b66eb0cca630416f4b862"
+    },
+    {
+      "file": "sources/portraits/hair/front/female12_shadow.png",
+      "sha256": "6d48400082fc8b6cb0a5396364f1a6ba9de34e92c52a685815b08f5f41c31411"
+    },
+    {
+      "file": "sources/portraits/hair/front/male01.png",
+      "sha256": "cccf6b224805e5fbab8211ada250e2e6305fbb224fe3e2265bf9336f2b3bf1f4"
+    },
+    {
+      "file": "sources/portraits/hair/front/male01_shadow.png",
+      "sha256": "0fc6389cb59ceaeb821d0d05487e7b9825ff0a407d4deafe780047620b8c8776"
+    },
+    {
+      "file": "sources/portraits/hair/front/male02.png",
+      "sha256": "c127dec3baa163918bfd6ff3e38073c9c0f937efe9bace4b506bf0e29128f8c1"
+    },
+    {
+      "file": "sources/portraits/hair/front/male03.png",
+      "sha256": "f4b149529e96d9fd60fd29e131770c17f23bb27dae470eb43d8a3b0688eedc69"
+    },
+    {
+      "file": "sources/portraits/hair/front/male03_shadow.png",
+      "sha256": "d12317805535b53906c5c1bf6718738fe7da97e7dea4fbb3df65165d571ead87"
     },
     {
       "file": "sources/portraits/LICENSE.txt",
@@ -200,5 +894,10 @@
       "file": "sources/portraits/nose/small02.png",
       "sha256": "f48374c2dba69bc3038213d3dc9726cede46b5809e8c7c115551ba694cdb48b1"
     }
-  ]
+  ],
+  "characterReferences": {
+    "registry": "../../data/band-appearances.mjs",
+    "referenceOnly": true,
+    "officialImagesRedistributed": false
+  }
 }

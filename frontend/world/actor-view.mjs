@@ -4,13 +4,14 @@ const WALK_COLUMNS = [0, 1, 2, 1];
 
 export function ensureAnims(scene, characters) {
   for (const [id, entry] of Object.entries(characters)) {
-    for (const [direction, row] of Object.entries(DIRECTIONS)) {
+    const columns=entry.columns||3,walkColumns=entry.walkColumns||WALK_COLUMNS;
+    for (const [direction, row] of Object.entries(entry.directions||DIRECTIONS)) {
       const walkKey = "walk-" + id + "-" + direction;
       if (!scene.anims.exists(walkKey)) {
         scene.anims.create({
           key: walkKey,
-          frames: WALK_COLUMNS.map((col) => ({ key: "char-" + id, frame: row * 3 + col })),
-          frameRate: 7,
+          frames: walkColumns.map((col) => ({ key: "char-" + id, frame: row * columns + col })),
+          frameRate: entry.frameRate||7,
           repeat: -1,
         });
       }
@@ -18,7 +19,7 @@ export function ensureAnims(scene, characters) {
       if (!scene.anims.exists(idleKey)) {
         scene.anims.create({
           key: idleKey,
-          frames: [{ key: "char-" + id, frame: row * 3 + entry.idleColumn }],
+          frames: [{ key: "char-" + id, frame: row * columns + entry.idleColumn }],
           frameRate: 1,
           repeat: -1,
         });
@@ -45,7 +46,7 @@ export class ActorView {
         const meta=this.scene.characterMeta[appearance];
         sprite.setOrigin(meta.anchorPx[0]/meta.frameWidth,meta.anchorPx[1]/meta.frameHeight).setScale(meta.displayScale||1);
         sprite.setDepth(actor.y);
-        entry = { sprite, shadow, targetX: actor.x, targetY: actor.y, direction: actor.direction, moving: actor.moving, label: null };
+        entry = { sprite, shadow, appearance, targetX: actor.x, targetY: actor.y, direction: actor.direction, moving: actor.moving, label: null };
         this.sprites.set(actor.actorId, entry);
         {
           entry.label = this.scene.add.text(actor.x, actor.y - 34, actor.label || '', {
@@ -63,6 +64,7 @@ export class ActorView {
       entry.moving = actor.moving;
       entry.activity = actor.activity;
       const meta=this.scene.characterMeta[appearance],parts=(actor.name||(actor.actorId===playerActorId?'店长':meta.displayName)).split(/[·｜|]/).map(s=>s.trim());
+      if(entry.appearance!==appearance){entry.sprite.setTexture('char-'+appearance);entry.sprite.setOrigin(meta.anchorPx[0]/meta.frameWidth,meta.anchorPx[1]/meta.frameHeight).setScale(meta.displayScale||1);entry.appearance=appearance;}
       const role=actor.actorId===playerActorId?'店主':(parts[1]||meta.role)+(actor.scavenger?' / 拾荒客':'');
       const text=parts[0]+'\n'+role+(actor.label?'\n'+actor.label:'');
       if(entry.label&&entry.label.text!==text)entry.label.setText(text);

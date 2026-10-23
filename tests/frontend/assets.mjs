@@ -52,7 +52,7 @@ check("清单字段完整（schemaVersion/artVersion/tileSize/characters/maps）
   if (manifest.tileSize !== 16) throw new Error("基础瓦片必须是 16×16");
 });
 
-check("至少七套角色，且都带有四向/待机/立绘声明", () => {
+check("至少 25 套新角色，且都带有四向/待机/立绘声明", () => {
   const ids = Object.keys(manifest.characters);
   if (ids.length < 7) throw new Error("角色数量 " + ids.length + " < 7");
   for (const id of ids) {
@@ -60,37 +60,37 @@ check("至少七套角色，且都带有四向/待机/立绘声明", () => {
     for (const key of ["sheet", "portrait", "frameWidth", "frameHeight", "anchorPx", "directions", "idleColumn", "walkColumns"]) {
       if (!(key in entry)) throw new Error(id + " 缺字段 " + key);
     }
-    if (entry.frameWidth !== 96 || entry.frameHeight !== 128) throw new Error(id + " 帧尺寸必须 96×128");
-    if (entry.anchorPx[0] !== 48 || entry.anchorPx[1] !== 120) throw new Error(id + " 落脚点必须 (48,120)");
+    const modern=entry.columns===8;
+    if(modern?(entry.frameWidth!==64||entry.frameHeight!==64):(entry.frameWidth!==96||entry.frameHeight!==128))throw new Error(id+' 帧尺寸与格式不一致');
+    if (entry.anchorPx[0]!==entry.frameWidth/2||entry.anchorPx[1]>=entry.frameHeight) throw new Error(id+' 落脚点越界');
     const dirs = entry.directions;
-    if (!(dirs.down === 0 && dirs.left === 1 && dirs.right === 2 && dirs.up === 3)) throw new Error(id + " 行序必须是 下/左/右/上");
-    if (entry.idleColumn !== 1) throw new Error(id + " 待机必须是第 1 列");
-    if (JSON.stringify(entry.walkColumns) !== JSON.stringify([0, 1, 2, 1])) throw new Error(id + " 行走帧序必须是 0→1→2→1");
+    if(new Set(Object.values(dirs)).size!==4||Object.values(dirs).some(r=>r<0||r>3))throw new Error(id+' 朝向声明无效');
+    if(entry.idleColumn<0||entry.idleColumn>=(entry.columns||3)||entry.walkColumns.some(col=>col<0||col>=(entry.columns||3)))throw new Error(id+' 动画帧越界');
   }
+  if(ids.filter(id=>id.startsWith('bd-')).length!==25)throw new Error('五团角色应为 25 人');
 });
 
-check("角色图集为 288×512、立绘为 256×256、均为透明背景", () => {
+check("角色图片尺寸符合清单，且均为透明背景", () => {
   for (const [id, entry] of Object.entries(manifest.characters)) {
     const sheet = readImage(entry.sheet);
-    const sheetOk = sheet.width === 288 && sheet.height === 512;
+    const sheetOk = sheet.width === entry.frameWidth*(entry.columns||3) && sheet.height === entry.frameHeight*4;
     if (!sheetOk) throw new Error(id + " 图集尺寸 " + sheet.width + "x" + sheet.height);
     const sheetAlpha = alphaStats(sheet);
     if (sheetAlpha.transparent < 500) throw new Error(id + " 图集不是透明底");
     if (sheetAlpha.opaque < 2000) throw new Error(id + " 图集内容过少");
     const portrait = readImage(entry.portrait);
-    if (portrait.width !== 256 || portrait.height !== 256) throw new Error(id + " 立绘不是 256×256");
+    const portraitSize=entry.columns===8?96:256;
+    if (portrait.width !== portraitSize || portrait.height !== portraitSize) throw new Error(id + " 头像尺寸与格式不符");
     const portraitAlpha = alphaStats(portrait);
     if (portraitAlpha.transparent < 800) throw new Error(id + " 立绘不是透明底");
     info.push({ 角色: id, 图集颜色数: colorsOf(sheet), 立绘颜色数: colorsOf(portrait), 图集字节: sheet.bytes, 立绘字节: portrait.bytes });
   }
 });
 
-check("帧索引覆盖 12 帧，且第 12 帧之外没有越界", () => {
+check("新图集包含 32 帧，旧图集包含 12 帧，索引不越界", () => {
   for (const entry of Object.values(manifest.characters)) {
-    const frames = 0;
-    const total = 3 * 4;
-    if (total !== 12) throw new Error("帧数必须是 12");
-    if (frames !== 0) throw new Error("占位");
+    const total=(entry.columns||3)*4;
+    for(const row of Object.values(entry.directions))for(const col of entry.walkColumns)if(row*(entry.columns||3)+col>=total)throw new Error('帧索引越界');
   }
 });
 
@@ -257,7 +257,7 @@ for (const row of results) {
 }
 console.log("");
 console.log("素材总量: " + (totalBytes / 1024).toFixed(1) + " KB（不含清单）");
-console.log("美术 v3：原生角色 96×128，导航 16，瓦片图像 32，设施图集 768×1152。");
+console.log("美术 v4：新角色 64×64 四向八帧，兼容旧角色格式；导航、瓦片与设施规格保持。");
 if (info.length) console.table ? console.table(info) : console.log(info);
 console.log((results.length - failed.length) + "/" + results.length + " 项通过");
 if (failed.length) process.exitCode = 1;

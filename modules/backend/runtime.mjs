@@ -12,6 +12,7 @@ import {voidNpcMatch} from './matches.mjs';
 import {inventoryView,cardDetailView,ledgerView,retailView,marketView,archiveMeta} from './views.mjs';
 import {DEFAULT_DISTRIBUTION,productEnabled} from './distribution.mjs';
 import {PLAYER_SKINS} from './appearances.mjs';
+import {migrateCustomerIdentity} from './customer-identity.mjs';
 
 const tasks=[
   {taskId:'first-order',title:'第一次进货',metric:'ordered',target:3,reward:40,guide:'store.counter'},
@@ -44,6 +45,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
   const listeners=new Set(),pauses=new Map(),quotes=new Map(),previews=new Map(),navigation=new Map(maps.map(m=>[m.mapId,validateMap(m)]));
   let connected=false,clientId,sessionId,seq=0,queue=Promise.resolve(),disconnected=false,lastInputSeq=-1,movement=null;
   function normaliseActors(world){
+    migrateCustomerIdentity(world);
     const aliases={novice:'rookie',competitive:'competitor',casual:'passerby',premium:'bigspender'},occupied=new Set();
     for(const actor of [world.player,...world.npcs]){
       const oldName=/^顾客\s*(\d+)$/.exec(actor.name||'');if(oldName){const names=customerBehavior(world).names;actor.name=names[(Number(oldName[1])-1)%names.length];}

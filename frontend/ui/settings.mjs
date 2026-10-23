@@ -47,7 +47,7 @@ export async function openSettings(app) {
         el('div',{class:'skin-grid'},skins.data.items.map(s=>el('button',{
           class:'skin-option'+(s.selected?' is-selected':''),type:'button','aria-label':'换装：'+s.name,'aria-pressed':String(s.selected),'data-skin':s.appearanceId,
           onclick:async event=>{const restore=busyButton(event.currentTarget,'换装中…');const r=await ctx.submit({requestId:newRequestId('skin'),type:'player.setSkin',payload:{appearanceId:s.appearanceId}});restore();if(!r.ok)app.toast('error',r.error.code,r.error.message);else {await app.refreshSnapshot();ctx.refresh();}}
-        },[imgWithFallback(app.manifest.characters[s.appearanceId].portrait,s.name,'skin-option__portrait'),el('strong',{text:s.name}),el('span',{class:'small muted',text:s.selected?'当前穿着':'点击换装'})])))
+        },[imgWithFallback(app.manifest.characters[s.appearanceId].portrait,s.name,'skin-option__portrait'),el('strong',{text:s.name}),el('span',{class:'small muted',text:s.selected?'当前穿着':s.group||'基础外观'})])))
       ]));
 
       body.append(el("div", { class: "section" }, [

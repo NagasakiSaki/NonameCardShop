@@ -41,7 +41,7 @@
     "discardChance":{"N":0.65,"R":0.25,"SR":0,"SSR":0},
     "scavengerChance":0.3,"poorWallet":400,"poorInitialWallet":200,
     "pickupLimit":2,"pickupCooldownMinutes":90,
-    "names":["林知夏","沈梨","许遥","江弥","叶澄","陈若","白栀","杜桥","唐禾","宋言","陆冬","苏棠"]
+    "names":["Maya Chen","Alex Rivera","Yuki Sato","Noah Bennett","Amara Okafor","Luca Rossi","Sofia Silva","Min-jun Park","Leila Haddad","Arjun Mehta","Emma Laurent","Elias Berg","Zoe Williams","Mateo Garcia","Amina Yusuf","Nina Ivanova","Owen Brooks","Rina Tanaka","Camila Costa","Jonas Fischer","Anika Shah","Leo Martin","Ines Duarte","Kai Nguyen","Eva Novak","Samira Nasser","Nico Moretti","Lin Zhou","Ada Mensah","Hana Kim"]
   },
   "maxNpcs":12,
   "priceDailyLimit":0.15,

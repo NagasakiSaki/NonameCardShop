@@ -1,5 +1,19 @@
 {
-  "prototypeOnly": true,
+  "version": 2,
+  "portraitSize": [
+    96,
+    96
+  ],
+  "walkFrame": [
+    64,
+    64
+  ],
+  "walkDirections": {
+    "up": 0,
+    "left": 1,
+    "down": 2,
+    "right": 3
+  },
   "presets": [
     {
       "id": "keeper",
@@ -26,7 +40,35 @@
         "#4b7a78",
         "#294858"
       ],
-      "walkHair": "hair"
+      "walkHair": "hair",
+      "portrait": "keeper-portrait-96.png",
+      "sheet": "keeper-walk.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayScale": 1
     },
     {
       "id": "collector",
@@ -53,7 +95,35 @@
         "#7c6aab",
         "#45445e"
       ],
-      "walkHair": "hair-silver"
+      "walkHair": "hair-silver",
+      "portrait": "collector-portrait-96.png",
+      "sheet": "collector-walk.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayScale": 1
     },
     {
       "id": "regular",
@@ -80,23 +150,1699 @@
         "#618aa5",
         "#3a516f"
       ],
-      "walkHair": "hair-pink"
+      "walkHair": "hair-pink",
+      "portrait": "regular-portrait-96.png",
+      "sheet": "regular-walk.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayScale": 1
+    },
+    {
+      "id": "bd-tomori",
+      "band": "mygo",
+      "characterName": "高松灯",
+      "name": "高松灯",
+      "role": "顾客",
+      "reference": "https://bang-dream.com/artist/mygo/takamatsu-tomori/",
+      "base": "female10",
+      "front": "female06",
+      "back": "short01",
+      "clothes": "female11",
+      "eyes": "female01",
+      "mouth": "neutral02",
+      "hair": [
+        "#a5a2a5",
+        "#6e6872",
+        "#393641"
+      ],
+      "cloth": [
+        "#f3f5ef",
+        "#b5c7c9",
+        "#5c768a"
+      ],
+      "iris": [
+        "#e6a1ae",
+        "#a55e76",
+        "#543b53"
+      ],
+      "secondary": [
+        "#fff7ee",
+        "#d4d6dc",
+        "#777e94"
+      ],
+      "walkHair": "hair-silver",
+      "walkStyle": "bob",
+      "accessory": null,
+      "features": "灰褐短鲍勃、细碎刘海、粉红眼、白灰青色外套",
+      "portrait": "bd-tomori-portrait-96.png",
+      "sheet": "bd-tomori-walk.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayScale": 1
+    },
+    {
+      "id": "bd-anon",
+      "band": "mygo",
+      "characterName": "千早爱音",
+      "name": "千早爱音",
+      "role": "顾客",
+      "reference": "https://bang-dream.com/artist/mygo/chihaya-anon/",
+      "base": "female02",
+      "front": "female05",
+      "back": "long02",
+      "clothes": "female04",
+      "eyes": "female01",
+      "mouth": "neutral02",
+      "hair": [
+        "#ffd1e1",
+        "#e393b6",
+        "#8e567e"
+      ],
+      "cloth": [
+        "#46444c",
+        "#2c2d38",
+        "#171f2b"
+      ],
+      "iris": [
+        "#bde5ee",
+        "#7496b4",
+        "#3b526e"
+      ],
+      "secondary": [
+        "#fff7ee",
+        "#d4d6dc",
+        "#777e94"
+      ],
+      "walkHair": "hair-silver",
+      "walkStyle": "long",
+      "accessory": "clip",
+      "features": "粉色长直发、侧分长刘海、蓝灰眼、黑色外套",
+      "portrait": "bd-anon-portrait-96.png",
+      "sheet": "bd-anon-walk.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayScale": 1
+    },
+    {
+      "id": "bd-rana",
+      "band": "mygo",
+      "characterName": "要乐奈",
+      "name": "要乐奈",
+      "role": "顾客",
+      "reference": "https://bang-dream.com/artist/mygo/kaname-rana/",
+      "base": "female10",
+      "front": "female01",
+      "back": "short01",
+      "clothes": "female07",
+      "eyes": "female01",
+      "mouth": "neutral02",
+      "hair": [
+        "#fcfcf3",
+        "#c8c9c8",
+        "#7b8291"
+      ],
+      "cloth": [
+        "#43464e",
+        "#292e38",
+        "#171d2a"
+      ],
+      "iris": [
+        "#e4c879",
+        "#ad8e43",
+        "#6e583c"
+      ],
+      "secondary": [
+        "#fff7ee",
+        "#d4d6dc",
+        "#777e94"
+      ],
+      "walkHair": "hair-silver",
+      "walkStyle": "bob",
+      "accessory": null,
+      "features": "白银短发、轻侧分、左金右蓝异色瞳、黑色无袖上衣",
+      "otherEye": [
+        "#95d3e1",
+        "#5685aa",
+        "#334e74"
+      ],
+      "portrait": "bd-rana-portrait-96.png",
+      "sheet": "bd-rana-walk.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayScale": 1
+    },
+    {
+      "id": "bd-soyo",
+      "band": "mygo",
+      "characterName": "长崎素世",
+      "name": "长崎素世",
+      "role": "顾客",
+      "reference": "https://bang-dream.com/artist/mygo/nagasaki-soyo/",
+      "base": "female02",
+      "front": "female05",
+      "back": "long03",
+      "clothes": "female06",
+      "eyes": "female01",
+      "mouth": "neutral02",
+      "hair": [
+        "#d7b99f",
+        "#ad8876",
+        "#6a5252"
+      ],
+      "cloth": [
+        "#f0f3ee",
+        "#a9c1c5",
+        "#566d81"
+      ],
+      "iris": [
+        "#c0e1ef",
+        "#7b9ab9",
+        "#4a5475"
+      ],
+      "secondary": [
+        "#fff7ee",
+        "#d4d6dc",
+        "#777e94"
+      ],
+      "walkHair": "hair-silver",
+      "walkStyle": "wavy",
+      "accessory": null,
+      "features": "浅棕长发、侧分、柔和卷尾、浅蓝眼、白青外套",
+      "portrait": "bd-soyo-portrait-96.png",
+      "sheet": "bd-soyo-walk.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayScale": 1
+    },
+    {
+      "id": "bd-taki",
+      "band": "mygo",
+      "characterName": "椎名立希",
+      "name": "椎名立希",
+      "role": "顾客",
+      "reference": "https://bang-dream.com/artist/mygo/shiina-taki/",
+      "base": "female08",
+      "front": "female06",
+      "back": "long01",
+      "clothes": "female11",
+      "eyes": "female01",
+      "mouth": "neutral02",
+      "hair": [
+        "#70616d",
+        "#4c3f51",
+        "#2b263b"
+      ],
+      "cloth": [
+        "#f0f3ed",
+        "#a0cbd0",
+        "#507e91"
+      ],
+      "iris": [
+        "#caaddb",
+        "#9367b4",
+        "#563d78"
+      ],
+      "secondary": [
+        "#fff7ee",
+        "#d4d6dc",
+        "#777e94"
+      ],
+      "walkHair": "hair-silver",
+      "walkStyle": "long",
+      "accessory": null,
+      "features": "深棕黑长发、整齐刘海、紫眼、白色青肩外套",
+      "portrait": "bd-taki-portrait-96.png",
+      "sheet": "bd-taki-walk.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayScale": 1
+    },
+    {
+      "id": "bd-uika",
+      "band": "avemujica",
+      "characterName": "三角初华",
+      "name": "三角初华",
+      "role": "顾客",
+      "reference": "https://bang-dream.com/artist/avemujica/misumi-uika/",
+      "base": "female10",
+      "front": "female06",
+      "back": "medium01",
+      "clothes": "female12",
+      "eyes": "female01",
+      "mouth": "neutral02",
+      "hair": [
+        "#fff0cc",
+        "#dbc69e",
+        "#99846f"
+      ],
+      "cloth": [
+        "#46424d",
+        "#282630",
+        "#191c28"
+      ],
+      "iris": [
+        "#cfb6ed",
+        "#9b75bf",
+        "#5f4b83"
+      ],
+      "secondary": [
+        "#fff7ee",
+        "#d4d6dc",
+        "#777e94"
+      ],
+      "walkHair": "hair-silver",
+      "walkStyle": "medium",
+      "accessory": "ribbon",
+      "features": "浅金中短发、齐刘海、紫眼、黑金服饰与红袖口",
+      "portrait": "bd-uika-portrait-96.png",
+      "sheet": "bd-uika-walk.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayScale": 1
+    },
+    {
+      "id": "bd-mutsumi",
+      "band": "avemujica",
+      "characterName": "若叶睦",
+      "name": "若叶睦",
+      "role": "顾客",
+      "reference": "https://bang-dream.com/artist/avemujica/wakaba-mutsumi/",
+      "base": "female08",
+      "front": "female06",
+      "back": "long01",
+      "clothes": "female12",
+      "eyes": "female01",
+      "mouth": "neutral02",
+      "hair": [
+        "#ddedd5",
+        "#afc9a4",
+        "#6f8878"
+      ],
+      "cloth": [
+        "#542f3f",
+        "#351e2e",
+        "#1d1b29"
+      ],
+      "iris": [
+        "#e4d795",
+        "#af9f5d",
+        "#6a654a"
+      ],
+      "secondary": [
+        "#fff7ee",
+        "#d4d6dc",
+        "#777e94"
+      ],
+      "walkHair": "hair-silver",
+      "walkStyle": "long",
+      "accessory": "beret",
+      "features": "浅绿长发、齐刘海、金眼、酒红贝雷帽与黑红裙",
+      "portrait": "bd-mutsumi-portrait-96.png",
+      "sheet": "bd-mutsumi-walk.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayScale": 1
+    },
+    {
+      "id": "bd-umiri",
+      "band": "avemujica",
+      "characterName": "八幡海铃",
+      "name": "八幡海铃",
+      "role": "顾客",
+      "reference": "https://bang-dream.com/artist/avemujica/yahata-umiri/",
+      "base": "female02",
+      "front": "female10",
+      "back": "medium03",
+      "clothes": "female04",
+      "eyes": "female01",
+      "mouth": "neutral02",
+      "hair": [
+        "#747c76",
+        "#424c49",
+        "#272e32"
+      ],
+      "cloth": [
+        "#513946",
+        "#302834",
+        "#1a1e2b"
+      ],
+      "iris": [
+        "#a7d7d2",
+        "#5d9997",
+        "#335c67"
+      ],
+      "secondary": [
+        "#fff7ee",
+        "#d4d6dc",
+        "#777e94"
+      ],
+      "walkHair": "hair-silver",
+      "walkStyle": "medium",
+      "accessory": "red-ties",
+      "features": "黑绿中长发、两侧束发、青绿眼、暗红披肩",
+      "portrait": "bd-umiri-portrait-96.png",
+      "sheet": "bd-umiri-walk.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayScale": 1
+    },
+    {
+      "id": "bd-nyamu",
+      "band": "avemujica",
+      "characterName": "祐天寺若麦",
+      "name": "祐天寺若麦",
+      "role": "顾客",
+      "reference": "https://bang-dream.com/artist/avemujica/yutenji-nyamu/",
+      "base": "female10",
+      "front": "female06",
+      "back": "short01",
+      "clothes": "female07",
+      "eyes": "female01",
+      "mouth": "neutral02",
+      "hair": [
+        "#c9bddc",
+        "#9589b2",
+        "#5e547b"
+      ],
+      "cloth": [
+        "#b34c5c",
+        "#7f2d43",
+        "#412039"
+      ],
+      "iris": [
+        "#e7a8bd",
+        "#b75a83",
+        "#71385f"
+      ],
+      "secondary": [
+        "#fff7ee",
+        "#d4d6dc",
+        "#777e94"
+      ],
+      "walkHair": "hair-silver",
+      "walkStyle": "bob",
+      "accessory": "earrings",
+      "features": "紫灰短鲍勃、红粉眼、红黑服饰与红耳坠",
+      "portrait": "bd-nyamu-portrait-96.png",
+      "sheet": "bd-nyamu-walk.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayScale": 1
+    },
+    {
+      "id": "bd-sakiko",
+      "band": "avemujica",
+      "characterName": "丰川祥子",
+      "name": "丰川祥子",
+      "role": "顾客",
+      "reference": "https://bang-dream.com/artist/avemujica/togawa-sakiko/",
+      "base": "female02",
+      "front": "female05",
+      "back": "pigtails01",
+      "clothes": "female12",
+      "eyes": "female01",
+      "mouth": "neutral02",
+      "hair": [
+        "#c3e9f4",
+        "#80afc6",
+        "#47718f"
+      ],
+      "cloth": [
+        "#b24d56",
+        "#793044",
+        "#3e2539"
+      ],
+      "iris": [
+        "#efcf95",
+        "#b59255",
+        "#75613f"
+      ],
+      "secondary": [
+        "#fff7ee",
+        "#d4d6dc",
+        "#777e94"
+      ],
+      "walkHair": "hair-silver",
+      "walkStyle": "twins",
+      "accessory": "black-bows",
+      "features": "浅蓝长双马尾、金眼、黑蝴蝶结、红黑礼服",
+      "portrait": "bd-sakiko-portrait-96.png",
+      "sheet": "bd-sakiko-walk.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayScale": 1
+    },
+    {
+      "id": "bd-arale",
+      "band": "yumemita",
+      "characterName": "仲町亚罗蕾",
+      "name": "仲町亚罗蕾",
+      "role": "顾客",
+      "reference": "https://bang-dream.com/artist/yumemita/nakamachi-arale/",
+      "base": "female07",
+      "front": "female01",
+      "back": "pigtails01",
+      "clothes": "female07",
+      "eyes": "female01",
+      "mouth": "neutral02",
+      "hair": [
+        "#fff0bc",
+        "#e8b66f",
+        "#aa795c"
+      ],
+      "cloth": [
+        "#c6ecf7",
+        "#83c6e0",
+        "#4c7f9e"
+      ],
+      "iris": [
+        "#e8aad8",
+        "#b66bb6",
+        "#6c417f"
+      ],
+      "secondary": [
+        "#fff7ee",
+        "#d4d6dc",
+        "#777e94"
+      ],
+      "walkHair": "hair-silver",
+      "walkStyle": "twins",
+      "accessory": "cat-yellow",
+      "features": "金色双马尾、粉色发尾、猫耳耳机、黄蓝白服饰",
+      "streak": "#ef93b6",
+      "accent": "#f3d76e",
+      "portrait": "bd-arale-portrait-96.png",
+      "sheet": "bd-arale-walk.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayScale": 1
+    },
+    {
+      "id": "bd-nonoka",
+      "band": "yumemita",
+      "characterName": "宫永乃乃花",
+      "name": "宫永乃乃花",
+      "role": "顾客",
+      "reference": "https://bang-dream.com/artist/yumemita/miyanaga-nonoka/",
+      "base": "female02",
+      "front": "female05",
+      "back": "long02",
+      "clothes": "female12",
+      "eyes": "female01",
+      "mouth": "neutral02",
+      "hair": [
+        "#f7f6ff",
+        "#cad4e8",
+        "#7f94b5"
+      ],
+      "cloth": [
+        "#f0a3b9",
+        "#cf708d",
+        "#8f496e"
+      ],
+      "iris": [
+        "#b0d9eb",
+        "#749bad",
+        "#4d627f"
+      ],
+      "secondary": [
+        "#fff7ee",
+        "#d4d6dc",
+        "#777e94"
+      ],
+      "walkHair": "hair-silver",
+      "walkStyle": "long",
+      "accessory": "bunny",
+      "features": "银蓝长发、辫侧发、兔耳发饰、粉白格纹衣饰",
+      "accent": "#f49fbc",
+      "portrait": "bd-nonoka-portrait-96.png",
+      "sheet": "bd-nonoka-walk.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayScale": 1
+    },
+    {
+      "id": "bd-ritsu",
+      "band": "yumemita",
+      "characterName": "峰月律",
+      "name": "峰月律",
+      "role": "顾客",
+      "reference": "https://bang-dream.com/artist/yumemita/minetsuki-ritsu/",
+      "base": "female10",
+      "front": "female06",
+      "back": "short01",
+      "clothes": "female11",
+      "eyes": "female01",
+      "mouth": "neutral02",
+      "hair": [
+        "#d6f5ff",
+        "#96c6e4",
+        "#547da8"
+      ],
+      "cloth": [
+        "#f0f6ff",
+        "#9ed0ee",
+        "#527fac"
+      ],
+      "iris": [
+        "#d1c8ec",
+        "#9b88bd",
+        "#5a4a7f"
+      ],
+      "secondary": [
+        "#fff7ee",
+        "#d4d6dc",
+        "#777e94"
+      ],
+      "walkHair": "hair-silver",
+      "walkStyle": "bob",
+      "accessory": "bear-blue",
+      "features": "冰蓝短发、蓝色圆耳耳机、蓝白机能风衣饰",
+      "portrait": "bd-ritsu-portrait-96.png",
+      "sheet": "bd-ritsu-walk.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayScale": 1
+    },
+    {
+      "id": "bd-miyako",
+      "band": "yumemita",
+      "characterName": "藤都子",
+      "name": "藤都子",
+      "role": "顾客",
+      "reference": "https://bang-dream.com/artist/yumemita/fuji-miyako/",
+      "base": "female10",
+      "front": "female06",
+      "back": "short01",
+      "clothes": "female12",
+      "eyes": "female01",
+      "mouth": "neutral02",
+      "hair": [
+        "#9b8cc4",
+        "#5a497f",
+        "#332c54"
+      ],
+      "cloth": [
+        "#806d9d",
+        "#554267",
+        "#302a49"
+      ],
+      "iris": [
+        "#c5b7ef",
+        "#8b79bf",
+        "#4d426f"
+      ],
+      "secondary": [
+        "#fff7ee",
+        "#d4d6dc",
+        "#777e94"
+      ],
+      "walkHair": "hair-silver",
+      "walkStyle": "bob",
+      "accessory": "veil",
+      "features": "深紫短发、白色头带与薄纱、淡紫眼、黑紫裙",
+      "portrait": "bd-miyako-portrait-96.png",
+      "sheet": "bd-miyako-walk.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayScale": 1
+    },
+    {
+      "id": "bd-yuno",
+      "band": "yumemita",
+      "characterName": "千石优乃",
+      "name": "千石优乃",
+      "role": "顾客",
+      "reference": "https://bang-dream.com/artist/yumemita/sengoku-yuno/",
+      "base": "female02",
+      "front": "female01",
+      "back": "long01",
+      "clothes": "female11",
+      "eyes": "female01",
+      "mouth": "neutral02",
+      "hair": [
+        "#575464",
+        "#2e2b3e",
+        "#1b1c2b"
+      ],
+      "cloth": [
+        "#ec709e",
+        "#b64476",
+        "#70304f"
+      ],
+      "iris": [
+        "#eba0bb",
+        "#b95383",
+        "#6c315e"
+      ],
+      "secondary": [
+        "#fff7ee",
+        "#d4d6dc",
+        "#777e94"
+      ],
+      "walkHair": "hair-silver",
+      "walkStyle": "long",
+      "accessory": "cat-pink",
+      "features": "黑色长发、粉红挑染、粉色猫耳耳机、玫红外套",
+      "streak": "#ef91b8",
+      "portrait": "bd-yuno-portrait-96.png",
+      "sheet": "bd-yuno-walk.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayScale": 1
+    },
+    {
+      "id": "bd-nagi",
+      "band": "millsage",
+      "characterName": "琴平凪",
+      "name": "琴平凪",
+      "role": "顾客",
+      "reference": "https://bang-dream.com/artist/millsage/kotohira-nagi/",
+      "base": "female02",
+      "front": "female05",
+      "back": "long03",
+      "clothes": "female06",
+      "eyes": "female01",
+      "mouth": "neutral02",
+      "hair": [
+        "#bdb49b",
+        "#8c836b",
+        "#565449"
+      ],
+      "cloth": [
+        "#f7f8f3",
+        "#ced4d1",
+        "#929da6"
+      ],
+      "iris": [
+        "#c5d2a1",
+        "#8c9d6d",
+        "#56664e"
+      ],
+      "secondary": [
+        "#fff7ee",
+        "#d4d6dc",
+        "#777e94"
+      ],
+      "walkHair": "hair-silver",
+      "walkStyle": "wavy",
+      "accessory": "flower-right",
+      "features": "橄榄褐色长发、右侧白花、草绿眼、白色花边上衣",
+      "portrait": "bd-nagi-portrait-96.png",
+      "sheet": "bd-nagi-walk.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayScale": 1
+    },
+    {
+      "id": "bd-mahoro",
+      "band": "millsage",
+      "characterName": "滨崎真幌",
+      "name": "滨崎真幌",
+      "role": "顾客",
+      "reference": "https://bang-dream.com/artist/millsage/hamasaki-mahoro/",
+      "base": "female10",
+      "front": "female06",
+      "back": "short01",
+      "clothes": "female12",
+      "eyes": "female01",
+      "mouth": "neutral02",
+      "hair": [
+        "#b1bfdc",
+        "#697da6",
+        "#414e78"
+      ],
+      "cloth": [
+        "#f6f8ff",
+        "#c1cddb",
+        "#7b8caa"
+      ],
+      "iris": [
+        "#bde3ec",
+        "#79aac0",
+        "#496983"
+      ],
+      "secondary": [
+        "#fff7ee",
+        "#d4d6dc",
+        "#777e94"
+      ],
+      "walkHair": "hair-silver",
+      "walkStyle": "bob",
+      "accessory": "pearl-band",
+      "features": "蓝灰短鲍勃、白珠头带、蓝眼、白色荷叶边领",
+      "portrait": "bd-mahoro-portrait-96.png",
+      "sheet": "bd-mahoro-walk.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayScale": 1
+    },
+    {
+      "id": "bd-hotaru",
+      "band": "millsage",
+      "characterName": "汐见萤",
+      "name": "汐见萤",
+      "role": "顾客",
+      "reference": "https://bang-dream.com/artist/millsage/shiomi-hotaru/",
+      "base": "female08",
+      "front": "female05",
+      "back": "long01",
+      "clothes": "female12",
+      "eyes": "female01",
+      "mouth": "neutral02",
+      "hair": [
+        "#ffffff",
+        "#dce5ed",
+        "#99adbd"
+      ],
+      "cloth": [
+        "#ffffff",
+        "#d7dfe4",
+        "#8c9dab"
+      ],
+      "iris": [
+        "#dedbff",
+        "#a5a1d9",
+        "#6c6d9a"
+      ],
+      "secondary": [
+        "#fff7ee",
+        "#d4d6dc",
+        "#777e94"
+      ],
+      "walkHair": "hair-silver",
+      "walkStyle": "long",
+      "accessory": "flower-left",
+      "features": "白银长发、左侧白花簇、淡紫眼、白衬衣黑领带",
+      "portrait": "bd-hotaru-portrait-96.png",
+      "sheet": "bd-hotaru-walk.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayScale": 1
+    },
+    {
+      "id": "bd-houka",
+      "band": "millsage",
+      "characterName": "和泉朋花",
+      "name": "和泉朋花",
+      "role": "顾客",
+      "reference": "https://bang-dream.com/artist/millsage/izumi-houka/",
+      "base": "female08",
+      "front": "female06",
+      "back": "long02",
+      "clothes": "female07",
+      "eyes": "female01",
+      "mouth": "neutral02",
+      "hair": [
+        "#f6dce1",
+        "#d9a9bb",
+        "#a87896"
+      ],
+      "cloth": [
+        "#ffffff",
+        "#dbe0e5",
+        "#9aa5b3"
+      ],
+      "iris": [
+        "#d6c1c8",
+        "#9e8a99",
+        "#695d78"
+      ],
+      "secondary": [
+        "#fff7ee",
+        "#d4d6dc",
+        "#777e94"
+      ],
+      "walkHair": "hair-silver",
+      "walkStyle": "long",
+      "accessory": "flower-left",
+      "features": "浅粉长直发、齐刘海、左侧白花、白色露肩上衣",
+      "portrait": "bd-houka-portrait-96.png",
+      "sheet": "bd-houka-walk.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayScale": 1
+    },
+    {
+      "id": "bd-natsume",
+      "band": "millsage",
+      "characterName": "伊泽夏芽",
+      "name": "伊泽夏芽",
+      "role": "顾客",
+      "reference": "https://bang-dream.com/artist/millsage/izawa-natsume/",
+      "base": "female02",
+      "front": "female05",
+      "back": "medium02",
+      "clothes": "female06",
+      "eyes": "female01",
+      "mouth": "neutral02",
+      "hair": [
+        "#c7d7bf",
+        "#94b099",
+        "#5d7e78"
+      ],
+      "cloth": [
+        "#fcfcf7",
+        "#d4ddd4",
+        "#8ca09b"
+      ],
+      "iris": [
+        "#d8b6f0",
+        "#ab7fc4",
+        "#655080"
+      ],
+      "secondary": [
+        "#fff7ee",
+        "#d4d6dc",
+        "#777e94"
+      ],
+      "walkHair": "hair-silver",
+      "walkStyle": "wavy-medium",
+      "accessory": "flower-left",
+      "features": "鼠尾草绿中长卷发、侧分、左侧白花、紫眼与白裙",
+      "portrait": "bd-natsume-portrait-96.png",
+      "sheet": "bd-natsume-walk.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayScale": 1
+    },
+    {
+      "id": "bd-raika",
+      "band": "ikka-dumb-rock",
+      "characterName": "须贺蕾叶",
+      "name": "须贺蕾叶",
+      "role": "顾客",
+      "reference": "https://bang-dream.com/artist/ikka-dumb-rock/suga-raika/",
+      "base": "female08",
+      "front": "female05",
+      "back": "long01",
+      "clothes": "female11",
+      "eyes": "female01",
+      "mouth": "neutral02",
+      "hair": [
+        "#6d6d70",
+        "#3b3e46",
+        "#222936"
+      ],
+      "cloth": [
+        "#6f708f",
+        "#434765",
+        "#2a3048"
+      ],
+      "iris": [
+        "#e2d989",
+        "#aaa64f",
+        "#62603b"
+      ],
+      "secondary": [
+        "#fff7ee",
+        "#d4d6dc",
+        "#777e94"
+      ],
+      "walkHair": "hair-silver",
+      "walkStyle": "long",
+      "accessory": "gold-pins",
+      "features": "黑长直发、金色内层挑染与发夹、黄绿眼、蓝紫夹克",
+      "streak": "#d7bd71",
+      "portrait": "bd-raika-portrait-96.png",
+      "sheet": "bd-raika-walk.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayScale": 1
+    },
+    {
+      "id": "bd-miku",
+      "band": "ikka-dumb-rock",
+      "characterName": "马桥心玖",
+      "name": "马桥心玖",
+      "role": "顾客",
+      "reference": "https://bang-dream.com/artist/ikka-dumb-rock/mahashi-miku/",
+      "base": "female02",
+      "front": "female05",
+      "back": "medium03",
+      "clothes": "female04",
+      "eyes": "female01",
+      "mouth": "neutral02",
+      "hair": [
+        "#ffffff",
+        "#d6e1e4",
+        "#90a8af"
+      ],
+      "cloth": [
+        "#77b8b3",
+        "#4f8c8c",
+        "#345f70"
+      ],
+      "iris": [
+        "#b8e3e7",
+        "#78acba",
+        "#4c727f"
+      ],
+      "secondary": [
+        "#fff7ee",
+        "#d4d6dc",
+        "#777e94"
+      ],
+      "walkHair": "hair-silver",
+      "walkStyle": "medium",
+      "accessory": "cross-pins",
+      "features": "白色中长发、侧边黑发夹、青蓝眼、绿格纹外套",
+      "accent": "#dabe62",
+      "portrait": "bd-miku-portrait-96.png",
+      "sheet": "bd-miku-walk.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayScale": 1
+    },
+    {
+      "id": "bd-yomogi",
+      "band": "ikka-dumb-rock",
+      "characterName": "矢仓蓬咲",
+      "name": "矢仓蓬咲",
+      "role": "顾客",
+      "reference": "https://bang-dream.com/artist/ikka-dumb-rock/yakura-yomogi/",
+      "base": "female10",
+      "front": "female02",
+      "back": "short01",
+      "clothes": "female11",
+      "eyes": "female01",
+      "mouth": "neutral02",
+      "hair": [
+        "#b8b5c9",
+        "#827f9b",
+        "#51506d"
+      ],
+      "cloth": [
+        "#6b8094",
+        "#3c5268",
+        "#293b51"
+      ],
+      "iris": [
+        "#c6d8ae",
+        "#8ca579",
+        "#53674f"
+      ],
+      "secondary": [
+        "#fff7ee",
+        "#d4d6dc",
+        "#777e94"
+      ],
+      "walkHair": "hair-silver",
+      "walkStyle": "asym-bob",
+      "accessory": "earrings",
+      "features": "灰紫不对称短鲍勃、长侧刘海、浅绿眼、蓝条纹宽外套",
+      "portrait": "bd-yomogi-portrait-96.png",
+      "sheet": "bd-yomogi-walk.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayScale": 1
+    },
+    {
+      "id": "bd-chieri",
+      "band": "ikka-dumb-rock",
+      "characterName": "梅里千绘里",
+      "name": "梅里千绘里",
+      "role": "顾客",
+      "reference": "https://bang-dream.com/artist/ikka-dumb-rock/umezato-chieri/",
+      "base": "female07",
+      "front": "female01",
+      "back": "pigtails01",
+      "clothes": "female07",
+      "eyes": "female01",
+      "mouth": "neutral02",
+      "hair": [
+        "#f8b9b8",
+        "#d78b96",
+        "#955d77"
+      ],
+      "cloth": [
+        "#ed9acb",
+        "#bc6ba0",
+        "#7f477b"
+      ],
+      "iris": [
+        "#e4d7a8",
+        "#ab9f71",
+        "#6f6b53"
+      ],
+      "secondary": [
+        "#fff7ee",
+        "#d4d6dc",
+        "#777e94"
+      ],
+      "walkHair": "hair-silver",
+      "walkStyle": "braids",
+      "accessory": "star-clips",
+      "features": "珊瑚粉双辫、黑色交叉夹与星星夹、粉紫短上衣",
+      "portrait": "bd-chieri-portrait-96.png",
+      "sheet": "bd-chieri-walk.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayScale": 1
+    },
+    {
+      "id": "bd-shizuku",
+      "band": "ikka-dumb-rock",
+      "characterName": "四宫宁月",
+      "name": "四宫宁月",
+      "role": "顾客",
+      "reference": "https://bang-dream.com/artist/ikka-dumb-rock/shinomiya-shizuku/",
+      "base": "female08",
+      "front": "female06",
+      "back": "pigtails01",
+      "clothes": "female11",
+      "eyes": "female01",
+      "mouth": "neutral02",
+      "hair": [
+        "#fff0d5",
+        "#e7c3a7",
+        "#ac877e"
+      ],
+      "cloth": [
+        "#a6a7a9",
+        "#747b88",
+        "#474e65"
+      ],
+      "iris": [
+        "#d4b9e9",
+        "#a27db8",
+        "#665084"
+      ],
+      "secondary": [
+        "#fff7ee",
+        "#d4d6dc",
+        "#777e94"
+      ],
+      "walkHair": "hair-silver",
+      "walkStyle": "twins",
+      "accessory": "cross-pins",
+      "features": "浅金粉双马尾、交叉发夹、紫眼、灰衣黄背带与条纹袖",
+      "accent": "#e6dc7c",
+      "portrait": "bd-shizuku-portrait-96.png",
+      "sheet": "bd-shizuku-walk.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayScale": 1
     }
   ],
-  "portraitSize": [
-    96,
-    96
-  ],
-  "walkFrame": [
-    64,
-    64
-  ],
-  "walkDirections": {
-    "up": 0,
-    "left": 1,
-    "down": 2,
-    "right": 3
-  },
   "sources": [
     "../CREDITS.md"
   ]

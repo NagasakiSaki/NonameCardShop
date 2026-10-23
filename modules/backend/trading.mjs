@@ -6,6 +6,7 @@ import {trashItems,discardCard,customerBehavior,ensureCustomerTraits,canScavenge
 import {pathfind,moveActor} from './navigation.mjs';
 import {managementEffects} from './management.mjs';
 import {productEnabled} from './distribution.mjs';
+import {customerAppearance} from './customer-identity.mjs';
 
 export const owned=(w,ownerId='player')=>Object.values(w.items).filter(i=>i.ownerId===ownerId);
 export const free=i=>!i.lock&&!i.protected;
@@ -183,7 +184,7 @@ export function tickEconomy(w,catalog,{map=null,seconds=0}={}){
   w.nextNpcMinute=w.clock.minute+w.rules.npcIntervalMinutes;
   let npc;
   if(w.npcs.filter(n=>n.trip&&n.trip.kind!=='match').length>=effects.concurrentCustomers)return;
-  if(w.npcs.length<w.rules.maxNpcs){const appearances=['rookie','collector','competitor','passerby','regular','bigspender'];const i=w.npcs.length,scavenger=random(w)<customerBehavior(w).scavengerChance,initialWallet=Math.round((scavenger?customerBehavior(w).poorInitialWallet:w.rules.npcInitialWallet)*effects.newCustomerWalletMultiplier);npc={actorId:serial(w,'npc'),name:customerBehavior(w).names[i%customerBehavior(w).names.length],appearanceId:scavenger?'rookie':appearances[i%appearances.length],wallet:{available:initialWallet},roomId:'store',x:240,y:272,direction:'up',moving:false,activity:'shopping',scavenger};w.npcs.push(npc);note(w,'npcArrived',{actorId:npc.actorId,externalFunds:initialWallet});}
+  if(w.npcs.length<w.rules.maxNpcs){const i=w.npcs.length,scavenger=random(w)<customerBehavior(w).scavengerChance,initialWallet=Math.round((scavenger?customerBehavior(w).poorInitialWallet:w.rules.npcInitialWallet)*effects.newCustomerWalletMultiplier);npc={actorId:serial(w,'npc'),name:customerBehavior(w).names[i%customerBehavior(w).names.length],appearanceId:customerAppearance(i),appearancePackVersion:1,wallet:{available:initialWallet},roomId:'store',x:240,y:272,direction:'up',moving:false,activity:'shopping',scavenger};w.npcs.push(npc);note(w,'npcArrived',{actorId:npc.actorId,externalFunds:initialWallet});}
   else {const available=w.npcs.filter(n=>!n.trip&&!n.currentMatchId&&n.roomId==='store');if(!available.length)return;npc=available[Math.floor(random(w)*available.length)];}
   if(canScavenge(w,npc)&&trashItems(w).length){const anchor=map?.anchors['store.trash'];if(anchor){npc.trip={stage:'scavenge',path:pathfind(map,npc,anchor),waitSeconds:customerBehavior(w).searchSeconds};npc.activity='scavenging';npc.label='去翻垃圾桶';return;}if(!map){scavenge(w,catalog,npc);npc.activity='idle';return;}}
   if(map){

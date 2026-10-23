@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "artVersion": "pixel-shop-3-profile-skins",
+  "artVersion": "pixel-shop-4-lpc-five-bands",
   "generatedBy": "tools/frontend-art/build.mjs",
   "tileSize": 16,
   "mapSize": {
@@ -72,37 +72,38 @@
   },
   "characters": {
     "owner": {
-      "sheet": "/assets/frontend/characters/owner.png",
-      "portrait": "/assets/frontend/portraits/owner.png",
-      "frameWidth": 96,
-      "frameHeight": 128,
-      "displayScale": 0.38,
+      "sheet": "/assets/frontend/characters/owner.09969b9b30.png",
+      "portrait": "/assets/frontend/portraits/owner.0cd78218fd.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
       "anchorPx": [
-        48,
-        120
+        32,
+        61
       ],
       "directions": {
-        "down": 0,
+        "up": 0,
         "left": 1,
-        "right": 2,
-        "up": 3
+        "down": 2,
+        "right": 3
       },
-      "idleColumn": 1,
+      "idleColumn": 0,
       "walkColumns": [
         0,
         1,
         2,
-        1
+        3,
+        4,
+        5,
+        6,
+        7
       ],
+      "frameRate": 9,
       "displayName": "店长",
       "role": "店主",
-      "traits": [
-        "卷袖衬衫",
-        "奶油围裙",
-        "铜钥匙"
-      ],
       "appearanceReference": null,
-      "skinTone": "fair"
+      "band": null
     },
     "rookie": {
       "sheet": "/assets/frontend/characters/rookie.png",
@@ -301,10 +302,885 @@
       ],
       "appearanceReference": "弦卷心：金色长发与鲜明红金配色",
       "skinTone": "fair"
+    },
+    "bd-tomori": {
+      "sheet": "/assets/frontend/characters/bd-tomori.af3ac3a933.png",
+      "portrait": "/assets/frontend/portraits/bd-tomori.52590b7382.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayName": "高松灯",
+      "role": "顾客",
+      "appearanceReference": "https://bang-dream.com/artist/mygo/takamatsu-tomori/",
+      "band": "mygo"
+    },
+    "bd-anon": {
+      "sheet": "/assets/frontend/characters/bd-anon.f6badad995.png",
+      "portrait": "/assets/frontend/portraits/bd-anon.577d571685.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayName": "千早爱音",
+      "role": "顾客",
+      "appearanceReference": "https://bang-dream.com/artist/mygo/chihaya-anon/",
+      "band": "mygo"
+    },
+    "bd-rana": {
+      "sheet": "/assets/frontend/characters/bd-rana.3c7e550327.png",
+      "portrait": "/assets/frontend/portraits/bd-rana.0623b39280.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayName": "要乐奈",
+      "role": "顾客",
+      "appearanceReference": "https://bang-dream.com/artist/mygo/kaname-rana/",
+      "band": "mygo"
+    },
+    "bd-soyo": {
+      "sheet": "/assets/frontend/characters/bd-soyo.d60689849e.png",
+      "portrait": "/assets/frontend/portraits/bd-soyo.3440d6e4f0.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayName": "长崎素世",
+      "role": "顾客",
+      "appearanceReference": "https://bang-dream.com/artist/mygo/nagasaki-soyo/",
+      "band": "mygo"
+    },
+    "bd-taki": {
+      "sheet": "/assets/frontend/characters/bd-taki.2a3b375b17.png",
+      "portrait": "/assets/frontend/portraits/bd-taki.5b07c4b112.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayName": "椎名立希",
+      "role": "顾客",
+      "appearanceReference": "https://bang-dream.com/artist/mygo/shiina-taki/",
+      "band": "mygo"
+    },
+    "bd-uika": {
+      "sheet": "/assets/frontend/characters/bd-uika.aca94e11fb.png",
+      "portrait": "/assets/frontend/portraits/bd-uika.64c8cfa57f.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayName": "三角初华",
+      "role": "顾客",
+      "appearanceReference": "https://bang-dream.com/artist/avemujica/misumi-uika/",
+      "band": "avemujica"
+    },
+    "bd-mutsumi": {
+      "sheet": "/assets/frontend/characters/bd-mutsumi.2a26671a7e.png",
+      "portrait": "/assets/frontend/portraits/bd-mutsumi.5bb2ae696a.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayName": "若叶睦",
+      "role": "顾客",
+      "appearanceReference": "https://bang-dream.com/artist/avemujica/wakaba-mutsumi/",
+      "band": "avemujica"
+    },
+    "bd-umiri": {
+      "sheet": "/assets/frontend/characters/bd-umiri.237abcbd0e.png",
+      "portrait": "/assets/frontend/portraits/bd-umiri.319f224f21.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayName": "八幡海铃",
+      "role": "顾客",
+      "appearanceReference": "https://bang-dream.com/artist/avemujica/yahata-umiri/",
+      "band": "avemujica"
+    },
+    "bd-nyamu": {
+      "sheet": "/assets/frontend/characters/bd-nyamu.14d9455d5e.png",
+      "portrait": "/assets/frontend/portraits/bd-nyamu.c25f613ae6.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayName": "祐天寺若麦",
+      "role": "顾客",
+      "appearanceReference": "https://bang-dream.com/artist/avemujica/yutenji-nyamu/",
+      "band": "avemujica"
+    },
+    "bd-sakiko": {
+      "sheet": "/assets/frontend/characters/bd-sakiko.65255b70ae.png",
+      "portrait": "/assets/frontend/portraits/bd-sakiko.086fdaa45a.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayName": "丰川祥子",
+      "role": "顾客",
+      "appearanceReference": "https://bang-dream.com/artist/avemujica/togawa-sakiko/",
+      "band": "avemujica"
+    },
+    "bd-arale": {
+      "sheet": "/assets/frontend/characters/bd-arale.66962537b9.png",
+      "portrait": "/assets/frontend/portraits/bd-arale.d68ed903bb.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayName": "仲町亚罗蕾",
+      "role": "顾客",
+      "appearanceReference": "https://bang-dream.com/artist/yumemita/nakamachi-arale/",
+      "band": "yumemita"
+    },
+    "bd-nonoka": {
+      "sheet": "/assets/frontend/characters/bd-nonoka.571db28da6.png",
+      "portrait": "/assets/frontend/portraits/bd-nonoka.c7c3c4c024.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayName": "宫永乃乃花",
+      "role": "顾客",
+      "appearanceReference": "https://bang-dream.com/artist/yumemita/miyanaga-nonoka/",
+      "band": "yumemita"
+    },
+    "bd-ritsu": {
+      "sheet": "/assets/frontend/characters/bd-ritsu.3833c39155.png",
+      "portrait": "/assets/frontend/portraits/bd-ritsu.b28233f38d.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayName": "峰月律",
+      "role": "顾客",
+      "appearanceReference": "https://bang-dream.com/artist/yumemita/minetsuki-ritsu/",
+      "band": "yumemita"
+    },
+    "bd-miyako": {
+      "sheet": "/assets/frontend/characters/bd-miyako.a5ec402f7c.png",
+      "portrait": "/assets/frontend/portraits/bd-miyako.e50d2adb06.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayName": "藤都子",
+      "role": "顾客",
+      "appearanceReference": "https://bang-dream.com/artist/yumemita/fuji-miyako/",
+      "band": "yumemita"
+    },
+    "bd-yuno": {
+      "sheet": "/assets/frontend/characters/bd-yuno.5e7b1556da.png",
+      "portrait": "/assets/frontend/portraits/bd-yuno.8ffe707a22.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayName": "千石优乃",
+      "role": "顾客",
+      "appearanceReference": "https://bang-dream.com/artist/yumemita/sengoku-yuno/",
+      "band": "yumemita"
+    },
+    "bd-nagi": {
+      "sheet": "/assets/frontend/characters/bd-nagi.5430eb41d6.png",
+      "portrait": "/assets/frontend/portraits/bd-nagi.f3f3cedcc2.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayName": "琴平凪",
+      "role": "顾客",
+      "appearanceReference": "https://bang-dream.com/artist/millsage/kotohira-nagi/",
+      "band": "millsage"
+    },
+    "bd-mahoro": {
+      "sheet": "/assets/frontend/characters/bd-mahoro.b9c4628d3e.png",
+      "portrait": "/assets/frontend/portraits/bd-mahoro.664920a0e5.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayName": "滨崎真幌",
+      "role": "顾客",
+      "appearanceReference": "https://bang-dream.com/artist/millsage/hamasaki-mahoro/",
+      "band": "millsage"
+    },
+    "bd-hotaru": {
+      "sheet": "/assets/frontend/characters/bd-hotaru.204b151549.png",
+      "portrait": "/assets/frontend/portraits/bd-hotaru.cc2d91ec0a.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayName": "汐见萤",
+      "role": "顾客",
+      "appearanceReference": "https://bang-dream.com/artist/millsage/shiomi-hotaru/",
+      "band": "millsage"
+    },
+    "bd-houka": {
+      "sheet": "/assets/frontend/characters/bd-houka.9021739318.png",
+      "portrait": "/assets/frontend/portraits/bd-houka.c83e412a8e.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayName": "和泉朋花",
+      "role": "顾客",
+      "appearanceReference": "https://bang-dream.com/artist/millsage/izumi-houka/",
+      "band": "millsage"
+    },
+    "bd-natsume": {
+      "sheet": "/assets/frontend/characters/bd-natsume.cefd416177.png",
+      "portrait": "/assets/frontend/portraits/bd-natsume.9267027668.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayName": "伊泽夏芽",
+      "role": "顾客",
+      "appearanceReference": "https://bang-dream.com/artist/millsage/izawa-natsume/",
+      "band": "millsage"
+    },
+    "bd-raika": {
+      "sheet": "/assets/frontend/characters/bd-raika.b8b7a91007.png",
+      "portrait": "/assets/frontend/portraits/bd-raika.7ef2c8ef02.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayName": "须贺蕾叶",
+      "role": "顾客",
+      "appearanceReference": "https://bang-dream.com/artist/ikka-dumb-rock/suga-raika/",
+      "band": "ikka-dumb-rock"
+    },
+    "bd-miku": {
+      "sheet": "/assets/frontend/characters/bd-miku.3728996393.png",
+      "portrait": "/assets/frontend/portraits/bd-miku.456f8c8ba3.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayName": "马桥心玖",
+      "role": "顾客",
+      "appearanceReference": "https://bang-dream.com/artist/ikka-dumb-rock/mahashi-miku/",
+      "band": "ikka-dumb-rock"
+    },
+    "bd-yomogi": {
+      "sheet": "/assets/frontend/characters/bd-yomogi.78a5c911b2.png",
+      "portrait": "/assets/frontend/portraits/bd-yomogi.7d846d80fb.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayName": "矢仓蓬咲",
+      "role": "顾客",
+      "appearanceReference": "https://bang-dream.com/artist/ikka-dumb-rock/yakura-yomogi/",
+      "band": "ikka-dumb-rock"
+    },
+    "bd-chieri": {
+      "sheet": "/assets/frontend/characters/bd-chieri.f3f9c4a371.png",
+      "portrait": "/assets/frontend/portraits/bd-chieri.d3de9ab026.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayName": "梅里千绘里",
+      "role": "顾客",
+      "appearanceReference": "https://bang-dream.com/artist/ikka-dumb-rock/umezato-chieri/",
+      "band": "ikka-dumb-rock"
+    },
+    "bd-shizuku": {
+      "sheet": "/assets/frontend/characters/bd-shizuku.65bd34d7f3.png",
+      "portrait": "/assets/frontend/portraits/bd-shizuku.34a0b4d337.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayName": "四宫宁月",
+      "role": "顾客",
+      "appearanceReference": "https://bang-dream.com/artist/ikka-dumb-rock/shinomiya-shizuku/",
+      "band": "ikka-dumb-rock"
     }
   },
   "characterOrder": [
     "owner",
+    "bd-tomori",
+    "bd-anon",
+    "bd-rana",
+    "bd-soyo",
+    "bd-taki",
+    "bd-uika",
+    "bd-mutsumi",
+    "bd-umiri",
+    "bd-nyamu",
+    "bd-sakiko",
+    "bd-arale",
+    "bd-nonoka",
+    "bd-ritsu",
+    "bd-miyako",
+    "bd-yuno",
+    "bd-nagi",
+    "bd-mahoro",
+    "bd-hotaru",
+    "bd-houka",
+    "bd-natsume",
+    "bd-raika",
+    "bd-miku",
+    "bd-yomogi",
+    "bd-chieri",
+    "bd-shizuku",
     "rookie",
     "collector",
     "competitor",
@@ -608,5 +1484,6 @@
         3
       ]
     }
-  }
+  },
+  "characterCredits": "/experiments/character-art/CREDITS.md"
 }

@@ -1,6 +1,7 @@
 import {PRESETS,renderPortrait,renderWalkSheet,loadImage,saveCanvas,saveJSON} from './portrait-kit.mjs';
+import {BANDS} from '../../data/band-appearances.mjs';
 const $=s=>document.querySelector(s),byId=new Map(PRESETS.map(p=>[p.id,p]));
-let current=structuredClone(PRESETS[1]),portraits=new Map(),sheets=new Map(),livePortrait,revision=0,activeTab='walk',paused=false,cycle=false,portraitScale=3;
+let current=structuredClone(byId.get('bd-tomori')),portraits=new Map(),sheets=new Map(),livePortrait,revision=0,activeTab='walk',paused=false,cycle=false,portraitScale=3;
 const notice=text=>$('#notice').textContent=text;
 const attribution={portrait:{author:'Viktor Hahn',license:'CC-BY-4.0',source:'https://github.com/V-ktor/pixel-art-portraits',modifications:'JavaScript layer compositor, palette changes and selected combinations'},walk:{authors:['Stephen Challener (Redshrike)','Eliza Wyatt (DeathsDarling)'],license:'OGA-BY-3.0',source:'https://github.com/ElizaWy/LPC',modifications:'Layer composition only; individual credit files are included in sources/lpc'}};
 function cloneCanvas(source){const c=document.createElement('canvas');c.width=source.width;c.height=source.height;c.getContext('2d').drawImage(source,0,0);return c;}
@@ -9,17 +10,20 @@ function updateFields(){
   $('#preset').value=current.id;$('#hair-color').value=current.hair[0];$('#cloth-color').value=current.cloth[0];$('#expression').value=current.eyes==='closed01'?'closed01':'open';$('#fringe').value=current.front;
 }
 async function refreshCurrent(){
-  const id=++revision,next=await renderPortrait(current);if(id!==revision)return;livePortrait=next;showPortrait('#large-portrait',next);$('#large-portrait canvas').style.cssText=`width:${96*portraitScale}px;height:${96*portraitScale}px`;showPortrait('#dialog-portrait',next);$('#dialog-role').textContent=current.role;$('#dialog-name').textContent=current.name.split(' · ')[1];$('#config').textContent=JSON.stringify({...current,attribution},null,2);
+  const id=++revision,[next,sheet]=await Promise.all([renderPortrait(current),renderWalkSheet(current)]);if(id!==revision)return;sheets.set(current.id,sheet);livePortrait=next;showPortrait('#large-portrait',next);$('#large-portrait canvas').style.cssText=`width:${96*portraitScale}px;height:${96*portraitScale}px`;showPortrait('#dialog-portrait',next);$('#dialog-role').textContent='顾客';$('#dialog-name').textContent='Maya Chen';$('#config').textContent=JSON.stringify({...current,attribution},null,2);$('#appearance-note').textContent=(current.characterName||current.name)+' · '+(current.features||'基础外观模板');$('#appearance-reference').href=current.reference||'./CREDITS.md';
   document.querySelectorAll('.roster-card').forEach(b=>b.classList.toggle('active',b.dataset.id===current.id));
 }
 async function select(id){current=structuredClone(byId.get(id));updateFields();await refreshCurrent();}
+const bandSelect=document.createElement('select');bandSelect.id='band-filter';bandSelect.setAttribute('aria-label','按乐团筛选外观');for(const b of [...BANDS,{id:'base',name:'基础模板'},{id:'all',name:'全部 28 套'}]){const o=document.createElement('option');o.value=b.id;o.textContent=b.name;bandSelect.append(o);}$('#roster-toolbar').append(bandSelect);
+function filterRoster(){document.querySelectorAll('.roster-card').forEach(b=>{const p=byId.get(b.dataset.id),band=bandSelect.value;b.hidden=band!=='all'&&(p.band||'base')!==band;});}
+bandSelect.addEventListener('change',async()=>{filterRoster();const next=PRESETS.find(p=>bandSelect.value==='all'||(p.band||'base')===bandSelect.value);if(next)await select(next.id);});
 for(const p of PRESETS){const o=document.createElement('option');o.value=p.id;o.textContent=p.name;$('#preset').append(o);}
 document.querySelectorAll('[data-tab]').forEach(button=>button.addEventListener('click',()=>{activeTab=button.dataset.tab;document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b===button));document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===activeTab));notice('');}));
 $('#preset').addEventListener('change',e=>select(e.target.value));
 for(const [id,key]of [['hair-color','hair'],['cloth-color','cloth']])$( '#'+id).addEventListener('input',e=>{const hex=e.target.value,channels=hex.match(/\w\w/g).map(n=>parseInt(n,16));current[key]=[hex,'#'+channels.map(n=>Math.round(n*.63).toString(16).padStart(2,'0')).join(''),'#'+channels.map(n=>Math.round(n*.38).toString(16).padStart(2,'0')).join('')];refreshCurrent();});
 $('#expression').addEventListener('change',e=>{current.eyes=e.target.value==='open'?byId.get(current.id).eyes:e.target.value;refreshCurrent();});$('#fringe').addEventListener('change',e=>{current.front=e.target.value;refreshCurrent();});
 document.querySelectorAll('[data-scale]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-scale]').forEach(x=>x.classList.toggle('selected',x===b));portraitScale=Number(b.dataset.scale);$('#large-portrait').querySelector('canvas').style.cssText=`width:${96*portraitScale}px;height:${96*portraitScale}px`;}));
-$('#export-png').addEventListener('click',()=>saveCanvas(livePortrait,current.id+'-portrait-96.png'));$('#export-sheet').addEventListener('click',()=>{saveCanvas(sheets.get(current.id),current.id+'-walk-64x64.png');notice('已导出 64×64 单帧、8 列×4 行图集；行序：上、左、下、右。地图服装尚未接入头像配色。');});$('#export-json').addEventListener('click',()=>saveJSON({version:1,portrait:current,walk:{frameWidth:64,frameHeight:64,columns:8,directions:{up:0,left:1,down:2,right:3},prototypeOnly:true},attribution},current.id+'-appearance.json'));
+$('#export-png').addEventListener('click',()=>saveCanvas(livePortrait,current.id+'-portrait-96.png'));$('#export-sheet').addEventListener('click',()=>{saveCanvas(sheets.get(current.id),current.id+'-walk-64x64.png');notice('已导出 64×64 单帧、8 列×4 行图集；行序：上、左、下、右。五团模板的发色与服装主色共享配置。');});$('#export-json').addEventListener('click',()=>saveJSON({version:2,portrait:current,walk:{frameWidth:64,frameHeight:64,columns:8,directions:{up:0,left:1,down:2,right:3},prototypeOnly:true},attribution},current.id+'-appearance.json'));
 $('.brand').addEventListener('click',e=>e.preventDefault());document.querySelectorAll('.choices button,.zone-action').forEach(b=>b.addEventListener('click',()=>notice('这是独立视觉样稿；该入口未接入正式游戏业务。')));
 $('#motion-toggle').addEventListener('click',()=>{paused=!paused;$('#motion-toggle').textContent=paused?'继续动作':'暂停动作';});$('#side-demo').addEventListener('click',()=>{cycle=!cycle;$('#side-demo').textContent=cycle?'退出四向轮播':'四向轮播';});
 const screen=$('#shop'),ctx=screen.getContext('2d');ctx.imageSmoothingEnabled=false;
@@ -29,7 +33,7 @@ screen.addEventListener('click',e=>{const r=screen.getBoundingClientRect();desti
 function label(text,x,y){ctx.font='8px "Microsoft YaHei",sans-serif';ctx.textAlign='center';const w=ctx.measureText(text).width;ctx.fillStyle='#1d2b2be6';ctx.fillRect(x-w/2-4,y-8,w+8,13);ctx.fillStyle='#f2ead0';ctx.fillText(text,x,y+1);}
 async function start(){
   for(const p of PRESETS){portraits.set(p.id,await renderPortrait(p));sheets.set(p.id,await renderWalkSheet(p));}
-  for(const p of PRESETS){const b=document.createElement('button');b.className='roster-card';b.dataset.id=p.id;b.append(cloneCanvas(portraits.get(p.id)));const span=document.createElement('span'),strong=document.createElement('strong'),small=document.createElement('small');strong.textContent=p.name;small.textContent='点击查看头像与行走图';span.append(strong,small);b.append(span);b.addEventListener('click',()=>select(p.id));$('#walk-roster').append(b);}
+  for(const p of PRESETS){const b=document.createElement('button');b.className='roster-card';b.dataset.id=p.id;b.append(cloneCanvas(portraits.get(p.id)));const span=document.createElement('span'),strong=document.createElement('strong'),small=document.createElement('small');strong.textContent=p.name;small.textContent=BANDS.find(v=>v.id===p.band)?.name||'基础外观';span.append(strong,small);b.append(span);b.addEventListener('click',()=>select(p.id));$('#walk-roster').append(b);}filterRoster();
   showPortrait('#keeper-portrait',portraits.get('keeper'));
   for(const [target,id,state]of [['#checkout-face','collector','正在挑选卡盒'],['#market-face','regular','正在查看寄售']]){const el=$(target),span=document.createElement('span'),strong=document.createElement('strong'),small=document.createElement('small');strong.textContent=byId.get(id).name.split(' · ')[1];small.textContent=state;span.append(strong,small);el.append(cloneCanvas(portraits.get(id)),span);}
   updateFields();await refreshCurrent();
@@ -50,7 +54,7 @@ async function start(){
     if(player.moving){const step=75*dt/n,nx=player.x+vx*step,ny=player.y+vy*step;if(can(nx,player.y))player.x=nx;if(can(player.x,ny))player.y=ny;player.direction=Math.abs(vx)>=Math.abs(vy)?vx>0?'right':'left':vy>0?'down':'up';}
     if(cycle)player.direction=['down','left','up','right'][Math.floor(time/1.1)%4];
     ctx.clearRect(0,0,480,320);ctx.drawImage(back,0,0);
-    const people=[{id:current.id,...player,frame:player.moving||cycle?Math.floor(time*9)%8:0,name:'店长 · '+current.name.split(' · ')[1]}, {id:'keeper',x:176,y:104,direction:'down',frame:0,name:'栗棕短发 · 顾客'}, {id:'regular',x:384,y:128,direction:'left',frame:0,name:'粉色发髻 · 常客'}].sort((a,b)=>a.y-b.y);
+    const people=[{id:current.id,...player,frame:player.moving||cycle?Math.floor(time*9)%8:0,name:'店长 · '+(current.characterName||current.name.split(' · ').at(-1))}, {id:'bd-yuno',x:176,y:104,direction:'down',frame:0,name:'Rina Tanaka · 顾客'}, {id:'bd-hotaru',x:384,y:128,direction:'left',frame:0,name:'Alex Rivera · 常客'}].sort((a,b)=>a.y-b.y);
     for(const p of people)actor(p.id,p.x,p.y,p.direction,p.frame,p.name);
     $('#motion-status').textContent=(cycle?'四向轮播':player.moving?'行走中 · '+({down:'向下',left:'向左',up:'向上',right:'向右'})[player.direction]:'待机')+' · 64×64 帧 / 8 帧步态';requestAnimationFrame(draw);
   }
