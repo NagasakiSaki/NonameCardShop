@@ -8,7 +8,7 @@
   const select=document.createElement('select');select.id='developmentFixture';select.style.cssText='max-width:100%;padding:6px';panel.append(select);
   const button=(title,fn)=>{const b=document.createElement('button');b.textContent=title;b.style.cssText='margin:5px;padding:6px;cursor:pointer';b.onclick=fn;panel.append(b);return b;};
   function available(){return typeof DATA!=='undefined'&&DATA&&typeof state!=='undefined'&&typeof store!=='undefined';}
-  function blocked(){return !available()||!document.querySelector('#battleScreen')?.hidden||document.querySelector('#taskEditor[open]')||document.querySelector('#managementPanel[open] #moduleConfigText');}
+  function blocked(){return !available()||!document.querySelector('#battleScreen')?.hidden||document.querySelector('#taskEditor[open]')||document.querySelector('#saveHistoryDialog[open]')||document.querySelector('#managementPanel[open] #moduleConfigText');}
   function reload(){if(!available()||typeof saveLoadError!=='undefined'&&saveLoadError)return;store.save(state);location.reload();}
   button('载入测试存档',()=>{if(!available())return;if(!document.querySelector('#battleScreen')?.hidden)return alert('请先返回小店，再切换测试存档。');if(!confirm('替换当前开发存档？当前开发进度会留一份本地备份。'))return;const fixture=fixtures.find(f=>f.id===select.value);if(!fixture)return;localStorage.setItem('noname-dev-before-fixture',localStorage.getItem(store.key)||'null');const next=ShopModel.normalise(fixture.save);ShopModules.ready(next);state=next;store.save(state);location.reload();});
   button('立即刷新',reload);

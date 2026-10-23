@@ -5,6 +5,8 @@
 /desktop/build/desktop-source/
 # Duplicate legacy portraits; the complete active images are in vendor/noname/image.
 /assets/character/
+# Upstream installation's browser profiles/cache are not engine source.
+/vendor/noname/Home/
 # Machine state, private saves, test results and caches.
 /.workbuddy-ai/
 /.local/

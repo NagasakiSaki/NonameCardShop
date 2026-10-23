@@ -1,7 +1,7 @@
 {
   "name":"noname-card-shop",
   "productName":"无名卡店",
-  "version":"0.8.0",
+  "version":"0.8.1",
   "description":"像素卡店经营与三国杀武将接力对战",
   "main":"main.cjs",
   "author":"Noname Card Shop contributors",
@@ -16,7 +16,7 @@
     "directories":{"output":"dist","buildResources":"build"},
     "files":["main.cjs","package.json","build/icon.ico"],
     "extraResources":[
-      {"from":"..","to":"game","filter":["*.html","*.js","*.mjs","*.css","*.md","*.cmd","package.json","package-lock.json","NONAME-LICENSE","assets/shop/**/*","data/**/*","modules/**/*","integration/**/*","docs/**/*","tools/**/*","dev/**/*","tests/**/*","vendor/**/*","!data/balance-build.log"]},
+      {"from":"..","to":"game","filter":["*.html","*.js","*.mjs","*.css","*.md","*.cmd","package.json","package-lock.json","NONAME-LICENSE","assets/shop/**/*","data/**/*","modules/**/*","integration/**/*","docs/**/*","tools/**/*","dev/**/*","tests/**/*","vendor/**/*","!data/balance-build.log","!vendor/noname/Home/**/*"]},
       {"from":"../node_modules/noname","to":"game/node_modules/noname","filter":["**/*"]},
       {"from":"../node_modules/dedent","to":"game/node_modules/dedent","filter":["**/*"]},
       {"from":"build/desktop-source","to":"desktop-source","filter":["**/*"]}

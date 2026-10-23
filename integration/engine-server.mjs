@@ -18,6 +18,7 @@ const MIME = {
 function localPath(name) {
   const resolved = path.resolve(ENGINE_ROOT, name.replaceAll("\\", "/"));
   if (resolved !== ENGINE_ROOT && !resolved.startsWith(ENGINE_ROOT + path.sep)) throw new Error("invalid path");
+  if(/^Home(?:\/|$)/i.test(path.relative(ENGINE_ROOT,resolved).replaceAll('\\','/')))throw new Error('invalid path');
   return resolved;
 }
 function json(res, data, status = 200) {

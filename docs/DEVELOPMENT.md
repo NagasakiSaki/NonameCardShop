@@ -1,6 +1,6 @@
 # 开发、测试与版本管理
 
-项目根目录为 `D:\GameDev\NonameCardShop`。所有工具按自身位置解析路径，整个目录可以再次搬迁。本机已初始化本地 Git；尚未关联远程仓库或上传 GitHub。
+项目根目录为 `D:\GameDev\NonameCardShop`。所有工具按自身位置解析路径，整个目录可以再次搬迁。已关联 GitHub 私有仓库 [NagasakiSaki/NonameCardShop](https://github.com/NagasakiSaki/NonameCardShop)，素材通过 Git LFS 管理。个人进度、依赖、构建产物和上游安装目录中的 Home 用户缓存不上传。
 
 ## 日常入口
 
@@ -40,7 +40,7 @@ Node 的 `--watch` 监视已导入的服务端模块并重启后台，页面连�
 
 ## 回归测试
 
-`npm test` 按顺序运行下面五组。可以单独运行 `npm run test:unit`、`test:ui`、`test:engine`、`test:dev`、`test:desktop`。每次创建带时间戳的目录，保存日志、界面截图和 JSON；`test-results/latest.json` 记录最近一次测试选择与结果。失败返回非零状态；测试超时会终止该测试拥有的进程树。依赖缺失时先执行初始化。
+`npm test` 按顺序运行下面五组。可以单独运行 `npm run test:unit`、`test:ui`、`test:engine`、`test:dev`、`test:desktop`；`npm run test:saves` 单测按天存档。每次创建带时间戳的目录，保存日志、界面截图和 JSON；`test-results/latest.json` 记录最近一次测试选择与结果。失败返回非零状态；测试超时会终止该测试拥有的进程树。依赖缺失时先执行初始化。
 
 | 分组 | 验证内容 |
 | --- | --- |
@@ -54,7 +54,7 @@ Node 的 `--watch` 监视已导入的服务端模块并重启后台，页面连�
 
 ## Git 日常使用
 
-`v0.7.1-baseline` 标签对应建立仓库时的完整开发基线，提交 `6f694784`。代码、配置、上游引擎均已纳入；大图片、音频等通过 Git LFS 保存。依赖、安装包、个人/测试进度、重复的旧 `assets/character` 卡图目录不入库，实际使用卡图保存在 `vendor/noname/image`。
+`v0.7.1-baseline` 标签对应建立仓库时的开发基线。原本地历史保留完整原包；发布副本 `.local/github-publish.git` 从所有导出历史中排除上游 Home 浏览器配置/缓存，绝不改写原目录或原历史。代码、配置、运行引擎均上传；大图片、音频等通过 Git LFS 保存。依赖、安装包、个人/测试进度、重复的旧 `assets/character` 卡图目录不上传，实际卡图在 `vendor/noname/image`。
 
 修改前后查看：
 
@@ -69,11 +69,12 @@ git log --oneline -8
 ```powershell
 git add app.js modules data docs
 git commit -m "说明这次改动的目的"
+npm run publish:private
 ```
 
 按实际修改选择文件。对照初始版本使用 `git diff v0.7.1-baseline -- 文件路径`。Git 不管理玩家进度，回退代码不会自动恢复进度，改存档格式前先用游戏导出备份。
 
-目前只有本地版本历史，仍需要磁盘备份。备份整个项目时包含隐藏 `.git` 和其中 `.git/lfs/objects`；单独 `git bundle` 不包含 LFS 大文件内容。以后接入远程时同时推送 Git 与 LFS 对象，迁机克隆后先 `git lfs pull` 再初始化。
+必须用 `npm run publish:private` 导出并推送，原仓库的直接push入口已禁用，防止误传原包缓存。导出历史的提交ID与原本地历史不同，消息和版本标签对应保留；发布脚本先确认目标为私有仓库，再检查所有导出对象没有 Home 路径。私有远程同时保存所需Git历史与LFS对象；迁机克隆后先 `git lfs pull` 再初始化。磁盘备份包含隐藏 `.git` 与 `.git/lfs/objects`，单独 `git bundle` 不含LFS大文件。个人存档另用游戏导出备份。
 
 ## 发布与模块扩展
 

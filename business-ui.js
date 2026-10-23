@@ -7,7 +7,7 @@ window.BusinessUI = (()=>{
   function commit(){store.save(state);}
   function close(id){$("#"+id).close();}
   function go(station){for(const id of ["taskBoard","shopPanel","dayReport"])if($("#"+id).open)close(id);ShopGame.interact(station);}
-  function isPaused(){return document.hidden||state.business.paused||window.ManagementUI?.isPaused()||["shopHelp","taskEditor","dayReport"].some(id=>$("#"+id).open)||!$("#battleScreen").hidden;}
+  function isPaused(){return document.hidden||state.business.paused||window.ManagementUI?.isPaused()||["shopHelp","taskEditor","dayReport","saveHistoryDialog"].some(id=>$("#"+id).open)||!$("#battleScreen").hidden;}
   function tick(seconds){
     if(!DATA||!state.business)return{running:false,minutes:0};
     const running=!isPaused();
@@ -227,7 +227,7 @@ window.BusinessUI = (()=>{
   $("#dayAction").onclick=()=>{if(state.business.phase==="preparing"){ShopBusiness.open(state);commit();ShopGame.toast("开门营业！顾客会来挑选商品。营业时间内也可以继续进货。");}else showReport();};
   $("#supplyBtn").onclick=()=>go("counter");
   $("#reportConfirmClose").onclick=()=>{ShopBusiness.settle(state);ShopGame.scene.resetCustomers();ShopGame.scene.stopWalking();commit();showReport();};
-  $("#nextDayBtn").onclick=()=>{const result=ShopBusiness.nextDay(state);if(!result.ok)return;ShopGame.scene.resetCustomers();commit();close("dayReport");ShopGame.toast(`第 ${state.business.day} 天开始，垃圾桶已清空 ${result.cleared} 张卡。补货后再开门吧。`);};
+  $("#nextDayBtn").onclick=async()=>{const result=ShopBusiness.nextDay(state);if(!result.ok)return;ShopGame.scene.resetCustomers();commit();await window.ShopDaySaves?.flush();close("dayReport");ShopGame.toast(`第 ${state.business.day} 天开始，垃圾桶已清空 ${result.cleared} 张卡。补货后再开门吧。`);};
   $("#reportRecover").onclick=()=>go("trash");
   $("#applyConfig").onclick=applyConfig;
   $("#exportConfig").onclick=()=>{try{const value=JSON.parse($("#configText").value),url=URL.createObjectURL(new Blob([JSON.stringify(value,null,2)],{type:"application/json"})),a=document.createElement("a");a.href=url;a.download=editorTab==="tasks"?"tasks.json":"business.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}catch{$("#editorMessage").textContent="JSON 尚不能解析，请先修正。";}};

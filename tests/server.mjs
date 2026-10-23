@@ -7,6 +7,8 @@ try{
   const html=await fetch(runtime.origin).then(r=>r.text());assert.ok(!html.includes('__CARD_SHOP_DEV__'));
   for(const file of ['/.git/config','/.local/desktop-dev/desktop.log','/desktop/main.cjs','/node_modules/noname/index.js','/tests/helpers.cjs','/dev/fixtures.json','/%2egit/config'])assert.equal((await fetch(runtime.origin+file)).status,404,file);
   assert.equal((await fetch(runtime.engineOrigin+'/noname/entry.js')).status,200);
+  for(const file of ['/Home/UserData/Preferences','/home/UserData/Preferences','/readFile?fileName=Home/UserData/Preferences','/getFileList?dir=Home/UserData'])assert.equal((await fetch(runtime.engineOrigin+file)).status,403,file);
+  assert.equal((await fetch(runtime.origin+'/vendor/noname/Home/UserData/Preferences')).status,404);
   await assert.rejects(startShopServer({port:Number(new URL(runtime.origin).port),enginePort:0}),{code:'EADDRINUSE'});
 }finally{await runtime.close();}
 for(const origin of [runtime.origin,runtime.engineOrigin])await assert.rejects(fetch(origin));

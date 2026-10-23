@@ -16,7 +16,7 @@
     <div class="brand-mark shop-logo" aria-hidden="true">▤</div>
     <div>
       <h1>无名小店<span class="open-sign" id="businessSign">准备中</span></h1>
-      <p class="brand-sub">一家由你经营的卡牌小店 · v0.6</p>
+      <p class="brand-sub">一家由你经营的卡牌小店 · 每日档案</p>
     </div>
   </div>
 
@@ -25,6 +25,7 @@
   <div class="shop-wallet"><span>店铺资金</span><strong id="shopCash">¥1,200</strong></div>
   <button class="btn" id="bagBtn"><span aria-hidden="true">▣</span> 背包 <kbd>B</kbd><b id="bagTotal">0</b></button>
   <button class="btn plain" id="managementBtn">街坊与经营</button>
+  <button class="btn plain" id="saveHistoryBtn">按天存档</button>
   <button class="ghost" id="helpBtn" aria-label="店主手册">店主手册 <span>?</span></button>
 </header>
 
@@ -123,7 +124,10 @@
 
 <dialog class="management-dialog" id="managementPanel" aria-labelledby="managementTitle"><header><div><span class="panel-eyebrow">街 坊 与 小 店</span><h2 id="managementTitle">店主的另一页手账</h2><p class="management-muted">留意行情，帮街坊找卡，让小店慢慢长大。</p></div><button class="panel-close" id="managementClose" aria-label="关闭经营手账">×</button></header><nav class="management-tabs"><button data-manage-tab="news">营业报 / 店赛</button><button data-manage-tab="people">熟悉的街坊</button><button data-manage-tab="orders">预约 / 收卡</button><button data-manage-tab="upgrades">设施 / 员工</button><button data-manage-tab="ledger">库存账本</button><button data-manage-tab="balance">评分 / 出货 / 定价</button><button data-manage-tab="editor">模块编辑器</button></nav><section id="managementContent"></section></dialog>
 
+<dialog class="business-dialog save-history-dialog" id="saveHistoryDialog" aria-labelledby="saveHistoryTitle"><header><div><span class="panel-eyebrow">DAILY SAVE ARCHIVE</span><h2 id="saveHistoryTitle">按天存档 / 读档</h2><p>每天起点、打烊自动留档；手动档保存当前时刻。读取前先备份，原有后续天数不会被覆盖。</p></div><button class="panel-close" id="saveHistoryClose" aria-label="关闭存档档案">×</button></header><nav class="editor-tabs"><button class="active" data-history-filter="days">每日档案</button><button data-history-filter="backups">读档前备份</button></nav><div class="day-save-toolbar"><button class="btn" id="saveHistoryNow">保存当前时刻</button><label class="btn plain file-import">导入每日档案<input id="saveHistoryImport" type="file" accept=".json,application/json"></label></div><p id="saveHistoryMessage" role="status"></p><div id="saveHistoryList"></div><footer><p id="saveHistoryRetention"></p></footer></dialog>
+
 <script src="modules/registry.js"></script>
+<script src="modules/save-history.js"></script>
 <script src="modules/balance.js"></script>
 <script src="shop-state.js"></script>
 <script src="shop-tasks.js"></script>
@@ -143,5 +147,6 @@
 <script src="shop.js"></script>
 <script src="business-ui.js"></script>
 <script src="management-ui.js"></script>
+<script src="save-history-ui.js"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 {
   "name":"noname-card-shop-development",
-  "version":"0.8.0",
+  "version":"0.8.1",
   "private":true,
   "type":"commonjs",
   "license":"GPL-3.0-only",
@@ -9,6 +9,7 @@
     "start":"node server.mjs",
     "setup":"node dev/setup.mjs",
     "doctor":"node dev/doctor.mjs",
+    "publish:private":"node dev/publish-private.mjs",
     "dev":"node --watch --watch-preserve-output dev/launch.mjs",
     "dev:open":"node --watch --watch-preserve-output dev/launch.mjs --open",
     "dev:desktop":"node dev/desktop.mjs",
@@ -18,6 +19,7 @@
     "test:engine":"node tests/run.mjs engine",
     "test:desktop":"node tests/run.mjs desktop",
     "test:release":"node tests/run.mjs release",
+    "test:saves":"node tests/run.mjs history",
     "test:dev":"node tests/run.mjs dev",
     "verify:engine":"node tools/verify-engine.mjs",
     "balance:build":"node tools/build-balance.cjs",

@@ -1,0 +1,6 @@
+{
+  "$schema":"./save-history.schema.json",
+  "version":1,
+  "maxDaysPerCampaign":30,
+  "maxBeforeLoadBackups":20
+}

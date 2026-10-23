@@ -3,14 +3,14 @@ import path from 'node:path';
 import {spawn} from 'node:child_process';
 import {root} from '../dev/process.mjs';
 import {startShopServer} from '../server.mjs';
-const groups={unit:['tools/test-business.cjs','tools/test-modules.cjs','tools/test-balance.cjs','tests/server.mjs','tests/boxes.cjs'],ui:['tests/economy.cjs','tests/management.cjs','tests/boxes-ui.cjs'],engine:['tests/duel.cjs'],dev:['tests/development.mjs'],desktop:['tests/desktop.cjs','tests/desktop-development.cjs'],release:['tests/desktop.cjs']};
+const groups={unit:['tools/test-business.cjs','tools/test-modules.cjs','tools/test-balance.cjs','tests/server.mjs','tests/boxes.cjs'],ui:['tests/economy.cjs','tests/management.cjs','tests/boxes-ui.cjs','tests/saves-ui.cjs'],engine:['tests/duel.cjs'],dev:['tests/development.mjs'],desktop:['tests/desktop.cjs','tests/desktop-development.cjs'],history:['tests/saves-ui.cjs'],release:['tests/desktop.cjs']};
 const selection=process.argv[2]||'all';if(selection!=='all'&&!groups[selection])throw new Error(`未知测试组：${selection}`);
 const output=path.join(root,'test-results',new Date().toISOString().replace(/[:.]/g,'-')+`-${process.pid}`);fs.mkdirSync(output,{recursive:true});
 const results=[],summary={selection,output,startedAt:new Date().toISOString(),results};let runtime;
 try{
-  if(['all','ui','engine'].includes(selection))runtime=await startShopServer({port:0,enginePort:0});
+  if(['all','ui','engine','history'].includes(selection))runtime=await startShopServer({port:0,enginePort:0});
   for(const [group,files] of Object.entries(groups)){
-    if(selection==='all'&&group==='release')continue;
+    if(selection==='all'&&['release','history'].includes(group))continue;
     if(selection!=='all'&&selection!==group)continue;
     for(const file of files){
       console.log(`\n运行 ${group} / ${file}`);const start=Date.now();

@@ -13,6 +13,8 @@ window.ShopModel = (() => {
     const saved = value && typeof value === "object" ? value : {};
     const shop = saved.shop || {};
     const result = {
+      campaignId:typeof saved.campaignId==='string'&&/^[a-zA-Z0-9-]{1,80}$/.test(saved.campaignId)?saved.campaignId:null,
+      campaignParent:typeof saved.campaignParent==='string'&&saved.campaignParent.length<250?saved.campaignParent:null,
       collection: counts(saved.collection), trash: counts(saved.trash), display: counts(saved.display),
       stock: counts(saved.stock), packDisplay: counts(saved.packDisplay),
       shop: {
