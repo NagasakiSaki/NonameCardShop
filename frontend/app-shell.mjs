@@ -1,5 +1,5 @@
 // frontend/app-shell.mjs — 应用外壳：Host 连接、场景、HUD、手账、窗口调度与交互路由。
-import { el, clear, toast, formatMoney, formatShort, formatClock, formatPhase } from "./ui/components.mjs";
+import { el, clear, toast, formatMoney, formatShort, formatClock, formatPhase, newRequestId } from "./ui/components.mjs";
 import { createHud } from "./ui/hud.mjs";
 import { createWindowManager } from "./ui/window-manager.mjs";
 import { createMapLoader, assetUrl } from "./world/map-loader.mjs";
@@ -41,11 +41,13 @@ export async function startApp({ host, connection, mode, fixture }) {
     }
     return list[0] && list[0].actorId ? list[0].actorId : "actor:owner";
   }
-  let currentMapId = (new URLSearchParams(location.search).get("scene") === "battle-room" ? "battle-room" : "store");
+  let currentMapId = actors.find(a=>a.actorId==='actor:owner'||a.actorId==='player')?.roomId || 'store';
+  let travelTarget = null, changingRoom = false,walkIntent=null;
   let playerActorId = "actor:owner";
   // 首次拿到角色列表后再定，避免正式模式下相机跟错人
   let playerIdResolved = false;
   let sceneRef = null;
+  let readyScene;const sceneReady=new Promise(resolve=>readyScene=resolve);
   let game = null;
   let destroying = false;
   const currency = connection.currency || { code: "GOLD", label: "游戏币", minorUnit: 1 };
@@ -68,7 +70,7 @@ export async function startApp({ host, connection, mode, fixture }) {
     mount: document.getElementById("windows"),
     onChange: (stack) => {
       document.body.classList.toggle("has-window", stack.length > 0);
-      if (!stack.length) movement.releaseAll();
+      if (stack.length) movement.releaseAll();
     },
   });
 
@@ -85,6 +87,7 @@ export async function startApp({ host, connection, mode, fixture }) {
     actors: () => actors,
     currentMap: () => maps[currentMapId],
     getPlayer: () => actors.find((actor) => actor.actorId === playerActorId) || null,
+    isNearInteraction(id){const i=maps[currentMapId].interactions.find(i=>i.id===id),p=actors.find(a=>a.actorId===playerActorId);return !!(i&&p&&Math.hypot(p.x-i.stand.x,p.y-i.stand.y)<=i.radius);},
     applyZoomPreference() { fitStage(); },
     get playerActorId() { return playerActorId; },
     toast,
@@ -97,6 +100,7 @@ export async function startApp({ host, connection, mode, fixture }) {
       if (result.ok) {
         snapshot = result.data;
         if (Array.isArray(snapshot.actors)) actors = snapshot.actors;
+        syncRoom();
         render();
       }
       return result;
@@ -114,63 +118,53 @@ export async function startApp({ host, connection, mode, fixture }) {
       for (const mapId of Object.keys(maps)) {
         const target = (maps[mapId].interactions || []).find((item) => item.id === interactionId);
         if (!target) continue;
-        if (mapId !== currentMapId) app.navigateScene(mapId);
-        setTimeout(() => {
+        windows.closeAll();
+        if (mapId !== currentMapId) {travelTarget=target;app.navigateScene(mapId);return true;}
+        scheduleWalk(() => {
           movement.moveTo(target.stand.x, target.stand.y);
           router.walkThenActivate(target);
-        }, mapId === currentMapId ? 0 : 260);
+        });
         return true;
       }
       return false;
     },
     navigateScene(mapId) {
-      if (!maps[mapId]) return;
-      const changed = mapId !== currentMapId;
-      currentMapId = mapId;
-      router.resetForMap();
-      // 无论是换图还是"已经在这张图"，都把角色房间同步给 Host，避免两边状态漂移
-      host.world.input({
-        sessionId: connection.sessionId,
-        inputSeq: 0,
-        roomId: mapId,
-        navVersion: maps[mapId].navVersion || "",
-        stop: true,
-      });
-      if (changed && sceneRef) {
-        const next = maps[mapId];
-        sceneRef.scene.restart({
-          mapId,
-          zoom: worldSceneZoom(mountEl.clientWidth, mountEl.clientHeight, next.width * next.tileSize, next.height * next.tileSize),
-        });
-      }
-      render();
+      if (!maps[mapId] || mapId===currentMapId) return;
+      const exit=maps[currentMapId].exits.find(e=>e.target?.mapId===mapId);
+      if(!exit){toast('error','没有可用出口',mapId);return;}
+      windows.closeAll();router.clearPending();
+      scheduleWalk(()=>movement.moveTo(exit.fromTile.x*16+8,exit.fromTile.y*16+8));
     },
     destroy() {
       destroying = true;
+      movement.destroy();observer?.disconnect();clearTimeout(notebookTask);window.removeEventListener('keydown',onGlobalKeyDown);
       windows.closeAll();
       if (game) game.destroy(true);
     },
   };
+
+  function flushWalk(){if(walkIntent&&windows.depth===0&&!snapshot.clock.manualPaused&&!(snapshot.clock.pauseReasons||[]).length){const fn=walkIntent;walkIntent=null;fn();}}
+  function scheduleWalk(fn){walkIntent=fn;flushWalk();}
+
+  function syncRoom(){
+    const player=actors.find(a=>a.actorId===playerActorId);
+    if(!player?.roomId||player.roomId===currentMapId||!maps[player.roomId])return;
+    currentMapId=player.roomId;router.resetForMap();
+    const next=maps[currentMapId];
+    if(sceneRef)sceneRef.scene.restart({mapId:currentMapId,zoom:worldSceneZoom(mountEl.clientWidth,mountEl.clientHeight,next.width*next.tileSize,next.height*next.tileSize)});
+    render();
+  }
 
   // ---- 交互路由 ----
   const router = createInteractionRouter({
     getMap: () => maps[currentMapId],
     hintNode,
     onActivate: (interaction) => handleInteraction(interaction),
-    onExit: (exit) => {
-      if (exit.target) {
-        app.navigateScene(exit.target.mapId);
-        const spawn = exit.target.spawnTile;
-        if (spawn) {
-          host.world.input({
-            sessionId: connection.sessionId,
-            inputSeq: 0,
-            roomId: exit.target.mapId,
-            navVersion: maps[exit.target.mapId].navVersion || "",
-            destination: { x: spawn.x * 16 + 8, y: spawn.y * 16 + 14 },
-          });
-        }
-      }
+    onExit: async (exit) => {
+      if(!exit.target||changingRoom)return;
+      changingRoom=true;movement.stop();
+      try{const result=await host.command({requestId:newRequestId('room'),type:'world.changeRoom',payload:{anchorId:exit.id}});if(!result.ok)toast('error',result.error.code,result.error.message);else {await app.refreshSnapshot();syncRoom();}}
+      finally{changingRoom=false;}
     },
   });
 
@@ -222,10 +216,12 @@ export async function startApp({ host, connection, mode, fixture }) {
     },
     onSceneReady: (mapId) => {
       router.clearPending();
+      if(travelTarget){const target=travelTarget;travelTarget=null;scheduleWalk(()=>{movement.moveTo(target.stand.x,target.stand.y);router.walkThenActivate(target);});}
       if (hintNode) hintNode.hidden = true;
       // 场景 create 之后布局才稳定，这里再对齐一次整数缩放
       fitStage();
       render();
+      readyScene();
     },
   });
 
@@ -235,7 +231,7 @@ export async function startApp({ host, connection, mode, fixture }) {
     getRoom: () => ({ mapId: currentMapId, navVersion: maps[currentMapId].navVersion }),
     isBlocked: () => windows.depth > 0,
     // 用户自己按方向键即放弃自动寻路与待触发的交互
-    onManualMove: () => router.clearPending(),
+    onManualMove: () => {walkIntent=null;travelTarget=null;router.clearPending();},
   });
 
   // ---- HUD ----
@@ -244,7 +240,16 @@ export async function startApp({ host, connection, mode, fixture }) {
     currency,
     getSnapshot: () => snapshot,
     onAction: (action) => {
-      if (action === "inventory") app.openPanel("inventory", {});
+      if (['business','pause','speed'].includes(action)) {
+        (async()=>{
+          const lease=await host.pause.acquire({ownerId:'hud-action',reason:'店铺操作'});
+          try{const clock=snapshot.clock,type=action==='business'?(clock.phase==='preparing'?'business.open':clock.phase==='closed'?'business.nextDay':'business.close'):action==='pause'?'clock.setManualPause':'clock.setSpeed';
+            const payload=action==='pause'?{paused:!clock.manualPaused}:action==='speed'?{speed:clock.speed===1?2:clock.speed===2?4:1}:{};
+            const r=await host.command({requestId:newRequestId('hud'),type,payload});if(!r.ok)toast('error',r.error.code,r.error.message);else {await app.refreshSnapshot();if(type==='business.close')app.openPanel('report');}
+          }finally{await host.pause.release(lease.leaseId);}
+        })().catch(e=>toast('error','操作失败',e.message));
+      }
+      else if (action === "inventory") app.openPanel("inventory", {});
       else if (action === "tasks") app.openPanel("tasks", {});
       else if (action === "report") app.openPanel("report", {});
       else if (action === "saves") app.openPanel("saves", {});
@@ -334,7 +339,7 @@ export async function startApp({ host, connection, mode, fixture }) {
     }
     if (ledgerResult.ok) {
       const ledger = ledgerResult.data || {};
-      const revenue = (ledger.revenue?.sealedSales || 0) + (ledger.revenue?.serviceIncome || 0);
+      const revenue = ledger.revenue?.total ?? ((ledger.revenue?.sealedSales || 0) + (ledger.revenue?.secondarySales || 0) + (ledger.revenue?.serviceIncome || 0));
       const cost = (ledger.cost?.procurement || 0) + (ledger.cost?.wages || 0) + (ledger.cost?.rent || 0) + (ledger.cost?.tableFees || 0);
       notebookBody.append(el("div", { class: "note-card" }, [
         el("p", { class: "note-card__title" }, ["今日收支", el("span", { class: "muted", text: "第 " + ledger.day + " 天" })]),
@@ -384,7 +389,7 @@ export async function startApp({ host, connection, mode, fixture }) {
   });
 
   // ---- 键盘 ----
-  window.addEventListener("keydown", (event) => {
+  const onGlobalKeyDown=(event) => {
     const target = event.target;
     const typing = target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable);
     if (event.key === "Escape") {
@@ -402,7 +407,8 @@ export async function startApp({ host, connection, mode, fixture }) {
       event.preventDefault();
       if (windows.depth === 0) router.activateNearest();
     }
-  });
+  };
+  window.addEventListener('keydown',onGlobalKeyDown);
 
   // ---- Host 事件 ----
   let lastSeq = 0;
@@ -455,14 +461,18 @@ export async function startApp({ host, connection, mode, fixture }) {
       const level = data.code === "UNREACHABLE" ? "info" : "error";
       toast(level, data.code || "提示", data.message || "");
     } else if (event.type === "worldReset") {
-      toast("error", "世界已重置", "视图缓存已清理，请重新连接");
-      actors = [];
+      walkIntent=null;travelTarget=null;
+      toast("info", "档案已载入", "已清理旧分支窗口和选择");
+      setTimeout(()=>windows.closeAll(),0);
       app.refreshSnapshot();
     }
+    syncRoom();
+    flushWalk();
   });
 
   movement.bindTouchpad(document.getElementById("touchpad"));
   window.__cardShopApp = app;
   render();
+  await sceneReady;
   return { app, destroy: () => { off(); window.removeEventListener("resize", onResize); app.destroy(); } };
 }

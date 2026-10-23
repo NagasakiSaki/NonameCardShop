@@ -32,7 +32,7 @@ function normalizeTask(task) {
     unit: task.unit || "次",
     reward: Number(task.reward ?? 0),
     hint: task.hint || "走到对应柜台按 E 交互",
-    target: task.target || task.mapTarget || null,
+    target: task.guide || task.mapTarget || (typeof task.target === 'string' ? task.target : null),
   };
 }
 

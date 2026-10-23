@@ -4,7 +4,7 @@ import crypto from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {startShopServer} from '../server.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
-export function watchedFile(name){const f=String(name).replaceAll('\\','/');return /^(app\.js|battle\.js|shop[^/]*\.js|business-ui\.js|management-ui\.js|save-history-ui\.js|index\.html|[^/]+\.css|data\/[^/]+\.json|modules\/[^/]+\.js|integration\/(duel|engine-preload)\.js|assets\/shop\/[^/]+|dev\/(client\.js|fixtures\.json))$/.test(f);}
+export function watchedFile(name){const f=String(name).replaceAll('\\','/');return /^(app\.js|battle\.js|shop[^/]*\.js|business-ui\.js|management-ui\.js|save-history-ui\.js|index\.html|legacy\.html|[^/]+\.css|data\/[^/]+\.json|modules\/[^/]+\.js|integration\/(duel|engine-preload)\.js|assets\/shop\/[^/]+|dev\/(client\.js|fixtures\.json|frontend-client\.mjs))$/.test(f)||/^(frontend|assets\/frontend|modules\/backend|contracts)\/.+\.(mjs|js|css|html|json|png|d\.ts)$/.test(f)||/^integration\/[^/]+\.mjs$/.test(f);}
 export async function startDevelopmentServer({port=5190,enginePort=5191,watch=true}={}){
   const clients=new Set(),instanceId=crypto.randomUUID();let revision=0,debounce,watcher,changed=new Set();
   const status=()=>({application:'noname-card-shop-development',instanceId,revision,development:true});
@@ -15,12 +15,13 @@ export async function startDevelopmentServer({port=5190,enginePort=5191,watch=tr
       res.writeHead(200,{'content-type':'text/event-stream','cache-control':'no-cache','connection':'keep-alive'});res.write(`event: ready\ndata: ${JSON.stringify(status())}\n\n`);clients.add(res);req.on('close',()=>clients.delete(res));return true;
     }
     if(route==='/__dev/status'){res.writeHead(200,{'content-type':'application/json','cache-control':'no-store'});res.end(JSON.stringify(status()));return true;}
-    const files={'/__dev/client.js':['dev/client.js','text/javascript'],'/__dev/fixtures.json':['dev/fixtures.json','application/json']};
+    const files={'/__dev/client.js':['dev/client.js','text/javascript'],'/__dev/frontend-client.mjs':['dev/frontend-client.mjs','text/javascript'],'/__dev/fixtures.json':['dev/fixtures.json','application/json']};
     if(files[route]){res.writeHead(200,{'content-type':files[route][1]+'; charset=utf-8','cache-control':'no-store'});fs.createReadStream(path.join(root,files[route][0])).on('error',()=>res.destroy()).pipe(res);return true;}
-    if(route==='/'||route==='/index.html'){
+    if(['/', '/index.html','/frontend/index.html','/legacy.html'].includes(route)){
       res.writeHead(200,{'content-type':'text/html; charset=utf-8','cache-control':'no-store'});
-      const injection=`<script>window.__CARD_SHOP_DEV__=${JSON.stringify(status())};</script><script src="/__dev/client.js" defer></script>`;
-      res.end(fs.readFileSync(path.join(root,'index.html'),'utf8').replace('</body>',injection+'</body>'));return true;
+      const client=route==='/legacy.html'?'client.js':'frontend-client.mjs';
+      const injection=`<script>window.__CARD_SHOP_DEV__=${JSON.stringify(status())};</script><script type="module" src="/__dev/${client}"></script>`;
+      res.end(fs.readFileSync(path.join(root,route==='/'?'index.html':route.slice(1)),'utf8').replace('</body>',injection+'</body>'));return true;
     }
     return false;
   };

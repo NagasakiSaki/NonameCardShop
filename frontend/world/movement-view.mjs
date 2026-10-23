@@ -11,7 +11,7 @@ export function createMovementView({ host, sessionId, getRoom, isBlocked, onManu
   let lastSent = 0;
 
   function send(payload) {
-    if (isBlocked()) return;
+    if (isBlocked() && !payload.stop) return;
     const room = getRoom();
     inputSeq += 1;
     host.world.input({
@@ -114,11 +114,14 @@ export function createMovementView({ host, sessionId, getRoom, isBlocked, onManu
   window.addEventListener("keydown", onKeyDown);
   window.addEventListener("keyup", onKeyUp);
   window.addEventListener("blur", releaseAll);
-  document.addEventListener("visibilitychange", () => {
+  const onVisibility=() => {
     if (document.hidden) releaseAll();
-  });
+  };
+  document.addEventListener("visibilitychange",onVisibility);
 
   return {
+    destroy(){releaseAll();window.removeEventListener('keydown',onKeyDown);window.removeEventListener('keyup',onKeyUp);window.removeEventListener('blur',releaseAll);document.removeEventListener('visibilitychange',onVisibility);},
+    stop: releaseAll,
     moveTo,
     releaseAll,
     bindTouchpad,

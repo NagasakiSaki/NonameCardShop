@@ -6,7 +6,7 @@ export function validateMap(map){
   if(!map.anchors&&map.spawn&&Array.isArray(map.interactions)){
     map.anchors={};
     for(const p of map.interactions)map.anchors[p.id]={...p.stand,radius:p.radius||24};
-    for(const exit of map.exits||[])map.anchors[exit.id]={x:exit.fromTile.x*16+8,y:exit.fromTile.y*16+8,radius:24,...(exit.target?{targetRoom:exit.target.mapId,targetAnchor:exit.target.point}:{})};
+    for(const exit of map.exits||[])map.anchors[exit.id]={x:exit.fromTile.x*16+8,y:exit.fromTile.y*16+8,radius:24,...(exit.target?{targetRoom:exit.target.mapId,targetAnchor:exit.target.point,...(exit.target.spawnTile?{targetSpawn:{x:exit.target.spawnTile.x*16+8,y:exit.target.spawnTile.y*16+8}}:{})}:{})};
     if(map.mapId==='store')map.anchors['store.entry']={...map.spawn,radius:24};
   }
   need(typeof map?.mapId==='string'&&typeof map.navVersion==='string','INVALID_MAP','地图缺少 ID 或导航版本。');

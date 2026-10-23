@@ -73,6 +73,7 @@ export async function connectHost({ mode, fixture }) {
   try {
     connection = await host.connect(input);
   } catch (error) {
+    await host.disconnect().catch(()=>{});
     throw new HostConnectionError("CONNECT_FAILED", "连接经营世界失败：" + (error?.message || error), error);
   }
   if (!connection || connection.contractVersion !== "card-shop-ui/1.0") {

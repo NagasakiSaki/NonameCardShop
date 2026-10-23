@@ -117,7 +117,7 @@ export function debounce(fn, delay = 220) {
 let requestCounter = 0;
 export function newRequestId(prefix = "req") {
   requestCounter += 1;
-  return prefix + ":" + Date.now().toString(36) + ":" + requestCounter;
+  return prefix + "-" + crypto.randomUUID() + "-" + requestCounter;
 }
 
 export function toast(kind, title, body, ttl = 4200) {

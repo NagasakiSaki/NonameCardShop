@@ -36,7 +36,7 @@ export function publishProducts(catalog,rules,day,marketPrices={}){
       prices:{box:{wholesale:boxWholesale,retail:round(boxWholesale/(1-rules.retailMargin))},pack:{wholesale:packWholesale,retail:round(packWholesale/(1-rules.retailMargin))}},effectiveDay:day};
   });
 }
-export function productDTO(product){const {pools,guaranteed,remainder,values,...dto}=product;return clone(dto);}
+export function productDTO(product){const {pools,guaranteed,remainder,values,...dto}=product;return {...clone(dto),themeName:product.name,unitAmounts:product.prices?{pack:product.prices.pack.wholesale,box:product.prices.box.wholesale}:null};}
 function printed(world,product,rarity){const key=pick(world,product.pools[rarity]);return {cardKey:key,printedRarity:rarity,printVersion:product.productVersion,ratingVersion:product.ratingVersion,source:product.poolSummary[rarity]?'theme':'global-substitution'};}
 export function manufactureBox(world,product){
   const list=counts=>shuffle(world,RARITIES.flatMap(r=>Array.from({length:counts[r]},()=>r)));

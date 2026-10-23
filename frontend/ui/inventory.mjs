@@ -69,6 +69,7 @@ export async function openInventory(app) {
         state.error = null;
         renderList();
         const result = await ctx.query("inventory.list", {
+          grouped: true,
           search: state.search || undefined,
           rarity: state.rarity || undefined,
           filter: state.filter,

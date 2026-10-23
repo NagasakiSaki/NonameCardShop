@@ -28,7 +28,7 @@ export async function openDaySaves(app) {
         el("tbody", {}, rows.map((row) => el("tr", {}, [
           el("td", { text: "第 " + row.day + " 天" }),
           el("td", { text: row.branch }),
-          el("td", { class: "mono", text: Math.floor(row.minute / 60) + ":" + String(row.minute % 60).padStart(2, "0") }),
+          el("td", { class: "mono", text: Math.floor(row.minute / 60) + ":" + String(Math.floor(row.minute % 60)).padStart(2, "0") }),
           el("td", { text: row.source === "auto" ? "自动" : "手动" }),
           el("td", {}, [el("span", { class: row.status === "readable" ? "chip chip--ok" : "chip chip--lock", text: row.status === "readable" ? "可读" : "不可读" })]),
           el("td", {}, [
@@ -47,13 +47,13 @@ export async function openDaySaves(app) {
                       class: "btn btn--primary", type: "button", text: "确认读取",
                       onclick: async (event2) => {
                         const restore = busyButton(event2.currentTarget, "读取中…");
-                        const response = await ctx.submit({ requestId: newRequestId("saveload"), type: "saves.load", payload: { saveId: row.saveId } });
+                        const response = await ctx.submit({ requestId: newRequestId("saveload"), type: "saves.load", payload: { archiveId: row.archiveId||row.id||row.saveId, saveId: row.saveId } });
                         restore();
                         if (!response.ok) {
                           body.append(errorView(response.error, null));
                           return;
                         }
-                        app.toast("ok", "已读档", "第 " + response.data.save.day + " 天 " + row.branch);
+                        app.toast("ok", "已读档", "第 " + row.day + " 天，已建立新分支");
                         app.refreshSnapshot();
                         ctx.refresh();
                       },
@@ -70,6 +70,16 @@ export async function openDaySaves(app) {
       body.append(table);
       body.append(el("p", { class: "small muted", text: "格式校验未通过的档只展示、不加载；世界重置后会发布 worldReset，前端清理视图缓存。" }));
 
+      const fileInput=el('input',{type:'file',accept:'.json,application/json',hidden:true});body.append(fileInput);
+      fileInput.addEventListener('change',async()=>{
+        const file=fileInput.files?.[0];if(!file)return;
+        if(file.size>=10000000){app.toast('error','文件过大','存档应小于 10 MB');return;}
+        try{const content=await file.text();JSON.parse(content);
+          const box=el('div',{class:'note-card'},[el('p',{text:`导入 ${file.name}？当前世界将先备份。`}),el('button',{class:'btn btn--primary',text:'确认导入',onclick:async event=>{
+            const restore=busyButton(event.currentTarget,'导入中…');try{const r=await ctx.submit({requestId:newRequestId('import'),type:'saves.import',payload:{content}});if(!r.ok){body.append(errorView(r.error));return;}app.toast('ok','已导入','已建立新分支');await app.refreshSnapshot();ctx.refresh();}finally{restore();}
+          }}),el('button',{class:'btn',text:'取消',onclick:()=>box.remove()})]);body.append(box);
+        }catch(e){app.toast('error','存档读取失败',e.message);}
+      });
       ctx.setFooter([
         el("button", {
           class: "btn btn--primary", type: "button", text: "保存当前进度",
@@ -81,7 +91,7 @@ export async function openDaySaves(app) {
               app.toast("error", response.error.code, response.error.message);
               return;
             }
-            app.toast("ok", "已保存", response.data.save.saveId);
+            app.toast("ok", "已保存", response.data.archiveId||response.data.save?.saveId||'');
             ctx.refresh();
           },
         }),
@@ -93,14 +103,14 @@ export async function openDaySaves(app) {
               app.toast("error", response.error.code, response.error.message);
               return;
             }
-            app.toast("ok", "已导出", response.data.blobName + "（" + response.data.bytes + " B）");
+            if(typeof response.data.content!=='string'){app.toast('error','导出不可用','Host 未提供存档文件内容');return;}
+            const url=URL.createObjectURL(new Blob([response.data.content],{type:response.data.mimeType})),a=el('a',{href:url,download:response.data.fileName});document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
           },
         }),
         el("button", {
           class: "btn btn--ghost", type: "button", text: "导入",
           onclick: async () => {
-            const response = await ctx.submit({ requestId: newRequestId("import"), type: "saves.import", payload: { file: "placeholder" } });
-            if (!response.ok) app.toast("error", response.error.code, response.error.message);
+            fileInput.value='';fileInput.click();
           },
         }),
         el("button", { class: "btn btn--ghost", type: "button", text: "关闭", onclick: () => ctx.handle.close() }),

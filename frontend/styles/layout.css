@@ -132,7 +132,7 @@ button { font-family: inherit; }
   place-items: center;
   padding: var(--step-4);
 }
-.windows > * { pointer-events: auto; }
+.windows > * { pointer-events: auto; grid-area: 1 / 1; }
 
 .toasts {
   position: fixed;

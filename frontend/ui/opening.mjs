@@ -65,11 +65,13 @@ export async function openOpening(app) {
                 return;
               }
               state.preview = preview.data;
+              state.requestId = null;
               renderStage();
             },
           }),
         ]));
-        setupNode.append(el("p", { class: "small muted", text: "开包会把结果直接写入库存；预览只锁定范围，不扣包。" }));
+        setupNode.append(el('button',{class:'btn',text:'一键开所有包',onclick:async()=>{const r=await ctx.query('opening.preview',{includeBoxes:state.includeBoxes});if(!r.ok){stageNode.append(errorView(r.error));return;}state.preview=r.data;state.result=null;state.requestId=null;renderStage();}}));
+        setupNode.append(el("p", { class: "small muted", text: "开包会把结果直接写入库存；预览只锁定范围，不扣包。整盒只拆本次所需的包，余包留在仓库。" }));
       }
 
       function renderStage() {
@@ -86,7 +88,7 @@ export async function openOpening(app) {
                   stageNode.append(errorView(result.error, null));
                   return;
                 }
-                const payload = result.data.response || result.data;
+                const payload = result.data.result?.data || result.data.response?.data || result.data.response || result.data;
                 if (payload && payload.opening) {
                   state.result = payload.opening;
                   state.unknown = false;
@@ -116,9 +118,10 @@ export async function openOpening(app) {
             el("p", { class: "small muted", text: "取消动画只是关闭展示，已提交的开包不会退回或重抽。" }),
             el("button", {
               class: "btn btn--primary", type: "button", text: "确认开包",
+              disabled: !preview.packs,
               onclick: async (event) => {
                 const restore = busyButton(event.currentTarget, "开包确认中…");
-                state.requestId = newRequestId("open");
+                state.requestId ||= newRequestId("open");
                 const response = await ctx.submit({
                   requestId: state.requestId,
                   type: "opening.execute",

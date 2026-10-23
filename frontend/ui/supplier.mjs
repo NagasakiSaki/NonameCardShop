@@ -55,6 +55,7 @@ export async function openSupplier(app, options = {}) {
           return;
         }
         for (const product of items) {
+          if(product.availability!=='available'){node.append(stateView({kind:'empty',title:product.themeName,body:product.unavailableReason}));continue;}
           const row = el("div", { class: "note-card" }, [
             el("p", { class: "note-card__title" }, [
               product.themeName + " · " + product.productVersion,
@@ -134,7 +135,7 @@ export async function openSupplier(app, options = {}) {
                           node.append(errorView(order.error, null));
                           return;
                         }
-                        app.toast("ok", "已下单", "订单 " + order.data.order.orderId + " 冻结价格，待签收");
+                        app.toast("ok", "已下单", "订单 " + (order.data.orderId||order.data.order?.orderId) + " 冻结价格，待签收");
                         state.tab = "orders";
                         ctx.refresh();
                         app.refreshSnapshot();
@@ -189,7 +190,7 @@ export async function openSupplier(app, options = {}) {
             el("p", { class: "small muted", text: order.note }),
             el("button", {
               class: "btn btn--primary", type: "button", text: order.status === "received" ? "已签收" : "签收",
-              disabled: order.status === "received",
+              disabled: order.status !== "arrived",
               onclick: async (event) => {
                 const restore = busyButton(event.currentTarget, "签收中…");
                 const response = await ctx.submit({ requestId: newRequestId("receive"), type: "supplier.receive", payload: { orderId: order.orderId } });
@@ -230,7 +231,7 @@ export async function openSupplier(app, options = {}) {
                 onclick: async (event) => {
                   const input = event.currentTarget.closest(".note-card").querySelector('[data-role="price"]');
                   const restore = busyButton(event.currentTarget, "提交中…");
-                  const response = await ctx.submit({ requestId: newRequestId("price"), type: "retail.setPrice", payload: { shelfId: shelf.shelfId, unitAmount: Number(input.value) } });
+                  const response = await ctx.submit({ requestId: newRequestId("price"), type: "retail.setPrice", payload: { inventoryRef: shelf.inventoryRefs?.[0], amount: Number(input.value) } });
                   restore();
                   if (!response.ok) {
                     app.toast("error", response.error.code, response.error.message);
@@ -243,11 +244,16 @@ export async function openSupplier(app, options = {}) {
               el("button", {
                 class: "btn btn--sm", type: "button", text: "下架 1",
                 onclick: async () => {
-                  const response = await ctx.submit({ requestId: newRequestId("withdraw"), type: "retail.withdraw", payload: { shelfId: shelf.shelfId, quantity: 1 } });
+                  const response = await ctx.submit({ requestId: newRequestId("withdraw"), type: "retail.withdraw", payload: { inventoryRef: shelf.inventoryRefs?.[0] } });
                   if (!response.ok) app.toast("error", response.error.code, response.error.message);
-                  else app.toast("ok", "已下架", "撤下 " + response.data.withdrawn + " 件");
+                  else {app.toast("ok", "已下架", "撤下 " + response.data.withdrawn + " 件");ctx.refresh();}
                 },
               }),
+              el("button", {
+                class:'btn btn--sm',text:'上架 1',disabled:!shelf.stockRefs?.length,
+                onclick:async()=>{const r=await ctx.submit({requestId:newRequestId('shelf'),type:'retail.list',payload:{inventoryRef:shelf.stockRefs[0]}});if(!r.ok)app.toast('error',r.error.code,r.error.message);else ctx.refresh();}
+              }),
+              el("span",{class:'small muted',text:'仓库 '+(shelf.warehouse??0)+' 件'}),
               el("button", {
                 class: "btn btn--sm", type: "button", text: "去开包",
                 onclick: () => app.openPanel("opening", {}),

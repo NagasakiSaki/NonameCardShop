@@ -1079,6 +1079,12 @@ export async function createMockHost({ fixture = "store-day" } = {}) {
   }
 
   const COMMANDS = {
+    "world.changeRoom": (payload) => {
+      const actor=actors.get(ownedActorId),exit=maps[actor.roomId].exits.find(e=>e.id===payload.anchorId);
+      if(!exit?.target||Math.hypot(actor.x-exit.fromTile.x*16-8,actor.y-exit.fromTile.y*16-8)>24)return fail('NOT_IN_RANGE','请先走到门口',false);
+      const tile=exit.target.spawnTile;actor.roomId=exit.target.mapId;actor.x=tile.x*16+8;actor.y=tile.y*16+8;actor.path=[];actor.intentDirection=null;actor.moving=false;
+      return ok(actor);
+    },
     "business.open": () => {
       clock.phase = "open";
       clock.running = true;

@@ -10,6 +10,7 @@ const appRoot = document.getElementById("app");
 const mode = readMode();
 let mounted = null;
 let connecting = false;
+let activeSession=null;
 
 function showError(error) {
   window.__bootFailed = true;
@@ -34,9 +35,11 @@ async function boot0() {
     ? "正在载入前端演示世界（" + mode.fixture + "）…"
     : "正在连接正式经营接口…";
   try {
+    if(mounted){mounted.destroy();mounted=null;}
+    await activeSession?.teardown();activeSession=null;
     const session = await connectHost({ mode: mode.mode, fixture: mode.fixture });
+    activeSession=session;
     bootHint.textContent = "正在准备像素店面…";
-    if (mounted) mounted.destroy();
     // 先让外壳参与布局，Phaser 才能拿到真实的画布尺寸（启动页仍盖在上面）
     appRoot.hidden = false;
     const { startApp } = await import("./app-shell.mjs");
@@ -53,6 +56,7 @@ async function boot0() {
     window.__cardShopReady = true;
     window.__cardShopMode = session.mode;
   } catch (error) {
+    await activeSession?.teardown();activeSession=null;
     showError(error);
   } finally {
     connecting = false;
@@ -70,3 +74,4 @@ window.addEventListener("error", (event) => {
 });
 
 boot0();
+window.addEventListener('pagehide',()=>activeSession?.teardown());

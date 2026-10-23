@@ -12,6 +12,8 @@ export async function openTrash(app) {
       const list = el("div", { class: "grid-auto" });
       const note = el("p", { class: "small muted", text: "被保护、锁定或已挂单的卡不能丢弃。" });
       body.append(note, list);
+      const discardResult=await ctx.query('inventory.list',{kind:'card',location:'collection',limit:200});
+      if(discardResult.ok){const cards=discardResult.data.items.filter(i=>i.available);if(cards.length){const select=el('select',{class:'select'},cards.map(c=>el('option',{value:c.inventoryRef,text:`${c.name} ${c.printedRarity} · ${c.inventoryRef.slice(-8)}`})));body.prepend(el('div',{class:'note-card'},[el('p',{text:'选择要丢弃的一张实物卡（本日可捡回）：'}),select,el('button',{class:'btn',text:'丢弃所选卡',onclick:async()=>{const r=await ctx.submit({requestId:newRequestId('discard'),type:'inventory.discard',payload:{inventoryRef:select.value}});if(!r.ok)body.append(errorView(r.error));else ctx.refresh();}})]));}}
 
       async function load() {
         clear(list);
@@ -59,7 +61,7 @@ export async function openTrash(app) {
           class: "btn btn--primary", type: "button", text: "全部捡回",
           onclick: async (event) => {
             const restore = busyButton(event.currentTarget, "捡回中…");
-            const response = await ctx.submit({ requestId: newRequestId("recover-all"), type: "inventory.recover", payload: {} });
+            const response = await ctx.submit({ requestId: newRequestId("recover-all"), type: "inventory.recover", payload: {all:true} });
             restore();
             if (!response.ok) {
               body.append(errorView(response.error, null));

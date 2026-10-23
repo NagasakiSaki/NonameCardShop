@@ -1,5 +1,7 @@
 # 无名小店 · 美术与前端交接包
 
+本文件保留前端模型的独立交付记录。当前主模型已完成正式集成，运行方式、已解决缺口及现存限制见 [新版集成说明](../FRONTEND-INTEGRATION.md)；正式参数以 [Host 契约](../../contracts/README.md) 为准。
+
 基线：源码 v0.8.1，分支提交 `865a475c`（其后的 `6d8c627a` 为交接文档基线）。
 本包实现交接文档第 3 章允许的五个目录：`frontend/`、`assets/frontend/`、`tools/frontend-art/`、`tests/frontend/`、`docs/frontend-handoff/`。
 

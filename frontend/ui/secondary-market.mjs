@@ -4,12 +4,13 @@ import { el, clear, stateView, errorView, imgWithFallback, newRequestId, busyBut
 const TABS = [
   { id: "buy", label: "买卡" },
   { id: "mine", label: "我的出售" },
+  { id: "sell", label: "出售收藏" },
   { id: "bids", label: "收购报价" },
   { id: "history", label: "行情记录" },
 ];
 
 export async function openMarket(app, options = {}) {
-  const state = { tab: options.tab || "buy", search: "", rarity: "" };
+  const state = { tab: options.tab || "buy", search: "", rarity: "",inventoryRef:options.inventoryRef||null };
 
   return app.windows.open({
     id: "market",
@@ -19,6 +20,7 @@ export async function openMarket(app, options = {}) {
     pauseReason: "二级市场",
     render: async (ctx) => {
       const body = ctx.body;
+      if(app.isNearInteraction&&!app.isNearInteraction('store.secondaryMarket'))body.append(el('div',{class:'note-card'},[el('p',{text:'交易与交卡需先到二级市场柜台。现在可查看行情。'}),el('button',{class:'btn',text:'前往二级市场柜台',onclick:()=>app.goToInteraction('store.secondaryMarket')})]));
       const tabs = el("div", { class: "tabs" }, TABS.map((tab) => el("button", {
         class: "tab", type: "button", text: tab.label,
         "aria-selected": String(state.tab === tab.id),
@@ -29,6 +31,7 @@ export async function openMarket(app, options = {}) {
 
       if (state.tab === "buy") await renderBuy(content);
       else if (state.tab === "mine") await renderMine(content);
+      else if (state.tab === "sell") await renderSell(content);
       else if (state.tab === "bids") await renderBids(content);
       else await renderHistory(content);
 
@@ -151,13 +154,27 @@ export async function openMarket(app, options = {}) {
             el("div", { class: "note-card", style: { margin: "4px 0" } }, [
               el("p", { class: "note-card__title", text: listing.name + " · 价格构成（Host 给出，不经前端重算）" }),
               el("div", { class: "stat-row" }, [el("span", { class: "stat-row__label", text: "全局评分 / 有效样本" }), el("span", { class: "stat-row__value", text: (breakdown.globalScore == null ? "—" : breakdown.globalScore) + " / " + (breakdown.sessions || 0) + " 场" })]),
-              el("div", { class: "stat-row" }, [el("span", { class: "stat-row__label", text: "供需系数" }), el("span", { class: "stat-row__value mono", text: "×" + (breakdown.demandIndex ?? 1) })]),
-              el("div", { class: "stat-row" }, [el("span", { class: "stat-row__label", text: "版本溢价" }), el("span", { class: "stat-row__value mono", text: "×" + (breakdown.versionPremium ?? 1) })]),
-              el("div", { class: "stat-row" }, [el("span", { class: "stat-row__label", text: "近期变化" }), el("span", { class: "stat-row__value", text: (breakdown.lastChange >= 0 ? "+" : "") + (breakdown.lastChange ?? 0) + "%" })]),
+              el("div", { class: "stat-row" }, [el("span", { class: "stat-row__label", text: "强度基准价" }), el("span", { class: "stat-row__value", text: app.formatMoney(listing.priceComponents?.powerBase) })]),
+              el("div", { class: "stat-row" }, [el("span", { class: "stat-row__label", text: "当前参考价" }), el("span", { class: "stat-row__value", text: app.formatMoney(listing.referencePrice) })]),
               el("p", { class: "small muted", text: breakdown.note || "价格由 Host 给出，前端不按公式重算。" }),
             ]),
           ]),
         ]);
+      }
+
+      async function renderSell(node){
+        const r=await ctx.query('inventory.list',{kind:'card',location:'collection',limit:200});
+        if(!r.ok){node.append(errorView(r.error));return;}
+        const cards=r.data.items.filter(c=>c.available);
+        if(!cards.length){node.append(stateView({kind:'empty',title:'没有可出售的收藏副本'}));return;}
+        if(!cards.some(c=>c.inventoryRef===state.inventoryRef))state.inventoryRef=cards[0].inventoryRef;
+        const card=cards.find(c=>c.inventoryRef===state.inventoryRef),detail=await ctx.query('catalog.detail',{cardKey:card.cardKey});
+        const select=el('select',{class:'select',onchange:e=>{state.inventoryRef=e.target.value;ctx.refresh();}},cards.map(c=>el('option',{value:c.inventoryRef,selected:c.inventoryRef===state.inventoryRef,text:`${c.name} ${c.printedRarity} · ${c.inventoryRef.slice(-8)}`})));
+        const amount=el('input',{class:'input',type:'number',min:1,value:detail.ok?detail.data.referencePrice.amount:1});
+        node.append(el('p',{class:'small muted',text:'按实物副本上架，不出售受保护或参赛中的卡。当前选择器显示前 200 件可查询实物。'}),select,amount,
+          el('button',{class:'btn btn--primary',text:'确认单卡上架',onclick:async()=>{const res=await ctx.submit({requestId:newRequestId('list-card'),type:'market.placeListing',payload:{inventoryRef:state.inventoryRef,amount:Number(amount.value)}});if(!res.ok){node.append(errorView(res.error));return;}state.tab='mine';ctx.refresh();}}),
+          el('button',{class:'btn',text:'留一，其余上架',onclick:async()=>{const p=await ctx.query('inventory.surplusPreview',{});if(!p.ok){node.append(errorView(p.error));return;}node.append(el('div',{class:'note-card'},[el('p',{text:`保留每种印刷版至少一张；上架 ${p.data.newListings} 张，挂牌未成交不会到账。`}),el('button',{class:'btn btn--primary',text:'确认批量上架',onclick:async()=>{const res=await ctx.submit({requestId:newRequestId('surplus'),type:'market.listSurplus',previewId:p.data.previewId,payload:{}});if(!res.ok){node.append(errorView(res.error));return;}state.tab='mine';ctx.refresh();}})]));}})
+        );
       }
 
       async function renderMine(node) {
@@ -199,7 +216,7 @@ export async function openMarket(app, options = {}) {
           node.append(errorView(result.error, () => ctx.refresh()));
           return;
         }
-        node.append(el("p", { class: "small muted", text: "收购报价为 NPC 需求方给出；接受报价需要主模型提供对应命令（见接口缺口）。" }));
+        node.append(el("p", { class: "small muted", text: "街坊求购：先接单托管资金，再在柜台交付真实副本。" }));
         node.append(el("table", { class: "data-table" }, [
           el("thead", {}, [el("tr", {}, [el("th", { text: "卡牌" }), el("th", { text: "买家" }), el("th", { class: "num", text: "单价" }), el("th", { class: "num", text: "数量" })])]),
           el("tbody", {}, (result.data.items || []).map((bid) => el("tr", {}, [
@@ -207,6 +224,7 @@ export async function openMarket(app, options = {}) {
             el("td", { text: bid.buyer }),
             el("td", { class: "num", text: app.formatMoney(bid.unitAmount) }),
             el("td", { class: "num", text: String(bid.quantity) }),
+            el('td',{},[el('button',{class:'btn btn--sm',text:bid.status==='accepted'?'交付卡牌':'接受求购',onclick:async()=>{const r=await ctx.submit({requestId:newRequestId('bid'),type:'neighbors.act',payload:{personId:bid.personId,orderId:bid.orderId,action:bid.status==='accepted'?'deliver':'accept'}});if(!r.ok)node.append(errorView(r.error));else ctx.refresh();}})]),
           ]))),
         ]));
       }

@@ -21,6 +21,8 @@
     "test:release":"node tests/run.mjs release",
     "test:saves":"node tests/run.mjs history",
     "test:backend":"node tests/run.mjs backend",
+    "test:frontend":"node tests/run.mjs frontend",
+    "test:legacy":"node tests/run.mjs legacy",
     "test:dev":"node tests/run.mjs dev",
     "verify:engine":"node tools/verify-engine.mjs",
     "balance:build":"node tools/build-balance.cjs",

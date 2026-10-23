@@ -1,5 +1,5 @@
 // frontend/ui/card-detail.mjs — 卡牌详情：印刷稀有度与当前全局分级并列、技能延迟加载源码、持仓与准入原因。
-import { el, clear, stateView, errorView, imgWithFallback, busyButton } from "./components.mjs";
+import { el, clear, stateView, errorView, imgWithFallback, busyButton, newRequestId } from "./components.mjs";
 
 const REVIEW_LABEL = {
   calibrated: "已校准",
@@ -127,11 +127,17 @@ export async function openCardDetail(app, options = {}) {
         el("p", { class: "small muted", text: stats.note || "实战样本不足" }),
       ]);
       body.append(statBlock);
+      if(card.copies?.length){body.append(el('div',{class:'section'},[el('h4',{text:'实物副本'}),...card.copies.map(copy=>el('div',{class:'note-card'},[
+        el('p',{class:'small',text:`${copy.printedRarity} · ${copy.printVersion} · ${copy.location}${copy.locked?' · 已占用':''}`}),
+        el('button',{class:'btn btn--sm',text:copy.protected?'取消保护':'保护这张',disabled:copy.locked,onclick:async()=>{const r=await ctx.submit({requestId:newRequestId('protect'),type:'inventory.setProtection',payload:{inventoryRef:copy.inventoryRef,protected:!copy.protected}});if(!r.ok)app.toast('error',r.error.code,r.error.message);else ctx.refresh();}}),
+        el('button',{class:'btn btn--sm',text:'在二级市场出售这张',disabled:!copy.available,onclick:()=>{ctx.handle.close();app.openPanel('market',{tab:'sell',inventoryRef:copy.inventoryRef});}}),
+        el('button',{class:'btn btn--sm',text:'到垃圾桶处理',onclick:()=>{app.goToInteraction('store.trash');}})
+      ]))]));}
 
       ctx.setFooter([
         el("button", {
           class: "btn", type: "button", text: "去二级市场",
-          onclick: () => app.openPanel("market", { tab: "buy" }),
+          onclick: () => app.goToInteraction('store.secondaryMarket'),
         }),
         el("button", { class: "btn btn--ghost", type: "button", text: "关闭", onclick: () => ctx.handle.close() }),
       ]);

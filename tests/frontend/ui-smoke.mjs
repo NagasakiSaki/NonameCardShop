@@ -6,7 +6,7 @@ import assert from "node:assert/strict";
 import { chromium } from "playwright";
 
 const ROOT = process.cwd();
-const SHOTS = path.join(ROOT, "docs/frontend-handoff/screenshots");
+const SHOTS = process.env.CARD_SHOP_TEST_RESULTS || path.join(ROOT, ".local/frontend-preview");
 fs.mkdirSync(SHOTS, { recursive: true });
 
 const MIME = {

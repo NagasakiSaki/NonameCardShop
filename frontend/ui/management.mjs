@@ -100,7 +100,7 @@ export async function openManagement(app) {
             el("p", { class: "small", text: "“" + neighbor.dialog + "”" }),
             neighbor.pending ? el("div", { class: "note-card", style: { background: "rgba(232,182,74,0.06)" } }, [
               el("p", { class: "note-card__title" }, [
-                neighbor.pending.kind === "booking" ? "预约请求" : "收卡申请",
+                neighbor.pending.kind === "offer" ? "街坊出售实物" : neighbor.pending.kind === "booking" ? "预约请求" : "收卡申请",
                 el("span", { class: "chip", text: "第 " + neighbor.pending.day + " 天" }),
               ]),
               neighbor.pending.kind === "booking"
@@ -112,10 +112,10 @@ export async function openManagement(app) {
                   ]),
               el("div", { style: { display: "flex", gap: "6px", flexWrap: "wrap", marginTop: "6px" } }, [
                 el("button", {
-                  class: "btn btn--sm btn--primary", type: "button", text: neighbor.pending.kind === "booking" ? "接下预约" : "接下申请",
+                  class: "btn btn--sm btn--primary", type: "button", text: neighbor.pending.kind === "offer"?'支付并收下':neighbor.pending.kind === "booking" ? "接下预约" : "接下申请",disabled:neighbor.pending.status==='accepted',
                   onclick: async (event) => {
                     const restore = busyButton(event.currentTarget, "提交中…");
-                    const response = await ctx.submit({ requestId: newRequestId("neighbor"), type: "neighbors.act", payload: { personId: neighbor.personId, action: "accept", pendingKind: neighbor.pending.kind } });
+                    const response = await ctx.submit({ requestId: newRequestId("neighbor"), type: "neighbors.act", payload: { personId: neighbor.personId, action: neighbor.pending.kind==='offer'?'buy':'accept',orderId:neighbor.pending.orderId, pendingKind: neighbor.pending.kind } });
                     restore();
                     if (!response.ok) app.toast("error", response.error.code, response.error.message);
                     else { app.toast("ok", "已接单", response.data.note || ""); ctx.refresh(); }
@@ -123,6 +123,7 @@ export async function openManagement(app) {
                 }),
                 el("button", {
                   class: "btn btn--sm", type: "button", text: neighbor.pending.kind === "booking" ? "交付场地" : "交付卡牌",
+                  disabled:neighbor.pending.kind==='offer'||neighbor.pending.status==='offered',
                   onclick: async (event) => {
                     const restore = busyButton(event.currentTarget, "交付中…");
                     const response = await ctx.submit({ requestId: newRequestId("neighbor"), type: "neighbors.act", payload: { personId: neighbor.personId, action: "deliver", pendingKind: neighbor.pending.kind } });

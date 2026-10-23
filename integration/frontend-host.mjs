@@ -24,7 +24,7 @@ export async function createHost(){
       return result;
     },
     command:input=>runtime.command(input),subscribe:listener=>runtime.subscribe(listener),pause:runtime.pause,world:runtime.world,battle:{mount},
-    async disconnect(){if(disconnecting)return;disconnecting=true;clearInterval(timer);timer=null;document.removeEventListener('visibilitychange',onVisibility);mount.disposeAll();await npcEngine.dispose();await runtime.disconnect();}
+    async disconnect(){if(disconnecting)return;disconnecting=true;clearInterval(timer);timer=null;document.removeEventListener('visibilitychange',onVisibility);await mount.disposeAll();await npcEngine.dispose();await runtime.disconnect();}
   };
   return host;
 }

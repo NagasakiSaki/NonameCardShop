@@ -1,6 +1,6 @@
 # 新版后端逐步清单与接入说明
 
-更新日期：2026-10-23。当前已完成独立后端第二批实现，根页面尚未切换，exe 未更新。
+更新日期：2026-10-23。当前已完成第三批前后端集成，根入口已切换新版，旧页面保留在 legacy.html；exe 未更新。
 
 ## 逐步清单
 
@@ -13,15 +13,16 @@
 | 5 | 二级市场、流通登记、NPC 钱包与持卡 | 已完成基础闭环；顾客购买后开包、真实持卡、有效挂单开放流通资格 |
 | 6 | 对战房、战绩、托管、按天存档 | 无赌注玩家与 NPC 自动对战、整场战绩与日档已接入；下注托管原语已写，实际下注仍关闭 |
 | 7 | 设施、员工、街坊预约 | 已完成基础闭环；实际容量/服务效果、轮班、日结工资、预付款托管、交卡与到期退款 |
+| 8 | 新前端正式联调与开发入口 | 已完成；真实营业日、BO3、档案文件导入导出通过，开发监视覆盖新版目录 |
 
-下一批继续：完整牌局恢复与下注开放、特殊技能兼容、与新前端正式联调。已有基础闭环不代表所有数值平衡或全部武将技能均已验证。
+后续继续：完整牌局恢复与下注开放、特殊技能兼容与长期数值平衡。已有基础闭环不代表全部武将技能均已验证。
 
 ## 文件边界
 
 - 后端：`modules/backend/*.mjs`、`data/backend-*.json`、`integration/frontend-host.mjs`、`integration/host-battle.mjs`、`integration/npc-engine.mjs`；共用引擎适配仅修改 `integration/engine-preload.js` 与 `integration/duel.js`。
 - 正式类型：`contracts/card-shop-host.d.ts`；地图元数据规格：`contracts/map.schema.json`。
-- 前端、美术和美术工具目录由另一模型负责，本批没有修改或提交它们。
-- 静态服务已支持 `.mjs`；未切换根 HTML、旧 UI 或安装包。
+- 前端模型交付已独立保存为 `7875aedf`；主模型在此基础上完成接口、交互和开发工具集成，保留美术源文件和历史验收记录。
+- 静态服务已支持 `.mjs`；根 HTML 转入新版，旧入口原样保存在 legacy.html，安装包未更新。
 
 ## 前端现在可以接入
 
@@ -39,17 +40,17 @@ const unsubscribe = host.subscribe(event => {
 
 `createHost()` 本身不会 connect；连接后经营时钟由后端计时，不需要 Phaser 每帧 tick。`connect().capabilities` 是真实能力开关，尚未接入的内容不要用旧全局函数绕过。
 
-首次启动这个新 Host 会建立 `noname-card-shop-world-v2` 数据库，然后按用户授权定向清理该地址的旧卡店键与旧日档库；不会清整个浏览器存储，不删除引擎目录。**原根页面没有调用新 Host，所以尚未替换玩家原来的正式运行入口。** 普通浏览器、开发端口、Electron 的存储仍相互隔离。
+首次启动这个新 Host 会建立 `noname-card-shop-world-v2` 数据库，然后按用户授权定向清理该地址的旧卡店键与旧日档库；不会清整个浏览器存储，不删除引擎目录。**根入口现已调用新版前端和 Host。** 普通浏览器、开发端口、Electron 的存储仍相互隔离。
 
 ### 实际参数约定
 
 - `products.quote`：`{productId, quantity, unit:'pack'|'box', action:'purchase'}`。
 - `supplier.placeOrder`：payload 同商品参数，加可选 `credit`；`quoteId` 在请求顶层。
-- `opening.preview`：`{includeBoxes:true|false, productId?, inventoryRefs?}`；不提供范围时选可用仓库包。
+- `opening.preview`：`{includeBoxes:true|false, quantity?, productId?, inventoryRefs?}`；省略 quantity 预览全部可用仓库包，提供时只选指定包数。从盒中只开一部分时，其他密封包保留原内容和分摊成本。
 - `opening.execute`：顶层 `previewId`，payload 可为空；同一次重试复用 requestId。
 - `inventory.surplusPreview`：`{mergePrints?:boolean, rarity?}`。
 - `market.listSurplus`：顶层 `previewId`；payload `{multiplier:1}`，允许 0.5～2。
-- 单件操作使用 `inventoryRef`；`inventory.list` 返回实体行，`owned=1`。前端按 cardKey/印刷版聚合显示 ×数量，提交时使用具体实物引用，不凭聚合数改库存。
+- 单件操作使用 `inventoryRef`；`inventory.list` 默认返回实体行，`owned=1`，`grouped:true` 返回后端按卡种/印刷版/位置聚合的卡片行与实际 inventoryRefs。前端显示 ×数量，提交仍使用具体实物引用，不凭聚合数改库存。
 - `inventory.setProtection`：`{inventoryRef,protected:true|false}`。
 - `market.placeListing`：`{inventoryRef,amount?}`，省略 amount 使用当前后端参考价。
 - `market.quote`：`{listingId,quantity:1}`；`market.acceptTrade` 带同一 listingId 和顶层 quoteId。
@@ -111,7 +112,7 @@ Host 连接后，`integration/npc-engine.mjs` 调度一个独立无名杀 iframe
 1. **下注：** 托管、退款、整场分配、NPC 稀有度倍率提议已有独立实现；当前规则和能力开关强制禁用实际下注。原因是现有无名杀运行事件栈、全部随机源与操作日志尚不能完整恢复。不能通过配置或导入档案绕过。
 2. **完整恢复：** 无赌注中断局当前可重开小局，已经完成的小局、费用与待处理事件保留；尚不能恢复引擎完整事件栈、手牌与每一步随机状态。
 3. **技能全适配：** 已移除 25 将白名单，按持有与流通准入；特殊技能仍需逐项兼容。可用 `compatibilityBlocks` 明确记录故障原因，不宣称 2563 位均已实测。
-4. **最终前端合并：** 已适配新前端当前的经营/对战/配置 DTO，upgrades/neighbors 能力已开放；未修改另一模型的资源与页面，完整菜单联调和根入口切换仍待交付后完成。
+4. **美术继续完善：** 当前已集成首版原创像素素材，表情差分、更多家具变体和最终美术品质仍可继续迭代。
 
 ## 本批验证
 
@@ -124,4 +125,5 @@ Host 连接后，`integration/npc-engine.mjs` 调度一个独立无名杀 iframe
 
 - `node tests/backend-management.mjs`：设施容量、员工效果/工资、每日对话、实物预约与托管到期退款、自动补货；NPC 实际持卡、暂停中结果持久化与重连、BO3 一次收费/战绩、未入座取消时安全返店。
 - `node tests/npc-engine-browser.mjs`：真实引擎 NPC 托管 AI 与暂停恢复，实际引擎 BO3 2:0 只收费记账一次，玩家桌仍为手动。为压缩耗时，在确认 AI 已开始实际回合后，通过引擎角色阵亡完成后续结算；不把它当作长时间 AI 胜率或全部技能压力测试。
-- `npm run test:backend` 现在包含上述四项；本批没有重建 exe。
+- 第三批新增 `tests/backend-views.mjs`（局部拆盒守恒、真实聚合持仓、市场分流、现金流与利润分开）和 `tests/frontend-integration.mjs`（真实新版页面的一天与 BO3、文件读写）；`tests/frontend-development.mjs` 验证开发自动刷新和端口存档隔离。
+- `npm run test:backend` 包含五项；`npm run test:frontend` 验证正式集成，`npm run test:dev` 验证新版开发服务。历史 UI 套件使用 `npm run test:legacy`；本批没有重建 exe。

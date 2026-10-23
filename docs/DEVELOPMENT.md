@@ -2,6 +2,8 @@
 
 项目根目录为 `D:\GameDev\NonameCardShop`。所有工具按自身位置解析路径，整个目录可以再次搬迁。已关联 GitHub 私有仓库 [NagasakiSaki/NonameCardShop](https://github.com/NagasakiSaki/NonameCardShop)，素材通过 Git LFS 管理。个人进度、依赖、构建产物和上游安装目录中的 Home 用户缓存不上传。
 
+2026-10-23：默认入口已改为新版前端与正式 Host，集成说明见 [FRONTEND-INTEGRATION.md](FRONTEND-INTEGRATION.md)。旧页面保留在 `/legacy.html`，安装版没有更新。
+
 ## 日常入口
 
 | 操作 | 双击文件 | 命令 |
@@ -20,19 +22,21 @@
 
 | 场景 | 页面 / 引擎端口 | 进度位置 |
 | --- | --- | --- |
-| 普通浏览器试玩 | 5174 / 5175 | 原浏览器该地址的 localStorage |
-| 浏览器开发 | 5190 / 5191 | 浏览器开发地址的 localStorage |
+| 普通浏览器试玩 | 5174 / 5175 | 该地址 IndexedDB `noname-card-shop-world-v2` |
+| 浏览器开发 | 5190 / 5191 | 开发地址独立 IndexedDB `noname-card-shop-world-v2` |
 | 安装版或普通桌面启动 | 51740 / 51741 | `%APPDATA%\NonameCardShop` |
 | 桌面开发 | 5192 / 5193 | 项目 `.local/desktop-dev` |
 | 自动回归 | 系统分配空闲端口 | 临时浏览器上下文；桌面进度在该次 `test-results` 目录 |
 
-开发版右下角“开发工具”可以载入空店、经营库存、第 7 天牌桌三个测试进度，也可暂停时钟、导出测试进度。载入前有确认，并把当前开发进度备份到该地址的 `noname-dev-before-fixture`；这些按钮只在开发服务出现。`dev/fixtures.json` 可添加测试场景，使用与正常导入相同的存档迁移和模块初始化。
+新版开发工具支持安全刷新、暂停时钟和打开档案导出；既定原子存储保留世界进度。旧版空店、经营库存、第 7 天牌桌三套 localStorage 测试场景只在 `/legacy.html` 开发页提供，不导入新版世界。新版场景数据通过版本 2 的档案文件导入。
 
 浏览器开发与普通试玩的隔离依赖端口，请固定使用上述入口。更换浏览器、端口或用户目录会显示该位置的新进度。迁移实际玩家存档用游戏导出/导入功能。测试不会访问正式桌面用户目录，也不会改普通试玩页面的 localStorage。
 
 ## 自动更新的范围
 
 页面样式修改直接更新样式，不中断牌局。界面脚本、经营模块、JSON 配置、像素素材修改后，保存开发存档并整页刷新；正在对局或编辑任务/模块 JSON 时等待关闭后再刷新。模块配置的浏览器覆盖仍优先于项目默认文件，需要测试新默认值时使用编辑器“恢复项目默认”。
+
+新版监视额外覆盖 `frontend/**`、`assets/frontend/**`、`modules/backend/**`、`integration/*.mjs` 与 `contracts/**`。任意窗口打开时等待关闭；玩家正在进行的小局结束后才自动重载。`npm run test:frontend` 跑真实集成，`npm run test:backend` 跑权威逻辑与原引擎，`npm run test:dev` 跑新版开发服务。`npm test` 默认组合 unit/backend/frontend/dev，旧 UI/桌面安装包不混入默认集成；历史 UI 单独 `npm run test:legacy`。
 
 Node 的 `--watch` 监视已导入的服务端模块并重启后台，页面连接恢复后自动刷新。引擎上游目录不会因素材文件变化触发整页刷新；修改引擎或 `integration/duel.js` 后应重新开始测试对局。`dev/runtime.mjs` 的 `watchedFile` 是前端监视范围接口，`dev/client.js` 的 `blocked` 是推迟刷新条件接口。
 

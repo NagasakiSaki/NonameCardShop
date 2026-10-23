@@ -17,7 +17,7 @@ export async function openDayReport(app) {
         return;
       }
       const ledger = result.data;
-      const revenue = ledger.revenue.sealedSales + ledger.revenue.serviceIncome;
+      const revenue = ledger.revenue.total ?? (ledger.revenue.sealedSales + (ledger.revenue.secondarySales||0) + ledger.revenue.serviceIncome);
       const cost = ledger.cost.procurement + ledger.cost.wages + ledger.cost.rent + ledger.cost.tableFees;
       const combatNet = ledger.combat.stakeOut - ledger.combat.stakeIn;
 
@@ -25,12 +25,14 @@ export async function openDayReport(app) {
         el("div", { class: "section" }, [
           el("h4", { class: "section__title", text: "收入" }),
           el("div", { class: "stat-row" }, [el("span", { class: "stat-row__label", text: "密封商品销售" }), el("span", { class: "stat-row__value", text: app.formatMoney(ledger.revenue.sealedSales) })]),
+          el("div", { class: "stat-row" }, [el("span", { class: "stat-row__label", text: "单卡销售" }), el("span", { class: "stat-row__value", text: app.formatMoney(ledger.revenue.secondarySales||0) })]),
           el("div", { class: "stat-row" }, [el("span", { class: "stat-row__label", text: "服务收入" }), el("span", { class: "stat-row__value", text: app.formatMoney(ledger.revenue.serviceIncome) })]),
           el("div", { class: "stat-row" }, [el("span", { class: "stat-row__label", text: "小计" }), el("span", { class: "stat-row__value", text: app.formatMoney(revenue) })]),
         ]),
         el("div", { class: "section" }, [
           el("h4", { class: "section__title", text: "费用" }),
-          el("div", { class: "stat-row" }, [el("span", { class: "stat-row__label", text: "采购" }), el("span", { class: "stat-row__value", text: app.formatMoney(ledger.cost.procurement) })]),
+          el("div", { class: "stat-row" }, [el("span", { class: "stat-row__label", text: "采购支出（现金流）" }), el("span", { class: "stat-row__value", text: app.formatMoney(ledger.cost.procurement) })]),
+          el("div", { class: "stat-row" }, [el("span", { class: "stat-row__label", text: "已售商品成本" }), el("span", { class: "stat-row__value", text: app.formatMoney(ledger.cost.costOfGoods||0) })]),
           el("div", { class: "stat-row" }, [el("span", { class: "stat-row__label", text: "工资" }), el("span", { class: "stat-row__value", text: app.formatMoney(ledger.cost.wages) })]),
           el("div", { class: "stat-row" }, [el("span", { class: "stat-row__label", text: "租金" }), el("span", { class: "stat-row__value", text: app.formatMoney(ledger.cost.rent) })]),
           el("div", { class: "stat-row" }, [el("span", { class: "stat-row__label", text: "桌费" }), el("span", { class: "stat-row__value", text: app.formatMoney(ledger.cost.tableFees) })]),
@@ -49,10 +51,12 @@ export async function openDayReport(app) {
 
       const confirmBox = el("div");
       body.append(confirmBox);
+      if(ledger.netProfit!==undefined)body.append(el('p',{class:'stat-row',text:'今日经营利润：'+app.formatMoney(ledger.netProfit)}));
 
       ctx.setFooter([
         el("button", {
           class: "btn btn--primary", type: "button", text: "开始下一天",
+          disabled: app.snapshot().clock.phase!=='closed',
           onclick: () => {
             clear(confirmBox);
             confirmBox.append(el("div", { class: "note-card" }, [

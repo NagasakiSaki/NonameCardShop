@@ -9,6 +9,9 @@ export function createHud({ mount, currency, onAction, getSnapshot }) {
   const actionsNode = document.getElementById("hud-actions");
 
   const actions = [
+    { id: "business", label: "开门营业" },
+    { id: "pause", label: "暂停时钟" },
+    { id: "speed", label: "速度 1×" },
     { id: "inventory", label: "背包 B" },
     { id: "tasks", label: "任务" },
     { id: "report", label: "日报" },
@@ -32,6 +35,10 @@ export function createHud({ mount, currency, onAction, getSnapshot }) {
   function render(snapshot) {
     if (!snapshot) return;
     const clock = snapshot.clock;
+    const business=actionsNode.querySelector('[data-action="business"]');
+    business.textContent=clock.phase==='preparing'?'开门营业':clock.phase==='closed'?'开始下一天':'打烊结算';
+    actionsNode.querySelector('[data-action="pause"]').textContent=clock.manualPaused?'继续时钟':'暂停时钟';
+    actionsNode.querySelector('[data-action="speed"]').textContent='速度 '+clock.speed+'×';
     clear(clockNode);
     const clockParts = [
       el("span", { class: "hud__day", text: "第 " + clock.day + " 天" }),

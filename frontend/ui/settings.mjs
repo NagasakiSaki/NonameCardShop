@@ -119,7 +119,7 @@ export async function openSettings(app) {
                 if (!response.ok) app.toast("error", response.error.code, response.error.message);
                 else app.refreshSnapshot();
               },
-            }, [0.5, 1, 2, 3, 4].map((speed) => el("option", { value: String(speed), text: speed + "×", selected: app.snapshot().clock.speed === speed }))),
+            }, [1, 2, 4].map((speed) => el("option", { value: String(speed), text: speed + "×", selected: app.snapshot().clock.speed === speed }))),
           ]),
         ]),
         el("p", { class: "small muted", text: "偏好存在本地键 " + PREF_KEY + "；不会触碰正式存档或浏览器全库。" }),
@@ -149,7 +149,7 @@ export async function openSettings(app) {
                 class: "btn btn--sm", type: "button", text: "校验", disabled: !item.editable,
                 onclick: async () => {
                   const check = await ctx.query("config.validate", { configId: item.configId, draft: draft.value });
-                  status.textContent = check.ok && check.data.valid ? "校验通过" : "校验失败：" + ((check.data && check.data.errors || [{}])[0].message || "未知错误");
+                  status.textContent = check.ok && check.data.valid ? "校验通过" : "校验失败：" + (check.error?.message || (check.data?.errors||[{}])[0].message || "未知错误");
                   status.style.color = check.ok && check.data.valid ? "#a6d6a9" : "#f0a08a";
                 },
               }),

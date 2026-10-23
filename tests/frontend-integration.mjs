@@ -1,0 +1,79 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import {chromium} from 'playwright';
+import {startShopServer} from '../server.mjs';
+
+const output=process.env.CARD_SHOP_TEST_RESULTS||'.local/frontend-integration';fs.mkdirSync(output,{recursive:true});
+const server=await startShopServer({port:0,enginePort:0});let browser;
+try{
+  browser=await chromium.launch();const page=await browser.newPage({viewport:{width:1440,height:900}}),errors=[];
+  page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error'&&!m.text().includes('404'))errors.push(m.text());if(m.type()==='warning'&&/Missing animation|__MISSING/.test(m.text()))errors.push(m.text());});page.on('dialog',d=>d.accept());
+  const query=(name,p={})=>page.evaluate(async({name,p})=>{const r=await __cardShopApp.host.query(name,p);if(!r.ok)throw Error(JSON.stringify(r));return r.data;},{name,p});
+  async function until(fn,message,timeout=15000){const start=Date.now();while(Date.now()-start<timeout){const value=await fn();if(value)return value;await page.waitForTimeout(150);}console.error('STATE',await page.evaluate(()=>({player:__cardShopApp.getPlayer(),clock:__cardShopApp.snapshot().clock,map:__cardShopApp.currentMap().mapId,windows:__cardShopApp.windows.depth,text:document.querySelector('#toasts')?.innerText})));await page.screenshot({path:path.join(output,'failure.png')});throw Error('Timeout: '+message);}
+  const close=async()=>{await page.evaluate(()=>__cardShopApp.windows.closeAll());await until(async()=>!(await query('shop.snapshot')).clock.pauseReasons.length,'release windows');};
+  const go=async id=>{await page.evaluate(id=>__cardShopApp.goToInteraction(id),id);await until(()=>page.evaluate(id=>__cardShopApp.isNearInteraction(id)&&__cardShopApp.windows.depth>0,id),'walk to '+id,20000);await page.waitForTimeout(180);};
+  await page.goto(server.origin);await page.waitForFunction(()=>window.__cardShopReady===true,null,{timeout:25000});
+  assert.match(page.url(),/frontend\/index.html/);assert.equal(await page.locator('#mode-badge').isVisible(),false);
+  // Exercise the public config contract in this isolated test world, keeping the foreground opponent free.
+  await page.evaluate(async()=>{const h=__cardShopApp.host,c=(await h.query('config.list')).data.items.find(c=>c.configId==='backend-rules'),value=JSON.parse(c.text);value.npcAutoBattles=false;const r=await h.command({requestId:'integration-ai-config',type:'config.apply',payload:{configId:c.configId,value}});if(!r.ok)throw Error(JSON.stringify(r));});
+  await page.getByRole('button',{name:'开门营业',exact:true}).click();assert.equal((await query('shop.snapshot')).clock.phase,'open');
+  await page.locator('[data-action="speed"]').click();await page.locator('[data-action="speed"]').click();
+  await go('store.counter');
+  const product=page.locator('.note-card').filter({has:page.locator('.note-card__title',{hasText:/^标准 ·/})}).first();
+  await product.locator('[data-role="qty"]').fill('7');await product.getByRole('button',{name:'获取报价',exact:true}).click();
+  await product.getByRole('button',{name:'确认下单并冻结价格',exact:true}).click();
+  assert.equal((await query('supplier.orders')).items[0].quantity,7);await close();
+  await until(async()=>(await query('supplier.orders')).items[0].status==='arrived','delivery');
+  await go('store.counter');await page.getByRole('button',{name:'待签收',exact:true}).click();await page.getByRole('button',{name:'签收',exact:true}).click();
+  assert.equal((await query('inventory.list',{kind:'pack'})).total,7);
+  await page.getByRole('button',{name:'开包柜台',exact:true}).click();
+  await page.getByRole('spinbutton').fill('1');await page.getByRole('button',{name:'生成预览',exact:true}).click();
+  assert.match(await page.locator('[aria-label="开包柜台"]').innerText(),/1 包/);
+  await page.getByRole('button',{name:'确认开包',exact:true}).click();
+  assert.equal((await query('inventory.list',{kind:'card'})).total,5);assert.equal((await query('inventory.list',{kind:'pack'})).total,6);
+  await go('store.retail');await page.getByRole('button',{name:'上架 1',exact:true}).click();await page.getByRole('button',{name:'上架 1',exact:true}).click();
+  assert.equal((await query('retail.list')).shelves[0].stock,2);
+  await go('store.counter');await page.getByRole('button',{name:'开包柜台',exact:true}).click();await page.getByRole('button',{name:'一键开所有包',exact:true}).click();await page.getByRole('button',{name:'确认开包',exact:true}).click();
+  assert.equal((await query('inventory.list',{kind:'card'})).total,25);
+  await page.screenshot({path:path.join(output,'opening.png')});await close();
+  await page.getByRole('button',{name:'背包 B',exact:true}).click();await page.locator('.card-tile').first().click();await page.getByRole('button',{name:'查看技能源码',exact:true}).click();
+  await until(()=>page.locator('pre').innerText().then(t=>t.length>100&&/audio:|content\(|trigger:|inherit:/.test(t)),'skill source');
+  assert.equal((await query('shop.snapshot')).clock.running,false);await page.keyboard.press('Escape');assert.equal((await query('shop.snapshot')).clock.running,false);await close();
+  await go('store.secondaryMarket');await page.getByRole('button',{name:'出售收藏',exact:true}).click();await page.getByRole('button',{name:'留一，其余上架',exact:true}).click();
+  const preview=await query('inventory.surplusPreview');assert.ok(preview.quantity>0);await page.getByRole('button',{name:'确认批量上架',exact:true}).click();
+  assert.equal((await query('market.list',{tab:'mine'})).total,preview.quantity);await close();
+  await until(async()=>(await query('management.people')).customers.some(n=>n.ownedCards>0),'actual NPC ownership',20000);
+  await until(async()=>(await query('market.list',{tab:'history'})).total>0,'real secondary sale',25000);
+  await go('store.trash');await page.getByRole('button',{name:'丢弃所选卡',exact:true}).click();assert.equal((await query('inventory.list',{location:'trash'})).total,1);
+  await page.getByRole('button',{name:'全部捡回',exact:true}).click();assert.equal((await query('inventory.list',{location:'trash'})).total,0);
+  await page.getByRole('button',{name:'丢弃所选卡',exact:true}).click();await close();
+  await page.evaluate(()=>__cardShopApp.navigateScene('battle-room'));await until(()=>page.evaluate(()=>__cardShopApp.currentMap().mapId==='battle-room'&&__cardShopApp.getPlayer().roomId==='battle-room'),'authoritative room switch',20000);
+  await go('battleRoom.service');await page.locator('.note-card').filter({has:page.locator('.note-card__title',{hasText:'1 号牌桌'})}).click();
+  await page.locator('.toolbar select').first().selectOption('bo3');await page.locator('.card-tile:enabled').first().click();
+  await page.getByRole('button',{name:'生成参赛预览',exact:true}).click();await page.getByRole('button',{name:'确认参赛（冻结阵容与托管）',exact:true}).click();
+  const before=(await query('ledger.daily')).service||0;
+  for(let round=1;round<=2;round++){
+    await page.getByRole('button',{name:'挂载牌局视图',exact:true}).click();
+    await until(async()=>{const m=(await query('room.snapshot')).matches.find(m=>!m.background&&m.status==='running');return m?.lastReadyGameId===m?.gameId&&m;},'engine ready',25000);
+    const frame=await page.locator('#battle-mount iframe').elementHandle().then(h=>h.contentFrame());
+    await frame.evaluate(async()=>window.__integrationEngine=await import('/noname.js'));
+    await frame.waitForFunction(()=>__integrationEngine._status.imchoosing,null,{timeout:30000});
+    assert.equal(await frame.evaluate(()=>__integrationEngine._status.auto),false);
+    await frame.evaluate(async()=>{const {game,ui,_status}=__integrationEngine;const event=game.createEvent('integrationDefeat',false);event.forceDie=true;event.setContent(async()=>{await game.players.find(p=>p!==game.me).die();});ui.click.auto();game.resume();});
+    await until(async()=>{const m=(await query('room.snapshot')).matches.find(m=>!m.background);return m.wins===round;},'actual engine result',25000);
+  }
+  const match=(await query('room.snapshot')).matches.find(m=>!m.background);assert.equal(match.status,'finished');assert.equal((await query('cardStats.summary',{cardKey:match.mine[0].cardKey,mode:'bo3'})).wins,1);
+  assert.equal((await query('ledger.daily')).service-before,10);await close();
+  await page.getByRole('button',{name:'存档',exact:true}).click();await page.getByRole('button',{name:'保存当前进度',exact:true}).click();const saves=await query('saves.list'),manual=saves.filter(s=>s.slot==='manual').at(-1);assert.ok(manual?.archiveId);
+  const downloadPromise=page.waitForEvent('download');await page.getByRole('button',{name:'导出',exact:true}).click();const download=await downloadPromise,savePath=path.join(output,'export.json');await download.saveAs(savePath);assert.equal(JSON.parse(fs.readFileSync(savePath)).format,'noname-shop-world-save');await close();
+  await page.getByRole('button',{name:'打烊结算',exact:true}).click();assert.equal((await query('shop.snapshot')).clock.phase,'closed');assert.match(await page.locator('[aria-label="当日日报"]').innerText(),/今日经营利润/);
+  await close();await page.getByRole('button',{name:'开始下一天',exact:true}).click();assert.equal((await query('shop.snapshot')).clock.day,2);assert.equal((await query('inventory.list',{location:'trash'})).total,0);
+  await page.getByRole('button',{name:'存档',exact:true}).click();const row=page.locator('tr').filter({hasText:manual.branch}).filter({hasText:'手动'}).first();await row.getByRole('button',{name:'读取',exact:true}).click();await page.getByRole('button',{name:'确认读取',exact:true}).click();await until(async()=>(await query('shop.snapshot')).clock.day===1,'load day branch');
+  const branch=(await query('shop.snapshot')).branchId;assert.notEqual(branch,manual.branchId);await close();
+  await page.getByRole('button',{name:'存档',exact:true}).click();await page.locator('input[type=file]').setInputFiles(savePath);await page.getByRole('button',{name:'确认导入',exact:true}).click();await until(async()=>(await query('shop.snapshot')).branchId!==branch,'import branch');await close();
+  await page.evaluate(()=>__cardShopApp.navigateScene('store'));await until(()=>page.evaluate(()=>__cardShopApp.currentMap().mapId==='store'&&__cardShopApp.getPlayer().roomId==='store'),'return room',20000);
+  await page.screenshot({path:path.join(output,'store.png')});assert.deepEqual(errors,[]);
+  await page.evaluate(()=>__cardShopApp.host.disconnect());
+  console.log('PASS frontend integration: root entry, real supply/receive, exact/all opening, shelf/NPC sales, grouping/details/source, nested pause, market, trash, authoritative doors, manual original-engine BO3, day settlement, archive download/load/import and branch restore.');
+}catch(e){console.error(e);throw e;}finally{await browser?.close();await server.close();}

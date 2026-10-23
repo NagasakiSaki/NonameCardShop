@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>无名小店 · 像素卡店</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="shop.css">
+<link rel="stylesheet" href="business.css">
+<link rel="stylesheet" href="management.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark shop-logo" aria-hidden="true">▤</div>
+    <div>
+      <h1>无名小店<span class="open-sign" id="businessSign">准备中</span></h1>
+      <p class="brand-sub">一家由你经营的卡牌小店 · 每日档案</p>
+    </div>
+  </div>
+
+  <div class="business-clock"><span id="businessDay">第 1 天</span><strong id="businessTime">08:00</strong><div><button id="clockPause" aria-label="暂停营业时间">Ⅱ</button><button id="clockSpeed">1×</button></div></div>
+  <button class="btn day-action" id="dayAction">开门营业</button>
+  <div class="shop-wallet"><span>店铺资金</span><strong id="shopCash">¥1,200</strong></div>
+  <button class="btn" id="bagBtn"><span aria-hidden="true">▣</span> 背包 <kbd>B</kbd><b id="bagTotal">0</b></button>
+  <button class="btn plain" id="managementBtn">街坊与经营</button>
+  <button class="btn plain" id="saveHistoryBtn">按天存档</button>
+  <button class="ghost" id="helpBtn" aria-label="店主手册">店主手册 <span>?</span></button>
+</header>
+
+<main class="shop-layout">
+  <section class="shop-world" aria-label="可走动的像素卡店">
+    <div class="world-caption"><span><i></i> SMALL CARD SHOP</span><span id="trafficText">营业前准备 · 签收与补货</span></div>
+    <div class="world-frame">
+      <div id="shopCanvas" tabindex="0" role="application" aria-label="卡店场景，用 WASD 或方向键移动，E 交互，B 打开背包"></div>
+      <div id="shopLoading">正在布置你的小店…</div>
+      <div class="world-interaction" id="worldInteraction" hidden><kbd>E</kbd><span></span><button id="interactBtn">交互</button></div>
+      <div class="shop-toast" id="shopToast" role="status" hidden></div>
+    </div>
+    <div class="world-controls"><span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / 方向键移动</span><span><kbd>E</kbd> 交互</span><span><kbd>B</kbd> 背包</span><span class="click-hint">也可以点击地面或家具</span></div>
+    <div class="touch-controls" aria-label="触屏方向键"><button data-direction="up" aria-label="向上">↑</button><button data-direction="left" aria-label="向左">←</button><button data-direction="down" aria-label="向下">↓</button><button data-direction="right" aria-label="向右">→</button></div>
+  </section>
+  <aside class="shop-journal">
+    <div class="journal-head"><span>店 主 手 账</span><small>SHOPKEEPER'S NOTES</small></div>
+    <section class="journal-section welcome-note"><span class="paper-tag" id="dayMood">营业前准备</span><h2>今日营业目标</h2><div class="revenue-goal"><strong id="dailyRevenue">¥0</strong><span id="dailyGoal">/ ¥180</span></div><div class="revenue-track"><i id="revenueBar"></i></div><p id="dailyGuidance">先在柜台进货，签收后就能拆包或整包上架。</p></section>
+    <section class="journal-section"><div class="section-title"><h3>正在进行的任务</h3><button id="tasksBtn">全部任务 ↗</button></div><ul class="business-task-short" id="taskShortList"></ul></section>
+    <section class="journal-section"><h3>今日经营</h3><div class="shop-numbers"><div><span>今日售出</span><strong id="statSold">0</strong></div><div><span>进货支出</span><strong id="dailyPurchase">¥0</strong></div><div><span>仓库卡包</span><strong id="statStock">0</strong></div><div><span>货架商品</span><strong id="statDisplay">0</strong></div></div><p class="business-small" id="customerStats">0 位进店 · 0 位成交</p><button class="journal-link" id="supplyBtn">供应商 / 收货 <span id="incomingOrders">0 笔在途</span></button></section>
+    <section class="journal-section collection-note"><div class="meter"><div class="ring" id="ring"><span id="ringText">0%</span></div><div class="meter-text"><b id="ownCount">0</b><span> / <span id="totalCount">0</span> 种</span><small>我的武将收藏</small></div></div><button class="journal-link" id="catalogueBtn">翻翻卡牌图鉴 <span>↗</span></button></section>
+    <section class="journal-section receipt-section"><h3>最新一笔生意</h3><p id="latestReceipt">暂时还没有成交。<br>把卡片放到货架上，等等第一位顾客吧。</p></section>
+    <section class="journal-section management-journal"><h3>街坊与小店</h3><p id="managementSummary">看看今天的话题与预约</p><button class="journal-link" id="managementJournalBtn">收卡 · 委托 · 升级 <span>↗</span></button></section>
+    <p class="journal-bottom" id="trashNotice">垃圾桶每天换日时清空，请在打烊后、开始下一天前捡回。</p>
+  </aside>
+</main>
+
+<dialog class="shop-panel" id="shopPanel" aria-labelledby="shopPanelTitle">
+  <div class="shop-panel-head"><div><span class="panel-eyebrow" id="shopPanelEyebrow">我的小店</span><h2 id="shopPanelTitle">柜台开包</h2><p id="shopPanelDesc"></p></div><button class="panel-close" id="shopPanelClose" aria-label="关闭面板">×</button></div>
+  <div id="counterBusiness" hidden><nav class="counter-tabs"><button data-counter-tab="supplier">供应商下单</button><button data-counter-tab="warehouse">收货 / 仓库</button><button data-counter-tab="opening">库存开包</button></nav><div id="supplyView"></div></div>
+  <div id="shopCatalogue"><nav class="lineages" id="lineages"></nav><section id="hero" class="lineage-hero"></section><section id="packsView" class="packs"></section><section id="codexView" class="codex" hidden></section></div>
+  <div id="inventoryView" hidden><div class="inventory-toolbar"><div class="inventory-tabs" id="inventoryTabs"></div><label class="inventory-search"><span>查找卡牌</span><input id="inventorySearch" placeholder="搜索武将名称" type="search"></label><select id="inventoryRarity" aria-label="筛选稀有度"><option value="">全部稀有度</option><option>C</option><option>U</option><option>R</option><option>SR</option><option>UR</option></select></div><div id="shelfBusiness" hidden></div><div class="inventory-summary"><span id="inventoryCount"></span><button class="btn plain" id="recoverAllBtn" hidden>全部捡回</button></div><div class="inventory-grid" id="inventoryGrid"></div></div>
+</dialog>
+
+<dialog class="business-dialog" id="taskBoard" aria-labelledby="taskBoardTitle"><header><div><span class="panel-eyebrow">任务与成长</span><h2 id="taskBoardTitle">店主任务簿</h2><p>主线任务按顺序解锁，每日任务随营业日更新。奖励不会计入营业额。</p></div><button class="panel-close" data-close="taskBoard" aria-label="关闭任务簿">×</button></header><div class="task-board-tabs"><button data-task-scope="all" class="active">全部</button><button data-task-scope="once">经营主线</button><button data-task-scope="daily">每日目标</button><button id="openTaskEditor">任务 / 经营编辑器</button></div><div id="taskBoardList"></div></dialog>
+
+<dialog class="business-dialog day-report" id="dayReport" aria-labelledby="dayReportTitle"><header><div><span class="panel-eyebrow">DAILY REPORT</span><h2 id="dayReportTitle">今日营业结算</h2><p id="reportIntro"></p></div><button class="panel-close" data-close="dayReport" aria-label="关闭结算">×</button></header><div id="reportContent"></div><footer><p id="reportTrashWarning"></p><button class="btn" id="reportConfirmClose">确认打烊并结算</button><button class="btn" id="nextDayBtn">领取每日奖励并开始下一天</button><button class="btn plain" id="reportRecover">先去捡回桶内卡片</button></footer></dialog>
+
+<dialog class="business-dialog task-editor" id="taskEditor" aria-labelledby="taskEditorTitle"><header><div><span class="panel-eyebrow">CONTENT EDITOR · 本地配置</span><h2 id="taskEditorTitle">任务与经营编辑器</h2><p>修改只保存在此浏览器。导出后可替换项目 data/ 内对应 JSON；应用前会校验，不重置收藏。</p></div><button class="panel-close" data-close="taskEditor" aria-label="关闭编辑器">×</button></header><nav class="editor-tabs"><button data-editor="tasks" class="active">任务 JSON</button><button data-editor="business">经营参数 JSON</button><button data-editor="help">扩展接口</button></nav><textarea id="configText" spellcheck="false" aria-label="JSON 配置编辑区域"></textarea><pre id="editorApi" hidden></pre><p id="editorMessage" role="status"></p><footer><button class="btn" id="applyConfig">校验并应用</button><button class="btn plain" id="exportConfig">导出 JSON</button><label class="btn plain file-import">导入 JSON<input id="importConfig" type="file" accept=".json,application/json"></label><button class="btn plain" id="restoreConfig">恢复项目默认配置</button></footer></dialog>
+
+<dialog class="shop-help" id="shopHelp" aria-labelledby="shopHelpTitle"><button class="panel-close" id="shopHelpClose" aria-label="关闭手册">×</button><span class="panel-eyebrow">店主手册</span><h2 id="shopHelpTitle">从清晨经营到打烊。</h2><p><b>移动</b> WASD / 方向键，E 交互，B 背包。点击家具可自动走过去。</p><p><b>时间</b> 08:00 准备，点击开门后从 09:00 营业至 20:00。可暂停与 1/2/4 倍速；晨昏光照与客流随时间变化。</p><p><b>进货</b> 柜台下单 → 等待 30 个游戏分钟 → 签收入库。可整包上架，也可消耗库存拆出 5 张单卡。</p><p><b>售货</b> 左侧货架同时售卖整包与单卡，可调整售价。顾客有各自预算与偏好，挑好商品后到柜台付款，缺货或太贵会离开。</p><p><b>任务</b> 手账打开任务簿领取奖励，主线按依赖解锁、每日任务换日重置；奖励不计入顾客营业额。</p><p><b>垃圾桶</b> 当天可以丢入、捡回；开始下一天时清空。打烊后仍可先捡回。背包、货架和仓库不清空。</p><p><b>结算</b> 每日扣营业成本，记录营业额、进货支出与经营净额。供应商赊购与未付成本形成欠款，收入会优先还款。</p><p><b>街坊与经营</b> 顶部手账查看预约、收卡和行情；背包可保留一张收藏。设施与员工在成长页采购，工资每天结算。</p><p><b>牌桌</b> KOF 三将接力继承剩余手牌；BO3 单将三局两胜。先使用合法单挑将池，参赛不消耗收藏，对局时暂停营业。周日店赛需要店赛牌桌。</p><p class="save-note">普通背包与柜台面板不暂停营业；手册、编辑器、结算、对局或切到后台会暂停。任务簿内可编辑 / 导入 / 导出 JSON，项目接口文档见 docs/TASK_AUTHORING.md。</p><button class="ghost" id="resetBtn">重新开店</button></dialog>
+
+<div class="overlay" id="overlay" hidden>
+  <button class="close" id="closeBtn" aria-label="关闭">×</button>
+  <div class="stage" id="stage"></div>
+</div>
+
+<dialog class="card-detail" id="cardDetail" aria-labelledby="detailName">
+  <button class="close detail-close" id="detailClose" aria-label="关闭武将详情" autofocus>×</button>
+  <div class="detail-layout">
+    <div class="detail-art"><img id="detailImage" alt=""><p id="detailImageFallback" hidden>暂无立绘</p></div>
+    <section class="detail-body">
+      <p class="detail-eyebrow" id="detailPack"></p>
+      <h2 id="detailName"></h2>
+      <p class="detail-title" id="detailTitle"></p>
+      <p class="detail-stats" id="detailStats"></p>
+<button class="btn" id="battleFromDetail">使用此武将对战</button>
+      <h3>武将技能</h3>
+      <div id="detailSkills"></div>
+    </section>
+  </div>
+</dialog>
+
+<dialog class="battle-setup" id="battleSetup" aria-labelledby="battleSetupTitle">
+  <button class="close" id="battleSetupClose" aria-label="关闭对战准备">×</button>
+  <p class="detail-eyebrow">无名杀 · 原版打牌引擎</p>
+  <h2 id="battleSetupTitle">准备对战</h2>
+  <p class="battle-intro">KOF 三将接力：阵亡后交接手牌；BO3：单将三局两胜。每次仅双方各一将在场，使用原版出牌与技能引擎。</p>
+  <div id="battleEmpty" hidden><p>背包中还没有本期单挑将池内的武将。可以拆包、向街坊收卡，或先体验原版大厅。</p><button class="btn" id="battleGetCards">去开一包</button></div>
+  <div id="battleResume"></div><form id="battleForm"><label>比赛赛制<select id="battleMode"><option value="kof">KOF · 三将接力</option><option value="bo3">BO3 · 单将三局两胜</option></select></label><div class="battle-roster">
+    <label>我的先锋 / 主战<select id="battleGeneral" required></select></label><label class="kof-field">我的中坚<select id="battleGeneral2"></select></label><label class="kof-field">我的大将<select id="battleGeneral3"></select></label>
+    </div><div class="battle-roster"><label>AI 先锋 / 主战<select id="battleOpponent"></select></label><label class="kof-field">AI 中坚<select id="battleOpponent2"></select></label><label class="kof-field">AI 大将<select id="battleOpponent3"></select></label></div><div class="battle-roster-tools kof-field"><input id="rosterName" aria-label="阵容名称" placeholder="阵容名称" maxlength="30"><button type="button" class="btn plain" id="saveRoster">保存阵容</button><select id="savedRosters" aria-label="已保存阵容"><option value="">载入阵容…</option></select></div><label><input type="checkbox" id="battleRanked"> 报名周日店赛（需店赛牌桌，报名费在开始时扣除）</label>
+    <p class="battle-note" id="battleRulesNote">KOF 按登记顺序出场；接班继承剩余手牌，不额外摸 4 张。存活对手的血量和场面保留。参赛不消耗收藏。</p>
+    <button class="btn battle-start" id="battleStart" type="submit">进入牌桌</button>
+  </form>
+  <p class="battle-last" id="battleLast"></p>
+  <button class="btn plain" id="classicBattle">原版模式大厅</button>
+  <button class="btn plain" id="battleBtn" hidden>准备对战</button>
+  <p class="battle-note">原版大厅保留完整模式与选将设置，可自由体验全卡池。</p>
+  <p class="battle-note">引擎：无名杀 v1.11.6 · <a href="NONAME-LICENSE" target="_blank" rel="noopener">GPL-3.0 许可</a></p>
+</dialog>
+
+<section class="battle-screen" id="battleScreen" aria-label="无名杀对局" hidden>
+  <header class="battle-toolbar">
+    <button class="btn plain" id="battleBack">返回小店</button>
+    <strong id="battleHeading">正在准备牌桌</strong>
+    <span id="battleStatus" role="status">正在载入…</span>
+    <button class="btn battle-series-next" id="battleNext" hidden>开始下一局</button><button class="btn" id="battleRestart">认输本局</button>
+  </header>
+  <iframe id="battleFrame" title="无名杀原版对局" allow="autoplay; fullscreen"></iframe>
+</section>
+
+<footer class="credit">
+  数据与立绘来源：无名杀 v1.11.6（GPL-3.0）· github.com/libnoname/noname · 本页面仅作本地学习与原型验证
+</footer>
+
+<dialog class="management-dialog" id="managementPanel" aria-labelledby="managementTitle"><header><div><span class="panel-eyebrow">街 坊 与 小 店</span><h2 id="managementTitle">店主的另一页手账</h2><p class="management-muted">留意行情，帮街坊找卡，让小店慢慢长大。</p></div><button class="panel-close" id="managementClose" aria-label="关闭经营手账">×</button></header><nav class="management-tabs"><button data-manage-tab="news">营业报 / 店赛</button><button data-manage-tab="people">熟悉的街坊</button><button data-manage-tab="orders">预约 / 收卡</button><button data-manage-tab="upgrades">设施 / 员工</button><button data-manage-tab="ledger">库存账本</button><button data-manage-tab="balance">评分 / 出货 / 定价</button><button data-manage-tab="editor">模块编辑器</button></nav><section id="managementContent"></section></dialog>
+
+<dialog class="business-dialog save-history-dialog" id="saveHistoryDialog" aria-labelledby="saveHistoryTitle"><header><div><span class="panel-eyebrow">DAILY SAVE ARCHIVE</span><h2 id="saveHistoryTitle">按天存档 / 读档</h2><p>每天起点、打烊自动留档；手动档保存当前时刻。读取前先备份，原有后续天数不会被覆盖。</p></div><button class="panel-close" id="saveHistoryClose" aria-label="关闭存档档案">×</button></header><nav class="editor-tabs"><button class="active" data-history-filter="days">每日档案</button><button data-history-filter="backups">读档前备份</button></nav><div class="day-save-toolbar"><button class="btn" id="saveHistoryNow">保存当前时刻</button><label class="btn plain file-import">导入每日档案<input id="saveHistoryImport" type="file" accept=".json,application/json"></label></div><p id="saveHistoryMessage" role="status"></p><div id="saveHistoryList"></div><footer><p id="saveHistoryRetention"></p></footer></dialog>
+
+<script src="modules/registry.js"></script>
+<script src="modules/save-history.js"></script>
+<script src="modules/balance.js"></script>
+<script src="shop-state.js"></script>
+<script src="shop-tasks.js"></script>
+<script src="shop-business.js"></script>
+<script src="modules/ledger.js"></script>
+<script src="modules/inventory.js"></script>
+<script src="modules/market.js"></script>
+<script src="modules/upgrades.js"></script>
+<script src="modules/neighbors.js"></script>
+<script src="modules/tournaments.js"></script>
+<script src="modules/combat.js"></script>
+<script src="modules/boxes.js"></script>
+<script src="integration/task-extensions.js"></script>
+<script src="app.js"></script>
+<script src="battle.js"></script>
+<script src="vendor/phaser/phaser.min.js"></script>
+<script src="shop.js"></script>
+<script src="business-ui.js"></script>
+<script src="management-ui.js"></script>
+<script src="save-history-ui.js"></script>
+</body>
+</html>

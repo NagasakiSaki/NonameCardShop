@@ -20,16 +20,16 @@ export function createBattleMount(runtime){
     const url=new URL(engine.engineOrigin);
     const roster=match.mine.map(c=>c.generalId),opponentRoster=match.enemy.map(c=>c.generalId);
     for(const [key,value] of Object.entries({packer:1,match:match.gameId,parentOrigin:location.origin,general:roster[0],opponent:opponentRoster[0],duelMode:match.mode,roster:JSON.stringify(roster),opponentRoster:JSON.stringify(opponentRoster),first:match.first,initialHand:match.rules.initialHand,firstDrawPenalty:match.rules.firstDrawPenalty}))url.searchParams.set(key,String(value));
-    let disposed=false;
+    let disposed=false,cleanup;
     const listener=event=>{
       const message=event.data;
       if(disposed||event.origin!==engine.engineOrigin||event.source!==frame.contentWindow||message?.channel!=='noname-packer'||message.matchId!==match.gameId)return;
       if(['ready','replacement','result'].includes(message.type))runtime.trustedEngineEvent(matchId,message).catch(error=>console.warn('已忽略过期或非法引擎事件：',error.message));
     };
-    const dispose=()=>{if(disposed)return;disposed=true;window.removeEventListener('message',listener);frame.remove();active.delete(matchId);runtime.interrupt(matchId).finally(()=>runtime.pause.release(lease.leaseId)).catch(console.error);};
+    const dispose=()=>{if(disposed)return cleanup;disposed=true;window.removeEventListener('message',listener);frame.remove();active.delete(matchId);cleanup=runtime.interrupt(matchId).finally(()=>runtime.pause.release(lease.leaseId));return cleanup;};
     window.addEventListener('message',listener);active.set(matchId,dispose);container.replaceChildren(frame);frame.src=url.href;
     return {dispose};
   }
-  mount.disposeAll=()=>{for(const dispose of [...active.values()])dispose();};
+  mount.disposeAll=()=>Promise.all([...active.values()].map(dispose=>dispose()));
   return mount;
 }

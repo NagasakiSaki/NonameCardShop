@@ -8,6 +8,7 @@ import {validateMap,pathfind,moveActor,canStand} from './navigation.mjs';
 import {initialiseManagement,configureManagement,validateManagement,managementEffects,shelfUsed,upgradesView,purchaseUpgrade,ensureRegulars,tickManagement,peopleView,neighborAct} from './management.mjs';
 import {tickNpcTables,backgroundState} from './npc-tables.mjs';
 import {voidNpcMatch} from './matches.mjs';
+import {inventoryView,cardDetailView,ledgerView,retailView,marketView,archiveMeta} from './views.mjs';
 
 const tasks=[
   {taskId:'first-order',title:'第一次进货',metric:'ordered',target:3,reward:40,guide:'store.counter'},
@@ -31,6 +32,16 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
   }
   const listeners=new Set(),pauses=new Map(),quotes=new Map(),previews=new Map(),navigation=new Map(maps.map(m=>[m.mapId,validateMap(m)]));
   let connected=false,clientId,sessionId,seq=0,queue=Promise.resolve(),disconnected=false,lastInputSeq=-1,movement=null;
+  function normaliseActors(world){
+    const aliases={novice:'rookie',competitive:'competitor',casual:'passerby',premium:'bigspender'},occupied=new Set();
+    for(const actor of [world.player,...world.npcs]){
+      actor.appearanceId=aliases[actor.appearanceId]||actor.appearanceId;const map=navigation.get(actor.roomId);if(!map)continue;
+      const key=(x,y)=>`${actor.roomId}:${Math.floor(x/16)}:${Math.floor(y/16)}`;
+      if(!canStand(map,actor.x,actor.y)||occupied.has(key(actor.x,actor.y))){const points=[];for(let y=0;y<map.height;y++)for(let x=0;x<map.width;x++){const p={x:x*16+8,y:y*16+8};if(canStand(map,p.x,p.y)&&!occupied.has(key(p.x,p.y)))points.push(p);}points.sort((a,b)=>Math.hypot(a.x-actor.x,a.y-actor.y)-Math.hypot(b.x-actor.x,b.y-actor.y));if(points[0])Object.assign(actor,points[0]);}
+      occupied.add(key(actor.x,actor.y));actor.navVersion=map.navVersion;
+    }
+  }
+  normaliseActors(record.world);
   const serially=fn=>{const result=queue.then(fn);queue=result.catch(()=>{});return result;};
   const reasons=()=>[...pauses.values()].map(p=>({code:p.ownerId,label:p.reason}));
   const backgroundRunning=()=>connected&&!disconnected&&!record.world.clock.manualPaused&&!pauses.size&&['open','closing'].includes(record.world.clock.phase);
@@ -63,26 +74,27 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
       switch(name){
         case 'shop.snapshot':data=snapshot(w(),reasons());break;
         case 'catalog.list':data=catalogList(catalog,p);break;
-        case 'catalog.detail':{const c=catalog.byKey.get(p.cardKey);need(c,'NOT_FOUND','卡牌不存在。');data={...cardSummary(c),title:c.title,skills:clone(c.skills),power:clone(c.power),price:referencePrice(w(),catalog,c.cardKey),circulation:w().circulation[c.cardKey]||null,stats:['bo3','kof'].map(mode=>stats(c.cardKey,mode)),skillSourceAvailable:true};break;}
-        case 'inventory.list':data=inventoryList(w(),catalog,p);break;
+        case 'catalog.detail':{const c=catalog.byKey.get(p.cardKey);need(c,'NOT_FOUND','卡牌不存在。');data=cardDetailView(w(),catalog,c,['bo3','kof'].map(mode=>stats(c.cardKey,mode)));break;}
+        case 'inventory.list':data=p.grouped?inventoryView(w(),catalog,p):inventoryList(w(),catalog,p);break;
         case 'products.list':data=page(w().products.filter(x=>!p.themeId||x.themeId===p.themeId).map(productDTO),p);break;
         case 'products.quote':case 'market.quote':data=quote(p);break;
-        case 'supplier.orders':data=page(w().orders.filter(o=>!p.status||o.status===p.status).map(({product,...o})=>({...clone(o),product:productDTO(product)})),p);break;
+        case 'supplier.orders':data=page(w().orders.filter(o=>!p.status||o.status===p.status).map(({product,...o})=>({...clone(o),themeName:product.name,productVersion:product.productVersion,total:o.cost,product:productDTO(product)})),p);break;
+        case 'retail.list':data=retailView(w());break;
         case 'opening.preview':{const value=openingPreview(w(),p);data={...value,previewId:token(previews,value)};break;}
         case 'inventory.surplusPreview':{const value=surplusPreview(w(),catalog,p);data={...value,previewId:token(previews,value)};break;}
-        case 'market.list':data=page(w().listings.filter(l=>(p.status?l.status===p.status:l.status==='active')&&(!p.ownerId||l.ownerId===p.ownerId)).map(l=>({...clone(l),name:catalog.byKey.get(l.cardKey)?.name,printedRarity:w().items[l.inventoryRef]?.printedRarity})),p);break;
+        case 'market.list':data=marketView(w(),catalog,p);break;
         case 'cardStats.summary':data=stats(p.cardKey,p.mode);break;
         case 'room.snapshot':data={roomId:'battle-room',tables:w().tables.map((t,i)=>{const m=w().matches.find(m=>m.matchId===t.matchId);return {...clone(t),label:`${i+1} 号牌桌`,status:m?(m.status==='running'?'in-progress':'waiting'):t.reservation?'reserved':'idle',mode:m?.mode||'BO3 / KOF',seated:m?2:0,maxSeats:2,stake:{base:w().rules.baseStake,final:m?.stake||0},fee:managementEffects(w()).tableFee,rakeRate:w().rules.rake,note:m?.background?'NPC 真实引擎对战':null};}),matches:clone(w().matches),tableFee:managementEffects(w()).tableFee,rake:w().rules.rake,wageringEnabled:w().rules.wageringEnabled,note:'NPC 使用实际持有的流通卡；当前开放无赌注比赛。'};break;
         case 'combat.eligible':data={mode:p.mode||'bo3',slots:p.mode==='kof'?3:1,items:eligible(w(),catalog,p.ownerId||'player').map(i=>({...i,reasons:i.disabledReasons}))};break;
         case 'combat.preview':{const value=combatPreview(w(),catalog,p);data={...value,previewId:token(previews,value),lineup:value.mine,fee:value.tableFee,balance:w().wallet.available,rules:['实体副本锁定至整场结束','玩家参赛免该桌抽水','当前只开放无赌注比赛'],stakeProposal:{proposalId:value.stakeProposalId,multiplier:value.multiplier,base:w().rules.baseStake,final:value.stakeAmount,reason:value.explanation}};break;}
         case 'tasks.list':data=tasks.map(t=>({...t,progress:w().lifetime[t.metric]||0,completed:(w().lifetime[t.metric]||0)>=t.target,claimed:!!w().tasks[t.taskId]}));break;
-        case 'ledger.daily':data=p.day&&p.day!==w().clock.day?w().reports.find(r=>r.day===p.day)||null:{day:w().clock.day,...clone(w().daily),wallet:clone(w().wallet)};break;
-        case 'management.people':data=peopleView(w());break;
+        case 'ledger.daily':{const report=p.day&&p.day!==w().clock.day?w().reports.find(r=>r.day===p.day):null;need(!p.day||p.day===w().clock.day||report,'NOT_FOUND','该日没有已结日报。');data=ledgerView(w(),catalog,report);break;}
+        case 'management.people':data=peopleView(w(),catalog);break;
         case 'management.upgrades':data=upgradesView(w());break;
         case 'management.orders':data={items:[...w().orders.filter(o=>o.status!=='received').map(o=>({...clone(o),themeName:o.product.name,productVersion:o.product.productVersion,total:o.cost})),...(w().management?.requests||[]).filter(r=>['offered','accepted'].includes(r.status)).map(r=>({...clone(r),unit:'card',themeName:catalog.byKey.get(r.cardKey)?.name,productVersion:'单卡二级市场',total:r.amount}))]};break;
         case 'config.list':data={items:[{configId:'backend-rules',label:'全局评分、供货与经营',editable:true,text:JSON.stringify(w().rules,null,2)},...(w().management?[{configId:'backend-management',label:'设施、员工与街坊',editable:true,text:JSON.stringify(w().management.config,null,2)}]:[])],permissions:{canEdit:true,role:'owner'}};break;
         case 'config.validate':{const value=p.value??JSON.parse(p.draft||'null');if(p.configId==='backend-management')validateManagement(value);else validateRules(value);data={valid:true,parsed:value,warnings:[]};break;}
-        case 'saves.list':data=record.archives.filter(a=>(!p.day||a.day===p.day)&&(!p.branchId||a.branchId===p.branchId)).map(({world,...meta})=>clone(meta));break;
+        case 'saves.list':data=record.archives.filter(a=>(!p.day||a.day===p.day)&&(!p.branchId||a.branchId===p.branchId)).map(archiveMeta);break;
         case 'operations.get':{const op=record.requests[p.requestId||p.operationId];data=op?{status:op.result.ok?'succeeded':'failed',...clone(op)}:{status:'unknown'};break;}
         case 'world.maps':data=[...navigation.values()].map(clone);break;
         default:fail('UNSUPPORTED_QUERY',`尚未实现查询：${name}`);
@@ -142,13 +154,13 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
       }
       case 'supplier.receive':return receiveOrder(world,world.orders.find(o=>o.orderId===p.orderId));
       case 'boxes.unseal':return {inventoryRefs:(p.boxIds||[p.inventoryRef]).flatMap(ref=>{const i=playerItem(world,ref);need(!i.protected,'ITEM_LOCKED','卡盒受保护。');return unsealBox(world,i).map(p=>p.inventoryRef);})};
-      case 'opening.execute':{const preview=lookup(previews,input.previewId,'opening');need(preview.refs.length,'OUT_OF_STOCK','没有可拆卡包。');const result=executeOpening(world,preview);return {operationId:input.requestId,...result};}
+      case 'opening.execute':{const preview=lookup(previews,input.previewId,'opening');need(preview.refs.length,'OUT_OF_STOCK','没有可拆卡包。');const result=executeOpening(world,preview,catalog);return {operationId:input.requestId,...result};}
       case 'inventory.setProtection':{const i=item();need(!i.lock,'ITEM_LOCKED','被交易或比赛占用的物品不能改保护状态。');need(typeof p.protected==='boolean','INVALID_INPUT','保护开关不正确。');i.protected=p.protected;return {};}
       case 'inventory.discard':{const i=item();need(i.kind==='card'&&i.location==='collection'&&free(i),'ITEM_LOCKED','只能丢弃未保护、未占用的收藏卡。');i.location='trash';return {};}
-      case 'inventory.recover':{const selected=p.all?owned(world).filter(i=>i.location==='trash'):[item()];for(const i of selected){need(i.location==='trash','INVALID_STATE','该卡不在垃圾桶。');i.location='collection';}return {quantity:selected.length};}
+      case 'inventory.recover':{const selected=p.all?owned(world).filter(i=>i.location==='trash'):[item()];for(const i of selected){need(i.location==='trash','INVALID_STATE','该卡不在垃圾桶。');i.location='collection';}return {quantity:selected.length,recovered:selected.length};}
       case 'retail.list':{const i=item();need(['pack','box'].includes(i.kind)&&i.location==='stock'&&free(i),'INVALID_ITEM','正店只出售未锁定的密封包/盒。');const e=managementEffects(world);need(shelfUsed(world)+(i.kind==='box'?e.boxShelfUnits:1)<=e.shelfCapacity,'SHELF_FULL','零售货架空间不足，可升级货架。');i.location='retail';return {};}
-      case 'retail.withdraw':{const i=item();need(i.location==='retail'&&!i.lock,'ITEM_LOCKED','不能撤下该商品。');i.location='stock';return {};}
-      case 'retail.setPrice':{const i=item();need(i.location==='retail','INVALID_STATE','商品未在零售货架。');i.retailPrice=integer(p.amount,1,1000000);return {};}
+      case 'retail.withdraw':{const i=item();need(i.location==='retail'&&!i.lock,'ITEM_LOCKED','不能撤下该商品。');i.location='stock';return {withdrawn:1};}
+      case 'retail.setPrice':{const i=item();need(i.location==='retail','INVALID_STATE','商品未在零售货架。');i.retailPrice=integer(p.amount,1,1000000);return {unitAmount:i.retailPrice};}
       case 'market.listSurplus':return listSurplus(world,catalog,lookup(previews,input.previewId,'surplus'),p);
       case 'market.placeListing':{const i=item();return placeListing(world,catalog,i,integer(p.amount??referencePrice(world,catalog,i.cardKey),1,1000000));}
       case 'market.cancelListing':{const l=world.listings.find(l=>l.listingId===p.listingId&&l.ownerId==='player'&&l.status==='active');need(l,'NOT_FOUND','挂单不存在。');const i=playerItem(world,l.inventoryRef);i.location='collection';i.lock=null;l.status='cancelled';return {};}
@@ -172,10 +184,10 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
         const a=input.type==='saves.load'?next.archives.find(a=>a.id===p.archiveId):typeof p.content==='string'&&p.content.length<10000000?JSON.parse(p.content):null;
         need(a?.format==='noname-shop-world-save'&&a.version===2,'INVALID_SAVE','档案格式不支持。');validateWorld(a.world);validateRules(a.world.rules);
         for(const i of Object.values(a.world.items))need(['pack','box','card'].includes(i.kind)&&Number.isSafeInteger(i.cost)&&i.cost>=0&&(!i.cardKey||catalog.byKey.has(i.cardKey)),'INVALID_SAVE','库存数据不完整。');
-        saveArchive(next,'before-load');next.world=clone(a.world);initialiseManagement(next.world,managementConfig);ensureRegulars(next.world);next.world.player.actorId='actor:owner';next.world.branchId=id('branch');next.world.pendingEngineEvents=[];for(const m of next.world.matches)if(m.status==='running')m.status='interrupted';return {worldId:next.world.worldId,branchId:next.world.branchId};
+        saveArchive(next,'before-load');next.world=clone(a.world);initialiseManagement(next.world,managementConfig);ensureRegulars(next.world);next.world.player.actorId='actor:owner';normaliseActors(next.world);next.world.branchId=id('branch');next.world.pendingEngineEvents=[];for(const m of next.world.matches)if(m.status==='running')m.status='interrupted';return {worldId:next.world.worldId,branchId:next.world.branchId};
       }
       case 'world.changeRoom':{
-        const map=navigation.get(world.player.roomId),door=map?.anchors[p.anchorId];need(door?.targetRoom&&door?.targetAnchor,'NOT_FOUND','房间出口不存在。');need(Math.hypot(world.player.x-door.x,world.player.y-door.y)<=(door.radius||24),'NOT_IN_RANGE','请先走到门口。');const nextMap=navigation.get(door.targetRoom),anchor=nextMap?.anchors[door.targetAnchor];need(anchor,'NAVIGATION_UNAVAILABLE','目标地图尚未就绪。');world.player={...world.player,roomId:nextMap.mapId,navVersion:nextMap.navVersion,x:anchor.x,y:anchor.y,moving:false};movement=null;return clone(world.player);
+        const map=navigation.get(world.player.roomId),door=map?.anchors[p.anchorId];need(door?.targetRoom&&door?.targetAnchor,'NOT_FOUND','房间出口不存在。');need(Math.hypot(world.player.x-door.x,world.player.y-door.y)<=(door.radius||24),'NOT_IN_RANGE','请先走到门口。');const nextMap=navigation.get(door.targetRoom),anchor=door.targetSpawn||nextMap?.anchors[door.targetAnchor];need(nextMap&&anchor&&canStand(nextMap,anchor.x,anchor.y),'NAVIGATION_UNAVAILABLE','目标地图尚未就绪。');world.player={...world.player,roomId:nextMap.mapId,navVersion:nextMap.navVersion,x:anchor.x,y:anchor.y,moving:false};movement=null;return clone(world.player);
       }
       default:fail('UNSUPPORTED_COMMAND',`尚未实现操作：${input.type}`);
     }

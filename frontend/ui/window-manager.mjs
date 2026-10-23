@@ -7,6 +7,7 @@ export function createWindowManager({ host, mount, onChange } = {}) {
   let seq = 0;
 
   function notify() {
+    for(const [index,item]of stack.entries())item.handle.element.inert=index!==stack.length-1;
     if (typeof onChange === "function") onChange(stack.map((item) => item.id));
   }
 
@@ -74,6 +75,8 @@ export function createWindowManager({ host, mount, onChange } = {}) {
       busy = true;
       try {
         return await host.command(input);
+      } catch(error) {
+        return {ok:false,requestId:input.requestId,error:{code:'RESULT_UNKNOWN',message:'未收到确定结果，请用原操作号查询：'+error.message,retryable:true}};
       } finally {
         busy = false;
       }
@@ -103,6 +106,7 @@ export function createWindowManager({ host, mount, onChange } = {}) {
         for (const node of [].concat(nodes || [])) if (node) foot.append(node);
       },
       async refresh() {
+        if(closed)return;
         clear(body);
         try {
           await render(renderContext);
@@ -147,6 +151,7 @@ export function createWindowManager({ host, mount, onChange } = {}) {
     (async () => {
       try {
         lease = await host.pause.acquire({ ownerId: "window:" + key, reason: pauseReason || title || "打开窗口" });
+        if(closed){await host.pause.release(lease.leaseId);return;}
         leaseOk = true;
         note.textContent = "经营世界已暂停";
         note.classList.add("muted");

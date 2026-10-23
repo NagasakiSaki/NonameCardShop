@@ -20,8 +20,8 @@
     {"id":"stocker","name":"雇用补货员","description":"营业时每 30 游戏分钟自动补货，每种商品保留一包；每日工资 50。","costs":[500],"effect":"stocker","amount":1,"minDay":3,"dailyCost":50}
   ],
   "regulars":[
-    {"id":"student","name":"小林 · 学生玩家","appearanceId":"novice","initialWallet":400,"preferredGroup":"shu","orderRate":1.1,"offerRate":0.6,"dialogue":["想找些好上手的武将。","帮我留意蜀势力的卡吧。","准备好阵容，我也想来打牌。"]},
+    {"id":"student","name":"小林 · 学生玩家","appearanceId":"rookie","initialWallet":400,"preferredGroup":"shu","orderRate":1.1,"offerRate":0.6,"dialogue":["想找些好上手的武将。","帮我留意蜀势力的卡吧。","准备好阵容，我也想来打牌。"]},
     {"id":"collector","name":"许先生 · 收藏家","appearanceId":"collector","initialWallet":1500,"preferredGroup":"wei","orderRate":1.2,"offerRate":0.65,"dialogue":["我带着收藏清单来了。","最近有魏势力的好卡吗？","卡到了就通知我，不必着急。"]},
-    {"id":"duelist","name":"阿岚 · 对战爱好者","appearanceId":"competitive","initialWallet":800,"preferredGroup":"wu","orderRate":1.15,"offerRate":0.6,"dialogue":["组好将就去对战房吧。","先看看市场上能补什么卡。","低稀有度也可能打赢，得看配合。"]}
+    {"id":"duelist","name":"阿岚 · 对战爱好者","appearanceId":"competitor","initialWallet":800,"preferredGroup":"wu","orderRate":1.15,"offerRate":0.6,"dialogue":["组好将就去对战房吧。","先看看市场上能补什么卡。","低稀有度也可能打赢，得看配合。"]}
   ]
 }

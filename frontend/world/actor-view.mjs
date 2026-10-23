@@ -36,11 +36,12 @@ export class ActorView {
   sync(actors, { playerActorId } = {}) {
     const seen = new Set();
     for (const actor of actors) {
+      const appearance=this.scene.textures.exists('char-'+actor.appearanceId)?actor.appearanceId:'passerby';
       seen.add(actor.actorId);
       let entry = this.sprites.get(actor.actorId);
       if (!entry) {
         const shadow = this.scene.add.image(actor.x, actor.y, "shadow").setDepth(actor.y - 1).setAlpha(0.55);
-        const sprite = this.scene.add.sprite(actor.x, actor.y, "char-" + actor.appearanceId, 1);
+        const sprite = this.scene.add.sprite(actor.x, actor.y, "char-" + appearance, 1);
         sprite.setOrigin(12 / 24, 30 / 32);
         sprite.setDepth(actor.y);
         entry = { sprite, shadow, targetX: actor.x, targetY: actor.y, direction: actor.direction, moving: actor.moving, label: null };
@@ -60,7 +61,7 @@ export class ActorView {
       entry.direction = actor.direction;
       entry.moving = actor.moving;
       entry.activity = actor.activity;
-      const anim = (actor.moving ? "walk-" : "idle-") + actor.appearanceId + "-" + (DIRECTIONS[actor.direction] == null ? "down" : actor.direction);
+      const anim = (actor.moving ? "walk-" : "idle-") + appearance + "-" + (DIRECTIONS[actor.direction] == null ? "down" : actor.direction);
       if (entry.sprite.anims.currentAnim?.key !== anim) entry.sprite.play(anim, true);
       if (actor.actorId === playerActorId) entry.sprite.setDepth(actor.y + 1);
     }
