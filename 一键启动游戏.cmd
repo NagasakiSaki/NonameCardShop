@@ -14,5 +14,7 @@ if errorlevel 1 (
   )
 )
 echo 正在打开无名小店最新版……
-"%SHOP_NODE%" dev\start-game.mjs
-if errorlevel 1 pause
+"%SHOP_NODE%" dev\start-game.mjs %*
+set "SHOP_EXIT=%ERRORLEVEL%"
+if not "%SHOP_EXIT%"=="0" pause
+exit /b %SHOP_EXIT%
