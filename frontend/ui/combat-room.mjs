@@ -11,7 +11,7 @@ const STATUS_LABEL = {
 };
 
 export async function openCombat(app, options = {}) {
-  const state = { selectedTable: options.tableId || null, mode: "kof", picked: [], preview: null, mount: null, matchId: null, noStake: true,off:null };
+  const state = { selectedTable: options.tableId || null, mode: "kof", picked: [], preview: null, mount: null, matchId: null, noStake: true,off:null,controller:null };
 
   return app.windows.open({
     id: "combat",
@@ -21,6 +21,7 @@ export async function openCombat(app, options = {}) {
     pauseReason: "对战房",
     onClose: () => {
       state.off?.();state.off=null;
+      state.controller?.abort();
       if (state.mount) {
         Promise.resolve(state.mount.dispose()).catch(e=>app.toast('error','牌局视图关闭失败',e.message));
         state.mount = null;
@@ -34,7 +35,8 @@ export async function openCombat(app, options = {}) {
         return;
       }
       const room = rooms.data;
-      if(!state.off){state.off=app.host.subscribe(event=>{if(event.type==='battleStatusChanged'&&state.matchId&&event.data?.matchId===state.matchId&&event.data.status!=='running')ctx.refresh();});}
+      state.controller?.abort();state.controller=new AbortController();
+      if(!state.off){state.off=app.host.subscribe(event=>{if(event.type!=='battleStatusChanged'||!state.matchId||event.data?.matchId!==state.matchId)return;if(event.data.status!=='running')ctx.refresh();else {const button=ctx.element.querySelector('[data-bout-surrender]');if(button)button.disabled=event.data.lastReadyGameId!==event.data.gameId;}});}
       if(state.mount){await state.mount.dispose();state.mount=null;}
       const active=(room.matches||[]).find(m=>!m.background&&m.status!=='finished');
       if(active){state.matchId=active.matchId;state.selectedTable=active.tableId;}
@@ -174,9 +176,9 @@ export async function openCombat(app, options = {}) {
               el("span", { class: "stat-row__label", text: "对手稀有度" }),
               el("span", { class: "stat-row__value", text: ["N", "R", "SR", "SSR"].map((rarity) => rarity + " " + (preview.opponent.raritySummary[rarity] || 0)).join(" / ") }),
             ]) : null,
-            el("div", { class: "stat-row" }, [el("span", { class: "stat-row__label", text: preview.noStake ? "赌注" : "NPC 提议倍数" }), el("span", { class: "stat-row__value", text: preview.noStake ? "无赌注（只付开桌费）" : "×" + preview.stakeProposal.multiplier })]),
+            el("div", { class: "stat-row" }, [el("span", { class: "stat-row__label", text: preview.noStake ? "赌注" : "NPC 提议倍数" }), el("span", { class: "stat-row__value", text: preview.noStake ? "无赌注" : "×" + preview.stakeProposal.multiplier })]),
             el("div", { class: "stat-row" }, [el("span", { class: "stat-row__label", text: "基础注 → 最终注" }), el("span", { class: "stat-row__value", text: app.formatMoney(preview.stakeProposal.base) + " → " + app.formatMoney(preview.stakeProposal.final) })]),
-            el("div", { class: "stat-row" }, [el("span", { class: "stat-row__label", text: "开桌费" }), el("span", { class: "stat-row__value", text: app.formatMoney(preview.fee) })]),
+            el("div", { class: "stat-row" }, [el("span", { class: "stat-row__label", text: "店主开桌费 / 对手桌费" }), el("span", { class: "stat-row__value", text: app.formatMoney(preview.fee)+' / '+app.formatMoney(preview.opponentFee??preview.fee) })]),
             el("div", { class: "stat-row" }, [el("span", { class: "stat-row__label", text: "可用余额" }), el("span", { class: "stat-row__value", text: app.formatMoney(preview.balance) })]),
             el("p", { class: "small muted", text: "倍数理由：" + preview.stakeProposal.reason }),
             el("p", { class: "small muted", text: "规则：" + preview.rules.join("；") }),
@@ -226,18 +228,21 @@ export async function openCombat(app, options = {}) {
         el("div", { style: { display: "flex", gap: "8px", marginTop: "8px", flexWrap: "wrap" } }, [
           el("button", {
             class: "btn btn--sm", type: "button", text: "挂载牌局视图",
-            onclick: async () => {
+            onclick: async event => {
               if(!state.matchId){app.toast('error','尚未登记','请先确认参赛');return;}
+              const restore=busyButton(event.currentTarget,'载入中…');
               try{
               if(state.mount)await state.mount.dispose();
               const container = document.getElementById("battle-mount");
               container.replaceChildren();
-              state.mount = await ctx.host.battle.mount({ container, matchId: state.matchId });
-              }catch(e){app.toast('error','牌局载入失败',e.message);ctx.refresh();}
+              state.mount = await ctx.host.battle.mount({ container, matchId: state.matchId,signal:state.controller.signal });
+              }catch(e){if(!ctx.handle.closed&&e.code!=='MOUNT_CANCELLED'&&e.name!=='AbortError'){app.toast('error','牌局载入失败',e.message);ctx.refresh();}}finally{restore();}
             },
           }),
           el("button", {
             class: "btn btn--sm btn--danger", type: "button", text: "本局认输",
+            'data-bout-surrender':'true',
+            disabled:match?.status!=='running'||match?.lastReadyGameId!==match?.gameId,
             onclick: async () => {
               const response = await ctx.submit({ requestId: newRequestId("surrender"), type: "combat.surrender", payload: { matchId: state.matchId,scope:'bout' } });
               if (!response.ok) {
@@ -250,14 +255,15 @@ export async function openCombat(app, options = {}) {
             },
           }),
           el('button',{class:'btn btn--sm',text:'整场认输',onclick:async()=>{const r=await ctx.submit({requestId:newRequestId('match-surrender'),type:'combat.surrender',payload:{matchId:state.matchId,scope:'match'}});if(!r.ok)app.toast('error',r.error.code,r.error.message);else ctx.refresh();}}),
-          match?.status==='prepared'?el('button',{class:'btn btn--sm',text:'取消未开局比赛',onclick:async()=>{const r=await ctx.submit({requestId:newRequestId('match-cancel'),type:'combat.cancel',payload:{matchId:match.matchId}});if(!r.ok)app.toast('error',r.error.code,r.error.message);else ctx.refresh();}}):null,
+          match&&!match.serviceRecognized&&!match.results?.length?el('button',{class:'btn btn--sm',text:'取消未开局比赛',onclick:async()=>{const r=await ctx.submit({requestId:newRequestId('match-cancel'),type:'combat.cancel',payload:{matchId:match.matchId}});if(!r.ok)app.toast('error',r.error.code,r.error.message);else ctx.refresh();}}):null,
           el("button", {
             class: "btn btn--sm btn--ghost", type: "button", text: "回主店",
             onclick: () => { app.navigateScene("store"); ctx.handle.close(); },
           }),
         ]),
-        el("p", { class: "small muted", text: match?`BO3 ${match.wins}:${match.losses} · ${match.status}；待下一局时重新挂载。关窗只中断视图，重开对战房可继续。`:'确认参赛后可挂载真实牌局。' }),
+        el("p", { class: "small muted", text: match?`${match.mode==='kof'?'KOF':'BO3'} ${match.wins}:${match.losses} · ${match.status}；待下一局时重新挂载。关窗只中断视图，重开对战房可继续。`:'确认参赛后可挂载真实牌局。' }),
       ]));
+      if(match?.error)body.append(el('p',{class:'note-card',text:match.error}));
 
       ctx.setFooter([el("button", { class: "btn btn--ghost", type: "button", text: "关闭", onclick: () => ctx.handle.close() })]);
       }

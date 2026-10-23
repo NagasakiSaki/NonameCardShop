@@ -13,6 +13,7 @@ export function validateRules(r){
   need(r.modeWeights?.bo3>=0&&r.modeWeights?.kof>=0&&Math.abs(r.modeWeights.bo3+r.modeWeights.kof-1)<1e-8,'INVALID_CONFIG','模式权重合计必须为 1。');
   need(r.wageringEnabled===false,'FEATURE_UNAVAILABLE','当前仅开放无赌注比赛；完整引擎恢复完成前不能启用下注。');
   if(r.npcAutoBattles!==undefined)need(typeof r.npcAutoBattles==='boolean','INVALID_CONFIG','NPC 自动对战开关不正确。');
+  for(const key of ['npcSinglePriceCeiling','npcSealedPriceCeiling'])if(r[key]!==undefined)need(Number.isFinite(r[key])&&r[key]>=1&&r[key]<=3,'INVALID_CONFIG',`${key} 必须在 1～3 之间。`);
   for(const key of ['npcMatchIntervalMinutes','npcMatchCooldownMinutes','npcRoundLimit'])if(r[key]!==undefined)need(Number.isSafeInteger(r[key])&&r[key]>=10&&r[key]<=1440,'INVALID_CONFIG',`${key} 超出支持范围。`);
   return r;
 }

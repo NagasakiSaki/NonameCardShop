@@ -31,6 +31,8 @@
   "maxDays":30,
   "npcIntervalMinutes":22,
   "npcInitialWallet":1500,
+  "npcSinglePriceCeiling":1.4,
+  "npcSealedPriceCeiling":1.4,
   "npcDailyIncome":300,
   "maxNpcs":12,
   "priceDailyLimit":0.15,

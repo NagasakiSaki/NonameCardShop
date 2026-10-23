@@ -8,14 +8,17 @@ export function eligible(w,catalog,ownerId='player'){
     const c=catalog.byKey.get(i.cardKey),reasons=[];
     if(!w.circulation[i.cardKey])reasons.push({code:'NOT_IN_CIRCULATION',message:'该卡种尚未被售出开包或有效进入市场。'});
     if(!free(i))reasons.push({code:'ITEM_LOCKED',message:'副本受保护或被交易/其他比赛占用。'});
+    if(i.location!=='collection')reasons.push({code:'NOT_IN_COLLECTION',message:'参赛副本必须在收藏中；请先捡回垃圾桶里的卡。'});
     const blocked=w.rules.compatibilityBlocks[c?.generalId];if(blocked)reasons.push({code:'SKILL_INCOMPATIBLE',message:blocked});
     return {inventoryRef:i.inventoryRef,cardKey:i.cardKey,generalId:c?.generalId,name:c?.name,rarity:c?.currentRarity,eligible:!reasons.length,disabledReasons:reasons,reviewStatus:c?.reviewStatus};
   });
 }
 export function combatPreview(w,catalog,p){
+  need(w.clock.phase==='open','SHOP_CLOSED','只在营业中接受新比赛登记。');
+  need(!w.matches.some(m=>!m.background&&m.status!=='finished'),'MATCH_ACTIVE','请先完成或取消当前的玩家比赛。');
   const mode=p.mode||'bo3',n=mode==='bo3'?1:mode==='kof'?3:0;
   need(n,'INVALID_INPUT','只支持 KOF 与 BO3。');
-  const npc=p.opponentId?w.npcs.find(n=>n.actorId===p.opponentId):w.npcs.find(npc=>!npc.currentMatchId&&eligible(w,catalog,npc.actorId).filter(i=>i.eligible).length>=n);need(npc&&!npc.currentMatchId,'NOT_FOUND','暂时没有实际持卡且空闲的顾客可组成该赛制阵容。');
+  const npc=p.opponentId?w.npcs.find(n=>n.actorId===p.opponentId):w.npcs.find(npc=>!npc.currentMatchId&&npc.wallet.available>=managementEffects(w).tableFee&&new Set(eligible(w,catalog,npc.actorId).filter(i=>i.eligible).map(i=>i.generalId)).size>=n);need(npc&&!npc.currentMatchId,'NOT_FOUND','暂时没有实际持卡、付得起桌费且空闲的顾客可组成该赛制阵容。');
   const choose=(owner,refs)=>{
     const options=eligible(w,catalog,owner).filter(i=>i.eligible),team=[];
     if(refs){need(Array.isArray(refs)&&refs.length===n,'INVALID_INPUT','阵容人数不正确。');for(const ref of refs){const found=options.find(i=>i.inventoryRef===ref);need(found,'NOT_ELIGIBLE','阵容包含不具备流通资格、被锁定或未持有的牌。');team.push(found);}}
@@ -97,10 +100,15 @@ export function engineMessage(w,matchId,message){
   }
   return clone(m);
 }
-export function surrender(w,matchId,scope){const m=matchById(w,matchId);need(m.status!=='finished','INVALID_STATE','比赛已结算。');if(m.mode==='bo3'&&scope==='bout'&&m.status==='running')return engineMessage(w,matchId,{matchId:m.gameId,type:'result',result:'loss'});finish(w,m,'loss');return clone(m);}
+export function surrender(w,matchId,scope){
+  const m=matchById(w,matchId);need(m.status!=='finished','INVALID_STATE','比赛已结算。');
+  if(scope==='bout'){need(m.status==='running'&&m.lastReadyGameId===m.gameId,'NOT_READY','当前没有已开始的小局，请先挂载牌局。');if(m.mode==='bo3')return engineMessage(w,matchId,{matchId:m.gameId,type:'result',result:'loss'});}
+  if(!m.serviceRecognized&&!m.results.length)return cancelPrepared(w,matchId);
+  finish(w,m,'loss');return clone(m);
+}
 
 export function cancelPrepared(w,matchId){
-  const m=matchById(w,matchId);need(m.status==='prepared','INVALID_STATE','只有尚未开局的比赛可以取消退款。');
+  const m=matchById(w,matchId);need(m.status!=='finished'&&!m.serviceRecognized&&!m.results.length,'INVALID_STATE','只有尚未真正开局的比赛可以取消退款。');
   pay(w,ownerId(m,'mine'),m.stake);pay(w,ownerId(m,'enemy'),m.stake);w.wallet.escrowLiability-=m.stake*2;refundService(w,m);
   m.status='finished';m.result='cancelled';releaseMatch(w,m);
   note(w,'matchCancelled',{matchId});return clone(m);

@@ -65,7 +65,7 @@ const dayOne=(await query('saves.list')).find(a=>a.day===1&&a.slot==='start');
 await command('saves.load',{archiveId:dayOne.id});assert.equal((await query('shop.snapshot')).clock.day,1);assert.equal(Object.keys(host.inspect().world.items).length,0);assert.notEqual(host.inspect().world.branchId,dayOne.branchId);
 await host.disconnect();
 const restored=await createRuntime({source,rules,repository});await restored.connect({contractVersion:'card-shop-ui/1.0',clientId:'reconnect'});
-assert.deepEqual(await restored.command(request),first,'completed request remains idempotent after reconnect/branch load');await restored.disconnect();
+assert.equal((await restored.command(request)).error.code,'STALE_OPERATION','old-branch success must not masquerade as a new-branch action');await restored.disconnect();
 const closingWorld=createWorld(rules);closingWorld.products=products;closingWorld.clock.phase='open';closingWorld.clock.minute=1199;
 const closing=await createRuntime({source,rules,repository:memoryRepository({schemaVersion:2,revision:0,world:closingWorld,archives:[],requests:{},legacyResetDone:true})});
 await closing.connect({contractVersion:'card-shop-ui/1.0',clientId:'closing'});await closing.advance(1);assert.equal((await closing.query('shop.snapshot')).data.clock.phase,'closing');

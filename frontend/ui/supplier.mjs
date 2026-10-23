@@ -86,7 +86,7 @@ export async function openSupplier(app, options = {}) {
             el("div", { class: "toolbar" }, [
               el("label", { class: "field" }, [
                 el("span", { class: "field__label", text: "数量" }),
-                el("input", { class: "input", type: "number", min: "1", max: "40", value: "2", style: { width: "90px" }, "data-role": "qty" }),
+                el("input", { class: "input", type: "number", min: "1", max: "20", value: "2", style: { width: "90px" }, "data-role": "qty" }),
               ]),
               el("label", { class: "field" }, [
                 el("span", { class: "field__label", text: "单位" }),
@@ -111,6 +111,7 @@ export async function openSupplier(app, options = {}) {
                   const old = card.querySelector(".quote-box");
                   if (old) old.remove();
                   const q = quote.data;
+                  const creditToggle=el('input',{type:'checkbox',disabled:!(q.supplierCreditAvailable>0)});
                   const box = el("div", { class: "note-card quote-box", style: { borderColor: "rgba(232,182,74,0.5)" } }, [
                     el("p", { class: "note-card__title", text: "报价 · " + (q.expired ? "已过期" : "有效") }),
                     el("div", { class: "stat-row" }, [el("span", { class: "stat-row__label", text: "单价" }), el("span", { class: "stat-row__value", text: app.formatMoney(q.unitAmount) })]),
@@ -118,6 +119,8 @@ export async function openSupplier(app, options = {}) {
                     el("div", { class: "stat-row" }, [el("span", { class: "stat-row__label", text: "手续费" }), el("span", { class: "stat-row__value", text: app.formatMoney(q.feeAmount) })]),
                     el("div", { class: "stat-row" }, [el("span", { class: "stat-row__label", text: "应付合计" }), el("span", { class: "stat-row__value", text: app.formatMoney(q.totalDebit) })]),
                     el("p", { class: "small muted", text: q.explanation.join(" · ") }),
+                    q.supplierCreditAvailable!==undefined?el('label',{class:'small'},[creditToggle,` 允许使用供应商信用（剩余 ${app.formatMoney(q.supplierCreditAvailable)}）`]):null,
+                    q.creditExplanation?el('p',{class:'small muted',text:q.creditExplanation}):null,
                     q.validUntil ? el("p", { class: "small muted", text: "有效期至第 " + q.validUntil.day + " 天 " + Math.floor(q.validUntil.minute / 60) + ":" + String(q.validUntil.minute % 60).padStart(2, "0") }) : null,
                     el("button", {
                       class: "btn btn--primary", type: "button", text: q.expired ? "报价已过期，重新获取" : "确认下单并冻结价格",
@@ -128,7 +131,7 @@ export async function openSupplier(app, options = {}) {
                           requestId: newRequestId("order"),
                           type: "supplier.placeOrder",
                           quoteId: q.quoteId,
-                          payload: { productId: product.productId, quantity: q.quantity, unit: q.unit, credit: false },
+                          payload: { productId: product.productId, quantity: q.quantity, unit: q.unit, credit: creditToggle.checked },
                         });
                         restore2();
                         if (!order.ok) {

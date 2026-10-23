@@ -28,7 +28,7 @@ try{
     const [{createRuntime},{memoryRepository},{createWorld},{buildCatalog},{publishProducts},{createBattleMount}]=await Promise.all([
       import('/modules/backend/runtime.mjs'),import('/modules/backend/storage.mjs'),import('/modules/backend/world.mjs'),import('/modules/backend/catalog.mjs'),import('/modules/backend/products.mjs'),import('/integration/host-battle.mjs')]);
     const source=await fetch('/data/cards.json').then(r=>r.json()),rules=await fetch('/data/backend-rules.json').then(r=>r.json()),world=createWorld(rules),catalog=buildCatalog(source,rules);world.products=publishProducts(catalog,rules,1);
-    world.npcs.push({actorId:'npc-test',name:'测试对手',appearanceId:'competitive',wallet:{available:1500},roomId:'store',x:200,y:200});
+    world.clock.phase='open';world.npcs.push({actorId:'npc-test',name:'测试对手',appearanceId:'competitive',wallet:{available:1500},roomId:'store',x:200,y:200});
     for(const [ref,ownerId,generalId] of [['mine','player','caocao'],['enemy','npc-test','zhangliao']]){
       const card=catalog.byId.get(generalId);world.items[ref]={inventoryRef:ref,ownerId,kind:'card',cardKey:card.cardKey,printedRarity:card.currentRarity,printVersion:'test',location:'collection',protected:false,lock:null,cost:10};world.circulation[card.cardKey]={source:'test-fixture',day:1};
     }

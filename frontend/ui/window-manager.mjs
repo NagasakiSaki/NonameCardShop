@@ -34,6 +34,7 @@ export function createWindowManager({ host, mount, onChange } = {}) {
     let leaseOk = false;
     let closed = false;
     let busy = false;
+    let rendering=Promise.resolve();
 
     const titleNode = el("h2", { class: "window__title", text: title || "窗口" });
     const subNode = el("span", { class: "window__sub", text: subtitle || "" });
@@ -105,8 +106,8 @@ export function createWindowManager({ host, mount, onChange } = {}) {
         foot.append(note);
         for (const node of [].concat(nodes || [])) if (node) foot.append(node);
       },
-      async refresh() {
-        if(closed)return;
+      refresh() {
+        const run=async()=>{if(closed)return;
         clear(body);
         try {
           await render(renderContext);
@@ -114,6 +115,7 @@ export function createWindowManager({ host, mount, onChange } = {}) {
           console.error("[window] 渲染失败", error);
           body.append(el("p", { class: "small", style: { color: "#f0a08a" }, text: "窗口渲染失败：" + error.message }));
         }
+        };rendering=rendering.then(run,run);return rendering;
       },
     };
 

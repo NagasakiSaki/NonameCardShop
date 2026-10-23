@@ -56,6 +56,7 @@ try{
   for(let round=1;round<=2;round++){
     await page.getByRole('button',{name:'挂载牌局视图',exact:true}).click();
     await until(async()=>{const m=(await query('room.snapshot')).matches.find(m=>!m.background&&m.status==='running');return m?.lastReadyGameId===m?.gameId&&m;},'engine ready',25000);
+    assert.equal(await page.getByRole('button',{name:'本局认输',exact:true}).isEnabled(),true);
     const frame=await page.locator('#battle-mount iframe').elementHandle().then(h=>h.contentFrame());
     await frame.evaluate(async()=>window.__integrationEngine=await import('/noname.js'));
     await frame.waitForFunction(()=>__integrationEngine._status.imchoosing,null,{timeout:30000});

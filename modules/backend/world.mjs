@@ -1,4 +1,4 @@
-import {id, clone, serial} from './common.mjs';
+import {id, clone, serial, need} from './common.mjs';
 export function createWorld(rules){
   const world={schemaVersion:2,worldId:id('world'),branchId:id('branch'),revision:0,serial:0,seed:Math.floor(Math.random()*4294967296),rules:clone(rules),
     clock:{day:1,minute:480,phase:'preparing',speed:1,manualPaused:false},wallet:{available:rules.startingCash,debt:0,escrowLiability:0},
@@ -13,7 +13,15 @@ export function validateWorld(world){
   if(world?.schemaVersion!==2||!world.worldId||!world.branchId||!world.items||!world.clock||!world.wallet||!Array.isArray(world.products))throw new Error('新版世界存档格式不完整，未覆盖原数据。');
   if(!Number.isSafeInteger(world.clock.day)||world.clock.day<1||!Number.isFinite(world.clock.minute)||world.clock.minute<0||world.clock.minute>=1440||!['preparing','open','closing','closed'].includes(world.clock.phase)||![1,2,4].includes(world.clock.speed))throw new Error('营业日期或时钟状态不合法。');
   if(!Number.isSafeInteger(world.wallet.available)||world.wallet.available<0||!Number.isSafeInteger(world.wallet.escrowLiability)||world.wallet.escrowLiability<0)throw new Error('资金账目不合法。');
-  for(const key of ['orders','listings','npcs','matches'])if(!Array.isArray(world[key]))throw new Error(`世界缺少 ${key}。`);
+  for(const key of ['orders','listings','npcs','matches','tables','reports','log'])need(Array.isArray(world[key]),'INVALID_SAVE',`世界缺少列表 ${key}。`);
+  for(const key of ['items','circulation','stats','daily','lifetime','tasks','prices'])need(world[key]&&typeof world[key]==='object'&&!Array.isArray(world[key]),'INVALID_SAVE',`世界缺少对象 ${key}。`);
+  need(Number.isSafeInteger(world.seed)&&world.seed>=0&&world.seed<=4294967295&&Number.isSafeInteger(world.serial)&&world.serial>=0,'INVALID_SAVE','存档随机源或实物序号不合法。');
+  need(world.player&&typeof world.player.roomId==='string'&&Number.isFinite(world.player.x)&&Number.isFinite(world.player.y),'INVALID_SAVE','店长位置数据不完整。');
+  for(const key of ['goods','cogs','service','fees','operating','purchases'])need(Number.isSafeInteger(world.daily[key])&&world.daily[key]>=0,'INVALID_SAVE',`日账 ${key} 不合法。`);
+  need(Number.isSafeInteger(world.daily.matchNet),'INVALID_SAVE','对局净额不合法。');
+  for(const value of Object.values(world.prices))need(Number.isSafeInteger(value)&&value>0,'INVALID_SAVE','单卡参考价必须是正整数。');
+  for(const value of Object.values(world.lifetime))need(Number.isSafeInteger(value)&&value>=0,'INVALID_SAVE','累计进度不合法。');
+  for(const value of Object.values(world.stats))need(value&&['wins','losses','draws'].every(k=>Number.isSafeInteger(value[k])&&value[k]>=0),'INVALID_SAVE','战绩统计不合法。');
   if(!Number.isSafeInteger(world.wallet.debt)||world.wallet.debt<0)throw new Error('欠款数据不合法。');
   const owners=new Set(['player',...world.npcs.map(n=>n.actorId)]);
   for(const n of world.npcs)if(!Number.isSafeInteger(n.wallet?.available)||n.wallet.available<0)throw new Error('NPC 余额不合法。');

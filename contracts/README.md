@@ -5,6 +5,7 @@
 ## 公共规则
 
 - command 输入 `{requestId,type,payload?,quoteId?,previewId?}`；requestId 仅允许字母/数字/下划线/连字符、最长 150 字符。同一操作重试必须复用 ID 与参数；成功结果在新世界数据库中持久化。
+- 成功记录绑定世界与分支。读档后重试旧分支操作会返回 STALE_OPERATION，补查为 stale，避免把旧结果当成新分支成交。
 - query/command 返回 `{ok:true,revision,data}` 或 `{ok:false,error:{code,message,retryable}}`；业务失败不能当空列表。
 - `operations.get({requestId})` 返回 `{status,result?}`，成功原响应在 result，业务负载在 `result.data`。开包补查读取 `result.data.opening`。
 - 金额为整数游戏币，currency.minorUnit=1。概率为 0～1，平均张数允许小数。
@@ -39,6 +40,8 @@
 - world.input 的 inputSeq 单调递增，仅为移动意图；不能通过 roomId 让角色瞬移。跨房先到出口，command `world.changeRoom({anchorId})`，确认权威 actorsUpdated 后换场景。
 - combat.register 返回顶层 matchId 及 match 兼容对象；battle.mount 只接已登记玩家比赛。玩家/后台引擎配置隔离，dispose 可重复调用并返回清理 Promise。
 - BO3 小局结束为 awaitingNext；重新 mount 或 combat.continue 后开始下一局。关窗中断当前无赌注小局，重开界面可继续。只有一整场结束才计一份胜率。
+- 每名玩家最多一场未完成比赛。新登记只在营业中；未真正开局撤退退款，不推进比赛任务；本局认输必须等引擎 ready。
 - saves.list 返回元数据数组（UI 可归一成 items），含 id/archiveId/saveId、branchId/branch、day/minute/slot、status='readable'。
 - saves.create 返回 archiveId；load 输入 archiveId；export 返回 fileName/mimeType/content；import 输入 content 文件文本。前端负责文件选择/下载，后端负责格式校验、备份、全量恢复和建立分支。
+- NPC 后台比赛不阻止存读档：档案保留已完成比分、费用和实际持卡，读档后当前小局重开，并返回 recoveryNote。玩家仍在运行的小局先关闭视图或完成。日档按 ID 独立保存，旧内嵌格式自动转存，不需清档。
 - capabilities.wagering=false 是当前真实能力限制，不能通过 UI、配置或导入存档绕过。

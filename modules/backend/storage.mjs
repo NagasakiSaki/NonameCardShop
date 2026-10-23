@@ -10,7 +10,7 @@ export function memoryRepository(initial=null){
 }
 
 export function browserRepository(indexedDB=globalThis.indexedDB){
-  let opening;
+  let opening,archiveIds=new Set();
   function open(){
     if(!opening)opening=new Promise((resolve,reject)=>{
       if(!indexedDB)return reject(new Error('当前环境不支持新版存档所需的 IndexedDB。'));
@@ -23,13 +23,26 @@ export function browserRepository(indexedDB=globalThis.indexedDB){
     return opening;
   }
   return {
-    async read(){const db=await open();return new Promise((resolve,reject)=>{const tx=db.transaction('worlds'),r=tx.objectStore('worlds').get('active');r.onsuccess=()=>resolve(r.result||null);r.onerror=()=>reject(r.error);});},
+    async read(){const db=await open();return new Promise((resolve,reject)=>{
+      const tx=db.transaction('worlds'),store=tx.objectStore('worlds'),r=store.get('active');let value=null,missing=false;
+      r.onsuccess=()=>{value=r.result||null;archiveIds=new Set();if(!value?.archiveStorage)return;
+        value.archives=value.archives.map(meta=>({...meta}));
+        for(const [index,meta]of value.archives.entries()){const request=store.get(`archive:${meta.id}`);request.onsuccess=()=>{if(!request.result?.world){missing=true;return;}value.archives[index]=request.result;archiveIds.add(meta.id);};}
+      };
+      tx.oncomplete=()=>missing?reject(Object.assign(new Error('日档内容缺失，未覆盖当前世界。'),{code:'STORAGE_ERROR'})):resolve(value);
+      tx.onabort=()=>reject(tx.error||new Error('存档读取失败。'));tx.onerror=()=>{};
+    });},
     async commit(record,expected){
       const db=await open();
       return new Promise((resolve,reject)=>{
         const tx=db.transaction('worlds','readwrite'),store=tx.objectStore('worlds'),read=store.get('active');let conflict=false;
-        read.onsuccess=()=>{if((read.result?.revision??null)!==expected){conflict=true;tx.abort();return;}store.put(clone(record),'active');};
-        tx.oncomplete=resolve;
+        const nextIds=new Set(record.archives.map(a=>a.id));
+        read.onsuccess=()=>{if((read.result?.revision??null)!==expected){conflict=true;tx.abort();return;}
+          for(const archive of record.archives)if(!archiveIds.has(archive.id))store.put(archive,`archive:${archive.id}`);
+          for(const key of archiveIds)if(!nextIds.has(key))store.delete(`archive:${key}`);
+          const active={...record,archiveStorage:1,archives:record.archives.map(({world,...meta})=>meta)};store.put(active,'active');
+        };
+        tx.oncomplete=()=>{archiveIds=nextIds;resolve();};
         tx.onabort=()=>reject(Object.assign(new Error(conflict?'存档已被另一会话更新，请重新连接。':'存档写入失败，本次操作未提交。'),{code:conflict?'CONCURRENT_UPDATE':'STORAGE_ERROR'}));
         tx.onerror=()=>{};
       });

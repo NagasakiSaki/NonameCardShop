@@ -16,10 +16,13 @@ export function referencePrice(w,catalog,cardKey){
   return c.issuanceValue;
 }
 export function updatePrices(w,catalog){
+  const supplies=new Map(),trades=new Map();
+  for(const i of Object.values(w.items))if(i.location==='market')supplies.set(i.cardKey,(supplies.get(i.cardKey)||0)+1);
+  for(const e of w.log)if(e.type==='secondaryTradeCompleted'&&e.day>=w.clock.day-3)trades.set(e.cardKey,(trades.get(e.cardKey)||0)+1);
   for(const c of catalog.cards){
     const modes=['bo3','kof'].map(mode=>{const s=w.stats[`${c.cardKey}|${mode}`]||{wins:0,losses:0,draws:0};const n=s.wins+s.losses+s.draws;return clamp(1+2*n/(n+40)*((s.wins+.5*s.draws+10)/(n+20)-.5),.7,1.4);});
-    const supplied=Object.values(w.items).filter(i=>i.cardKey===c.cardKey&&i.location==='market').length;
-    const demand=1+Math.min(.15,(w.log.filter(e=>e.type==='secondaryTradeCompleted'&&e.cardKey===c.cardKey&&e.day>=w.clock.day-3).length)/(10+supplied*5));
+    const supplied=supplies.get(c.cardKey)||0;
+    const demand=1+Math.min(.15,(trades.get(c.cardKey)||0)/(10+supplied*5));
     const target=Math.round(c.issuanceValue*(modes[0]*.65+modes[1]*.35)*demand),previous=w.prices[c.cardKey]||c.issuanceValue;
     w.prices[c.cardKey]=Math.max(1,Math.round(clamp(target,previous*(1-w.rules.priceDailyLimit),previous*(1+w.rules.priceDailyLimit))));
   }
@@ -98,10 +101,12 @@ export function purchaseRetail(w,npc,item){
   for(const packet of packets)for(const card of openPacket(w,packet))enterCirculation(w,card.cardKey,'customerPackOpened',packet.inventoryRef);
   note(w,'packSaleCompleted',{buyerId:npc.actorId,amount:item.retailPrice,productId:item.productId});
 }
+function acceptableListing(w,catalog,npc,l){return l.status==='active'&&l.ownerId!==npc.actorId&&l.unitAmount<=npc.wallet.available&&l.unitAmount<=referencePrice(w,catalog,l.cardKey)*(w.rules.npcSinglePriceCeiling??1.4);}
+function acceptableRetail(w,npc,i){const suggested=i.suggestedRetail??i.cost/(1-w.rules.retailMargin);return i.location==='retail'&&!i.lock&&i.retailPrice<=npc.wallet.available&&i.retailPrice<=suggested*(w.rules.npcSealedPriceCeiling??1.4);}
 function customerPurchase(w,catalog,npc){
-  const listing=w.listings.find(l=>l.status==='active'&&l.ownerId!==npc.actorId&&l.unitAmount<=npc.wallet.available);
+  const listing=w.listings.find(l=>acceptableListing(w,catalog,npc,l));
   if(listing)settleTrade(w,listing,npc.actorId);
-  else {const item=owned(w).filter(i=>i.location==='retail'&&!i.lock&&i.retailPrice<=npc.wallet.available).sort((a,b)=>a.retailPrice-b.retailPrice)[0];if(item)purchaseRetail(w,npc,item);}
+  else {const item=owned(w).filter(i=>acceptableRetail(w,npc,i)).sort((a,b)=>a.retailPrice-b.retailPrice)[0];if(item)purchaseRetail(w,npc,item);}
   const cards=owned(w,npc.actorId).filter(i=>i.kind==='card'&&free(i));
   if(cards.length>3&&w.listings.filter(l=>l.ownerId===npc.actorId&&l.status==='active').length<2){const item=cards.at(-1);placeListing(w,catalog,item,referencePrice(w,catalog,item.cardKey));}
 }
@@ -127,7 +132,7 @@ export function tickEconomy(w,catalog,{map=null,seconds=0}={}){
   else {const available=w.npcs.filter(n=>!n.trip&&!n.currentMatchId&&n.roomId==='store');if(!available.length)return;npc=available[Math.floor(random(w)*available.length)];}
   if(map){
     const entry=map.anchors['store.entry'];if((npc.activity==='idle'||!npc.navVersion)&&entry){npc.x=entry.x;npc.y=entry.y;}
-    const hasMarket=w.listings.some(l=>l.status==='active'&&l.ownerId!==npc.actorId&&l.unitAmount<=npc.wallet.available);
+    const hasMarket=w.listings.some(l=>acceptableListing(w,catalog,npc,l));
     const anchor=map.anchors[hasMarket?'store.secondaryMarket':'store.counter'];
     if(anchor){npc.trip={stage:'checkout',path:pathfind(map,npc,anchor)};npc.navVersion=map.navVersion;npc.activity='walking';return;}
   }

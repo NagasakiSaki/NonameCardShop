@@ -41,7 +41,7 @@ export async function openDaySaves(app) {
                 if (old) old.remove();
                 const box = el("div", { class: "note-card confirm-load" }, [
                   el("p", { class: "note-card__title", text: "读取第 " + row.day + " 天（" + row.branch + "）？" }),
-                  el("p", { class: "small muted", text: "当前未保存的进度会丢失。读取由 Host 恢复，前端不还原原始存档 JSON。" }),
+                  el("p", { class: "small muted", text: row.recoveryNote || "读取前会备份当前世界，再建立新分支。中断牌局只能从当前小局开头继续。" }),
                   el("div", { style: { display: "flex", gap: "8px" } }, [
                     el("button", {
                       class: "btn btn--primary", type: "button", text: "确认读取",

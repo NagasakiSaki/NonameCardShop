@@ -37,6 +37,6 @@ export interface CardShopHost {
   subscribe(listener:(event:HostEvent)=>void):()=>void;
   pause:{acquire(input:{ownerId:string;reason:string}):Promise<PauseLease>;release(leaseId:string):Promise<void>};
   world:{input(input:{sessionId:string;inputSeq:number;roomId:string;navVersion:string;direction?:'up'|'down'|'left'|'right';destination?:{x:number;y:number};stop?:boolean}):void};
-  battle:{mount(input:{container:HTMLElement;matchId:string}):Promise<{dispose():void|Promise<void>}>};
+  battle:{mount(input:{container:HTMLElement;matchId:string;signal?:AbortSignal}):Promise<{dispose():void|Promise<void>}>};
   disconnect():Promise<void>;
 }

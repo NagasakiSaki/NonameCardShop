@@ -49,7 +49,7 @@ export function manufacturePack(world,product){
 function pickRarity(world,weights){let n=pickUnit(world);for(const r of RARITIES){n-=weights[r];if(n<1e-12&&weights[r]>0)return r;}return RARITIES.findLast(r=>weights[r]>0);}
 function pickUnit(world){world.seed=(Math.imul(world.seed,1664525)+1013904223)>>>0;return world.seed/4294967296;}
 export function makeSealed(world,product,unit,cost,ownerId='player'){
-  const item={inventoryRef:serial(world,'item'),kind:unit,productId:product.productId,productVersion:product.productVersion,ownerId,location:'stock',cost,protected:false,lock:null,retailPrice:product.prices[unit].retail,
+  const item={inventoryRef:serial(world,'item'),kind:unit,productId:product.productId,productVersion:product.productVersion,ownerId,location:'stock',cost,protected:false,lock:null,retailPrice:product.prices[unit].retail,suggestedRetail:product.prices[unit].retail,
     spec:{cardsPerPack:5,packsPerBox:24,boxCounts:clone(product.boxCounts),guarantees:clone(product.guarantees)}};
   if(unit==='box')item.packets=manufactureBox(world,product);else item.cards=manufacturePack(world,product);
   world.items[item.inventoryRef]=item;return item;
@@ -57,7 +57,7 @@ export function makeSealed(world,product,unit,cost,ownerId='player'){
 export function unsealBox(world,item){
   need(item.kind==='box'&&item.location==='stock'&&!item.lock,'ITEM_LOCKED','只能拆开仓库中未锁定的卡盒。');
   const total=item.packets.length;
-  const packets=item.packets.map((cards,i)=>({inventoryRef:serial(world,'item'),kind:'pack',productId:item.productId,productVersion:item.productVersion,ownerId:item.ownerId,location:'stock',cost:Math.floor(item.cost/total)+(i<item.cost%total?1:0),cards:clone(cards),boxId:item.inventoryRef,protected:false,lock:null,retailPrice:Math.ceil(item.retailPrice/total),spec:clone(item.spec)}));
+  const packets=item.packets.map((cards,i)=>({inventoryRef:serial(world,'item'),kind:'pack',productId:item.productId,productVersion:item.productVersion,ownerId:item.ownerId,location:'stock',cost:Math.floor(item.cost/total)+(i<item.cost%total?1:0),cards:clone(cards),boxId:item.inventoryRef,protected:false,lock:null,retailPrice:Math.ceil(item.retailPrice/total),suggestedRetail:Math.ceil((item.suggestedRetail??item.cost/(1-world.rules.retailMargin))/total),spec:clone(item.spec)}));
   delete world.items[item.inventoryRef];for(const packet of packets)world.items[packet.inventoryRef]=packet;return packets;
 }
 export function openPacket(world,packet){
