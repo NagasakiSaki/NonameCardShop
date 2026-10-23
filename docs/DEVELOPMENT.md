@@ -76,6 +76,8 @@ npm run publish:private
 
 必须用 `npm run publish:private` 导出并推送，原仓库的直接push入口已禁用，防止误传原包缓存。导出历史的提交ID与原本地历史不同，消息和版本标签对应保留；发布脚本先确认目标为私有仓库，再检查所有导出对象没有 Home 路径。私有远程同时保存所需Git历史与LFS对象；迁机克隆后先 `git lfs pull` 再初始化。磁盘备份包含隐藏 `.git` 与 `.git/lfs/objects`，单独 `git bundle` 不含LFS大文件。个人存档另用游戏导出备份。
 
+发布需要 GitHub CLI（`gh`）已登录且有该私有仓库权限；只做本地开发不需要。首次素材上传较大，进度保存在忽略的 `.local/lfs-upload-progress.log`，后续提交只传新增对象。
+
 ## 发布与模块扩展
 
 开发入口直接运行源码；安装包是构建时的快照，改代码不会更新已经生成的 exe。打包命令自动设置 NSIS 所需的 `ELECTRON_BUILDER_7Z_FILTER=BCJ`，使用锁定依赖并禁用自动发布；输出在 `desktop/dist`。现有 0.7.1 安装包保留，开发工具改动后发布需重新构建。

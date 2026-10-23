@@ -24,8 +24,8 @@ window.ShopDaySaves=(()=>{
     if(restoring||!DATA||saveLoadError||!save?.business)return;
     try{
       const campaign=ensureCampaign(save),key=`${campaign}:${save.business.day}`,phase=save.business.phase;
-      if(seenDay!==key){const first=seenDay===null;seenDay=key;seenPhase=phase;void enqueue(capture(save,'start',{reason:first?'first-seen':'day-start'}),{ifAbsent:true}).catch(()=>{});if(phase==='closed')void enqueue(capture(save,'close')).catch(()=>{});}
-      else if(phase==='closed'&&seenPhase!=='closed'){seenPhase=phase;void enqueue(capture(save,'close')).catch(()=>{});}
+      if(seenDay!==key){const first=seenDay===null;seenDay=key;seenPhase=phase;void enqueue(capture(save,'start',{reason:first?'first-seen':'day-start'}),{ifAbsent:true}).catch(()=>{});if(phase==='closed')void enqueue(capture(save,'close'),{ifAbsent:true}).catch(()=>{});}
+      else if(phase==='closed'&&seenPhase!=='closed'){seenPhase=phase;void enqueue(capture(save,'close'),{ifAbsent:true}).catch(()=>{});}
       else seenPhase=phase;
     }catch(error){lastError=error;status(`按天存档失败：${error.message}`,true);}
   }
