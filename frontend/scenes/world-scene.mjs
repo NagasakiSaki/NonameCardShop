@@ -58,5 +58,5 @@ export function createWorldSceneClass(){return class WorldScene extends Phaser.S
 };}
 export function worldSceneZoom(width,height,mapWidth=480,mapHeight=320){
   const fit=Math.min((Number(width)||720)/mapWidth,(Number(height)||480)/mapHeight);
-  return Math.max(.75,Math.min(3,Math.floor(fit*4)/4));
+  return Math.max(1,Math.min(3,Math.floor(fit*4)/4));
 }

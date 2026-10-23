@@ -2,6 +2,7 @@
 // No Host, engine, IndexedDB, save or game-clock dependencies.
 import {colorizeLayer,portraitLayers} from './appearance-data.mjs';
 import {portraitDetails,portraitHairExtensions,composeWalk,walkLayerNames} from './pixel-customization.mjs';
+import {renderStanding} from './standing-portrait.mjs';
 export {PRESETS} from './appearance-data.mjs';
 const cache=new Map();
 const canvas=(w,h)=>Object.assign(document.createElement('canvas'),{width:w,height:h});
@@ -12,6 +13,7 @@ function tint(source,colors,config,file){
   ctx.putImageData(im,0,0);return c;
 }
 export async function renderPortrait(config){
+  if(config.band){const sources={};for(const [file]of portraitLayers(config)){const im=await loadImage('./sources/portraits/'+file),part=canvas(im.width,im.height),ctx=part.getContext('2d');ctx.drawImage(im,0,0);sources[file]=ctx.getImageData(0,0,im.width,im.height);}const im=renderStanding(config,sources),out=canvas(im.width,im.height);out.getContext('2d').putImageData(new ImageData(im.data,im.width,im.height),0,0);return out;}
   const out=canvas(96,96),ctx=out.getContext('2d');ctx.imageSmoothingEnabled=false;
   const layers=portraitLayers(config);
   for(const [file,colors] of layers){const im=await loadImage('./sources/portraits/'+file),part=tint(im,colors,config,file);ctx.drawImage(part,(96-im.width)/2,(96-im.height)/2);if(file.startsWith('hair/back/')){const data=ctx.getImageData(0,0,96,96);portraitHairExtensions(data,config);ctx.putImageData(data,0,0);}}

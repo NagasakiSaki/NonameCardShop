@@ -79,8 +79,9 @@ check("角色图片尺寸符合清单，且均为透明背景", () => {
     if (sheetAlpha.transparent < 500) throw new Error(id + " 图集不是透明底");
     if (sheetAlpha.opaque < 2000) throw new Error(id + " 图集内容过少");
     const portrait = readImage(entry.portrait);
-    const portraitSize=entry.columns===8?96:256;
-    if (portrait.width !== portraitSize || portrait.height !== portraitSize) throw new Error(id + " 头像尺寸与格式不符");
+    const portraitSize=entry.portraitSize||(entry.columns===8?[96,96]:[256,256]);
+    if (portrait.width !== portraitSize[0] || portrait.height !== portraitSize[1]) throw new Error(id + " 立绘尺寸与格式不符");
+    if(entry.avatar){const avatar=readImage(entry.avatar);if(avatar.width!==96||avatar.height!==96)throw new Error(id+' 列表头像应为 96×96');}
     const portraitAlpha = alphaStats(portrait);
     if (portraitAlpha.transparent < 800) throw new Error(id + " 立绘不是透明底");
     info.push({ 角色: id, 图集颜色数: colorsOf(sheet), 立绘颜色数: colorsOf(portrait), 图集字节: sheet.bytes, 立绘字节: portrait.bytes });

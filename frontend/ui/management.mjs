@@ -1,5 +1,5 @@
 // frontend/ui/management.mjs — 保留的经营入口：设施升级、员工与街坊、待处理订单。
-import { el, clear, stateView, errorView, newRequestId, busyButton } from "./components.mjs";
+import { el, clear, stateView, errorView, newRequestId, busyButton, imgWithFallback } from "./components.mjs";
 
 export async function openManagement(app) {
   const state = { tab: "upgrades" };
@@ -95,7 +95,9 @@ export async function openManagement(app) {
 
         node.append(el("h4", { class: "section__title", text: "街坊" }));
         for (const neighbor of result.data.neighbors) {
-          node.append(el("div", { class: "note-card" }, [
+          const appearance=result.data.customers?.find(n=>n.regularId===neighbor.personId)?.appearanceId||neighbor.portrait,portrait=app.manifest.characters[appearance]?.portrait;
+          node.append(el("div", { class: "note-card person-card" }, [
+            portrait?imgWithFallback(portrait,neighbor.name+'立绘','person-card__portrait'):null,
             el("p", { class: "note-card__title" }, [neighbor.name, el("span", { class: "chip", text: "关系 " + neighbor.relation })]),
             el("p", { class: "small", text: "“" + neighbor.dialog + "”" }),
             neighbor.pending ? el("div", { class: "note-card", style: { background: "rgba(232,182,74,0.06)" } }, [

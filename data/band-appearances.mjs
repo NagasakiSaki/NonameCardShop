@@ -1,15 +1,16 @@
 // Appearance only. Never use this registry to decide wallets, personalities or card preferences.
 // Official visual references were inspected on 2026-10-24; the PNGs are redrawn/composed pixel studies.
+import {CHARACTER_AUDIT} from './character-audit.mjs';
 export const BANDS=[
   {id:'mygo',name:'MyGO!!!!!'}, {id:'avemujica',name:'Ave Mujica'},
-  {id:'yumemita',name:'梦限大みゅーたいぷ'}, {id:'millsage',name:'millsage'},
+  {id:'yumemita',name:'夢限大みゅーたいぷ'}, {id:'millsage',name:'millsage'},
   {id:'ikka-dumb-rock',name:'一家Dumb Rock!'}
 ];
 const p=(id,band,characterName,slug,hair,iris,base,front,back,clothes,cloth,walkStyle,accessory,features,extra={})=>({
-  id:'bd-'+id,band,characterName,name:characterName,role:'顾客',
+  id:'bd-'+id,band,previousDisplayName:characterName,characterName:CHARACTER_AUDIT[id].officialName.replaceAll(' ',''),name:CHARACTER_AUDIT[id].officialName.replaceAll(' ',''),role:'顾客',
   reference:`https://bang-dream.com/artist/${band}/${slug}/`,
-  base,front,back,clothes,eyes:'female01',mouth:'neutral02',hair,cloth,iris,
-  secondary:['#fff7ee','#d4d6dc','#777e94'],walkHair:'hair-silver',walkStyle,accessory,features,...extra
+  base,front,back,clothes,eyes:'female01',mouth:'neutral02',hair,cloth,originalCloth:[...cloth],iris,
+  secondary:['#fff7ee','#d4d6dc','#777e94'],walkHair:'hair-silver',walkStyle,accessory,features,...extra,...CHARACTER_AUDIT[id],features:CHARACTER_AUDIT[id].notes,portraitVersion:3
 });
 export const BAND_APPEARANCES=[
   p('tomori','mygo','高松灯','takamatsu-tomori',['#a5a2a5','#6e6872','#393641'],['#e6a1ae','#a55e76','#543b53'],'female10','female06','short01','female11',['#f3f5ef','#b5c7c9','#5c768a'],'bob',null,'灰褐短鲍勃、细碎刘海、粉红眼、白灰青色外套'),

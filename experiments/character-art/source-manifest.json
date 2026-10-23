@@ -899,5 +899,28 @@
     "registry": "../../data/band-appearances.mjs",
     "referenceOnly": true,
     "officialImagesRedistributed": false
+  },
+  "characterReferenceAudit": "../../data/character-reference-audit.json",
+  "originalCodeLayers": [
+    "pixel-customization.mjs",
+    "standing-portrait.mjs"
+  ],
+  "outputSizes": {
+    "walkFrame": [
+      64,
+      64
+    ],
+    "walkSheet": [
+      512,
+      256
+    ],
+    "standingPortrait": [
+      128,
+      224
+    ],
+    "avatar": [
+      96,
+      96
+    ]
   }
 }

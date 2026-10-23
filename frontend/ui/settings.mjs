@@ -44,10 +44,14 @@ export async function openSettings(app) {
       if(skins.ok)body.append(el('section',{class:'section'},[
         el('h4',{class:'section__title',text:'店长换装'}),
         el('p',{class:'small muted',text:'外观免费切换并随存档保存，只改变店长外形。'}),
+        ...skins.data.items.filter(s=>s.selected).map(s=>el('div',{class:'skin-standing-preview'},[
+          imgWithFallback(app.manifest.characters[s.appearanceId].portrait,s.name+'完整立绘','skin-standing-preview__image'),
+          el('div',{},[el('strong',{text:s.name}),el('p',{class:'small muted',text:s.group||'基础外观'}),el('p',{class:'small muted',text:'当前外观 · 角色姓名用于形象参考，店长身份保持不变。'})])
+        ])),
         el('div',{class:'skin-grid'},skins.data.items.map(s=>el('button',{
           class:'skin-option'+(s.selected?' is-selected':''),type:'button','aria-label':'换装：'+s.name,'aria-pressed':String(s.selected),'data-skin':s.appearanceId,
           onclick:async event=>{const restore=busyButton(event.currentTarget,'换装中…');const r=await ctx.submit({requestId:newRequestId('skin'),type:'player.setSkin',payload:{appearanceId:s.appearanceId}});restore();if(!r.ok)app.toast('error',r.error.code,r.error.message);else {await app.refreshSnapshot();ctx.refresh();}}
-        },[imgWithFallback(app.manifest.characters[s.appearanceId].portrait,s.name,'skin-option__portrait'),el('strong',{text:s.name}),el('span',{class:'small muted',text:s.selected?'当前穿着':s.group||'基础外观'})])))
+        },[imgWithFallback(app.manifest.characters[s.appearanceId].avatar||app.manifest.characters[s.appearanceId].portrait,s.name,'skin-option__portrait'),el('strong',{text:s.name}),el('span',{class:'small muted',text:s.selected?'当前穿着':s.group||'基础外观'})])))
       ]));
 
       body.append(el("div", { class: "section" }, [

@@ -1,8 +1,12 @@
 {
-  "version": 2,
-  "portraitSize": [
+  "version": 3,
+  "avatarSize": [
     96,
     96
+  ],
+  "standingSize": [
+    128,
+    224
   ],
   "walkFrame": [
     64,
@@ -42,6 +46,11 @@
       ],
       "walkHair": "hair",
       "portrait": "keeper-portrait-96.png",
+      "avatar": "keeper-portrait-96.png",
+      "portraitSize": [
+        96,
+        96
+      ],
       "sheet": "keeper-walk.png",
       "frameWidth": 64,
       "frameHeight": 64,
@@ -97,6 +106,11 @@
       ],
       "walkHair": "hair-silver",
       "portrait": "collector-portrait-96.png",
+      "avatar": "collector-portrait-96.png",
+      "portraitSize": [
+        96,
+        96
+      ],
       "sheet": "collector-walk.png",
       "frameWidth": 64,
       "frameHeight": 64,
@@ -152,6 +166,11 @@
       ],
       "walkHair": "hair-pink",
       "portrait": "regular-portrait-96.png",
+      "avatar": "regular-portrait-96.png",
+      "portraitSize": [
+        96,
+        96
+      ],
       "sheet": "regular-walk.png",
       "frameWidth": 64,
       "frameHeight": 64,
@@ -183,8 +202,9 @@
     {
       "id": "bd-tomori",
       "band": "mygo",
-      "characterName": "高松灯",
-      "name": "高松灯",
+      "previousDisplayName": "高松灯",
+      "characterName": "高松燈",
+      "name": "高松燈",
       "role": "顾客",
       "reference": "https://bang-dream.com/artist/mygo/takamatsu-tomori/",
       "base": "female10",
@@ -203,6 +223,11 @@
         "#b5c7c9",
         "#5c768a"
       ],
+      "originalCloth": [
+        "#f3f5ef",
+        "#b5c7c9",
+        "#5c768a"
+      ],
       "iris": [
         "#e6a1ae",
         "#a55e76",
@@ -216,8 +241,26 @@
       "walkHair": "hair-silver",
       "walkStyle": "bob",
       "accessory": null,
-      "features": "灰褐短鲍勃、细碎刘海、粉红眼、白灰青色外套",
-      "portrait": "bd-tomori-portrait-96.png",
+      "features": "灰褐色短鲍勃与碎齐刘海；灰粉眼；白灰连帽外套、青色块、黄色扣件、黑短裤。",
+      "officialName": "高松 燈",
+      "hairShape": "rounded-bob",
+      "costume": "mygo-hoodie",
+      "eyeShape": "round",
+      "notes": "灰褐色短鲍勃与碎齐刘海；灰粉眼；白灰连帽外套、青色块、黄色扣件、黑短裤。",
+      "walkLegwear": "warmers",
+      "lowerBody": "黑短裤、黑色腿套、白青运动鞋。",
+      "shoePalette": [
+        "#faf8f1",
+        "#a9cbd5",
+        "#617b92"
+      ],
+      "portraitVersion": 3,
+      "portrait": "bd-tomori-standing-128x224.png",
+      "avatar": "bd-tomori-portrait-96.png",
+      "portraitSize": [
+        128,
+        224
+      ],
       "sheet": "bd-tomori-walk.png",
       "frameWidth": 64,
       "frameHeight": 64,
@@ -249,11 +292,12 @@
     {
       "id": "bd-anon",
       "band": "mygo",
-      "characterName": "千早爱音",
-      "name": "千早爱音",
+      "previousDisplayName": "千早爱音",
+      "characterName": "千早愛音",
+      "name": "千早愛音",
       "role": "顾客",
       "reference": "https://bang-dream.com/artist/mygo/chihaya-anon/",
-      "base": "female02",
+      "base": "female08",
       "front": "female05",
       "back": "long02",
       "clothes": "female04",
@@ -265,6 +309,11 @@
         "#8e567e"
       ],
       "cloth": [
+        "#46444c",
+        "#2c2d38",
+        "#171f2b"
+      ],
+      "originalCloth": [
         "#46444c",
         "#2c2d38",
         "#171f2b"
@@ -282,8 +331,25 @@
       "walkHair": "hair-silver",
       "walkStyle": "long",
       "accessory": "clip",
-      "features": "粉色长直发、侧分长刘海、蓝灰眼、黑色外套",
-      "portrait": "bd-anon-portrait-96.png",
+      "features": "粉色长直发、侧分；蓝灰眼；黑外套与黑内搭，青色腰侧饰边和金黄袖口。",
+      "officialName": "千早 愛音",
+      "hairShape": "straight-long",
+      "costume": "mygo-black-coat",
+      "notes": "粉色长直发、侧分；蓝灰眼；黑外套与黑内搭，青色腰侧饰边和金黄袖口。",
+      "walkLegwear": "dark",
+      "lowerBody": "黑色长外套尾摆、裸露膝部、深色长靴。",
+      "shoePalette": [
+        "#66606b",
+        "#383540",
+        "#252630"
+      ],
+      "portraitVersion": 3,
+      "portrait": "bd-anon-standing-128x224.png",
+      "avatar": "bd-anon-portrait-96.png",
+      "portraitSize": [
+        128,
+        224
+      ],
       "sheet": "bd-anon-walk.png",
       "frameWidth": 64,
       "frameHeight": 64,
@@ -315,8 +381,9 @@
     {
       "id": "bd-rana",
       "band": "mygo",
-      "characterName": "要乐奈",
-      "name": "要乐奈",
+      "previousDisplayName": "要乐奈",
+      "characterName": "要楽奈",
+      "name": "要楽奈",
       "role": "顾客",
       "reference": "https://bang-dream.com/artist/mygo/kaname-rana/",
       "base": "female10",
@@ -335,6 +402,11 @@
         "#292e38",
         "#171d2a"
       ],
+      "originalCloth": [
+        "#43464e",
+        "#292e38",
+        "#171d2a"
+      ],
       "iris": [
         "#e4c879",
         "#ad8e43",
@@ -348,13 +420,30 @@
       "walkHair": "hair-silver",
       "walkStyle": "bob",
       "accessory": null,
-      "features": "白银短发、轻侧分、左金右蓝异色瞳、黑色无袖上衣",
+      "features": "白银短发；画面左眼金色、右眼蓝色；黑高领无袖上衣，白青外套滑落肩部，黑色长裤和白底鞋。",
       "otherEye": [
         "#95d3e1",
         "#5685aa",
         "#334e74"
       ],
-      "portrait": "bd-rana-portrait-96.png",
+      "officialName": "要 楽奈",
+      "hairShape": "side-bob",
+      "costume": "mygo-offshoulder",
+      "notes": "白银短发；画面左眼金色、右眼蓝色；黑高领无袖上衣，白青外套滑落肩部，黑色长裤和白底鞋。",
+      "walkLegwear": "pants",
+      "lowerBody": "黑色长裤、白底运动鞋；不是短裤。",
+      "shoePalette": [
+        "#faf8f1",
+        "#c2cbd2",
+        "#6d788b"
+      ],
+      "portraitVersion": 3,
+      "portrait": "bd-rana-standing-128x224.png",
+      "avatar": "bd-rana-portrait-96.png",
+      "portraitSize": [
+        128,
+        224
+      ],
       "sheet": "bd-rana-walk.png",
       "frameWidth": 64,
       "frameHeight": 64,
@@ -386,8 +475,9 @@
     {
       "id": "bd-soyo",
       "band": "mygo",
-      "characterName": "长崎素世",
-      "name": "长崎素世",
+      "previousDisplayName": "长崎素世",
+      "characterName": "長崎そよ",
+      "name": "長崎そよ",
       "role": "顾客",
       "reference": "https://bang-dream.com/artist/mygo/nagasaki-soyo/",
       "base": "female02",
@@ -406,6 +496,11 @@
         "#a9c1c5",
         "#566d81"
       ],
+      "originalCloth": [
+        "#f0f3ee",
+        "#a9c1c5",
+        "#566d81"
+      ],
       "iris": [
         "#c0e1ef",
         "#7b9ab9",
@@ -419,8 +514,25 @@
       "walkHair": "hair-silver",
       "walkStyle": "wavy",
       "accessory": null,
-      "features": "浅棕长发、侧分、柔和卷尾、浅蓝眼、白青外套",
-      "portrait": "bd-soyo-portrait-96.png",
+      "features": "浅棕长发、侧分、柔和卷尾；浅蓝眼；白青外套、黄色肩带、腰间青绿格纹布与黑裙。",
+      "officialName": "長崎 そよ",
+      "hairShape": "soft-wave",
+      "costume": "mygo-waist-plaid",
+      "notes": "浅棕长发、侧分、柔和卷尾；浅蓝眼；白青外套、黄色肩带、腰间青绿格纹布与黑裙。",
+      "walkLegwear": "bare",
+      "lowerBody": "及小腿的黑裙与青绿格纹腰布、黄交叉饰带黑鞋。",
+      "shoePalette": [
+        "#6f6570",
+        "#36353f",
+        "#22232e"
+      ],
+      "portraitVersion": 3,
+      "portrait": "bd-soyo-standing-128x224.png",
+      "avatar": "bd-soyo-portrait-96.png",
+      "portraitSize": [
+        128,
+        224
+      ],
       "sheet": "bd-soyo-walk.png",
       "frameWidth": 64,
       "frameHeight": 64,
@@ -452,6 +564,7 @@
     {
       "id": "bd-taki",
       "band": "mygo",
+      "previousDisplayName": "椎名立希",
       "characterName": "椎名立希",
       "name": "椎名立希",
       "role": "顾客",
@@ -472,6 +585,11 @@
         "#a0cbd0",
         "#507e91"
       ],
+      "originalCloth": [
+        "#f0f3ed",
+        "#a0cbd0",
+        "#507e91"
+      ],
       "iris": [
         "#caaddb",
         "#9367b4",
@@ -485,8 +603,25 @@
       "walkHair": "hair-silver",
       "walkStyle": "long",
       "accessory": null,
-      "features": "深棕黑长发、整齐刘海、紫眼、白色青肩外套",
-      "portrait": "bd-taki-portrait-96.png",
+      "features": "深棕黑长直发、齐刘海；紫眼；白灰外套、青色肩部、黑色短裹裙及青色竖饰边、裸腿与运动鞋。",
+      "officialName": "椎名 立希",
+      "hairShape": "straight-long",
+      "costume": "mygo-wrap-skirt",
+      "notes": "深棕黑长直发、齐刘海；紫眼；白灰外套、青色肩部、黑色短裹裙及青色竖饰边、裸腿与运动鞋。",
+      "walkLegwear": "bare",
+      "lowerBody": "黑色短裹裙、青色边、裸腿、黑白运动鞋；不是长裙。",
+      "shoePalette": [
+        "#e1e4dc",
+        "#53656f",
+        "#303843"
+      ],
+      "portraitVersion": 3,
+      "portrait": "bd-taki-standing-128x224.png",
+      "avatar": "bd-taki-portrait-96.png",
+      "portraitSize": [
+        128,
+        224
+      ],
       "sheet": "bd-taki-walk.png",
       "frameWidth": 64,
       "frameHeight": 64,
@@ -518,8 +653,9 @@
     {
       "id": "bd-uika",
       "band": "avemujica",
-      "characterName": "三角初华",
-      "name": "三角初华",
+      "previousDisplayName": "三角初华",
+      "characterName": "三角初華",
+      "name": "三角初華",
       "role": "顾客",
       "reference": "https://bang-dream.com/artist/avemujica/misumi-uika/",
       "base": "female10",
@@ -538,6 +674,11 @@
         "#282630",
         "#191c28"
       ],
+      "originalCloth": [
+        "#46424d",
+        "#282630",
+        "#191c28"
+      ],
       "iris": [
         "#cfb6ed",
         "#9b75bf",
@@ -551,8 +692,25 @@
       "walkHair": "hair-silver",
       "walkStyle": "medium",
       "accessory": "ribbon",
-      "features": "浅金中短发、齐刘海、紫眼、黑金服饰与红袖口",
-      "portrait": "bd-uika-portrait-96.png",
+      "features": "浅金及肩发、齐刘海；紫眼；黑金束身衣、白蕾丝领、棕腰带、黑短裤、红色袖口。",
+      "officialName": "三角 初華",
+      "hairShape": "shoulder-bob",
+      "costume": "mujica-shorts",
+      "notes": "浅金及肩发、齐刘海；紫眼；黑金束身衣、白蕾丝领、棕腰带、黑短裤、红色袖口。",
+      "walkLegwear": "dark",
+      "lowerBody": "黑短裤、非对称条纹腿饰、黑金鞋、红里分片披尾。",
+      "shoePalette": [
+        "#b7a46c",
+        "#494047",
+        "#2b2934"
+      ],
+      "portraitVersion": 3,
+      "portrait": "bd-uika-standing-128x224.png",
+      "avatar": "bd-uika-portrait-96.png",
+      "portraitSize": [
+        128,
+        224
+      ],
       "sheet": "bd-uika-walk.png",
       "frameWidth": 64,
       "frameHeight": 64,
@@ -584,8 +742,9 @@
     {
       "id": "bd-mutsumi",
       "band": "avemujica",
-      "characterName": "若叶睦",
-      "name": "若叶睦",
+      "previousDisplayName": "若叶睦",
+      "characterName": "若葉睦",
+      "name": "若葉睦",
       "role": "顾客",
       "reference": "https://bang-dream.com/artist/avemujica/wakaba-mutsumi/",
       "base": "female08",
@@ -604,6 +763,11 @@
         "#351e2e",
         "#1d1b29"
       ],
+      "originalCloth": [
+        "#542f3f",
+        "#351e2e",
+        "#1d1b29"
+      ],
       "iris": [
         "#e4d795",
         "#af9f5d",
@@ -617,8 +781,25 @@
       "walkHair": "hair-silver",
       "walkStyle": "long",
       "accessory": "beret",
-      "features": "浅绿长发、齐刘海、金眼、酒红贝雷帽与黑红裙",
-      "portrait": "bd-mutsumi-portrait-96.png",
+      "features": "浅绿长发、齐刘海；金色眼；酒红贝雷帽、红色束腰内层、黑金外层与灰色纱袖。",
+      "officialName": "若葉 睦",
+      "hairShape": "straight-long",
+      "costume": "mujica-red-corset",
+      "notes": "浅绿长发、齐刘海；金色眼；酒红贝雷帽、红色束腰内层、黑金外层与灰色纱袖。",
+      "walkLegwear": "dark",
+      "lowerBody": "黑红长外层与深色腿饰、长靴。",
+      "shoePalette": [
+        "#75666b",
+        "#3f3743",
+        "#272934"
+      ],
+      "portraitVersion": 3,
+      "portrait": "bd-mutsumi-standing-128x224.png",
+      "avatar": "bd-mutsumi-portrait-96.png",
+      "portraitSize": [
+        128,
+        224
+      ],
       "sheet": "bd-mutsumi-walk.png",
       "frameWidth": 64,
       "frameHeight": 64,
@@ -650,12 +831,13 @@
     {
       "id": "bd-umiri",
       "band": "avemujica",
-      "characterName": "八幡海铃",
-      "name": "八幡海铃",
+      "previousDisplayName": "八幡海铃",
+      "characterName": "八幡海鈴",
+      "name": "八幡海鈴",
       "role": "顾客",
       "reference": "https://bang-dream.com/artist/avemujica/yahata-umiri/",
-      "base": "female02",
-      "front": "female10",
+      "base": "female08",
+      "front": "female05",
       "back": "medium03",
       "clothes": "female04",
       "eyes": "female01",
@@ -666,6 +848,11 @@
         "#272e32"
       ],
       "cloth": [
+        "#513946",
+        "#302834",
+        "#1a1e2b"
+      ],
+      "originalCloth": [
         "#513946",
         "#302834",
         "#1a1e2b"
@@ -683,8 +870,25 @@
       "walkHair": "hair-silver",
       "walkStyle": "medium",
       "accessory": "red-ties",
-      "features": "黑绿中长发、两侧束发、青绿眼、暗红披肩",
-      "portrait": "bd-umiri-portrait-96.png",
+      "features": "黑绿中长发、侧刘海及两侧红发绳；青绿眼；画面左侧暗红肩披、黑金上衣、深灰下装。",
+      "officialName": "八幡 海鈴",
+      "hairShape": "shoulder-layered",
+      "costume": "mujica-cape",
+      "notes": "黑绿中长发、侧刘海及两侧红发绳；青绿眼；画面左侧暗红肩披、黑金上衣、深灰下装。",
+      "walkLegwear": "dark",
+      "lowerBody": "不对称深色腿饰、棕黑色高靴与披尾。",
+      "shoePalette": [
+        "#9c8464",
+        "#615044",
+        "#3a3337"
+      ],
+      "portraitVersion": 3,
+      "portrait": "bd-umiri-standing-128x224.png",
+      "avatar": "bd-umiri-portrait-96.png",
+      "portraitSize": [
+        128,
+        224
+      ],
       "sheet": "bd-umiri-walk.png",
       "frameWidth": 64,
       "frameHeight": 64,
@@ -716,8 +920,9 @@
     {
       "id": "bd-nyamu",
       "band": "avemujica",
-      "characterName": "祐天寺若麦",
-      "name": "祐天寺若麦",
+      "previousDisplayName": "祐天寺若麦",
+      "characterName": "祐天寺にゃむ",
+      "name": "祐天寺にゃむ",
       "role": "顾客",
       "reference": "https://bang-dream.com/artist/avemujica/yutenji-nyamu/",
       "base": "female10",
@@ -736,6 +941,11 @@
         "#7f2d43",
         "#412039"
       ],
+      "originalCloth": [
+        "#b34c5c",
+        "#7f2d43",
+        "#412039"
+      ],
       "iris": [
         "#e7a8bd",
         "#b75a83",
@@ -749,8 +959,25 @@
       "walkHair": "hair-silver",
       "walkStyle": "bob",
       "accessory": "earrings",
-      "features": "紫灰短鲍勃、红粉眼、红黑服饰与红耳坠",
-      "portrait": "bd-nyamu-portrait-96.png",
+      "features": "紫灰短鲍勃、齐刘海；红粉眼；红黑束身短裙、灰纱袖、高领与红色耳饰。",
+      "officialName": "祐天寺 にゃむ",
+      "hairShape": "rounded-bob",
+      "costume": "mujica-red-skirt",
+      "notes": "紫灰短鲍勃、齐刘海；红粉眼；红黑束身短裙、灰纱袖、高领与红色耳饰。",
+      "walkLegwear": "bare",
+      "lowerBody": "灰色腿饰、黑色交叉系带、红色高跟鞋。",
+      "shoePalette": [
+        "#e0828b",
+        "#ad3d51",
+        "#642d44"
+      ],
+      "portraitVersion": 3,
+      "portrait": "bd-nyamu-standing-128x224.png",
+      "avatar": "bd-nyamu-portrait-96.png",
+      "portraitSize": [
+        128,
+        224
+      ],
       "sheet": "bd-nyamu-walk.png",
       "frameWidth": 64,
       "frameHeight": 64,
@@ -782,11 +1009,12 @@
     {
       "id": "bd-sakiko",
       "band": "avemujica",
-      "characterName": "丰川祥子",
-      "name": "丰川祥子",
+      "previousDisplayName": "丰川祥子",
+      "characterName": "豊川祥子",
+      "name": "豊川祥子",
       "role": "顾客",
       "reference": "https://bang-dream.com/artist/avemujica/togawa-sakiko/",
-      "base": "female02",
+      "base": "female08",
       "front": "female05",
       "back": "pigtails01",
       "clothes": "female12",
@@ -798,6 +1026,11 @@
         "#47718f"
       ],
       "cloth": [
+        "#b24d56",
+        "#793044",
+        "#3e2539"
+      ],
+      "originalCloth": [
         "#b24d56",
         "#793044",
         "#3e2539"
@@ -815,8 +1048,25 @@
       "walkHair": "hair-silver",
       "walkStyle": "twins",
       "accessory": "black-bows",
-      "features": "浅蓝长双马尾、金眼、黑蝴蝶结、红黑礼服",
-      "portrait": "bd-sakiko-portrait-96.png",
+      "features": "浅蓝长双马尾、侧分刘海、两侧黑蝴蝶结；金眼；红色蓬肩、黑金束身衣与层叠裙。",
+      "officialName": "豊川 祥子",
+      "hairShape": "long-twintails",
+      "costume": "mujica-red-shoulders",
+      "notes": "浅蓝长双马尾、侧分刘海、两侧黑蝴蝶结；金眼；红色蓬肩、黑金束身衣与层叠裙。",
+      "walkLegwear": "bare",
+      "lowerBody": "奶白内裙、黑金外裙、交叉系带和深色鞋。",
+      "shoePalette": [
+        "#b9ab8d",
+        "#49404a",
+        "#292b37"
+      ],
+      "portraitVersion": 3,
+      "portrait": "bd-sakiko-standing-128x224.png",
+      "avatar": "bd-sakiko-portrait-96.png",
+      "portraitSize": [
+        128,
+        224
+      ],
       "sheet": "bd-sakiko-walk.png",
       "frameWidth": 64,
       "frameHeight": 64,
@@ -848,11 +1098,12 @@
     {
       "id": "bd-arale",
       "band": "yumemita",
-      "characterName": "仲町亚罗蕾",
-      "name": "仲町亚罗蕾",
+      "previousDisplayName": "仲町亚罗蕾",
+      "characterName": "仲町あられ",
+      "name": "仲町あられ",
       "role": "顾客",
       "reference": "https://bang-dream.com/artist/yumemita/nakamachi-arale/",
-      "base": "female07",
+      "base": "female08",
       "front": "female01",
       "back": "pigtails01",
       "clothes": "female07",
@@ -864,6 +1115,11 @@
         "#aa795c"
       ],
       "cloth": [
+        "#c6ecf7",
+        "#83c6e0",
+        "#4c7f9e"
+      ],
+      "originalCloth": [
         "#c6ecf7",
         "#83c6e0",
         "#4c7f9e"
@@ -881,10 +1137,27 @@
       "walkHair": "hair-silver",
       "walkStyle": "twins",
       "accessory": "cat-yellow",
-      "features": "金色双马尾、粉色发尾、猫耳耳机、黄蓝白服饰",
+      "features": "金色双马尾、粉色内层/发尾；粉紫眼；黄黑猫耳耳机、白蓝上衣、黄色拼色裙。",
       "streak": "#ef93b6",
       "accent": "#f3d76e",
-      "portrait": "bd-arale-portrait-96.png",
+      "officialName": "仲町 あられ",
+      "hairShape": "long-twintails",
+      "costume": "mew-yellow",
+      "notes": "金色双马尾、粉色内层/发尾；粉紫眼；黄黑猫耳耳机、白蓝上衣、黄色拼色裙。",
+      "walkLegwear": "yellow",
+      "lowerBody": "黄白拼色裙、非对称腿套、黄腿套与白蓝鞋。",
+      "shoePalette": [
+        "#f7faf0",
+        "#b0d6e4",
+        "#6f9cc1"
+      ],
+      "portraitVersion": 3,
+      "portrait": "bd-arale-standing-128x224.png",
+      "avatar": "bd-arale-portrait-96.png",
+      "portraitSize": [
+        128,
+        224
+      ],
       "sheet": "bd-arale-walk.png",
       "frameWidth": 64,
       "frameHeight": 64,
@@ -916,11 +1189,12 @@
     {
       "id": "bd-nonoka",
       "band": "yumemita",
-      "characterName": "宫永乃乃花",
-      "name": "宫永乃乃花",
+      "previousDisplayName": "宫永乃乃花",
+      "characterName": "宮永ののか",
+      "name": "宮永ののか",
       "role": "顾客",
       "reference": "https://bang-dream.com/artist/yumemita/miyanaga-nonoka/",
-      "base": "female02",
+      "base": "female08",
       "front": "female05",
       "back": "long02",
       "clothes": "female12",
@@ -932,6 +1206,11 @@
         "#7f94b5"
       ],
       "cloth": [
+        "#f0a3b9",
+        "#cf708d",
+        "#8f496e"
+      ],
+      "originalCloth": [
         "#f0a3b9",
         "#cf708d",
         "#8f496e"
@@ -949,9 +1228,26 @@
       "walkHair": "hair-silver",
       "walkStyle": "long",
       "accessory": "bunny",
-      "features": "银蓝长发、辫侧发、兔耳发饰、粉白格纹衣饰",
+      "features": "银蓝长发与侧辫；浅蓝眼；粉白兔耳发饰、粉白格纹短上衣和裙、黄色纽扣。",
       "accent": "#f49fbc",
-      "portrait": "bd-nonoka-portrait-96.png",
+      "officialName": "宮永 ののか",
+      "hairShape": "straight-long",
+      "costume": "mew-pink-check",
+      "notes": "银蓝长发与侧辫；浅蓝眼；粉白兔耳发饰、粉白格纹短上衣和裙、黄色纽扣。",
+      "walkLegwear": "pink",
+      "lowerBody": "粉白格纹层叠裙、粉白腿饰、粉蓝鞋。",
+      "shoePalette": [
+        "#f6d3e4",
+        "#d995c0",
+        "#7aa9d4"
+      ],
+      "portraitVersion": 3,
+      "portrait": "bd-nonoka-standing-128x224.png",
+      "avatar": "bd-nonoka-portrait-96.png",
+      "portraitSize": [
+        128,
+        224
+      ],
       "sheet": "bd-nonoka-walk.png",
       "frameWidth": 64,
       "frameHeight": 64,
@@ -983,6 +1279,7 @@
     {
       "id": "bd-ritsu",
       "band": "yumemita",
+      "previousDisplayName": "峰月律",
       "characterName": "峰月律",
       "name": "峰月律",
       "role": "顾客",
@@ -1003,6 +1300,11 @@
         "#9ed0ee",
         "#527fac"
       ],
+      "originalCloth": [
+        "#f0f6ff",
+        "#9ed0ee",
+        "#527fac"
+      ],
       "iris": [
         "#d1c8ec",
         "#9b88bd",
@@ -1016,8 +1318,25 @@
       "walkHair": "hair-silver",
       "walkStyle": "bob",
       "accessory": "bear-blue",
-      "features": "冰蓝短发、蓝色圆耳耳机、蓝白机能风衣饰",
-      "portrait": "bd-ritsu-portrait-96.png",
+      "features": "冰蓝短发；灰紫眼；蓝色圆耳耳机、白蓝机能上衣、蓝白袖、深蓝短下装。",
+      "officialName": "峰月 律",
+      "hairShape": "rounded-bob",
+      "costume": "mew-blue",
+      "notes": "冰蓝短发；灰紫眼；蓝色圆耳耳机、白蓝机能上衣、蓝白袖、深蓝短下装。",
+      "walkLegwear": "blue",
+      "lowerBody": "蓝色腿装、白蓝护腿和白蓝鞋。",
+      "shoePalette": [
+        "#e7f5f8",
+        "#8dc2e3",
+        "#527fb7"
+      ],
+      "portraitVersion": 3,
+      "portrait": "bd-ritsu-standing-128x224.png",
+      "avatar": "bd-ritsu-portrait-96.png",
+      "portraitSize": [
+        128,
+        224
+      ],
       "sheet": "bd-ritsu-walk.png",
       "frameWidth": 64,
       "frameHeight": 64,
@@ -1049,6 +1368,7 @@
     {
       "id": "bd-miyako",
       "band": "yumemita",
+      "previousDisplayName": "藤都子",
       "characterName": "藤都子",
       "name": "藤都子",
       "role": "顾客",
@@ -1069,6 +1389,11 @@
         "#554267",
         "#302a49"
       ],
+      "originalCloth": [
+        "#806d9d",
+        "#554267",
+        "#302a49"
+      ],
       "iris": [
         "#c5b7ef",
         "#8b79bf",
@@ -1082,8 +1407,25 @@
       "walkHair": "hair-silver",
       "walkStyle": "bob",
       "accessory": "veil",
-      "features": "深紫短发、白色头带与薄纱、淡紫眼、黑紫裙",
-      "portrait": "bd-miyako-portrait-96.png",
+      "features": "深紫短发；紫眼；白头带与有尖角轮廓的紫色薄纱、黑紫束腰裙、白色花边与星饰。",
+      "officialName": "藤 都子",
+      "hairShape": "rounded-bob",
+      "costume": "mew-purple-lace",
+      "notes": "深紫短发；紫眼；白头带与有尖角轮廓的紫色薄纱、黑紫束腰裙、白色花边与星饰。",
+      "walkLegwear": "bare",
+      "lowerBody": "黑紫白层叠花边裙、裸腿、浅色踝饰和橄榄色鞋。",
+      "shoePalette": [
+        "#c2be99",
+        "#8d896b",
+        "#555645"
+      ],
+      "portraitVersion": 3,
+      "portrait": "bd-miyako-standing-128x224.png",
+      "avatar": "bd-miyako-portrait-96.png",
+      "portraitSize": [
+        128,
+        224
+      ],
       "sheet": "bd-miyako-walk.png",
       "frameWidth": 64,
       "frameHeight": 64,
@@ -1115,11 +1457,12 @@
     {
       "id": "bd-yuno",
       "band": "yumemita",
-      "characterName": "千石优乃",
-      "name": "千石优乃",
+      "previousDisplayName": "千石优乃",
+      "characterName": "千石ユノ",
+      "name": "千石ユノ",
       "role": "顾客",
       "reference": "https://bang-dream.com/artist/yumemita/sengoku-yuno/",
-      "base": "female02",
+      "base": "female08",
       "front": "female01",
       "back": "long01",
       "clothes": "female11",
@@ -1131,6 +1474,11 @@
         "#1b1c2b"
       ],
       "cloth": [
+        "#ec709e",
+        "#b64476",
+        "#70304f"
+      ],
+      "originalCloth": [
         "#ec709e",
         "#b64476",
         "#70304f"
@@ -1148,9 +1496,26 @@
       "walkHair": "hair-silver",
       "walkStyle": "long",
       "accessory": "cat-pink",
-      "features": "黑色长发、粉红挑染、粉色猫耳耳机、玫红外套",
+      "features": "黑色长发、粉色挑染；红粉眼；粉色猫耳耳机、黑色内搭、宽松玫红外套和深色短裤。",
       "streak": "#ef91b8",
-      "portrait": "bd-yuno-portrait-96.png",
+      "officialName": "千石 ユノ",
+      "hairShape": "straight-long",
+      "costume": "mew-red-jacket",
+      "notes": "黑色长发、粉色挑染；红粉眼；粉色猫耳耳机、黑色内搭、宽松玫红外套和深色短裤。",
+      "walkLegwear": "pink",
+      "lowerBody": "深色短下装、腿部束带、玫红高靴。",
+      "shoePalette": [
+        "#f47eaa",
+        "#cb437a",
+        "#812f5c"
+      ],
+      "portraitVersion": 3,
+      "portrait": "bd-yuno-standing-128x224.png",
+      "avatar": "bd-yuno-portrait-96.png",
+      "portraitSize": [
+        128,
+        224
+      ],
       "sheet": "bd-yuno-walk.png",
       "frameWidth": 64,
       "frameHeight": 64,
@@ -1182,6 +1547,7 @@
     {
       "id": "bd-nagi",
       "band": "millsage",
+      "previousDisplayName": "琴平凪",
       "characterName": "琴平凪",
       "name": "琴平凪",
       "role": "顾客",
@@ -1202,6 +1568,11 @@
         "#ced4d1",
         "#929da6"
       ],
+      "originalCloth": [
+        "#f7f8f3",
+        "#ced4d1",
+        "#929da6"
+      ],
       "iris": [
         "#c5d2a1",
         "#8c9d6d",
@@ -1215,8 +1586,25 @@
       "walkHair": "hair-silver",
       "walkStyle": "wavy",
       "accessory": "flower-right",
-      "features": "橄榄褐色长发、右侧白花、草绿眼、白色花边上衣",
-      "portrait": "bd-nagi-portrait-96.png",
+      "features": "橄榄褐色长发与卷尾；草绿眼；画面左侧白花、白色露肩花边上衣、黑白层叠裙。",
+      "officialName": "琴平 凪",
+      "hairShape": "soft-wave",
+      "costume": "millsage-ruffle",
+      "notes": "橄榄褐色长发与卷尾；草绿眼；画面左侧白花、白色露肩花边上衣、黑白层叠裙。",
+      "walkLegwear": "white",
+      "lowerBody": "黑白层叠下装、白色过膝靴与深色交叉饰带。",
+      "shoePalette": [
+        "#f7faf2",
+        "#d4dde3",
+        "#9baebd"
+      ],
+      "portraitVersion": 3,
+      "portrait": "bd-nagi-standing-128x224.png",
+      "avatar": "bd-nagi-portrait-96.png",
+      "portraitSize": [
+        128,
+        224
+      ],
       "sheet": "bd-nagi-walk.png",
       "frameWidth": 64,
       "frameHeight": 64,
@@ -1248,8 +1636,9 @@
     {
       "id": "bd-mahoro",
       "band": "millsage",
-      "characterName": "滨崎真幌",
-      "name": "滨崎真幌",
+      "previousDisplayName": "滨崎真幌",
+      "characterName": "浜崎まほろ",
+      "name": "浜崎まほろ",
       "role": "顾客",
       "reference": "https://bang-dream.com/artist/millsage/hamasaki-mahoro/",
       "base": "female10",
@@ -1268,6 +1657,11 @@
         "#c1cddb",
         "#7b8caa"
       ],
+      "originalCloth": [
+        "#f6f8ff",
+        "#c1cddb",
+        "#7b8caa"
+      ],
       "iris": [
         "#bde3ec",
         "#79aac0",
@@ -1281,8 +1675,25 @@
       "walkHair": "hair-silver",
       "walkStyle": "bob",
       "accessory": "pearl-band",
-      "features": "蓝灰短鲍勃、白珠头带、蓝眼、白色荷叶边领",
-      "portrait": "bd-mahoro-portrait-96.png",
+      "features": "蓝灰短鲍勃；蓝眼；白色珍珠头带、荷叶肩饰、白色褶皱连衣裙。",
+      "officialName": "浜崎 まほろ",
+      "hairShape": "rounded-bob",
+      "costume": "millsage-pleats",
+      "notes": "蓝灰短鲍勃；蓝眼；白色珍珠头带、荷叶肩饰、白色褶皱连衣裙。",
+      "walkLegwear": "white",
+      "lowerBody": "白色荷叶短裙、腿部系带、白靴。",
+      "shoePalette": [
+        "#f7faf2",
+        "#d4dde3",
+        "#9baebd"
+      ],
+      "portraitVersion": 3,
+      "portrait": "bd-mahoro-standing-128x224.png",
+      "avatar": "bd-mahoro-portrait-96.png",
+      "portraitSize": [
+        128,
+        224
+      ],
       "sheet": "bd-mahoro-walk.png",
       "frameWidth": 64,
       "frameHeight": 64,
@@ -1314,8 +1725,9 @@
     {
       "id": "bd-hotaru",
       "band": "millsage",
-      "characterName": "汐见萤",
-      "name": "汐见萤",
+      "previousDisplayName": "汐见萤",
+      "characterName": "汐見蛍",
+      "name": "汐見蛍",
       "role": "顾客",
       "reference": "https://bang-dream.com/artist/millsage/shiomi-hotaru/",
       "base": "female08",
@@ -1334,6 +1746,11 @@
         "#d7dfe4",
         "#8c9dab"
       ],
+      "originalCloth": [
+        "#ffffff",
+        "#d7dfe4",
+        "#8c9dab"
+      ],
       "iris": [
         "#dedbff",
         "#a5a1d9",
@@ -1347,8 +1764,25 @@
       "walkHair": "hair-silver",
       "walkStyle": "long",
       "accessory": "flower-left",
-      "features": "白银长发、左侧白花簇、淡紫眼、白衬衣黑领带",
-      "portrait": "bd-hotaru-portrait-96.png",
+      "features": "白银长发；淡紫眼；画面右侧白花簇、白衬衣、黑领带、白色纵褶与黑侧层。",
+      "officialName": "汐見 蛍",
+      "hairShape": "straight-long",
+      "costume": "millsage-tie",
+      "notes": "白银长发；淡紫眼；画面右侧白花簇、白衬衣、黑领带、白色纵褶与黑侧层。",
+      "walkLegwear": "white",
+      "lowerBody": "白色纵褶短下装、黑灰长垂尾、白色腿装与系带。",
+      "shoePalette": [
+        "#f7faf2",
+        "#d4dde3",
+        "#9baebd"
+      ],
+      "portraitVersion": 3,
+      "portrait": "bd-hotaru-standing-128x224.png",
+      "avatar": "bd-hotaru-portrait-96.png",
+      "portraitSize": [
+        128,
+        224
+      ],
       "sheet": "bd-hotaru-walk.png",
       "frameWidth": 64,
       "frameHeight": 64,
@@ -1380,6 +1814,7 @@
     {
       "id": "bd-houka",
       "band": "millsage",
+      "previousDisplayName": "和泉朋花",
       "characterName": "和泉朋花",
       "name": "和泉朋花",
       "role": "顾客",
@@ -1400,6 +1835,11 @@
         "#dbe0e5",
         "#9aa5b3"
       ],
+      "originalCloth": [
+        "#ffffff",
+        "#dbe0e5",
+        "#9aa5b3"
+      ],
       "iris": [
         "#d6c1c8",
         "#9e8a99",
@@ -1413,8 +1853,25 @@
       "walkHair": "hair-silver",
       "walkStyle": "long",
       "accessory": "flower-left",
-      "features": "浅粉长直发、齐刘海、左侧白花、白色露肩上衣",
-      "portrait": "bd-houka-portrait-96.png",
+      "features": "浅粉长直发、齐刘海；灰粉眼；画面右侧白花、白色露肩短上衣、裸露腰线、白色高腰裙。",
+      "officialName": "和泉 朋花",
+      "hairShape": "straight-long",
+      "costume": "millsage-crop",
+      "notes": "浅粉长直发、齐刘海；灰粉眼；画面右侧白花、白色露肩短上衣、裸露腰线、白色高腰裙。",
+      "walkLegwear": "white",
+      "lowerBody": "白色落地开衩长裙、露出的腿部交叉饰带、白鞋。",
+      "shoePalette": [
+        "#f7faf2",
+        "#d4dde3",
+        "#9baebd"
+      ],
+      "portraitVersion": 3,
+      "portrait": "bd-houka-standing-128x224.png",
+      "avatar": "bd-houka-portrait-96.png",
+      "portraitSize": [
+        128,
+        224
+      ],
       "sheet": "bd-houka-walk.png",
       "frameWidth": 64,
       "frameHeight": 64,
@@ -1446,8 +1903,9 @@
     {
       "id": "bd-natsume",
       "band": "millsage",
-      "characterName": "伊泽夏芽",
-      "name": "伊泽夏芽",
+      "previousDisplayName": "伊泽夏芽",
+      "characterName": "伊沢なつめ",
+      "name": "伊沢なつめ",
       "role": "顾客",
       "reference": "https://bang-dream.com/artist/millsage/izawa-natsume/",
       "base": "female02",
@@ -1466,6 +1924,11 @@
         "#d4ddd4",
         "#8ca09b"
       ],
+      "originalCloth": [
+        "#fcfcf7",
+        "#d4ddd4",
+        "#8ca09b"
+      ],
       "iris": [
         "#d8b6f0",
         "#ab7fc4",
@@ -1479,8 +1942,25 @@
       "walkHair": "hair-silver",
       "walkStyle": "wavy-medium",
       "accessory": "flower-left",
-      "features": "鼠尾草绿中长卷发、侧分、左侧白花、紫眼与白裙",
-      "portrait": "bd-natsume-portrait-96.png",
+      "features": "鼠尾草绿中长卷发、侧分；紫眼；画面右侧白花、白色不对称薄纱垂袖与连衣裙。",
+      "officialName": "伊沢 なつめ",
+      "hairShape": "shoulder-wave",
+      "costume": "millsage-drape",
+      "notes": "鼠尾草绿中长卷发、侧分；紫眼；画面右侧白花、白色不对称薄纱垂袖与连衣裙。",
+      "walkLegwear": "bare",
+      "lowerBody": "白色短下装、不对称长纱尾、黑色腿饰与白踝靴。",
+      "shoePalette": [
+        "#f7faf2",
+        "#d4dde3",
+        "#9baebd"
+      ],
+      "portraitVersion": 3,
+      "portrait": "bd-natsume-standing-128x224.png",
+      "avatar": "bd-natsume-portrait-96.png",
+      "portraitSize": [
+        128,
+        224
+      ],
       "sheet": "bd-natsume-walk.png",
       "frameWidth": 64,
       "frameHeight": 64,
@@ -1512,8 +1992,9 @@
     {
       "id": "bd-raika",
       "band": "ikka-dumb-rock",
-      "characterName": "须贺蕾叶",
-      "name": "须贺蕾叶",
+      "previousDisplayName": "须贺蕾叶",
+      "characterName": "須賀蕾叶",
+      "name": "須賀蕾叶",
       "role": "顾客",
       "reference": "https://bang-dream.com/artist/ikka-dumb-rock/suga-raika/",
       "base": "female08",
@@ -1532,6 +2013,11 @@
         "#434765",
         "#2a3048"
       ],
+      "originalCloth": [
+        "#6f708f",
+        "#434765",
+        "#2a3048"
+      ],
       "iris": [
         "#e2d989",
         "#aaa64f",
@@ -1545,9 +2031,26 @@
       "walkHair": "hair-silver",
       "walkStyle": "long",
       "accessory": "gold-pins",
-      "features": "黑长直发、金色内层挑染与发夹、黄绿眼、蓝紫夹克",
+      "features": "黑长发、金色内层挑染与金色发夹；黄绿眼；蓝紫宽夹克、黄内衬、白短上衣与金属饰带。",
       "streak": "#d7bd71",
-      "portrait": "bd-raika-portrait-96.png",
+      "officialName": "須賀 蕾叶",
+      "hairShape": "straight-long",
+      "costume": "ikka-purple-bomber",
+      "notes": "黑长发、金色内层挑染与金色发夹；黄绿眼；蓝紫宽夹克、黄内衬、白短上衣与金属饰带。",
+      "walkLegwear": "striped",
+      "lowerBody": "黑短裤、一侧灰色腿装与另一侧黑白条纹、棕色系带靴。",
+      "shoePalette": [
+        "#cfad75",
+        "#a17451",
+        "#664b42"
+      ],
+      "portraitVersion": 3,
+      "portrait": "bd-raika-standing-128x224.png",
+      "avatar": "bd-raika-portrait-96.png",
+      "portraitSize": [
+        128,
+        224
+      ],
       "sheet": "bd-raika-walk.png",
       "frameWidth": 64,
       "frameHeight": 64,
@@ -1579,8 +2082,9 @@
     {
       "id": "bd-miku",
       "band": "ikka-dumb-rock",
-      "characterName": "马桥心玖",
-      "name": "马桥心玖",
+      "previousDisplayName": "马桥心玖",
+      "characterName": "馬橋心玖",
+      "name": "馬橋心玖",
       "role": "顾客",
       "reference": "https://bang-dream.com/artist/ikka-dumb-rock/mahashi-miku/",
       "base": "female02",
@@ -1599,6 +2103,11 @@
         "#4f8c8c",
         "#345f70"
       ],
+      "originalCloth": [
+        "#77b8b3",
+        "#4f8c8c",
+        "#345f70"
+      ],
       "iris": [
         "#b8e3e7",
         "#78acba",
@@ -1612,9 +2121,26 @@
       "walkHair": "hair-silver",
       "walkStyle": "medium",
       "accessory": "cross-pins",
-      "features": "白色中长发、侧边黑发夹、青蓝眼、绿格纹外套",
+      "features": "白色中长发、黑色交叉发夹；青蓝眼；黑短背心、绿格纹宽衬衣、白裤、黑颈饰。",
       "accent": "#dabe62",
-      "portrait": "bd-miku-portrait-96.png",
+      "officialName": "馬橋 心玖",
+      "hairShape": "shoulder-layered",
+      "costume": "ikka-teal-plaid",
+      "notes": "白色中长发、黑色交叉发夹；青蓝眼；黑短背心、绿格纹宽衬衣、白裤、黑颈饰。",
+      "walkLegwear": "pants-white",
+      "lowerBody": "白色宽裤、破口和腿部系带、黑色厚底靴。",
+      "shoePalette": [
+        "#81747c",
+        "#3d3742",
+        "#252934"
+      ],
+      "portraitVersion": 3,
+      "portrait": "bd-miku-standing-128x224.png",
+      "avatar": "bd-miku-portrait-96.png",
+      "portraitSize": [
+        128,
+        224
+      ],
       "sheet": "bd-miku-walk.png",
       "frameWidth": 64,
       "frameHeight": 64,
@@ -1646,8 +2172,9 @@
     {
       "id": "bd-yomogi",
       "band": "ikka-dumb-rock",
-      "characterName": "矢仓蓬咲",
-      "name": "矢仓蓬咲",
+      "previousDisplayName": "矢仓蓬咲",
+      "characterName": "矢倉蓬咲",
+      "name": "矢倉蓬咲",
       "role": "顾客",
       "reference": "https://bang-dream.com/artist/ikka-dumb-rock/yakura-yomogi/",
       "base": "female10",
@@ -1666,6 +2193,11 @@
         "#3c5268",
         "#293b51"
       ],
+      "originalCloth": [
+        "#6b8094",
+        "#3c5268",
+        "#293b51"
+      ],
       "iris": [
         "#c6d8ae",
         "#8ca579",
@@ -1679,8 +2211,25 @@
       "walkHair": "hair-silver",
       "walkStyle": "asym-bob",
       "accessory": "earrings",
-      "features": "灰紫不对称短鲍勃、长侧刘海、浅绿眼、蓝条纹宽外套",
-      "portrait": "bd-yomogi-portrait-96.png",
+      "features": "灰紫不对称短发，画面左侧刘海较长；浅绿眼；蓝色细条纹宽外套、黑内搭和银链。",
+      "officialName": "矢倉 蓬咲",
+      "hairShape": "asymmetric-bob",
+      "costume": "ikka-pinstripe",
+      "notes": "灰紫不对称短发，画面左侧刘海较长；浅绿眼；蓝色细条纹宽外套、黑内搭和银链。",
+      "walkLegwear": "striped",
+      "lowerBody": "黑短下装、网纹与条纹腿饰、深色鞋。",
+      "shoePalette": [
+        "#7e7988",
+        "#3c3947",
+        "#262933"
+      ],
+      "portraitVersion": 3,
+      "portrait": "bd-yomogi-standing-128x224.png",
+      "avatar": "bd-yomogi-portrait-96.png",
+      "portraitSize": [
+        128,
+        224
+      ],
       "sheet": "bd-yomogi-walk.png",
       "frameWidth": 64,
       "frameHeight": 64,
@@ -1712,11 +2261,12 @@
     {
       "id": "bd-chieri",
       "band": "ikka-dumb-rock",
-      "characterName": "梅里千绘里",
-      "name": "梅里千绘里",
+      "previousDisplayName": "梅里千绘里",
+      "characterName": "梅里ちえり",
+      "name": "梅里ちえり",
       "role": "顾客",
       "reference": "https://bang-dream.com/artist/ikka-dumb-rock/umezato-chieri/",
-      "base": "female07",
+      "base": "female08",
       "front": "female01",
       "back": "pigtails01",
       "clothes": "female07",
@@ -1728,6 +2278,11 @@
         "#955d77"
       ],
       "cloth": [
+        "#ed9acb",
+        "#bc6ba0",
+        "#7f477b"
+      ],
+      "originalCloth": [
         "#ed9acb",
         "#bc6ba0",
         "#7f477b"
@@ -1745,8 +2300,25 @@
       "walkHair": "hair-silver",
       "walkStyle": "braids",
       "accessory": "star-clips",
-      "features": "珊瑚粉双辫、黑色交叉夹与星星夹、粉紫短上衣",
-      "portrait": "bd-chieri-portrait-96.png",
+      "features": "珊瑚粉双辫，不是发髻；浅黄绿眼；黑交叉夹和星夹、粉紫短上衣、拼接短裙、黄白腰带。",
+      "officialName": "梅里 ちえり",
+      "hairShape": "braids",
+      "costume": "ikka-patchwork",
+      "notes": "珊瑚粉双辫，不是发髻；浅黄绿眼；黑交叉夹和星夹、粉紫短上衣、拼接短裙、黄白腰带。",
+      "walkLegwear": "blue",
+      "lowerBody": "拼接短裙、渔网腿饰、蓝色腿套和粉色细节。",
+      "shoePalette": [
+        "#9cb9c4",
+        "#587f98",
+        "#34485f"
+      ],
+      "portraitVersion": 3,
+      "portrait": "bd-chieri-standing-128x224.png",
+      "avatar": "bd-chieri-portrait-96.png",
+      "portraitSize": [
+        128,
+        224
+      ],
       "sheet": "bd-chieri-walk.png",
       "frameWidth": 64,
       "frameHeight": 64,
@@ -1778,8 +2350,9 @@
     {
       "id": "bd-shizuku",
       "band": "ikka-dumb-rock",
-      "characterName": "四宫宁月",
-      "name": "四宫宁月",
+      "previousDisplayName": "四宫宁月",
+      "characterName": "四宮寧月",
+      "name": "四宮寧月",
       "role": "顾客",
       "reference": "https://bang-dream.com/artist/ikka-dumb-rock/shinomiya-shizuku/",
       "base": "female08",
@@ -1798,6 +2371,11 @@
         "#747b88",
         "#474e65"
       ],
+      "originalCloth": [
+        "#a6a7a9",
+        "#747b88",
+        "#474e65"
+      ],
       "iris": [
         "#d4b9e9",
         "#a27db8",
@@ -1811,9 +2389,27 @@
       "walkHair": "hair-silver",
       "walkStyle": "twins",
       "accessory": "cross-pins",
-      "features": "浅金粉双马尾、交叉发夹、紫眼、灰衣黄背带与条纹袖",
+      "features": "浅金粉低双马尾、齐刘海与黑交叉发夹；紫眼；灰长上衣、黄色背带、黑网纱袖、红白条纹臂套。",
       "accent": "#e6dc7c",
-      "portrait": "bd-shizuku-portrait-96.png",
+      "officialName": "四宮 寧月",
+      "hairShape": "low-twintails",
+      "walkTailLength": 24,
+      "costume": "ikka-grey-harness",
+      "notes": "浅金粉低双马尾、齐刘海与黑交叉发夹；紫眼；灰长上衣、黄色背带、黑网纱袖、红白条纹臂套。",
+      "walkLegwear": "striped",
+      "lowerBody": "黑短裙、非对称黄白与黑白条纹长袜、白色厚底鞋。",
+      "shoePalette": [
+        "#f8f6ed",
+        "#c4c8d2",
+        "#88899c"
+      ],
+      "portraitVersion": 3,
+      "portrait": "bd-shizuku-standing-128x224.png",
+      "avatar": "bd-shizuku-portrait-96.png",
+      "portraitSize": [
+        128,
+        224
+      ],
       "sheet": "bd-shizuku-walk.png",
       "frameWidth": 64,
       "frameHeight": 64,

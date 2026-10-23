@@ -1,0 +1,181 @@
+{
+  "checkedAt": "2026-10-24",
+  "basis": "Official character profile full-body illustration, not cast photo. Metadata only; official images are not distributed.",
+  "characters": [
+    {
+      "id": "bd-tomori",
+      "officialName": "高松 燈",
+      "page": "https://bang-dream.com/artist/mygo/takamatsu-tomori/",
+      "image": "https://bang-dream.com/wordpress/wp-content/themes/bangdream-portal/assets/webp/common/artist/mygo/img_full_takamatsu-tomori_01.webp",
+      "sha256": "839c3b1867cd13af5a3b87723f06ea9dbe67acb16cb84340452847068f0746d3"
+    },
+    {
+      "id": "bd-rana",
+      "officialName": "要 楽奈",
+      "page": "https://bang-dream.com/artist/mygo/kaname-rana/",
+      "image": "https://bang-dream.com/wordpress/wp-content/themes/bangdream-portal/assets/webp/common/artist/mygo/img_full_kaname-rana_01.webp",
+      "sha256": "f4417c38418dc6968b3e729862f7c45e3563a57fd2f7f877ab36b2361295dfce"
+    },
+    {
+      "id": "bd-taki",
+      "officialName": "椎名 立希",
+      "page": "https://bang-dream.com/artist/mygo/shiina-taki/",
+      "image": "https://bang-dream.com/wordpress/wp-content/themes/bangdream-portal/assets/webp/common/artist/mygo/img_full_shiina-taki_01.webp",
+      "sha256": "6c3aadc730948f1c2987126127c26bdad30e647d483fc50db9b6fc5e8aa75356"
+    },
+    {
+      "id": "bd-anon",
+      "officialName": "千早 愛音",
+      "page": "https://bang-dream.com/artist/mygo/chihaya-anon/",
+      "image": "https://bang-dream.com/wordpress/wp-content/themes/bangdream-portal/assets/webp/common/artist/mygo/img_full_chihaya-anon_01.webp",
+      "sha256": "0567beaf3999e59a919a7e4d6568f6f504809b23e090c83e4946fc5c216c25ad"
+    },
+    {
+      "id": "bd-soyo",
+      "officialName": "長崎 そよ",
+      "page": "https://bang-dream.com/artist/mygo/nagasaki-soyo/",
+      "image": "https://bang-dream.com/wordpress/wp-content/themes/bangdream-portal/assets/webp/common/artist/mygo/img_full_nagasaki-soyo_01.webp",
+      "sha256": "532a110a1e959c3f9b8ee5e418ed78b692e05c7b840c2b3410c23f67a5a2aeaf"
+    },
+    {
+      "id": "bd-nyamu",
+      "officialName": "祐天寺 にゃむ",
+      "page": "https://bang-dream.com/artist/avemujica/yutenji-nyamu/",
+      "image": "https://bang-dream.com/wordpress/wp-content/themes/bangdream-portal/assets/webp/common/artist/avemujica/img_full_yutenji-nyamu_01.webp",
+      "sha256": "7fb157c11cd28d14535b13e12e03c96d9c2ad613c446bde3edfed11375add89a"
+    },
+    {
+      "id": "bd-mutsumi",
+      "officialName": "若葉 睦",
+      "page": "https://bang-dream.com/artist/avemujica/wakaba-mutsumi/",
+      "image": "https://bang-dream.com/wordpress/wp-content/themes/bangdream-portal/assets/webp/common/artist/avemujica/img_full_wakaba-mutsumi_01.webp",
+      "sha256": "c7f35e0ddab202438ae4c91f583601509b0551adae854f5914638689560ca025"
+    },
+    {
+      "id": "bd-sakiko",
+      "officialName": "豊川 祥子",
+      "page": "https://bang-dream.com/artist/avemujica/togawa-sakiko/",
+      "image": "https://bang-dream.com/wordpress/wp-content/themes/bangdream-portal/assets/webp/common/artist/avemujica/img_full_togawa-sakiko_01.webp",
+      "sha256": "bbbf72ad01f3dfc0fcc91541bea3418632ec9abf6cfcabc9b4c974624a96cab0"
+    },
+    {
+      "id": "bd-uika",
+      "officialName": "三角 初華",
+      "page": "https://bang-dream.com/artist/avemujica/misumi-uika/",
+      "image": "https://bang-dream.com/wordpress/wp-content/themes/bangdream-portal/assets/webp/common/artist/avemujica/img_full_misumi-uika_01.webp",
+      "sha256": "08a46c021a2d0a42981b2208d3d74e3b14a1984600632ea23e3de21eb7b49041"
+    },
+    {
+      "id": "bd-umiri",
+      "officialName": "八幡 海鈴",
+      "page": "https://bang-dream.com/artist/avemujica/yahata-umiri/",
+      "image": "https://bang-dream.com/wordpress/wp-content/themes/bangdream-portal/assets/webp/common/artist/avemujica/img_full_yahata-umiri_01.webp",
+      "sha256": "4ad98a7c24a0263129cb14a818d53f38528cb59267b4f184d386c4b8c4b39bf3"
+    },
+    {
+      "id": "bd-arale",
+      "officialName": "仲町 あられ",
+      "page": "https://bang-dream.com/artist/yumemita/nakamachi-arale/",
+      "image": "https://bang-dream.com/wordpress/wp-content/themes/bangdream-portal/assets/webp/common/artist/yumemita/img_full_nakamachi-arale_01.webp",
+      "sha256": "78272ac19680f91012233fb41e575b407669f585009ac587fa14ed490a7409fa"
+    },
+    {
+      "id": "bd-miyako",
+      "officialName": "藤 都子",
+      "page": "https://bang-dream.com/artist/yumemita/fuji-miyako/",
+      "image": "https://bang-dream.com/wordpress/wp-content/themes/bangdream-portal/assets/webp/common/artist/yumemita/img_full_fuji-miyako_01.webp",
+      "sha256": "e92527b328ca1496135943451cb67364474b07aad885422f2a3b259a8c333396"
+    },
+    {
+      "id": "bd-nonoka",
+      "officialName": "宮永 ののか",
+      "page": "https://bang-dream.com/artist/yumemita/miyanaga-nonoka/",
+      "image": "https://bang-dream.com/wordpress/wp-content/themes/bangdream-portal/assets/webp/common/artist/yumemita/img_full_miyanaga-nonoka_01.webp",
+      "sha256": "77a11218071dccde83b7c06fca19f845241d906a2fb0386b2a14d3257804f32b"
+    },
+    {
+      "id": "bd-yuno",
+      "officialName": "千石 ユノ",
+      "page": "https://bang-dream.com/artist/yumemita/sengoku-yuno/",
+      "image": "https://bang-dream.com/wordpress/wp-content/themes/bangdream-portal/assets/webp/common/artist/yumemita/img_full_sengoku-yuno_01.webp",
+      "sha256": "4b3041633aacf24ca3621a77b45bcbb53d298be5cfbd02e51dc0e4c006f4fcd1"
+    },
+    {
+      "id": "bd-ritsu",
+      "officialName": "峰月 律",
+      "page": "https://bang-dream.com/artist/yumemita/minetsuki-ritsu/",
+      "image": "https://bang-dream.com/wordpress/wp-content/themes/bangdream-portal/assets/webp/common/artist/yumemita/img_full_minetsuki-ritsu_01.webp",
+      "sha256": "49cd7719235d3759b73acd9b987eef1932052c0c5930bd20275ede3b029192b1"
+    },
+    {
+      "id": "bd-nagi",
+      "officialName": "琴平 凪",
+      "page": "https://bang-dream.com/artist/millsage/kotohira-nagi/",
+      "image": "https://bang-dream.com/wordpress/wp-content/themes/bangdream-portal/assets/webp/common/artist/millsage/img_full_kotohira-nagi_01.webp",
+      "sha256": "1b8472207eba95b312b8704f1d1f83632d15bbc557d03643563a2b1dd49109f8"
+    },
+    {
+      "id": "bd-natsume",
+      "officialName": "伊沢 なつめ",
+      "page": "https://bang-dream.com/artist/millsage/izawa-natsume/",
+      "image": "https://bang-dream.com/wordpress/wp-content/themes/bangdream-portal/assets/webp/common/artist/millsage/img_full_izawa-natsume_01.webp",
+      "sha256": "1d3174e4b65a6930452d2790a8bafce7c4d745cc48720dfdd0b410b8273377d1"
+    },
+    {
+      "id": "bd-hotaru",
+      "officialName": "汐見 蛍",
+      "page": "https://bang-dream.com/artist/millsage/shiomi-hotaru/",
+      "image": "https://bang-dream.com/wordpress/wp-content/themes/bangdream-portal/assets/webp/common/artist/millsage/img_full_shiomi-hotaru_01.webp",
+      "sha256": "36b73912e9477e0f7b4ccee4e5c0252b5ad5cd7be00c62412a7296ddd8091eb0"
+    },
+    {
+      "id": "bd-mahoro",
+      "officialName": "浜崎 まほろ",
+      "page": "https://bang-dream.com/artist/millsage/hamasaki-mahoro/",
+      "image": "https://bang-dream.com/wordpress/wp-content/themes/bangdream-portal/assets/webp/common/artist/millsage/img_full_hamasaki-mahoro_01.webp",
+      "sha256": "b79fc84a609e0db2a364e08cb3c2f1bdecc3b2933d026de48d14bbcea35dd243"
+    },
+    {
+      "id": "bd-houka",
+      "officialName": "和泉 朋花",
+      "page": "https://bang-dream.com/artist/millsage/izumi-houka/",
+      "image": "https://bang-dream.com/wordpress/wp-content/themes/bangdream-portal/assets/webp/common/artist/millsage/img_full_izumi-houka_01.webp",
+      "sha256": "3d089692c7712b02a9afcba660cde6df8d8757582fc1147387db832d318d6528"
+    },
+    {
+      "id": "bd-chieri",
+      "officialName": "梅里 ちえり",
+      "page": "https://bang-dream.com/artist/ikka-dumb-rock/umezato-chieri/",
+      "image": "https://bang-dream.com/wordpress/wp-content/themes/bangdream-portal/assets/webp/common/artist/ikka-dumb-rock/img_full_umezato-chieri_01.webp",
+      "sha256": "5c8f3ba99d2650e817f2f5e316dfed902d398bd40d41de24556b2bf39946b4ff"
+    },
+    {
+      "id": "bd-miku",
+      "officialName": "馬橋 心玖",
+      "page": "https://bang-dream.com/artist/ikka-dumb-rock/mahashi-miku/",
+      "image": "https://bang-dream.com/wordpress/wp-content/themes/bangdream-portal/assets/webp/common/artist/ikka-dumb-rock/img_full_mahashi-miku_01.webp",
+      "sha256": "30ed92f19abb3e4e4d728bbac465a16b9f35826c46ca15cfec1669dfc8fe0d20"
+    },
+    {
+      "id": "bd-raika",
+      "officialName": "須賀 蕾叶",
+      "page": "https://bang-dream.com/artist/ikka-dumb-rock/suga-raika/",
+      "image": "https://bang-dream.com/wordpress/wp-content/themes/bangdream-portal/assets/webp/common/artist/ikka-dumb-rock/img_full_suga-raika_01.webp",
+      "sha256": "8b100d0af8cc5788848ae8feb34784dd842c339295e4f2b5090979c975ce4c85"
+    },
+    {
+      "id": "bd-yomogi",
+      "officialName": "矢倉 蓬咲",
+      "page": "https://bang-dream.com/artist/ikka-dumb-rock/yakura-yomogi/",
+      "image": "https://bang-dream.com/wordpress/wp-content/themes/bangdream-portal/assets/webp/common/artist/ikka-dumb-rock/img_full_yakura-yomogi_01.webp",
+      "sha256": "cbcd7e1487be2f572d0651feb417e5aa8db9fcda6fa6620a212c8b3d3dd51075"
+    },
+    {
+      "id": "bd-shizuku",
+      "officialName": "四宮 寧月",
+      "page": "https://bang-dream.com/artist/ikka-dumb-rock/shinomiya-shizuku/",
+      "image": "https://bang-dream.com/wordpress/wp-content/themes/bangdream-portal/assets/webp/common/artist/ikka-dumb-rock/img_full_shinomiya-shizuku_01.webp",
+      "sha256": "47cab4ef9ad1798fa40f7c0057dd8e1734fd11384b76c877e36380b2f719f240"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+// Checked against the character illustrations (not the voice-actor photos) on 2026-10-24.
+// Directions below describe the image as seen by the viewer. Kana names are not invented Chinese translations.
+export const CHARACTER_AUDIT={
+  tomori:{officialName:'高松 燈',hairShape:'rounded-bob',costume:'mygo-hoodie',eyeShape:'round',notes:'灰褐色短鲍勃与碎齐刘海；灰粉眼；白灰连帽外套、青色块、黄色扣件、黑短裤。'},
+  anon:{officialName:'千早 愛音',base:'female08',front:'female05',hairShape:'straight-long',costume:'mygo-black-coat',notes:'粉色长直发、侧分；蓝灰眼；黑外套与黑内搭，青色腰侧饰边和金黄袖口。'},
+  rana:{officialName:'要 楽奈',hairShape:'side-bob',costume:'mygo-offshoulder',notes:'白银短发；画面左眼金色、右眼蓝色；黑高领无袖上衣，白青外套滑落肩部，黑色长裤和白底鞋。'},
+  soyo:{officialName:'長崎 そよ',hairShape:'soft-wave',costume:'mygo-waist-plaid',notes:'浅棕长发、侧分、柔和卷尾；浅蓝眼；白青外套、黄色肩带、腰间青绿格纹布与黑裙。'},
+  taki:{officialName:'椎名 立希',hairShape:'straight-long',costume:'mygo-wrap-skirt',notes:'深棕黑长直发、齐刘海；紫眼；白灰外套、青色肩部、黑色短裹裙及青色竖饰边、裸腿与运动鞋。'},
+  uika:{officialName:'三角 初華',hairShape:'shoulder-bob',costume:'mujica-shorts',notes:'浅金及肩发、齐刘海；紫眼；黑金束身衣、白蕾丝领、棕腰带、黑短裤、红色袖口。'},
+  mutsumi:{officialName:'若葉 睦',hairShape:'straight-long',costume:'mujica-red-corset',notes:'浅绿长发、齐刘海；金色眼；酒红贝雷帽、红色束腰内层、黑金外层与灰色纱袖。'},
+  umiri:{officialName:'八幡 海鈴',base:'female08',front:'female05',hairShape:'shoulder-layered',costume:'mujica-cape',notes:'黑绿中长发、侧刘海及两侧红发绳；青绿眼；画面左侧暗红肩披、黑金上衣、深灰下装。'},
+  nyamu:{officialName:'祐天寺 にゃむ',hairShape:'rounded-bob',costume:'mujica-red-skirt',notes:'紫灰短鲍勃、齐刘海；红粉眼；红黑束身短裙、灰纱袖、高领与红色耳饰。'},
+  sakiko:{officialName:'豊川 祥子',base:'female08',front:'female05',hairShape:'long-twintails',costume:'mujica-red-shoulders',notes:'浅蓝长双马尾、侧分刘海、两侧黑蝴蝶结；金眼；红色蓬肩、黑金束身衣与层叠裙。'},
+  arale:{officialName:'仲町 あられ',base:'female08',front:'female01',hairShape:'long-twintails',costume:'mew-yellow',notes:'金色双马尾、粉色内层/发尾；粉紫眼；黄黑猫耳耳机、白蓝上衣、黄色拼色裙。'},
+  nonoka:{officialName:'宮永 ののか',base:'female08',front:'female05',hairShape:'straight-long',costume:'mew-pink-check',notes:'银蓝长发与侧辫；浅蓝眼；粉白兔耳发饰、粉白格纹短上衣和裙、黄色纽扣。'},
+  ritsu:{officialName:'峰月 律',hairShape:'rounded-bob',costume:'mew-blue',notes:'冰蓝短发；灰紫眼；蓝色圆耳耳机、白蓝机能上衣、蓝白袖、深蓝短下装。'},
+  miyako:{officialName:'藤 都子',hairShape:'rounded-bob',costume:'mew-purple-lace',notes:'深紫短发；紫眼；白头带与有尖角轮廓的紫色薄纱、黑紫束腰裙、白色花边与星饰。'},
+  yuno:{officialName:'千石 ユノ',base:'female08',front:'female01',hairShape:'straight-long',costume:'mew-red-jacket',notes:'黑色长发、粉色挑染；红粉眼；粉色猫耳耳机、黑色内搭、宽松玫红外套和深色短裤。'},
+  nagi:{officialName:'琴平 凪',hairShape:'soft-wave',costume:'millsage-ruffle',notes:'橄榄褐色长发与卷尾；草绿眼；画面左侧白花、白色露肩花边上衣、黑白层叠裙。'},
+  mahoro:{officialName:'浜崎 まほろ',hairShape:'rounded-bob',costume:'millsage-pleats',notes:'蓝灰短鲍勃；蓝眼；白色珍珠头带、荷叶肩饰、白色褶皱连衣裙。'},
+  hotaru:{officialName:'汐見 蛍',hairShape:'straight-long',costume:'millsage-tie',notes:'白银长发；淡紫眼；画面右侧白花簇、白衬衣、黑领带、白色纵褶与黑侧层。'},
+  houka:{officialName:'和泉 朋花',hairShape:'straight-long',costume:'millsage-crop',notes:'浅粉长直发、齐刘海；灰粉眼；画面右侧白花、白色露肩短上衣、裸露腰线、白色高腰裙。'},
+  natsume:{officialName:'伊沢 なつめ',hairShape:'shoulder-wave',costume:'millsage-drape',notes:'鼠尾草绿中长卷发、侧分；紫眼；画面右侧白花、白色不对称薄纱垂袖与连衣裙。'},
+  raika:{officialName:'須賀 蕾叶',hairShape:'straight-long',costume:'ikka-purple-bomber',notes:'黑长发、金色内层挑染与金色发夹；黄绿眼；蓝紫宽夹克、黄内衬、白短上衣与金属饰带。'},
+  miku:{officialName:'馬橋 心玖',hairShape:'shoulder-layered',costume:'ikka-teal-plaid',notes:'白色中长发、黑色交叉发夹；青蓝眼；黑短背心、绿格纹宽衬衣、白裤、黑颈饰。'},
+  yomogi:{officialName:'矢倉 蓬咲',hairShape:'asymmetric-bob',costume:'ikka-pinstripe',notes:'灰紫不对称短发，画面左侧刘海较长；浅绿眼；蓝色细条纹宽外套、黑内搭和银链。'},
+  chieri:{officialName:'梅里 ちえり',base:'female08',front:'female01',hairShape:'braids',costume:'ikka-patchwork',notes:'珊瑚粉双辫，不是发髻；浅黄绿眼；黑交叉夹和星夹、粉紫短上衣、拼接短裙、黄白腰带。'},
+  shizuku:{officialName:'四宮 寧月',hairShape:'low-twintails',walkTailLength:24,costume:'ikka-grey-harness',notes:'浅金粉低双马尾、齐刘海与黑交叉发夹；紫眼；灰长上衣、黄色背带、黑网纱袖、红白条纹臂套。'}
+};
+// Full-body profile illustrations also checked; legwear is deliberately simplified in 64x64 frames.
+const LEGWEAR={
+  tomori:['warmers','黑短裤、黑色腿套、白青运动鞋。',['#faf8f1','#a9cbd5','#617b92']],
+  anon:['dark','黑色长外套尾摆、裸露膝部、深色长靴。',['#66606b','#383540','#252630']],
+  rana:['pants','黑色长裤、白底运动鞋；不是短裤。',['#faf8f1','#c2cbd2','#6d788b']],
+  soyo:['bare','及小腿的黑裙与青绿格纹腰布、黄交叉饰带黑鞋。',['#6f6570','#36353f','#22232e']],
+  taki:['bare','黑色短裹裙、青色边、裸腿、黑白运动鞋；不是长裙。',['#e1e4dc','#53656f','#303843']],
+  uika:['dark','黑短裤、非对称条纹腿饰、黑金鞋、红里分片披尾。',['#b7a46c','#494047','#2b2934']],
+  mutsumi:['dark','黑红长外层与深色腿饰、长靴。',['#75666b','#3f3743','#272934']],
+  umiri:['dark','不对称深色腿饰、棕黑色高靴与披尾。',['#9c8464','#615044','#3a3337']],
+  nyamu:['bare','灰色腿饰、黑色交叉系带、红色高跟鞋。',['#e0828b','#ad3d51','#642d44']],
+  sakiko:['bare','奶白内裙、黑金外裙、交叉系带和深色鞋。',['#b9ab8d','#49404a','#292b37']],
+  arale:['yellow','黄白拼色裙、非对称腿套、黄腿套与白蓝鞋。',['#f7faf0','#b0d6e4','#6f9cc1']],
+  nonoka:['pink','粉白格纹层叠裙、粉白腿饰、粉蓝鞋。',['#f6d3e4','#d995c0','#7aa9d4']],
+  ritsu:['blue','蓝色腿装、白蓝护腿和白蓝鞋。',['#e7f5f8','#8dc2e3','#527fb7']],
+  miyako:['bare','黑紫白层叠花边裙、裸腿、浅色踝饰和橄榄色鞋。',['#c2be99','#8d896b','#555645']],
+  yuno:['pink','深色短下装、腿部束带、玫红高靴。',['#f47eaa','#cb437a','#812f5c']],
+  nagi:['white','黑白层叠下装、白色过膝靴与深色交叉饰带。',['#f7faf2','#d4dde3','#9baebd']],
+  mahoro:['white','白色荷叶短裙、腿部系带、白靴。',['#f7faf2','#d4dde3','#9baebd']],
+  hotaru:['white','白色纵褶短下装、黑灰长垂尾、白色腿装与系带。',['#f7faf2','#d4dde3','#9baebd']],
+  houka:['white','白色落地开衩长裙、露出的腿部交叉饰带、白鞋。',['#f7faf2','#d4dde3','#9baebd']],
+  natsume:['bare','白色短下装、不对称长纱尾、黑色腿饰与白踝靴。',['#f7faf2','#d4dde3','#9baebd']],
+  raika:['striped','黑短裤、一侧灰色腿装与另一侧黑白条纹、棕色系带靴。',['#cfad75','#a17451','#664b42']],
+  miku:['pants-white','白色宽裤、破口和腿部系带、黑色厚底靴。',['#81747c','#3d3742','#252934']],
+  yomogi:['striped','黑短下装、网纹与条纹腿饰、深色鞋。',['#7e7988','#3c3947','#262933']],
+  chieri:['blue','拼接短裙、渔网腿饰、蓝色腿套和粉色细节。',['#9cb9c4','#587f98','#34485f']],
+  shizuku:['striped','黑短裙、非对称黄白与黑白条纹长袜、白色厚底鞋。',['#f8f6ed','#c4c8d2','#88899c']]
+};
+for(const [id,[walkLegwear,lowerBody,shoePalette]]of Object.entries(LEGWEAR))Object.assign(CHARACTER_AUDIT[id],{walkLegwear,lowerBody,shoePalette});
