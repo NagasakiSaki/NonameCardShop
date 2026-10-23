@@ -10,6 +10,8 @@
     "tileSize":{"const":16},
     "width":{"type":"integer","minimum":1,"maximum":200},
     "height":{"type":"integer","minimum":1,"maximum":200},
+    "worldOffset":{"type":"object","required":["x","y"],"properties":{"x":{"type":"number"},"y":{"type":"number"}},"description":"Presentation offset in the shared continuous scene; gameplay ownership and coordinates remain local to each room."},
+    "signs":{"type":"array","items":{"type":"object","required":["x","y","text"],"properties":{"x":{"type":"number"},"y":{"type":"number"},"text":{"type":"string"},"color":{"type":"string"},"brand":{"type":"boolean"}}}},
     "walkable":{"anyOf":[{"type":"array","items":{"type":"string","pattern":"^[01]+$"}},{"type":"array","items":{"type":"integer","enum":[0,1]}}],"description":"Rows of 0/1 strings, or row-major flat width*height integers. 1=walkable. Runtime normalizes frontend spawn/interactions/exits into anchors."},
     "anchors":{"type":"object","additionalProperties":{"type":"object","required":["x","y"],"properties":{"x":{"type":"number"},"y":{"type":"number"},"radius":{"type":"number","minimum":1},"targetRoom":{"type":"string"},"targetAnchor":{"type":"string"}}}}
   }

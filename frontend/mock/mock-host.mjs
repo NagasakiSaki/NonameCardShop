@@ -590,7 +590,8 @@ export async function createMockHost({ fixture = "store-day" } = {}) {
     if (!map) return;
     let vx = 0;
     let vy = 0;
-    if (actor.intentDirection) {
+    if(actor.intentVector){vx=actor.intentVector.x;vy=actor.intentVector.y;actor.direction=Math.abs(vx)>Math.abs(vy)?vx>0?'right':'left':vy>0?'down':'up';actor.path=[];}
+    else if (actor.intentDirection) {
       const d = actor.intentDirection;
       if (d === "left") vx = -1;
       else if (d === "right") vx = 1;
@@ -1082,7 +1083,7 @@ export async function createMockHost({ fixture = "store-day" } = {}) {
     "world.changeRoom": (payload) => {
       const actor=actors.get(ownedActorId),exit=maps[actor.roomId].exits.find(e=>e.id===payload.anchorId);
       if(!exit?.target||Math.hypot(actor.x-exit.fromTile.x*16-8,actor.y-exit.fromTile.y*16-8)>24)return fail('NOT_IN_RANGE','请先走到门口',false);
-      const tile=exit.target.spawnTile;actor.roomId=exit.target.mapId;actor.x=tile.x*16+8;actor.y=tile.y*16+8;actor.path=[];actor.intentDirection=null;actor.moving=false;
+      const tile=exit.target.spawnTile;actor.roomId=exit.target.mapId;actor.x=exit.seamlessEdge?(exit.seamlessEdge==='east'?0:479.99):tile.x*16+8;if(!exit.seamlessEdge)actor.y=tile.y*16+8;actor.path=[];actor.intentDirection=null;actor.intentVector=null;actor.moving=false;
       return ok(actor);
     },
     "business.open": () => {
@@ -1544,17 +1545,21 @@ export async function createMockHost({ fixture = "store-day" } = {}) {
           }
         }
         if (input.stop) {
+          actor.intentVector=null;
           actor.intentDirection = null;
           actor.path = [];
           actor.moving = false;
           return;
         }
         if (input.direction) {
+          actor.intentVector=null;
           actor.intentDirection = input.direction;
           actor.moving = true;
           return;
         }
+        if(input.vector){actor.intentDirection=null;actor.intentVector={...input.vector};actor.path=[];actor.moving=!!(input.vector.x||input.vector.y);return;}
         if (input.destination) {
+          actor.intentVector=null;
           const map = maps[actor.roomId];
           actor.intentDirection = null;
           const path = bfsPath(map, actor, input.destination);

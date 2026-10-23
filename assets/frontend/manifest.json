@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "artVersion": "pixel-shop-1",
+  "artVersion": "pixel-shop-2-band-inspired",
   "generatedBy": "tools/frontend-art/build.mjs",
   "tileSize": 16,
   "mapSize": {
@@ -10,7 +10,7 @@
     "pixelWidth": 480,
     "pixelHeight": 320
   },
-  "navVersion": "nav-2026-10-23a",
+  "navVersion": "nav-2026-10-23-continuous",
   "palette": {
     "ink": "#20182a",
     "inkSoft": "#3a2d47",
@@ -74,11 +74,12 @@
     "owner": {
       "sheet": "/assets/frontend/characters/owner.png",
       "portrait": "/assets/frontend/portraits/owner.png",
-      "frameWidth": 24,
-      "frameHeight": 32,
+      "frameWidth": 48,
+      "frameHeight": 64,
+      "displayScale": 0.6,
       "anchorPx": [
-        12,
-        30
+        24,
+        60
       ],
       "directions": {
         "down": 0,
@@ -96,20 +97,22 @@
       "displayName": "店长",
       "role": "店主",
       "traits": [
-        "帆布围裙",
-        "胸前店徽",
-        "腰间钥匙"
+        "卷袖衬衫",
+        "奶油围裙",
+        "铜钥匙"
       ],
-      "skinTone": "warm"
+      "appearanceReference": null,
+      "skinTone": "fair"
     },
     "rookie": {
       "sheet": "/assets/frontend/characters/rookie.png",
       "portrait": "/assets/frontend/portraits/rookie.png",
-      "frameWidth": 24,
-      "frameHeight": 32,
+      "frameWidth": 48,
+      "frameHeight": 64,
+      "displayScale": 0.6,
       "anchorPx": [
-        12,
-        30
+        24,
+        60
       ],
       "directions": {
         "down": 0,
@@ -125,21 +128,24 @@
         1
       ],
       "displayName": "新手顾客",
-      "role": "新手",
+      "role": "新手玩家",
       "traits": [
-        "绿色鸭舌帽",
-        "手拎入门牌盒"
+        "猫耳发束",
+        "星形发夹",
+        "入门盒"
       ],
+      "appearanceReference": "户山香澄：猫耳感发束、棕发与星形饰物",
       "skinTone": "fair"
     },
     "collector": {
       "sheet": "/assets/frontend/characters/collector.png",
       "portrait": "/assets/frontend/portraits/collector.png",
-      "frameWidth": 24,
-      "frameHeight": 32,
+      "frameWidth": 48,
+      "frameHeight": 64,
+      "displayScale": 0.6,
       "anchorPx": [
-        12,
-        30
+        24,
+        60
       ],
       "directions": {
         "down": 0,
@@ -154,23 +160,25 @@
         2,
         1
       ],
-      "displayName": "收藏家",
-      "role": "收藏",
+      "displayName": "收藏顾客",
+      "role": "收藏家",
       "traits": [
-        "银灰长发",
-        "金边领口",
-        "腋下收藏册"
+        "银紫长发",
+        "紫色蝴蝶结",
+        "收藏册"
       ],
+      "appearanceReference": "凑友希那：银紫长发与深紫服装",
       "skinTone": "fair"
     },
     "competitor": {
       "sheet": "/assets/frontend/characters/competitor.png",
       "portrait": "/assets/frontend/portraits/competitor.png",
-      "frameWidth": 24,
-      "frameHeight": 32,
+      "frameWidth": 48,
+      "frameHeight": 64,
+      "displayScale": 0.6,
       "anchorPx": [
-        12,
-        30
+        24,
+        60
       ],
       "directions": {
         "down": 0,
@@ -185,23 +193,25 @@
         2,
         1
       ],
-      "displayName": "竞技玩家",
-      "role": "竞技",
+      "displayName": "竞技顾客",
+      "role": "竞技玩家",
       "traits": [
-        "红色头带",
-        "运动短裤",
-        "腰侧牌盒"
+        "红色挑染",
+        "格纹裙摆",
+        "竞技牌盒"
       ],
-      "skinTone": "tan"
+      "appearanceReference": "美竹兰：深色短发、红色挑染",
+      "skinTone": "fair"
     },
     "passerby": {
       "sheet": "/assets/frontend/characters/passerby.png",
       "portrait": "/assets/frontend/portraits/passerby.png",
-      "frameWidth": 24,
-      "frameHeight": 32,
+      "frameWidth": 48,
+      "frameHeight": 64,
+      "displayScale": 0.6,
       "anchorPx": [
-        12,
-        30
+        24,
+        60
       ],
       "directions": {
         "down": 0,
@@ -216,22 +226,25 @@
         2,
         1
       ],
-      "displayName": "路过顾客",
-      "role": "路过",
+      "displayName": "休闲顾客",
+      "role": "休闲玩家",
       "traits": [
-        "短袖便装",
-        "布拖鞋"
+        "灰绿短发",
+        "宽松连帽衫",
+        "斜挎包"
       ],
-      "skinTone": "deep"
+      "appearanceReference": "青叶摩卡：灰绿短发、宽松外套",
+      "skinTone": "fair"
     },
     "regular": {
       "sheet": "/assets/frontend/characters/regular.png",
       "portrait": "/assets/frontend/portraits/regular.png",
-      "frameWidth": 24,
-      "frameHeight": 32,
+      "frameWidth": 48,
+      "frameHeight": 64,
+      "displayScale": 0.6,
       "anchorPx": [
-        12,
-        30
+        24,
+        60
       ],
       "directions": {
         "down": 0,
@@ -246,22 +259,25 @@
         2,
         1
       ],
-      "displayName": "熟客",
+      "displayName": "常来顾客",
       "role": "熟客",
       "traits": [
-        "高马尾与发夹",
-        "米色围巾"
+        "粉色双马尾",
+        "白色针织衫",
+        "粉色蝴蝶结"
       ],
-      "skinTone": "warm"
+      "appearanceReference": "丸山彩：粉色双马尾与粉白配色",
+      "skinTone": "fair"
     },
     "bigspender": {
       "sheet": "/assets/frontend/characters/bigspender.png",
       "portrait": "/assets/frontend/portraits/bigspender.png",
-      "frameWidth": 24,
-      "frameHeight": 32,
+      "frameWidth": 48,
+      "frameHeight": 64,
+      "displayScale": 0.6,
       "anchorPx": [
-        12,
-        30
+        24,
+        60
       ],
       "directions": {
         "down": 0,
@@ -279,10 +295,11 @@
       "displayName": "高预算顾客",
       "role": "大客户",
       "traits": [
-        "宽檐礼帽",
-        "亮面高领外套",
-        "手提收藏箱"
+        "金色长发",
+        "红色披肩",
+        "金扣收藏箱"
       ],
+      "appearanceReference": "弦卷心：金色长发与鲜明红金配色",
       "skinTone": "fair"
     }
   },
@@ -298,6 +315,7 @@
   "tileset": {
     "image": "/assets/frontend/tiles/tileset.png",
     "tileSize": 16,
+    "frameSize": 32,
     "columns": 8,
     "rows": 3,
     "tiles": [
@@ -322,188 +340,249 @@
   },
   "props": {
     "image": "/assets/frontend/props/props.png",
-    "cellSize": 48,
+    "cellSize": 192,
+    "artScale": 2,
     "columns": 4,
-    "rows": 5,
+    "rows": 6,
     "list": [
       {
         "prop": "counter_retail",
         "cell": 0,
         "x": 0,
         "y": 0,
-        "w": 48,
-        "h": 32,
-        "footY": 32,
+        "w": 192,
+        "h": 96,
+        "footY": 48,
         "occludes": true
       },
       {
         "prop": "counter_service",
         "cell": 1,
-        "x": 48,
+        "x": 192,
         "y": 0,
-        "w": 48,
-        "h": 32,
-        "footY": 32,
+        "w": 192,
+        "h": 96,
+        "footY": 48,
         "occludes": true
       },
       {
         "prop": "shelf",
         "cell": 2,
-        "x": 96,
+        "x": 384,
         "y": 0,
-        "w": 32,
-        "h": 40,
-        "footY": 40,
+        "w": 128,
+        "h": 112,
+        "footY": 56,
         "occludes": true
       },
       {
         "prop": "display_packs",
         "cell": 3,
-        "x": 144,
+        "x": 576,
         "y": 0,
-        "w": 16,
-        "h": 24,
-        "footY": 24,
+        "w": 128,
+        "h": 96,
+        "footY": 48,
         "occludes": true
       },
       {
         "prop": "display_boxes",
         "cell": 4,
         "x": 0,
-        "y": 48,
-        "w": 16,
-        "h": 24,
-        "footY": 24,
+        "y": 192,
+        "w": 128,
+        "h": 96,
+        "footY": 48,
         "occludes": true
       },
       {
         "prop": "trash",
         "cell": 5,
-        "x": 48,
-        "y": 48,
-        "w": 16,
-        "h": 20,
-        "footY": 20,
-        "occludes": false
+        "x": 192,
+        "y": 192,
+        "w": 48,
+        "h": 64,
+        "footY": 32,
+        "occludes": true
       },
       {
         "prop": "table",
         "cell": 6,
-        "x": 96,
-        "y": 48,
-        "w": 40,
-        "h": 32,
-        "footY": 32,
+        "x": 384,
+        "y": 192,
+        "w": 128,
+        "h": 96,
+        "footY": 48,
         "occludes": true
       },
       {
         "prop": "chair",
         "cell": 7,
-        "x": 144,
-        "y": 48,
-        "w": 16,
-        "h": 20,
-        "footY": 20,
-        "occludes": false
+        "x": 576,
+        "y": 192,
+        "w": 40,
+        "h": 48,
+        "footY": 24,
+        "occludes": true
       },
       {
         "prop": "lamp",
         "cell": 8,
         "x": 0,
-        "y": 96,
-        "w": 16,
-        "h": 32,
-        "footY": 32,
+        "y": 384,
+        "w": 32,
+        "h": 80,
+        "footY": 40,
         "occludes": false
       },
       {
         "prop": "sign",
         "cell": 9,
-        "x": 48,
-        "y": 96,
-        "w": 32,
-        "h": 16,
-        "footY": 16,
+        "x": 192,
+        "y": 384,
+        "w": 128,
+        "h": 40,
+        "footY": 20,
         "occludes": false
       },
       {
         "prop": "plant",
         "cell": 10,
-        "x": 96,
-        "y": 96,
-        "w": 16,
-        "h": 24,
-        "footY": 24,
+        "x": 384,
+        "y": 384,
+        "w": 48,
+        "h": 80,
+        "footY": 40,
         "occludes": true
       },
       {
         "prop": "rug",
         "cell": 11,
-        "x": 144,
-        "y": 96,
-        "w": 48,
-        "h": 24,
-        "footY": 24,
+        "x": 576,
+        "y": 384,
+        "w": 192,
+        "h": 128,
+        "footY": 64,
         "occludes": false
       },
       {
         "prop": "register",
         "cell": 12,
         "x": 0,
-        "y": 144,
-        "w": 16,
-        "h": 16,
-        "footY": 16,
+        "y": 576,
+        "w": 48,
+        "h": 48,
+        "footY": 24,
         "occludes": false
       },
       {
         "prop": "case_stack",
         "cell": 13,
-        "x": 48,
-        "y": 144,
-        "w": 16,
-        "h": 24,
-        "footY": 24,
+        "x": 192,
+        "y": 576,
+        "w": 64,
+        "h": 64,
+        "footY": 32,
         "occludes": true
       },
       {
         "prop": "door_mat",
         "cell": 14,
-        "x": 96,
-        "y": 144,
-        "w": 16,
-        "h": 16,
-        "footY": 16,
+        "x": 384,
+        "y": 576,
+        "w": 64,
+        "h": 48,
+        "footY": 24,
         "occludes": false
       },
       {
         "prop": "kiosk",
         "cell": 15,
-        "x": 144,
-        "y": 144,
-        "w": 48,
-        "h": 32,
-        "footY": 32,
+        "x": 576,
+        "y": 576,
+        "w": 160,
+        "h": 128,
+        "footY": 64,
         "occludes": true
       },
       {
         "prop": "bench",
         "cell": 16,
         "x": 0,
-        "y": 192,
-        "w": 40,
-        "h": 20,
-        "footY": 20,
-        "occludes": false
+        "y": 768,
+        "w": 128,
+        "h": 64,
+        "footY": 32,
+        "occludes": true
       },
       {
         "prop": "board",
         "cell": 17,
-        "x": 48,
-        "y": 192,
-        "w": 24,
-        "h": 32,
+        "x": 192,
+        "y": 768,
+        "w": 80,
+        "h": 96,
+        "footY": 48,
+        "occludes": true
+      },
+      {
+        "prop": "poster",
+        "cell": 18,
+        "x": 384,
+        "y": 768,
+        "w": 64,
+        "h": 80,
+        "footY": 40,
+        "occludes": false
+      },
+      {
+        "prop": "sofa",
+        "cell": 19,
+        "x": 576,
+        "y": 768,
+        "w": 192,
+        "h": 80,
+        "footY": 40,
+        "occludes": true
+      },
+      {
+        "prop": "tea",
+        "cell": 20,
+        "x": 0,
+        "y": 960,
+        "w": 64,
+        "h": 64,
         "footY": 32,
+        "occludes": true
+      },
+      {
+        "prop": "trophy",
+        "cell": 21,
+        "x": 192,
+        "y": 960,
+        "w": 48,
+        "h": 64,
+        "footY": 32,
+        "occludes": true
+      },
+      {
+        "prop": "clock",
+        "cell": 22,
+        "x": 384,
+        "y": 960,
+        "w": 48,
+        "h": 48,
+        "footY": 24,
+        "occludes": false
+      },
+      {
+        "prop": "speaker",
+        "cell": 23,
+        "x": 576,
+        "y": 960,
+        "w": 48,
+        "h": 80,
+        "footY": 40,
         "occludes": true
       }
     ]
@@ -520,10 +599,12 @@
     "fontStack": "\"Noto Sans SC\", \"Microsoft YaHei\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
     "pixelDisplay": {
       "sampling": "nearest",
-      "integerScaleOnly": true,
+      "integerScaleOnly": false,
       "allowedScales": [
         1,
+        1.5,
         2,
+        2.5,
         3
       ]
     }

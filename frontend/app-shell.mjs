@@ -87,6 +87,7 @@ export async function startApp({ host, connection, mode, fixture }) {
     actors: () => actors,
     currentMap: () => maps[currentMapId],
     getPlayer: () => actors.find((actor) => actor.actorId === playerActorId) || null,
+    getWorldScene: () => sceneRef,
     isNearInteraction(id){const i=maps[currentMapId].interactions.find(i=>i.id===id),p=actors.find(a=>a.actorId===playerActorId);return !!(i&&p&&Math.hypot(p.x-i.stand.x,p.y-i.stand.y)<=i.radius);},
     applyZoomPreference() { fitStage(); },
     get playerActorId() { return playerActorId; },
@@ -114,10 +115,11 @@ export async function startApp({ host, connection, mode, fixture }) {
       const open = await loader();
       return open(app, options);
     },
-    goToInteraction(interactionId) {
+    goToInteraction(interactionId,panel,panelOptions={}) {
       for (const mapId of Object.keys(maps)) {
-        const target = (maps[mapId].interactions || []).find((item) => item.id === interactionId);
-        if (!target) continue;
+        const found = (maps[mapId].interactions || []).find((item) => item.id === interactionId);
+        if (!found) continue;
+        const target={...found,...(panel?{panel,panelOptions}:{})};
         windows.closeAll();
         if (mapId !== currentMapId) {travelTarget=target;app.navigateScene(mapId);return true;}
         scheduleWalk(() => {
@@ -133,7 +135,7 @@ export async function startApp({ host, connection, mode, fixture }) {
       const exit=maps[currentMapId].exits.find(e=>e.target?.mapId===mapId);
       if(!exit){toast('error','没有可用出口',mapId);return;}
       windows.closeAll();router.clearPending();
-      scheduleWalk(()=>movement.moveTo(exit.fromTile.x*16+8,exit.fromTile.y*16+8));
+      scheduleWalk(()=>movement.moveTo(exit.seamlessEdge?(exit.seamlessEdge==='east'?maps[currentMapId].width*16-1:1):exit.fromTile.x*16+8,exit.fromTile.y*16+8));
     },
     destroy() {
       destroying = true;
@@ -150,8 +152,7 @@ export async function startApp({ host, connection, mode, fixture }) {
     const player=actors.find(a=>a.actorId===playerActorId);
     if(!player?.roomId||player.roomId===currentMapId||!maps[player.roomId])return;
     currentMapId=player.roomId;router.resetForMap();
-    const next=maps[currentMapId];
-    if(sceneRef)sceneRef.scene.restart({mapId:currentMapId,zoom:worldSceneZoom(mountEl.clientWidth,mountEl.clientHeight,next.width*next.tileSize,next.height*next.tileSize)});
+    if(sceneRef?.ready)sceneRef.setActiveRoom(currentMapId);
     render();
   }
 
@@ -162,14 +163,18 @@ export async function startApp({ host, connection, mode, fixture }) {
     onActivate: (interaction) => handleInteraction(interaction),
     onExit: async (exit) => {
       if(!exit.target||changingRoom)return;
-      changingRoom=true;movement.stop();
+      changingRoom=true;movement.suspend();
       try{const result=await host.command({requestId:newRequestId('room'),type:'world.changeRoom',payload:{anchorId:exit.id}});if(!result.ok)toast('error',result.error.code,result.error.message);else {await app.refreshSnapshot();syncRoom();}}
-      finally{changingRoom=false;}
+      finally{changingRoom=false;
+        if(travelTarget){const target=travelTarget;travelTarget=null;movement.moveTo(target.stand.x,target.stand.y);router.walkThenActivate(target);}
+        else if(!movement.resume()){const p=app.getPlayer();if(p)movement.moveTo(p.x+(exit.seamlessEdge==='east'?24:-24),p.y);}
+      }
     },
   });
 
   function handleInteraction(interaction) {
     if (!interaction) return;
+    if(interaction.panel){app.openPanel(interaction.panel,interaction.panelOptions);return;}
     switch (interaction.kind) {
       case "retail":
         app.openPanel("supplier", { tab: "retail", interaction: interaction.id });
@@ -186,6 +191,9 @@ export async function startApp({ host, connection, mode, fixture }) {
       case "service":
         app.openPanel("combat", { interaction: interaction.id });
         break;
+      case 'table':
+        app.openPanel('combat',{tableId:interaction.tableId});
+        break;
       default:
         app.openPanel("supplier", { interaction: interaction.id });
     }
@@ -200,8 +208,11 @@ export async function startApp({ host, connection, mode, fixture }) {
     getPlayerActorId: () => playerActorId,
     getSnapshot: () => snapshot,
     isBlocked: () => windows.depth > 0 || window.__bootFailed === true,
-    onWorldClick: (x, y) => {
+    onWorldClick: (x, y, roomId=currentMapId) => {
+      if(roomId!==currentMapId){const destination=maps[roomId],hit=destination.interactions.find(i=>(i.props||[]).some(id=>{const p=destination.props.find(p=>p.id===id);return p&&x>=p.x&&x<=p.x+p.w&&y>=p.y&&y<=p.y+p.h;}));if(hit)app.goToInteraction(hit.id);else app.navigateScene(roomId);return;}
       const map = maps[currentMapId];
+      const hit=map.interactions.find(i=>(i.props||[]).some(id=>{const p=map.props.find(p=>p.id===id);return p&&x>=p.x&&x<=p.x+p.w&&y>=p.y&&y<=p.y+p.h;}));
+      if(hit){app.goToInteraction(hit.id);return;}
       const near = nearestInteraction(map, x, y, 6);
       if (near && near.distance < (near.interaction.radius || 24) + 14) {
         router.walkThenActivate(near.interaction);
@@ -229,7 +240,7 @@ export async function startApp({ host, connection, mode, fixture }) {
     host,
     sessionId: connection.sessionId,
     getRoom: () => ({ mapId: currentMapId, navVersion: maps[currentMapId].navVersion }),
-    isBlocked: () => windows.depth > 0,
+    isBlocked: () => windows.depth > 0 || changingRoom,
     // 用户自己按方向键即放弃自动寻路与待触发的交互
     onManualMove: () => {walkIntent=null;travelTarget=null;router.clearPending();},
   });
@@ -352,7 +363,7 @@ export async function startApp({ host, connection, mode, fixture }) {
     const map = maps[currentMapId];
     notebookBody.append(el("div", { class: "note-card" }, [
       el("p", { class: "note-card__title" }, ["店面导航", el("span", { class: "muted", text: map.label })]),
-      el("p", { class: "small muted", text: "点击地面走动，靠近柜台按 E 交互；点击家具会先走到可站的位置。" }),
+      el("p", { class: "small muted", text: "WASD / 方向键可斜向行走；点击设施自动走近并打开。穿过右侧通道进入对战房。" }),
       el("div", { style: { display: "flex", gap: "6px", flexWrap: "wrap" } }, (map.interactions || []).map((interaction) =>
         el("button", {
           class: "btn btn--sm", type: "button", text: interaction.label,
@@ -372,10 +383,11 @@ export async function startApp({ host, connection, mode, fixture }) {
 
   function render() {
     hud.render(snapshot);
-    if (notebookTask) clearTimeout(notebookTask);
+    if(notebookTask)return;
     notebookTask = setTimeout(() => {
+      notebookTask=null;
       renderNotebook().catch((error) => console.error("[notebook] 渲染失败", error));
-    }, 180);
+    }, 1000);
   }
 
   if (window.innerWidth < 720) {

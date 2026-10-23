@@ -37,9 +37,9 @@ export function createInteractionRouter({ map, getMap, hintNode, onActivate, onE
     }
     // 出口触发带冷却：刚换房间落地时不会立刻被对面门口弹回去
     if (exit && exit.target && onExit && performance.now() > exitCooldownUntil) {
-      const reachedExit = Math.hypot(exit.fromTile.x * 16 + 8 - player.x, exit.fromTile.y * 16 + 8 - player.y) < 26;
+      const reachedExit = exit.seamlessEdge ? (exit.seamlessEdge==='east'?player.x>=map.width*16-6&&player.direction!=='left':player.x<=6&&player.direction!=='right') : Math.hypot(exit.fromTile.x * 16 + 8 - player.x, exit.fromTile.y * 16 + 8 - player.y) < 26;
       if (reachedExit) {
-        exitCooldownUntil = performance.now() + 900;
+        exitCooldownUntil = performance.now() + 250;
         onExit(exit);
       }
     }
@@ -59,7 +59,7 @@ export function createInteractionRouter({ map, getMap, hintNode, onActivate, onE
   function resetForMap() {
     current = null;
     pending = null;
-    exitCooldownUntil = performance.now() + 900;
+    exitCooldownUntil = performance.now() + 250;
     if (hintNode) hintNode.hidden = true;
   }
 

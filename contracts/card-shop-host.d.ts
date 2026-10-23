@@ -15,6 +15,7 @@ export interface CustomerBehaviorConfig {
   keepCopies:number; minimumKeptCards:number; discardChance:Record<Rarity,number>;
   scavengerChance:number; poorWallet:number; poorInitialWallet:number;
   pickupLimit:number; pickupCooldownMinutes:number;
+  names:string[];
 }
 export interface UpgradeView {
   upgradeId:string; name:string; description:string; level:number; maxLevel:number;
@@ -48,7 +49,7 @@ export interface CardShopHost {
   command<T=unknown>(input:CommandRequest):Promise<Result<T> & {requestId:string}>;
   subscribe(listener:(event:HostEvent)=>void):()=>void;
   pause:{acquire(input:{ownerId:string;reason:string}):Promise<PauseLease>;release(leaseId:string):Promise<void>};
-  world:{input(input:{sessionId:string;inputSeq:number;roomId:string;navVersion:string;direction?:'up'|'down'|'left'|'right';destination?:{x:number;y:number};stop?:boolean}):void};
+  world:{input(input:{sessionId:string;inputSeq:number;roomId:string;navVersion:string;direction?:'up'|'down'|'left'|'right';vector?:{x:number;y:number};destination?:{x:number;y:number};stop?:boolean}):void};
   battle:{mount(input:{container:HTMLElement;matchId:string;signal?:AbortSignal}):Promise<{dispose():void|Promise<void>}>};
   disconnect():Promise<void>;
 }

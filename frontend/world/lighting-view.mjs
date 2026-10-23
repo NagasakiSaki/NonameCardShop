@@ -36,13 +36,14 @@ export class LightingView {
   constructor(scene, map) {
     this.scene = scene;
     this.map = map;
-    this.overlay = scene.add.rectangle(0, 0, map.width * map.tileSize, map.height * map.tileSize, 0xffffff, 0.001)
+    const offset=map.worldOffset||{x:0,y:0};
+    this.overlay = scene.add.rectangle(offset.x, offset.y, map.width * map.tileSize, map.height * map.tileSize, 0xffffff, 0.001)
       .setOrigin(0, 0)
       .setDepth(8000)
       .setBlendMode(Phaser.BlendModes.MULTIPLY);
     this.glows = [];
     for (const light of map.lights || []) {
-      const glow = scene.add.image(light.x, light.y, "glow")
+      const glow = scene.add.image(light.x+offset.x, light.y+offset.y, "glow")
         .setDepth(8100)
         .setBlendMode(Phaser.BlendModes.ADD)
         .setScale((light.radius || 64) / 48)

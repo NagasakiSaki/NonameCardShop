@@ -1,0 +1,41 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {chromium} from 'playwright';
+import {startShopServer} from '../server.mjs';
+import {validateMap,moveActor,pathfind,clearSegment} from '../modules/backend/navigation.mjs';
+const grid=validateMap({mapId:'physics',navVersion:'test',width:8,height:8,tileSize:16,walkable:['00000000','01111110','01101110','01101110','01101110','01111110','01111110','00000000'],anchors:{}});
+const diagonal={actorId:'actor:owner',x:32,y:80},straight={...diagonal};moveActor(grid,diagonal,{vector:{x:1,y:1}},.1);moveActor(grid,straight,{vector:{x:0,y:1}},.1);assert.ok(Math.abs(Math.hypot(diagonal.x-32,diagonal.y-80)-10)<.001);assert.ok(Math.abs(straight.y-80-10)<.001);
+const sliding={actorId:'actor:owner',x:47,y:40};moveActor(grid,sliding,{vector:{x:1,y:1}},.1);assert.ok(sliding.x<48&&sliding.y>40,'slide along a wall without crossing it');assert.equal(clearSegment(grid,{x:40,y:40},{x:72,y:40}),false);
+const direct=pathfind(grid,{x:24,y:88},{x:104,y:104});assert.equal(direct.length,1,'open floors use a straight path');
+const output=process.env.CARD_SHOP_TEST_RESULTS||'.local/frontend-v2';fs.mkdirSync(output,{recursive:true});
+const server=await startShopServer({port:0,enginePort:0});let browser;
+try{
+  browser=await chromium.launch();const page=await browser.newPage({viewport:{width:1440,height:950}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await page.goto(server.origin+'/data/backend-rules.json');await page.evaluate(async()=>{
+    const [{createWorld},{browserRepository},{buildCatalog},{publishProducts,makeSealed}]=await Promise.all([import('/modules/backend/world.mjs'),import('/modules/backend/storage.mjs'),import('/modules/backend/catalog.mjs'),import('/modules/backend/products.mjs')]);
+    const [source,rules]=await Promise.all(['/data/cards.json','/data/backend-rules.json'].map(p=>fetch(p).then(r=>r.json())));rules.npcAutoBattles=false;const w=createWorld(rules);w.clock.phase='open';w.clock.minute=540;w.nextNpcMinute=10000;w.player.x=200;w.player.y=200;
+    w.products=publishProducts(buildCatalog(source,rules),rules,1);const product=w.products.find(p=>p.availability==='available');for(let i=0;i<4;i++)makeSealed(w,product,'pack',50);
+    w.orders=[{orderId:'bulk-1',product,unit:'pack',quantity:2,unitCost:50,status:'arrived'},{orderId:'bulk-2',product,unit:'pack',quantity:2,unitCost:50,status:'arrived'}];
+    const repo=browserRepository();await repo.commit({schemaVersion:2,revision:0,world:w,archives:[],requests:{},legacyResetDone:true},null);await repo.close();
+  });
+  await page.goto(server.origin);await page.waitForFunction(()=>window.__cardShopReady===true);
+  const player=()=>page.evaluate(()=>__cardShopApp.getPlayer()),query=(name,p={})=>page.evaluate(async({name,p})=>(await __cardShopApp.host.query(name,p)).data,{name,p});
+  await page.waitForFunction(()=>document.querySelector('#notebook-body').innerText.includes('店面导航'));
+  const before=await player();await page.keyboard.down('ArrowRight');await page.keyboard.down('ArrowDown');await page.waitForTimeout(350);const after=await player();assert.ok(after.x-before.x>10&&after.y-before.y>10);assert.ok(Math.abs((after.x-before.x)-(after.y-before.y))<2,'both axes move simultaneously');
+  await page.keyboard.up('ArrowDown');await page.waitForTimeout(150);const afterOne=await player();assert.ok(afterOne.x>after.x);assert.ok(Math.abs(afterOne.y-after.y)<1);await page.keyboard.up('ArrowRight');
+  const labels=await page.evaluate(()=>[...__cardShopApp.getWorldScene().actorView.sprites.values()].map(e=>({text:e.label.text,visible:e.label.visible,alpha:e.label.alpha})));assert.ok(labels.length>=4);assert.ok(labels.every(l=>l.visible&&l.alpha>.9&&l.text.split('\n').length>=2));
+  await page.screenshot({path:output+'/store.png'});
+  await page.evaluate(()=>{window.__v2Sprite=__cardShopApp.getWorldScene().actorView.getSprite('actor:owner');window.__v2Steps=[];window.__v2Off=__cardShopApp.host.subscribe(e=>{if(e.type==='actorsUpdated'){const p=e.data.find(a=>a.actorId==='actor:owner');if(p)__v2Steps.push({room:p.roomId,x:p.x+(p.roomId==='battle-room'?480:0),y:p.y});}});__cardShopApp.navigateScene('battle-room');});
+  await page.waitForFunction(()=>__cardShopApp.getPlayer().roomId==='battle-room',null,{timeout:18000});await page.waitForTimeout(400);
+  assert.equal(await page.evaluate(()=>__v2Sprite===__cardShopApp.getWorldScene().actorView.getSprite('actor:owner')),true,'room crossing preserves the actor and scene');
+  const steps=await page.evaluate(()=>__v2Steps),cross=steps.findIndex((p,i)=>i&&p.room!==steps[i-1].room);assert.ok(cross>0);assert.ok(Math.hypot(steps[cross].x-steps[cross-1].x,steps[cross].y-steps[cross-1].y)<10,'no room teleport jump');
+  await page.screenshot({path:output+'/continuous-room.png'});
+  const tableClick=await page.evaluate(()=>{const s=__cardShopApp.getWorldScene(),cam=s.cameras.main,p=__cardShopApp.currentMap().props.find(p=>p.prop==='table'),bounds=document.querySelector('#game-mount canvas').getBoundingClientRect();return {x:bounds.left+(p.x+480+p.w/2-cam.worldView.x)*cam.zoom,y:bounds.top+(p.y+20-cam.worldView.y)*cam.zoom};});
+  await page.mouse.click(tableClick.x,tableClick.y);await page.waitForFunction(()=>__cardShopApp.windows.depth===1,null,{timeout:10000});await page.getByText('对战房',{exact:true}).first().waitFor();assert.ok(await page.locator('.note-card').filter({has:page.locator('.note-card__title',{hasText:'1 号牌桌'})}).first().evaluate(e=>e.style.borderColor.includes('232')));await page.evaluate(()=>{__cardShopApp.windows.closeAll();__cardShopApp.navigateScene('store');});await page.waitForFunction(()=>__cardShopApp.getPlayer().roomId==='store',null,{timeout:18000});
+  await page.evaluate(()=>__cardShopApp.goToInteraction('store.counter','supplier',{tab:'orders'}));await page.getByRole('button',{name:'一键签收全部到货',exact:true}).waitFor({timeout:15000});await page.getByRole('button',{name:'一键签收全部到货',exact:true}).click();
+  assert.ok((await query('supplier.orders')).items.every(o=>o.status==='received'));
+  await page.getByRole('button',{name:'零售货架',exact:true}).click();await page.getByRole('button',{name:'一键补满货架',exact:true}).first().waitFor({timeout:15000});await page.getByRole('button',{name:'一键补满货架',exact:true}).first().click();assert.equal((await query('retail.list')).shelves[0].stock,8);
+  await page.getByRole('button',{name:'去开包',exact:true}).first().click();await page.getByRole('button',{name:'一键开所有包',exact:true}).waitFor({timeout:15000});assert.equal(await page.evaluate(()=>__cardShopApp.windows.depth),1,'counter transfer replaces old windows');assert.equal((await player()).roomId,'store');
+  const paused=(await query('shop.snapshot')).clock.minute;await page.waitForTimeout(250);assert.equal((await query('shop.snapshot')).clock.minute,paused);await page.evaluate(()=>__cardShopApp.windows.closeAll());await page.setViewportSize({width:420,height:850});await page.waitForTimeout(350);await page.screenshot({path:output+'/narrow.png'});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);assert.ok(await page.evaluate(()=>__cardShopApp.getWorldScene().cameras.main.zoom<=1),'narrow viewport fits the room');assert.deepEqual(errors,[]);await page.evaluate(()=>{__v2Off();return __cardShopApp.host.disconnect();});
+  console.log('PASS movement/UI: normalized diagonals, sliding, straight paths, simultaneous keys, persistent NPC names/types, continuous same-scene crossing in both directions, bulk receiving/shelving, automatic counter transfer and paused single window.');
+}finally{await browser?.close();await server.close();}

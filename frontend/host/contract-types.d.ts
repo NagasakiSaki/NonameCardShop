@@ -142,6 +142,7 @@ export type WorldInput = {
   roomId: string;
   navVersion: string;
   direction?: "up" | "down" | "left" | "right";
+  vector?: {x:number;y:number};
   destination?: { x: number; y: number };
   stop?: boolean;
 };

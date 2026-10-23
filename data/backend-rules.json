@@ -39,7 +39,8 @@
     "keepCopies":1,"minimumKeptCards":3,
     "discardChance":{"N":0.65,"R":0.25,"SR":0,"SSR":0},
     "scavengerChance":0.3,"poorWallet":400,"poorInitialWallet":200,
-    "pickupLimit":2,"pickupCooldownMinutes":90
+    "pickupLimit":2,"pickupCooldownMinutes":90,
+    "names":["林知夏","沈梨","许遥","江弥","叶澄","陈若","白栀","杜桥","唐禾","宋言","陆冬","苏棠"]
   },
   "maxNpcs":12,
   "priceDailyLimit":0.15,

@@ -42,18 +42,19 @@ export class ActorView {
       if (!entry) {
         const shadow = this.scene.add.image(actor.x, actor.y, "shadow").setDepth(actor.y - 1).setAlpha(0.55);
         const sprite = this.scene.add.sprite(actor.x, actor.y, "char-" + appearance, 1);
-        sprite.setOrigin(12 / 24, 30 / 32);
+        const meta=this.scene.characterMeta[appearance];
+        sprite.setOrigin(meta.anchorPx[0]/meta.frameWidth,meta.anchorPx[1]/meta.frameHeight).setScale(meta.displayScale||1);
         sprite.setDepth(actor.y);
         entry = { sprite, shadow, targetX: actor.x, targetY: actor.y, direction: actor.direction, moving: actor.moving, label: null };
         this.sprites.set(actor.actorId, entry);
         {
           entry.label = this.scene.add.text(actor.x, actor.y - 34, actor.label || '', {
             fontFamily: '"Microsoft YaHei", sans-serif',
-            fontSize: "9px",
+            fontSize: "7px",resolution:4,align:'center',lineSpacing:1,
             color: "#f6e6b8",
             backgroundColor: "rgba(20,15,26,0.72)",
             padding: { left: 3, right: 3, top: 1, bottom: 1 },
-          }).setOrigin(0.5, 1).setDepth(9000).setAlpha(0);
+          }).setOrigin(0.5, 1).setDepth(9000).setAlpha(.96);
         }
       }
       entry.targetX = actor.x;
@@ -61,7 +62,11 @@ export class ActorView {
       entry.direction = actor.direction;
       entry.moving = actor.moving;
       entry.activity = actor.activity;
-      if(entry.label){entry.label.setText(actor.label || '');entry.label.setVisible(!!actor.label);}
+      const meta=this.scene.characterMeta[appearance],parts=(actor.name||meta.displayName).split(/[·｜|]/).map(s=>s.trim());
+      const role=actor.actorId===playerActorId?'店主':(parts[1]||meta.role)+(actor.scavenger?' / 拾荒客':'');
+      const text=parts[0]+'\n'+role+(actor.label?'\n'+actor.label:'');
+      if(entry.label&&entry.label.text!==text)entry.label.setText(text);
+      entry.headHeight=meta.anchorPx[1]*(meta.displayScale||1)+5;
       const anim = (actor.moving ? "walk-" : "idle-") + appearance + "-" + (DIRECTIONS[actor.direction] == null ? "down" : actor.direction);
       if (entry.sprite.anims.currentAnim?.key !== anim) entry.sprite.play(anim, true);
       if (actor.actorId === playerActorId) entry.sprite.setDepth(actor.y + 1);
@@ -76,7 +81,7 @@ export class ActorView {
   }
 
   update(dt, playerPosition) {
-    const lerp = Math.min(1, dt * 0.018);
+    const lerp = Math.min(1, dt * 0.04),labels=[];
     for (const [id, entry] of this.sprites) {
       const { sprite, shadow } = entry;
       const dx = entry.targetX - sprite.x;
@@ -94,9 +99,10 @@ export class ActorView {
       shadow.setPosition(sprite.x, sprite.y + 1);
       shadow.setDepth(sprite.y - 2);
       if (entry.label) {
-        entry.label.setPosition(sprite.x, sprite.y - 33);
-        const near = playerPosition ? Math.hypot(sprite.x - playerPosition.x, sprite.y - playerPosition.y) < 58 : true;
-        entry.label.setAlpha(Phaser.Math.Linear(entry.label.alpha, near ? 0.95 : 0, 0.16));
+        entry.label.setScale(1.8/this.scene.cameras.main.zoom);
+        let y=sprite.y-entry.headHeight;
+        for(const other of labels)if(Math.abs(other.x-sprite.x)<(other.width+entry.label.displayWidth)/2+2&&Math.abs(other.y-y)<entry.label.displayHeight+3)y=other.y-entry.label.displayHeight-4;
+        entry.label.setPosition(sprite.x,y);labels.push({x:sprite.x,y,width:entry.label.displayWidth});
       }
     }
   }

@@ -39,7 +39,7 @@ export function purchaseUpgrade(w,upgradeId){
 }
 export function ensureRegulars(w){
   if(!w.management)return;
-  for(const r of w.management.config.regulars){const actorId=`regular:${r.id}`;if(w.npcs.some(n=>n.actorId===actorId))continue;w.npcs.push({actorId,regularId:r.id,name:r.name,appearanceId:r.appearanceId,wallet:{available:r.initialWallet},roomId:'store',x:240,y:272,direction:'up',moving:false,activity:'idle'});note(w,'regularJoined',{actorId,externalFunds:r.initialWallet});}
+  for(const [index,r] of w.management.config.regulars.entries()){const actorId=`regular:${r.id}`;if(w.npcs.some(n=>n.actorId===actorId))continue;const homes=[{x:176,y:104},{x:400,y:128},{x:208,y:208}],home=homes[index%homes.length];w.npcs.push({actorId,regularId:r.id,name:r.name,appearanceId:r.appearanceId,wallet:{available:r.initialWallet},roomId:'store',...home,direction:'down',moving:false,activity:'idle'});note(w,'regularJoined',{actorId,externalFunds:r.initialWallet});}
 }
 function refundRequest(w,request){
   if(request.fundsHeld){const npc=w.npcs.find(n=>n.actorId===request.actorId);credit(npc.wallet,request.fundsHeld);w.wallet.escrowLiability-=request.fundsHeld;request.fundsHeld=0;}

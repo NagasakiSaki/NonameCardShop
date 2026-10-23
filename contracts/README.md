@@ -46,6 +46,12 @@
 - NPC 后台比赛不阻止存读档：档案保留已完成比分、费用和实际持卡，读档后当前小局重开，并返回 recoveryNote。玩家仍在运行的小局先关闭视图或完成。日档按 ID 独立保存，旧内嵌格式自动转存，不需清档。
 - capabilities.wagering=false 是当前真实能力限制，不能通过 UI、配置或导入存档绕过。
 
+## 连续移动与批量操作（2026-10-23）
+
+当前前端第二版：`world.input` 支持归一化 `vector:{x,y}`，原 direction/destination 保留；地图新增 worldOffset/signs 和出口 seamlessEdge。后端坐标仍按房间本地记录，边缘转换必须通过 `world.changeRoom`。
+
+批量操作：`supplier.receiveAll({})` 签收全部已到货订单；`retail.listAll({inventoryRefs})` 按剩余货架容量上架，返回 listed/remaining/note。与单件操作一样检查站位与 requestId，不跨过保护或库存锁。美术单位、连续场景与调整入口见 [操作与美术第二版](../docs/前端操作与美术第二版.md)。
+
 ## 顾客拆包与共享垃圾桶（2026-10-23）
 
 - 顾客购买密封商品后分阶段拆包、挑牌、走到垃圾桶弃牌；`actorsUpdated` 的 `activity` 和 `label` 表达当前行为。

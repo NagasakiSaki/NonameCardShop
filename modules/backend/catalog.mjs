@@ -19,6 +19,7 @@ export function validateRules(r){
   if(r.customerBehavior!==undefined){
     need(r.customerBehavior&&typeof r.customerBehavior==='object'&&!Array.isArray(r.customerBehavior),'INVALID_CONFIG','顾客行为参数必须是对象。');
     const c={...DEFAULT_CUSTOMER_BEHAVIOR,...r.customerBehavior};
+    need(Array.isArray(c.names)&&c.names.length>0&&c.names.length<=100&&c.names.every(n=>typeof n==='string'&&n.trim().length>0&&n.length<=12&&!/[\r\n\t]/.test(n)),'INVALID_CONFIG','顾客姓名池须包含 1～100 个不超过 12 字的姓名。');
     for(const key of ['openingSeconds','sortingSeconds','searchSeconds'])need(Number.isFinite(c[key])&&c[key]>=.25&&c[key]<=60,'INVALID_CONFIG',`${key} 必须在 0.25～60 秒之间。`);
     for(const key of ['keepCopies','minimumKeptCards','pickupLimit'])need(Number.isSafeInteger(c[key])&&c[key]>=1&&c[key]<=120,'INVALID_CONFIG',`${key} 必须在 1～120 之间。`);
     for(const key of ['poorWallet','poorInitialWallet','pickupCooldownMinutes'])need(Number.isSafeInteger(c[key])&&c[key]>=0&&c[key]<=1000000,'INVALID_CONFIG',`${key} 必须是支持范围内的非负整数。`);

@@ -36,10 +36,17 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
   function normaliseActors(world){
     const aliases={novice:'rookie',competitive:'competitor',casual:'passerby',premium:'bigspender'},occupied=new Set();
     for(const actor of [world.player,...world.npcs]){
+      const oldName=/^顾客\s*(\d+)$/.exec(actor.name||'');if(oldName){const names=customerBehavior(world).names;actor.name=names[(Number(oldName[1])-1)%names.length];}
+      const navigationChanged=actor.navVersion!==navigation.get(actor.roomId)?.navVersion;
       actor.appearanceId=aliases[actor.appearanceId]||actor.appearanceId;const map=navigation.get(actor.roomId);if(!map)continue;
       const key=(x,y)=>`${actor.roomId}:${Math.floor(x/16)}:${Math.floor(y/16)}`;
       if(!canStand(map,actor.x,actor.y)||occupied.has(key(actor.x,actor.y))){const points=[];for(let y=0;y<map.height;y++)for(let x=0;x<map.width;x++){const p={x:x*16+8,y:y*16+8};if(canStand(map,p.x,p.y)&&!occupied.has(key(p.x,p.y)))points.push(p);}points.sort((a,b)=>Math.hypot(a.x-actor.x,a.y-actor.y)-Math.hypot(b.x-actor.x,b.y-actor.y));if(points[0])Object.assign(actor,points[0]);}
       occupied.add(key(actor.x,actor.y));actor.navVersion=map.navVersion;
+      if(navigationChanged&&actor.trip?.path?.length){
+        const goal=actor.trip.path.at(-1),fallback=map.anchors[actor.trip.stage==='discard'||actor.trip.stage==='scavenge'?'store.trash':'store.counter'];
+        try{actor.trip.path=pathfind(map,actor,canStand(map,goal.x,goal.y)?goal:fallback||map.anchors['store.entry']);}
+        catch{if(actor.trip.kind!=='match'){finishCustomerVisits(world,catalog);break;}}
+      }
     }
   }
   normaliseActors(record.world);
@@ -165,12 +172,19 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
         world.orders.push(order);world.daily.purchases+=order.cost;world.lifetime.ordered+=q.quantity*(q.unit==='box'?24:1);note(world,'orderPlaced',{orderId:order.orderId,amount:order.cost});return {orderId:order.orderId};
       }
       case 'supplier.receive':return receiveOrder(world,world.orders.find(o=>o.orderId===p.orderId));
+      case 'supplier.receiveAll':{const arrived=world.orders.filter(o=>o.status==='arrived'),results=arrived.map(o=>receiveOrder(world,o));return {orders:arrived.length,inventoryRefs:results.flatMap(r=>r.inventoryRefs),stock:{packs:sum(results.map(r=>r.stock.packs))}};}
       case 'boxes.unseal':return {inventoryRefs:(p.boxIds||[p.inventoryRef]).flatMap(ref=>{const i=playerItem(world,ref);need(!i.protected,'ITEM_LOCKED','卡盒受保护。');return unsealBox(world,i).map(p=>p.inventoryRef);})};
       case 'opening.execute':{const preview=lookup(previews,input.previewId,'opening');need(preview.refs.length,'OUT_OF_STOCK','没有可拆卡包。');const result=executeOpening(world,preview,catalog);return {operationId:input.requestId,...result};}
       case 'inventory.setProtection':{const i=item();need(!i.lock,'ITEM_LOCKED','被交易或比赛占用的物品不能改保护状态。');need(typeof p.protected==='boolean','INVALID_INPUT','保护开关不正确。');i.protected=p.protected;return {};}
       case 'inventory.discard':{discardCard(world,item(),'player');return {};}
       case 'inventory.recover':{const selected=p.all?trashItems(world):[world.items[p.inventoryRef]];for(const i of selected)pickTrashCard(world,i,'player');return {quantity:selected.length,recovered:selected.length,note:`已拾取 ${selected.length} 张实物卡，拾取的卡种已登记流通。`};}
       case 'retail.list':{const i=item();need(['pack','box'].includes(i.kind)&&i.location==='stock'&&free(i),'INVALID_ITEM','正店只出售未锁定的密封包/盒。');const e=managementEffects(world);need(shelfUsed(world)+(i.kind==='box'?e.boxShelfUnits:1)<=e.shelfCapacity,'SHELF_FULL','零售货架空间不足，可升级货架。');i.location='retail';return {};}
+      case 'retail.listAll':{
+        need(Array.isArray(p.inventoryRefs)&&p.inventoryRefs.length<=10000&&p.inventoryRefs.every(r=>typeof r==='string'),'INVALID_INPUT','请选择待补货的库存实物。');
+        const items=[...new Set(p.inventoryRefs)].map(ref=>playerItem(world,ref)),e=managementEffects(world);let used=shelfUsed(world),listed=0;
+        for(const i of items){const units=i.kind==='box'?e.boxShelfUnits:1;if(['pack','box'].includes(i.kind)&&i.location==='stock'&&free(i)&&used+units<=e.shelfCapacity){i.location='retail';used+=units;listed++;}}
+        return {listed,remaining:items.length-listed,note:`已补货 ${listed} 件；货架满或受保护的商品保留在仓库。`};
+      }
       case 'retail.withdraw':{const i=item();need(i.location==='retail'&&!i.lock,'ITEM_LOCKED','不能撤下该商品。');i.location='stock';return {withdrawn:1};}
       case 'retail.setPrice':{const i=item();need(i.location==='retail','INVALID_STATE','商品未在零售货架。');i.retailPrice=integer(p.amount,1,1000000);return {unitAmount:i.retailPrice};}
       case 'market.listSurplus':return listSurplus(world,catalog,lookup(previews,input.previewId,'surplus'),p);
@@ -199,7 +213,9 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
         saveArchive(next,'before-load');next.world=clone(a.world);initialiseManagement(next.world,managementConfig);ensureRegulars(next.world);next.world.player.actorId='actor:owner';normaliseActors(next.world);next.world.branchId=id('branch');next.world.pendingEngineEvents=[];for(const m of next.world.matches)if(m.status==='running')m.status='interrupted';return {worldId:next.world.worldId,branchId:next.world.branchId};
       }
       case 'world.changeRoom':{
-        const map=navigation.get(world.player.roomId),door=map?.anchors[p.anchorId];need(door?.targetRoom&&door?.targetAnchor,'NOT_FOUND','房间出口不存在。');need(Math.hypot(world.player.x-door.x,world.player.y-door.y)<=(door.radius||24),'NOT_IN_RANGE','请先走到门口。');const nextMap=navigation.get(door.targetRoom),anchor=door.targetSpawn||nextMap?.anchors[door.targetAnchor];need(nextMap&&anchor&&canStand(nextMap,anchor.x,anchor.y),'NAVIGATION_UNAVAILABLE','目标地图尚未就绪。');world.player={...world.player,roomId:nextMap.mapId,navVersion:nextMap.navVersion,x:anchor.x,y:anchor.y,moving:false};movement=null;return clone(world.player);
+        const map=navigation.get(world.player.roomId),door=map?.anchors[p.anchorId];need(door?.targetRoom&&door?.targetAnchor,'NOT_FOUND','房间出口不存在。');need(Math.hypot(world.player.x-door.x,world.player.y-door.y)<=(door.radius||24),'NOT_IN_RANGE','请先走到门口。');const nextMap=navigation.get(door.targetRoom);let anchor=door.targetSpawn||nextMap?.anchors[door.targetAnchor];
+        if(nextMap&&door.seamlessEdge){need(door.seamlessEdge==='east'?world.player.x>=map.width*16-6:world.player.x<=6,'NOT_IN_RANGE','请继续走过房间通道。');anchor={x:door.seamlessEdge==='east'?0:nextMap.width*16-.01,y:world.player.y};}
+        need(nextMap&&anchor&&canStand(nextMap,anchor.x,anchor.y),'NAVIGATION_UNAVAILABLE','目标地图尚未就绪。');world.player={...world.player,roomId:nextMap.mapId,navVersion:nextMap.navVersion,x:anchor.x,y:anchor.y,moving:false};movement=null;return clone(world.player);
       }
       default:fail('UNSUPPORTED_COMMAND',`尚未实现操作：${input.type}`);
     }
@@ -225,7 +241,15 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
     async connect(p){need(p?.contractVersion===CONTRACT,'CONTRACT_MISMATCH','前后端契约版本不一致。');need(typeof p.clientId==='string','INVALID_INPUT','缺少会话 ID。');clientId=p.clientId;sessionId=id('session');connected=true;disconnected=false;return {contractVersion:CONTRACT,worldId:w().worldId,branchId:w().branchId,sessionId,revision:record.revision,currency:{code:'SHOP',label:'游戏币',minorUnit:1},capabilities:{clock:true,inventory:true,products:true,market:true,combat:true,wagering:false,saves:true,navigation:navigation.size>0,upgrades:!!w().management,neighbors:!!w().management,npcAutoBattles:backgroundAvailable},initialSnapshot:snapshot(w(),reasons())};},
     query,command,subscribe(listener){listeners.add(listener);publish();return()=>listeners.delete(listener);},
     pause:{async acquire(p){live();need(p?.ownerId&&p?.reason,'INVALID_INPUT','缺少暂停原因。');const lease={leaseId:id('pause'),ownerId:p.ownerId,reason:p.reason};pauses.set(lease.leaseId,lease);movement=null;publish();return clone(lease);},async release(leaseId){pauses.delete(leaseId);publish();}},
-    world:{input(p){if(!connected||disconnected||p?.sessionId!==sessionId||!Number.isSafeInteger(p.inputSeq)||p.inputSeq<=lastInputSeq)return;lastInputSeq=p.inputSeq;movement=null;if(p.stop||pauses.size||w().clock.manualPaused)return;try{const map=navigation.get(w().player.roomId);need(map&&p.navVersion===map.navVersion&&p.roomId===map.mapId,'NAVIGATION_UNAVAILABLE','导航版本未就绪。');if(p.direction)need(['up','down','left','right'].includes(p.direction),'INVALID_INPUT','方向不合法。');movement=p.direction?{direction:p.direction}:p.destination?{path:pathfind(map,w().player,p.destination)}:null;}catch(e){emit('notification',{level:'error',...errorDTO(e)});}}},
+    world:{input(p){
+      if(!connected||disconnected||p?.sessionId!==sessionId||!Number.isSafeInteger(p.inputSeq)||p.inputSeq<=lastInputSeq)return;
+      lastInputSeq=p.inputSeq;movement=null;if(p.stop||pauses.size||w().clock.manualPaused)return;
+      try{const map=navigation.get(w().player.roomId);need(map&&p.navVersion===map.navVersion&&p.roomId===map.mapId,'NAVIGATION_UNAVAILABLE','导航版本未就绪。');
+        if(p.direction)need(['up','down','left','right'].includes(p.direction),'INVALID_INPUT','方向不合法。');
+        if(p.vector)need(Number.isFinite(p.vector.x)&&Number.isFinite(p.vector.y)&&Math.abs(p.vector.x)<=1&&Math.abs(p.vector.y)<=1,'INVALID_INPUT','移动向量不合法。');
+        movement=p.vector?{vector:{x:p.vector.x,y:p.vector.y}}:p.direction?{direction:p.direction}:p.destination?{path:pathfind(map,w().player,p.destination)}:null;
+      }catch(e){emit('notification',{level:'error',...errorDTO(e)});}
+    }},
     async disconnect(){disconnected=true;connected=false;movement=null;await queue;await repository.close?.();listeners.clear();},
     advance,
     async trustedEngineEvent(matchId,message){return serially(async()=>{const next=fork(),m=matchById(next.world,matchId);if(m.background&&!backgroundRunning()){need(m.status==='running'&&m.gameId===message.matchId,'STALE_EVENT','过期的后台牌局事件。');const events=next.world.pendingEngineEvents||=[];if(!events.some(e=>e.matchId===matchId&&JSON.stringify(e.message)===JSON.stringify(message)))events.push({matchId,message:clone(message)});await persist(next);return {deferred:true};}const data=engineMessage(next.world,matchId,message);await persist(next);emit('battleStatusChanged',data);return data;});},

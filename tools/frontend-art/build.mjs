@@ -3,12 +3,12 @@ import fs from "node:fs";
 import path from "node:path";
 import { encodePng } from "./png.mjs";
 import { PALETTE, Img } from "./pixkit.mjs";
-import { CHARACTERS, drawActorSheet, drawPortrait, FRAME_W, FRAME_H, ANCHOR, DIRECTIONS, WALK_COLUMNS } from "./characters.mjs";
-import { TILES, PROPS, PROP_META, buildTileset, buildProps, buildGlow, buildBlobShadow } from "./props.mjs";
-import { buildStoreMap, buildBattleRoomMap, MAP_W, MAP_H, TILE, NAV_VERSION } from "./maps.mjs";
+import { CHARACTERS, drawActorSheet, drawPortrait, FRAME_W, FRAME_H, ANCHOR, DIRECTIONS, WALK_COLUMNS } from "./characters-v2.mjs";
+import { TILES, PROPS, PROP_META, buildTileset, buildProps, buildGlow, buildBlobShadow, ART_SCALE, PROP_CELL } from "./props-v2.mjs";
+import { buildStoreMap, buildBattleRoomMap, MAP_W, MAP_H, TILE, NAV_VERSION } from "./maps-v2.mjs";
 
 const OUT = "assets/frontend";
-const ART_VERSION = "pixel-shop-1";
+const ART_VERSION = "pixel-shop-2-band-inspired";
 const dirs = ["characters", "portraits", "tiles", "props", "maps", "fx", "fonts"];
 
 function ensureDirs() {
@@ -35,6 +35,7 @@ export function buildAll() {
       portrait: portrait.path,
       frameWidth: FRAME_W,
       frameHeight: FRAME_H,
+      displayScale: 0.6,
       anchorPx: ANCHOR,
       directions: { down: 0, left: 1, right: 2, up: 3 },
       idleColumn: 1,
@@ -42,6 +43,7 @@ export function buildAll() {
       displayName: spec.name,
       role: spec.role,
       traits: spec.traits,
+      appearanceReference: spec.reference || null,
       skinTone: spec.skinTone,
     };
   }
@@ -72,22 +74,24 @@ export function buildAll() {
     tileset: {
       image: tileset.path,
       tileSize: TILE,
+      frameSize: TILE * ART_SCALE,
       columns: 8,
       rows: Math.ceil(TILES.length / 8),
       tiles: TILES,
     },
     props: {
       image: propSheet.path,
-      cellSize: 48,
+      cellSize: PROP_CELL,
+      artScale: ART_SCALE,
       columns: 4,
       rows: Math.ceil(PROPS.length / 4),
       list: PROPS.map((name, index) => ({
         prop: name,
         cell: index,
-        x: (index % 4) * 48,
-        y: Math.floor(index / 4) * 48,
-        w: PROP_META[name].w,
-        h: PROP_META[name].h,
+        x: (index % 4) * PROP_CELL,
+        y: Math.floor(index / 4) * PROP_CELL,
+        w: PROP_META[name].w * ART_SCALE,
+        h: PROP_META[name].h * ART_SCALE,
         footY: PROP_META[name].footY,
         occludes: PROP_META[name].occludes,
       })),
@@ -102,7 +106,7 @@ export function buildAll() {
     },
     ui: {
       fontStack: "\"Noto Sans SC\", \"Microsoft YaHei\", \"PingFang SC\", \"Hiragino Sans GB\", sans-serif",
-      pixelDisplay: { sampling: "nearest", integerScaleOnly: true, allowedScales: [1, 2, 3] },
+      pixelDisplay: { sampling: "nearest", integerScaleOnly: false, allowedScales: [1, 1.5, 2, 2.5, 3] },
     },
   };
   fs.writeFileSync(path.join(OUT, "manifest.json"), JSON.stringify(manifest, null, 2));

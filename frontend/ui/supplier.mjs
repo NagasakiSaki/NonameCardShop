@@ -13,7 +13,7 @@ function percent(value) {
 }
 
 export async function openSupplier(app, options = {}) {
-  const state = { tab: options.tab === "retail" ? "retail" : "order", selected: null };
+  const state = { tab: ['order','orders','retail'].includes(options.tab)?options.tab:'order', selected: null };
 
   return app.windows.open({
     id: "supplier",
@@ -30,7 +30,7 @@ export async function openSupplier(app, options = {}) {
       ].map(([id, label]) => el("button", {
         class: "tab", type: "button", text: label,
         "aria-selected": String(state.tab === id),
-        onclick: () => { state.tab = id; ctx.refresh(); },
+        onclick: () => { const station=id==='retail'?'store.retail':'store.counter';if(!app.isNearInteraction(station)){ctx.handle.close();app.goToInteraction(station,'supplier',{tab:id});return;}state.tab = id; ctx.refresh(); },
       })));
       body.append(tabsNode);
 
@@ -180,6 +180,7 @@ export async function openSupplier(app, options = {}) {
           return;
         }
         const orderRows = rowsOf(result.data);
+        if(orderRows.some(o=>o.status==='arrived'))node.append(el('button',{class:'btn btn--primary',text:'一键签收全部到货',onclick:async event=>{const restore=busyButton(event.currentTarget,'签收中…');const r=await ctx.submit({requestId:newRequestId('receive-all'),type:'supplier.receiveAll',payload:{}});restore();if(!r.ok)node.append(errorView(r.error));else {app.toast('ok','已签收',`${r.data.orders} 笔订单已入库`);ctx.refresh();}}}));
         if (!orderRows.length) {
           node.append(stateView({ kind: "empty", title: "没有待签收的订单", body: "订货后会出现在这里；未签收的商品不能当库存开。" }));
           return;
@@ -257,9 +258,10 @@ export async function openSupplier(app, options = {}) {
                 onclick:async()=>{const r=await ctx.submit({requestId:newRequestId('shelf'),type:'retail.list',payload:{inventoryRef:shelf.stockRefs[0]}});if(!r.ok)app.toast('error',r.error.code,r.error.message);else ctx.refresh();}
               }),
               el("span",{class:'small muted',text:'仓库 '+(shelf.warehouse??0)+' 件'}),
+              el('button',{class:'btn btn--sm',text:'一键补满货架',disabled:!shelf.stockRefs?.length,onclick:async()=>{const r=await ctx.submit({requestId:newRequestId('shelf-all'),type:'retail.listAll',payload:{inventoryRefs:shelf.stockRefs}});if(!r.ok)app.toast('error',r.error.code,r.error.message);else {app.toast('ok','补货完成',r.data.note);ctx.refresh();}}}),
               el("button", {
                 class: "btn btn--sm", type: "button", text: "去开包",
-                onclick: () => app.openPanel("opening", {}),
+                onclick: () => {ctx.handle.close();app.goToInteraction('store.counter','opening');},
               }),
             ]),
           ]));
@@ -268,7 +270,7 @@ export async function openSupplier(app, options = {}) {
       }
 
       ctx.setFooter([
-        el("button", { class: "btn", type: "button", text: "开包柜台", onclick: () => app.openPanel("opening", {}) }),
+        el("button", { class: "btn", type: "button", text: "开包柜台", onclick: () => {ctx.handle.close();if(app.isNearInteraction('store.counter'))app.openPanel('opening');else app.goToInteraction('store.counter','opening');} }),
         el("button", { class: "btn btn--ghost", type: "button", text: "关闭", onclick: () => ctx.handle.close() }),
       ]);
     },

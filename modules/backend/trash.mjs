@@ -6,7 +6,8 @@ export const DEFAULT_CUSTOMER_BEHAVIOR=Object.freeze({
   openingSeconds:3,sortingSeconds:2,searchSeconds:2,
   keepCopies:1,minimumKeptCards:3,discardChance:{N:.65,R:.25,SR:0,SSR:0},
   scavengerChance:.3,poorWallet:400,poorInitialWallet:200,
-  pickupLimit:2,pickupCooldownMinutes:90
+  pickupLimit:2,pickupCooldownMinutes:90,
+  names:['林知夏','沈梨','许遥','江弥','叶澄','陈若','白栀','杜桥','唐禾','宋言','陆冬','苏棠']
 });
 export function customerBehavior(w){return {...DEFAULT_CUSTOMER_BEHAVIOR,...w.rules.customerBehavior,discardChance:{...DEFAULT_CUSTOMER_BEHAVIOR.discardChance,...w.rules.customerBehavior?.discardChance}};}
 export const trashItems=w=>Object.values(w.items).filter(i=>i.kind==='card'&&i.location==='trash'&&!i.lock&&!i.protected);

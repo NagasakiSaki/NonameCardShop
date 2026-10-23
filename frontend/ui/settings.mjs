@@ -70,7 +70,7 @@ export async function openSettings(app) {
                 app.applyZoomPreference();
               },
             }, [
-              el("option", { value: "auto", text: "自动（铺满视口）", selected: !prefs.zoom || prefs.zoom === "auto" }),
+              el("option", { value: "auto", text: "自动（完整店面）", selected: !prefs.zoom || prefs.zoom === "auto" }),
               el("option", { value: "1", text: "1×（最小）", selected: prefs.zoom === "1" }),
               el("option", { value: "2", text: "2×", selected: prefs.zoom === "2" }),
               el("option", { value: "3", text: "3×（最近）", selected: prefs.zoom === "3" }),

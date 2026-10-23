@@ -60,8 +60,8 @@ check("至少七套角色，且都带有四向/待机/立绘声明", () => {
     for (const key of ["sheet", "portrait", "frameWidth", "frameHeight", "anchorPx", "directions", "idleColumn", "walkColumns"]) {
       if (!(key in entry)) throw new Error(id + " 缺字段 " + key);
     }
-    if (entry.frameWidth !== 24 || entry.frameHeight !== 32) throw new Error(id + " 帧尺寸必须 24×32");
-    if (entry.anchorPx[0] !== 12 || entry.anchorPx[1] !== 30) throw new Error(id + " 落脚点必须 (12,30)");
+    if (entry.frameWidth !== 48 || entry.frameHeight !== 64) throw new Error(id + " 帧尺寸必须 48×64");
+    if (entry.anchorPx[0] !== 24 || entry.anchorPx[1] !== 60) throw new Error(id + " 落脚点必须 (24,60)");
     const dirs = entry.directions;
     if (!(dirs.down === 0 && dirs.left === 1 && dirs.right === 2 && dirs.up === 3)) throw new Error(id + " 行序必须是 下/左/右/上");
     if (entry.idleColumn !== 1) throw new Error(id + " 待机必须是第 1 列");
@@ -69,16 +69,16 @@ check("至少七套角色，且都带有四向/待机/立绘声明", () => {
   }
 });
 
-check("角色图集为 72×128、立绘为 96×96、均为透明背景", () => {
+check("角色图集为 144×256、立绘为 128×128、均为透明背景", () => {
   for (const [id, entry] of Object.entries(manifest.characters)) {
     const sheet = readImage(entry.sheet);
-    const sheetOk = sheet.width === 72 && sheet.height === 128;
+    const sheetOk = sheet.width === 144 && sheet.height === 256;
     if (!sheetOk) throw new Error(id + " 图集尺寸 " + sheet.width + "x" + sheet.height);
     const sheetAlpha = alphaStats(sheet);
     if (sheetAlpha.transparent < 500) throw new Error(id + " 图集不是透明底");
     if (sheetAlpha.opaque < 2000) throw new Error(id + " 图集内容过少");
     const portrait = readImage(entry.portrait);
-    if (portrait.width !== 96 || portrait.height !== 96) throw new Error(id + " 立绘不是 96×96");
+    if (portrait.width !== 128 || portrait.height !== 128) throw new Error(id + " 立绘不是 128×128");
     const portraitAlpha = alphaStats(portrait);
     if (portraitAlpha.transparent < 800) throw new Error(id + " 立绘不是透明底");
     info.push({ 角色: id, 图集颜色数: colorsOf(sheet), 立绘颜色数: colorsOf(portrait), 图集字节: sheet.bytes, 立绘字节: portrait.bytes });
@@ -97,13 +97,14 @@ check("帧索引覆盖 12 帧，且第 12 帧之外没有越界", () => {
 // ---- 瓦片与道具 ----
 check("瓦片集尺寸能被 16 整除，清单列数与图片一致", () => {
   const tileset = readImage(manifest.tileset.image);
-  if (tileset.width % manifest.tileSize !== 0 || tileset.height % manifest.tileSize !== 0) throw new Error("瓦片集尺寸不整除");
-  if (tileset.width / manifest.tileSize !== manifest.tileset.columns) throw new Error("清单列数与图片不符");
+  const frameSize=manifest.tileset.frameSize||manifest.tileSize;
+  if (tileset.width % frameSize !== 0 || tileset.height % frameSize !== 0) throw new Error("瓦片集尺寸不整除");
+  if (tileset.width / frameSize !== manifest.tileset.columns) throw new Error("清单列数与图片不符");
   if (manifest.tileset.tiles.length > manifest.tileset.columns * manifest.tileset.rows) throw new Error("瓦片数量超出图集");
   info.push({ 瓦片集: tileset.width + "x" + tileset.height, 瓦片数: manifest.tileset.tiles.length, 字节: tileset.bytes });
 });
 
-check("道具图集为 48 的整数倍，每个道具的裁切矩形不越界", () => {
+check("道具图集单元整除，每个道具的裁切矩形不越界", () => {
   const sheet = readImage(manifest.props.image);
   if (sheet.width % manifest.props.cellSize !== 0 || sheet.height % manifest.props.cellSize !== 0) throw new Error("道具图集尺寸不整除");
   for (const prop of manifest.props.list) {
@@ -256,7 +257,7 @@ for (const row of results) {
 }
 console.log("");
 console.log("素材总量: " + (totalBytes / 1024).toFixed(1) + " KB（不含清单）");
-console.log("最大纹理: 96×96 光晕 / 192×192 道具图集");
+console.log("美术 v2：原生角色 48×64，导航 16，瓦片图像 32，设施图集 768×1152。");
 if (info.length) console.table ? console.table(info) : console.log(info);
 console.log((results.length - failed.length) + "/" + results.length + " 项通过");
 if (failed.length) process.exitCode = 1;
