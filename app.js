@@ -20,6 +20,7 @@ const store = {
     try {
       const raw = localStorage.getItem(this.key);
       const saved = JSON.parse(raw);
+      if(saved&&!saved.modules?.boxes&&!localStorage.getItem('noname-packer-before-boxes-v1'))localStorage.setItem('noname-packer-before-boxes-v1',raw);
       if(saved&&!saved.modules?.balance&&!localStorage.getItem('noname-packer-before-balance-v1'))localStorage.setItem('noname-packer-before-balance-v1',raw);
       if (saved && !saved.shop && !localStorage.getItem("noname-packer-before-shop-v1")) {
         try { localStorage.setItem("noname-packer-before-shop-v1", raw); } catch {}
@@ -191,7 +192,8 @@ function renderPacks() {
         </span>
       </div>`;
 
-    el.querySelector('.pack-odds').textContent=ShopBalance.describe(pack,ShopBusiness.config.economy.cardPrices);
+    const loose=ShopBoxes.loose(state,pid),boxed=ShopBoxes.tracked(state,pid,'stock').length;
+    el.querySelector('.pack-odds').textContent=ShopBalance.describe(pack,ShopBusiness.config.economy.cardPrices)+`\n仓库：独立散包 ${loose} / 拆盒余包 ${boxed}。默认先开独立包；上述独立概率不适用于内容已固定的盒内余包，可在收货/仓库指定原盒拆包。`;
     view.appendChild(el);
   });
 
@@ -390,12 +392,13 @@ $("#cardDetail").addEventListener("click", (event) => {
 
 /* ---------- 开包 ---------- */
 
-function openPack(packId) {
+function openPack(packId,boxId) {
   if (busy) return;
   const candidate = DATA.packs.find((pack) => pack.id === packId);
   if (window.ShopGame && !ShopGame.canOpenPack()) { ShopGame.toast("到柜台前，按 E 开包。"); return; }
   if (state.business.phase==="closed") { window.ShopGame?.toast("今天已打烊，明早再拆包。"); return; }
   if (!candidate || !(state.stock[packId]>0)) { window.ShopGame?.toast("仓库里没有这包卡，先在柜台下单并签收。"); return; }
+  if(boxId&&!ShopBoxes.peek(state,packId,boxId).ok){ShopGame.toast('这盒已没有仓库余包，请选择其他卡包。');return;}
   if ($("#shopPanel")?.open) $("#shopPanel").close();
   busy = true;
 
@@ -410,7 +413,7 @@ function openPack(packId) {
       <div class="wrapper-inner">
         <div class="wrapper-seal">包</div>
         <div class="wrapper-name">${pack.name}</div>
-        <div class="wrapper-hint">消耗库存 ×1 · 获得 5 张卡</div>
+        <div class="wrapper-hint">${boxId?'指定卡盒余包':'库存卡包'} ×1 · 获得 5 张卡</div>
       </div>
     </div>`;
 
@@ -418,17 +421,19 @@ function openPack(packId) {
   wrapper.onclick = () => {
     wrapper.onclick = null;
     wrapper.classList.add("opening");
-    overlayLater(() => reveal(packId, list), 720);
+    overlayLater(() => reveal(packId, list,boxId), 720);
   };
 
   $("#closeBtn").onclick = () => closeOverlay();
 }
 
-function reveal(packId, list) {
+function reveal(packId, list,boxId) {
   const pack = DATA.packs.find((item) => item.id === packId);
-  if (!ShopModel.buy(state, pack)) { closeOverlay(); window.ShopGame?.toast("库存不足或已打烊，本次没有消耗卡包。"); return; }
+  let pulls;
+  try{const picked=ShopBoxes.peek(state,packId,boxId);if(!picked.ok)throw new Error(picked.error);pulls=picked.pulls||ShopBalance.draw(pack);}catch(error){closeOverlay();ShopGame.toast(error.message);return;}
+  if (!ShopBusiness.openPack(state, pack,boxId)) { closeOverlay(); window.ShopGame?.toast("库存不足或已打烊，本次没有消耗卡包。"); return; }
   const stage = $("#stage");
-  const pulls = ShopBalance.draw(pack), cards=pulls.map(p=>p.card);
+  const cards=pulls.map(p=>p.card);
   const alreadySeen = new Set(Object.keys(state.collection));
   const fresh = cards.map((c) => { const isNew = !alreadySeen.has(c.id); alreadySeen.add(c.id); return isNew; });
   const quantities = {};
@@ -484,7 +489,7 @@ function reveal(packId, list) {
       <button class="btn" id="againBtn">再来一包</button>
       <button class="btn plain" id="doneBtn">放进背包</button>`;
     after.classList.add("show");
-    $("#againBtn").onclick = () => { busy = false; openPack(packId); };
+    $("#againBtn").onclick = () => { busy = false; openPack(packId,boxId); };
     $("#doneBtn").onclick = () => closeOverlay();
   }, 140 + cards.length * 260 + 500);
 }

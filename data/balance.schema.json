@@ -1,12 +1,14 @@
 {
   "$schema":"https://json-schema.org/draft/2020-12/schema",
-  "title":"卡包槽位与定价 v1",
+  "title":"散包槽位、整盒配额与定价 v1",
   "type":"object",
   "required":["version","pricing","recipes","packGrades"],
   "properties":{
     "version":{"const":1},
     "pricing":{"type":"object","required":["openingReturn","sealedMargin","roundTo"],"properties":{"openingReturn":{"type":"number","exclusiveMinimum":0,"maximum":1.2,"description":"参考卡值期望/进价的上限（价格取整后可能更低）"},"sealedMargin":{"type":"number","minimum":0.1,"maximum":0.6},"roundTo":{"type":"number","minimum":1}}},
     "recipes":{"type":"object","required":["standard"],"additionalProperties":{"type":"object","required":["name","slots"],"properties":{"name":{"type":"string","minLength":1},"slots":{"type":"array","minItems":5,"maxItems":5,"items":{"type":"object","minProperties":1,"propertyNames":{"enum":["C","U","R","SR","UR"]},"additionalProperties":{"type":"number","minimum":0,"maximum":1},"description":"每槽概率和为1，至少一个槽只出R/SR/UR；运行时额外校验"}}}}},
-    "packGrades":{"type":"object","description":"卡包ID→recipes的档位ID；未列出的卡包采用standard","additionalProperties":{"type":"string"}}
+    "packGrades":{"type":"object","description":"卡包ID→recipes的档位ID；未列出的卡包采用standard","additionalProperties":{"type":"string"}},
+    "boxCustomer":{"type":"object","required":["chance","budget"],"properties":{"chance":{"type":"number","minimum":0,"maximum":1,"description":"货架有完整卡盒时，新顾客成为整盒采购客的概率"},"budget":{"type":"integer","minimum":1}}},
+    "boxes":{"type":"object","description":"档位→固定配额；旧覆盖配置没有此字段时保留散包玩法，不自动追加盒保底","additionalProperties":{"type":"object","required":["packs","shelfUnits","counts"],"properties":{"packs":{"type":"integer","minimum":1,"maximum":100},"shelfUnits":{"type":"integer","minimum":1,"maximum":36},"counts":{"type":"object","required":["C","U","R","SR","UR"],"additionalProperties":false,"properties":{"C":{"type":"integer","minimum":0},"U":{"type":"integer","minimum":0},"R":{"type":"integer","minimum":0},"SR":{"type":"integer","minimum":0},"UR":{"type":"integer","minimum":1}},"description":"合计须等于5×包数，还须能排入五个槽位；运行时做整数配额可行性校验"}}}}
   }
 }

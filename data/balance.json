@@ -76,6 +76,45 @@
       ]
     }
   },
+  "boxCustomer": {
+    "chance": 0.12,
+    "budget": 9500
+  },
+  "boxes": {
+    "standard": {
+      "packs": 24,
+      "shelfUnits": 4,
+      "counts": {
+        "C": 60,
+        "U": 36,
+        "R": 18,
+        "SR": 5,
+        "UR": 1
+      }
+    },
+    "premium": {
+      "packs": 24,
+      "shelfUnits": 4,
+      "counts": {
+        "C": 36,
+        "U": 60,
+        "R": 15,
+        "SR": 7,
+        "UR": 2
+      }
+    },
+    "collector": {
+      "packs": 24,
+      "shelfUnits": 4,
+      "counts": {
+        "C": 12,
+        "U": 60,
+        "R": 34,
+        "SR": 11,
+        "UR": 3
+      }
+    }
+  },
   "packGrades": {
     "refresh": "standard",
     "yijiang": "standard",

@@ -3,7 +3,7 @@ import path from 'node:path';
 import {spawn} from 'node:child_process';
 import {root} from '../dev/process.mjs';
 import {startShopServer} from '../server.mjs';
-const groups={unit:['tools/test-business.cjs','tools/test-modules.cjs','tools/test-balance.cjs','tests/server.mjs'],ui:['tests/economy.cjs','tests/management.cjs'],engine:['tests/duel.cjs'],dev:['tests/development.mjs'],desktop:['tests/desktop.cjs','tests/desktop-development.cjs'],release:['tests/desktop.cjs']};
+const groups={unit:['tools/test-business.cjs','tools/test-modules.cjs','tools/test-balance.cjs','tests/server.mjs','tests/boxes.cjs'],ui:['tests/economy.cjs','tests/management.cjs','tests/boxes-ui.cjs'],engine:['tests/duel.cjs'],dev:['tests/development.mjs'],desktop:['tests/desktop.cjs','tests/desktop-development.cjs'],release:['tests/desktop.cjs']};
 const selection=process.argv[2]||'all';if(selection!=='all'&&!groups[selection])throw new Error(`未知测试组：${selection}`);
 const output=path.join(root,'test-results',new Date().toISOString().replace(/[:.]/g,'-')+`-${process.pid}`);fs.mkdirSync(output,{recursive:true});
 const results=[],summary={selection,output,startedAt:new Date().toISOString(),results};let runtime;

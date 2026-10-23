@@ -42,6 +42,43 @@
       "retail": 175,
       "margin": 0.3142857142857143,
       "legendChance": 0.020000000000000018,
+      "box": {
+        "packs": 24,
+        "shelfUnits": 4,
+        "counts": {
+          "C": 60,
+          "U": 36,
+          "R": 18,
+          "SR": 5,
+          "UR": 1
+        },
+        "name": "常规卡盒",
+        "grade": "standard",
+        "slots": [
+          {
+            "C": 1
+          },
+          {
+            "C": 1
+          },
+          {
+            "U": 1
+          },
+          {
+            "C": 0.5,
+            "U": 0.5
+          },
+          {
+            "R": 0.8,
+            "SR": 0.18,
+            "UR": 0.02
+          }
+        ],
+        "ev": 3200,
+        "wholesale": 3050,
+        "retail": 4360,
+        "margin": 0.30045871559633025
+      },
       "id": "refresh",
       "productName": "常规包",
       "population": {
@@ -89,6 +126,43 @@
       "retail": 175,
       "margin": 0.3142857142857143,
       "legendChance": 0.020000000000000018,
+      "box": {
+        "packs": 24,
+        "shelfUnits": 4,
+        "counts": {
+          "C": 60,
+          "U": 36,
+          "R": 18,
+          "SR": 5,
+          "UR": 1
+        },
+        "name": "常规卡盒",
+        "grade": "standard",
+        "slots": [
+          {
+            "C": 1
+          },
+          {
+            "C": 1
+          },
+          {
+            "U": 1
+          },
+          {
+            "C": 0.5,
+            "U": 0.5
+          },
+          {
+            "R": 0.8,
+            "SR": 0.18,
+            "UR": 0.02
+          }
+        ],
+        "ev": 3200,
+        "wholesale": 3050,
+        "retail": 4360,
+        "margin": 0.30045871559633025
+      },
       "id": "yijiang",
       "productName": "常规包",
       "population": {
@@ -136,6 +210,43 @@
       "retail": 215,
       "margin": 0.3023255813953488,
       "legendChance": 0.050000000000000044,
+      "box": {
+        "packs": 24,
+        "shelfUnits": 4,
+        "counts": {
+          "C": 36,
+          "U": 60,
+          "R": 15,
+          "SR": 7,
+          "UR": 2
+        },
+        "name": "进阶卡盒",
+        "grade": "premium",
+        "slots": [
+          {
+            "C": 1
+          },
+          {
+            "U": 1
+          },
+          {
+            "U": 1
+          },
+          {
+            "C": 0.5,
+            "U": 0.5
+          },
+          {
+            "R": 0.65,
+            "SR": 0.3,
+            "UR": 0.05
+          }
+        ],
+        "ev": 4048,
+        "wholesale": 3860,
+        "retail": 5515,
+        "margin": 0.300090661831369
+      },
       "id": "shenhua",
       "productName": "进阶包",
       "population": {
@@ -183,6 +294,43 @@
       "retail": 175,
       "margin": 0.3142857142857143,
       "legendChance": 0.020000000000000018,
+      "box": {
+        "packs": 24,
+        "shelfUnits": 4,
+        "counts": {
+          "C": 60,
+          "U": 36,
+          "R": 18,
+          "SR": 5,
+          "UR": 1
+        },
+        "name": "常规卡盒",
+        "grade": "standard",
+        "slots": [
+          {
+            "C": 1
+          },
+          {
+            "C": 1
+          },
+          {
+            "U": 1
+          },
+          {
+            "C": 0.5,
+            "U": 0.5
+          },
+          {
+            "R": 0.8,
+            "SR": 0.18,
+            "UR": 0.02
+          }
+        ],
+        "ev": 3200,
+        "wholesale": 3050,
+        "retail": 4360,
+        "margin": 0.30045871559633025
+      },
       "id": "standard",
       "productName": "常规包",
       "population": {
@@ -230,6 +378,43 @@
       "retail": 330,
       "margin": 0.30303030303030304,
       "legendChance": 0.12,
+      "box": {
+        "packs": 24,
+        "shelfUnits": 4,
+        "counts": {
+          "C": 12,
+          "U": 60,
+          "R": 34,
+          "SR": 11,
+          "UR": 3
+        },
+        "name": "典藏卡盒",
+        "grade": "collector",
+        "slots": [
+          {
+            "U": 1
+          },
+          {
+            "U": 1
+          },
+          {
+            "R": 1
+          },
+          {
+            "C": 0.5,
+            "U": 0.5
+          },
+          {
+            "R": 0.45,
+            "SR": 0.43,
+            "UR": 0.12
+          }
+        ],
+        "ev": 5888,
+        "wholesale": 5610,
+        "retail": 8015,
+        "margin": 0.30006238303181537
+      },
       "id": "extra",
       "productName": "典藏包",
       "population": {
@@ -277,6 +462,43 @@
       "retail": 175,
       "margin": 0.3142857142857143,
       "legendChance": 0.020000000000000018,
+      "box": {
+        "packs": 24,
+        "shelfUnits": 4,
+        "counts": {
+          "C": 60,
+          "U": 36,
+          "R": 18,
+          "SR": 5,
+          "UR": 1
+        },
+        "name": "常规卡盒",
+        "grade": "standard",
+        "slots": [
+          {
+            "C": 1
+          },
+          {
+            "C": 1
+          },
+          {
+            "U": 1
+          },
+          {
+            "C": 0.5,
+            "U": 0.5
+          },
+          {
+            "R": 0.8,
+            "SR": 0.18,
+            "UR": 0.02
+          }
+        ],
+        "ev": 3200,
+        "wholesale": 3050,
+        "retail": 4360,
+        "margin": 0.30045871559633025
+      },
       "id": "sp",
       "productName": "常规包",
       "population": {
@@ -324,6 +546,43 @@
       "retail": 175,
       "margin": 0.3142857142857143,
       "legendChance": 0.020000000000000018,
+      "box": {
+        "packs": 24,
+        "shelfUnits": 4,
+        "counts": {
+          "C": 60,
+          "U": 36,
+          "R": 18,
+          "SR": 5,
+          "UR": 1
+        },
+        "name": "常规卡盒",
+        "grade": "standard",
+        "slots": [
+          {
+            "C": 1
+          },
+          {
+            "C": 1
+          },
+          {
+            "U": 1
+          },
+          {
+            "C": 0.5,
+            "U": 0.5
+          },
+          {
+            "R": 0.8,
+            "SR": 0.18,
+            "UR": 0.02
+          }
+        ],
+        "ev": 3200,
+        "wholesale": 3050,
+        "retail": 4360,
+        "margin": 0.30045871559633025
+      },
       "id": "sp2",
       "productName": "常规包",
       "population": {
@@ -371,6 +630,43 @@
       "retail": 175,
       "margin": 0.3142857142857143,
       "legendChance": 0.020000000000000018,
+      "box": {
+        "packs": 24,
+        "shelfUnits": 4,
+        "counts": {
+          "C": 60,
+          "U": 36,
+          "R": 18,
+          "SR": 5,
+          "UR": 1
+        },
+        "name": "常规卡盒",
+        "grade": "standard",
+        "slots": [
+          {
+            "C": 1
+          },
+          {
+            "C": 1
+          },
+          {
+            "U": 1
+          },
+          {
+            "C": 0.5,
+            "U": 0.5
+          },
+          {
+            "R": 0.8,
+            "SR": 0.18,
+            "UR": 0.02
+          }
+        ],
+        "ev": 3200,
+        "wholesale": 3050,
+        "retail": 4360,
+        "margin": 0.30045871559633025
+      },
       "id": "newjiang",
       "productName": "常规包",
       "population": {
@@ -418,6 +714,43 @@
       "retail": 175,
       "margin": 0.3142857142857143,
       "legendChance": 0.020000000000000018,
+      "box": {
+        "packs": 24,
+        "shelfUnits": 4,
+        "counts": {
+          "C": 60,
+          "U": 36,
+          "R": 18,
+          "SR": 5,
+          "UR": 1
+        },
+        "name": "常规卡盒",
+        "grade": "standard",
+        "slots": [
+          {
+            "C": 1
+          },
+          {
+            "C": 1
+          },
+          {
+            "U": 1
+          },
+          {
+            "C": 0.5,
+            "U": 0.5
+          },
+          {
+            "R": 0.8,
+            "SR": 0.18,
+            "UR": 0.02
+          }
+        ],
+        "ev": 3200,
+        "wholesale": 3050,
+        "retail": 4360,
+        "margin": 0.30045871559633025
+      },
       "id": "xianding",
       "productName": "常规包",
       "population": {
@@ -465,6 +798,43 @@
       "retail": 175,
       "margin": 0.3142857142857143,
       "legendChance": 0.020000000000000018,
+      "box": {
+        "packs": 24,
+        "shelfUnits": 4,
+        "counts": {
+          "C": 60,
+          "U": 36,
+          "R": 18,
+          "SR": 5,
+          "UR": 1
+        },
+        "name": "常规卡盒",
+        "grade": "standard",
+        "slots": [
+          {
+            "C": 1
+          },
+          {
+            "C": 1
+          },
+          {
+            "U": 1
+          },
+          {
+            "C": 0.5,
+            "U": 0.5
+          },
+          {
+            "R": 0.8,
+            "SR": 0.18,
+            "UR": 0.02
+          }
+        ],
+        "ev": 3200,
+        "wholesale": 3050,
+        "retail": 4360,
+        "margin": 0.30045871559633025
+      },
       "id": "mobile",
       "productName": "常规包",
       "population": {
@@ -512,6 +882,43 @@
       "retail": 175,
       "margin": 0.3142857142857143,
       "legendChance": 0.020000000000000018,
+      "box": {
+        "packs": 24,
+        "shelfUnits": 4,
+        "counts": {
+          "C": 60,
+          "U": 36,
+          "R": 18,
+          "SR": 5,
+          "UR": 1
+        },
+        "name": "常规卡盒",
+        "grade": "standard",
+        "slots": [
+          {
+            "C": 1
+          },
+          {
+            "C": 1
+          },
+          {
+            "U": 1
+          },
+          {
+            "C": 0.5,
+            "U": 0.5
+          },
+          {
+            "R": 0.8,
+            "SR": 0.18,
+            "UR": 0.02
+          }
+        ],
+        "ev": 3200,
+        "wholesale": 3050,
+        "retail": 4360,
+        "margin": 0.30045871559633025
+      },
       "id": "tw",
       "productName": "常规包",
       "population": {
@@ -559,6 +966,43 @@
       "retail": 175,
       "margin": 0.3142857142857143,
       "legendChance": 0.020000000000000018,
+      "box": {
+        "packs": 24,
+        "shelfUnits": 4,
+        "counts": {
+          "C": 60,
+          "U": 36,
+          "R": 18,
+          "SR": 5,
+          "UR": 1
+        },
+        "name": "常规卡盒",
+        "grade": "standard",
+        "slots": [
+          {
+            "C": 1
+          },
+          {
+            "C": 1
+          },
+          {
+            "U": 1
+          },
+          {
+            "C": 0.5,
+            "U": 0.5
+          },
+          {
+            "R": 0.8,
+            "SR": 0.18,
+            "UR": 0.02
+          }
+        ],
+        "ev": 3200,
+        "wholesale": 3050,
+        "retail": 4360,
+        "margin": 0.30045871559633025
+      },
       "id": "huicui",
       "productName": "常规包",
       "population": {
@@ -606,6 +1050,43 @@
       "retail": 175,
       "margin": 0.3142857142857143,
       "legendChance": 0.020000000000000018,
+      "box": {
+        "packs": 24,
+        "shelfUnits": 4,
+        "counts": {
+          "C": 60,
+          "U": 36,
+          "R": 18,
+          "SR": 5,
+          "UR": 1
+        },
+        "name": "常规卡盒",
+        "grade": "standard",
+        "slots": [
+          {
+            "C": 1
+          },
+          {
+            "C": 1
+          },
+          {
+            "U": 1
+          },
+          {
+            "C": 0.5,
+            "U": 0.5
+          },
+          {
+            "R": 0.8,
+            "SR": 0.18,
+            "UR": 0.02
+          }
+        ],
+        "ev": 3200,
+        "wholesale": 3050,
+        "retail": 4360,
+        "margin": 0.30045871559633025
+      },
       "id": "onlyOL",
       "productName": "常规包",
       "population": {
@@ -653,6 +1134,43 @@
       "retail": 175,
       "margin": 0.3142857142857143,
       "legendChance": 0.020000000000000018,
+      "box": {
+        "packs": 24,
+        "shelfUnits": 4,
+        "counts": {
+          "C": 60,
+          "U": 36,
+          "R": 18,
+          "SR": 5,
+          "UR": 1
+        },
+        "name": "常规卡盒",
+        "grade": "standard",
+        "slots": [
+          {
+            "C": 1
+          },
+          {
+            "C": 1
+          },
+          {
+            "U": 1
+          },
+          {
+            "C": 0.5,
+            "U": 0.5
+          },
+          {
+            "R": 0.8,
+            "SR": 0.18,
+            "UR": 0.02
+          }
+        ],
+        "ev": 3200,
+        "wholesale": 3050,
+        "retail": 4360,
+        "margin": 0.30045871559633025
+      },
       "id": "sb",
       "productName": "常规包",
       "population": {
@@ -700,6 +1218,43 @@
       "retail": 215,
       "margin": 0.3023255813953488,
       "legendChance": 0.050000000000000044,
+      "box": {
+        "packs": 24,
+        "shelfUnits": 4,
+        "counts": {
+          "C": 36,
+          "U": 60,
+          "R": 15,
+          "SR": 7,
+          "UR": 2
+        },
+        "name": "进阶卡盒",
+        "grade": "premium",
+        "slots": [
+          {
+            "C": 1
+          },
+          {
+            "U": 1
+          },
+          {
+            "U": 1
+          },
+          {
+            "C": 0.5,
+            "U": 0.5
+          },
+          {
+            "R": 0.65,
+            "SR": 0.3,
+            "UR": 0.05
+          }
+        ],
+        "ev": 4048,
+        "wholesale": 3860,
+        "retail": 5515,
+        "margin": 0.300090661831369
+      },
       "id": "shiji",
       "productName": "进阶包",
       "population": {
@@ -747,6 +1302,43 @@
       "retail": 175,
       "margin": 0.3142857142857143,
       "legendChance": 0.020000000000000018,
+      "box": {
+        "packs": 24,
+        "shelfUnits": 4,
+        "counts": {
+          "C": 60,
+          "U": 36,
+          "R": 18,
+          "SR": 5,
+          "UR": 1
+        },
+        "name": "常规卡盒",
+        "grade": "standard",
+        "slots": [
+          {
+            "C": 1
+          },
+          {
+            "C": 1
+          },
+          {
+            "U": 1
+          },
+          {
+            "C": 0.5,
+            "U": 0.5
+          },
+          {
+            "R": 0.8,
+            "SR": 0.18,
+            "UR": 0.02
+          }
+        ],
+        "ev": 3200,
+        "wholesale": 3050,
+        "retail": 4360,
+        "margin": 0.30045871559633025
+      },
       "id": "clan",
       "productName": "常规包",
       "population": {
@@ -794,6 +1386,43 @@
       "retail": 215,
       "margin": 0.3023255813953488,
       "legendChance": 0.050000000000000044,
+      "box": {
+        "packs": 24,
+        "shelfUnits": 4,
+        "counts": {
+          "C": 36,
+          "U": 60,
+          "R": 15,
+          "SR": 7,
+          "UR": 2
+        },
+        "name": "进阶卡盒",
+        "grade": "premium",
+        "slots": [
+          {
+            "C": 1
+          },
+          {
+            "U": 1
+          },
+          {
+            "U": 1
+          },
+          {
+            "C": 0.5,
+            "U": 0.5
+          },
+          {
+            "R": 0.65,
+            "SR": 0.3,
+            "UR": 0.05
+          }
+        ],
+        "ev": 4048,
+        "wholesale": 3860,
+        "retail": 5515,
+        "margin": 0.300090661831369
+      },
       "id": "bingshi",
       "productName": "进阶包",
       "population": {
@@ -841,6 +1470,43 @@
       "retail": 175,
       "margin": 0.3142857142857143,
       "legendChance": 0.020000000000000018,
+      "box": {
+        "packs": 24,
+        "shelfUnits": 4,
+        "counts": {
+          "C": 60,
+          "U": 36,
+          "R": 18,
+          "SR": 5,
+          "UR": 1
+        },
+        "name": "常规卡盒",
+        "grade": "standard",
+        "slots": [
+          {
+            "C": 1
+          },
+          {
+            "C": 1
+          },
+          {
+            "U": 1
+          },
+          {
+            "C": 0.5,
+            "U": 0.5
+          },
+          {
+            "R": 0.8,
+            "SR": 0.18,
+            "UR": 0.02
+          }
+        ],
+        "ev": 3200,
+        "wholesale": 3050,
+        "retail": 4360,
+        "margin": 0.30045871559633025
+      },
       "id": "yingbian",
       "productName": "常规包",
       "population": {
@@ -888,6 +1554,43 @@
       "retail": 175,
       "margin": 0.3142857142857143,
       "legendChance": 0.020000000000000018,
+      "box": {
+        "packs": 24,
+        "shelfUnits": 4,
+        "counts": {
+          "C": 60,
+          "U": 36,
+          "R": 18,
+          "SR": 5,
+          "UR": 1
+        },
+        "name": "常规卡盒",
+        "grade": "standard",
+        "slots": [
+          {
+            "C": 1
+          },
+          {
+            "C": 1
+          },
+          {
+            "U": 1
+          },
+          {
+            "C": 0.5,
+            "U": 0.5
+          },
+          {
+            "R": 0.8,
+            "SR": 0.18,
+            "UR": 0.02
+          }
+        ],
+        "ev": 3200,
+        "wholesale": 3050,
+        "retail": 4360,
+        "margin": 0.30045871559633025
+      },
       "id": "offline",
       "productName": "常规包",
       "population": {
@@ -935,6 +1638,43 @@
       "retail": 175,
       "margin": 0.3142857142857143,
       "legendChance": 0.020000000000000018,
+      "box": {
+        "packs": 24,
+        "shelfUnits": 4,
+        "counts": {
+          "C": 60,
+          "U": 36,
+          "R": 18,
+          "SR": 5,
+          "UR": 1
+        },
+        "name": "常规卡盒",
+        "grade": "standard",
+        "slots": [
+          {
+            "C": 1
+          },
+          {
+            "C": 1
+          },
+          {
+            "U": 1
+          },
+          {
+            "C": 0.5,
+            "U": 0.5
+          },
+          {
+            "R": 0.8,
+            "SR": 0.18,
+            "UR": 0.02
+          }
+        ],
+        "ev": 3200,
+        "wholesale": 3050,
+        "retail": 4360,
+        "margin": 0.30045871559633025
+      },
       "id": "sixiang",
       "productName": "常规包",
       "population": {
@@ -982,6 +1722,43 @@
       "retail": 175,
       "margin": 0.3142857142857143,
       "legendChance": 0.020000000000000018,
+      "box": {
+        "packs": 24,
+        "shelfUnits": 4,
+        "counts": {
+          "C": 60,
+          "U": 36,
+          "R": 18,
+          "SR": 5,
+          "UR": 1
+        },
+        "name": "常规卡盒",
+        "grade": "standard",
+        "slots": [
+          {
+            "C": 1
+          },
+          {
+            "C": 1
+          },
+          {
+            "U": 1
+          },
+          {
+            "C": 0.5,
+            "U": 0.5
+          },
+          {
+            "R": 0.8,
+            "SR": 0.18,
+            "UR": 0.02
+          }
+        ],
+        "ev": 3200,
+        "wholesale": 3050,
+        "retail": 4360,
+        "margin": 0.30045871559633025
+      },
       "id": "collab",
       "productName": "常规包",
       "population": {
@@ -1029,6 +1806,43 @@
       "retail": 175,
       "margin": 0.3142857142857143,
       "legendChance": 0.020000000000000018,
+      "box": {
+        "packs": 24,
+        "shelfUnits": 4,
+        "counts": {
+          "C": 60,
+          "U": 36,
+          "R": 18,
+          "SR": 5,
+          "UR": 1
+        },
+        "name": "常规卡盒",
+        "grade": "standard",
+        "slots": [
+          {
+            "C": 1
+          },
+          {
+            "C": 1
+          },
+          {
+            "U": 1
+          },
+          {
+            "C": 0.5,
+            "U": 0.5
+          },
+          {
+            "R": 0.8,
+            "SR": 0.18,
+            "UR": 0.02
+          }
+        ],
+        "ev": 3200,
+        "wholesale": 3050,
+        "retail": 4360,
+        "margin": 0.30045871559633025
+      },
       "id": "key",
       "productName": "常规包",
       "population": {
@@ -1076,6 +1890,43 @@
       "retail": 175,
       "margin": 0.3142857142857143,
       "legendChance": 0.020000000000000018,
+      "box": {
+        "packs": 24,
+        "shelfUnits": 4,
+        "counts": {
+          "C": 60,
+          "U": 36,
+          "R": 18,
+          "SR": 5,
+          "UR": 1
+        },
+        "name": "常规卡盒",
+        "grade": "standard",
+        "slots": [
+          {
+            "C": 1
+          },
+          {
+            "C": 1
+          },
+          {
+            "U": 1
+          },
+          {
+            "C": 0.5,
+            "U": 0.5
+          },
+          {
+            "R": 0.8,
+            "SR": 0.18,
+            "UR": 0.02
+          }
+        ],
+        "ev": 3200,
+        "wholesale": 3050,
+        "retail": 4360,
+        "margin": 0.30045871559633025
+      },
       "id": "old",
       "productName": "常规包",
       "population": {
@@ -1123,6 +1974,43 @@
       "retail": 175,
       "margin": 0.3142857142857143,
       "legendChance": 0.020000000000000018,
+      "box": {
+        "packs": 24,
+        "shelfUnits": 4,
+        "counts": {
+          "C": 60,
+          "U": 36,
+          "R": 18,
+          "SR": 5,
+          "UR": 1
+        },
+        "name": "常规卡盒",
+        "grade": "standard",
+        "slots": [
+          {
+            "C": 1
+          },
+          {
+            "C": 1
+          },
+          {
+            "U": 1
+          },
+          {
+            "C": 0.5,
+            "U": 0.5
+          },
+          {
+            "R": 0.8,
+            "SR": 0.18,
+            "UR": 0.02
+          }
+        ],
+        "ev": 3200,
+        "wholesale": 3050,
+        "retail": 4360,
+        "margin": 0.30045871559633025
+      },
       "id": "jsrg",
       "productName": "常规包",
       "population": {
@@ -1170,6 +2058,43 @@
       "retail": 175,
       "margin": 0.3142857142857143,
       "legendChance": 0.020000000000000018,
+      "box": {
+        "packs": 24,
+        "shelfUnits": 4,
+        "counts": {
+          "C": 60,
+          "U": 36,
+          "R": 18,
+          "SR": 5,
+          "UR": 1
+        },
+        "name": "常规卡盒",
+        "grade": "standard",
+        "slots": [
+          {
+            "C": 1
+          },
+          {
+            "C": 1
+          },
+          {
+            "U": 1
+          },
+          {
+            "C": 0.5,
+            "U": 0.5
+          },
+          {
+            "R": 0.8,
+            "SR": 0.18,
+            "UR": 0.02
+          }
+        ],
+        "ev": 3200,
+        "wholesale": 3050,
+        "retail": 4360,
+        "margin": 0.30045871559633025
+      },
       "id": "diy",
       "productName": "常规包",
       "population": {
@@ -1217,6 +2142,43 @@
       "retail": 175,
       "margin": 0.3142857142857143,
       "legendChance": 0.020000000000000018,
+      "box": {
+        "packs": 24,
+        "shelfUnits": 4,
+        "counts": {
+          "C": 60,
+          "U": 36,
+          "R": 18,
+          "SR": 5,
+          "UR": 1
+        },
+        "name": "常规卡盒",
+        "grade": "standard",
+        "slots": [
+          {
+            "C": 1
+          },
+          {
+            "C": 1
+          },
+          {
+            "U": 1
+          },
+          {
+            "C": 0.5,
+            "U": 0.5
+          },
+          {
+            "R": 0.8,
+            "SR": 0.18,
+            "UR": 0.02
+          }
+        ],
+        "ev": 3200,
+        "wholesale": 3050,
+        "retail": 4360,
+        "margin": 0.30045871559633025
+      },
       "id": "sxrm",
       "productName": "常规包",
       "population": {

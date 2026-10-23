@@ -6,6 +6,8 @@ ShopTasks.registerMetric("custom.uniqueOwned", save => Object.keys(save.collecti
 ShopTasks.registerCondition("custom.ownsCard", (save, condition) => (save.collection[condition.cardId] || 0) >= (condition.quantity || 1));
 ShopTasks.registerMetric("management.ordersCompleted",save=>window.ShopModules?.value("neighbors.completed",save,0)||0);
 ShopTasks.registerMetric("management.upgradeLevels",save=>Object.values(save.modules?.upgrades?.data.levels||{}).reduce((sum,n)=>sum+n,0));
+ShopTasks.registerMetric('inventory.sealedBoxes',save=>window.ShopBoxes?.lots(save).filter(b=>b.status==='sealed').length||0);
+ShopTasks.registerMetric('inventory.boxPacks',save=>window.ShopBoxes?.lots(save).filter(b=>b.status==='unsealed').reduce((n,b)=>n+b.packets.filter(p=>['stock','packDisplay'].includes(p.location)).length,0)||0);
 ShopTasks.registerCondition("management.upgrade",(save,condition)=>(window.ShopModules?.value("upgrades.level",save,0,{id:condition.upgradeId})||0)>=(condition.level||1));
 // Example custom event objective: {type:"event", event:"custom_tournament", target:1}
 // Emit from your gameplay: ShopBusiness.emit(state,"custom_tournament",{quantity:1}); store.save(state);

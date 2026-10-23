@@ -82,8 +82,9 @@ window.ShopBusiness = (() => {
   function retailCard(card,save){return Math.round(referenceCard(card,save)*(save?.business.pricing.cards||1));}
   function capacity(save){return window.ShopModules?ShopModules.value("shelf.capacity",save,cfg.economy.shelfCapacity):cfg.economy.shelfCapacity;}
   function dailyCost(save){return window.ShopModules?ShopModules.value("business.dailyCost",save,cfg.economy.operatingCost):cfg.economy.operatingCost;}
-  function shelfUsed(save){return total(save.display)+total(save.packDisplay);}
-  function order(save,pack,quantity,useCredit=false){
+  function shelfUsed(save){return total(save.display)+total(save.packDisplay)+(window.ShopBoxes?.shelfUsed(save)||0);}
+  function order(save,pack,quantity,useCredit=false,unit='pack'){
+    if(unit==='box')return window.ShopBoxes?.order(save,pack,quantity,useCredit)||{ok:false,error:'卡盒模块未载入。'};
     if(save.business.phase==="closed")return {ok:false,error:"今天已结算，请先进入下一天。"};
     if(!pack||!Number.isInteger(quantity)||quantity<1||quantity>cfg.supplier.maxOrderQuantity)return {ok:false,error:"进货数量不合法。"};
     const cost=wholesale(pack)*quantity,shortfall=Math.max(0,cost-save.shop.cash);
@@ -94,21 +95,24 @@ window.ShopBusiness = (() => {
     bump(save,"ordersPlaced");bump(save,"purchasedPacks",quantity);bump(save,"purchaseExpense",cost);emit(save,"orderPlaced",{packId:pack.id,quantity,amount:cost,credit:shortfall});
     return {ok:true,order:item};
   }
-  function deliveries(save){let changed=false;for(const item of save.orders){if(item.status==="pending"&&item.dueAt<=stamp(save)){item.status="arrived";changed=true;emit(save,"deliveryArrived",{orderId:item.id,packId:item.packId,quantity:item.quantity});}}return changed;}
+  function deliveries(save){let changed=false;for(const item of save.orders){if(item.status==="pending"&&item.dueAt<=stamp(save)){item.status="arrived";changed=true;emit(save,"deliveryArrived",{kind:item.kind||'pack',orderId:item.id,packId:item.packId,quantity:item.packQuantity||item.quantity,...(item.kind==='box'?{boxes:item.quantity}:{})});}}return changed;}
   function receive(save,id){
     if(save.business.phase==="closed")return {ok:false,error:"请明早再签收。"};
     const item=save.orders.find(o=>o.id===id&&o.status==="arrived");if(!item)return {ok:false,error:"这笔订单尚未送达或已签收。"};
+    if(item.kind==='box')return ShopBoxes.receive(save,item);
     item.status="received";item.receivedAt=stamp(save);save.stock[item.packId]=(save.stock[item.packId]||0)+item.quantity;
     bump(save,"receivedPacks",item.quantity);emit(save,"goodsReceived",{orderId:item.id,packId:item.packId,quantity:item.quantity,cost:item.cost});return {ok:true,quantity:item.quantity};
   }
-  function movePacks(save,packId,from,to,n=1){
+  function movePacks(save,packId,from,to,n=1,boxId){
     if(!["stock","packDisplay"].includes(from)||!["stock","packDisplay"].includes(to)||from===to||!Number.isInteger(n)||n<1||!(save[from][packId]>=n))return false;
     if(save.business.phase==="closed"||to==="packDisplay"&&shelfUsed(save)+n>capacity(save))return false;
+    if(window.ShopBoxes&&!ShopBoxes.moveTracked(save,packId,from,to,n,boxId))return false;
     save[from][packId]-=n;if(!save[from][packId])delete save[from][packId];save[to][packId]=(save[to][packId]||0)+n;
     if(to==="packDisplay")bump(save,"listedUnits",n);emit(save,to==="packDisplay"?"stockListed":"stockWithdrawn",{kind:"pack",packId,quantity:n});return true;
   }
-  function openPack(save,pack){
+  function openPack(save,pack,boxId){
     if(save.business.phase==="closed"||!pack||!(save.stock[pack.id]>0))return false;
+    if(window.ShopBoxes&&!ShopBoxes.moveTracked(save,pack.id,'stock','opened',1,boxId))return false;
     save.stock[pack.id]--;if(!save.stock[pack.id])delete save.stock[pack.id];save.shop.packsOpened++;bump(save,"openedPacks");emit(save,"packOpened",{packId:pack.id,quantity:1});return true;
   }
   function noteTransfer(save,from,to,cardId,n){
@@ -116,6 +120,7 @@ window.ShopBusiness = (() => {
     emit(save,to==="display"?"stockListed":from==="display"?"stockWithdrawn":to==="trash"?"cardDiscarded":"cardRecovered",{kind:"card",cardId,quantity:n});
   }
   function sell(save,kind,id,profile){
+    if(kind==='box')return ShopBoxes.sell(save,id,profile);
     if(save.business.phase!=="open")return {ok:false,error:"店铺尚未营业。"};
     const item=kind==="card"?catalog?.cards.find(c=>c.id===id):catalog?.packs.find(p=>p.id===id);
     const container=kind==="card"?save.display:save.packDisplay;
@@ -130,6 +135,7 @@ window.ShopBusiness = (() => {
     const item=kind==="card"?catalog?.cards.find(c=>c.id===id):catalog?.packs.find(p=>p.id===id),stock=save[container];
     if(!item||!(stock[id]>=quantity))return {ok:false,error:"商品数量不足。"};
     if(container==="collection"&&window.ShopModules&&ShopModules.value("inventory.available",save,stock[id],{cardId:id})<quantity)return {ok:false,error:"收藏保护中的卡片不能出售。"};
+    if(kind==='pack'&&window.ShopBoxes&&!ShopBoxes.moveTracked(save,id,'packDisplay','sold',quantity))return {ok:false,error:'盒内库存记录不一致。'};
     stock[id]-=quantity;if(!stock[id])delete stock[id];addCash(save,amount);save.shop.revenue+=amount;save.shop.sold+=quantity;
     bump(save,"revenue",amount);bump(save,kind==="card"?"soldCards":"soldPacks",quantity);bump(save,"served");save.business.reputation=Math.min(100,save.business.reputation+.5);
     save.receipts.push({name:item.name,id,kind,amount,quantity,day:save.business.day,minute:save.business.minute,customer:profile?.name||"顾客"});save.receipts=save.receipts.slice(-50);
@@ -140,6 +146,7 @@ window.ShopBusiness = (() => {
     for(const [id,n] of Object.entries(save.display)){const card=catalog?.cards.find(c=>c.id===id);if(n>0&&card&&profile.rarities.includes(card.rarity)&&retailCard(card,save)<=profile.budget&&save.business.pricing.cards<=profile.maxMarkup)products.push({kind:"card",id,price:retailCard(card,save),score:profile.preference==="card"?100:20});}
     for(const [id,n] of Object.entries(save.packDisplay)){const pack=catalog?.packs.find(p=>p.id===id);if(n>0&&pack&&retailPack(pack,save)<=profile.budget&&save.business.pricing.packs<=profile.maxMarkup)products.push({kind:"pack",id,price:retailPack(pack,save),score:profile.preference==="pack"?100:20});}
     if(window.ShopModules)for(const product of products){const item=product.kind==="card"?catalog.cards.find(c=>c.id===product.id):catalog.packs.find(p=>p.id===product.id);product.score=ShopModules.value("customer.productScore",save,product.score,{profile,kind:product.kind,item});}
+    if(window.ShopBoxes)products.push(...ShopBoxes.products(save,profile));
     products.sort((a,b)=>profile.preference==="cheapest"&&!profile.regularId?a.price-b.price:b.score-a.score||a.price-b.price);
     return products[0]||null;
   }

@@ -1,7 +1,7 @@
 {
   "name":"noname-card-shop",
   "productName":"无名卡店",
-  "version":"0.7.1",
+  "version":"0.8.0",
   "description":"像素卡店经营与三国杀武将接力对战",
   "main":"main.cjs",
   "author":"Noname Card Shop contributors",

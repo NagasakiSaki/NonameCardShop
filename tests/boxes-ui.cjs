@@ -1,0 +1,34 @@
+const {chromium,base,output}=require('./helpers.cjs');
+const assert=require('node:assert/strict'),path=require('node:path'),fs=require('node:fs');
+let browser;
+(async()=>{
+ browser=await chromium.launch();const context=await browser.newContext({viewport:{width:1450,height:1050}}),page=await context.newPage(),errors=[];
+ page.on('pageerror',e=>errors.push(e.stack));page.on('dialog',d=>d.accept());
+ await context.addInitScript(base=>{if(location.origin===base&&!localStorage.getItem('boxes-seed')){localStorage.setItem('boxes-seed','1');localStorage.setItem('noname-packer-v1',JSON.stringify({collection:{caocao:2},stock:{standard:2},trash:{guanyu:1},shop:{cash:40000}}));}},base);
+ await page.goto(base);await page.waitForFunction(()=>typeof DATA!=='undefined'&&DATA&&ShopGame.scene?.owner);assert.ok(await page.evaluate(()=>localStorage.getItem('noname-packer-before-boxes-v1')));
+ await page.evaluate(()=>{state.business.paused=true;ShopGame.scene.owner.setPosition(490,296);ShopGame.panel('counter');BusinessUI.renderCounter('supplier');});
+ await page.locator('#orderPack').selectOption('standard');await page.locator('#orderUnit').selectOption('box');await page.locator('#orderQuantity').fill('2');
+ assert.match(await page.locator('#orderSummary').innerText(),/整盒固定：C 60.*UR 1/);assert.match(await page.locator('#orderSummary').innerText(),/6,100/);
+ await page.locator('#placeOrder').click();const order=await page.evaluate(()=>state.orders.at(-1));assert.equal(order.kind,'box');assert.equal(order.cost,6100);assert.equal(order.packQuantity,48);
+ await page.evaluate(()=>{state.business.minute=550;ShopBusiness.deliveries(state);store.save(state);});await page.locator(`[data-receive="${order.id}"]`).click();await page.locator('[data-counter-tab=warehouse]').click();
+ const boxes=await page.evaluate(()=>ShopBoxes.lots(state).map(b=>({id:b.id,packets:b.packets,spec:b.spec})));assert.equal(boxes.length,2);assert.equal(await page.evaluate(()=>state.stock.standard),2);
+ await page.screenshot({path:path.join(output,'boxes-warehouse.png')});await page.setViewportSize({width:390,height:844});assert.equal(await page.locator('#shopPanel').evaluate(e=>e.scrollWidth<=e.clientWidth+1),true);await page.screenshot({path:path.join(output,'boxes-mobile.png')});await page.setViewportSize({width:1450,height:1050});
+ await page.locator(`[data-unseal-box="${boxes[0].id}"]`).click();assert.equal(await page.evaluate(()=>state.stock.standard),26);
+ const content=await page.evaluate(id=>JSON.stringify(ShopBoxes.find(state,id)),boxes[0].id);await page.reload();await page.waitForFunction(()=>typeof DATA!=='undefined'&&DATA&&ShopGame.scene?.owner);assert.equal(await page.evaluate(id=>JSON.stringify(ShopBoxes.find(state,id)),boxes[0].id),content);
+ await page.evaluate(()=>{ShopGame.scene.owner.setPosition(490,296);ShopGame.panel('counter');BusinessUI.renderCounter('warehouse');});
+ await page.locator(`[data-open-box="${boxes[0].id}"]`).click();await page.locator('#closeBtn').click();assert.equal(await page.evaluate(()=>state.stock.standard),26);
+ await page.evaluate(()=>{ShopGame.panel('counter');BusinessUI.renderCounter('warehouse');});const before=await page.evaluate(()=>({...state.collection}));
+ await page.locator(`[data-open-box="${boxes[0].id}"]`).click();await page.locator('#wrapper').click();await page.waitForFunction(()=>document.querySelectorAll('#stage .card').length===5);
+ assert.equal(await page.evaluate(()=>state.stock.standard),25);assert.equal(await page.evaluate(id=>ShopBoxes.find(state,id).packets.filter(p=>p.location==='opened').length,boxes[0].id),1);
+ await page.waitForFunction(()=>document.querySelector('#doneBtn'));await page.locator('#doneBtn').click();
+ await page.evaluate(id=>{for(let i=0;i<23;i++){reveal('standard',[],id);closeOverlay();}},boxes[0].id);
+ const actual=await page.evaluate(before=>{const counts={C:0,U:0,R:0,SR:0,UR:0};for(const [id,n]of Object.entries(state.collection)){const added=n-(before[id]||0);if(added)counts[byId.get(id).rarity]+=added;}return counts;},before);assert.deepEqual(actual,boxes[0].spec.counts);assert.equal(await page.evaluate(()=>state.stock.standard),2);
+ // A second complete box is sold by a real scene NPC, retaining its manufactured cards.
+ await page.evaluate(()=>{ShopGame.scene.owner.setPosition(240,360);ShopGame.panel('display','boxes');});await page.locator(`[data-move-box="${boxes[1].id}"]`).click();assert.equal(await page.evaluate(()=>ShopBusiness.shelfUsed(state)),4);await page.locator('#shopPanelClose').click();
+ const expected=await page.evaluate(id=>{const c=ShopModules.clone(ShopModules.get('balance').config);c.boxCustomer.chance=1;ShopModules.configure('balance',c);ShopBusiness.open(state);state.business.paused=false;state.business.speed=4;ShopGame.scene.resetCustomers();store.save(state);return ShopBoxes.retail(state,ShopBoxes.find(state,id));},boxes[1].id);
+ await page.waitForFunction(id=>ShopBoxes.find(state,id)?.status==='sold',boxes[1].id,{timeout:55000});await page.evaluate(()=>{state.business.paused=true;store.save(state);});assert.equal(await page.evaluate(()=>state.business.daily.revenue),expected);assert.equal(await page.evaluate(()=>state.modules.ledger.data.daily.cogs),3050);assert.equal(await page.evaluate(()=>ShopBusiness.shelfUsed(state)),0);
+ assert.deepEqual(await page.evaluate(id=>ShopBoxes.find(state,id).packets.map(p=>p.cards),boxes[1].id),boxes[1].packets.map(p=>p.cards));
+ const saved=await page.evaluate(()=>JSON.stringify({collection:state.collection,stock:state.stock,boxes:state.modules.boxes,ledger:state.modules.ledger,shop:state.shop}));await page.reload();await page.waitForFunction(()=>typeof DATA!=='undefined'&&DATA&&ShopGame.scene?.owner);assert.equal(await page.evaluate(()=>JSON.stringify({collection:state.collection,stock:state.stock,boxes:state.modules.boxes,ledger:state.modules.ledger,shop:state.shop})),saved);
+ assert.deepEqual(errors,[]);fs.writeFileSync(path.join(output,'boxes-ui-result.json'),JSON.stringify({oldSave:true,order:true,frozenBox:true,exact120Cards:actual,cancelSafe:true,wholeBoxNpcSale:true,costs:true,reload:true,mobile:true,errors},null,2));
+ console.log('PASS box UI: legacy migration, real supplier/receipt/unseal/open/cancel, exact 120-card totals, fixed contents across reload, whole-box scene NPC purchase and ledger, mobile layout.');
+})().catch(error=>{console.error(error);process.exitCode=1;}).finally(async()=>{await browser?.close();});

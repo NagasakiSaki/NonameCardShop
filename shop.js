@@ -41,7 +41,7 @@ window.ShopGame = (() => {
       text.setText(station.name + (level?` Lv.${level}`:"") + (count ? ` ×${count}` : ""));
     }
     scene?.updateFixtures?.();
-    const signature=JSON.stringify([state.collection,state.trash,state.display,state.stock,state.packDisplay,state.business.pricing,state.modules.inventory,state.business.day,state.modules.upgrades,ShopModules.revision]);
+    const signature=JSON.stringify([state.collection,state.trash,state.display,state.stock,state.packDisplay,ShopBoxes.lots(state).map(b=>[b.id,b.status,b.location]),state.business.pricing,state.modules.inventory,state.business.day,state.modules.upgrades,ShopModules.revision]);
     if ($("#shopPanel").open && panelMode !== "counter" && panelMode !== "catalogue" && signature!==inventorySignature) renderInventory();
     inventorySignature=signature;
     window.BusinessUI?.refresh();
@@ -80,7 +80,7 @@ window.ShopGame = (() => {
   function renderInventoryTabs() {
     const tabs = $("#inventoryTabs");
     tabs.replaceChildren();
-    const options = panelMode === "trash" ? [["collection", "背包 · 选择丢入"], ["trash", "桶内 · 换日清空"]] : panelMode === "display" ? [["collection", "单卡上架"], ["display", "在售单卡"], ["stock", "整包上架"], ["packDisplay", "在售卡包"]] : [["collection", "全部卡片"]];
+    const options = panelMode === "trash" ? [["collection", "背包 · 选择丢入"], ["trash", "桶内 · 换日清空"]] : panelMode === "display" ? [["collection", "单卡上架"], ["display", "在售单卡"], ["stock", "整包上架"], ["packDisplay", "在售卡包"],["boxes","卡盒上架"],["boxDisplay","在售卡盒"]] : [["collection", "全部卡片"]];
     for (const [id, label] of options) {
       const button = elementWithText("button", label, "inventory-tab" + (inventoryTab === id ? " active" : ""));
       button.type = "button";
@@ -102,6 +102,7 @@ window.ShopGame = (() => {
     $("#inventoryRarity").disabled=false;$("#inventoryGrid").classList.remove("pack-inventory");
     if(panelMode==="display")BusinessUI.renderShelfPricing();
     if(["stock","packDisplay"].includes(inventoryTab)){BusinessUI.renderShelfPacks(inventoryTab);return;}
+    if(['boxes','boxDisplay'].includes(inventoryTab)){BusinessUI.renderShelfBoxes(inventoryTab);return;}
     const items = state[inventoryTab];
     const query = $("#inventorySearch").value.trim().toLowerCase();
     const rarity = $("#inventoryRarity").value;

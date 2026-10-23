@@ -46,7 +46,7 @@ window.BusinessUI = (()=>{
     window.ManagementUI?.refresh();
     if($("#taskBoard").open)renderTaskBoard();
     if($("#shopPanel").open&&ShopGame.panelMode==="counter"){
-      const signature=JSON.stringify([state.orders.map(o=>[o.id,o.status]),state.stock,state.packDisplay,state.shop.cash,b.phase,ShopModules.revision]);
+      const signature=JSON.stringify([state.orders.map(o=>[o.id,o.status]),state.stock,state.packDisplay,ShopBoxes.lots(state).map(b=>[b.id,b.status,b.location]),state.shop.cash,b.phase,ShopModules.revision]);
       if(signature!==lastCounter){lastCounter=signature;renderCounter();}
       updateSupplierSummary();
     }
@@ -87,20 +87,22 @@ window.BusinessUI = (()=>{
     const opening=counterTab==="opening";$("#shopCatalogue").hidden=!opening;
     $("#supplyView").hidden=opening;
     if(opening){renderPacks();return;}
-    const root=$("#supplyView"),oldPack=$("#orderPack")?.value,oldQuantity=$("#orderQuantity")?.value,oldCredit=$("#orderCredit")?.checked;
+    const root=$("#supplyView"),oldPack=$("#orderPack")?.value,oldQuantity=$("#orderQuantity")?.value,oldCredit=$("#orderCredit")?.checked,oldUnit=$("#orderUnit")?.value||'pack';
     root.replaceChildren();
-    const summary=el("div","","supply-summary");summary.append(el("span",`仓库 ${ShopModel.total(state.stock)} 包 · 货架 ${ShopModel.total(state.packDisplay)} 包`),el("span",`供应商欠款 ${money(state.business.debt)} / 额度 ${money(ShopBusiness.config.economy.supplierCreditLimit)}`));root.appendChild(summary);
+    const sealed=ShopBoxes.lots(state).filter(b=>b.status==='sealed');
+    const summary=el("div","","supply-summary");summary.append(el("span",`仓库 ${ShopModel.total(state.stock)} 包 · 货架 ${ShopModel.total(state.packDisplay)} 包 · 完整卡盒 ${sealed.length} 盒`),el("span",`供应商欠款 ${money(state.business.debt)} / 额度 ${money(ShopBusiness.config.economy.supplierCreditLimit)}`));root.appendChild(summary);
     if(counterTab==="supplier"){
       const form=el("form","","supplier-form");form.id="supplierForm";
       const packLabel=el("label","选择卡包"),select=document.createElement("select");select.id="orderPack";
       for(const pack of DATA.packs)select.add(new Option(`${pack.name} · 进价 ${money(ShopBusiness.wholesale(pack))} / 包`,pack.id));
       select.value=oldPack&&DATA.packs.some(p=>p.id===oldPack)?oldPack:"standard";packLabel.appendChild(select);
       const quantityLabel=el("label","订购数量"),quantity=document.createElement("input");quantity.id="orderQuantity";quantity.type="number";quantity.min="1";quantity.max=String(ShopBusiness.config.supplier.maxOrderQuantity);quantity.step="1";quantity.value=oldQuantity||"3";quantityLabel.appendChild(quantity);
+      const unitLabel=el('label','商品规格','order-unit'),unit=document.createElement('select');unit.id='orderUnit';unit.add(new Option('散包 · 仅单包R+小保底','pack'));unit.add(new Option('完整卡盒 · 固定配额大保底','box'));unit.value=oldUnit;unitLabel.appendChild(unit);unit.onchange=()=>{quantity.value='1';updateSupplierSummary();};
       const creditLabel=el("label","","credit-option"),credit=document.createElement("input");credit.id="orderCredit";credit.type="checkbox";credit.checked=!!oldCredit;creditLabel.append(credit,document.createTextNode("资金不足时使用供应商额度（销售与任务收入优先还款）"));
       const amount=el("p","","order-summary");amount.id="orderSummary";const send=button("确认下单",()=>{});send.id="placeOrder";send.type="submit";send.onclick=null;
-      form.append(packLabel,quantityLabel,creditLabel,amount,send);
+      form.append(packLabel,quantityLabel,unitLabel,creditLabel,amount,send);
       form.oninput=updateSupplierSummary;form.onchange=updateSupplierSummary;
-      form.onsubmit=event=>{event.preventDefault();const pack=DATA.packs.find(p=>p.id===select.value),result=ShopBusiness.order(state,pack,Number(quantity.value),credit.checked);if(!result.ok)return ShopGame.toast(result.error);commit();ShopGame.toast(`${pack.name} ×${result.order.quantity} 已下单，送达后请签收。`);renderCounter();};
+      form.onsubmit=event=>{event.preventDefault();const pack=DATA.packs.find(p=>p.id===select.value),result=ShopBusiness.order(state,pack,Number(quantity.value),credit.checked,unit.value);if(!result.ok)return ShopGame.toast(result.error);commit();ShopGame.toast(`${pack.name} ×${result.order.quantity}${result.order.kind==='box'?'盒':'包'} 已下单，送达后请签收。`);renderCounter();};
       root.appendChild(form);
     }
     renderOrders(root);
@@ -113,16 +115,19 @@ window.BusinessUI = (()=>{
         actions.append(open,button("去货架上架",()=>go("display"),"btn plain"));row.appendChild(actions);list.appendChild(row);
       }
       if(!list.children.length)list.appendChild(el("p","仓库还没有未拆封卡包。先下单，再签收送达的货物。","empty-business"));root.appendChild(list);
+      root.appendChild(el('h3','完整卡盒 / 拆盒余包','warehouse-heading'));renderBoxes(root,'warehouse');
     }
     updateSupplierSummary();
   }
   function stampText(value){return `第 ${Math.floor(value/1440)+1} 天 ${ShopBusiness.time(value%1440)}`;}
   function updateSupplierSummary(){
     if(!$("#orderPack"))return;
-    const pack=DATA.packs.find(p=>p.id===$("#orderPack").value),quantity=Number($("#orderQuantity").value),cost=ShopBusiness.wholesale(pack)*quantity;
+    const pack=DATA.packs.find(p=>p.id===$("#orderPack").value),quantity=Number($("#orderQuantity").value),box=$('#orderUnit')?.value==='box',q=box?ShopBalance.quoteBox(pack,ShopBusiness.config.economy.cardPrices):null,cost=(box?q?.wholesale||0:ShopBusiness.wholesale(pack))*quantity,max=box?Math.min(5,ShopBusiness.config.supplier.maxOrderQuantity):ShopBusiness.config.supplier.maxOrderQuantity;
+    $('#orderQuantity').max=String(max);
+    for(const option of $('#orderPack').options){const p=DATA.packs.find(p=>p.id===option.value),quote=box?ShopBalance.quoteBox(p,ShopBusiness.config.economy.cardPrices):null;option.textContent=`${p.name} · ${box?(quote?`${money(quote.wholesale)} / 盒`:'未配置卡盒'):`${money(ShopBusiness.wholesale(p))} / 包`}`;}
     const shortfall=Math.max(0,cost-state.shop.cash),credit=$("#orderCredit").checked;
-    const legal=Number.isInteger(quantity)&&quantity>0&&quantity<=ShopBusiness.config.supplier.maxOrderQuantity;
-    $("#orderSummary").textContent=legal?`合计 ${money(cost)} · 预计 ${stampText(ShopBusiness.stamp(state)+ShopBusiness.config.supplier.deliveryMinutes)} 送达${shortfall?` · 需赊购 ${money(shortfall)}`:""}\n${ShopBalance.describe(pack,ShopBusiness.config.economy.cardPrices)}`:"请输入有效的整数数量。";
+    const legal=Number.isInteger(quantity)&&quantity>0&&quantity<=max&&(!box||!!q);
+    $("#orderSummary").textContent=legal?`合计 ${money(cost)} · ${quantity}${box?'盒':'包'}${box?`（共${quantity*q.packs}包）`:''} · 预计 ${stampText(ShopBusiness.stamp(state)+ShopBusiness.config.supplier.deliveryMinutes)} 送达${shortfall?` · 需赊购 ${money(shortfall)}`:""}\n${box?ShopBalance.describeBox(pack,ShopBusiness.config.economy.cardPrices):ShopBalance.describe(pack,ShopBusiness.config.economy.cardPrices)}`:box&&!q?ShopBalance.describeBox(pack,ShopBusiness.config.economy.cardPrices):`请输入1—${max}的整数数量。`;
     $("#placeOrder").disabled=!legal||state.business.phase==="closed"||shortfall>0&&(!credit||shortfall+state.business.debt>ShopBusiness.config.economy.supplierCreditLimit);
   }
   function renderOrders(root){
@@ -131,13 +136,34 @@ window.BusinessUI = (()=>{
     const list=el("div","","order-list");
     for(const order of orders){
       const row=el("article","","order-row");row.dataset.order=order.id;
-      const text=el("div","","order-copy");text.append(el("strong",`${DATA.packs.find(p=>p.id===order.packId)?.name||order.packId} ×${order.quantity}`),el("small",`${money(order.cost)} · ${stampText(order.dueAt)} ${order.status==="arrived"?"已送达":"预计送达"}`));
-      const receive=button(order.status==="arrived"?"签收入库":"运送中",()=>{const result=ShopBusiness.receive(state,order.id);if(result.ok){commit();ShopGame.toast(`已签收 ${result.quantity} 包，可拆包或上架。`);renderCounter();}else ShopGame.toast(result.error);});receive.disabled=order.status!=="arrived"||state.business.phase==="closed";receive.dataset.receive=order.id;
+      const text=el("div","","order-copy");text.append(el("strong",`${DATA.packs.find(p=>p.id===order.packId)?.name||order.packId} ×${order.quantity}${order.kind==='box'?`盒（${order.packQuantity}包）`:'包'}`),el("small",`${money(order.cost)} · ${stampText(order.dueAt)} ${order.status==="arrived"?"已送达":"预计送达"}`));
+      const receive=button(order.status==="arrived"?"签收入库":"运送中",()=>{const result=ShopBusiness.receive(state,order.id);if(result.ok){commit();ShopGame.toast(`已签收 ${result.quantity} ${result.unit==='box'?'盒':'包'}，可拆封或上架。`);renderCounter();}else ShopGame.toast(result.error);});receive.disabled=order.status!=="arrived"||state.business.phase==="closed";receive.dataset.receive=order.id;
       row.append(text,receive);list.appendChild(row);
     }
     if(!orders.length)list.appendChild(el("p","当前没有在途或待签收订单。","empty-business"));root.appendChild(list);
   }
   function packRow(pack,n,location){const row=el("article","","pack-stock-row");row.dataset.pack=pack.id;const icon=el("div",String(pack.name).slice(0,2),"sealed-pack-icon");const text=el("div","","pack-stock-copy");text.append(el("h3",pack.name),el("strong",`${location} ×${n}`),el("p",`整包售价 ${money(ShopBusiness.retailPack(pack,state))} · 拆开获得 5 张卡`));row.append(icon,text);return row;}
+  function renderBoxes(root,mode){
+    const query=mode==='warehouse'?'':$('#inventorySearch').value.trim().toLowerCase();
+    const boxes=ShopBoxes.lots(state).filter(b=>mode==='warehouse'?b.status==='unsealed'||b.status==='sealed'&&b.location==='stock':b.status==='sealed'&&b.location===(mode==='boxes'?'stock':'display')).filter(b=>`${b.id} ${DATA.packs.find(p=>p.id===b.packId)?.name}`.toLowerCase().includes(query));
+    for(const box of boxes){
+      const pack=DATA.packs.find(p=>p.id===box.packId),row=el('article','','pack-stock-row box-stock-row');row.dataset.boxId=box.id;
+      const text=el('div','','pack-stock-copy'),sealed=box.status==='sealed',remaining=box.packets.filter(p=>p.location==='stock').length,onShelf=box.packets.filter(p=>p.location==='packDisplay').length;
+      text.append(el('h3',`${pack.name} · ${sealed?'完整封盒':'拆盒余包'}`),el('small',box.id),el('p',sealed?ShopBalance.describeBox(pack,ShopBusiness.config.economy.cardPrices,box.spec):`本盒仓库 ${remaining} 包 / 货架 ${onShelf} 包 · 已拆或售出 ${box.spec.packs-remaining-onShelf} 包\n原盒配额：${ShopBalance.ORDER.map(r=>`${r} ${box.spec.counts[r]}`).join(' / ')}。余包内容已固定，不重新补保底。`));
+      const actions=el('div','','pack-stock-actions');
+      if(mode==='warehouse'){
+        if(sealed){const b=button(`拆盒取出 ${box.spec.packs} 包`,()=>{if(!ShopGame.canOpenPack())return ShopGame.toast('请到柜台前拆盒。');const result=ShopModules.dispatch(state,'boxes.unseal',{boxId:box.id});if(!result.ok)return ShopGame.toast(result.error);commit();renderCounter();});b.dataset.unsealBox=box.id;b.disabled=state.business.phase==='closed';actions.append(b,button('去货架整盒上架',()=>go('display'),'btn plain'));}
+        else{const b=button('拆本盒 1 包',()=>openPack(pack.id,box.id));b.dataset.openBox=box.id;b.disabled=!remaining||state.business.phase==='closed';actions.append(b,button('去货架拆卖',()=>go('display'),'btn plain'));}
+      }else{
+        text.append(el('strong',`占 ${box.spec.shelfUnits} 个货架位 · 整盒售价 ${money(ShopBoxes.retail(state,box))}`));
+        const b=button(mode==='boxes'?'上架完整卡盒':'撤回完整卡盒',()=>{if(!ShopGame.near('display'))return ShopGame.toast('请先到陈列架旁。');const result=ShopModules.dispatch(state,'boxes.move',{boxId:box.id,to:mode==='boxes'?'display':'stock'});if(!result.ok)return ShopGame.toast(result.error);commit();ShopGame.renderInventory();});b.dataset.moveBox=box.id;b.disabled=state.business.phase==='closed';actions.append(b);
+      }
+      row.append(el('div',sealed?'盒':'余','sealed-pack-icon'),text,actions);root.append(row);
+    }
+    if(!boxes.length)root.append(el('p','没有符合条件的卡盒。完整卡盒需在供应商选择“完整卡盒”进货；散包不会自动合成盒。','inventory-empty'));
+    return boxes.length;
+  }
+  function renderShelfBoxes(tab){$('#inventoryRarity').disabled=true;$('#recoverAllBtn').hidden=true;const root=$('#inventoryGrid');root.replaceChildren();root.classList.add('pack-inventory');const n=renderBoxes(root,tab);$('#inventoryCount').textContent=`共 ${n} 盒 · 完整卡盒单独管理`;}
   function renderShelfPricing(){
     const root=$("#shelfBusiness");root.replaceChildren();root.appendChild(el("span",`货架容量 ${ShopBusiness.shelfUsed(state)} / ${ShopBusiness.capacity(state)}`));
     for(const [kind,label]of [["cards","单卡定价"],["packs","整包定价"]]){
@@ -210,5 +236,5 @@ window.BusinessUI = (()=>{
   ShopBusiness.on(event=>{if(event.type==="deliveryArrived")ShopGame.toast("供应商已送货，到柜台签收入库吧。");});
   window.addEventListener("catalogueready",refresh);window.addEventListener("shopready",refresh);
   document.addEventListener("visibilitychange",()=>{if(document.hidden&&DATA)commit();});
-  return{tick,refresh,isPaused,renderCounter,renderShelfPricing,renderShelfPacks,showTasks,showEditor,showReport,claim};
+  return{tick,refresh,isPaused,renderCounter,renderShelfPricing,renderShelfPacks,renderShelfBoxes,showTasks,showEditor,showReport,claim};
 })();

@@ -10,6 +10,7 @@
 | 常客、关系、收卡和预约 | data/neighbors.json | 每日生成并冻结具体报价 |
 | 设施费用、工资、员工效率 | data/upgrades.json | 通过查询提供容量与成本加成 |
 | 周赛日期、报名、奖金、AI 阵容 | data/tournaments.json | 比赛报名与奖励快照 |
+| 散包小保底、整盒五档配额/大保底、盒客群 | data/balance.json / modules/boxes.js | 实体盒内容与订单冻结；见 BOOSTER-BOXES.md |
 | 单挑将池、起始手牌、先手补偿 | data/combat.json | 只允许已实现的 KOF / BO3 规则 |
 | 新经营系统 | modules/*.js | 独立状态、命令、查询、事件 |
 | 新赛制的引擎接入 | integration/duel.js | 引擎事件边界，不修改 vendor/noname |
