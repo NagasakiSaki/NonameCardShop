@@ -1,0 +1,919 @@
+{
+  "version": 1,
+  "baseline": 50,
+  "pointsPerCE": 10,
+  "hpPoint": 6,
+  "weights": {
+    "damage": 1.6,
+    "guard": 1.4,
+    "heal": 1.3,
+    "control": 1.2,
+    "quality": 0.5,
+    "hpLoss": 1.6,
+    "burst": 3,
+    "carry": 3
+  },
+  "assumptions": {
+    "turnsPerGeneral": 4,
+    "damageEvents": 0.6,
+    "damageDealtEvents": 0.65,
+    "cardEvents": 1.2,
+    "conditional": 0.55,
+    "perSkillCap": 2.5,
+    "perGeneralCap": 5,
+    "uncertainDiscount": 0.65,
+    "hpCap": 6
+  },
+  "rarityThresholds": {
+    "U": 52,
+    "R": 57,
+    "SR": 65,
+    "UR": 78
+  },
+  "overrides": {
+    "caocao": {
+      "vector": {
+        "cards": 0.45
+      },
+      "confidence": 0.75,
+      "notes": "奸雄：0.6次受伤/回合 × 0.75有实体伤害牌 = 0.45牌；护驾在中立单挑无效。"
+    },
+    "simayi": {
+      "vector": {
+        "cards": 1.2,
+        "quality": 0.25,
+        "cost": 0.15
+      },
+      "confidence": 0.75,
+      "notes": "反馈：0.6次受伤 × 偷一张(+2牌差)=1.2；鬼才改判按0.15张成本，牌质收益0.25。"
+    },
+    "xiahoudun": {
+      "vector": {
+        "cards": 0.35,
+        "damage": 0.22
+      },
+      "confidence": 0.75,
+      "notes": "刚烈：受伤0.6 × 非红桃0.75 × 对手最优选择弃牌或受伤的混合估计；两种结果不同时全计。"
+    },
+    "zhangliao": {
+      "vector": {
+        "cards": 0,
+        "quality": 0.4,
+        "control": 0.15
+      },
+      "confidence": 0.75,
+      "notes": "单挑突袭只有一个目标：偷1张净牌差+2，替代正常摸2张，净增0；额外计拆关键牌价值。"
+    },
+    "xuzhu": {
+      "vector": {
+        "damage": 0.5,
+        "cost": 0.65,
+        "burst": 0.3
+      },
+      "confidence": 0.75,
+      "notes": "裸衣：选择发动率0.65，少摸成本0.65；杀/决斗额外伤害0.5，不能将伤害增幅视为必定命中。"
+    },
+    "guojia": {
+      "vector": {
+        "cards": 1.35
+      },
+      "confidence": 0.75,
+      "notes": "遗计0.6次受伤 × 2牌，天妒自然判定约0.15；给自己；未重复扣被动必受伤，主动卖血另算。"
+    },
+    "zhenji": {
+      "vector": {
+        "cards": 1,
+        "guard": 0.4
+      },
+      "confidence": 0.75,
+      "notes": "洛神黑红等概率且不计改判：几何分布期望摸1；倾国提升防御0.4次/回合，黑牌转化不额外加牌差。"
+    },
+    "liubei": {
+      "vector": {},
+      "confidence": 0.75,
+      "notes": "单挑仁德只能资敌；可选择不发动。激将在中立单挑无效；身份局需另建模型。"
+    },
+    "guanyu": {
+      "vector": {
+        "quality": 0.55,
+        "damage": 0.12
+      },
+      "confidence": 0.75,
+      "notes": "武圣转化提高杀的可用性；消耗原红牌，不计算为免费摸牌。"
+    },
+    "zhangfei": {
+      "vector": {
+        "damage": 0.32,
+        "burst": 0.8,
+        "carry": 0.3
+      },
+      "confidence": 0.75,
+      "notes": "咆哮受杀的供给约束；额外命中约0.32/回合；KOF继承手牌提高爆发机会。"
+    },
+    "zhugeliang": {
+      "vector": {
+        "quality": 0.8,
+        "guard": 0.4
+      },
+      "confidence": 0.75,
+      "notes": "单挑观星只看2张，空城按触发概率折算防御；不套用五人观星收益。"
+    },
+    "zhaoyun": {
+      "vector": {
+        "quality": 0.5,
+        "guard": 0.2,
+        "damage": 0.08
+      },
+      "confidence": 0.75,
+      "notes": "龙胆杀闪互转，按0.5牌质及少量防伤/命中增量估计，牌数不变。"
+    },
+    "machao": {
+      "vector": {
+        "damage": 0.28,
+        "quality": 0.08
+      },
+      "confidence": 0.75,
+      "notes": "铁骑：杀机会 × 红判概率 × 本可被闪抵消的概率；马术在一对一距离1中不直接加伤害。"
+    },
+    "huangyueying": {
+      "vector": {
+        "cards": 1.1,
+        "quality": 0.1
+      },
+      "confidence": 0.75,
+      "notes": "集智：平均1.1张普通锦囊/回合，奇才在单挑距离收益很小；依赖牌堆构成。"
+    },
+    "sunquan": {
+      "vector": {
+        "quality": 1.8,
+        "burst": 0.3
+      },
+      "confidence": 0.75,
+      "notes": "制衡弃摸等量，净牌差0；按筛掉低效牌改善1.8牌质估算；救援中立单挑无效。"
+    },
+    "ganning": {
+      "vector": {
+        "control": 0.6,
+        "quality": 0.4
+      },
+      "confidence": 0.75,
+      "notes": "奇袭黑牌换拆桥，一换一净牌差0；计定向破坏节奏与牌质，不能将弃对手牌全部算无成本收益。"
+    },
+    "lvmeng": {
+      "vector": {
+        "cards": 0.4,
+        "burst": 0.35,
+        "carry": 0.6
+      },
+      "confidence": 0.75,
+      "notes": "克己保留本应弃置的溢出手牌；扣除放弃杀的机会后折算0.4；KOF囤牌继承另加。"
+    },
+    "huanggai": {
+      "vector": {
+        "cards": 1.2,
+        "hpLoss": 0.6,
+        "burst": 1.1,
+        "carry": 0.25
+      },
+      "confidence": 0.75,
+      "notes": "苦肉每回合平均0.6次，摸1.2张且主动失0.6血；卡差与血耗同时列示。"
+    },
+    "zhouyu": {
+      "vector": {
+        "cards": 0.35,
+        "damage": 0.4875
+      },
+      "confidence": 0.75,
+      "notes": "英姿+1；反间发动0.65：送牌成本0.65，非猜中概率0.75 × 0.65=0.4875伤害。"
+    },
+    "daqiao": {
+      "vector": {
+        "control": 0.8,
+        "quality": 0.3
+      },
+      "confidence": 0.75,
+      "notes": "国色方片换乐不思蜀，按判定与解乐/无懈折扣；流离不能转移给唯一攻击者，在单挑不计收益。"
+    },
+    "luxun": {
+      "vector": {
+        "cards": 0.8,
+        "guard": 0.2
+      },
+      "confidence": 0.75,
+      "notes": "连营按每回合0.8次触发；谦逊按顺手/乐命中机会估防御，不是每回合免一伤。"
+    },
+    "sunshangxiang": {
+      "vector": {
+        "cards": 0.55,
+        "heal": 0.45,
+        "cost": 0.45
+      },
+      "confidence": 0.75,
+      "notes": "枭姬约0.275次失装备 ×2；结姻有性别与双方受伤条件，两牌成本折算0.45。"
+    },
+    "huatuo": {
+      "vector": {
+        "heal": 0.65,
+        "cost": 0.35,
+        "quality": 0.45
+      },
+      "confidence": 0.75,
+      "notes": "青囊平均0.35次/回合，耗牌治疗；急救按红牌可用性计牌质，不能将红牌免费创造为桃。"
+    },
+    "lvbu": {
+      "vector": {
+        "damage": 0.32,
+        "cards": 0.2,
+        "burst": 0.45
+      },
+      "confidence": 0.75,
+      "notes": "无双按对手多付闪/杀或额外命中混合估计，不同时给两条分支全部收益。"
+    },
+    "diaochan": {
+      "vector": {
+        "cards": 1
+      },
+      "confidence": 0.75,
+      "notes": "离间需两名其他男性，1v1无法发动；闭月每回合稳定+1牌。"
+    },
+    "huaxiong": {
+      "vector": {
+        "cards": 0,
+        "cost": 0.35
+      },
+      "confidence": 0.75,
+      "notes": "6血体力底盘；耀武资敌按每回合0.35牌等价成本折扣，更多血不代表免费收益。"
+    },
+    "gongsunzan": {
+      "vector": {
+        "guard": 0.18
+      },
+      "confidence": 0.75,
+      "notes": "单挑距离压缩，义从只在低血时额外距离防御折算0.18。"
+    },
+    "xf_yiji": {
+      "vector": {
+        "cards": 1
+      },
+      "confidence": 0.75,
+      "notes": "机捷可把牌交给自己，每回合+1；急援常规交给其他人，在中立单挑不计资敌收益。"
+    },
+    "re_yuanshu": {
+      "vector": {
+        "cards": 0.4
+      },
+      "confidence": 0.75,
+      "notes": "妄尊单挑按对方血量更高概率0.4；无主公额外收益；同疾依赖第三人无效。"
+    },
+    "std_yuejin": {
+      "vector": {
+        "damage": 0.35,
+        "cost": 0.35,
+        "cards": 0.2
+      },
+      "confidence": 0.75,
+      "notes": "骁果基本牌成本与对手弃装备/受伤择优分支折算；不是免费每回合一伤。"
+    },
+    "old_re_lidian": {
+      "vector": {
+        "quality": 0.8
+      },
+      "confidence": 0.75,
+      "notes": "恂恂四选二属于牌质而非额外摸2；忘隙双方各摸1，单挑净牌差0。"
+    },
+    "ganfuren": {
+      "vector": {},
+      "confidence": 0.75,
+      "notes": "淑慎只益其他人；神智弃全手回血仅按紧急择优，不视为稳定正收益。"
+    },
+    "std_panfeng": {
+      "vector": {
+        "cards": 0.55,
+        "hpLoss": 0.18
+      },
+      "confidence": 0.75,
+      "notes": "狂斧命中/血量条件分支折算，摸牌与失血都计入。"
+    },
+    "shen_guanyu": {
+      "vector": {
+        "damage": 0.8,
+        "quality": 1,
+        "burst": 2.2,
+        "carry": 1.2
+      },
+      "confidence": 0.75,
+      "notes": "武神红桃强命无次数，受牌源约束；武魂在单挑/KOF的死亡换将收益按概率计爆发/继承，不作为常驻伤害。"
+    },
+    "shen_zhaoyun": {
+      "vector": {
+        "cards": 0.9,
+        "guard": 0.9,
+        "heal": 0.7,
+        "quality": 1.3,
+        "burst": 0.8
+      },
+      "confidence": 0.75,
+      "notes": "绝境低血摸牌与龙魂供给合并估计；2血底盘扣12分；双牌转化仍有成本，未额外计双份牌差。"
+    },
+    "shen_zhugeliang": {
+      "vector": {
+        "guard": 0.85,
+        "quality": 1.3,
+        "damage": 0.2,
+        "cost": 0.35,
+        "burst": 0.6
+      },
+      "confidence": 0.75,
+      "notes": "七星仅交换不产生七张常规手牌；星资源有限，按四回合摊销，雾防御与狂风耗星计成本。"
+    },
+    "shen_lvmeng": {
+      "vector": {
+        "cards": 1.05,
+        "control": 0.55,
+        "quality": 0.7
+      },
+      "confidence": 0.75,
+      "notes": "涉猎五张不同花色期望约3.05张，相对正常摸2净+1.05；攻心看手牌与红桃处理分开折算。"
+    },
+    "shen_zhouyu": {
+      "vector": {
+        "damage": 0.4,
+        "hpLoss": 0.18,
+        "cost": 0.2,
+        "burst": 1.5
+      },
+      "confidence": 0.75,
+      "notes": "大业炎3伤需要四色4牌并失3血，单挑不套多人三目标收益；有限爆发按四回合摊销并折发起率。"
+    },
+    "shen_simayi": {
+      "vector": {
+        "cards": 1.2,
+        "control": 0.6,
+        "quality": 0.6,
+        "cost": 0.25,
+        "burst": 1.2
+      },
+      "confidence": 0.75,
+      "notes": "忍与觉醒有启动时间，白银后极略收益按觉醒概率/四回合折扣；连破单挑终局无额外收益。"
+    },
+    "shen_caocao": {
+      "vector": {
+        "cards": 0.9,
+        "guard": 0.3,
+        "cost": 0.65
+      },
+      "confidence": 0.75,
+      "notes": "单挑归心只偷一名对手(+2牌差/次)，发动0.45；翻面跳回合成本0.65；不套八人归心。"
+    },
+    "shen_lvbu": {
+      "vector": {
+        "damage": 0.45,
+        "cards": 0.7,
+        "cost": 0.8,
+        "hpLoss": 0.15,
+        "burst": 1.1
+      },
+      "confidence": 0.75,
+      "notes": "神愤标记积累与翻面成本均摊，单挑只有一个目标；无谋负面纳入，不按神字直接UR。"
+    },
+    "shen_liubei": {
+      "vector": {
+        "cards": 2.1,
+        "damage": 0.65,
+        "hpLoss": 0.5,
+        "cost": 0.2,
+        "quality": 0.6,
+        "burst": 1.1,
+        "carry": 0.4
+      },
+      "confidence": 0.75,
+      "notes": "龙怒收益扣失血/减上限，杀命中受手牌限制；6血底盘，结营单挑资敌不计正收益。"
+    },
+    "shen_luxun": {
+      "vector": {
+        "damage": 0.7,
+        "cards": 0.5,
+        "control": 0.4,
+        "burst": 0.6
+      },
+      "confidence": 0.75,
+      "notes": "摧克奇偶分支择一与启动概率折算，绽火限定摊销；未重复计全部分支。"
+    },
+    "shen_zhangliao": {
+      "vector": {
+        "control": 0.8,
+        "quality": 0.7,
+        "cost": 0.25,
+        "burst": 0.5
+      },
+      "confidence": 0.75,
+      "notes": "夺锐需出牌阶段伤害且废装备栏，夺取技能收益高度依赖对手，列为对局敏感估计。"
+    },
+    "shen_ganning": {
+      "vector": {
+        "cards": 2.4,
+        "control": 0.6,
+        "cost": 0.7,
+        "quality": 0.4,
+        "burst": 1.4,
+        "carry": 0.5
+      },
+      "confidence": 0.75,
+      "notes": "劫营按对手留手2.4牌净差估计，破袭按己方弃牌与减上限/结束阶段代价折扣；需要后续对局校准。"
+    },
+    "re_sunshangxiang": {
+      "vector": {
+        "cards": 0.6,
+        "heal": 0.3,
+        "cost": 0.45,
+        "quality": 0.2
+      },
+      "confidence": 0.75,
+      "notes": "结姻在单挑须与敌方男性比较血量，收益分支不能全算己方；枭姬按失装备频率折算。"
+    },
+    "re_caozhang": {
+      "vector": {
+        "cards": 1,
+        "quality": 0.2,
+        "burst": 0.3
+      },
+      "confidence": 0.75,
+      "notes": "将驰三个选项互斥：稳定选摸1；摸2禁杀或弃1增杀仅作为牌质/爆发补偿，不叠加三分支摸牌。"
+    },
+    "ol_yuanji": {
+      "vector": {
+        "cards": 1.2,
+        "quality": 0.7
+      },
+      "confidence": 0.75,
+      "notes": "镜花/水月摸2后还牌，跨阶段短期手牌不等于净增4；结言给敌方摸牌部分净差为0。"
+    },
+    "tw_qiaozhou": {
+      "vector": {
+        "cards": 1,
+        "quality": 0.35,
+        "control": 0.2
+      },
+      "confidence": 0.75,
+      "notes": "知命两次摸牌后可放回，稳定净收益按1；星卜只能给其他角色，正面收益不计己方。"
+    },
+    "ns_huamulan": {
+      "vector": {
+        "cards": 0.6,
+        "quality": 0.3,
+        "damage": 0.15
+      },
+      "confidence": 0.75,
+      "notes": "从军随机变身高度不确定；不将变身前后所有技能常驻叠加，小概率2伤不计每回合2伤。"
+    },
+    "yj_qiaozhou": {
+      "vector": {
+        "cards": 0.65,
+        "quality": 0.5,
+        "heal": 0.1,
+        "cost": 0.15
+      },
+      "confidence": 0.75,
+      "notes": "识命三牌替代常规摸2并自伤，只有1额外牌；将息双方摸牌净差0，回合结束重置摸牌按概率计。"
+    },
+    "sxrm_huatuo": {
+      "vector": {
+        "damage": 0.5,
+        "cost": 0.8,
+        "heal": 0.2,
+        "cards": 0.3
+      },
+      "confidence": 0.75,
+      "notes": "灭害两牌转杀，支出2牌；黑桃后续回复/摸牌可能给对手，只计己方可实现部分。"
+    },
+    "ca_lijue": {
+      "vector": {
+        "cards": 0.5,
+        "heal": 0.25,
+        "burst": 0.8
+      },
+      "confidence": 0.75,
+      "notes": "摧袭需要两名额外角色，在单挑无法发动；聚军限定补牌回血按四回合摊销，不能回复副作用折扣。"
+    },
+    "ol_niuma": {
+      "vector": {
+        "cards": 1.4,
+        "damage": 0.4,
+        "quality": 0.7,
+        "cost": 0.45,
+        "burst": 2,
+        "carry": 0.4
+      },
+      "confidence": 0.75,
+      "notes": "首回合十三牌很强但多牌组合要支付手牌；按四回合摊销净牌与供给，炸弹非每回合必有。"
+    },
+    "db_key_hina": {
+      "vector": {
+        "cards": 1.3,
+        "quality": 0.8
+      },
+      "confidence": 0.75,
+      "notes": "神势力神识两阶段各摸2放1，按可发动势力及牌源保守折算；键势力助战单挑不能稳定资己。"
+    },
+    "dc_sb_zhonghui": {
+      "vector": {
+        "cards": 2.6,
+        "damage": 0.3,
+        "control": 0.5,
+        "heal": 0.2,
+        "burst": 0.6
+      },
+      "confidence": 0.75,
+      "notes": "两回合窗口精练摸牌约2.6/本人回合；挟术令原牌对目标无效换偷牌，不能无代价双计；觉醒摊销。"
+    },
+    "v_liubei": {
+      "vector": {
+        "cards": 3,
+        "damage": 0.65,
+        "control": 0.3,
+        "burst": 0.8
+      },
+      "confidence": 0.75,
+      "notes": "烈襄可选择摸至多5且造成伤害；按不同手牌分支折算3牌/回合，仁构同势力协助在单挑无效。"
+    },
+    "yue_daqiao": {
+      "vector": {
+        "cards": 1.6,
+        "damage": 0.7,
+        "control": 0.8,
+        "quality": 0.7,
+        "burst": 1
+      },
+      "confidence": 0.75,
+      "notes": "子系判定区数量1/2/3三个分支互斥，需先铺琴；高爆发按启动率折扣，琴回收按可达牌源估计。"
+    },
+    "pot_taishici": {
+      "vector": {
+        "cards": 1.2,
+        "damage": 0.65,
+        "heal": 0.12,
+        "quality": 0.4,
+        "burst": 0.8
+      },
+      "confidence": 0.75,
+      "notes": "酣战双方补牌要扣对手补牌；战烈四选项受烈标记数限制，摸3不能每次全得；振锋限定摊销。"
+    },
+    "pot_zhouyu": {
+      "vector": {
+        "cards": 1.7,
+        "damage": 0.8,
+        "control": 0.65,
+        "cost": 0.4,
+        "burst": 0.8
+      },
+      "confidence": 0.75,
+      "notes": "炽云需给牌且由敌方择优分支；焰洄弃牌/伤害与摸牌二选一；焚涛在单挑不套连环多人倍率。"
+    },
+    "shen_guojia": {
+      "vector": {
+        "cards": 3,
+        "heal": 0.3,
+        "quality": 0.8,
+        "burst": 1.5
+      },
+      "confidence": 0.75,
+      "notes": "慧识多次不同花色判定期望约3.22张，扣启动/上限约束后合并慧识限定与天翊，按3牌/回合；受牌堆影响。"
+    },
+    "shen_zhangjiao": {
+      "vector": {
+        "cards": 2.1,
+        "guard": 0.85,
+        "damage": 0.25,
+        "quality": 0.7,
+        "burst": 0.7
+      },
+      "confidence": 0.75,
+      "notes": "异兆按每回合约3张出入/均点数累积折算；三首防伤概率需结合本回合已用类型；天劫按洗牌周期摊销。"
+    },
+    "shen_zhangfei": {
+      "vector": {
+        "cards": 1.6,
+        "damage": 0.65,
+        "control": 1,
+        "quality": 0.5,
+        "burst": 1.2,
+        "carry": 0.5
+      },
+      "confidence": 0.75,
+      "notes": "神裁判定牌稳定+1，负面标记/额外使用次数随巡使提升；按两次内发动与判定有效概率折算，不计必然秒杀。"
+    },
+    "shen_xunyu": {
+      "vector": {
+        "cards": 1.6,
+        "guard": 0.5,
+        "control": 0.3,
+        "quality": 0.5
+      },
+      "confidence": 0.75,
+      "notes": "灵策按两名角色锦囊频率与定汉记录命中计；定汉每个牌名首次免疫，免疫不是无限常驻。"
+    },
+    "shen_dengai": {
+      "vector": {
+        "cards": 1,
+        "damage": 0.65,
+        "guard": 0.15,
+        "heal": 0.15,
+        "quality": 0.65,
+        "burst": 1
+      },
+      "confidence": 0.75,
+      "notes": "拓域/先晋需累计伤害开启标签；奇径单挑不能移动到两名其他角色之间，额外回合按规则依赖低估计。"
+    },
+    "shen_jiangwei": {
+      "vector": {
+        "cards": 1.4,
+        "damage": 0.25,
+        "quality": 0.6,
+        "burst": 1.4,
+        "carry": 0.4
+      },
+      "confidence": 0.75,
+      "notes": "九伐9不同牌名启动慢；天任仅弃置基本/锦囊增长，排除正常使用入弃牌；平襄9杀受上限>9启动概率折扣。"
+    },
+    "shen_machao": {
+      "vector": {
+        "cards": 1,
+        "damage": 0.6,
+        "guard": 0.25,
+        "quality": 0.7,
+        "hpLoss": 0.2,
+        "burst": 0.8
+      },
+      "confidence": 0.75,
+      "notes": "狩骊1v1仅两名角色供坐骑，横骛按场上同花装备实际可达数量折算，不能套八人装备收益；雷伤增幅有反噬。"
+    },
+    "dc_shen_sunquan": {
+      "vector": {
+        "cards": 2.2,
+        "control": 1.1,
+        "quality": 1,
+        "damage": 0.3,
+        "burst": 1.3
+      },
+      "confidence": 0.75,
+      "notes": "藏溟单次按所含颜色数摸牌；积潮压手牌有归还时点，愁袭按牌名次数与供给折扣。"
+    },
+    "shen_sunquan": {
+      "vector": {
+        "cards": 0.65,
+        "quality": 1.2,
+        "cost": 0.4,
+        "control": 0.45,
+        "burst": 0.7
+      },
+      "confidence": 0.75,
+      "notes": "驭衡随机技能不能按永久叠加；不同花色弃牌与结束摸牌净差抵销，计技能池收益和帝力启动折扣。"
+    },
+    "shen_sunce": {
+      "vector": {
+        "cards": 1.6,
+        "damage": 0.55,
+        "guard": 0.65,
+        "hpLoss": 0.15,
+        "control": 0.4,
+        "burst": 1
+      },
+      "confidence": 0.75,
+      "notes": "1血底盘有大上限与冯河/英霸机制，平河减上限抵伤按发动率估计；特殊底盘仅初步校准。"
+    },
+    "wutugu": {
+      "vector": {
+        "damage": 0.3,
+        "hpLoss": 1.3,
+        "cost": 0.2
+      },
+      "confidence": 0.75,
+      "notes": "15血在四回合模型超过6血的收益封顶；燃殇积累负面按主动/被动火伤折扣，不能仅按15血排传说。"
+    },
+    "mb_wutugu": {
+      "vector": {
+        "damage": 0.2,
+        "cards": 0.2,
+        "hpLoss": 1.2
+      },
+      "confidence": 0.75,
+      "notes": "悍勇需要多目标，在单挑场景收益很低；燃殇持续掉血与减上限反噬扣除，15血收益封顶。"
+    },
+    "zhangjian": {
+      "vector": {
+        "damage": 0.25,
+        "hpLoss": 0.9
+      },
+      "confidence": 0.75,
+      "notes": "105血为特殊设计，A技能把伤害改为牌点数，不能将105血直接线性折算；体力收益封顶且标记特殊模式复核。"
+    },
+    "key_doruji": {
+      "vector": {
+        "damage": 0.3,
+        "guard": 0,
+        "hpLoss": 0.4
+      },
+      "confidence": 0.75,
+      "notes": "16血超模型范围封顶；杀双向不可响应，强命同时增加自己受伤风险，不能只计进攻。"
+    },
+    "hefei_yuejin": {
+      "vector": {
+        "cards": 1.4,
+        "damage": 0.35,
+        "control": 0.5,
+        "burst": 0.4
+      },
+      "confidence": 0.75,
+      "notes": "陷坚实杀命中前摸1弃至少1很强，但陷坚/摧锐触发有牌源条件；合羽依赖队友，在单挑剔除。"
+    },
+    "mb_caocao": {
+      "vector": {
+        "cards": 0.7,
+        "damage": 0.15,
+        "control": 0.35,
+        "burst": 0.4
+      },
+      "confidence": 0.75,
+      "notes": "令法第一二轮分别生效，非三分支同时发动；后续取得技能需要另估，按四回合窗口折扣。"
+    },
+    "zj_lukang": {
+      "vector": {
+        "cards": 0.8,
+        "damage": 0.3,
+        "guard": 0.3,
+        "quality": 1.1,
+        "burst": 0.8
+      },
+      "confidence": 0.75,
+      "notes": "决堰四装备栏只能逐次废除，摸3和集智不能每回合全叠加；怀柔重铸净牌差0，首次虚拟锦囊计牌质。"
+    },
+    "ca_lvbu": {
+      "vector": {
+        "cards": 2.8,
+        "damage": 0.5,
+        "cost": 0.6,
+        "hpLoss": 0.3,
+        "burst": 1
+      },
+      "confidence": 0.75,
+      "notes": "利驭可两次偷牌净+4，但对手同时视为决斗，扣掉血和响应消耗；双分支不可只计偷牌与增伤。"
+    },
+    "yj_chezhou": {
+      "vector": {
+        "cards": 0.65,
+        "damage": 0.3,
+        "burst": 1.2
+      },
+      "confidence": 0.75,
+      "notes": "偷算首次伤害+1摸3后失去技能，按四回合摊销与触发率估算；6血底盘另加。"
+    },
+    "yj_yongkai": {
+      "vector": {
+        "cards": 1.2,
+        "damage": 0.3,
+        "quality": 0.5,
+        "burst": 0.5
+      },
+      "confidence": 0.75,
+      "notes": "嚣反三种势力分支依受伤/造成伤害/失装备切换；骄虎额外摸牌仅蜀势力启用，不全程视为多技能并发。"
+    },
+    "hm_shen_huangfusong": {
+      "vector": {
+        "cards": 0.6,
+        "damage": 0.55,
+        "guard": 0.3,
+        "control": 0.8,
+        "burst": 0.6
+      },
+      "confidence": 0.75,
+      "notes": "势策阳阴择一；破怠需敌方技能描述条件，摸3自伤/资敌与封技为互斥分支，不能给己方免费+3。"
+    },
+    "hm_shen_zhujun": {
+      "vector": {
+        "cards": 0.4,
+        "damage": 0.6,
+        "control": 0.5,
+        "cost": 0.2,
+        "burst": 0.7
+      },
+      "confidence": 0.75,
+      "notes": "彻击重铸净牌差0，桃分支双方摸牌净差0；待摧火杀需压牌与伤害条件，限定追击触发率折扣。"
+    },
+    "xk_pengqi": {
+      "vector": {
+        "cards": 1.2,
+        "damage": 0.15,
+        "quality": 0.2,
+        "cost": 0.15
+      },
+      "confidence": 0.75,
+      "notes": "集众起义军稳定多摸1；缭乱翻面代价不能忽略，义军阵营与1号位依赖在单挑收益有限。"
+    },
+    "ol_huaxiong": {
+      "vector": {
+        "cards": 0.2,
+        "cost": 0.25
+      },
+      "confidence": 0.75,
+      "notes": "红杀资敌/非红杀自己摸牌择一按0.6受伤率与颜色折算；6血底盘另计，不将两分支都算自己摸牌。"
+    },
+    "re_zhangyi": {
+      "vector": {
+        "cards": 0.4,
+        "damage": 0.3,
+        "heal": 0.1,
+        "quality": 0.15
+      },
+      "confidence": 0.75,
+      "notes": "怃戎展示杀/闪博弈分支互斥；低血矢志只在1血生效，不能按每回合稳定回复。"
+    },
+    "re_zhangjiao": {
+      "vector": {
+        "cards": 0.35,
+        "damage": 0.85,
+        "heal": 0.15,
+        "quality": 0.55,
+        "cost": 0.15
+      },
+      "confidence": 0.75,
+      "notes": "雷击黑桃/梅花互斥且依赖闪触发；鬼道换牌净牌差0，黑桃2—9额外摸1按概率；黄天单挑无效。"
+    },
+    "sb_huaxiong": {
+      "vector": {
+        "cards": 0.8,
+        "damage": 0.25,
+        "cost": 0.1,
+        "burst": 0.5
+      },
+      "confidence": 0.75,
+      "notes": "扬威2牌后隔两回合才能再用，摊销非每回合+2；耀武有资敌副作用，3血扣6。"
+    },
+    "sp_zhangjiao": {
+      "vector": {
+        "damage": 0.6,
+        "heal": 0.15,
+        "quality": 0.5,
+        "cost": 0.1
+      },
+      "confidence": 0.75,
+      "notes": "雷击判定黑桃2/梅花1分支互斥，按闪发生率；鬼道耗牌改判计成本；黄天单挑无效。"
+    },
+    "lukang": {
+      "vector": {
+        "cards": 1.1,
+        "guard": 0.3,
+        "quality": 0.75,
+        "burst": 0.5
+      },
+      "confidence": 0.75,
+      "notes": "决堰宝物/防具/坐骑/武器逐回合废除，防具摸3有限，不按四回合稳定+3；破势按觉醒可达性折扣。"
+    },
+    "db_wenyang": {
+      "vector": {
+        "cards": 1.7,
+        "damage": 0.5,
+        "hpLoss": 0.45,
+        "quality": 0.5,
+        "burst": 1,
+        "carry": 0.6
+      },
+      "confidence": 0.75,
+      "notes": "却敌偷牌每回合一次且双选减上限；追锋失血与决斗，冲坚需吴势力，不能将全部势力技能常驻叠加；仇决计接力收益。"
+    },
+    "ol_sunru": {
+      "vector": {
+        "cards": 1.3,
+        "heal": 0.15,
+        "quality": 0.6,
+        "cost": 0.2,
+        "burst": 0.5
+      },
+      "confidence": 0.75,
+      "notes": "赤势失一区最后牌每回合一次按可触发率；慰勉废栏至多三项为有限资源，弃手摸4需扣原手牌。"
+    },
+    "liuxuan": {
+      "vector": {
+        "cards": 2,
+        "heal": 0.25,
+        "quality": 0.5,
+        "cost": 0.35,
+        "burst": 0.5
+      },
+      "confidence": 0.75,
+      "notes": "梦归三个阶段选项均一次性移除，弃牌摸等量净差0；仁成摸2稳定，尊谏觉醒启动按四回合摊销。"
+    },
+    "leitong": {
+      "vector": {
+        "cards": 0.4,
+        "damage": 0.75,
+        "heal": 0.15,
+        "cost": 0.4,
+        "burst": 0.6
+      },
+      "confidence": 0.75,
+      "notes": "溃击黑基本牌置自身兵粮，有后续跳摸阶段成本；2伤按黑牌可用率/无懈及对手血量限制折算。"
+    }
+  },
+  "legendRequiresReview": true,
+  "$schema": "./power-model.schema.json"
+}

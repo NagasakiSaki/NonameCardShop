@@ -1,0 +1,114 @@
+{
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "regularChance": {
+      "type": "number"
+    },
+    "relationshipPerPurchase": {
+      "type": "integer"
+    },
+    "maxPurchaseRelationshipPerDay": {
+      "type": "integer"
+    },
+    "regulars": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "profile": {
+            "type": "string"
+          },
+          "budget": {
+            "type": "integer"
+          },
+          "group": {
+            "type": "string"
+          },
+          "tint": {
+            "type": "integer"
+          },
+          "wish": {
+            "type": "string"
+          },
+          "dialogue": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "offerRate": {
+            "type": "number"
+          },
+          "orderRate": {
+            "type": "number"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "ordersPerDay": {
+      "type": "integer"
+    },
+    "orderDurationDays": {
+      "type": "integer"
+    },
+    "orderQuantity": {
+      "type": "integer"
+    },
+    "completionRelationship": {
+      "type": "integer"
+    },
+    "offersPerDay": {
+      "type": "integer"
+    },
+    "offerDurationDays": {
+      "type": "integer"
+    },
+    "orderRarities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "offerRarities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "dialogueRelationship": {
+      "type": "integer"
+    },
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "neighbors module v1",
+  "required": [
+    "version",
+    "regularChance",
+    "relationshipPerPurchase",
+    "maxPurchaseRelationshipPerDay",
+    "regulars",
+    "ordersPerDay",
+    "orderDurationDays",
+    "orderQuantity",
+    "completionRelationship",
+    "offersPerDay",
+    "offerDurationDays",
+    "orderRarities",
+    "offerRarities",
+    "dialogueRelationship"
+  ]
+}

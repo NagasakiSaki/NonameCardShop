@@ -1,0 +1,60 @@
+{
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "name": {
+      "type": "string"
+    },
+    "weekday": {
+      "type": "integer"
+    },
+    "minDay": {
+      "type": "integer"
+    },
+    "requiredUpgrade": {
+      "type": "string"
+    },
+    "entryFee": {
+      "type": "integer"
+    },
+    "winCash": {
+      "type": "integer"
+    },
+    "lossCash": {
+      "type": "integer"
+    },
+    "winReputation": {
+      "type": "integer"
+    },
+    "lossReputation": {
+      "type": "integer"
+    },
+    "opponentRoster": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "tournaments module v1",
+  "required": [
+    "version",
+    "name",
+    "weekday",
+    "minDay",
+    "requiredUpgrade",
+    "entryFee",
+    "winCash",
+    "lossCash",
+    "winReputation",
+    "lossReputation",
+    "opponentRoster"
+  ]
+}

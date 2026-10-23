@@ -1,0 +1,119 @@
+{
+  "$schema": "./business.schema.json",
+  "version": 1,
+  "clock": {
+    "prepareMinute": 480,
+    "openMinute": 540,
+    "closeMinute": 1200,
+    "minutesPerSecond": 2,
+    "speeds": [
+      1,
+      2,
+      4
+    ]
+  },
+  "economy": {
+    "startingCash": 1200,
+    "baseDailyGoal": 180,
+    "dailyGoalStep": 60,
+    "maxDailyGoal": 900,
+    "operatingCost": 30,
+    "supplierCreditLimit": 300,
+    "shelfCapacity": 36,
+    "wholesaleByTier": {
+      "1": 60,
+      "2": 80,
+      "3": 110,
+      "4": 145
+    },
+    "retailPackByTier": {
+      "1": 95,
+      "2": 125,
+      "3": 175,
+      "4": 230
+    },
+    "cardPrices": {
+      "C": 8,
+      "U": 16,
+      "R": 48,
+      "SR": 160,
+      "UR": 480
+    }
+  },
+  "supplier": {
+    "deliveryMinutes": 30,
+    "maxOrderQuantity": 20
+  },
+  "customers": {
+    "intervalMinutes": 22,
+    "maxConcurrent": 3,
+    "shoppingSeconds": 3,
+    "traffic": [
+      {
+        "from": 540,
+        "to": 690,
+        "multiplier": 1
+      },
+      {
+        "from": 690,
+        "to": 840,
+        "multiplier": 1.6
+      },
+      {
+        "from": 840,
+        "to": 1020,
+        "multiplier": 0.85
+      },
+      {
+        "from": 1020,
+        "to": 1200,
+        "multiplier": 1.35
+      }
+    ],
+    "profiles": [
+      {
+        "id": "casual",
+        "name": "路过的玩家",
+        "weight": 5,
+        "budget": 180,
+        "preference": "pack",
+        "rarities": [
+          "C",
+          "U",
+          "R"
+        ],
+        "maxMarkup": 1.2,
+        "tint": 13943787
+      },
+      {
+        "id": "collector",
+        "name": "武将收藏家",
+        "weight": 3,
+        "budget": 600,
+        "preference": "card",
+        "rarities": [
+          "R",
+          "SR",
+          "UR"
+        ],
+        "maxMarkup": 1.6,
+        "tint": 15128761
+      },
+      {
+        "id": "budget",
+        "name": "精打细算的学生",
+        "weight": 4,
+        "budget": 100,
+        "preference": "cheapest",
+        "rarities": [
+          "C",
+          "U",
+          "R"
+        ],
+        "maxMarkup": 1.05,
+        "tint": 12115928
+      }
+    ]
+  },
+  "balanceEconomyVersion": 1
+}

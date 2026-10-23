@@ -1,0 +1,79 @@
+{
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "minMultiplier": {
+      "type": "number"
+    },
+    "maxMultiplier": {
+      "type": "number"
+    },
+    "tournamentDays": {
+      "type": "integer"
+    },
+    "tournamentMultiplier": {
+      "type": "number"
+    },
+    "calendar": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "weekday": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "packId": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "demand": {
+            "type": "number"
+          },
+          "group": {
+            "type": "string"
+          },
+          "rarity": {
+            "type": "string"
+          },
+          "rarities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "market module v1",
+  "required": [
+    "version",
+    "minMultiplier",
+    "maxMultiplier",
+    "tournamentDays",
+    "tournamentMultiplier",
+    "calendar"
+  ]
+}

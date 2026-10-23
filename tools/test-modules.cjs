@@ -1,0 +1,41 @@
+/* Behavioral regression, no npm dependencies. */
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
+const root=path.resolve(__dirname,'..'),context=vm.createContext({console,localStorage:{getItem:()=>null},fetch:async name=>({ok:true,json:async()=>JSON.parse(fs.readFileSync(path.join(root,name),'utf8'))})});context.window=context;
+const files=['modules/registry.js','modules/balance.js','shop-state.js','shop-tasks.js','shop-business.js','modules/ledger.js','modules/inventory.js','modules/market.js','modules/upgrades.js','modules/neighbors.js','modules/tournaments.js','modules/combat.js','integration/task-extensions.js'];
+for(const f of files)vm.runInContext(fs.readFileSync(path.join(root,f),'utf8'),context,{filename:f});
+(async()=>{
+  const {ShopModules:M,ShopBusiness:B,ShopModel:S,ShopLedger:L,ShopTasks:T}=context,data=JSON.parse(fs.readFileSync(path.join(root,'data/cards.json')));
+  B.configure(JSON.parse(fs.readFileSync(path.join(root,'data/business.json'))));T.configure(JSON.parse(fs.readFileSync(path.join(root,'data/tasks.json'))));await M.load();M.setCatalog(data);B.setCatalog(data);T.setCatalog(data);
+  const fresh=(saved={})=>{const s=S.normalise({shop:{cash:10000},...saved});M.ready(s);return s;};
+  const call=(s,c,p={})=>{const result=M.dispatch(s,c,p);assert.equal(result.ok,true,result.error);return result;};
+  const day=(s)=>{if(s.business.phase==='preparing')B.open(s);B.settle(s);assert.equal(B.nextDay(s).ok,true);};
+  let s=fresh({collection:{caocao:3},trash:{guanyu:1}});
+  assert.equal(s.modules.neighbors.data.orders.length,3);assert.equal(s.modules.ledger.data.card.caocao.cost,null);
+  const copy=S.normalise(JSON.parse(JSON.stringify(s)));M.ready(copy);assert.equal(copy.modules.neighbors.data.orders.length,3);assert.equal(copy.collection.caocao,3);
+  call(s,'inventory.toggle',{cardId:'caocao'});assert.equal(S.transfer(s,'collection','trash','caocao',3),false);assert.equal(S.transfer(s,'collection','display','caocao',2),true);assert.equal(s.collection.caocao,1);
+  const pack=data.packs.find(p=>p.id==='standard'),order=B.order(s,pack,3).order;for(let i=0;i<16;i++)B.tick(s,1);assert.equal(B.receive(s,order.id).ok,true);assert.equal(s.modules.ledger.data.pack.standard.cost,360);
+  B.open(s);const price=B.retailPack(pack,s);assert.equal(B.movePacks(s,'standard','stock','packDisplay',1),true);assert.equal(B.sell(s,'pack','standard').amount,price);assert.equal(s.modules.ledger.data.daily.cogs,120);
+  assert.equal(B.openPack(s,pack),true);const cards=['liubei','guanyu','zhangfei','zhaoyun','machao'];for(const id of cards)s.collection[id]=(s.collection[id]||0)+1;B.emit(s,'cardsOpened',{packId:'standard',cards});
+  assert.equal(s.modules.ledger.data.pack.standard.quantity,1);const newCost=cards.filter(id=>id!=='guanyu').reduce((sum,id)=>sum+s.modules.ledger.data.card[id].cost,0);assert.ok(newCost>0&&newCost<120);
+  assert.equal(s.modules.ledger.data.pending.length,0);const report=M.value('ledger.summary',s,{});assert.equal(report.sales,price);assert.equal(report.hasUnknownCosts,false);
+  let contract=s.modules.neighbors.data.orders[0];call(s,'neighbors.accept',{id:contract.id});s.collection[contract.cardId]=(s.collection[contract.cardId]||0)+1;L.sync(s);const turnover=s.business.daily.revenue;call(s,'neighbors.deliver',{id:contract.id});assert.equal(s.business.daily.revenue,turnover+contract.amount);assert.equal(M.dispatch(s,'neighbors.deliver',{id:contract.id}).ok,false);
+  const offer=s.modules.neighbors.data.offers[0],cash=s.shop.cash;call(s,'neighbors.buy',{id:offer.id});assert.equal(s.shop.cash,cash-offer.amount);assert.equal(M.dispatch(s,'neighbors.buy',{id:offer.id}).ok,false);
+  const regular=offer.regularId;B.visitor(s,{regularId:regular});call(s,'neighbors.talk',{regularId:regular});const rel=s.modules.neighbors.data.people[regular].relationship;call(s,'neighbors.talk',{regularId:regular});assert.equal(s.modules.neighbors.data.people[regular].relationship,rel);
+  const frozen=contract.amount;const market=JSON.parse(JSON.stringify(M.get('market').config));market.calendar[0].price=1.4;M.configure('market',market);assert.equal(contract.amount,frozen);
+  const pending=s.modules.neighbors.data.orders.find(o=>o.status==='offered');call(s,'neighbors.accept',{id:pending.id});day(s);assert.equal(s.business.day,2);assert.equal(s.trash.guanyu,undefined);assert.equal(s.modules.neighbors.data.orders.filter(o=>o.createdDay===2).length,3);
+  call(s,'upgrades.buy',{id:'cashier'});assert.equal(B.dailyCost(s),65);call(s,'upgrades.buy',{id:'shelf'});assert.equal(B.capacity(s),48);assert.equal(M.value('customer.maxConcurrent',s,3),4);
+  day(s);assert.equal(s.modules.neighbors.data.orders.find(o=>o.id===pending.id).status,'expired');assert.equal(s.modules.ledger.data.history.length,2);
+  call(s,'upgrades.buy',{id:'stocker'});s.stock.standard=6;L.sync(s);B.open(s);B.tick(s,1);assert.equal(s.packDisplay.standard,3);assert.equal(s.stock.standard,3);
+  const roster=['caocao','liubei','sunquan'];roster.forEach(id=>s.collection[id]=Math.max(1,s.collection[id]||0));
+  call(s,'combat.create',{id:'bo3-a',mode:'bo3',roster:['caocao'],opponentRoster:['zhangfei'],first:0});const wonBefore=s.business.lifetime.battlesWon;
+  for(const [i,result] of ['win','draw','loss','win'].entries()){call(s,'combat.begin',{gameId:`bout-${i}`});call(s,'combat.result',{gameId:`bout-${i}`,result,round:3});assert.equal(M.dispatch(s,'combat.result',{gameId:`bout-${i}`,result}).ok,false);if(i===1)assert.equal(s.modules.combat.data.active.first,1);}
+  assert.equal(s.modules.combat.data.active.result,'win');assert.equal(s.modules.combat.data.active.wins,2);assert.equal(s.modules.combat.data.active.losses,1);assert.equal(s.business.lifetime.battlesWon,wonBefore+1);assert.equal(s.modules.inventory.data.activeRoster.length,0);
+  const before=JSON.stringify(s);const rejected=M.batch(s,[{command:'combat.create',payload:{id:'too-early',mode:'kof',roster,opponentRoster:['zhangliao','sunquan','guanyu'],first:0,ranked:true}},{command:'tournaments.register',payload:{matchId:'too-early',roster}}]);assert.equal(rejected.ok,false);assert.equal(JSON.stringify(s),before);
+  while(s.business.day<7)day(s);call(s,'upgrades.buy',{id:'table'});B.open(s);const startCash=s.shop.cash,startRevenue=s.business.daily.revenue;
+  assert.equal(M.batch(s,[{command:'combat.create',payload:{id:'weekly-1',mode:'kof',roster,opponentRoster:['zhangliao','sunquan','guanyu'],first:0,ranked:true}},{command:'tournaments.register',payload:{matchId:'weekly-1',roster}}]).ok,true);assert.equal(s.shop.cash,startCash-80);
+  call(s,'combat.begin',{gameId:'weekly-game'});call(s,'combat.result',{gameId:'weekly-game',result:'win'});assert.equal(s.shop.cash,startCash-80+260);assert.equal(s.business.daily.revenue,startRevenue);assert.equal(s.modules.tournaments.data.entries[0].status,'finished');assert.equal(M.dispatch(s,'tournaments.settle',{matchId:'weekly-1',result:'win'}).ok,false);assert.equal(s.modules.market.data.temporary.length,1);
+  day(s);assert.ok(M.value('market.active',s,[]).some(e=>e.cardIds?.includes('caocao')));
+  const invalid=JSON.parse(JSON.stringify(M.get('neighbors').config));invalid.ordersPerDay=90;assert.ok(M.validate('neighbors',invalid).length);
+  M.register({id:'failure',title:'rollback test',version:1,defaults:()=>({}),actions:{break(ctx){ctx.save.shop.cash=0;ctx.emit('unexpectedMutation');throw new Error('expected');}}});M.initialise(s,s);const snapshot=JSON.stringify(s);assert.equal(M.dispatch(s,'failure.break').ok,false);assert.equal(JSON.stringify(s),snapshot);
+  console.log('PASS: module migration, reserved copies, average inventory costs, negotiated offers, immutable customer quotes, order delivery/expiry, relationship caps, upgrade effects/wages, automatic restocking, BO3 score/draw/idempotence, atomic paid registration, one-time tournament settlement, next-day champion demand, config rejection, command rollback.');
+})().catch(e=>{console.error(e);process.exit(1)});

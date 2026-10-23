@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "pricing": {
+    "openingReturn": 1.05,
+    "sealedMargin": 0.3,
+    "roundTo": 5
+  },
+  "recipes": {
+    "standard": {
+      "name": "常规包",
+      "slots": [
+        {
+          "C": 1
+        },
+        {
+          "C": 1
+        },
+        {
+          "U": 1
+        },
+        {
+          "C": 0.5,
+          "U": 0.5
+        },
+        {
+          "R": 0.8,
+          "SR": 0.18,
+          "UR": 0.02
+        }
+      ]
+    },
+    "premium": {
+      "name": "进阶包",
+      "slots": [
+        {
+          "C": 1
+        },
+        {
+          "U": 1
+        },
+        {
+          "U": 1
+        },
+        {
+          "C": 0.5,
+          "U": 0.5
+        },
+        {
+          "R": 0.65,
+          "SR": 0.3,
+          "UR": 0.05
+        }
+      ]
+    },
+    "collector": {
+      "name": "典藏包",
+      "slots": [
+        {
+          "U": 1
+        },
+        {
+          "U": 1
+        },
+        {
+          "R": 1
+        },
+        {
+          "C": 0.5,
+          "U": 0.5
+        },
+        {
+          "R": 0.45,
+          "SR": 0.43,
+          "UR": 0.12
+        }
+      ]
+    }
+  },
+  "packGrades": {
+    "refresh": "standard",
+    "yijiang": "standard",
+    "shenhua": "premium",
+    "standard": "standard",
+    "extra": "collector",
+    "sp": "standard",
+    "sp2": "standard",
+    "newjiang": "standard",
+    "xianding": "standard",
+    "mobile": "standard",
+    "tw": "standard",
+    "huicui": "standard",
+    "onlyOL": "standard",
+    "sb": "standard",
+    "shiji": "premium",
+    "clan": "standard",
+    "bingshi": "premium",
+    "yingbian": "standard",
+    "offline": "standard",
+    "sixiang": "standard",
+    "collab": "standard",
+    "key": "standard",
+    "old": "standard",
+    "jsrg": "standard",
+    "diy": "standard",
+    "sxrm": "standard"
+  },
+  "$schema": "./balance.schema.json"
+}

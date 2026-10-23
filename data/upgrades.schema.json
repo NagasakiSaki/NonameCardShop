@@ -1,0 +1,74 @@
+{
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "upgrades": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "costs": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "effect": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "integer"
+          },
+          "minDay": {
+            "type": "integer"
+          },
+          "dailyCost": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "restockIntervalMinutes": {
+      "type": "integer"
+    },
+    "restockTargetPerPack": {
+      "type": "integer"
+    },
+    "warehouseReservePerPack": {
+      "type": "integer"
+    },
+    "cashierCheckoutMilliseconds": {
+      "type": "integer"
+    },
+    "showcaseBudgetMultiplier": {
+      "type": "number"
+    },
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "upgrades module v1",
+  "required": [
+    "version",
+    "upgrades",
+    "restockIntervalMinutes",
+    "restockTargetPerPack",
+    "warehouseReservePerPack",
+    "cashierCheckoutMilliseconds",
+    "showcaseBudgetMultiplier"
+  ]
+}

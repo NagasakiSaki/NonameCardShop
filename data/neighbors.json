@@ -1,0 +1,75 @@
+{
+  "$schema": "./neighbors.schema.json",
+  "version": 1,
+  "regularChance": 0.55,
+  "relationshipPerPurchase": 2,
+  "maxPurchaseRelationshipPerDay": 4,
+  "regulars": [
+    {
+      "id": "student",
+      "name": "小林 · 学生玩家",
+      "profile": "budget",
+      "budget": 130,
+      "group": "shu",
+      "tint": 9875615,
+      "wish": "想凑齐三位好上手的武将，预算不多。",
+      "dialogue": [
+        "刚入门，能不能帮我留意好上手的武将？",
+        "上次推荐的武将很好用，我还想补一位。",
+        "周末我也想参加店赛，别小看我哦。"
+      ],
+      "offerRate": 0.45,
+      "orderRate": 1.1
+    },
+    {
+      "id": "collector",
+      "name": "许先生 · 收藏家",
+      "profile": "collector",
+      "budget": 1500,
+      "group": "wei",
+      "tint": 14856847,
+      "wish": "收集魏势力人物，也会带旧藏来交流。",
+      "dialogue": [
+        "我想找些魏势力的武将，品相倒不必太苛刻。",
+        "你留意我的收藏，我也会把好东西带来。",
+        "我准备了一份新的收藏清单，慢慢找就好。"
+      ],
+      "offerRate": 0.6,
+      "orderRate": 1.3
+    },
+    {
+      "id": "duelist",
+      "name": "阿岚 · 对战爱好者",
+      "profile": "casual",
+      "budget": 450,
+      "group": "wu",
+      "tint": 10537962,
+      "wish": "正在研究先锋与大将的手牌接力配合。",
+      "dialogue": [
+        "把手牌留给下一位武将，顺序可大有讲究。",
+        "打过几次就知道，留牌和抢血一样重要。",
+        "周日打场 KOF？我已经把顺序排好了。"
+      ],
+      "offerRate": 0.5,
+      "orderRate": 1.2
+    }
+  ],
+  "ordersPerDay": 3,
+  "orderDurationDays": 2,
+  "orderQuantity": 1,
+  "completionRelationship": 5,
+  "offersPerDay": 3,
+  "offerDurationDays": 2,
+  "orderRarities": [
+    "C",
+    "U",
+    "R"
+  ],
+  "offerRarities": [
+    "C",
+    "U",
+    "R",
+    "SR"
+  ],
+  "dialogueRelationship": 1
+}

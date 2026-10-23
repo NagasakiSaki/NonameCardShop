@@ -1,0 +1,18 @@
+{
+  "$schema": "./tournaments.schema.json",
+  "version": 1,
+  "name": "街坊周日三将赛",
+  "weekday": 7,
+  "minDay": 7,
+  "requiredUpgrade": "table",
+  "entryFee": 80,
+  "winCash": 260,
+  "lossCash": 20,
+  "winReputation": 5,
+  "lossReputation": 1,
+  "opponentRoster": [
+    "zhangliao",
+    "sunquan",
+    "guanyu"
+  ]
+}

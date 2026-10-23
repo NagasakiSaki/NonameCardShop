@@ -1,0 +1,42 @@
+{
+  "$schema": "./combat.schema.json",
+  "version": 1,
+  "defaultMode": "kof",
+  "initialHand": 4,
+  "firstDrawPenalty": 1,
+  "bo3Wins": 2,
+  "legalIds": [
+    "caocao",
+    "simayi",
+    "xiahoudun",
+    "zhangliao",
+    "xuzhu",
+    "guojia",
+    "zhenji",
+    "liubei",
+    "guanyu",
+    "zhangfei",
+    "zhugeliang",
+    "zhaoyun",
+    "machao",
+    "huangyueying",
+    "sunquan",
+    "ganning",
+    "lvmeng",
+    "huanggai",
+    "zhouyu",
+    "daqiao",
+    "luxun",
+    "sunshangxiang",
+    "huatuo",
+    "lvbu",
+    "diaochan"
+  ],
+  "defaultOpponentKof": [
+    "zhangliao",
+    "sunquan",
+    "guanyu"
+  ],
+  "familyOverrides": {},
+  "allowMirrorAcrossSides": true
+}

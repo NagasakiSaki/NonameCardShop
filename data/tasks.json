@@ -1,0 +1,388 @@
+{
+  "$schema": "./tasks.schema.json",
+  "version": 1,
+  "tasks": [
+    {
+      "id": "first_order",
+      "title": "第一次进货",
+      "description": "在柜台向供应商订购至少 3 包卡。",
+      "scope": "once",
+      "objectives": [
+        {
+          "type": "metric",
+          "metric": "lifetime.purchasedPacks",
+          "target": 3
+        }
+      ],
+      "rewards": [
+        {
+          "type": "cash",
+          "amount": 40
+        }
+      ],
+      "guide": "counter"
+    },
+    {
+      "id": "receive_stock",
+      "title": "货到了，签收吧",
+      "description": "等待送货，在柜台仓库签收 3 包卡。",
+      "scope": "once",
+      "dependsOn": [
+        "first_order"
+      ],
+      "objectives": [
+        {
+          "type": "metric",
+          "metric": "lifetime.receivedPacks",
+          "target": 3
+        }
+      ],
+      "rewards": [
+        {
+          "type": "cash",
+          "amount": 40
+        }
+      ],
+      "guide": "counter"
+    },
+    {
+      "id": "put_on_shelf",
+      "title": "让货架有得卖",
+      "description": "累计上架 2 件商品，可以是整包或单卡。",
+      "scope": "once",
+      "dependsOn": [
+        "receive_stock"
+      ],
+      "objectives": [
+        {
+          "type": "metric",
+          "metric": "lifetime.listedUnits",
+          "target": 2
+        }
+      ],
+      "rewards": [
+        {
+          "type": "cash",
+          "amount": 50
+        }
+      ],
+      "guide": "display"
+    },
+    {
+      "id": "first_customers",
+      "title": "迎接三位顾客",
+      "description": "开门营业，让 3 位 AI 顾客买到喜欢的商品。",
+      "scope": "once",
+      "dependsOn": [
+        "put_on_shelf"
+      ],
+      "objectives": [
+        {
+          "type": "metric",
+          "metric": "lifetime.served",
+          "target": 3
+        }
+      ],
+      "rewards": [
+        {
+          "type": "cash",
+          "amount": 100
+        },
+        {
+          "type": "reputation",
+          "amount": 2
+        }
+      ],
+      "guide": "display"
+    },
+    {
+      "id": "daily_revenue",
+      "title": "今日营业额目标",
+      "description": "营业结束前达到今日营业额。只统计顾客付款，不含任务奖励。",
+      "scope": "daily",
+      "objectives": [
+        {
+          "type": "metric",
+          "metric": "daily.revenue",
+          "target": "dailyRevenueGoal"
+        }
+      ],
+      "rewards": [
+        {
+          "type": "cash",
+          "amount": 80
+        },
+        {
+          "type": "reputation",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "id": "morning_sale",
+      "title": "午后之前开个好头",
+      "description": "09:00—13:00 之间取得 ¥60 营业额。",
+      "scope": "daily",
+      "deadlineMinute": 780,
+      "objectives": [
+        {
+          "type": "event",
+          "event": "sale",
+          "measure": "amount",
+          "window": {
+            "from": 540,
+            "to": 780
+          },
+          "target": 60
+        }
+      ],
+      "rewards": [
+        {
+          "type": "cash",
+          "amount": 35
+        }
+      ]
+    },
+    {
+      "id": "daily_packs",
+      "title": "整包也有人喜欢",
+      "description": "今天卖出 2 个未拆封卡包。",
+      "scope": "daily",
+      "objectives": [
+        {
+          "type": "event",
+          "event": "sale",
+          "filter": {
+            "kind": "pack"
+          },
+          "target": 2
+        }
+      ],
+      "rewards": [
+        {
+          "type": "cash",
+          "amount": 35
+        }
+      ],
+      "guide": "display"
+    },
+    {
+      "id": "evening_collector",
+      "title": "晚间收藏客",
+      "description": "17:00—20:00 卖出 1 张 R / SR / UR 单卡。",
+      "scope": "daily",
+      "conditions": [
+        {
+          "type": "minDay",
+          "value": 2
+        }
+      ],
+      "objectives": [
+        {
+          "type": "event",
+          "event": "sale",
+          "filter": {
+            "kind": "card",
+            "rarity": [
+              "R",
+              "SR",
+              "UR"
+            ]
+          },
+          "window": {
+            "from": 1020,
+            "to": 1200
+          },
+          "target": 1
+        }
+      ],
+      "rewards": [
+        {
+          "type": "cash",
+          "amount": 60
+        }
+      ]
+    },
+    {
+      "id": "first_card_purchase",
+      "title": "街坊的旧收藏",
+      "description": "在街坊与经营手账中，购买一份指定单卡收购申请。",
+      "scope": "once",
+      "objectives": [
+        {
+          "type": "event",
+          "event": "cardPurchased",
+          "target": 1
+        }
+      ],
+      "rewards": [
+        {
+          "type": "cash",
+          "amount": 20
+        }
+      ],
+      "guide": "counter"
+    },
+    {
+      "id": "first_customer_request",
+      "title": "帮街坊找一张卡",
+      "description": "接受预约委托，在期限内从背包交付指定武将。",
+      "scope": "once",
+      "objectives": [
+        {
+          "type": "metric",
+          "metric": "management.ordersCompleted",
+          "target": 1
+        }
+      ],
+      "rewards": [
+        {
+          "type": "cash",
+          "amount": 60
+        },
+        {
+          "type": "reputation",
+          "amount": 1
+        }
+      ],
+      "guide": "counter"
+    },
+    {
+      "id": "first_collection_lock",
+      "title": "这张留给自己",
+      "description": "为背包中的一名武将保留一张收藏。重复卡仍可交易。",
+      "scope": "once",
+      "objectives": [
+        {
+          "type": "event",
+          "event": "collectionLockChanged",
+          "filter": {
+            "quantity": 1
+          },
+          "target": 1
+        }
+      ],
+      "rewards": [
+        {
+          "type": "cash",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "first_store_upgrade",
+      "title": "小店长大一点",
+      "description": "购买一项设施或雇用一名员工。",
+      "scope": "once",
+      "objectives": [
+        {
+          "type": "metric",
+          "metric": "management.upgradeLevels",
+          "target": 1
+        }
+      ],
+      "rewards": [
+        {
+          "type": "cash",
+          "amount": 50
+        }
+      ]
+    },
+    {
+      "id": "first_relay",
+      "title": "轮到下一位了",
+      "description": "在 KOF 对局中，自己的接班武将登场一次。",
+      "scope": "once",
+      "objectives": [
+        {
+          "type": "event",
+          "event": "generalReplaced",
+          "filter": {
+            "side": "mine"
+          },
+          "target": 1
+        }
+      ],
+      "rewards": [
+        {
+          "type": "cash",
+          "amount": 30
+        }
+      ],
+      "guide": "battle"
+    },
+    {
+      "id": "first_bo3_win",
+      "title": "三局两胜",
+      "description": "赢下一整场 BO3；单局获胜尚不计完成。",
+      "scope": "once",
+      "objectives": [
+        {
+          "type": "event",
+          "event": "matchFinished",
+          "filter": {
+            "mode": "bo3",
+            "result": "win"
+          },
+          "target": 1
+        }
+      ],
+      "rewards": [
+        {
+          "type": "cash",
+          "amount": 60
+        }
+      ],
+      "guide": "battle"
+    },
+    {
+      "id": "first_weekly_champion",
+      "title": "街坊店赛冠军",
+      "description": "购买店赛牌桌后，在周日赢得 KOF 店赛。",
+      "scope": "once",
+      "objectives": [
+        {
+          "type": "event",
+          "event": "matchFinished",
+          "filter": {
+            "mode": "kof",
+            "ranked": true,
+            "result": "win"
+          },
+          "target": 1
+        }
+      ],
+      "rewards": [
+        {
+          "type": "cash",
+          "amount": 100
+        },
+        {
+          "type": "reputation",
+          "amount": 3
+        }
+      ],
+      "guide": "battle"
+    },
+    {
+      "id": "daily_regular_order",
+      "title": "今日预约交付",
+      "description": "今天完成一份街坊预约，获得额外奖励。",
+      "scope": "daily",
+      "objectives": [
+        {
+          "type": "event",
+          "event": "customerOrderCompleted",
+          "target": 1
+        }
+      ],
+      "rewards": [
+        {
+          "type": "cash",
+          "amount": 25
+        }
+      ],
+      "guide": "counter"
+    }
+  ]
+}

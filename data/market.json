@@ -1,0 +1,81 @@
+{
+  "$schema": "./market.schema.json",
+  "version": 1,
+  "minMultiplier": 0.7,
+  "maxMultiplier": 1.5,
+  "tournamentDays": 2,
+  "tournamentMultiplier": 1.15,
+  "calendar": [
+    {
+      "id": "opening",
+      "weekday": 1,
+      "title": "新一周，经典回归",
+      "description": "经典系列整包更受欢迎，保持货架充足。",
+      "kind": "pack",
+      "packId": "standard",
+      "price": 1.05,
+      "demand": 1.5
+    },
+    {
+      "id": "wei-night",
+      "weekday": 2,
+      "title": "街坊在讨论魏势力阵容",
+      "description": "魏势力单卡的询价增加，玩家正在寻找配合。",
+      "kind": "card",
+      "group": "wei",
+      "price": 1.15,
+      "demand": 1.7
+    },
+    {
+      "id": "reprint",
+      "weekday": 3,
+      "title": "普通稀有卡再版消息",
+      "description": "R 卡供应预期增加，参考价短暂回落。",
+      "kind": "card",
+      "rarity": "R",
+      "price": 0.85,
+      "demand": 1.15
+    },
+    {
+      "id": "shu-day",
+      "weekday": 4,
+      "title": "蜀势力爱好者聚会",
+      "description": "蜀势力单卡今天更容易遇到买家。",
+      "kind": "card",
+      "group": "shu",
+      "price": 1.1,
+      "demand": 1.6
+    },
+    {
+      "id": "students",
+      "weekday": 5,
+      "title": "新手组将日",
+      "description": "普通与少见武将需求上升，低价卡也有用处。",
+      "kind": "card",
+      "rarities": [
+        "C",
+        "U"
+      ],
+      "price": 1.05,
+      "demand": 1.8
+    },
+    {
+      "id": "weekend",
+      "weekday": 6,
+      "title": "周末卡包预热",
+      "description": "收藏家们准备来店里拆包。",
+      "kind": "pack",
+      "price": 1.08,
+      "demand": 1.5
+    },
+    {
+      "id": "tournament",
+      "weekday": 7,
+      "title": "周日店赛",
+      "description": "为参赛者备好单卡，也看看自己的三将阵容。",
+      "kind": "card",
+      "price": 1.05,
+      "demand": 1.3
+    }
+  ]
+}

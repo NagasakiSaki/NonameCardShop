@@ -1,0 +1,57 @@
+{
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "defaultMode": {
+      "type": "string"
+    },
+    "initialHand": {
+      "type": "integer"
+    },
+    "firstDrawPenalty": {
+      "type": "integer"
+    },
+    "bo3Wins": {
+      "type": "integer"
+    },
+    "legalIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "defaultOpponentKof": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "familyOverrides": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": true
+    },
+    "allowMirrorAcrossSides": {
+      "type": "boolean"
+    },
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "combat module v1",
+  "required": [
+    "version",
+    "defaultMode",
+    "initialHand",
+    "firstDrawPenalty",
+    "bo3Wins",
+    "legalIds",
+    "defaultOpponentKof",
+    "familyOverrides",
+    "allowMirrorAcrossSides"
+  ]
+}

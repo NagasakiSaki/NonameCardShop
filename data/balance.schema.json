@@ -1,0 +1,12 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "title":"卡包槽位与定价 v1",
+  "type":"object",
+  "required":["version","pricing","recipes","packGrades"],
+  "properties":{
+    "version":{"const":1},
+    "pricing":{"type":"object","required":["openingReturn","sealedMargin","roundTo"],"properties":{"openingReturn":{"type":"number","exclusiveMinimum":0,"maximum":1.2,"description":"参考卡值期望/进价的上限（价格取整后可能更低）"},"sealedMargin":{"type":"number","minimum":0.1,"maximum":0.6},"roundTo":{"type":"number","minimum":1}}},
+    "recipes":{"type":"object","required":["standard"],"additionalProperties":{"type":"object","required":["name","slots"],"properties":{"name":{"type":"string","minLength":1},"slots":{"type":"array","minItems":5,"maxItems":5,"items":{"type":"object","minProperties":1,"propertyNames":{"enum":["C","U","R","SR","UR"]},"additionalProperties":{"type":"number","minimum":0,"maximum":1},"description":"每槽概率和为1，至少一个槽只出R/SR/UR；运行时额外校验"}}}}},
+    "packGrades":{"type":"object","description":"卡包ID→recipes的档位ID；未列出的卡包采用standard","additionalProperties":{"type":"string"}}
+  }
+}

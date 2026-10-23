@@ -1,0 +1,70 @@
+{
+  "$schema": "./upgrades.schema.json",
+  "version": 1,
+  "upgrades": [
+    {
+      "id": "shelf",
+      "name": "加宽陈列架",
+      "description": "增加 12 个商品位，场景中的货架会显示等级。",
+      "costs": [
+        300,
+        650,
+        1000
+      ],
+      "effect": "shelfCapacity",
+      "amount": 12,
+      "minDay": 1
+    },
+    {
+      "id": "showcase",
+      "name": "珍藏展示柜",
+      "description": "吸引更多常客，提高他们的购物预算。",
+      "costs": [
+        450
+      ],
+      "effect": "collector",
+      "amount": 0.1,
+      "minDay": 2
+    },
+    {
+      "id": "table",
+      "name": "店赛牌桌",
+      "description": "解锁周日 KOF 店赛与报名奖励。日常切磋始终可用。",
+      "costs": [
+        500
+      ],
+      "effect": "tournament",
+      "amount": 1,
+      "minDay": 3
+    },
+    {
+      "id": "cashier",
+      "name": "雇用收银员",
+      "description": "结账等待时间缩短，可同时接待更多顾客；每天工资 ¥35。",
+      "costs": [
+        350
+      ],
+      "effect": "cashier",
+      "amount": 1,
+      "dailyCost": 35,
+      "minDay": 2
+    },
+    {
+      "id": "stocker",
+      "name": "雇用补货员",
+      "description": "营业时每 30 分钟补充整包货架；每种仓库保留 1 包，每天工资 ¥50。",
+      "costs": [
+        500
+      ],
+      "effect": "stocker",
+      "amount": 1,
+      "dailyCost": 50,
+      "minDay": 3
+    }
+  ],
+  "restockIntervalMinutes": 30,
+  "restockTargetPerPack": 3,
+  "warehouseReservePerPack": 1,
+  "cashierCheckoutMilliseconds": 450,
+  "showcaseBudgetMultiplier": 1.2
+}

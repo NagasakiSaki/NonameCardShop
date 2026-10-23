@@ -1,0 +1,22 @@
+# Installed tooling, retaining the two original extraction adapters for the baseline.
+/node_modules/*
+!/node_modules/noname/
+!/node_modules/dedent/
+/desktop/node_modules/
+/desktop/dist/
+/desktop/build/desktop-source/
+# Duplicate legacy portraits; the complete active images are in vendor/noname/image.
+/assets/character/
+# Machine state, private saves, test results and caches.
+/.workbuddy-ai/
+/.local/
+/test-results/
+/playwright-report/
+/.env
+/.env.*
+!.env.example
+*.log
+*.tmp
+/迁移说明.txt
+Thumbs.db
+Desktop.ini
