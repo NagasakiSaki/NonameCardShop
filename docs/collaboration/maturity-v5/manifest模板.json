@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "packageId": "MV5-XX",
+  "status": "candidate-only",
+  "baseCommit": null,
+  "recordedAt": null,
+  "contractRevision": null,
+  "dependencies": [],
+  "inputFiles": [
+    {"path": "relative/formal/file.mjs", "sha256": null}
+  ],
+  "files": [
+    {
+      "candidate": "src/example.mjs",
+      "target": "proposed/final/example.mjs",
+      "kind": "source",
+      "sha256": null,
+      "runtimeDependency": true
+    }
+  ],
+  "patches": [],
+  "commands": [
+    {"purpose": "test", "cwd": "repository-root", "command": null}
+  ],
+  "scenarios": [
+    {"id": "C01", "evidenceType": "unverified", "result": "not-run", "evidenceFile": null}
+  ],
+  "newDependencies": [],
+  "knownLimitations": [],
+  "blockingDecisions": [],
+  "rollbackNotes": null
+}

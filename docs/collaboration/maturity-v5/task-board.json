@@ -1,0 +1,222 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-10-25",
+  "baseCommit": "3472cec48ff4ad46bcf3be617db390074aa51d15",
+  "scope": "Planning only; no tasks automatically assigned or executed. Dependency means acceptance prerequisite; A-stage research can start earlier. MV5-16 and MV5-17 are rolling roles.",
+  "tasks": [
+    {
+      "id": "MV5-01",
+      "title": "成熟经营项目研究",
+      "status": "planned",
+      "taskFile": "tasks/MV5-01-成熟经营项目研究.md",
+      "outputDir": "deliverables/maturity-v5/MV5-01/",
+      "dependsOn": [],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "MV5-02",
+      "title": "前三日与首周实测",
+      "status": "planned",
+      "taskFile": "tasks/MV5-02-前三日与首周实测.md",
+      "outputDir": "deliverables/maturity-v5/MV5-02/",
+      "dependsOn": [],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "MV5-03",
+      "title": "经济仿真与调参",
+      "status": "planned",
+      "taskFile": "tasks/MV5-03-经济仿真与调参.md",
+      "outputDir": "deliverables/maturity-v5/MV5-03/",
+      "dependsOn": [
+        "MV5-02"
+      ],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "MV5-04",
+      "title": "成长考核与活动内容",
+      "status": "planned",
+      "taskFile": "tasks/MV5-04-成长考核与活动内容.md",
+      "outputDir": "deliverables/maturity-v5/MV5-04/",
+      "dependsOn": [
+        "MV5-01"
+      ],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "MV5-05",
+      "title": "NPC行为与客群",
+      "status": "planned",
+      "taskFile": "tasks/MV5-05-NPC行为与客群.md",
+      "outputDir": "deliverables/maturity-v5/MV5-05/",
+      "dependsOn": [
+        "MV5-02"
+      ],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "MV5-06",
+      "title": "经营与赛事前端",
+      "status": "planned",
+      "taskFile": "tasks/MV5-06-经营与赛事前端.md",
+      "outputDir": "deliverables/maturity-v5/MV5-06/",
+      "dependsOn": [
+        "MV5-04",
+        "MV5-07"
+      ],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "MV5-07",
+      "title": "可扩展赛制注册表",
+      "status": "planned",
+      "taskFile": "tasks/MV5-07-可扩展赛制注册表.md",
+      "outputDir": "deliverables/maturity-v5/MV5-07/",
+      "dependsOn": [],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "MV5-08",
+      "title": "牌技考核与训练",
+      "status": "planned",
+      "taskFile": "tasks/MV5-08-牌技考核与训练.md",
+      "outputDir": "deliverables/maturity-v5/MV5-08/",
+      "dependsOn": [
+        "MV5-04",
+        "MV5-07",
+        "MV5-12"
+      ],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "MV5-09",
+      "title": "赛事运营与结算意图",
+      "status": "planned",
+      "taskFile": "tasks/MV5-09-赛事运营与结算意图.md",
+      "outputDir": "deliverables/maturity-v5/MV5-09/",
+      "dependsOn": [
+        "MV5-04",
+        "MV5-05",
+        "MV5-07"
+      ],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "MV5-10",
+      "title": "战绩市场与评分数据",
+      "status": "planned",
+      "taskFile": "tasks/MV5-10-战绩市场与评分数据.md",
+      "outputDir": "deliverables/maturity-v5/MV5-10/",
+      "dependsOn": [
+        "MV5-03",
+        "MV5-07"
+      ],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "MV5-11",
+      "title": "内核耦合与上游差异清单",
+      "status": "planned",
+      "taskFile": "tasks/MV5-11-内核耦合与上游差异清单.md",
+      "outputDir": "deliverables/maturity-v5/MV5-11/",
+      "dependsOn": [],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "MV5-12",
+      "title": "引擎适配与能力探测",
+      "status": "planned",
+      "taskFile": "tasks/MV5-12-引擎适配与能力探测.md",
+      "outputDir": "deliverables/maturity-v5/MV5-12/",
+      "dependsOn": [
+        "MV5-11"
+      ],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "MV5-13",
+      "title": "内核升级工具链",
+      "status": "planned",
+      "taskFile": "tasks/MV5-13-内核升级工具链.md",
+      "outputDir": "deliverables/maturity-v5/MV5-13/",
+      "dependsOn": [
+        "MV5-11",
+        "MV5-12"
+      ],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "MV5-14",
+      "title": "身份映射与存档迁移",
+      "status": "planned",
+      "taskFile": "tasks/MV5-14-身份映射与存档迁移.md",
+      "outputDir": "deliverables/maturity-v5/MV5-14/",
+      "dependsOn": [
+        "MV5-11"
+      ],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "MV5-15",
+      "title": "美术可读性与反馈",
+      "status": "planned",
+      "taskFile": "tasks/MV5-15-美术可读性与反馈.md",
+      "outputDir": "deliverables/maturity-v5/MV5-15/",
+      "dependsOn": [
+        "MV5-06"
+      ],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "MV5-16",
+      "title": "独立全项目排查",
+      "status": "planned",
+      "taskFile": "tasks/MV5-16-独立全项目排查.md",
+      "outputDir": "deliverables/maturity-v5/MV5-16/",
+      "dependsOn": [],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "MV5-17",
+      "title": "候选集成与维护工具",
+      "status": "planned",
+      "taskFile": "tasks/MV5-17-候选集成与维护工具.md",
+      "outputDir": "deliverables/maturity-v5/MV5-17/",
+      "dependsOn": [],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "MV5-18",
+      "title": "桌面发布与维护预案",
+      "status": "planned",
+      "taskFile": "tasks/MV5-18-桌面发布与维护预案.md",
+      "outputDir": "deliverables/maturity-v5/MV5-18/",
+      "dependsOn": [
+        "MV5-13",
+        "MV5-14",
+        "MV5-16",
+        "MV5-17"
+      ],
+      "executor": null,
+      "acceptedCommit": null
+    }
+  ]
+}
