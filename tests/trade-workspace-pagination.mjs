@@ -1,0 +1,92 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {chromium} from 'playwright';
+import {startShopServer} from '../server.mjs';
+
+const out=process.env.CARD_SHOP_TEST_RESULTS||'.local/trade-workspace-pagination';fs.mkdirSync(out,{recursive:true});
+const server=await startShopServer({port:0,enginePort:0});let browser;
+try{
+  browser=await chromium.launch();const page=await browser.newPage({viewport:{width:1440,height:900}}),errors=[];
+  page.setDefaultTimeout(15000);page.on('pageerror',error=>errors.push(error.message));
+  const query=(name,input={})=>page.evaluate(async({name,input})=>{const r=await __cardShopApp.query(name,input);if(!r.ok)throw Error(JSON.stringify(r));return r.data;},{name,input});
+  const command=(type,payload={})=>page.evaluate(async({type,payload})=>{const r=await __cardShopApp.command({type,payload,requestId:'pagination-'+crypto.randomUUID()});if(!r.ok)throw Error(JSON.stringify(r));return r.data;},{type,payload});
+  const close=()=>page.evaluate(()=>__cardShopApp.windows.closeAll());
+  const tiles=page.locator('[data-collection-root] [data-card-grid] [data-card]');
+  const next=page.getByRole('button',{name:'下一页',exact:true});
+  await page.goto(server.origin+'/?profile=legacy');await page.waitForFunction(()=>window.__cardShopReady===true);
+  const cards=[];let cursor=0;
+  while(cards.length<1000){const p=await query('catalog.list',{limit:200,cursor});cards.push(...p.items);if(!p.nextCursor)break;cursor=Number(p.nextCursor);}
+  assert.equal(cards.length,1000);
+  const product=(await query('products.list',{limit:1})).items[0],archive=JSON.parse((await command('saves.export')).content);
+  for(let i=0;i<cards.length;i++){
+    const c=cards[i],ref='pagination:card:'+i;
+    archive.world.items[ref]={inventoryRef:ref,kind:'card',cardKey:c.cardKey,printedRarity:c.currentRarity,printVersion:product.productVersion,source:'synthetic',productId:product.productId,ownerId:'player',location:'collection',protected:false,lock:null,cost:0};
+  }
+  await command('saves.import',{content:JSON.stringify(archive)});await page.reload();await page.waitForFunction(()=>window.__cardShopReady===true);
+  await page.evaluate(()=>__cardShopApp.goToInteraction('store.secondaryMarket','market',{tab:'collection'}));
+  await tiles.first().waitFor();await page.waitForFunction(()=>__cardShopApp.isNearInteraction('store.secondaryMarket'));
+  assert.equal(await tiles.count(),48);
+  assert.equal(await page.locator('[data-purchase-root]').count(),0,'opening collection must not build the supplier pane');
+  assert.equal(await page.locator('[data-unbox-root]').count(),0,'opening collection must not build the opening pane');
+  const firstKey=JSON.parse(await tiles.first().getAttribute('data-card'))[0];
+  assert.equal(cards.find(c=>c.cardKey===firstKey).globalScore,Math.max(...cards.map(c=>c.globalScore)),'score sort uses the authoritative global score');
+  const reached=[];
+  for(;;){
+    reached.push(...await tiles.evaluateAll(nodes=>nodes.map(n=>n.dataset.card)));
+    if(await next.isDisabled())break;
+    await next.click();assert.ok(await tiles.count()<=48);
+  }
+  assert.equal(reached.length,1000);assert.equal(new Set(reached).size,1000,'every aggregate row is reachable exactly once');
+  assert.equal(await tiles.count(),40);
+  // A specific copy and its asking price survive closing and reopening on the final page.
+  await tiles.last().click();const selected=await page.locator('[data-card][aria-pressed="true"]').getAttribute('data-card');
+  await page.getByRole('spinbutton',{name:'单卡上架售价',exact:true}).fill('37');
+  await close();await page.evaluate(()=>__cardShopApp.openPanel('inventory',{}));await tiles.first().waitFor();
+  assert.equal(await tiles.count(),40);assert.equal(await page.locator('[data-card][aria-pressed="true"]').getAttribute('data-card'),selected);
+  assert.equal(await page.getByRole('spinbutton',{name:'单卡上架售价',exact:true}).inputValue(),'37');
+  // Search covers off-page rows and retains input focus; zero hits also clear the old details.
+  const target=cards.find(c=>c.cardKey===firstKey);
+  const search=page.getByRole('searchbox',{name:'搜索单卡',exact:true});
+  await search.fill(target.name);
+  assert.ok(await tiles.count()>0);assert.ok((await tiles.getAttribute('data-card')).includes(target.cardKey));
+  assert.equal(await search.evaluate(node=>node===document.activeElement),true);
+  await search.fill('不存在的卡牌测试词');assert.equal(await tiles.count(),0);
+  assert.equal(await page.getByRole('button',{name:'确认单卡上架',exact:true}).count(),0);
+  await search.fill('');assert.equal(await tiles.count(),48);
+  await page.getByRole('combobox',{name:'全部印刷稀有度',exact:true}).selectOption('SSR');
+  const ssrKeys=await tiles.evaluateAll(nodes=>nodes.map(n=>JSON.parse(n.dataset.card)[0]));
+  assert.ok(ssrKeys.length>0);assert.ok(ssrKeys.every(key=>cards.find(c=>c.cardKey===key).currentRarity==='SSR'));
+  await page.getByRole('combobox',{name:'全部印刷稀有度',exact:true}).selectOption('');
+  await page.getByRole('combobox',{name:'收藏排序',exact:true}).selectOption('name');
+  const names=await tiles.locator('.pbc-card-tile__name').allTextContents();assert.deepEqual(names,[...names].sort((a,b)=>a.localeCompare(b,'zh')));
+  // Programmatic selection must navigate to the real card's page, even with a conflicting filter.
+  await search.fill('不存在的卡牌测试词');
+  const offPage=cards.at(-1);
+  await page.evaluate(cardKey=>__cardShopApp.windows.stack.find(w=>w.id==='trade-workspace').handle.chooseTradeSection({section:'collection',cardKey}),offPage.cardKey);
+  assert.equal(JSON.parse(await page.locator('[data-card][aria-pressed="true"]').getAttribute('data-card'))[0],offPage.cardKey);
+  assert.equal(await search.inputValue(),'');
+  // A page-selected real copy is submitted to the actual Host, not an ordinal in the current page.
+  const ref=await page.getByRole('combobox',{name:'待出售实物',exact:true}).inputValue();
+  await page.getByRole('spinbutton',{name:'单卡上架售价',exact:true}).fill('37');
+  await page.getByRole('button',{name:'确认单卡上架',exact:true}).click();
+  await page.waitForFunction(async()=>{const r=await __cardShopApp.query('market.list',{tab:'mine'});return r.ok&&r.data.total===1;});
+  const listed=(await query('market.list',{tab:'mine'})).items[0];assert.equal(listed.cardKey,offPage.cardKey);assert.equal(listed.unitAmount,37);
+  assert.ok((await query('inventory.list',{kind:'card',grouped:false,limit:200})).items.some(c=>c.inventoryRef===ref)||listed.inventoryRef===ref);
+  await page.getByRole('button',{name:'采购与货架',exact:true}).click();await page.locator('[data-purchase-root]').waitFor();
+  await page.getByRole('button',{name:'收藏与市场',exact:true}).click();assert.equal(await page.locator('[data-purchase-root]:visible').count(),0);
+  await page.screenshot({path:out+'/paginated-collection.png'});await close();
+  // Late detail responses and unmounted drafts cannot cross into a different world branch.
+  const guards=await page.evaluate(async()=>{
+    const {mountTradeWorkspace}=await import('/frontend-next/components/workspace/workspace.mjs');
+    const root=document.createElement('div');root.className='pbc-root';document.body.append(root);let release;
+    const v={worldId:'guard',branchId:'old',clock:{day:1},wallet:{},inventory:[{cardKey:'test',name:'测试卡',printedRarity:'N',currentRarity:'N',owned:1,available:0}],market:{}};
+    const c=mountTradeWorkspace({root,view:v,initialSection:'collection',draft:{unbox:{preview:{previewId:'old-preview'}}},actions:{cardDetail:()=>new Promise(resolve=>release=resolve)}});
+    const pendingPreserved=c.getDraft().unbox.preview.previewId==='old-preview';
+    [...root.querySelectorAll('button')].find(b=>b.textContent==='查看大图与完整技能').click();
+    c.update({...v,branchId:'new'});release({ok:true,data:{skills:[{name:'过期技能',description:'不应出现'}]}});await new Promise(r=>setTimeout(r,0));
+    const result={pendingPreserved,cleared:c.getDraft().unbox===undefined,staleHidden:!root.textContent.includes('过期技能'),detailCleared:c.getDraft().collection.detail===null};
+    c.dispose();root.remove();return result;
+  });
+  assert.deepEqual(guards,{pendingPreserved:true,cleared:true,staleHidden:true,detailCleared:true});assert.deepEqual(errors,[]);
+  console.log('PASS trade pagination: all 1000 real rows reachable, 48 DOM tiles/page, global-score sorting, full search/filter/focus, draft restore, off-page selection, actual Host listing, lazy sections and branch/late-response guards.');
+}finally{await browser?.close();await server.close();}

@@ -61,9 +61,9 @@ export async function openTradeWorkspace(app,options={}){
     try{
       const artResponse=await fetch('/assets/frontend-next/products/manifest.json');if(!artResponse.ok)throw Error('包装素材清单读取失败');productArt=await artResponse.json();
       const view=await refresh();if(!view||!active())return;
-      controller=mountTradeWorkspace({root,view,actions,draft,format:app.formatMoney,assets:{productImage:(id,kind)=>productArt.products[id]?.[kind]||productArt.products.standard?.[kind],portrait:personId=>app.manifest.characters[{'student':'bd-tomori','collector':'bd-anon','duelist':'bd-rana'}[personId]]?.avatar}});
+      controller=mountTradeWorkspace({root,view,actions,draft,initialSection:options.section||'collection',format:app.formatMoney,assets:{productImage:(id,kind)=>productArt.products[id]?.[kind]||productArt.products.standard?.[kind],portrait:personId=>app.manifest.characters[{'student':'bd-tomori','collector':'bd-anon','duelist':'bd-rana'}[personId]]?.avatar}});
       // Restore results/drafts only within the same authoritative world branch.
-      choose(options);controller.update(view);
+      choose(options);
       const pending=operation.operation;
       if(pending&&['unknown','submitting'].includes(pending.status)){
         const warning=el('section',{class:'surface-message',text:'上次操作结果尚未确认；请查询原操作，避免重复提交。'});

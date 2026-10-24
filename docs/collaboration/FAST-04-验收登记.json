@@ -1,0 +1,766 @@
+{
+  "acceptedAt": "2026-10-24T14:19:34.657Z",
+  "baseline": "92507cb40315ae1e86b1bf729ce6a030f31cd2a3",
+  "status": "accepted-with-scope-corrections-and-targeted-fixes",
+  "deliveryFingerprints": {
+    "deliverables/playability-v3/FAST-04/DELIVERY.md": "acb19da51255fad34542b51c4ac1b85306954471e22fb0cfc313a1bfc896d826",
+    "deliverables/playability-v3/FAST-04/report.md": "1648937cb6e4deff2b6a78563a6e29f3627abf7dcd9c3ec0e02dbd98c6e9d5f5",
+    "deliverables/playability-v3/FAST-04/baseline.md": "4629a633e7de139c6e7f89fe6d462fdbce54d9eefe244fd97bbb6b787678cf6a",
+    "deliverables/playability-v3/FAST-04/summary.json": "9b4b6f98482161630d904b0d262a99e0574400633fc1119476b8b264cde13886",
+    "deliverables/playability-v3/FAST-04/scripts/lib/harness.mjs": "d5ccf8f7294ed216dbe9d474542ef7e4719ea83feb5461c1a8737cf5dbf5a7e8",
+    "deliverables/playability-v3/FAST-04/repro/repro-1000-cards-panel.mjs": "93fb90af6a0274bb283f63836813880ec0a41a12deb7a17a1f1fc60983f07ad6"
+  },
+  "rawSamples": 10,
+  "originalSummary": {
+    "generatedAt": "2026-10-24T13:58:06.982Z",
+    "rawFiles": 10,
+    "scenarios": {
+      "normal": {
+        "runs": [
+          {
+            "file": "normal-2026-10-24T13-47-17-286Z.json",
+            "head": "92507cb4",
+            "codeChanged": false,
+            "startedAt": "2026-10-24T13:47:17.286Z",
+            "bootColdMs": 995,
+            "bootWarmMs": 369,
+            "npcMean": 1.87,
+            "npcMax": 3,
+            "cap": null,
+            "reachedCap": null,
+            "speed": 1,
+            "shelfUsed": 24,
+            "frameP50": 16.7,
+            "frameP95": 16.7,
+            "frameMax": 16.8,
+            "over33": 0,
+            "impliedFps": 60,
+            "longtasks": 0,
+            "longtaskMs": 0,
+            "taskPct": 36.2,
+            "scriptPct": 4.8,
+            "layoutMs": 0.166,
+            "heapIdleMB": 21.61,
+            "errors": 0,
+            "httpErrors": 0,
+            "panels": {
+              "trade": {
+                "visible": 4.6,
+                "painted": 37.6,
+                "close": 1.2
+              },
+              "management": {
+                "visible": 28.9,
+                "painted": 60.3,
+                "close": 0.8
+              },
+              "trash": {
+                "visible": 33.5,
+                "painted": 74.2,
+                "close": 0.7
+              }
+            }
+          },
+          {
+            "file": "normal-2026-10-24T13-48-17-281Z.json",
+            "head": "92507cb4",
+            "codeChanged": false,
+            "startedAt": "2026-10-24T13:48:17.281Z",
+            "bootColdMs": 1141,
+            "bootWarmMs": 365,
+            "npcMean": 1.87,
+            "npcMax": 3,
+            "cap": null,
+            "reachedCap": null,
+            "speed": 1,
+            "shelfUsed": 24,
+            "frameP50": 16.7,
+            "frameP95": 16.7,
+            "frameMax": 16.8,
+            "over33": 0,
+            "impliedFps": 60,
+            "longtasks": 0,
+            "longtaskMs": 0,
+            "taskPct": 31.9,
+            "scriptPct": 4.6,
+            "layoutMs": 0.149,
+            "heapIdleMB": 21.58,
+            "errors": 0,
+            "httpErrors": 0,
+            "panels": {
+              "trade": {
+                "visible": 23.1,
+                "painted": 46.9,
+                "close": 1.1
+              },
+              "management": {
+                "visible": 26,
+                "painted": 47.1,
+                "close": 0.7
+              },
+              "trash": {
+                "visible": 30.5,
+                "painted": 58.9,
+                "close": 0.8
+              }
+            }
+          },
+          {
+            "file": "normal-2026-10-24T13-49-17-393Z.json",
+            "head": "92507cb4",
+            "codeChanged": false,
+            "startedAt": "2026-10-24T13:49:17.393Z",
+            "bootColdMs": 1160,
+            "bootWarmMs": 355,
+            "npcMean": 1.87,
+            "npcMax": 3,
+            "cap": null,
+            "reachedCap": null,
+            "speed": 1,
+            "shelfUsed": 24,
+            "frameP50": 16.7,
+            "frameP95": 16.7,
+            "frameMax": 16.8,
+            "over33": 0,
+            "impliedFps": 60,
+            "longtasks": 0,
+            "longtaskMs": 0,
+            "taskPct": 35.2,
+            "scriptPct": 4.6,
+            "layoutMs": 0.146,
+            "heapIdleMB": 21.5,
+            "errors": 0,
+            "httpErrors": 0,
+            "panels": {
+              "trade": {
+                "visible": 6.4,
+                "painted": 38.2,
+                "close": 0.8
+              },
+              "management": {
+                "visible": 26.1,
+                "painted": 49.7,
+                "close": 0.7
+              },
+              "trash": {
+                "visible": 22.6,
+                "painted": 51.8,
+                "close": 0.6
+              }
+            }
+          }
+        ],
+        "median": {
+          "npcMean": 1.87,
+          "frameP50": 16.7,
+          "frameP95": 16.7,
+          "over33": 0,
+          "taskPct": 35.2,
+          "scriptPct": 4.6,
+          "longtasks": 0,
+          "bootColdMs": 1141,
+          "bootWarmMs": 365,
+          "tradePanel": 38.2,
+          "managementPanel": 49.7,
+          "trashPanel": 58.9
+        }
+      },
+      "busy": {
+        "runs": [
+          {
+            "file": "busy-2026-10-24T13-50-17-829Z.json",
+            "head": "92507cb4",
+            "codeChanged": false,
+            "startedAt": "2026-10-24T13:50:17.829Z",
+            "bootColdMs": 1132,
+            "bootWarmMs": null,
+            "npcMean": 3.43,
+            "npcMax": 5,
+            "cap": 5,
+            "reachedCap": true,
+            "speed": 1,
+            "shelfUsed": 24,
+            "frameP50": 16.7,
+            "frameP95": 16.7,
+            "frameMax": 16.8,
+            "over33": 0,
+            "impliedFps": 60,
+            "longtasks": 0,
+            "longtaskMs": 0,
+            "taskPct": 33.7,
+            "scriptPct": 6.3,
+            "layoutMs": 0.148,
+            "heapIdleMB": 22.32,
+            "errors": 0,
+            "httpErrors": 0,
+            "panels": {
+              "trade": {
+                "visible": 21.6,
+                "painted": 45.1,
+                "close": 0.9
+              },
+              "management": {
+                "visible": 43.8,
+                "painted": 60,
+                "close": 0.7
+              },
+              "trash": {
+                "visible": 27.1,
+                "painted": 59.9,
+                "close": 0.7
+              }
+            }
+          },
+          {
+            "file": "busy-2026-10-24T13-51-35-824Z.json",
+            "head": "92507cb4",
+            "codeChanged": false,
+            "startedAt": "2026-10-24T13:51:35.824Z",
+            "bootColdMs": 1139,
+            "bootWarmMs": null,
+            "npcMean": 4,
+            "npcMax": 5,
+            "cap": 5,
+            "reachedCap": true,
+            "speed": 1,
+            "shelfUsed": 24,
+            "frameP50": 16.7,
+            "frameP95": 16.7,
+            "frameMax": 16.8,
+            "over33": 0,
+            "impliedFps": 60,
+            "longtasks": 0,
+            "longtaskMs": 0,
+            "taskPct": 36.2,
+            "scriptPct": 6.4,
+            "layoutMs": 0.167,
+            "heapIdleMB": 22.24,
+            "errors": 0,
+            "httpErrors": 0,
+            "panels": {
+              "trade": {
+                "visible": 4.6,
+                "painted": 36.5,
+                "close": 0.9
+              },
+              "management": {
+                "visible": 32.1,
+                "painted": 63.3,
+                "close": 0.6
+              },
+              "trash": {
+                "visible": 33.5,
+                "painted": 72,
+                "close": 0.7
+              }
+            }
+          },
+          {
+            "file": "busy-2026-10-24T13-52-54-240Z.json",
+            "head": "92507cb4",
+            "codeChanged": false,
+            "startedAt": "2026-10-24T13:52:54.240Z",
+            "bootColdMs": 817,
+            "bootWarmMs": null,
+            "npcMean": 3.48,
+            "npcMax": 5,
+            "cap": 5,
+            "reachedCap": true,
+            "speed": 1,
+            "shelfUsed": 24,
+            "frameP50": 16.7,
+            "frameP95": 16.7,
+            "frameMax": 16.8,
+            "over33": 0,
+            "impliedFps": 60,
+            "longtasks": 0,
+            "longtaskMs": 0,
+            "taskPct": 34.6,
+            "scriptPct": 6.1,
+            "layoutMs": 0.162,
+            "heapIdleMB": 22.27,
+            "errors": 0,
+            "httpErrors": 0,
+            "panels": {
+              "trade": {
+                "visible": 22,
+                "painted": 42.1,
+                "close": 1
+              },
+              "management": {
+                "visible": 45.3,
+                "painted": 62.3,
+                "close": 0.6
+              },
+              "trash": {
+                "visible": 28.3,
+                "painted": 54.4,
+                "close": 0.6
+              }
+            }
+          }
+        ],
+        "median": {
+          "npcMean": 3.48,
+          "frameP50": 16.7,
+          "frameP95": 16.7,
+          "over33": 0,
+          "taskPct": 34.6,
+          "scriptPct": 6.3,
+          "longtasks": 0,
+          "bootColdMs": 1132,
+          "bootWarmMs": null,
+          "tradePanel": 42.1,
+          "managementPanel": 62.3,
+          "trashPanel": 59.9
+        }
+      },
+      "inventory": {
+        "runs": [
+          {
+            "file": "inventory-2026-10-24T13-54-20-524Z.json",
+            "head": "92507cb4",
+            "importMs": 51,
+            "distinctKeys": 1000,
+            "baseline": {
+              "invCards": 0,
+              "tradePainted": 84.7,
+              "tradeVisible": 63.4,
+              "tradeDom": 531,
+              "tradeCloseMs": 1,
+              "trashTabMs": 36.8,
+              "trashTiles": 0,
+              "trashDom": 145,
+              "managementPainted": 56.9,
+              "queryInventoryListP50": 0,
+              "heapMB": 19.14
+            },
+            "loaded": {
+              "invCards": 1000,
+              "tradePainted": 422.6,
+              "tradeVisible": 360.7,
+              "tradeDom": 12558,
+              "tradeCloseMs": 10.6,
+              "trashTabMs": 21,
+              "trashTiles": 24,
+              "trashDom": 408,
+              "managementPainted": 50.7,
+              "queryInventoryListP50": 0.6,
+              "heapMB": 24.84
+            }
+          },
+          {
+            "file": "inventory-2026-10-24T13-54-32-608Z.json",
+            "head": "92507cb4",
+            "importMs": 50,
+            "distinctKeys": 1000,
+            "baseline": {
+              "invCards": 0,
+              "tradePainted": 84.4,
+              "tradeVisible": 66.1,
+              "tradeDom": 531,
+              "tradeCloseMs": 0.9,
+              "trashTabMs": 22.5,
+              "trashTiles": 0,
+              "trashDom": 145,
+              "managementPainted": 56.5,
+              "queryInventoryListP50": 0,
+              "heapMB": 19.18
+            },
+            "loaded": {
+              "invCards": 1000,
+              "tradePainted": 414.2,
+              "tradeVisible": 357.1,
+              "tradeDom": 12558,
+              "tradeCloseMs": 10.4,
+              "trashTabMs": 19.8,
+              "trashTiles": 24,
+              "trashDom": 408,
+              "managementPainted": 60,
+              "queryInventoryListP50": 0.7,
+              "heapMB": 25.22
+            }
+          }
+        ],
+        "median": {
+          "importMs": 50.5,
+          "tradePainted0": 84.55,
+          "tradePainted1000": 418.4,
+          "tradeDom0": 531,
+          "tradeDom1000": 12558,
+          "trashTabMs0": 29.65,
+          "trashTabMs1000": 20.4,
+          "heap0": 19.16,
+          "heap1000": 25.03
+        }
+      },
+      "windows": {
+        "runs": [
+          {
+            "file": "windows-2026-10-24T13-54-44-911Z.json",
+            "head": "92507cb4",
+            "baseline": {
+              "heapMB": 20.82,
+              "listeners": 236,
+              "nodes": 329
+            },
+            "final": {
+              "heapMB": 22.23,
+              "listeners": 236,
+              "nodes": 364
+            },
+            "slow": {
+              "trade": {
+                "pause": 0,
+                "depth": 0,
+                "newErrors": 0
+              },
+              "management": {
+                "pause": 0,
+                "depth": 0,
+                "newErrors": 0
+              },
+              "trash": {
+                "pause": 0,
+                "depth": 0,
+                "newErrors": 0
+              }
+            },
+            "per": {
+              "trade": {
+                "cycles": 20,
+                "paintedFirstHalf": 48.46,
+                "paintedSecondHalf": 51.07,
+                "maxPainted": 63.3,
+                "closeAvg": 1.02,
+                "pausedAfterClose": 0,
+                "depthNotZero": 0,
+                "errors": 0
+              },
+              "management": {
+                "cycles": 20,
+                "paintedFirstHalf": 61.72,
+                "paintedSecondHalf": 57.07,
+                "maxPainted": 72.1,
+                "closeAvg": 0.61,
+                "pausedAfterClose": 0,
+                "depthNotZero": 0,
+                "errors": 0
+              },
+              "trash": {
+                "cycles": 20,
+                "paintedFirstHalf": 41.89,
+                "paintedSecondHalf": 42.32,
+                "maxPainted": 43.9,
+                "closeAvg": 0.61,
+                "pausedAfterClose": 0,
+                "depthNotZero": 0,
+                "errors": 0
+              }
+            },
+            "errors": 0
+          },
+          {
+            "file": "windows-2026-10-24T13-55-10-376Z.json",
+            "head": "92507cb4",
+            "baseline": {
+              "heapMB": 22.33,
+              "listeners": 240,
+              "nodes": 366
+            },
+            "final": {
+              "heapMB": 21.45,
+              "listeners": 232,
+              "nodes": 327
+            },
+            "slow": {
+              "trade": {
+                "pause": 0,
+                "depth": 0,
+                "newErrors": 0
+              },
+              "management": {
+                "pause": 0,
+                "depth": 0,
+                "newErrors": 0
+              },
+              "trash": {
+                "pause": 0,
+                "depth": 0,
+                "newErrors": 0
+              }
+            },
+            "per": {
+              "trade": {
+                "cycles": 20,
+                "paintedFirstHalf": 50.51,
+                "paintedSecondHalf": 46.12,
+                "maxPainted": 61.3,
+                "closeAvg": 0.97,
+                "pausedAfterClose": 0,
+                "depthNotZero": 0,
+                "errors": 0
+              },
+              "management": {
+                "cycles": 20,
+                "paintedFirstHalf": 58.62,
+                "paintedSecondHalf": 57.29,
+                "maxPainted": 67,
+                "closeAvg": 0.64,
+                "pausedAfterClose": 0,
+                "depthNotZero": 0,
+                "errors": 0
+              },
+              "trash": {
+                "cycles": 20,
+                "paintedFirstHalf": 41.69,
+                "paintedSecondHalf": 41.83,
+                "maxPainted": 49.2,
+                "closeAvg": 0.59,
+                "pausedAfterClose": 0,
+                "depthNotZero": 0,
+                "errors": 0
+              }
+            },
+            "errors": 0
+          }
+        ]
+      }
+    }
+  },
+  "corrections": [
+    "S1/S2 alone sampled frames; DELIVERY F1 inclusion of S4 is not accepted",
+    "Legal busy customer cap reached is 5, not 12",
+    "headless frame pacing does not prove physical display or GPU FPS",
+    "server chooses a single primary image directory rather than per-image fallback"
+  ],
+  "before": {
+    "generatedAt": "2026-10-24T14:08:10.630Z",
+    "head": "92507cb40315ae1e86b1bf729ce6a030f31cd2a3",
+    "sources": {
+      "frontend-next/components/workspace/collection.mjs": "95173d2c74a997f51f8a82f2f3a033b3c1b99e31157d63517332e2414424cba1",
+      "frontend-next/components/workspace/workspace.mjs": "64994346931332105684c4ac6d2de36965ab58baa3056e2ee946c7bcd2ebd846",
+      "frontend-next/screens/workspace.mjs": "607a73571a883b120565ea9d8f423dedd71348fe580744aa4946681279e77bab"
+    },
+    "cpu": "AMD Ryzen 7 8845H w/ Radeon 780M Graphics",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "headless": true,
+    "rounds": [
+      {
+        "cards": 0,
+        "paintedMs": 52.3,
+        "dom": 531,
+        "tiles": 0,
+        "closeMs": 0.6,
+        "depth": 0,
+        "pause": 0
+      },
+      {
+        "cards": 0,
+        "paintedMs": 24.8,
+        "dom": 531,
+        "tiles": 0,
+        "closeMs": 0.5,
+        "depth": 0,
+        "pause": 0
+      },
+      {
+        "cards": 0,
+        "paintedMs": 29.3,
+        "dom": 531,
+        "tiles": 0,
+        "closeMs": 0.6,
+        "depth": 0,
+        "pause": 0
+      },
+      {
+        "cards": 1000,
+        "paintedMs": 355,
+        "dom": 12558,
+        "tiles": 1000,
+        "closeMs": 17.8,
+        "depth": 0,
+        "pause": 0
+      },
+      {
+        "cards": 1000,
+        "paintedMs": 197,
+        "dom": 12558,
+        "tiles": 1000,
+        "closeMs": 1.3,
+        "depth": 0,
+        "pause": 0
+      },
+      {
+        "cards": 1000,
+        "paintedMs": 251.4,
+        "dom": 12602,
+        "tiles": 1000,
+        "closeMs": 8.4,
+        "depth": 0,
+        "pause": 0
+      }
+    ],
+    "browser": "156.0.8078.4",
+    "errors": [],
+    "httpErrors": [
+      {
+        "url": "/img/pot_zhangren.jpg",
+        "status": 404
+      },
+      {
+        "url": "/img/pot_zhangren.jpg",
+        "status": 404
+      },
+      {
+        "url": "/img/pot_zhangren.jpg",
+        "status": 404
+      }
+    ],
+    "codeChangedDuringSample": false
+  },
+  "after": {
+    "generatedAt": "2026-10-24T14:16:40.468Z",
+    "head": "92507cb40315ae1e86b1bf729ce6a030f31cd2a3",
+    "sources": {
+      "frontend-next/components/workspace/collection.mjs": "0d5aca1d9eb5e1fbc716a42482300748d0f9355d9d893b00aff05fcd12f78e28",
+      "frontend-next/components/workspace/workspace.mjs": "41eec2e5fc0f0bd3d5771e6bfac459272109d7fef437941c48c003db068ee28d",
+      "frontend-next/screens/workspace.mjs": "90131ffdf4aeacf3ba60595d5cd353282ffb30d19f249483b840fce9e4c5a595"
+    },
+    "cpu": "AMD Ryzen 7 8845H w/ Radeon 780M Graphics",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "headless": true,
+    "rounds": [
+      {
+        "cards": 0,
+        "paintedMs": 46.8,
+        "dom": 147,
+        "tiles": 0,
+        "closeMs": 0.8,
+        "depth": 0,
+        "pause": 0
+      },
+      {
+        "cards": 0,
+        "paintedMs": 27.1,
+        "dom": 147,
+        "tiles": 0,
+        "closeMs": 0.7,
+        "depth": 0,
+        "pause": 0
+      },
+      {
+        "cards": 0,
+        "paintedMs": 30.3,
+        "dom": 147,
+        "tiles": 0,
+        "closeMs": 0.5,
+        "depth": 0,
+        "pause": 0
+      },
+      {
+        "cards": 1000,
+        "paintedMs": 66.7,
+        "dom": 754,
+        "tiles": 48,
+        "closeMs": 1.9,
+        "depth": 0,
+        "pause": 0
+      },
+      {
+        "cards": 1000,
+        "paintedMs": 27.9,
+        "dom": 753,
+        "tiles": 48,
+        "closeMs": 1,
+        "depth": 0,
+        "pause": 0
+      },
+      {
+        "cards": 1000,
+        "paintedMs": 27.2,
+        "dom": 754,
+        "tiles": 48,
+        "closeMs": 1.6,
+        "depth": 0,
+        "pause": 0
+      }
+    ],
+    "browser": "156.0.8078.4",
+    "errors": [],
+    "httpErrors": [
+      {
+        "url": "/img/pot_zhangren.jpg",
+        "status": 404
+      },
+      {
+        "url": "/img/pot_zhangren.jpg",
+        "status": 404
+      },
+      {
+        "url": "/img/pot_zhangren.jpg",
+        "status": 404
+      },
+      {
+        "url": "/img/pot_zhangren.jpg",
+        "status": 404
+      },
+      {
+        "url": "/img/pot_zhangren.jpg",
+        "status": 404
+      },
+      {
+        "url": "/img/mb_gaoxiang.jpg",
+        "status": 404
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "search",
+        "value": "手杀神吕布",
+        "paintedMs": 34.9,
+        "tiles": 1,
+        "focusRetained": true
+      },
+      {
+        "kind": "search",
+        "value": "不存在的卡牌测试词",
+        "paintedMs": 57.5,
+        "tiles": 0,
+        "focusRetained": true
+      },
+      {
+        "kind": "search",
+        "value": "",
+        "paintedMs": 47,
+        "tiles": 48,
+        "focusRetained": true
+      },
+      {
+        "kind": "nextPage",
+        "paintedMs": 64.1,
+        "tiles": 48
+      }
+    ],
+    "codeChangedDuringSample": false
+  },
+  "verification": [
+    "tests/trade-workspace-pagination.mjs",
+    "tests/playability-integration.mjs",
+    "tests/high-quality-pass.mjs"
+  ],
+  "deferred": [
+    "missing original card artwork",
+    "long-run and cross-day performance",
+    "real GPU and Electron performance",
+    "combat room load",
+    "C2/C3 content and economic follow-up"
+  ],
+  "batchRunIndexes": 2
+}

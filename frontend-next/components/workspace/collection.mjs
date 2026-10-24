@@ -13,6 +13,7 @@ const TABS = [
 ];
 const STATUS_FILTERS = [['all', '全部持有'], ['sellable', '可上架'], ['protected', '含保护'], ['listed', '在售']];
 const SORTS = [['score-desc', '评分从高到低'], ['owned-desc', '持有数量'], ['name', '名称']];
+const PAGE_SIZE = 48;
 
 function listingAmount(value) {
   const text = String(value).trim(), amount = Number(text);
@@ -27,7 +28,7 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
     const money = createFormatter(format);
     const state = {
       tab: 'collection', search: '', rarity: '', statusFilter: 'all', sort: 'score-desc',
-      selected: null, op: createOperationState(), busy: false,
+      selected: null, page: 0, op: createOperationState(), busy: false,
       quote: null, detail: null, detailLoading: false, detailVersion: 0, detailOpen: false,
       sellRef: {}, sellAmount: {}, expandedCopy: null,
       ...draft, op:createOperationState(draft.operation),busy:false,
@@ -93,7 +94,7 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
         if (state.statusFilter === 'protected') rows = rows.filter(r => r.protected > 0);
         if (state.statusFilter === 'listed') rows = rows.filter(r => r.listed > 0);
         const sorters = {
-          'score-desc': (a, b) => (b.raw._score || 0) - (a.raw._score || 0),
+          'score-desc': (a, b) => (b.raw.globalScore ?? b.raw._score ?? 0) - (a.raw.globalScore ?? a.raw._score ?? 0),
           'owned-desc': (a, b) => (b.owned || 0) - (a.owned || 0),
           name: (a, b) => a.name.localeCompare(b.name, 'zh'),
         };
@@ -104,11 +105,30 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
 
     function select(row) {
       state.selected = row ? row.id : null;
-      state.quote = null; state.detail = null; state.detailOpen = false; state.detailVersion++;
+      state.quote = null; state.detail = null; state.detailOpen = false; state.detailLoading = false; state.detailVersion++;
       if (state.tab === 'collection' && row?.availableRefs?.length) state.sellRef[row.id] ??= row.availableRefs[0];
       paint();
     }
     const selectedRow = () => visibleRows().find(r => r.id === state.selected) || null;
+    function pageRows(rows) {
+      const last = Math.max(0, Math.ceil(rows.length / PAGE_SIZE) - 1);
+      state.page = Math.min(last, Math.max(0, Number.isFinite(state.page) ? Math.floor(state.page) : 0));
+      return rows.slice(state.page * PAGE_SIZE, (state.page + 1) * PAGE_SIZE);
+    }
+    function ensureSelection(rows) {
+      const page = pageRows(rows);
+      if (rows.some(r => r.id === state.selected)) return;
+      state.selected = page[0]?.id ?? null;
+      state.quote = null; state.detail = null; state.detailOpen = false; state.detailLoading = false; state.detailVersion++;
+    }
+    // Keep the toolbar/input mounted while filtering, so typing does not lose focus.
+    function paintGrid() {
+      if (disposed) return;
+      state.page = 0; state.selected = null;
+      const rows = visibleRows();
+      ensureSelection(rows);
+      body.querySelector('.pbc-market')?.replaceChildren(paintGridArea(rows), paintDetail());
+    }
 
     // ── 详情数据（按需加载） ─────────────────────────────
     async function loadDetail(cardKey) {
@@ -169,7 +189,7 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
       const filters = el('div', { class: 'pbc-toolbar' }, [
         segmented(TABS, state.tab, id => {
           state.tab = id; state.selected = null; state.quote = null; state.detail = null; state.detailOpen = false;
-          state.rarity = ''; state.statusFilter = 'all'; state.sort = 'score-desc'; paint();
+          state.rarity = ''; state.statusFilter = 'all'; state.sort = 'score-desc'; state.page = 0; paint();
         }, '收藏与市场任务视图'),
         el('input', {
           class: 'pbc-input', type: 'search', value: state.search, placeholder: '搜索卡名…',
@@ -192,21 +212,36 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
       }
       body.append(filters);
       const rows = visibleRows();
-      if (!rows.some(r => r.id === state.selected) && rows.length) { select(rows[0]); return; }
+      ensureSelection(rows);
       const market = el('div', { class: 'pbc-market' }, [paintGridArea(rows), paintDetail()]);
       body.append(market);
     }
 
     function paintGridArea(rows) {
       const area = el('div');
+      const page = pageRows(rows);
+      const pages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
       const label = el('div', { class: 'pbc-catalog__label' }, [
-        el('span', { text: '已显示 ' + rows.length + ' 条 · ' + tabCaption() }),
+        el('span', { text: '共 ' + rows.length + ' 条 · 本页 ' + page.length + ' 条 · ' + tabCaption() }),
         state.tab === 'collection' ? chip('印刷稀有度与全局强度分开显示') : null,
       ]);
       const grid = el('div', { class: 'pbc-card-grid', 'data-card-grid': 'true' });
       if (!rows.length) grid.append(emptyState(emptyText(), emptyHint()));
-      else for (const row of rows) grid.append(cardTile(row));
-      area.append(label, grid);
+      else for (const row of page) grid.append(cardTile(row));
+      area.append(label);
+      if (pages > 1) {
+        const changePage = next => {
+          state.page = next; state.selected = null;
+          paint();
+          body.scrollTop = 0;
+        };
+        area.append(el('nav', { class: 'pbc-actions', 'aria-label': '卡牌分页', style: 'margin-top:12px' }, [
+          button('上一页', () => changePage(state.page - 1), { disabled: state.page === 0 }),
+          el('span', { role: 'status', text: '第 ' + (state.page + 1) + ' / ' + pages + ' 页' }),
+          button('下一页', () => changePage(state.page + 1), { disabled: state.page + 1 >= pages }),
+        ]));
+      }
+      area.append(grid);
       return area;
     }
     function tabCaption() {
@@ -453,13 +488,18 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
 
     paint();
     return {
-      setTab(tab){if(TABS.some(([id])=>id===tab)){state.tab=tab;state.selected=null;paint();}},
-      selectCard(cardKey){state.tab='collection';state.search='';state.selected=null;paint();const item=rowsFor().map(normalize).find(c=>c.cardKey===cardKey);if(item)return select(item);return callAction(actions,'openCardDetail',{cardKey});},
+      setTab(tab){if(tab!==state.tab&&TABS.some(([id])=>id===tab)){state.tab=tab;state.selected=null;state.page=0;state.rarity='';paint();}},
+      selectCard(cardKey){
+        state.tab='collection';state.search='';state.rarity='';state.statusFilter='all';
+        const rows=visibleRows(),index=rows.findIndex(c=>c.cardKey===cardKey);
+        if(index>=0){state.page=Math.floor(index/PAGE_SIZE);return select(rows[index]);}
+        state.selected=null;state.page=0;paint();return callAction(actions,'openCardDetail',{cardKey});
+      },
       getDraft(){const {op,...values}=state;return structuredClone({...values,busy:false,operation:op.current});},
       update(nextView) {
         const previous=view.worldId+':'+view.branchId;view=nextView;
         state.op.invalidate(nextView.branchId);
-        if (nextView.worldId+':'+nextView.branchId!==previous) { state.quote = null; state.detail = null; state.detailOpen = false; state.selected = null; }
+        if (nextView.worldId+':'+nextView.branchId!==previous) { state.quote = null; state.detail = null; state.detailOpen = false; state.detailLoading = false; state.detailVersion++; state.selected = null; state.page = 0; surplusPreview = null; }
         paint();
       },
       dispose() { disposed = true; root.replaceChildren(); },

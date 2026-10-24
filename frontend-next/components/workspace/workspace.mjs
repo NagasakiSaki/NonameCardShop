@@ -1,5 +1,5 @@
 // PLAY-B · 交易工作区：同一空间切换 采购/货架、拆包、收藏/市场 三个任务视图。
-// 组件同时保持挂载，切换不丢草稿与滚动；销毁时全部清理。暂停令牌、站位与
+// 区段首次使用时挂载，之后切换保留草稿与滚动；销毁时全部清理。暂停令牌、站位与
 // 真实提交由主模型的适配层承担——本组件只表达意图。
 import { el, chip } from './dom.mjs';
 import { injectStyles, FORMAL_CSS } from './styles.mjs';
@@ -13,7 +13,7 @@ const SECTIONS = [
   ['collection', '收藏与市场'],
 ];
 
-export function mountTradeWorkspace({ root, view, actions = {}, assets = {}, format, draft = {}, title = '卡店交易台' }) {
+export function mountTradeWorkspace({ root, view, actions = {}, assets = {}, format, draft = {}, initialSection, title = '卡店交易台' }) {
   let current = view;
   let disposed = false;
   const messages = [];
@@ -52,8 +52,10 @@ export function mountTradeWorkspace({ root, view, actions = {}, assets = {}, for
       onclick: () => setSection(id),
     })));
   }
-  let activeSection = draft.section || 'purchase';
+  let activeSection = initialSection || draft.section || 'purchase';
   function setSection(id) {
+    if (disposed || !panels[id]) return;
+    ensureChild(id);
     activeSection = id;
     for (const [key, node] of Object.entries(panels)) node.hidden = key !== id;
     renderNav();
@@ -65,25 +67,27 @@ export function mountTradeWorkspace({ root, view, actions = {}, assets = {}, for
   Object.values(panels).forEach(p => container.append(p));
 
   const shared = { actions, assets, format, notify };
-  const children = {
-    purchase: mountPurchase({ root: panels.purchase, view, draft:draft.purchase, ...shared }),
-    unbox: mountUnbox({ root: panels.unbox, view, draft:draft.unbox, ...shared }),
-    collection: mountCollection({ root: panels.collection, view, draft:draft.collection, ...shared }),
-  };
-  setSection(activeSection);
+  const children = {};
+  let pendingDrafts = { purchase:draft.purchase, unbox:draft.unbox, collection:draft.collection };
+  const mounts = { purchase:mountPurchase, unbox:mountUnbox, collection:mountCollection };
+  function ensureChild(id) {
+    return children[id] ??= mounts[id]({root:panels[id], view:current, draft:pendingDrafts[id], ...shared});
+  }
+  setSection(panels[activeSection] ? activeSection : 'purchase');
   renderHeader();
 
   return {
     setSection,
-    setPurchaseTab(tab){children.purchase.setTab(tab);},
-    getDraft(){return {section:activeSection,...Object.fromEntries(Object.entries(children).map(([id,c])=>[id,c.getDraft()]))};},
-    selectCard(cardKey){setSection('collection');return children.collection.selectCard(cardKey);},
-    setTab(tab){children.collection.setTab(tab);},
-    setOpeningScope(scope){children.unbox.setScope(scope);},
+    setPurchaseTab(tab){ensureChild('purchase').setTab(tab);},
+    getDraft(){return {section:activeSection,...pendingDrafts,...Object.fromEntries(Object.entries(children).map(([id,c])=>[id,c.getDraft()]))};},
+    selectCard(cardKey){setSection('collection');return ensureChild('collection').selectCard(cardKey);},
+    setTab(tab){ensureChild('collection').setTab(tab);},
+    setOpeningScope(scope){ensureChild('unbox').setScope(scope);},
     update(nextView) {
       if (disposed) return;
-      const branchChanged = nextView.branchId !== current.branchId;
+      const branchChanged = nextView.branchId !== current.branchId || nextView.worldId !== current.worldId;
       current = nextView;
+      if (branchChanged) pendingDrafts = {};
       renderHeader();
       for (const child of Object.values(children)) child.update(nextView);
       if (branchChanged) notify('已读取新的进度分支：旧报价、预览和选中实物已失效，需要重新确认。', 'info');
