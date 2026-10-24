@@ -1,6 +1,6 @@
 import {buildStoreMap as originalStore,buildBattleRoomMap as originalBattle} from './maps.mjs';
 import {PROP_META,TILES} from './props-v2.mjs';
-export const TILE=16,MAP_W=30,MAP_H=20,NAV_VERSION='nav-2026-10-23-continuous';
+export const TILE=16,MAP_W=30,MAP_H=20,NAV_VERSION='nav-2026-10-24-split-counters';
 const at=(x,y)=>({x:x*16+8,y:y*16+8,tile:{x,y}});
 const storeProps=[
   ['rug',176,112],['shelf',24,40],['shelf',24,112],['shelf',192,32],
@@ -8,9 +8,9 @@ const storeProps=[
   ['counter_service',256,192],['kiosk',336,32],['trash',432,256],
   ['plant',272,32],['plant',416,32],['plant',24,264],['plant',432,184],
   ['poster',104,2],['poster',288,2],['clock',240,2],['sofa',176,272],
-  ['tea',176,224],['board',368,216],['case_stack',352,144],['case_stack',32,176],
+  ['tea',304,96],['board',368,216],['case_stack',352,144],['case_stack',32,176],
   ['lamp',8,80],['lamp',320,48],['lamp',400,240],['door_mat',224,256],
-  ['trophy',288,144],['speaker',440,80],
+  ['trophy',288,144],['speaker',440,80],['counter_service',144,200],
 ];
 const battleProps=[
   ['rug',72,72],['rug',248,168],['table',80,64],['table',256,160],
@@ -32,17 +32,18 @@ function make(id,base,placements){
     floor.push(index(service?'floor_tile':id==='battle-room'?'floor_stone':(x+y)%2?'floor_wood_a':'floor_wood_b'));
     walls.push(wall?index(y===0?([3,4,5,17,18,19].includes(x)?'wall_window':'wall_top'):'wall_base'):-1);
   }
-  map.props=placements.map(([prop,x,y],i)=>({id:`${prop}.${String(i+1).padStart(2,'0')}`,prop,x,y,...structuredClone(PROP_META[prop])}));
+  map.props=placements.map(([prop,x,y,extra={}],i)=>({id:`${prop}.${String(i+1).padStart(2,'0')}`,prop,x,y,...structuredClone(PROP_META[prop]),...extra}));
   for(const p of map.props)for(const [x,y,w,h]of p.blocks){for(let yy=Math.floor((p.y+y)/16);yy<=Math.floor((p.y+y+h-1)/16);yy++)for(let xx=Math.floor((p.x+x)/16);xx<=Math.floor((p.x+x+w-1)/16);xx++)if(xx>=0&&xx<30&&yy>=0&&yy<20)walk[yy*30+xx]=0;}
   map.layers=[{name:'floor',type:'tiles',data:floor},{name:'walls',type:'tiles',data:walls}];
   map.walkable=walk;map.navVersion=NAV_VERSION;map.worldOffset={x:id==='store'?0:480,y:0};
   map.label=id==='store'?'无名小店 · 卡牌商店':'牌友会馆 · 对战与休憩';
   map.signs=id==='store'?[
     {x:136,y:42,text:'卡包 · 卡盒',color:'#ffe2a1'},
-    {x:304,y:184,text:'进货 / 拆包',color:'#d9efe0'},
+    {x:304,y:184,text:'进货 / 收货',color:'#d9efe0'},
+    {x:176,y:194,text:'拆包工作台',color:'#d9efe0'},
     {x:376,y:27,text:'二级市场',color:'#e9dcff'},
     {x:440,y:249,text:'共享回收',color:'#d9eed5'},
-    {x:80,y:202,text:'零售备货台',color:'#ffe2a1'},
+    {x:80,y:202,text:'顾客收银台',color:'#ffe2a1'},
     {x:443,y:126,text:'对战房 →',color:'#f3d5a7'},
     {x:240,y:31,text:'NONAME  /  CARD ATELIER',color:'#405d58',brand:true},
   ]:[
@@ -58,6 +59,12 @@ function make(id,base,placements){
     i.props=map.props.filter(p=>i.kind==='retail'?['display_packs','display_boxes','counter_retail','shelf'].includes(p.prop):p.prop===kind).map(p=>p.id);
     if(i.kind==='retail'){i.anchor={x:136,y:80};i.label='卡包 / 卡盒零售';}
     if(i.kind==='trash'){i.anchor={x:444,y:274};i.label='共享垃圾桶';}
+  }
+  if(id==='store'){
+    const counter=map.interactions.find(i=>i.id==='store.counter');counter.label='进货 / 收货台';counter.props=['counter_service.08'];
+    map.interactions.find(i=>i.id==='store.retail').props=map.interactions.find(i=>i.id==='store.retail').props.filter(id=>id!=='counter_retail.07');
+    map.interactions.push({id:'store.checkout',label:'顾客收银台',kind:'retail',anchor:{x:80,y:240},stand:at(5,16),radius:24,props:['counter_retail.07']});
+    map.interactions.push({id:'store.opening',label:'独立拆包工作台',kind:'opening',panel:'opening',anchor:{x:176,y:240},stand:at(11,16),radius:24,props:['counter_service.29']});
   }
   if(id==='battle-room')map.tables.forEach((table,index)=>{
     const p=map.props.filter(p=>p.prop==='table')[index];

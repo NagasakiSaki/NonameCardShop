@@ -37,7 +37,7 @@ try{
   const cash=(await query('shop.snapshot')).wallet.available;const minute=(await query('shop.snapshot')).clock.minute;await page.waitForTimeout(250);assert.equal((await query('shop.snapshot')).clock.minute,minute);
   await close();await until(async()=>{const orders=(await query('supplier.orders')).items;return orders.length===2&&orders.every(o=>o.status==='arrived');});
   await page.evaluate(()=>__cardShopApp.openPanel('supplier',{tab:'orders'}));await button('一键签收已到货').waitFor();await button('一键签收已到货').click();await until(async()=>(await query('supplier.orders')).items.every(o=>o.status==='received'));
-  assert.equal((await query('shop.snapshot')).wallet.available,cash);assert.equal((await query('inventory.sealedSummary')).items.find(i=>i.kind==='box').owned,1);
+  assert.equal((await query('shop.snapshot')).wallet.available,cash+200,'first receipt task automatically pays 200');assert.equal((await query('inventory.sealedSummary')).items.find(i=>i.kind==='box').owned,1);
   await button('密封仓库').click();await button('一键开所有可用包').click();await button('确认开包').waitFor();await button('确认开包').click();await page.locator('[data-opening-result]').waitFor();
   assert.match(await page.locator('[data-opening-result]').innerText(),/已开 2 包/);assert.equal((await query('inventory.list',{kind:'card'})).total,13);assert.equal((await query('inventory.list',{kind:'box'})).total,1);assert.equal((await query('inventory.list',{kind:'pack'})).total,1);
   await page.screenshot({path:output+'/real-opening.png',animations:'disabled'});await page.locator('[data-opening-cards] .card-tile').first().click();await button('查看技能源码').waitFor();await button('查看技能源码').click();await page.locator('pre').waitFor();assert.ok((await page.locator('pre').innerText()).length>100);

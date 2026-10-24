@@ -31,6 +31,6 @@ export function productView(row,unit,artManifest,sealed=[],orders=[]){
   const stock=sealed.filter(i=>i.productId===row.productId&&i.kind===unit),pending=orders.filter(o=>o.product?.productId===row.productId&&o.unit===unit&&o.status!=='received');
   const image=artManifest.products[row.productId]||artManifest.products.standard;
   return {id:JSON.stringify([row.productId,unit]),productId:row.productId,kind:unit,name:row.themeName+' · '+(unit==='box'?'密封盒':'散包'),artUrl:image?.[unit],unitPrice:row.prices?.[unit]?.wholesale,suggestedRetail:row.prices?.[unit]?.retail,
-    packsPerBox:row.packsPerBox,cardsPerPack:row.cardsPerPack,available:row.availability==='available',stock:null,
+    packsPerBox:row.packsPerBox,cardsPerPack:row.cardsPerPack,available:row.availability==='available',stock:null,subtitle:row.priceTier?`${row.priceTier.label} · 主题平均强度 ${row.averageStrength}`:'',
     warehouse:stock.reduce((n,i)=>n+i.warehouse,0),onShelf:stock.reduce((n,i)=>n+i.onShelf,0),inTransit:pending.reduce((n,o)=>n+o.quantity,0),raw:row};
 }

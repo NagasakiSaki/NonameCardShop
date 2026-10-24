@@ -26,8 +26,8 @@ export function cardDetailView(w,catalog,card,stats){
     copies:items.map(i=>({inventoryRef:i.inventoryRef,printedRarity:i.printedRarity,printVersion:i.printVersion,location:i.location,protected:i.protected,locked:!!i.lock,available:i.location==='collection'&&free(i)})),
     price:referencePrice(w,catalog,card.cardKey),referencePrice:{amount:referencePrice(w,catalog,card.cardKey)},circulation:w.circulation[card.cardKey]||null,
     marketEligibility:{eligible:available.length>0,reasons:available.length?[]:[{code:'NO_AVAILABLE_COPY',message:'没有可出售的未锁定收藏副本。'}]},
-    combatEligibility:{eligible:!!w.circulation[card.cardKey]&&available.length>0,reasons:w.circulation[card.cardKey]?[]:[{code:'NOT_IN_CIRCULATION',message:'该卡种尚未进入流通，暂不能参赛。'}]},
-    stats:Object.fromEntries([...stats.map(s=>[s.mode,{...s,sessions:s.games}]),['sampleSufficient',stats.some(s=>s.games>=20)],['note','BO3 记整场；KOF 记实际上场武将的队伍胜率。']]),skillSourceAvailable:true};
+    combatEligibility:{eligible:available.length>0,reasons:available.length?[]:[{code:'NO_AVAILABLE_COPY',message:'没有可参赛的未锁定收藏副本。'}]},
+    stats:Object.fromEntries([...stats.map(s=>[s.mode,{...s,sessions:s.games}]),['sampleSufficient',stats.some(s=>s.games>=20)],['note','BO3 记整场；KOF 记实际上场武将的队伍胜率。含 NPC 模拟对局，模拟场次单独标记。']]),skillSourceAvailable:true};
 }
 export function ledgerView(w,catalog,report){
   const daily=report||w.daily,day=report?.day||w.clock.day;

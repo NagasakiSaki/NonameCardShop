@@ -1,5 +1,6 @@
 import {RARITIES,clone,need,sum,shuffle,pick,serial,clamp} from './common.mjs';
 import {boxRecipe,distribution} from './distribution.mjs';
+import {priceByStrength} from './supply-pricing.mjs';
 
 export function publishProducts(catalog,rules,day,marketPrices={}){
   const ratingVersion=catalog.cards[0]?.ratingVersion||rules.ratingVersion;
@@ -14,8 +15,6 @@ export function publishProducts(catalog,rules,day,marketPrices={}){
     const packSlots=[...Array.from({length:4},()=>Object.fromEntries(RARITIES.map(r=>[r,remainder[r]/96]))),Object.fromEntries(RARITIES.map(r=>[r,guaranteed[r]/24]))];
     const values=Object.fromEntries(RARITIES.map(r=>[r,pools[r].length?sum(pools[r].map(k=>{const base=catalog.byKey.get(k).issuanceValue;return clamp(marketPrices[k]??base,base*.85,base*1.15);}))/pools[r].length:0]));
     const boxValue=sum(RARITIES.map(r=>boxCounts[r]*values[r]));
-    const round=n=>Math.ceil(n/rules.roundTo)*rules.roundTo;
-    const boxWholesale=round(boxValue/rules.openingReturn),packWholesale=round(boxValue/24/rules.openingReturn);
     const substitutions=RARITIES.filter(r=>boxCounts[r]>0&&!local[r].length);
     const collationVersion=distribution(rules).version;
     return {productId:pack.id,themeId:pack.id,name:pack.name,productVersion:`${ratingVersion}-${collationVersion}-day${day}`,ratingVersion,priceVersion:`supply-${collationVersion}-day${day}`,collationVersion,
@@ -23,7 +22,7 @@ export function publishProducts(catalog,rules,day,marketPrices={}){
       packExpectedCounts:Object.fromEntries(RARITIES.map(r=>[r,boxCounts[r]/24])),packAtLeastOneProbabilities:Object.fromEntries(RARITIES.map(r=>[r,1-packSlots.reduce((n,s)=>n*(1-s[r]),1)])),
       guarantees:['每包 4 张 N/R 基础槽 + 1 张 R/SR/SSR 进阶槽',`整盒固定 ${boxCounts.N}N / ${boxCounts.R}R / ${boxCounts.SR}SR / ${boxCounts.SSR}SSR；散包无累计大保底`],
       substitutionSummary:substitutions.length?`${substitutions.join('/')} 缺档，使用全局同档补位。`:null,availability:'available',unavailableReason:null,
-      prices:{box:{wholesale:boxWholesale,retail:round(boxWholesale/(1-rules.retailMargin))},pack:{wholesale:packWholesale,retail:round(packWholesale/(1-rules.retailMargin))}},effectiveDay:day};
+      ...priceByStrength(catalog.cards.filter(c=>c.pack===pack.id),rules),packExpectedValue:Math.round(boxValue/24),effectiveDay:day};
   });
 }
 export function productDTO(product){const {pools,guaranteed,remainder,values,...dto}=product;return {...clone(dto),themeName:product.name,unitAmounts:product.prices?{pack:product.prices.pack.wholesale,box:product.prices.box.wholesale}:null};}

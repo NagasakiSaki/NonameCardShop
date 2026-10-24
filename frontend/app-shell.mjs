@@ -19,6 +19,7 @@ const PANEL_LOADERS = {
   combat: () => import("./ui/combat-room.mjs").then((m) => m.openCombat),
   tasks: () => import("./ui/tasks.mjs").then((m) => m.openTasks),
   report: () => import("./ui/day-report.mjs").then((m) => m.openDayReport),
+  finance: () => import('./ui/finance.mjs').then(m=>m.openFinance),
   saves: () => import("./ui/day-saves.mjs").then((m) => m.openDaySaves),
   management: () => import("./ui/management.mjs").then((m) => m.openManagement),
   settings: () => import("./ui/settings.mjs").then((m) => m.openSettings),
@@ -264,6 +265,7 @@ export async function startApp({ host, connection, mode, fixture }) {
       else if (action === "inventory") app.openPanel("inventory", {});
       else if (action === "tasks") app.openPanel("tasks", {});
       else if (action === "report") app.openPanel("report", {});
+      else if (action === 'finance') app.openPanel('finance', {});
       else if (action === "saves") app.openPanel("saves", {});
       else if (action === "management") app.openPanel("management", {});
       else if (action === "help") app.openPanel("help", {});
@@ -334,10 +336,12 @@ export async function startApp({ host, connection, mode, fixture }) {
     const tasksResult = await app.query("tasks.list");
     const ledgerResult = await app.query("ledger.daily");
     if (tasksResult.ok) {
-      const open = tasksResult.data.items.filter((task) => !task.claimed);
-      const totalTasks = tasksResult.data.items.length;
+      const daily=tasksResult.data.items.filter(task=>task.scope==='daily');
+      const shown=daily.length?daily:tasksResult.data.items;
+      const open = shown.filter((task) => !task.claimed);
+      const totalTasks = shown.length;
       const card = el("div", { class: "note-card" }, [
-        el("p", { class: "note-card__title" }, ["今日任务", el("span", { class: "muted", text: open.length + "/" + totalTasks })]),
+        el("p", { class: "note-card__title" }, ["今日任务", el("span", { class: "muted", text: '待完成 '+open.length + "/" + totalTasks })]),
         el("ul", { class: "note-list" }, open.slice(0, 4).map((task) =>
           el("li", {}, [
             el("span", { text: task.title }),
@@ -356,7 +360,7 @@ export async function startApp({ host, connection, mode, fixture }) {
       notebookBody.append(el("div", { class: "note-card" }, [
         el("p", { class: "note-card__title" }, ["今日收支", el("span", { class: "muted", text: "第 " + ledger.day + " 天" })]),
         el("div", { class: "stat-row" }, [el("span", { class: "stat-row__label", text: "营业收入" }), el("span", { class: "stat-row__value", text: app.formatMoney(revenue) })]),
-        el("div", { class: "stat-row" }, [el("span", { class: "stat-row__label", text: "费用合计" }), el("span", { class: "stat-row__value", text: app.formatMoney(cost) })]),
+        el("div", { class: "stat-row" }, [el("span", { class: "stat-row__label", text: "进货与运营支出" }), el("span", { class: "stat-row__value", text: app.formatMoney(cost) })]),
         el("div", { class: "stat-row" }, [el("span", { class: "stat-row__label", text: "对局净额" }), el("span", { class: "stat-row__value", text: app.formatMoney((ledger.combat?.stakeOut || 0) - (ledger.combat?.stakeIn || 0)) })]),
         el("p", { class: "small muted", text: ledger.note || "未售卡估值不计收入；赌注本金不计营业所得。" }),
       ]));

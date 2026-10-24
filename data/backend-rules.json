@@ -1,54 +1,197 @@
 {
   "version": 1,
   "ratingVersion": "global-power-2",
-  "distribution":{"version":"tcg-slots-3","excludedPacks":["diy","old","key","collab","sixiang","onlyOL","xianding"],"baseCounts":{"N":60,"R":42,"SR":15,"SSR":3},"bounds":{"N":[54,66],"SR":[14,18],"SSR":[2,4]},"themeScoreSpan":12},
-  "thresholds": {"R":57,"SR":65,"SSR":78},
-  "modeWeights": {"bo3":0.5,"kof":0.5},
+  "distribution": {
+    "version": "tcg-slots-3",
+    "excludedPacks": [
+      "diy",
+      "old",
+      "key",
+      "collab",
+      "sixiang",
+      "onlyOL",
+      "xianding"
+    ],
+    "baseCounts": {
+      "N": 60,
+      "R": 42,
+      "SR": 15,
+      "SSR": 3
+    },
+    "bounds": {
+      "N": [
+        54,
+        66
+      ],
+      "SR": [
+        14,
+        18
+      ],
+      "SSR": [
+        2,
+        4
+      ]
+    },
+    "themeScoreSpan": 12
+  },
+  "thresholds": {
+    "R": 57,
+    "SR": 65,
+    "SSR": 78
+  },
+  "modeWeights": {
+    "bo3": 0.5,
+    "kof": 0.5
+  },
   "scoring": {
-    "baseline":50,
-    "hpPoint":6,
-    "hpCap":6,
-    "weights":{"cards":10,"damage":16,"guard":14,"heal":13,"control":12,"quality":5,"cost":-10,"hpLoss":-16,"burst":3,"carry":3}
+    "baseline": 50,
+    "hpPoint": 6,
+    "hpCap": 6,
+    "weights": {
+      "cards": 10,
+      "damage": 16,
+      "guard": 14,
+      "heal": 13,
+      "control": 12,
+      "quality": 5,
+      "cost": -10,
+      "hpLoss": -16,
+      "burst": 3,
+      "carry": 3
+    }
   },
-  "rarityWeights": {"N":1,"R":0.8,"SR":0.5,"SSR":0.25},
-  "referenceValues": {"N":8,"R":48,"SR":160,"SSR":480},
-  "cardsPerPack":5,
-  "packsPerBox":24,
-  "openingReturn":1.05,
-  "retailMargin":0.3,
-  "roundTo":5,
-  "startingCash":1200,
-  "supplierCreditLimit":300,
-  "deliveryMinutes":30,
-  "operatingCost":30,
-  "marketFee":0.05,
-  "tableFee":10,
-  "rake":0.05,
-  "baseStake":20,
-  "maxStake":200,
-  "maxWalletStakeFraction":0.2,
-  "minutesPerSecond":2,
-  "maxArchives":120,
-  "maxDays":30,
-  "npcIntervalMinutes":22,
-  "npcInitialWallet":1500,
-  "npcSinglePriceCeiling":1.4,
-  "npcSealedPriceCeiling":1.4,
-  "npcDailyIncome":300,
+  "rarityWeights": {
+    "N": 1,
+    "R": 0.8,
+    "SR": 0.5,
+    "SSR": 0.25
+  },
+  "referenceValues": {
+    "N": 8,
+    "R": 48,
+    "SR": 160,
+    "SSR": 480
+  },
+  "cardsPerPack": 5,
+  "packsPerBox": 24,
+  "openingReturn": 1.05,
+  "retailMargin": 0.3,
+  "roundTo": 5,
+  "startingCash": 1200,
+  "supplierCreditLimit": 300,
+  "deliveryMinutes": 30,
+  "operatingCost": 30,
+  "marketFee": 0.05,
+  "tableFee": 10,
+  "rake": 0.05,
+  "baseStake": 20,
+  "maxStake": 200,
+  "maxWalletStakeFraction": 0.2,
+  "minutesPerSecond": 2,
+  "maxArchives": 120,
+  "maxDays": 30,
+  "npcIntervalMinutes": 22,
+  "npcInitialWallet": 1500,
+  "npcSinglePriceCeiling": 1.4,
+  "npcSealedPriceCeiling": 1.4,
+  "npcDailyIncome": 300,
   "customerBehavior": {
-    "openingSeconds":3,"sortingSeconds":2,"searchSeconds":2,
-    "keepCopies":1,"minimumKeptCards":3,
-    "discardChance":{"N":0.65,"R":0.25,"SR":0,"SSR":0},
-    "scavengerChance":0.3,"poorWallet":400,"poorInitialWallet":200,
-    "pickupLimit":2,"pickupCooldownMinutes":90,
-    "names":["Maya Chen","Alex Rivera","Yuki Sato","Noah Bennett","Amara Okafor","Luca Rossi","Sofia Silva","Min-jun Park","Leila Haddad","Arjun Mehta","Emma Laurent","Elias Berg","Zoe Williams","Mateo Garcia","Amina Yusuf","Nina Ivanova","Owen Brooks","Rina Tanaka","Camila Costa","Jonas Fischer","Anika Shah","Leo Martin","Ines Duarte","Kai Nguyen","Eva Novak","Samira Nasser","Nico Moretti","Lin Zhou","Ada Mensah","Hana Kim"]
+    "openingSeconds": 3,
+    "sortingSeconds": 2,
+    "searchSeconds": 2,
+    "keepCopies": 1,
+    "minimumKeptCards": 3,
+    "discardChance": {
+      "N": 0.65,
+      "R": 0.25,
+      "SR": 0,
+      "SSR": 0
+    },
+    "scavengerChance": 0.3,
+    "poorWallet": 400,
+    "poorInitialWallet": 200,
+    "pickupLimit": 2,
+    "pickupCooldownMinutes": 90,
+    "names": [
+      "林知夏",
+      "沈梨",
+      "许遥",
+      "江弥",
+      "叶澄",
+      "陈若",
+      "白栀",
+      "杜桥",
+      "唐禾",
+      "宋言",
+      "陆冬",
+      "苏棠",
+      "顾清禾",
+      "周予安",
+      "温以宁",
+      "夏明川",
+      "许星遥",
+      "林见鹿",
+      "程晚晴",
+      "陆景行",
+      "沈南星",
+      "姜听雨",
+      "宋知微",
+      "谢云舟",
+      "叶书宁",
+      "陈望舒",
+      "季星澜",
+      "方亦辰",
+      "苏沐晴",
+      "江时序"
+    ]
   },
-  "maxNpcs":12,
-  "priceDailyLimit":0.15,
-  "wageringEnabled":false,
-  "npcAutoBattles":true,
-  "npcMatchIntervalMinutes":45,
-  "npcMatchCooldownMinutes":90,
-  "npcRoundLimit":60,
-  "compatibilityBlocks":{}
+  "maxNpcs": 12,
+  "priceDailyLimit": 0.15,
+  "wageringEnabled": false,
+  "npcAutoBattles": true,
+  "npcMatchIntervalMinutes": 45,
+  "npcMatchCooldownMinutes": 90,
+  "npcRoundLimit": 60,
+  "compatibilityBlocks": {},
+  "npcSimulation": true,
+  "npcSimulationSeconds": 18,
+  "tasks": {
+    "rewardMultiplier": 1
+  },
+  "strengthPricing": {
+    "version": "strength-tiers-1",
+    "boxDiscount": 0.95,
+    "tiers": [
+      {
+        "id": "entry",
+        "label": "入门档",
+        "maxScore": 51,
+        "packWholesale": 260
+      },
+      {
+        "id": "standard",
+        "label": "标准档",
+        "maxScore": 53,
+        "packWholesale": 280
+      },
+      {
+        "id": "advanced",
+        "label": "进阶档",
+        "maxScore": 55,
+        "packWholesale": 290
+      },
+      {
+        "id": "expert",
+        "label": "精英档",
+        "maxScore": 60,
+        "packWholesale": 330
+      },
+      {
+        "id": "legend",
+        "label": "顶级档",
+        "maxScore": 10000,
+        "packWholesale": 420
+      }
+    ]
+  }
 }

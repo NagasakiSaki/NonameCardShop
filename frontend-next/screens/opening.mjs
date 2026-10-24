@@ -26,12 +26,12 @@ export async function openOpening(app,options={}){
   return app.windows.open({id:'opening',title:'开包柜台',subtitle:'先确认消耗范围，再揭晓卡牌；整盒余包保留',width:'window--trade',refreshOnReuse:true,pauseReason:'开包柜台',render:async ctx=>{
     const surface=await createSurface(ctx);if(!surface.active())return;
     let inventory=[],loading=false,querySerial=0;
-    const active=()=>surface.active(),near=()=>app.isNearInteraction?.('store.counter')!==false;
+    const active=()=>surface.active(),near=()=>app.isNearInteraction?.('store.opening')!==false;
     function message(error){if(active())surface.setMessage(error?.message||String(error),'error');}
     function scope(){return {...(Array.isArray(draft.inventoryRefs)?{inventoryRefs:[...draft.inventoryRefs]}:{}),...(draft.productId?{productId:draft.productId}:{}),includeBoxes:!!draft.includeBoxes};}
     function travel(){
       const preserved={...scope(),quantity:draft.quantity};
-      ctx.handle.close();app.goToInteraction('store.counter','opening',preserved);
+      ctx.handle.close();app.goToInteraction('store.opening','opening',preserved);
     }
     async function loadInventory(){
       const serial=++querySerial,identity=draft.identity;

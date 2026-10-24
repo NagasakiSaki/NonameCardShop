@@ -1,7 +1,7 @@
 {
  "mapId": "store",
  "label": "无名小店 · 卡牌商店",
- "navVersion": "nav-2026-10-23-continuous",
+ "navVersion": "nav-2026-10-24-split-counters",
  "tileSize": 16,
  "width": 30,
  "height": 20,
@@ -1519,8 +1519,8 @@
   {
    "id": "tea.19",
    "prop": "tea",
-   "x": 176,
-   "y": 224,
+   "x": 304,
+   "y": 96,
    "w": 32,
    "h": 32,
    "footY": 32,
@@ -1664,6 +1664,24 @@
      24,
      24,
      16
+    ]
+   ],
+   "occludes": true
+  },
+  {
+   "id": "counter_service.29",
+   "prop": "counter_service",
+   "x": 144,
+   "y": 200,
+   "w": 96,
+   "h": 48,
+   "footY": 48,
+   "blocks": [
+    [
+     0,
+     24,
+     96,
+     24
     ]
    ],
    "occludes": true
@@ -1899,8 +1917,8 @@
   1,
   1,
   1,
-  1,
-  1,
+  0,
+  0,
   1,
   1,
   1,
@@ -2098,13 +2116,13 @@
   0,
   0,
   0,
-  1,
-  1,
   1,
-  1,
-  1,
-  1,
-  1,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
   1,
   0,
   0,
@@ -2128,13 +2146,13 @@
   0,
   0,
   0,
-  1,
-  1,
   1,
   0,
   0,
-  1,
-  1,
+  0,
+  0,
+  0,
+  0,
   1,
   1,
   1,
@@ -2344,13 +2362,12 @@
     "shelf.03",
     "shelf.04",
     "display_packs.05",
-    "display_boxes.06",
-    "counter_retail.07"
+    "display_boxes.06"
    ]
   },
   {
    "id": "store.counter",
-   "label": "进货 / 开包柜台",
+   "label": "进货 / 收货台",
    "kind": "counter",
    "anchor": {
     "x": 296,
@@ -2410,6 +2427,49 @@
    "props": [
     "trash.10"
    ]
+  },
+  {
+   "id": "store.checkout",
+   "label": "顾客收银台",
+   "kind": "retail",
+   "anchor": {
+    "x": 80,
+    "y": 240
+   },
+   "stand": {
+    "x": 88,
+    "y": 264,
+    "tile": {
+     "x": 5,
+     "y": 16
+    }
+   },
+   "radius": 24,
+   "props": [
+    "counter_retail.07"
+   ]
+  },
+  {
+   "id": "store.opening",
+   "label": "独立拆包工作台",
+   "kind": "opening",
+   "panel": "opening",
+   "anchor": {
+    "x": 176,
+    "y": 240
+   },
+   "stand": {
+    "x": 184,
+    "y": 264,
+    "tile": {
+     "x": 11,
+     "y": 16
+    }
+   },
+   "radius": 24,
+   "props": [
+    "counter_service.29"
+   ]
   }
  ],
  "queuePoints": [],
@@ -2450,7 +2510,13 @@
   {
    "x": 304,
    "y": 184,
-   "text": "进货 / 拆包",
+   "text": "进货 / 收货",
+   "color": "#d9efe0"
+  },
+  {
+   "x": 176,
+   "y": 194,
+   "text": "拆包工作台",
    "color": "#d9efe0"
   },
   {
@@ -2468,7 +2534,7 @@
   {
    "x": 80,
    "y": 202,
-   "text": "零售备货台",
+   "text": "顾客收银台",
    "color": "#ffe2a1"
   },
   {

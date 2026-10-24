@@ -7,6 +7,10 @@ export function createHud({ mount, currency, onAction, getSnapshot }) {
   const clockNode = document.getElementById("hud-clock");
   const walletNode = document.getElementById("hud-wallet");
   const actionsNode = document.getElementById("hud-actions");
+  const ledgerNode=el('section',{class:'live-ledger','aria-label':'实时收支流水'});
+  document.getElementById('stage-overlay').append(ledgerNode);
+  const ticker=el('div',{class:'live-ledger-ticker',role:'status',hidden:true});document.getElementById('app').append(ticker);
+  let lastEntryId=null,tickerTimer,ledgerBranch;
 
   const actions = [
     { id: "business", label: "开门营业" },
@@ -15,6 +19,7 @@ export function createHud({ mount, currency, onAction, getSnapshot }) {
     { id: "inventory", label: "背包 B" },
     { id: "tasks", label: "任务" },
     { id: "report", label: "日报" },
+    { id: "finance", label: "收支流水" },
     { id: "saves", label: "存档" },
     { id: "management", label: "经营" },
     { id: "help", label: "手册" },
@@ -54,6 +59,17 @@ export function createHud({ mount, currency, onAction, getSnapshot }) {
     if (snapshot.wallet.debt > 0) walletParts.push(el("span", { class: "wallet__debt", text: "欠款 " + formatShort(snapshot.wallet.debt, currency) }));
     if (snapshot.wallet.escrowLiability > 0) walletParts.push(el("span", { class: "badge", text: "托管 " + formatShort(snapshot.wallet.escrowLiability, currency) }));
     walletNode.append(...walletParts);
+    const entries=snapshot.cashJournal||[];
+    const branch=snapshot.worldId+':'+snapshot.branchId;if(ledgerBranch!==branch){ledgerBranch=branch;lastEntryId=null;ticker.hidden=true;}
+    if(lastEntryId&&entries[0]?.entryId!==lastEntryId){
+      ticker.replaceChildren(...entries.slice(0,Math.max(1,entries.findIndex(e=>e.entryId===lastEntryId))).slice(0,3).map(e=>el('div',{text:e.label+' · 现金 '+(e.amount>=0?'+':'')+e.amount+' 币'+(e.debtDelta?' · 欠款'+(e.debtDelta>0?'+':'')+e.debtDelta:'')})));
+      ticker.hidden=false;clearTimeout(tickerTimer);tickerTimer=setTimeout(()=>{ticker.hidden=true;},7000);
+    }
+    lastEntryId=entries[0]?.entryId||'empty';
+    ledgerNode.replaceChildren(el('strong',{text:'实时收支流水'}),...entries.slice(0,4).map(e=>el('div',{class:'live-ledger__row '+(e.amount<0?'is-expense':'is-income')},[
+      el('span',{text:`第${e.day}天 ${Math.floor(e.minute/60).toString().padStart(2,'0')}:${Math.floor(e.minute%60).toString().padStart(2,'0')} · ${e.label}`}),
+      el('b',{text:(e.amount>0?'+':'')+e.amount.toLocaleString('zh-CN')+' 币'+(e.debtDelta?' · 欠款'+(e.debtDelta>0?'+':'')+e.debtDelta:'')})
+    ])),...(!entries.length?[el('p',{class:'muted',text:'进货、销售、桌费与任务奖励将实时显示。'})]:[]));
 
     const paused = document.getElementById("paused-banner");
     if (paused) {

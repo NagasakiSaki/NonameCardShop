@@ -169,7 +169,11 @@ export function tickEconomy(w,catalog,{map=null,seconds=0}={}){
         if(npc.trip.waitSeconds==null)npc.trip.waitSeconds=managementEffects(w).checkoutSeconds;
         npc.trip.waitSeconds-=seconds*w.clock.speed;if(npc.trip.waitSeconds>0)continue;
         const purchaseRef=customerPurchase(w,catalog,npc,{deferOpening:true});
-        if(purchaseRef){npc.trip={stage:'opening',path:[],purchaseRef,waitSeconds:customerBehavior(w).openingSeconds};npc.activity='opening';npc.label='拆卡包';}
+        if(purchaseRef){
+          const station=map.anchors['store.opening'];let route=null;try{route=station?(customerTarget(w,map,station,npc)||{path:pathfind(map,npc,station)}):{path:[]};}catch{}
+          if(!route){const refs=openCustomerPurchase(w,catalog,npc,purchaseRef);npc.trip={stage:'sorting',path:[],discardRefs:unwantedCards(w,catalog,npc,refs),waitSeconds:behavior.sortingSeconds};npc.activity='sorting';npc.label='挑选卡牌';}
+          else {npc.trip={stage:'opening',...route,purchaseRef,waitSeconds:customerBehavior(w).openingSeconds};npc.activity='opening';npc.label='前往拆包台';}
+        }
         else if(owned(w,npc.actorId).some(i=>i.kind==='card'&&i.location==='collection'&&free(i)&&w.circulation[i.cardKey]))finishShopping(w,map,npc);
         else exitShop(w,map,npc,'no-purchase');
       }else if(npc.trip.stage==='opening'){
@@ -213,7 +217,7 @@ export function tickEconomy(w,catalog,{map=null,seconds=0}={}){
   if(canScavenge(w,npc)&&trashItems(w).length){const anchor=map?.anchors['store.trash'];if(anchor){const route=customerTarget(w,map,anchor,npc);if(route){npc.trip={stage:'scavenge',...route,waitSeconds:customerBehavior(w).searchSeconds};npc.activity='scavenging';npc.label='去翻垃圾桶';return;}}if(!map){scavenge(w,catalog,npc);departCustomer(w,npc);return;}}
   if(map){
     const hasMarket=w.listings.some(l=>acceptableListing(w,catalog,npc,l));
-    const anchor=map.anchors[hasMarket?'store.secondaryMarket':'store.counter'];
+    const anchor=map.anchors[hasMarket?'store.secondaryMarket':map.anchors['store.checkout']?'store.checkout':'store.counter'];
     if(anchor){const route=customerTarget(w,map,anchor,npc);if(route){npc.trip={stage:'checkout',...route};npc.navVersion=map.navVersion;npc.activity='walking';npc.label='选购卡牌';return;}exitShop(w,map,npc,'counter-unreachable');return;}
   }
   customerPurchase(w,catalog,npc);departCustomer(w,npc);

@@ -19,6 +19,7 @@ export function ProductTile(product,{onAdd,onDetail,format=money}={}){
   return el('article',{class:'product-tile','data-product':product.id},[
     el('button',{class:'product-visual','aria-label':product.name+' 商品信息',onclick:()=>onDetail?.(product)},[art(product.artUrl,product.name,'product-art product-art--'+product.kind),el('span',{class:'product-kind',text:product.kind==='box'?'密封卡盒':'独立散包'})]),
     el('strong',{class:'product-name',text:product.name}),
+    product.subtitle?el('p',{class:'muted product-tier',text:product.subtitle}):null,
     el('p',{class:'muted product-spec',text:product.kind==='box'?`每盒 ${product.packsPerBox} 包 · 每包 ${product.cardsPerPack} 张`:`每包 ${product.cardsPerPack} 张`}),
     el('div',{class:'product-price'},[el('strong',{text:format(product.unitPrice)}),el('span',{class:'muted',text:' / '+(product.kind==='box'?'盒':'包')})]),
     el('p',{class:'muted compact',text:'建议售 '+format(product.suggestedRetail)}),

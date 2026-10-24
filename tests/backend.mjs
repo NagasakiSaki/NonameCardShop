@@ -25,7 +25,7 @@ for(const p of products.filter(p=>p.availability==='available')){
 assert.ok(new Set(products.map(p=>JSON.stringify(p.boxCounts))).size>1,'theme composition must change product recipe');
 const expensivePrices=Object.fromEntries(catalog.cards.map(c=>[c.cardKey,c.issuanceValue*100]));
 const repriced=publishProducts(catalog,rules,2,expensivePrices);
-assert.ok(repriced.some((p,i)=>p.prices?.box.wholesale>products[i].prices?.box.wholesale));
+assert.ok(repriced.every((p,i)=>!p.prices||p.prices.box.wholesale===products[i].prices.box.wholesale),'strength price tiers are independent of market speculation');
 assert.ok(repriced.every((p,i)=>!p.prices||p.prices.box.wholesale<=products[i].prices.box.wholesale*1.16+5),'supply price influence is bounded');
 
 const repository=memoryRepository(),host=await createRuntime({source,rules,repository});

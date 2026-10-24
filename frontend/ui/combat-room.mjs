@@ -61,6 +61,7 @@ export async function openCombat(app, options = {}) {
         el("p", { class: "small muted", text: room.note }),
       ]));
       for(const match of (room.matches||[]).filter(m=>m.background&&m.error).slice(-3))body.append(el('p',{class:'note-card',text:'最近 NPC 对局技术中断（不计正常战绩）：'+match.error}));
+      for(const match of (room.matches||[]).filter(m=>m.simulated&&m.status==='finished'&&m.result!=='cancelled').slice(-3).reverse())body.append(el('p',{class:'note-card',text:`NPC 模拟比赛已结束 · ${match.mode.toUpperCase()} · ${match.mode==='bo3'?match.wins+':'+match.losses:'三将接力'} · 已离桌，桌费 ${app.formatMoney(match.simulation.feePaid)} 已结算`}));
       if(active){renderBattle(active);return;}
       if(state.matchId){const finished=(room.matches||[]).find(m=>m.matchId===state.matchId);if(finished?.status==='finished')body.append(el('p',{class:'note-card',text:`比赛已结束：${finished.result}，小局 ${finished.wins}:${finished.losses}`}));state.matchId=null;}
 

@@ -1,4 +1,4 @@
-import {clone,need,integer,serial,sum,debit,credit,id} from './common.mjs';
+import {clone,need,integer,serial,sum,debit,credit,id,random,clamp} from './common.mjs';
 import {owned,free,wallet,income} from './trading.mjs';
 import {note} from './world.mjs';
 import {managementEffects} from './management.mjs';
@@ -7,7 +7,7 @@ import {onSite} from './visits.mjs';
 export function eligible(w,catalog,ownerId='player'){
   return owned(w,ownerId).filter(i=>i.kind==='card').map(i=>{
     const c=catalog.byKey.get(i.cardKey),reasons=[];
-    if(!w.circulation[i.cardKey])reasons.push({code:'NOT_IN_CIRCULATION',message:'该卡种尚未被售出开包或有效进入市场。'});
+    if(ownerId!=='player'&&!w.circulation[i.cardKey])reasons.push({code:'NOT_IN_CIRCULATION',message:'NPC 只能使用已流入市场的卡种。'});
     if(!free(i))reasons.push({code:'ITEM_LOCKED',message:'副本受保护或被交易/其他比赛占用。'});
     if(i.location!=='collection')reasons.push({code:'NOT_IN_COLLECTION',message:'参赛副本必须在收藏中；请先捡回垃圾桶里的卡。'});
     const blocked=w.rules.compatibilityBlocks[c?.generalId];if(blocked)reasons.push({code:'SKILL_INCOMPATIBLE',message:blocked});
@@ -64,6 +64,7 @@ function pay(w,owner,amount){if(owner==='player')income(w,amount);else credit(wa
 function releaseMatch(w,m){
   for(const i of [...m.mine,...m.enemy])if(w.items[i.inventoryRef]?.lock===m.matchId)w.items[i.inventoryRef].lock=null;
   for(const side of ['mine','enemy']){const npc=w.npcs.find(n=>n.actorId===ownerId(m,side));if(npc?.currentMatchId===m.matchId){npc.currentMatchId=null;npc.trip=null;npc.moving=false;npc.activity=m.background?'leaving-table':'idle';if(m.background)npc.returnAfterMatch=true;}}
+  if(m.simulated&&m.serviceDue){for(const owner of [m.mineOwnerId,m.enemyOwnerId]){const purse=wallet(w,owner);purse.reserved=Math.max(0,(purse.reserved||0)-m.serviceDue/2);}m.serviceDue=0;}
   const table=w.tables.find(t=>t.tableId===m.tableId);if(table?.matchId===m.matchId)table.matchId=null;
 }
 function refundService(w,m){if(!m.serviceRecognized){for(const c of m.serviceContributions||[{ownerId:m.opponentId,amount:m.serviceHeld}])credit(wallet(w,c.ownerId),c.amount);w.wallet.escrowLiability-=m.serviceHeld;m.serviceHeld=0;}}
@@ -82,6 +83,7 @@ function finish(w,m,result){
     for(const c of deployed){const key=`${c.cardKey}|${m.mode}`,s=w.stats[key]||={wins:0,losses:0,draws:0,rulesVersion:1};const sideResult=side==='mine'?result:result==='win'?'loss':result==='loss'?'win':'draw';s[sideResult==='win'?'wins':sideResult==='loss'?'losses':'draws']++;}
   }
   note(w,'officialMatchSettled',{matchId:m.matchId,result,mode:m.mode});
+  if(m.simulated)for(const [side,team]of [['mine',m.mine],['enemy',m.enemy]])for(const c of m.mode==='kof'?team.slice(0,m.progress[side]+1):team){const s=w.stats[`${c.cardKey}|${m.mode}`];s.simulatedGames=(s.simulatedGames||0)+1;}
 }
 // Only the origin/source-checked engine adapter may call this method, never a UI command.
 export function engineMessage(w,matchId,message){
@@ -119,12 +121,33 @@ export function registerNpcMatch(w,catalog,table,npcs,{mode='bo3'}={}){
   need(w.clock.phase==='open'&&npcs.length===2&&!table.matchId&&!table.reservation,'NOT_READY','当前不能开 NPC 桌。');
   need(['bo3','kof'].includes(mode),'INVALID_INPUT','NPC 赛制不正确。');
   const teams=npcs.map(n=>{need(onSite(n)&&!n.currentMatchId,'ITEM_LOCKED','顾客未在店或已在其他牌局。');const cards=eligible(w,catalog,n.actorId).filter(i=>i.eligible).sort((a,b)=>catalog.byKey.get(b.cardKey).globalScore-catalog.byKey.get(a.cardKey).globalScore),team=[];for(const card of cards)if(!team.some(c=>c.generalId===card.generalId)&&team.length<(mode==='kof'?3:1))team.push(card);need(team.length===(mode==='kof'?3:1),'NOT_ELIGIBLE','顾客没有足够的不同流通武将。');return team;});
-  const fee=managementEffects(w).tableFee;for(const npc of npcs)need(npc.wallet.available>=fee,'INSUFFICIENT_FUNDS','顾客支付不起开桌费。');
-  for(const npc of npcs)debit(npc.wallet,fee);
+  const fee=managementEffects(w).tableFee;for(const npc of npcs)need(npc.wallet.available-(npc.wallet.reserved||0)>=fee,'INSUFFICIENT_FUNDS','顾客支付不起开桌费。');
+  const simulated=w.rules.npcSimulation!==false;
+  if(!simulated)for(const npc of npcs)debit(npc.wallet,fee);
   const m={matchId:serial(w,'npc-match'),mode,mine:clone(teams[0]),enemy:clone(teams[1]),mineOwnerId:npcs[0].actorId,enemyOwnerId:npcs[1].actorId,opponentId:npcs[1].actorId,background:true,tableId:table.tableId,
     status:'prepared',wins:0,losses:0,bout:1,results:[],gameId:null,first:0,stake:0,serviceHeld:fee*2,serviceContributions:npcs.map(n=>({ownerId:n.actorId,amount:fee})),serviceRecognized:false,progress:{mine:0,enemy:0},rules:{initialHand:4,firstDrawPenalty:1,winsRequired:2,ratingVersion:w.rules.ratingVersion,aiRoundLimit:w.rules.npcRoundLimit||60},createdDay:w.clock.day};
-  w.wallet.escrowLiability+=fee*2;table.matchId=m.matchId;w.matches.push(m);for(const team of teams)for(const c of team)w.items[c.inventoryRef].lock=m.matchId;for(const npc of npcs)npc.currentMatchId=m.matchId;
+  if(simulated){m.simulated=true;m.serviceDue=fee*2;m.serviceHeld=0;m.serviceContributions=[];m.simulation={elapsedSeconds:0,durationSeconds:w.rules.npcSimulationSeconds||18};for(const npc of npcs)npc.wallet.reserved=(npc.wallet.reserved||0)+fee;}
+  w.wallet.escrowLiability+=m.serviceHeld;table.matchId=m.matchId;w.matches.push(m);for(const team of teams)for(const c of team)w.items[c.inventoryRef].lock=m.matchId;for(const npc of npcs)npc.currentMatchId=m.matchId;
   note(w,'npcMatchRegistered',{matchId:m.matchId,owners:npcs.map(n=>n.actorId),serviceHeld:fee*2});return m;
+}
+// NPC simulations are authoritative, seeded and saved. They never enter the real engine bridge.
+export function advanceNpcSimulation(w,catalog,m,seconds){
+  if(!m.simulated||m.status==='finished')return;
+  const seated=[m.mineOwnerId,m.enemyOwnerId].every(id=>w.npcs.find(n=>n.actorId===id)?.activity==='seated');
+  if(!seated)return;
+  if(m.status!=='running'){m.status='running';m.gameId=serial(w,'simulation');note(w,'npcSimulationStarted',{matchId:m.matchId});}
+  m.simulation.elapsedSeconds+=Math.max(0,seconds)*w.clock.speed;
+  if(m.simulation.elapsedSeconds<m.simulation.durationSeconds)return;
+  const strength=team=>sum(team.map(c=>catalog.byKey.get(c.cardKey)?.globalScore||0))/team.length;
+  const chance=clamp(1/(1+Math.exp((strength(m.enemy)-strength(m.mine))/15)),.15,.85);
+  if(m.mode==='bo3')while(m.wins<2&&m.losses<2){const win=random(w)<chance;win?m.wins++:m.losses++;m.results.push({gameId:m.gameId,result:win?'win':'loss',simulated:true});}
+  const result=m.mode==='bo3'?(m.wins===2?'win':'loss'):(random(w)<chance?'win':'loss');
+  if(m.mode==='kof'){m.progress={mine:result==='win'?Math.floor(random(w)*3):2,enemy:result==='loss'?Math.floor(random(w)*3):2};m.results.push({gameId:m.gameId,result,simulated:true});}
+  const due=m.serviceDue||0,fee=due/2;
+  for(const owner of [m.mineOwnerId,m.enemyOwnerId]){const purse=wallet(w,owner);purse.reserved=Math.max(0,(purse.reserved||0)-fee);debit(purse,fee);}
+  income(w,due);w.daily.service+=due;m.serviceRecognized=true;m.serviceDue=0;m.simulation.feePaid=due;m.winChance=chance;
+  finish(w,m,result);
+  note(w,'npcSimulationSettled',{matchId:m.matchId,amount:due,owners:[m.mineOwnerId,m.enemyOwnerId],names:[m.mineOwnerId,m.enemyOwnerId].map(id=>w.npcs.find(n=>n.actorId===id)?.name),result,simulated:true});
 }
 export function voidNpcMatch(w,matchId,reason){
   const m=matchById(w,matchId);need(m.background,'INVALID_STATE','该操作仅用于 NPC 后台牌局。');if(m.status==='finished')return clone(m);

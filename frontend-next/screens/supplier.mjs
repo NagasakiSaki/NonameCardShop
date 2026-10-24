@@ -136,14 +136,14 @@ export async function openSupply(app,options={}){
     }
     function renderStock(){
       const content=el('section',{class:'surface-list','aria-label':'真实密封仓库'});
-      content.append(el('div',{class:'toolbar'},[el('p',{class:'muted',text:'包、整盒及历史版本分开保存；不重抽已制造内容。'}),button('一键开所有可用包',()=>app.goToInteraction('store.counter','opening',{all:true}),true)]));
+      content.append(el('div',{class:'toolbar'},[el('p',{class:'muted',text:'包、整盒及历史版本分开保存；不重抽已制造内容。'}),button('一键开所有可用包',()=>app.goToInteraction('store.opening','opening',{all:true}),true)]));
       const grid=el('div',{class:'product-grid'});content.append(grid);
       for(const group of data.sealed){const image=artManifest.products[group.productId]||artManifest.products.standard;grid.append(el('article',{class:'product-tile'},[
         art(image?.[group.kind],group.name,'product-art product-art--'+group.kind),el('h3',{text:group.name+' · '+(group.kind==='box'?'整盒':'散包')}),
         el('p',{text:'仓库 ×'+group.warehouse+' · 可用 '+group.available+' · 在架 '+group.onShelf}),el('p',{class:'surface-meta',text:'保护 '+group.protected+' / 占用 '+group.locked+(group.retired?' · 停产旧库存':'')}),
         el('details',{},[el('summary',{text:'查看印刷版本'}),el('p',{class:'surface-meta',text:group.productVersion})]),
         el('div',{class:'surface-actions'},[
-          button('前往柜台开本组',()=>app.goToInteraction('store.counter','opening',{inventoryRefs:group.inventoryRefs,productId:group.productId,includeBoxes:group.kind==='box'}),false,!group.available),
+          button('前往柜台开本组',()=>app.goToInteraction('store.opening','opening',{inventoryRefs:group.inventoryRefs,productId:group.productId,includeBoxes:group.kind==='box'}),false,!group.available),
           group.kind==='box'?button('拆 1 盒取出密封包',()=>run({type:'boxes.unseal',payload:{inventoryRef:group.inventoryRefs[0]}}),false,!group.available||working||waiting(draft)||!near('store.counter')):null
         ])
       ]));}

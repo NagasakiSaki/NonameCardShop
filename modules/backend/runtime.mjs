@@ -15,16 +15,10 @@ import {PLAYER_SKINS} from './appearances.mjs';
 import {migrateCustomerIdentity} from './customer-identity.mjs';
 import {basketQuote,placeBasketOrder} from './basket.mjs';
 import {migrateVisits,onSite} from './visits.mjs';
+import {taskViews,initialiseDailyTasks,grantTaskRewards} from './tasks.mjs';
+import {recordWalletChange,financeView} from './finance.mjs';
+import {DEFAULT_STRENGTH_PRICING} from './supply-pricing.mjs';
 
-const tasks=[
-  {taskId:'first-order',title:'第一次进货',metric:'ordered',target:3,reward:40,guide:'store.counter'},
-  {taskId:'first-receipt',title:'签收三包卡',metric:'received',target:3,reward:40,guide:'store.counter'},
-  {taskId:'first-opening',title:'自己开一包',metric:'opened',target:1,reward:40,guide:'store.counter'},
-  {taskId:'first-sale',title:'迎来首位买包顾客',metric:'sales',target:1,reward:50,guide:'store.retail'},
-  {taskId:'first-market',title:'完成首笔单卡出售',metric:'marketSales',target:1,reward:50,guide:'store.secondaryMarket'},
-  {taskId:'first-match',title:'亲自完成一场正式比赛',metric:'playerMatches',target:1,reward:50,guide:'battleRoom.service'},
-  {taskId:'first-npc-match',title:'接待一场 NPC 比赛',metric:'npcMatches',target:1,reward:20,guide:'battleRoom.service'}
-];
 
 export async function createRuntime({source,rules,repository,maps=[],managementConfig=null,backgroundAvailable=false,now=()=>Date.now()}){
   validateRules(rules);
@@ -40,13 +34,20 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
   if(!record){const world=createWorld(rules);initialiseManagement(world,managementConfig);ensureRegulars(world);world.products=publishProducts(catalog,rules,1);record={schemaVersion:2,revision:0,world,archives:[],requests:{},legacyResetDone:false};record.archives.push(archive(world,'start'));await repository.commit(record,null);}
   upgradeDistribution(record.world);initialiseManagement(record.world,managementConfig);ensureRegulars(record.world);record.world.player.actorId='actor:owner';
   validateWorld(record.world);validateRules(record.world.rules);catalog=buildCatalog(source,record.world.rules);
-  for(const m of record.world.matches)if(m.status==='running'){
+  for(const m of record.world.matches)if(m.status==='running'&&!m.simulated){
     if(m.background&&(record.world.pendingEngineEvents||[]).some(e=>e.matchId===m.matchId&&e.message.matchId===m.gameId))m.needsRestartAfterEvents=true;
     else m.status='interrupted';
   }
   const listeners=new Set(),pauses=new Map(),quotes=new Map(),previews=new Map(),engineProgress=new Map(),navigation=new Map(maps.map(m=>[m.mapId,validateMap(m)]));
   let connected=false,clientId,sessionId,seq=0,queue=Promise.resolve(),disconnected=false,lastInputSeq=-1,movement=null;
   function normaliseActors(world){
+    if(world.gameplayRevision!==2){
+      world.rules.npcSimulation=rules.npcSimulation!==false;world.rules.npcSimulationSeconds=rules.npcSimulationSeconds||18;
+      world.rules.strengthPricing=clone(rules.strengthPricing||DEFAULT_STRENGTH_PRICING);
+      for(const m of world.matches)if(world.rules.npcSimulation!==false&&m.background&&!m.simulated&&m.status!=='finished')voidNpcMatch(world,m.matchId,'切换到 NPC 模拟对局，旧后台桌已取消并释放。');
+      world.products=publishProducts(buildCatalog(source,world.rules),world.rules,world.clock.day,world.prices);world.gameplayRevision=2;
+    }
+    initialiseDailyTasks(world);
     migrateVisits(world);
     migrateCustomerIdentity(world);
     const aliases={novice:'rookie',competitive:'competitor',casual:'passerby',premium:'bigspender'},occupied=new Set();
@@ -79,7 +80,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
     const saved=clone(world);
     for(const event of saved.pendingEngineEvents||[]){const m=saved.matches.find(m=>m.matchId===event.matchId);if(m?.status==='running'&&m.gameId===event.message.matchId)engineMessage(saved,event.matchId,event.message);}
     saved.pendingEngineEvents=[];let restarted=false;
-    for(const m of saved.matches){delete m.needsRestartAfterEvents;if(m.background&&m.status==='running'){m.status='interrupted';restarted=true;}}
+    for(const m of saved.matches){delete m.needsRestartAfterEvents;if(m.background&&!m.simulated&&m.status==='running'){m.status='interrupted';restarted=true;}}
     return {id:id('archive'),format:'noname-shop-world-save',version:2,worldId:world.worldId,branchId:world.branchId,day:world.clock.day,minute:world.clock.minute,slot,createdAt:now(),...(restarted?{recoveryNote:'读取后 NPC 当前小局重开，已完成小局、费用和比分保留。'}:{}),world:saved};
   }
   function saveArchive(next,slot){
@@ -91,7 +92,17 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
     const recent=eligible.filter(a=>!daily.has(a.id)).slice(-Math.max(0,capacity-daily.size));
     const kept=new Set([...daily,...recent.map(a=>a.id)]);next.archives=eligible.filter(a=>kept.has(a.id));
   }
-  async function persist(next){next.revision=record.revision+1;next.world.revision=next.revision;validateWorld(next.world);const rulesChanged=JSON.stringify(next.world.rules)!==JSON.stringify(w().rules);await repository.commit(next,record.revision);record=next;if(rulesChanged)catalog=buildCatalog(source,w().rules);publish();}
+  async function persist(next,operation='tick'){
+    next.revision=record.revision+1;next.world.revision=next.revision;
+    if(!['saves.load','saves.loadDay','saves.import'].includes(operation)){
+      const oldIds=new Set(w().log.map(e=>e.eventId)),events=next.world.log.filter(e=>!oldIds.has(e.eventId));
+      const names={packSaleCompleted:'顾客购买卡包/盒',secondaryTradeCompleted:'二级市场成交',npcSimulationSettled:'NPC 离桌付费',officialMatchSettled:'比赛结算'};
+      const lines=events.filter(e=>names[e.type]).map(e=>`${names[e.type]}${e.names?' · '+e.names.join(' / '):''}${e.amount?' '+e.amount+' 币':''}`);
+      recordWalletChange(next.world,w().wallet,{operation,...(lines.length?{label:lines.join('；')}:{})});
+    }
+    grantTaskRewards(next.world,(before,detail)=>recordWalletChange(next.world,before,detail));
+    validateWorld(next.world);const rulesChanged=JSON.stringify(next.world.rules)!==JSON.stringify(w().rules);await repository.commit(next,record.revision);record=next;if(rulesChanged)catalog=buildCatalog(source,w().rules);publish();
+  }
   function token(map,value){const tokenId=id('token');map.set(tokenId,{...clone(value),worldId:w().worldId,branchId:w().branchId,day:w().clock.day});return tokenId;}
   function lookup(map,tokenId,kind){const value=map.get(tokenId);need(value&&value.worldId===w().worldId&&value.branchId===w().branchId&&value.day===w().clock.day&&(!kind||value.kind===kind),'PREVIEW_EXPIRED','预览或报价已过期，请重新确认。');return value;}
   function quote(input){
@@ -104,7 +115,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
   }
   function stats(cardKey,mode='bo3'){const s=w().stats[`${cardKey}|${mode}`]||{wins:0,losses:0,draws:0};const games=s.wins+s.losses+s.draws;return {...s,cardKey,mode,games,winRate:games?(s.wins+.5*s.draws)/games:null,insufficientSamples:games<20,label:mode==='kof'?'KOF 出场队伍胜率':'BO3 整场胜率'};}
   function currentProgress(m){const value=engineProgress.get(m.matchId);return value?.gameId===m.gameId?value:null;}
-  function npcTableNote(m){if(!m?.background)return null;const progress=currentProgress(m);const labels={loading:'准备牌局',phase:'回合进行中',phaseBefore:'回合开始',phaseUse:'出牌阶段',useCard:'出牌结算',useCardAfter:'出牌完成',phaseDraw:'摸牌',phaseDiscard:'弃牌',phaseJudge:'判定',damage:'伤害结算',damageEnd:'伤害结算完成',dying:'濒死结算',die:'阵亡结算',shopRelayBoundary:'接力换将',gain:'手牌结算',lose:'手牌结算'};return !backgroundRunning()?'NPC 对局因交互或暂停而暂停，关闭窗口后继续。':progress?`${m.mode.toUpperCase()} ${m.wins}:${m.losses}，第 ${progress.round} 轮 · ${progress.choosing?'思考应对':labels[progress.phase]||'技能与牌面结算'}，已运行 ${progress.activeSeconds} 秒`:'NPC 正在入座或载入原版引擎。';}
+  function npcTableNote(m){if(!m?.background)return null;if(m.simulated)return !backgroundRunning()?'NPC 模拟对局已暂停；关闭交互窗口并解除其他暂停后继续。':m.status==='running'?`NPC 模拟对局 · ${Math.max(0,Math.ceil(m.simulation.durationSeconds-m.simulation.elapsedSeconds))} 秒后结算，结束后自动离桌付费。`:'NPC 正在自动入座；使用实际流通卡阵容进行模拟。';const progress=currentProgress(m);const labels={loading:'准备牌局',phase:'回合进行中',phaseBefore:'回合开始',phaseUse:'出牌阶段',useCard:'出牌结算',useCardAfter:'出牌完成',phaseDraw:'摸牌',phaseDiscard:'弃牌',phaseJudge:'判定',damage:'伤害结算',damageEnd:'伤害结算完成',dying:'濒死结算',die:'阵亡结算',shopRelayBoundary:'接力换将',gain:'手牌结算',lose:'手牌结算'};return !backgroundRunning()?'NPC 对局因交互或暂停而暂停，关闭窗口后继续。':progress?`${m.mode.toUpperCase()} ${m.wins}:${m.losses}，第 ${progress.round} 轮 · ${progress.choosing?'思考应对':labels[progress.phase]||'技能与牌面结算'}，已运行 ${progress.activeSeconds} 秒`:'NPC 正在入座或载入原版引擎。';}
   async function query(name,p={}){
     try{live();await queue;
       let data;
@@ -128,7 +139,8 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
         case 'room.diagnostics':data={paused:!backgroundRunning(),pauseReasons:reasons(),items:w().matches.filter(m=>m.background).slice(-20).map(m=>({matchId:m.matchId,gameId:m.gameId,status:m.status,mode:m.mode,bout:m.bout,wins:m.wins,losses:m.losses,result:m.result||null,error:m.error||null,progress:clone(currentProgress(m))}))};break;
         case 'combat.eligible':data={mode:p.mode||'bo3',slots:p.mode==='kof'?3:1,items:eligible(w(),catalog,p.ownerId||'player').map(i=>({...i,reasons:i.disabledReasons}))};break;
         case 'combat.preview':{const value=combatPreview(w(),catalog,p);data={...value,previewId:token(previews,value),lineup:value.mine,fee:0,opponentFee:value.tableFee,noStake:value.stakeAmount===0,balance:w().wallet.available,rules:['实体副本锁定至整场结束','店主免自身开桌费；对手支付桌费','玩家参赛免该桌抽水','当前只开放无赌注比赛'],stakeProposal:{proposalId:value.stakeProposalId,multiplier:value.multiplier,base:w().rules.baseStake,final:value.stakeAmount,reason:value.explanation}};break;}
-        case 'tasks.list':data=tasks.map(t=>({...t,progress:w().lifetime[t.metric]||0,completed:(w().lifetime[t.metric]||0)>=t.target,claimed:!!w().tasks[t.taskId]}));break;
+        case 'tasks.list':data=taskViews(w());break;
+        case 'ledger.live':data=financeView(w());break;
         case 'ledger.daily':{const report=p.day&&p.day!==w().clock.day?w().reports.find(r=>r.day===p.day):null;need(!p.day||p.day===w().clock.day||report,'NOT_FOUND','该日没有已结日报。');data=ledgerView(w(),catalog,report);break;}
         case 'management.people':data=peopleView(w(),catalog);break;
         case 'management.upgrades':data=upgradesView(w());break;
@@ -156,7 +168,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
       const data=handleCommand(next,input,p);
       const result={ok:true,requestId,revision:record.revision+1,data:clone(data)};
       next.requests[requestId]={signature,result,worldId:next.world.worldId,branchId:next.world.branchId};
-      await persist(next);
+      await persist(next,input.type);
       if(input.previewId)previews.delete(input.previewId);
       if(['saves.load','saves.loadDay','saves.import'].includes(input.type)){quotes.clear();previews.clear();engineProgress.clear();movement=null;emit('worldReset',snapshot(w(),reasons()));}
       return result;
@@ -167,7 +179,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
     const world=next.world;
     if(world.clock.phase==='closed'&&(input.type==='market.acceptTrade'||input.type==='neighbors.act'&&['accept','deliver','buy'].includes(p.action)))fail('SHOP_CLOSED','今天已结算，请开始下一天后交易。');
     const item=()=>playerItem(world,p.inventoryRef);
-    const station=input.type.startsWith('supplier.')||input.type==='boxes.unseal'||input.type==='opening.execute'?'store.counter':input.type.startsWith('market.')?'store.secondaryMarket':input.type.startsWith('retail.')?'store.retail':input.type==='inventory.discard'||input.type==='inventory.recover'?'store.trash':null;
+    const station=input.type==='opening.execute'?'store.opening':input.type.startsWith('supplier.')||input.type==='boxes.unseal'?'store.counter':input.type.startsWith('market.')?'store.secondaryMarket':input.type.startsWith('retail.')?'store.retail':input.type==='inventory.discard'||input.type==='inventory.recover'?'store.trash':null;
     if(station&&navigation.size){const map=navigation.get(world.player.roomId),anchor=map?.anchors[station];need(anchor&&Math.hypot(world.player.x-anchor.x,world.player.y-anchor.y)<=(anchor.radius||24),'NOT_IN_RANGE','请先走到对应柜台或家具旁边。');}
     switch(input.type){
       case 'clock.setManualPause':need(typeof p.paused==='boolean','INVALID_INPUT','暂停开关不正确。');world.clock.manualPaused=p.paused;return {};
@@ -183,6 +195,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
         need(world.clock.phase==='closed','INVALID_STATE','请先结算打烊。');
         const cleared=Object.values(world.items).filter(i=>i.location==='trash');for(const i of cleared)delete world.items[i.inventoryRef];note(world,'trashCleared',{quantity:cleared.length});
         world.clock.day++;world.clock.minute=480;world.clock.phase='preparing';world.daily={goods:0,cogs:0,service:0,fees:0,matchNet:0,operating:0,purchases:0};
+        initialiseDailyTasks(world);
         for(const n of world.npcs){credit(n.wallet,world.rules.npcDailyIncome);note(world,'npcDailyIncome',{actorId:n.actorId,externalFunds:world.rules.npcDailyIncome});}
         updatePrices(world,buildCatalog(source,world.rules));world.products=publishProducts(buildCatalog(source,world.rules),world.rules,world.clock.day,world.prices);world.nextNpcMinute=540;
         for(const o of world.orders)if(o.status==='pending'&&o.dueAt<=world.clock.day*1440+480)o.status='arrived';
@@ -230,7 +243,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
       case 'room.cancelNpcMatch':return voidNpcMatch(world,p.matchId,'店主取消后台对局；不计战绩。');
       case 'upgrades.purchase':return purchaseUpgrade(world,p.upgradeId);
       case 'neighbors.act':return neighborAct(world,catalog,p);
-      case 'tasks.claim':{const t=tasks.find(t=>t.taskId===p.taskId);need(t&&!world.tasks[t.taskId]&&world.lifetime[t.metric]>=t.target,'NOT_READY','任务尚未完成或已领取。');world.tasks[t.taskId]=true;income(world,t.reward);return {reward:t.reward};}
+      case 'tasks.claim':{const t=taskViews(world).find(t=>t.taskId===p.taskId);need(t?.completed,'NOT_READY','任务尚未完成。');return {reward:0,autoClaim:true,note:'完成任务会自动入账，无需再次领取。'};}
       case 'config.apply':{const value=p.value??JSON.parse(p.draft||'null');if(p.configId==='backend-management')return configureManagement(world,value);need(p.configId==='backend-rules','INVALID_INPUT','配置 ID 不正确。');validateRules(value);world.rules=clone(value);upgradeDistribution(world);note(world,'configChanged',{ratingVersion:value.ratingVersion});return {productsEffective:'nextDay'};}
       case 'config.restoreDefault':if(p.configId==='backend-management'){need(managementConfig,'FEATURE_UNAVAILABLE','经营默认参数尚未加载。');return configureManagement(world,managementConfig);}need(!p.configId||p.configId==='backend-rules','INVALID_INPUT','配置 ID 不正确。');world.rules=clone(rules);upgradeDistribution(world);return {};
       case 'saves.create':need(!world.matches.some(m=>!m.background&&m.status==='running'),'MATCH_ACTIVE','请先关闭玩家牌局视图或完成当前小局后存档。');saveArchive(next,'manual');return {archiveId:next.archives.at(-1).id};
@@ -241,7 +254,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
         if(input.type==='saves.loadDay')need(a?.slot==='start'&&a.minute===480&&a.world?.clock.minute===480&&a.world?.clock.phase==='preparing','NOT_DAY_START','请选择对应日期的日初档；即时备份不能冒充当天开始。');
         need(a?.format==='noname-shop-world-save'&&a.version===2,'INVALID_SAVE','档案格式不支持。');validateWorld(a.world);validateRules(a.world.rules);
         for(const i of Object.values(a.world.items))need(['pack','box','card'].includes(i.kind)&&Number.isSafeInteger(i.cost)&&i.cost>=0&&(!i.cardKey||catalog.byKey.has(i.cardKey)),'INVALID_SAVE','库存数据不完整。');
-        saveArchive(next,'before-load');next.world=clone(a.world);upgradeDistribution(next.world);initialiseManagement(next.world,managementConfig);ensureRegulars(next.world);next.world.player.actorId='actor:owner';normaliseActors(next.world);next.world.branchLineage=[next.world.branchId,...(next.world.branchLineage||[])].slice(0,120);next.world.branchId=id('branch');next.world.pendingEngineEvents=[];for(const m of next.world.matches)if(m.status==='running')m.status='interrupted';if(input.type==='saves.loadDay')saveArchive(next,'start');return {worldId:next.world.worldId,branchId:next.world.branchId};
+        saveArchive(next,'before-load');next.world=clone(a.world);upgradeDistribution(next.world);initialiseManagement(next.world,managementConfig);ensureRegulars(next.world);next.world.player.actorId='actor:owner';normaliseActors(next.world);next.world.branchLineage=[next.world.branchId,...(next.world.branchLineage||[])].slice(0,120);next.world.branchId=id('branch');next.world.pendingEngineEvents=[];for(const m of next.world.matches)if(m.status==='running'&&!m.simulated)m.status='interrupted';if(input.type==='saves.loadDay')saveArchive(next,'start');return {worldId:next.world.worldId,branchId:next.world.branchId};
       }
       case 'world.changeRoom':{
         const map=navigation.get(world.player.roomId),door=map?.anchors[p.anchorId];need(door?.targetRoom&&door?.targetAnchor,'NOT_FOUND','房间出口不存在。');need(Math.hypot(world.player.x-door.x,world.player.y-door.y)<=(door.radius||24),'NOT_IN_RANGE','请先走到门口。');const nextMap=navigation.get(door.targetRoom);let anchor=door.targetSpawn||nextMap?.anchors[door.targetAnchor];
@@ -264,12 +277,12 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
     tickManagement(world,catalog);
     if(world.clock.phase==='open'&&world.clock.minute>=1200){world.clock.phase='closing';note(world,'shopClosing');}
     if(clockRunning||world.clock.phase==='closing')tickEconomy(world,catalog,{map:navigation.get('store'),seconds});
-    tickNpcTables(world,catalog,navigation,seconds,{schedule:backgroundAvailable});
+    tickNpcTables(world,catalog,navigation,seconds,{schedule:world.rules.npcSimulation!==false||backgroundAvailable});
     const map=navigation.get(world.player.roomId);if(map){world.player.navVersion=map.navVersion;moveActor(map,world.player,movement,seconds);}
     await persist(next);
   });}
   return {
-    async connect(p){need(p?.contractVersion===CONTRACT,'CONTRACT_MISMATCH','前后端契约版本不一致。');need(typeof p.clientId==='string','INVALID_INPUT','缺少会话 ID。');clientId=p.clientId;sessionId=id('session');connected=true;disconnected=false;return {contractVersion:CONTRACT,worldId:w().worldId,branchId:w().branchId,sessionId,revision:record.revision,currency:{code:'SHOP',label:'游戏币',minorUnit:1},capabilities:{clock:true,inventory:true,products:true,market:true,combat:true,wagering:false,saves:true,navigation:navigation.size>0,upgrades:!!w().management,neighbors:!!w().management,npcAutoBattles:backgroundAvailable},initialSnapshot:snapshot(w(),reasons())};},
+    async connect(p){need(p?.contractVersion===CONTRACT,'CONTRACT_MISMATCH','前后端契约版本不一致。');need(typeof p.clientId==='string','INVALID_INPUT','缺少会话 ID。');clientId=p.clientId;sessionId=id('session');connected=true;disconnected=false;return {contractVersion:CONTRACT,worldId:w().worldId,branchId:w().branchId,sessionId,revision:record.revision,currency:{code:'SHOP',label:'游戏币',minorUnit:1},capabilities:{clock:true,inventory:true,products:true,market:true,combat:true,wagering:false,saves:true,navigation:navigation.size>0,upgrades:!!w().management,neighbors:!!w().management,npcAutoBattles:w().rules.npcSimulation!==false||backgroundAvailable},initialSnapshot:snapshot(w(),reasons())};},
     query,command,subscribe(listener){listeners.add(listener);publish();return()=>listeners.delete(listener);},
     pause:{async acquire(p){live();need(p?.ownerId&&p?.reason,'INVALID_INPUT','缺少暂停原因。');const lease={leaseId:id('pause'),ownerId:p.ownerId,reason:p.reason};pauses.set(lease.leaseId,lease);movement=null;publish();return clone(lease);},async release(leaseId){pauses.delete(leaseId);publish();}},
     world:{input(p){
@@ -288,7 +301,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
     reportBackgroundProgress(matchId,progress){const m=w().matches.find(m=>m.matchId===matchId);if(!m||m.status!=='running'||m.gameId!==progress.gameId)return;for(const key of engineProgress.keys())if(key!==matchId)engineProgress.delete(key);engineProgress.set(matchId,clone(progress));},
     async startBackgroundMatch(matchId){return serially(async()=>{need(backgroundRunning(),'WORLD_PAUSED','经营世界已暂停。');const next=fork(),m=matchById(next.world,matchId);need(m.background&&backgroundState(next.world,false).matches.find(x=>x.matchId===matchId)?.seated,'NOT_READY','NPC 还未入座。');const data=beginMatch(next.world,matchId);await persist(next);return data;});},
     async failBackgroundMatch(matchId,reason){return serially(async()=>{const next=fork();if(matchById(next.world,matchId).status==='finished')return clone(matchById(next.world,matchId));const data=voidNpcMatch(next.world,matchId,reason);await persist(next);emit('battleStatusChanged',data);emit('notification',{level:'error',message:'NPC 牌局技术中断，不计正常战绩：'+data.error});return data;});},
-    async interrupt(matchId,reason){return serially(async()=>{const next=fork(),m=matchById(next.world,matchId);if(m.status==='running'){m.status='interrupted';if(reason)m.error=String(reason).slice(0,300);await persist(next);emit('battleStatusChanged',clone(m));}});},
+    async interrupt(matchId,reason){return serially(async()=>{const next=fork(),m=matchById(next.world,matchId);if(m.status==='running'&&!m.simulated){m.status='interrupted';if(reason)m.error=String(reason).slice(0,300);await persist(next);emit('battleStatusChanged',clone(m));}});},
     inspect(){return clone(record);},
     async markLegacyReset(){return serially(async()=>{if(record.legacyResetDone)return;const next=fork();next.legacyResetDone=true;await persist(next);});}
   };

@@ -38,7 +38,7 @@ assert.equal((await f.command('supplier.placeBasketOrder',{credit:true},{quoteId
 const request={requestId:'basket-idempotency',type:'supplier.placeBasketOrder',quoteId:quote.quoteId,payload:{}};
 const purchased=await f.host.command(request);assert.equal(purchased.ok,true,JSON.stringify(purchased));
 assert.equal(purchased.data.totalDebit,expected);assert.equal(purchased.data.orders.length,3);assert.equal(new Set(purchased.data.orderIds).size,3);
-const after=f.host.inspect();assert.equal(after.world.wallet.available,before.world.wallet.available-expected);assert.equal(after.world.daily.purchases,expected);
+const after=f.host.inspect();assert.equal(after.world.wallet.available,before.world.wallet.available-expected+500,'first and daily procurement rewards are separate from purchase cost');assert.equal(after.world.daily.purchases,expected);
 assert.equal(after.world.lifetime.ordered,29);assert.ok(after.world.orders.every(o=>o.status==='pending'&&o.dueAt===1*1440+480+rules.deliveryMinutes));
 assert.equal(after.world.orders[1].unitCost,a.prices.box.wholesale);assert.deepEqual(after.world.orders[1].product,a);
 assert.deepEqual(await f.host.command(request),purchased);assert.deepEqual(f.host.inspect(),after);

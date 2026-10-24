@@ -12,6 +12,7 @@ import {voidNpcMatch} from '../modules/backend/matches.mjs';
 
 const read=name=>JSON.parse(fs.readFileSync(new URL(`../data/${name}.json`,import.meta.url)));
 const source=read('cards'),rules={...read('backend-rules'),startingCash:50000},managementConfig=read('backend-management'),catalog=buildCatalog(source,rules);
+rules.npcSimulation=false;
 const record=world=>({schemaVersion:2,revision:0,world,archives:[],requests:{},legacyResetDone:true});
 const card=(world,ref,owner,general)=>{const c=catalog.byId.get(general);world.items[ref]={inventoryRef:ref,ownerId:owner,kind:'card',cardKey:c.cardKey,printedRarity:c.currentRarity,printVersion:'test',location:'collection',protected:false,lock:null,cost:3};world.circulation[c.cardKey]={source:'test',day:world.clock.day};};
 const world=createWorld(rules);world.clock.day=3;world.clock.minute=540;world.clock.phase='open';world.products=publishProducts(catalog,rules,3);initialiseManagement(world,managementConfig);ensureRegulars(world);

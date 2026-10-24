@@ -81,3 +81,14 @@
 - `inventory.recover({inventoryRef})` 或 `{all:true}` 拾取共享桶内原卡，登记流通资格；仍需到桶旁。拾取自己原卡保留原成本，拾取他人弃卡以零成本入库，不产生交易收入。
 - 部分低预算 NPC 按习惯、余额门槛、每次数量和冷却主动拾取。下一天清空全部剩余垃圾，已拾取者保留实物。
 - 行为参数在 `backend-rules.customerBehavior`，缺字段沿用默认，支持旧存档。详细流程、事件与配置见 [顾客拆包与共享垃圾桶](../docs/顾客拆包与共享垃圾桶.md)。
+
+## 2026-10-24 经营节奏补充（覆盖此前 NPC 默认真实对局的说明）
+
+- `tasks.list` 新增 `scope:daily|starter`、`autoClaim:true`、`goal`、`claimed`；数字 `target` 与 `guide` 继续兼容。每日以当天累计值基线计进度，事务内完成即发奖励；`tasks.claim` 不再二次发奖。
+- `ledger.live` 返回 `{day,cash,debt,items:CashEntry[]}`；快照新增 `cashJournal` 最近六条。`amount` 是可用现金实际差额，`debtDelta` 是供应商欠款差额，任务可附 `grossIncome`。两者不得混算，也不能把奖励当商品利润。
+- `products.list` 新增 `averageStrength`、`priceTier:{id,label,version}`、`packExpectedValue`。前端仅展示服务端档位；供货按主题全局平均分分五档，旧实物/订单仍冻结原版内容与成本。
+- `opening.execute` 的站位改为 `store.opening`；采购和签收仍为 `store.counter`；NPC 结账位 `store.checkout`。地图生成器和静态导航已同步。
+- 玩家 `combat.eligible` 不要求全局流通，仍检查持有、副本锁定、保护、位置及技能兼容；NPC 保留流通限制。NPC 拆出的所有卡立即进入流通。
+- NPC 默认 `simulated:true`，使用实际持卡阵容、后台权威随机源和保存的 `simulation.elapsedSeconds/durationSeconds`。18 秒默认模拟时长（受倍率/暂停影响）；完赛自动付费并释放桌位。`simulation.feePaid` 为已结桌费；统计可含 `simulatedGames`，不能把模拟场次宣传为真实引擎实测。
+- 模拟牌局不在真实 engine worker 的 `backgroundState.matches` 中；`room.snapshot.matches` 仍提供经营展示。真实引擎后台路径可通过 `rules.npcSimulation=false` 专门测试；默认前端必须按模拟状态说明，不再等待引擎 ready。
+- 默认中文姓名，已知旧国际姓名会迁移；外观不决定钱包/行为。默认 NPC 模拟不会开放下注。

@@ -5,7 +5,7 @@ export function createWorld(rules){
     player:{actorId:'actor:owner',appearanceId:'owner',roomId:'store',x:240,y:272,direction:'down',moving:false,activity:'idle',navVersion:null},
     products:[],items:{},orders:[],listings:[],npcs:[],circulation:{},stats:{},matches:[],tables:[{tableId:'battleRoom.table.01',matchId:null},{tableId:'battleRoom.table.02',matchId:null}],
     daily:{goods:0,cogs:0,service:0,fees:0,matchNet:0,operating:0,purchases:0},reports:[],lifetime:{ordered:0,received:0,opened:0,sales:0,marketSales:0,matches:0},
-    tasks:{},log:[],nextNpcMinute:540,prices:{},configOverrides:{}};
+    tasks:{},dailyTasks:{day:1,baseline:{},claimed:{}},cashJournal:[],log:[],nextNpcMinute:540,prices:{},configOverrides:{}};
   return world;
 }
 export function note(world,type,data={}){world.log.push({eventId:serial(world,'event'),type,day:world.clock.day,minute:world.clock.minute,...clone(data)});world.log=world.log.slice(-1000);}
@@ -13,6 +13,7 @@ export function enterCirculation(w,cardKey,source,reference){if(!w.circulation[c
 export function validateWorld(world){
   if(world?.schemaVersion!==2||!world.worldId||!world.branchId||!world.items||!world.clock||!world.wallet||!Array.isArray(world.products))throw new Error('新版世界存档格式不完整，未覆盖原数据。');
   need(world.branchLineage===undefined||Array.isArray(world.branchLineage)&&world.branchLineage.length<=120&&world.branchLineage.every(id=>typeof id==='string'&&id.length<=150),'INVALID_SAVE','存档分支来源不合法。');
+  need(world.cashJournal===undefined||Array.isArray(world.cashJournal)&&world.cashJournal.length<=300&&world.cashJournal.every(e=>e&&typeof e.label==='string'&&Number.isSafeInteger(e.amount)&&Number.isSafeInteger(e.debtDelta)&&Number.isSafeInteger(e.day)&&Number.isFinite(e.minute)),'INVALID_SAVE','收支流水数据不合法。');
   if(!Number.isSafeInteger(world.clock.day)||world.clock.day<1||!Number.isFinite(world.clock.minute)||world.clock.minute<0||world.clock.minute>=1440||!['preparing','open','closing','closed'].includes(world.clock.phase)||![1,2,4].includes(world.clock.speed))throw new Error('营业日期或时钟状态不合法。');
   if(!Number.isSafeInteger(world.wallet.available)||world.wallet.available<0||!Number.isSafeInteger(world.wallet.escrowLiability)||world.wallet.escrowLiability<0)throw new Error('资金账目不合法。');
   for(const key of ['orders','listings','npcs','matches','tables','reports','log'])need(Array.isArray(world[key]),'INVALID_SAVE',`世界缺少列表 ${key}。`);
@@ -27,6 +28,7 @@ export function validateWorld(world){
   if(!Number.isSafeInteger(world.wallet.debt)||world.wallet.debt<0)throw new Error('欠款数据不合法。');
   const owners=new Set(['player',...world.npcs.map(n=>n.actorId)]);
   for(const n of world.npcs)if(!Number.isSafeInteger(n.wallet?.available)||n.wallet.available<0)throw new Error('NPC 余额不合法。');
+  for(const n of world.npcs)need(n.wallet.reserved===undefined||Number.isSafeInteger(n.wallet.reserved)&&n.wallet.reserved>=0&&n.wallet.reserved<=n.wallet.available,'INVALID_SAVE','NPC 预留桌费不合法。');
   for(const n of world.npcs)need(n.presence===undefined||['onsite','offsite'].includes(n.presence),'INVALID_SAVE','顾客在店状态不合法。');
   for(const n of world.npcs){
     if(n.trip)need(typeof n.trip.stage==='string'&&Array.isArray(n.trip.path)&&n.trip.path.every(p=>p&&Number.isFinite(p.x)&&Number.isFinite(p.y)),'INVALID_SAVE','顾客行程数据不合法。');
@@ -45,4 +47,4 @@ export function validateWorld(world){
 }
 export function snapshot(world,pauseReasons=[]){return {worldId:world.worldId,branchId:world.branchId,revision:world.revision,
   clock:{...clone(world.clock),running:!world.clock.manualPaused&&!pauseReasons.length&&(world.clock.phase==='open'||world.clock.phase==='preparing'&&world.clock.minute<540),pauseReasons:[...(world.clock.manualPaused?[{code:'manual',label:'手动暂停'}]:[]),...pauseReasons]},
-  wallet:clone(world.wallet),daily:clone(world.daily),actors:[world.player,...world.npcs.filter(n=>n.presence!=='offsite')].map(({wallet,trip,...actor})=>clone(actor)),allowedActions:world.clock.phase==='preparing'?['business.open']:['open','closing'].includes(world.clock.phase)?['business.close']:['business.nextDay']};}
+  wallet:clone(world.wallet),daily:clone(world.daily),cashJournal:clone((world.cashJournal||[]).slice(-6).reverse()),actors:[world.player,...world.npcs.filter(n=>n.presence!=='offsite')].map(({wallet,trip,...actor})=>clone(actor)),allowedActions:world.clock.phase==='preparing'?['business.open']:['open','closing'].includes(world.clock.phase)?['business.close']:['business.nextDay']};}

@@ -1,6 +1,6 @@
 import {need,random} from './common.mjs';
 import {note,enterCirculation} from './world.mjs';
-import {INTERNATIONAL_NAMES} from './customer-identity.mjs';
+import {CHINESE_NAMES} from './customer-identity.mjs';
 
 export const TRASH_OWNER='public:trash';
 export const DEFAULT_CUSTOMER_BEHAVIOR=Object.freeze({
@@ -8,7 +8,7 @@ export const DEFAULT_CUSTOMER_BEHAVIOR=Object.freeze({
   keepCopies:1,minimumKeptCards:3,discardChance:{N:.65,R:.25,SR:0,SSR:0},
   scavengerChance:.3,poorWallet:400,poorInitialWallet:200,
   pickupLimit:2,pickupCooldownMinutes:90,
-  names:INTERNATIONAL_NAMES
+  names:CHINESE_NAMES
 });
 export function customerBehavior(w){return {...DEFAULT_CUSTOMER_BEHAVIOR,...w.rules.customerBehavior,discardChance:{...DEFAULT_CUSTOMER_BEHAVIOR.discardChance,...w.rules.customerBehavior?.discardChance}};}
 export const trashItems=w=>Object.values(w.items).filter(i=>i.kind==='card'&&i.location==='trash'&&!i.lock&&!i.protected);

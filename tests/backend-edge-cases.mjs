@@ -8,6 +8,7 @@ import {publishProducts,makeSealed} from '../modules/backend/products.mjs';
 import {placeListing,tickEconomy} from '../modules/backend/trading.mjs';
 import {registerNpcMatch} from '../modules/backend/matches.mjs';
 const read=n=>JSON.parse(fs.readFileSync(new URL(`../data/${n}.json`,import.meta.url))),source=read('cards'),rules=read('backend-rules'),catalog=buildCatalog(source,rules);
+rules.npcSimulation=false;
 const checks=[];
 async function check(name,fn){try{await fn();checks.push({name,ok:true});console.log('PASS',name);}catch(e){checks.push({name,ok:false});console.error('FAIL',name,e.message);}}
 async function fixture(setup=()=>{}){

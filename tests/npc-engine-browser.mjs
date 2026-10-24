@@ -11,7 +11,7 @@ try{
     const [{createRuntime},{memoryRepository},{createWorld},{buildCatalog},{publishProducts},{createNpcEngine}]=await Promise.all([
       import('/modules/backend/runtime.mjs'),import('/modules/backend/storage.mjs'),import('/modules/backend/world.mjs'),import('/modules/backend/catalog.mjs'),import('/modules/backend/products.mjs'),import('/integration/npc-engine.mjs')]);
     const source=await fetch('/data/cards.json').then(r=>r.json()),rules=await fetch('/data/backend-rules.json').then(r=>r.json()),catalog=buildCatalog(source,rules),world=createWorld(rules);
-    world.clock.phase='open';world.clock.minute=540;world.products=publishProducts(catalog,rules,1);
+    rules.npcSimulation=false;world.rules.npcSimulation=false;world.clock.phase='open';world.clock.minute=540;world.products=publishProducts(catalog,rules,1);
     world.npcs=[{actorId:'npc-a',name:'A',appearanceId:'novice',wallet:{available:100},roomId:'store',x:240,y:272,activity:'idle'},{actorId:'npc-b',name:'B',appearanceId:'competitive',wallet:{available:100},roomId:'store',x:240,y:272,activity:'idle'}];
     for(const [ref,ownerId,generalId] of [['a','npc-a','caocao'],['b','npc-b','zhangliao'],['player-card','player','liubei']]){const c=catalog.byId.get(generalId);world.items[ref]={inventoryRef:ref,ownerId,kind:'card',cardKey:c.cardKey,printedRarity:c.currentRarity,printVersion:'test',location:'collection',protected:false,lock:null,cost:1};world.circulation[c.cardKey]={source:'test',day:1};}
     window.backend=await createRuntime({source,rules,repository:memoryRepository({schemaVersion:2,revision:0,world,archives:[],requests:{},legacyResetDone:true}),backgroundAvailable:true});

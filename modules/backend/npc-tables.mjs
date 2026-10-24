@@ -1,5 +1,5 @@
 import {clone,need} from './common.mjs';
-import {eligible,registerNpcMatch,voidNpcMatch} from './matches.mjs';
+import {eligible,registerNpcMatch,voidNpcMatch,advanceNpcSimulation} from './matches.mjs';
 import {managementEffects} from './management.mjs';
 import {pathfind,moveActor} from './navigation.mjs';
 import {note} from './world.mjs';
@@ -36,6 +36,7 @@ export function tickNpcTables(w,catalog,navigation,seconds,{schedule=true}={}){
     else departCustomer(w,npc,'match-finished');
     }catch(error){note(w,'npcTableRouteUnavailable',{actorId:npc.actorId,reason:error.message});if(npc.currentMatchId)voidNpcMatch(w,npc.currentMatchId,error.message);if(!npc.currentMatchId)departCustomer(w,npc,'table-route-unavailable');}
   }
+  for(const m of w.matches)if(m.background&&m.simulated)advanceNpcSimulation(w,catalog,m,seconds);
   if(!schedule||w.rules.npcAutoBattles===false||w.clock.phase!=='open'||w.matches.some(m=>m.background&&m.status!=='finished'))return;
   const stamp=w.clock.day*1440+w.clock.minute;if(stamp<(w.nextNpcMatchAt||0))return;w.nextNpcMatchAt=stamp+(w.rules.npcMatchIntervalMinutes||45);
   const table=w.tables.find(t=>!t.matchId&&!t.reservation);if(!table)return;
@@ -50,5 +51,5 @@ export function tickNpcTables(w,catalog,navigation,seconds,{schedule=true}={}){
   note(w,'npcTableReserved',{matchId:match.matchId});
 }
 export function backgroundState(w,paused){
-  return {worldId:w.worldId,branchId:w.branchId,paused,matches:w.matches.filter(m=>m.background&&m.status!=='finished').map(m=>({...clone(m),seated:[m.mineOwnerId,m.enemyOwnerId].every(owner=>w.npcs.find(n=>n.actorId===owner)?.activity==='seated')}))};
+  return {worldId:w.worldId,branchId:w.branchId,paused,matches:w.matches.filter(m=>m.background&&!m.simulated&&m.status!=='finished').map(m=>({...clone(m),seated:[m.mineOwnerId,m.enemyOwnerId].every(owner=>w.npcs.find(n=>n.actorId===owner)?.activity==='seated')}))};
 }

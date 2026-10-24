@@ -13,6 +13,6 @@ export function pick(world,items){need(items.length,'EMPTY_POOL','该稀有度�
 export function shuffle(world,items){const a=[...items];for(let i=a.length-1;i>0;i--){const j=Math.floor(random(world)*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 export function serial(world,prefix){return `${prefix}-${world.worldId}-${++world.serial}`;}
 export function money(n){need(Number.isSafeInteger(n)&&n>=0,'INVALID_AMOUNT','金额必须是非负安全整数。');return n;}
-export function debit(wallet,n){money(n);need(wallet.available>=n,'INSUFFICIENT_FUNDS','可用游戏币不足。');wallet.available-=n;}
+export function debit(wallet,n){money(n);need(wallet.available-(wallet.reserved||0)>=n,'INSUFFICIENT_FUNDS','可用游戏币不足，或部分资金已预留给未完成的牌桌。');wallet.available-=n;}
 export function credit(wallet,n){money(n);money(wallet.available+n);wallet.available+=n;}
 export function page(rows,input={}){const start=integer(Number(input.cursor||0),0,10000000),limit=integer(input.limit??48,1,200);return {items:rows.slice(start,start+limit),total:rows.length,nextCursor:start+limit<rows.length?String(start+limit):null};}

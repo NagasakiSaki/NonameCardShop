@@ -1,4 +1,9 @@
 export type Rarity = 'N' | 'R' | 'SR' | 'SSR';
+/** ledger.live and snapshot.cashJournal: actual spendable cash delta, separate from supplier debt. */
+export interface CashEntry {entryId:string;day:number;minute:number;kind:string;label:string;amount:number;debtDelta:number;balance:number;debt:number;grossIncome?:number}
+export interface LiveLedger {day:number;cash:number;debt:number;items:CashEntry[]}
+export interface TaskView {taskId:string;scope:'starter'|'daily';title:string;goal:number;target:number;guide:string;progress:number;reward:number;completed:boolean;claimed:boolean;autoClaim:true}
+export interface StrengthPriceTier {id:string;label:string;version:string}
 export type HostError = { code: string; message: string; retryable: boolean; details?: unknown };
 export type Result<T = unknown> = {ok:true; revision:number; data:T} | {ok:false; error:HostError};
 export interface CommandRequest { requestId:string; type:string; payload?:Record<string,unknown>; quoteId?:string; previewId?:string }

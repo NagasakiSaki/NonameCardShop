@@ -261,7 +261,7 @@ export async function openSupplier(app, options = {}) {
               el('button',{class:'btn btn--sm',text:'一键补满货架',disabled:!shelf.stockRefs?.length,onclick:async()=>{const r=await ctx.submit({requestId:newRequestId('shelf-all'),type:'retail.listAll',payload:{inventoryRefs:shelf.stockRefs}});if(!r.ok)app.toast('error',r.error.code,r.error.message);else {app.toast('ok','补货完成',r.data.note);ctx.refresh();}}}),
               el("button", {
                 class: "btn btn--sm", type: "button", text: "去开包",
-                onclick: () => {ctx.handle.close();app.goToInteraction('store.counter','opening');},
+                onclick: () => {ctx.handle.close();app.goToInteraction('store.opening','opening');},
               }),
             ]),
           ]));
@@ -270,7 +270,7 @@ export async function openSupplier(app, options = {}) {
       }
 
       ctx.setFooter([
-        el("button", { class: "btn", type: "button", text: "开包柜台", onclick: () => {ctx.handle.close();if(app.isNearInteraction('store.counter'))app.openPanel('opening');else app.goToInteraction('store.counter','opening');} }),
+        el("button", { class: "btn", type: "button", text: "开包柜台", onclick: () => {ctx.handle.close();if(app.isNearInteraction('store.opening'))app.openPanel('opening');else app.goToInteraction('store.opening','opening');} }),
         el("button", { class: "btn btn--ghost", type: "button", text: "关闭", onclick: () => ctx.handle.close() }),
       ]);
     },

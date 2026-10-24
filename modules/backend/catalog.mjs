@@ -1,8 +1,13 @@
 import {RARITIES,clamp,need,page} from './common.mjs';
 import {DEFAULT_CUSTOMER_BEHAVIOR} from './trash.mjs';
 import {productEnabled,validateDistribution} from './distribution.mjs';
+import {validateStrengthPricing} from './supply-pricing.mjs';
 
 export function validateRules(r){
+  validateStrengthPricing(r||{});
+  if(r.npcSimulation!==undefined)need(typeof r.npcSimulation==='boolean','INVALID_CONFIG','NPC 模拟开关不正确。');
+  if(r.npcSimulationSeconds!==undefined)need(Number.isFinite(r.npcSimulationSeconds)&&r.npcSimulationSeconds>=1&&r.npcSimulationSeconds<=300,'INVALID_CONFIG','NPC 模拟时长须在 1～300 秒。');
+  if(r.tasks!==undefined)need(Number.isFinite(r.tasks.rewardMultiplier)&&r.tasks.rewardMultiplier>0&&r.tasks.rewardMultiplier<=10,'INVALID_CONFIG','任务奖励倍率须在 0～10 之间。');
   validateDistribution(r||{});
   need(r?.version===1,'INVALID_CONFIG','不支持的后端规则版本。');
   need(['R','SR','SSR'].every(k=>Number.isFinite(r.thresholds?.[k])),'INVALID_CONFIG','分数界线必须是有限数值。');
