@@ -15,6 +15,7 @@ groups.frontend.push('tests/portrait-sources.mjs','tests/portrait-preview.mjs');
 groups.npc=['tests/customer-visits.mjs','tests/gameplay-adjustments.mjs'];
 groups.npcNatural=['tests/npc-natural-browser.mjs'];
 groups.backend.push('tests/day-starts.mjs','tests/gameplay-adjustments.mjs');groups.history.push('tests/day-starts.mjs');
+groups.backend.push('tests/shop-experience.mjs');groups.npc.push('tests/shop-experience.mjs');
 const selection=process.argv[2]||'all';if(selection!=='all'&&!groups[selection])throw new Error(`未知测试组：${selection}`);
 const output=path.join(root,'test-results',new Date().toISOString().replace(/[:.]/g,'-')+`-${process.pid}`);fs.mkdirSync(output,{recursive:true});
 const results=[],summary={selection,output,startedAt:new Date().toISOString(),results};let runtime;

@@ -33,11 +33,11 @@ export function ledgerView(w,catalog,report){
   const daily=report||w.daily,day=report?.day||w.clock.day;
   const sealedSales=daily.sealedSales??sum(w.log.filter(e=>e.day===day&&e.type==='packSaleCompleted').map(e=>e.amount));
   const secondarySales=(daily.goods||0)-sealedSales,wages=daily.wages||0;
-  return {day,...clone(daily),wallet:clone(w.wallet),revenue:{sealedSales,secondarySales,serviceIncome:daily.service||0,total:(daily.goods||0)+(daily.service||0)},
+  return {day,...clone(daily),wallet:clone(report?.walletAtClose??w.wallet),walletAsOf:report?(report.walletAtClose?'day-close':'current-fallback'):'current',valuationAsOf:report?(report.unsoldValuationAtClose!==undefined?'day-close':'current-fallback'):'current',revenue:{sealedSales,secondarySales,serviceIncome:daily.service||0,total:(daily.goods||0)+(daily.service||0)},
     cost:{procurement:daily.purchases||0,wages,rent:Math.max(0,(daily.operating||0)-wages),tableFees:0,costOfGoods:daily.cogs||0,investment:daily.investment||0},
     combat:{net:daily.matchNet||0,stakeOut:Math.max(0,daily.matchNet||0),stakeIn:Math.max(0,-(daily.matchNet||0)),rake:daily.rake||0},escrow:{held:w.wallet.escrowLiability},
     netProfit:(daily.goods||0)+(daily.service||0)-(daily.cogs||0)-(daily.operating||0),
-    unsoldValuation:sum(owned(w).filter(i=>i.location!=='trash').map(i=>i.kind==='card'?referencePrice(w,catalog,i.cardKey):i.retailPrice||i.cost)),
+    unsoldValuation:report?.unsoldValuationAtClose??sum(owned(w).filter(i=>i.location!=='trash').map(i=>i.kind==='card'?referencePrice(w,catalog,i.cardKey):i.retailPrice||i.cost)),
     note:'采购与设施购置是现金流；利润扣已售商品成本和日结运营费，未售库存估值不计收入。'};
 }
 export function retailView(w){

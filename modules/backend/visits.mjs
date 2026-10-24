@@ -20,10 +20,11 @@ export function migrateVisits(w){
   }
   w.customerVisitVersion=1;if(count)note(w,'customerVisitsMigrated',{quantity:count});
 }
-export function arriveCustomer(w,npc,map){
+export function arriveCustomer(w,npc,map,intent=null){
   const entry=map?.anchors['store.entry'];npc.presence='onsite';npc.roomId='store';npc.activity='shopping';npc.label='刚进店';npc.moving=false;npc.trip=null;
   if(entry){npc.x=entry.x;npc.y=entry.y;npc.navVersion=map.navVersion;}
-  npc.visit={visitId:serial(w,'visit'),enteredAt:stamp(w),elapsedSeconds:0,idleSeconds:0};note(w,'npcVisitStarted',{actorId:npc.actorId,visitId:npc.visit.visitId});
+  npc.customerCategory=npc.regularId==='collector'?'收藏客':npc.regularId==='duelist'?'对战客':npc.regularId==='student'?'学生玩家':npc.scavenger?'拾牌客':'顾客';
+  npc.visit={visitId:serial(w,'visit'),enteredAt:stamp(w),elapsedSeconds:0,idleSeconds:0,intent:intent||{kind:'shopping',label:npc.regularId==='collector'?'寻找缺少的单卡':'看看合适的卡牌'},purchases:0,pickups:0,matches:0,issues:[]};note(w,'npcVisitStarted',{actorId:npc.actorId,visitId:npc.visit.visitId});
 }
 export function lingerCustomer(w,npc,seconds){
   npc.trip=null;npc.activity='idle';npc.label='逛店 / 找牌友';npc.moving=false;

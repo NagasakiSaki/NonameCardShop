@@ -1,5 +1,7 @@
 # 开发、测试与版本管理
 
+2026-10-24 技术路线已确认：继续 Phaser + HTML/CSS + JavaScript 规则，沿用现有无名杀与桌面接入。新增功能按 [Phaser 长期维护与优化约定](Phaser长期维护与优化约定.md) 和 [可玩性重构分工](collaboration/2026-10-24-可玩性重构分工方案.md) 推进；其中待建工具和性能基线不视为已实现。
+
 项目根目录为 `D:\GameDev\NonameCardShop`。所有工具按自身位置解析路径，整个目录可以再次搬迁。已关联 GitHub 私有仓库 [NagasakiSaki/NonameCardShop](https://github.com/NagasakiSaki/NonameCardShop)，素材通过 Git LFS 管理。个人进度、依赖、构建产物和上游安装目录中的 Home 用户缓存不上传。
 
 2026-10-23：默认入口已改为新版前端与正式 Host，集成说明见 [FRONTEND-INTEGRATION.md](FRONTEND-INTEGRATION.md)。旧页面保留在 `/legacy.html`，安装版没有更新。

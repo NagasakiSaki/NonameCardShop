@@ -4,6 +4,7 @@ import {managementEffects} from './management.mjs';
 import {pathfind,moveActor} from './navigation.mjs';
 import {note} from './world.mjs';
 import {onSite,departCustomer} from './visits.mjs';
+import {customerFeedback} from './trading.mjs';
 
 function tableSeat(map,tableId,index){const table=map.tables?.find(t=>t.id===tableId||tableId.endsWith(t.id));return table?.seatAnchors?.[index];}
 function routeToTable(npc,index,table,navigation){
@@ -39,9 +40,10 @@ export function tickNpcTables(w,catalog,navigation,seconds,{schedule=true}={}){
   for(const m of w.matches)if(m.background&&m.simulated)advanceNpcSimulation(w,catalog,m,seconds);
   if(!schedule||w.rules.npcAutoBattles===false||w.clock.phase!=='open'||w.matches.some(m=>m.background&&m.status!=='finished'))return;
   const stamp=w.clock.day*1440+w.clock.minute;if(stamp<(w.nextNpcMatchAt||0))return;w.nextNpcMatchAt=stamp+(w.rules.npcMatchIntervalMinutes||45);
-  const table=w.tables.find(t=>!t.matchId&&!t.reservation);if(!table)return;
+  const table=w.tables.find(t=>!t.matchId&&!t.reservation);if(!table){for(const npc of w.npcs.filter(n=>onSite(n)&&n.activity==='idle'&&!n.currentMatchId&&eligible(w,catalog,n.actorId).some(i=>i.eligible)))customerFeedback(w,npc,'table-full');return;}
   const fee=managementEffects(w).tableFee;
-  const npcs=w.npcs.filter(n=>onSite(n)&&!n.trip&&!n.currentMatchId&&n.activity==='idle'&&n.wallet.available>=fee&&(n.nextMatchAt||0)<=stamp&&eligible(w,catalog,n.actorId).some(i=>i.eligible)).slice(0,2);
+  const event=w.experience?.events.find(e=>e.day===w.clock.day&&e.status==='scheduled');
+  const npcs=w.npcs.filter(n=>onSite(n)&&!n.trip&&!n.currentMatchId&&n.activity==='idle'&&n.wallet.available>=fee&&(n.nextMatchAt||0)<=stamp&&(!event||event.actorIds.includes(n.actorId))&&eligible(w,catalog,n.actorId).some(i=>i.eligible)).slice(0,2);
   if(npcs.length<2)return;
   let routes;
   try{routes=npcs.map((npc,index)=>routeToTable(npc,index,table,navigation));}

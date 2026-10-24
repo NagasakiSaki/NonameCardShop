@@ -1,4 +1,5 @@
 export type Rarity = 'N' | 'R' | 'SR' | 'SSR';
+export type * from './shop-experience';
 /** ledger.live and snapshot.cashJournal: actual spendable cash delta, separate from supplier debt. */
 export interface CashEntry {entryId:string;day:number;minute:number;kind:string;label:string;amount:number;debtDelta:number;balance:number;debt:number;grossIncome?:number}
 export interface LiveLedger {day:number;cash:number;debt:number;items:CashEntry[]}

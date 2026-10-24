@@ -1,4 +1,5 @@
 import {id, clone, serial, need} from './common.mjs';
+import {initialiseExperience,recordExperienceEvent,validateExperience,experienceSnapshot,FEEDBACK_REASONS} from './experience.mjs';
 export function createWorld(rules){
   const world={schemaVersion:2,customerVisitVersion:1,worldId:id('world'),branchId:id('branch'),revision:0,serial:0,seed:Math.floor(Math.random()*4294967296),rules:clone(rules),
     clock:{day:1,minute:480,phase:'preparing',speed:1,manualPaused:false},wallet:{available:rules.startingCash,debt:0,escrowLiability:0},
@@ -6,9 +7,9 @@ export function createWorld(rules){
     products:[],items:{},orders:[],listings:[],npcs:[],circulation:{},stats:{},matches:[],tables:[{tableId:'battleRoom.table.01',matchId:null},{tableId:'battleRoom.table.02',matchId:null}],
     daily:{goods:0,cogs:0,service:0,fees:0,matchNet:0,operating:0,purchases:0},reports:[],lifetime:{ordered:0,received:0,opened:0,sales:0,marketSales:0,matches:0},
     tasks:{},dailyTasks:{day:1,baseline:{},claimed:{}},cashJournal:[],log:[],nextNpcMinute:540,prices:{},configOverrides:{}};
-  return world;
+  initialiseExperience(world,{fresh:true});return world;
 }
-export function note(world,type,data={}){world.log.push({eventId:serial(world,'event'),type,day:world.clock.day,minute:world.clock.minute,...clone(data)});world.log=world.log.slice(-1000);}
+export function note(world,type,data={}){const event={eventId:serial(world,'event'),type,day:world.clock.day,minute:world.clock.minute,...clone(data)};world.log.push(event);world.log=world.log.slice(-1000);recordExperienceEvent(world,event);}
 export function enterCirculation(w,cardKey,source,reference){if(!w.circulation[cardKey]){w.circulation[cardKey]={day:w.clock.day,source,reference};note(w,'cardEnteredCirculation',{cardKey,source,reference});}}
 export function validateWorld(world){
   if(world?.schemaVersion!==2||!world.worldId||!world.branchId||!world.items||!world.clock||!world.wallet||!Array.isArray(world.products))throw new Error('新版世界存档格式不完整，未覆盖原数据。');
@@ -33,6 +34,11 @@ export function validateWorld(world){
   for(const n of world.npcs){
     if(n.trip)need(typeof n.trip.stage==='string'&&Array.isArray(n.trip.path)&&n.trip.path.every(p=>p&&Number.isFinite(p.x)&&Number.isFinite(p.y)),'INVALID_SAVE','顾客行程数据不合法。');
     if(n.visit)need(Number.isFinite(n.visit.elapsedSeconds)&&n.visit.elapsedSeconds>=0&&Number.isFinite(n.visit.idleSeconds)&&n.visit.idleSeconds>=0,'INVALID_SAVE','顾客访问计时不合法。');
+    if(n.visit){
+      need(n.visit.issues===undefined||Array.isArray(n.visit.issues)&&n.visit.issues.length<=8&&n.visit.issues.every(k=>Object.hasOwn(FEEDBACK_REASONS,k)),'INVALID_SAVE','顾客问题记录不合法。');
+      need(n.visit.lastIssue===undefined||Object.hasOwn(FEEDBACK_REASONS,n.visit.lastIssue),'INVALID_SAVE','顾客最后反馈不合法。');
+      for(const key of ['purchases','pickups','matches'])need(n.visit[key]===undefined||Number.isSafeInteger(n.visit[key])&&n.visit[key]>=0,'INVALID_SAVE','顾客访问结果计数不合法。');
+    }
   }
   for(const [ref,i] of Object.entries(world.items)){
     const publicTrash=i?.ownerId==='public:trash'&&i.kind==='card'&&i.location==='trash'&&!i.lock&&!i.protected&&owners.has(i.trash?.discardedBy);
@@ -43,8 +49,8 @@ export function validateWorld(world){
   const escrow=world.matches.filter(m=>m.status!=='finished').reduce((n,m)=>n+m.stake*2+m.serviceHeld,0)+(world.management?.requests||[]).reduce((n,r)=>n+(r.fundsHeld||0),0);
   for(const r of world.management?.requests||[])if(!Number.isSafeInteger(r.fundsHeld)||r.fundsHeld<0||r.fundsHeld>0&&(r.status!=='accepted'||r.kind!=='purchase'||r.fundsHeld!==r.amount))throw new Error('街坊订单托管数据不合法。');
   if(escrow!==world.wallet.escrowLiability)throw new Error('托管余额与未结比赛不一致。');
-  return world;
+  validateExperience(world);return world;
 }
 export function snapshot(world,pauseReasons=[]){return {worldId:world.worldId,branchId:world.branchId,revision:world.revision,
   clock:{...clone(world.clock),running:!world.clock.manualPaused&&!pauseReasons.length&&(world.clock.phase==='open'||world.clock.phase==='preparing'&&world.clock.minute<540),pauseReasons:[...(world.clock.manualPaused?[{code:'manual',label:'手动暂停'}]:[]),...pauseReasons]},
-  wallet:clone(world.wallet),daily:clone(world.daily),cashJournal:clone((world.cashJournal||[]).slice(-6).reverse()),actors:[world.player,...world.npcs.filter(n=>n.presence!=='offsite')].map(({wallet,trip,...actor})=>clone(actor)),allowedActions:world.clock.phase==='preparing'?['business.open']:['open','closing'].includes(world.clock.phase)?['business.close']:['business.nextDay']};}
+  wallet:clone(world.wallet),daily:clone(world.daily),cashJournal:clone((world.cashJournal||[]).slice(-6).reverse()),experience:experienceSnapshot(world),actors:[world.player,...world.npcs.filter(n=>n.presence!=='offsite')].map(({wallet,trip,...actor})=>clone(actor)),allowedActions:world.clock.phase==='preparing'?['business.open']:['open','closing'].includes(world.clock.phase)?['business.close']:['business.nextDay']};}

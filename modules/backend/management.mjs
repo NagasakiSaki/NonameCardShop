@@ -80,7 +80,7 @@ export function neighborAct(w,catalog,p){
   if(String(p.personId).startsWith('staff:')){const upgradeId=p.personId.slice(6);if(p.action==='hire')return purchaseUpgrade(w,upgradeId);need(p.action==='schedule'&&(m.levels[upgradeId]||0)>0,'INVALID_INPUT','员工操作不正确。');m.onDuty[upgradeId]=typeof p.onDuty==='boolean'?p.onDuty:m.onDuty[upgradeId]===false;return {note:m.onDuty[upgradeId]?'已安排当班；工资在日结统一支付。':'已安排休息；当日合同工资照常结算。'};}
   const regular=m.config.regulars.find(r=>r.id===p.personId);need(regular,'NOT_FOUND','街坊不存在。');
   const relation=amount=>m.relationships[regular.id]=Math.min(m.config.maxRelationship,(m.relationships[regular.id]||0)+amount);
-  if(p.action==='talk'){if(m.talkedDays[regular.id]!==w.clock.day){m.talkedDays[regular.id]=w.clock.day;relation(m.config.dialogueRelationship);}return {note:regular.dialogue[Math.min(regular.dialogue.length-1,Math.floor((m.relationships[regular.id]||0)/10))]};}
+  if(p.action==='talk'){if(m.talkedDays[regular.id]!==w.clock.day){m.talkedDays[regular.id]=w.clock.day;relation(m.config.dialogueRelationship);note(w,'regularTalked',{actorId:`regular:${regular.id}`,personId:regular.id});}return {note:regular.dialogue[Math.min(regular.dialogue.length-1,Math.floor((m.relationships[regular.id]||0)/10))]};}
   const request=m.requests.find(o=>o.personId===regular.id&&(!p.orderId||o.orderId===p.orderId)&&['offered','accepted'].includes(o.status));need(request&&w.clock.day<=request.expiresDay,'NOT_FOUND','没有有效待办。');
   const npc=w.npcs.find(n=>n.actorId===request.actorId);
   if(p.action==='decline'){refundRequest(w,request);request.status='declined';return {note:'已取消；未消费的托管资金和实物锁定已退回。'};}
