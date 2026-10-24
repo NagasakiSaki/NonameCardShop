@@ -1,6 +1,6 @@
 {
   "checkedAt": "2026-10-24",
-  "basis": "Official character profile full-body illustration, not cast photo. Metadata only; official images are not distributed.",
+  "basis": "Historical official-web references are preserved below. Current standing portraits use the user-provided PNG source registry in data/character-portraits.json.",
   "characters": [
     {
       "id": "bd-tomori",
@@ -177,5 +177,6 @@
       "image": "https://bang-dream.com/wordpress/wp-content/themes/bangdream-portal/assets/webp/common/artist/ikka-dumb-rock/img_full_shinomiya-shizuku_01.webp",
       "sha256": "47cab4ef9ad1798fa40f7c0057dd8e1734fd11384b76c877e36380b2f719f240"
     }
-  ]
+  ],
+  "currentPortraitSource": "data/character-portraits.json"
 }

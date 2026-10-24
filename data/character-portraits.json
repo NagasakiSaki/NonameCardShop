@@ -1,0 +1,1661 @@
+{
+  "version": 1,
+  "artVersion": "pixel-shop-6-user-source-portraits",
+  "sourceOfTruth": "用户指定的全部角色基础全身立绘/PNG透明格式",
+  "sourceDirectory": "C:\\Users\\lenovo\\Desktop\\OurNotes_BanG_Dream剧情\\全部角色基础全身立绘\\PNG透明格式",
+  "characters": {
+    "bd-tomori": {
+      "name": "高松燈",
+      "band": "mygo",
+      "sourceFile": "01_MyGO!!!!!_高松灯_基础全身立绘.png",
+      "sourceSha256": "1642cc1e3d580e401a48b8a3ceeada2e607bda706785aeaf1699c5cd3f738387",
+      "sourceSize": [
+        741,
+        1389
+      ],
+      "portrait": {
+        "url": "/assets/frontend/portraits/bd-tomori.11fe94c1b6.png",
+        "sha256": "11fe94c1b6aaabc648170ddf778876d5c7be9e6614288f99d42a57cf82d8cc41",
+        "candidateSha256": "ed23c38743b84fc9c2c593be30dba580e6d006748cac61ab79df822a07a6ce1c",
+        "width": 128,
+        "height": 224,
+        "colors": 61
+      },
+      "avatar": {
+        "url": "/assets/frontend/portraits/bd-tomori.2e555cd2d0.png",
+        "sha256": "2e555cd2d0b29618903fc3c07cc802b8603a7bb07a8ecfdeb292c3a92cd81494",
+        "candidateSha256": "035b4342ce2a53c8195dae8336483713dea18ff41b1e543bcdc3c06f280dc795",
+        "width": 96,
+        "height": 96,
+        "colors": 44
+      },
+      "headRectSource": [
+        111,
+        1,
+        564,
+        422
+      ],
+      "avatarCrop": {
+        "target": 96,
+        "cropRectOn384x672": [
+          80,
+          0,
+          272,
+          186
+        ],
+        "cropOriginOn384x672": [
+          80,
+          -6
+        ],
+        "paddedTransparent": [
+          0,
+          3,
+          0,
+          0
+        ],
+        "headSafeArea": {
+          "hairTopInCropPx": 19,
+          "chinInCropPx": 214,
+          "marginAboveHairPx": 19,
+          "marginBelowChinPx": -22,
+          "headCenterXInCropPx": 96,
+          "headCenterYInCropPx": 116
+        },
+        "alphaValues": [
+          0,
+          255
+        ],
+        "semiTransparentPixels": 0,
+        "uniqueColors": 44,
+        "warnings": [
+          "crop padded transparently l0 t6 r0 b0 instead of clamping",
+          "head margins tight: above=19px below=-22px of 192"
+        ],
+        "sha256": "035b4342ce2a53c8195dae8336483713dea18ff41b1e543bcdc3c06f280dc795"
+      },
+      "method": "retouch",
+      "palette": 64
+    },
+    "bd-anon": {
+      "name": "千早愛音",
+      "band": "mygo",
+      "sourceFile": "02_MyGO!!!!!_千早爱音_基础全身立绘.png",
+      "sourceSha256": "dae884eca5905e6b191dc15258dac6d1a48b8510a2a926f499c65f9fe812d55e",
+      "sourceSize": [
+        1536,
+        1536
+      ],
+      "portrait": {
+        "url": "/assets/frontend/portraits/bd-anon.56c98768ed.png",
+        "sha256": "56c98768ed67c2691594e226a25fc94373865e4442e9e1ee444c846c2886a9d1",
+        "candidateSha256": "683d636aa79abc1b6ec1e99313b6726a4246a0e4744a931aa7ba7fad43a0713c",
+        "width": 128,
+        "height": 224,
+        "colors": 62
+      },
+      "avatar": {
+        "url": "/assets/frontend/portraits/bd-anon.79cfda23ed.png",
+        "sha256": "79cfda23ed5280633ec70fd63d2a3c1fc40d1c84604ec0dc407ce20b2cd6bba0",
+        "candidateSha256": "d627406d500e8b92deea61da1a8501e8a9ffd06e0a0a506928fcf5378207382c",
+        "width": 96,
+        "height": 96,
+        "colors": 58
+      },
+      "headRectSource": [
+        590,
+        143,
+        961,
+        491
+      ],
+      "avatarCrop": {
+        "target": 96,
+        "cropRectOn384x672": [
+          49,
+          105,
+          241,
+          297
+        ],
+        "cropOriginOn384x672": [
+          49,
+          105
+        ],
+        "paddedTransparent": null,
+        "headSafeArea": {
+          "hairTopInCropPx": 19,
+          "chinInCropPx": 137,
+          "marginAboveHairPx": 19,
+          "marginBelowChinPx": 55,
+          "headCenterXInCropPx": 96,
+          "headCenterYInCropPx": 78
+        },
+        "alphaValues": [
+          0,
+          255
+        ],
+        "semiTransparentPixels": 0,
+        "uniqueColors": 58,
+        "warnings": [],
+        "sha256": "d627406d500e8b92deea61da1a8501e8a9ffd06e0a0a506928fcf5378207382c"
+      },
+      "method": "retouch",
+      "palette": 64
+    },
+    "bd-rana": {
+      "name": "要楽奈",
+      "band": "mygo",
+      "sourceFile": "03_MyGO!!!!!_要乐奈_基础全身立绘.png",
+      "sourceSha256": "5a7bab6750fecfde14110d06322029f203e997ae14394cc416fb8e848137b107",
+      "sourceSize": [
+        1536,
+        1536
+      ],
+      "portrait": {
+        "url": "/assets/frontend/portraits/bd-rana.f81b2f6466.png",
+        "sha256": "f81b2f6466efad7108ffa129fd516065e29ab77829ecd3b7d283a87a08e06997",
+        "candidateSha256": "0f92177fed3a5e420f6fd2b4086718ca336f23b53bd011c23b5b5f3d133af7f2",
+        "width": 128,
+        "height": 224,
+        "colors": 64
+      },
+      "avatar": {
+        "url": "/assets/frontend/portraits/bd-rana.021e2c4022.png",
+        "sha256": "021e2c4022f49c2ad600da501e9bb448fd4695b1b6099e4b2135f77eda8b8c9e",
+        "candidateSha256": "6b8d9f35cfe9fc37d4b26a0878af59c6bd7ebcda3403ab091ef9c6b8b989f1a0",
+        "width": 96,
+        "height": 96,
+        "colors": 47
+      },
+      "headRectSource": [
+        573,
+        145,
+        1011,
+        530
+      ],
+      "avatarCrop": {
+        "target": 96,
+        "cropRectOn384x672": [
+          17,
+          63,
+          209,
+          255
+        ],
+        "cropOriginOn384x672": [
+          17,
+          63
+        ],
+        "paddedTransparent": null,
+        "headSafeArea": {
+          "hairTopInCropPx": 19,
+          "chinInCropPx": 159,
+          "marginAboveHairPx": 19,
+          "marginBelowChinPx": 33,
+          "headCenterXInCropPx": 96,
+          "headCenterYInCropPx": 89
+        },
+        "alphaValues": [
+          0,
+          255
+        ],
+        "semiTransparentPixels": 0,
+        "uniqueColors": 47,
+        "warnings": [],
+        "sha256": "6b8d9f35cfe9fc37d4b26a0878af59c6bd7ebcda3403ab091ef9c6b8b989f1a0"
+      },
+      "method": "retouch",
+      "palette": 64
+    },
+    "bd-soyo": {
+      "name": "長崎そよ",
+      "band": "mygo",
+      "sourceFile": "04_MyGO!!!!!_长崎爽世_基础全身立绘.png",
+      "sourceSha256": "efad2b9acc7c9311610a111dd2fabd0ae7f8944f6bbb3108e12e785a7712b8db",
+      "sourceSize": [
+        1536,
+        1536
+      ],
+      "portrait": {
+        "url": "/assets/frontend/portraits/bd-soyo.d0e4a798c5.png",
+        "sha256": "d0e4a798c5786c5a29c5c1c8a1f0756eafc485cb960d02b206c5526b9773c029",
+        "candidateSha256": "bf245e5da3dfa657812ae872dd258ae5e20be0510177d6599b5aea1404c7f8ad",
+        "width": 128,
+        "height": 224,
+        "colors": 61
+      },
+      "avatar": {
+        "url": "/assets/frontend/portraits/bd-soyo.8cf1adc0bd.png",
+        "sha256": "8cf1adc0bd650494d03d0a2dc515416329084dd57a7fefadcc21c5e7ea1ef874",
+        "candidateSha256": "85e60acadfbee877c86dac8c3f40766df025250f1a87212bc1eb56760b3195f8",
+        "width": 96,
+        "height": 96,
+        "colors": 58
+      },
+      "headRectSource": [
+        603,
+        142,
+        1011,
+        650
+      ],
+      "avatarCrop": {
+        "target": 96,
+        "cropRectOn384x672": [
+          124,
+          130,
+          316,
+          322
+        ],
+        "cropOriginOn384x672": [
+          124,
+          130
+        ],
+        "paddedTransparent": null,
+        "headSafeArea": {
+          "hairTopInCropPx": 19,
+          "chinInCropPx": 155,
+          "marginAboveHairPx": 19,
+          "marginBelowChinPx": 37,
+          "headCenterXInCropPx": 95,
+          "headCenterYInCropPx": 87
+        },
+        "alphaValues": [
+          0,
+          255
+        ],
+        "semiTransparentPixels": 0,
+        "uniqueColors": 58,
+        "warnings": [
+          "headRectSource.x1=1011 deviates >6% from auto-detect 1111"
+        ],
+        "sha256": "85e60acadfbee877c86dac8c3f40766df025250f1a87212bc1eb56760b3195f8"
+      },
+      "method": "retouch",
+      "palette": 64
+    },
+    "bd-taki": {
+      "name": "椎名立希",
+      "band": "mygo",
+      "sourceFile": "05_MyGO!!!!!_椎名立希_基础全身立绘.png",
+      "sourceSha256": "b53800217177afc8a6cddc055befb4a56750f27ed5a74cfc60e7758d1d66c822",
+      "sourceSize": [
+        782,
+        1393
+      ],
+      "portrait": {
+        "url": "/assets/frontend/portraits/bd-taki.8a795a12b8.png",
+        "sha256": "8a795a12b82c70ec1d69ba5fb0c49f82db3ce01f322e94c20c9830b25c831ac7",
+        "candidateSha256": "5dd08ecf5d4b5d39e1ec72252092867a5fc7fdb30f5c27749b669c3fdf8ae6b7",
+        "width": 128,
+        "height": 224,
+        "colors": 62
+      },
+      "avatar": {
+        "url": "/assets/frontend/portraits/bd-taki.3b36dfa895.png",
+        "sha256": "3b36dfa895d05831dff1580b44c750eb91028ebbc8b27358c2b898388a09f4eb",
+        "candidateSha256": "6fdd3397e0cf0b61b86269bd11af86a08debd7d9f90a4ce58446211ec4e61ed6",
+        "width": 96,
+        "height": 96,
+        "colors": 39
+      },
+      "headRectSource": [
+        148,
+        0,
+        566,
+        399
+      ],
+      "avatarCrop": {
+        "target": 96,
+        "cropRectOn384x672": [
+          80,
+          0,
+          272,
+          185
+        ],
+        "cropOriginOn384x672": [
+          80,
+          -7
+        ],
+        "paddedTransparent": [
+          0,
+          3,
+          0,
+          0
+        ],
+        "headSafeArea": {
+          "hairTopInCropPx": 19,
+          "chinInCropPx": 204,
+          "marginAboveHairPx": 19,
+          "marginBelowChinPx": -12,
+          "headCenterXInCropPx": 96,
+          "headCenterYInCropPx": 111
+        },
+        "alphaValues": [
+          0,
+          255
+        ],
+        "semiTransparentPixels": 0,
+        "uniqueColors": 39,
+        "warnings": [
+          "crop padded transparently l0 t7 r0 b0 instead of clamping",
+          "head margins tight: above=19px below=-12px of 192"
+        ],
+        "sha256": "6fdd3397e0cf0b61b86269bd11af86a08debd7d9f90a4ce58446211ec4e61ed6"
+      },
+      "method": "retouch",
+      "palette": 64
+    },
+    "bd-uika": {
+      "name": "三角初華",
+      "band": "avemujica",
+      "sourceFile": "06_Ave Mujica_Doloris_三角初华_基础全身立绘.png",
+      "sourceSha256": "78863b2befc5db250f04c92aaf800f59be73e88159a0d332687c3fd43bc5ce69",
+      "sourceSize": [
+        1217,
+        1401
+      ],
+      "portrait": {
+        "url": "/assets/frontend/portraits/bd-uika.9bba0a55c5.png",
+        "sha256": "9bba0a55c522a9ad055e9e266755e373300d4f424da6187fa23bd08757ef155f",
+        "candidateSha256": "c0f27e87c7c17cb248ef5b05039794164ec2926edbd2daacbbbe6a6156381528",
+        "width": 128,
+        "height": 224,
+        "colors": 62
+      },
+      "avatar": {
+        "url": "/assets/frontend/portraits/bd-uika.f480dd60ea.png",
+        "sha256": "f480dd60eabb7c32c4a0772e81ed8e041ed838214c92310b961cf908ba630aab",
+        "candidateSha256": "20183decdbedef7b1ddf801d6f32fd474eee1b3fdb564ddf6abc96e00508451a",
+        "width": 96,
+        "height": 96,
+        "colors": 53
+      },
+      "headRectSource": [
+        234,
+        2,
+        687,
+        395
+      ],
+      "avatarCrop": {
+        "target": 96,
+        "cropRectOn384x672": [
+          52,
+          97,
+          244,
+          289
+        ],
+        "cropOriginOn384x672": [
+          52,
+          97
+        ],
+        "paddedTransparent": null,
+        "headSafeArea": {
+          "hairTopInCropPx": 19,
+          "chinInCropPx": 142,
+          "marginAboveHairPx": 19,
+          "marginBelowChinPx": 50,
+          "headCenterXInCropPx": 96,
+          "headCenterYInCropPx": 80
+        },
+        "alphaValues": [
+          0,
+          255
+        ],
+        "semiTransparentPixels": 0,
+        "uniqueColors": 53,
+        "warnings": [],
+        "sha256": "20183decdbedef7b1ddf801d6f32fd474eee1b3fdb564ddf6abc96e00508451a"
+      },
+      "method": "retouch",
+      "palette": 64
+    },
+    "bd-mutsumi": {
+      "name": "若葉睦",
+      "band": "avemujica",
+      "sourceFile": "07_Ave Mujica_Mortis_若叶睦_基础全身立绘.png",
+      "sourceSha256": "2759fcb572b9c9b81b41eb414a5cb69e36cc94b4e337d9a3247d941d0ad39361",
+      "sourceSize": [
+        1536,
+        1536
+      ],
+      "portrait": {
+        "url": "/assets/frontend/portraits/bd-mutsumi.dd76fc39d2.png",
+        "sha256": "dd76fc39d2dbe79927c4d0d6059d4b9fa0cd5cc82d7b0f11027c17e00d239eea",
+        "candidateSha256": "7fdf9278ce783afa5b7d373da3cf90e81c41e14d85adac066629e75bdbc6cd36",
+        "width": 128,
+        "height": 224,
+        "colors": 64
+      },
+      "avatar": {
+        "url": "/assets/frontend/portraits/bd-mutsumi.fdc4f1e343.png",
+        "sha256": "fdc4f1e3433ab39bfcbcbf4805fae1878a1348c85ab57af6f93c6b7c7ca45554",
+        "candidateSha256": "667edbddaf4d1eaeea4687a74cf32b001a962e303b3dc560bd146f7b904a6414",
+        "width": 96,
+        "height": 96,
+        "colors": 53
+      },
+      "headRectSource": [
+        610,
+        193,
+        963,
+        586
+      ],
+      "avatarCrop": {
+        "target": 96,
+        "cropRectOn384x672": [
+          93,
+          75,
+          285,
+          267
+        ],
+        "cropOriginOn384x672": [
+          93,
+          75
+        ],
+        "paddedTransparent": null,
+        "headSafeArea": {
+          "hairTopInCropPx": 19,
+          "chinInCropPx": 169,
+          "marginAboveHairPx": 19,
+          "marginBelowChinPx": 23,
+          "headCenterXInCropPx": 96,
+          "headCenterYInCropPx": 94
+        },
+        "alphaValues": [
+          0,
+          255
+        ],
+        "semiTransparentPixels": 0,
+        "uniqueColors": 53,
+        "warnings": [],
+        "sha256": "667edbddaf4d1eaeea4687a74cf32b001a962e303b3dc560bd146f7b904a6414"
+      },
+      "method": "retouch",
+      "palette": 64
+    },
+    "bd-umiri": {
+      "name": "八幡海鈴",
+      "band": "avemujica",
+      "sourceFile": "08_Ave Mujica_Timoris_八幡海铃_基础全身立绘.png",
+      "sourceSha256": "118c565b9f5b07b1f2de1f40e21d171105d9279f641a14a9c621381a47c1b74d",
+      "sourceSize": [
+        851,
+        1424
+      ],
+      "portrait": {
+        "url": "/assets/frontend/portraits/bd-umiri.fd42539f78.png",
+        "sha256": "fd42539f780f4a180479e931d5b127cf53a23229d90cb5c188d41c2603cf3c69",
+        "candidateSha256": "4d01ec5f1a2a870a26d622cd5315fa7af0a4c8639bb4664e9d590894a7c356bc",
+        "width": 128,
+        "height": 224,
+        "colors": 64
+      },
+      "avatar": {
+        "url": "/assets/frontend/portraits/bd-umiri.cc9cf8b202.png",
+        "sha256": "cc9cf8b2021c544beb4b9aee9289e766422fe379685842d8d4686c0f78c87cf0",
+        "candidateSha256": "f0c42e5136b8ea9bf36f2c23ba748eb0826bce9195bd19031682da0edc68f16d",
+        "width": 96,
+        "height": 96,
+        "colors": 60
+      },
+      "headRectSource": [
+        322,
+        24,
+        745,
+        358
+      ],
+      "avatarCrop": {
+        "target": 96,
+        "cropRectOn384x672": [
+          144,
+          11,
+          336,
+          203
+        ],
+        "cropOriginOn384x672": [
+          144,
+          11
+        ],
+        "paddedTransparent": null,
+        "headSafeArea": {
+          "hairTopInCropPx": 19,
+          "chinInCropPx": 167,
+          "marginAboveHairPx": 19,
+          "marginBelowChinPx": 25,
+          "headCenterXInCropPx": 96,
+          "headCenterYInCropPx": 93
+        },
+        "alphaValues": [
+          0,
+          255
+        ],
+        "semiTransparentPixels": 0,
+        "uniqueColors": 60,
+        "warnings": [],
+        "sha256": "f0c42e5136b8ea9bf36f2c23ba748eb0826bce9195bd19031682da0edc68f16d"
+      },
+      "method": "retouch",
+      "palette": 64
+    },
+    "bd-nyamu": {
+      "name": "祐天寺にゃむ",
+      "band": "avemujica",
+      "sourceFile": "09_Ave Mujica_Amoris_祐天寺若麦_基础全身立绘.png",
+      "sourceSha256": "2581f4ac4187656ef46b3028ca20def32219c1675331e85c77a34be8234ccbd9",
+      "sourceSize": [
+        928,
+        1400
+      ],
+      "portrait": {
+        "url": "/assets/frontend/portraits/bd-nyamu.a932b82faa.png",
+        "sha256": "a932b82faa1dd5fd7e39faa735e9be7b1e26f2d59fbfe9ba19e898d37c7bde86",
+        "candidateSha256": "df6bacf329c1ef1f557ec9fff0a882520c9ba36e30f3de220d96e259febe7834",
+        "width": 128,
+        "height": 224,
+        "colors": 64
+      },
+      "avatar": {
+        "url": "/assets/frontend/portraits/bd-nyamu.8237400e0c.png",
+        "sha256": "8237400e0c1b98c5bb080b99a6e6247a7a234d33e50c7f4cb2afd15cbe54578a",
+        "candidateSha256": "057e58112452fd334c8e8bdffc4a5f746b80a295ebe73dbed19954ad8552f265",
+        "width": 96,
+        "height": 96,
+        "colors": 55
+      },
+      "headRectSource": [
+        210,
+        0,
+        612,
+        487
+      ],
+      "avatarCrop": {
+        "target": 96,
+        "cropRectOn384x672": [
+          74,
+          32,
+          266,
+          224
+        ],
+        "cropOriginOn384x672": [
+          74,
+          32
+        ],
+        "paddedTransparent": null,
+        "headSafeArea": {
+          "hairTopInCropPx": 19,
+          "chinInCropPx": 217,
+          "marginAboveHairPx": 19,
+          "marginBelowChinPx": -25,
+          "headCenterXInCropPx": 96,
+          "headCenterYInCropPx": 118
+        },
+        "alphaValues": [
+          0,
+          255
+        ],
+        "semiTransparentPixels": 0,
+        "uniqueColors": 55,
+        "warnings": [
+          "head margins tight: above=19px below=-25px of 192"
+        ],
+        "sha256": "057e58112452fd334c8e8bdffc4a5f746b80a295ebe73dbed19954ad8552f265"
+      },
+      "method": "retouch",
+      "palette": 64
+    },
+    "bd-sakiko": {
+      "name": "豊川祥子",
+      "band": "avemujica",
+      "sourceFile": "10_Ave Mujica_Oblivionis_丰川祥子_基础全身立绘.png",
+      "sourceSha256": "8ecd42e534af14900c6013c980ad82c1ce07047c00a465d14c4c5e726ad4315b",
+      "sourceSize": [
+        1536,
+        1536
+      ],
+      "portrait": {
+        "url": "/assets/frontend/portraits/bd-sakiko.2a4e7b28ac.png",
+        "sha256": "2a4e7b28acbced37c2a6dc7e03d332955a0f3e3a69530e6a5cba69e09422d52e",
+        "candidateSha256": "fc7a0ba026b5b9f0c7c55f615a121be09c008459d98c7a11a0582492886b25a8",
+        "width": 128,
+        "height": 224,
+        "colors": 64
+      },
+      "avatar": {
+        "url": "/assets/frontend/portraits/bd-sakiko.08fe1ab48a.png",
+        "sha256": "08fe1ab48aeb579c9b4d783ca275458ff706ccbc5bac5dae721dfb9e334b722e",
+        "candidateSha256": "20ff47142a1ffe2dddc3a4b4037317ef5b376a636026a062b8cc5d8a89024018",
+        "width": 96,
+        "height": 96,
+        "colors": 62
+      },
+      "headRectSource": [
+        783,
+        147,
+        987,
+        530
+      ],
+      "avatarCrop": {
+        "target": 96,
+        "cropRectOn384x672": [
+          123,
+          142,
+          315,
+          334
+        ],
+        "cropOriginOn384x672": [
+          123,
+          142
+        ],
+        "paddedTransparent": null,
+        "headSafeArea": {
+          "hairTopInCropPx": 19,
+          "chinInCropPx": 116,
+          "marginAboveHairPx": 19,
+          "marginBelowChinPx": 76,
+          "headCenterXInCropPx": 96,
+          "headCenterYInCropPx": 67
+        },
+        "alphaValues": [
+          0,
+          255
+        ],
+        "semiTransparentPixels": 0,
+        "uniqueColors": 62,
+        "warnings": [],
+        "sha256": "20ff47142a1ffe2dddc3a4b4037317ef5b376a636026a062b8cc5d8a89024018"
+      },
+      "method": "retouch",
+      "palette": 64
+    },
+    "bd-arale": {
+      "name": "仲町あられ",
+      "band": "yumemita",
+      "sourceFile": "11_梦限大MewType_仲町阿拉蕾_基础全身立绘.png",
+      "sourceSha256": "5446187adab565c14a26cc563fe5321ab6d0ea89a03935f9f55e1424df871217",
+      "sourceSize": [
+        998,
+        1509
+      ],
+      "portrait": {
+        "url": "/assets/frontend/portraits/bd-arale.cc3a183a55.png",
+        "sha256": "cc3a183a55655713a74a501550f889524c88be737955a85c2d08e406fbb67dc9",
+        "candidateSha256": "4538eeba66ce99246a73a78e75922d8f3c67e2e4d1a75776f6adf4c5ac6164ff",
+        "width": 128,
+        "height": 224,
+        "colors": 64
+      },
+      "avatar": {
+        "url": "/assets/frontend/portraits/bd-arale.fc8b68255f.png",
+        "sha256": "fc8b68255f069200c6af1a5b5f0a0740ca814041930518536de8945e74584701",
+        "candidateSha256": "114debe8f0bfb2f277f2f9dfc69bda0278a6c2640afdf9826b6ec1bcfa021879",
+        "width": 96,
+        "height": 96,
+        "colors": 63
+      },
+      "headRectSource": [
+        535,
+        169,
+        687,
+        455
+      ],
+      "avatarCrop": {
+        "target": 96,
+        "cropRectOn384x672": [
+          138,
+          94,
+          330,
+          286
+        ],
+        "cropOriginOn384x672": [
+          138,
+          94
+        ],
+        "paddedTransparent": null,
+        "headSafeArea": {
+          "hairTopInCropPx": 19,
+          "chinInCropPx": 128,
+          "marginAboveHairPx": 19,
+          "marginBelowChinPx": 64,
+          "headCenterXInCropPx": 96,
+          "headCenterYInCropPx": 73
+        },
+        "alphaValues": [
+          0,
+          255
+        ],
+        "semiTransparentPixels": 0,
+        "uniqueColors": 63,
+        "warnings": [],
+        "sha256": "114debe8f0bfb2f277f2f9dfc69bda0278a6c2640afdf9826b6ec1bcfa021879"
+      },
+      "method": "retouch",
+      "palette": 64
+    },
+    "bd-nonoka": {
+      "name": "宮永ののか",
+      "band": "yumemita",
+      "sourceFile": "12_梦限大MewType_宫永野乃花_基础全身立绘.png",
+      "sourceSha256": "26359247dce9fd2d4fe626274dbb272122317a62d79e639da68edbf497b86480",
+      "sourceSize": [
+        1536,
+        1536
+      ],
+      "portrait": {
+        "url": "/assets/frontend/portraits/bd-nonoka.8a7e51a0a2.png",
+        "sha256": "8a7e51a0a23d733aa432ba0c44ca784a10cc9c7a16ef00c86cbc9a6a6706a3da",
+        "candidateSha256": "1a704b56f56204156253c31c177d56aa1667ec23a88f4d8f5f6d17a8645a87fc",
+        "width": 128,
+        "height": 224,
+        "colors": 64
+      },
+      "avatar": {
+        "url": "/assets/frontend/portraits/bd-nonoka.8a0c693121.png",
+        "sha256": "8a0c693121d69779a5ec92ba4530b23e4eb3281f1574ac0d81b7eec93adb5f32",
+        "candidateSha256": "23d352477544f9bf8bf7c7bdd4760d489576d0430d6a0f8f362285a68ae30480",
+        "width": 96,
+        "height": 96,
+        "colors": 64
+      },
+      "headRectSource": [
+        523,
+        117,
+        908,
+        637
+      ],
+      "avatarCrop": {
+        "target": 96,
+        "cropRectOn384x672": [
+          64,
+          100,
+          256,
+          292
+        ],
+        "cropOriginOn384x672": [
+          64,
+          100
+        ],
+        "paddedTransparent": null,
+        "headSafeArea": {
+          "hairTopInCropPx": 19,
+          "chinInCropPx": 178,
+          "marginAboveHairPx": 19,
+          "marginBelowChinPx": 14,
+          "headCenterXInCropPx": 96,
+          "headCenterYInCropPx": 98
+        },
+        "alphaValues": [
+          0,
+          255
+        ],
+        "semiTransparentPixels": 0,
+        "uniqueColors": 64,
+        "warnings": [
+          "headRectSource.x0=523 deviates >6% from auto-detect 344",
+          "head margins tight: above=19px below=14px of 192"
+        ],
+        "sha256": "23d352477544f9bf8bf7c7bdd4760d489576d0430d6a0f8f362285a68ae30480"
+      },
+      "method": "retouch",
+      "palette": 64
+    },
+    "bd-ritsu": {
+      "name": "峰月律",
+      "band": "yumemita",
+      "sourceFile": "13_梦限大MewType_峰月律_基础全身立绘.png",
+      "sourceSha256": "a1833bd730f4deca788b9ac53aae21aa88a75f93f4e576d34109be8612f5606a",
+      "sourceSize": [
+        888,
+        1425
+      ],
+      "portrait": {
+        "url": "/assets/frontend/portraits/bd-ritsu.6d97f08d96.png",
+        "sha256": "6d97f08d96b671a3512a7f3ec6c830ac11a37c38b55112af5ac015ad816cf430",
+        "candidateSha256": "977d7fd3948240205221065369daecb84df128869a7c2874b1b41c12a8809f34",
+        "width": 128,
+        "height": 224,
+        "colors": 64
+      },
+      "avatar": {
+        "url": "/assets/frontend/portraits/bd-ritsu.7b17dcbb21.png",
+        "sha256": "7b17dcbb21fdea12ab99f5e928e528cff861a333201d3b81c85df835cce42130",
+        "candidateSha256": "9914b86d456f2ebbbc71ac166c8e756fe4d4ab85c98ad7c187328ccb3104c591",
+        "width": 96,
+        "height": 96,
+        "colors": 64
+      },
+      "headRectSource": [
+        346,
+        3,
+        616,
+        417
+      ],
+      "avatarCrop": {
+        "target": 96,
+        "cropRectOn384x672": [
+          112,
+          14,
+          304,
+          206
+        ],
+        "cropOriginOn384x672": [
+          112,
+          14
+        ],
+        "paddedTransparent": null,
+        "headSafeArea": {
+          "hairTopInCropPx": 19,
+          "chinInCropPx": 195,
+          "marginAboveHairPx": 19,
+          "marginBelowChinPx": -3,
+          "headCenterXInCropPx": 95,
+          "headCenterYInCropPx": 107
+        },
+        "alphaValues": [
+          0,
+          255
+        ],
+        "semiTransparentPixels": 0,
+        "uniqueColors": 64,
+        "warnings": [
+          "head margins tight: above=19px below=-3px of 192"
+        ],
+        "sha256": "9914b86d456f2ebbbc71ac166c8e756fe4d4ab85c98ad7c187328ccb3104c591"
+      },
+      "method": "retouch",
+      "palette": 64
+    },
+    "bd-miyako": {
+      "name": "藤都子",
+      "band": "yumemita",
+      "sourceFile": "14_梦限大MewType_藤都子_基础全身立绘.png",
+      "sourceSha256": "b77f9287a99764486187bcf483f8df3b737f50223a1b94b0f7fc294adf8e889a",
+      "sourceSize": [
+        1536,
+        1536
+      ],
+      "portrait": {
+        "url": "/assets/frontend/portraits/bd-miyako.4e4bf7702d.png",
+        "sha256": "4e4bf7702d52cd83f7fc1c5f87cce3f66c3f2b54a8c1b8d128349a5ab925b3c7",
+        "candidateSha256": "78caf077afe3a7ae2690e9d87dcee393bb92a9df1a869714c1bd37d34db08f7c",
+        "width": 128,
+        "height": 224,
+        "colors": 64
+      },
+      "avatar": {
+        "url": "/assets/frontend/portraits/bd-miyako.ee39994c29.png",
+        "sha256": "ee39994c29ce37429f8b83a07c6ef88617d4df54d21b4d51dfb9dea706c23a69",
+        "candidateSha256": "152eb2869c9991757d17624894800c7d3eae48f051626d0a66e52306732043cc",
+        "width": 96,
+        "height": 96,
+        "colors": 57
+      },
+      "headRectSource": [
+        609,
+        190,
+        818,
+        568
+      ],
+      "avatarCrop": {
+        "target": 96,
+        "cropRectOn384x672": [
+          34,
+          122,
+          226,
+          314
+        ],
+        "cropOriginOn384x672": [
+          34,
+          122
+        ],
+        "paddedTransparent": null,
+        "headSafeArea": {
+          "hairTopInCropPx": 19,
+          "chinInCropPx": 136,
+          "marginAboveHairPx": 19,
+          "marginBelowChinPx": 56,
+          "headCenterXInCropPx": 95,
+          "headCenterYInCropPx": 77
+        },
+        "alphaValues": [
+          0,
+          255
+        ],
+        "semiTransparentPixels": 0,
+        "uniqueColors": 57,
+        "warnings": [],
+        "sha256": "152eb2869c9991757d17624894800c7d3eae48f051626d0a66e52306732043cc"
+      },
+      "method": "retouch",
+      "palette": 64
+    },
+    "bd-yuno": {
+      "name": "千石ユノ",
+      "band": "yumemita",
+      "sourceFile": "15_梦限大MewType_千石由乃_基础全身立绘.png",
+      "sourceSha256": "023316424a70af283c6be630b985fc2172224c96a53b1b02b9d9520801f52ad4",
+      "sourceSize": [
+        1536,
+        1536
+      ],
+      "portrait": {
+        "url": "/assets/frontend/portraits/bd-yuno.e58d540f25.png",
+        "sha256": "e58d540f25e988a0759991776ac98c709656f6339f7b8310b891c288676e52f4",
+        "candidateSha256": "6db10e502e435184e3f604eb936d360a8afdd68a7519c861ab9daf1422a94ead",
+        "width": 128,
+        "height": 224,
+        "colors": 64
+      },
+      "avatar": {
+        "url": "/assets/frontend/portraits/bd-yuno.d8eaab8333.png",
+        "sha256": "d8eaab833384a6046eaf9bf60d689ecdfc8d7f69a65de18165493be67b02e352",
+        "candidateSha256": "c9bab81dc95888af7b97c9b74d88d443cdf932cb7a8cdf012597ac89722300e7",
+        "width": 96,
+        "height": 96,
+        "colors": 61
+      },
+      "headRectSource": [
+        514,
+        114,
+        957,
+        537
+      ],
+      "avatarCrop": {
+        "target": 96,
+        "cropRectOn384x672": [
+          46,
+          100,
+          238,
+          292
+        ],
+        "cropOriginOn384x672": [
+          46,
+          100
+        ],
+        "paddedTransparent": null,
+        "headSafeArea": {
+          "hairTopInCropPx": 19,
+          "chinInCropPx": 148,
+          "marginAboveHairPx": 19,
+          "marginBelowChinPx": 44,
+          "headCenterXInCropPx": 95,
+          "headCenterYInCropPx": 83
+        },
+        "alphaValues": [
+          0,
+          255
+        ],
+        "semiTransparentPixels": 0,
+        "uniqueColors": 61,
+        "warnings": [],
+        "sha256": "c9bab81dc95888af7b97c9b74d88d443cdf932cb7a8cdf012597ac89722300e7"
+      },
+      "method": "retouch",
+      "palette": 64
+    },
+    "bd-hotaru": {
+      "name": "汐見蛍",
+      "band": "millsage",
+      "sourceFile": "16_millsage_汐见萤_基础全身立绘.png",
+      "sourceSha256": "56b55301df8e2dc2ad72c0e52d8c3879c51a23c88d7b3a357427c80050eb2c35",
+      "sourceSize": [
+        1536,
+        1536
+      ],
+      "portrait": {
+        "url": "/assets/frontend/portraits/bd-hotaru.0af30dcb60.png",
+        "sha256": "0af30dcb606575bab8ba43c4f5102500f6426f8d93744e605456402a760a8469",
+        "candidateSha256": "cfacb462f17c910f3b9e2d485318179ff031ee4b6363547f3ea3bd8889bfdf49",
+        "width": 128,
+        "height": 224,
+        "colors": 62
+      },
+      "avatar": {
+        "url": "/assets/frontend/portraits/bd-hotaru.a81134af45.png",
+        "sha256": "a81134af4520e829029666ab49e894651cf9a8201619fabe312c2d27216cb141",
+        "candidateSha256": "aa284df15d16ddb2bdf5f06bee1ae66aee825eb8e28b360cc37d1bb08df3646a",
+        "width": 96,
+        "height": 96,
+        "colors": 62
+      },
+      "headRectSource": [
+        596,
+        107,
+        1034,
+        529
+      ],
+      "avatarCrop": {
+        "target": 96,
+        "cropRectOn384x672": [
+          94,
+          0,
+          286,
+          186
+        ],
+        "cropOriginOn384x672": [
+          94,
+          -6
+        ],
+        "paddedTransparent": [
+          0,
+          3,
+          0,
+          0
+        ],
+        "headSafeArea": {
+          "hairTopInCropPx": 19,
+          "chinInCropPx": 209,
+          "marginAboveHairPx": 19,
+          "marginBelowChinPx": -17,
+          "headCenterXInCropPx": 96,
+          "headCenterYInCropPx": 114
+        },
+        "alphaValues": [
+          0,
+          255
+        ],
+        "semiTransparentPixels": 0,
+        "uniqueColors": 62,
+        "warnings": [
+          "crop padded transparently l0 t6 r0 b0 instead of clamping",
+          "head margins tight: above=19px below=-17px of 192"
+        ],
+        "sha256": "aa284df15d16ddb2bdf5f06bee1ae66aee825eb8e28b360cc37d1bb08df3646a"
+      },
+      "method": "retouch",
+      "palette": 64
+    },
+    "bd-natsume": {
+      "name": "伊沢なつめ",
+      "band": "millsage",
+      "sourceFile": "17_millsage_伊泽枣_基础全身立绘.png",
+      "sourceSha256": "767f3ad144fdcd1016eedc08a6a010350bb7c4c39d9430d384871da28228aec3",
+      "sourceSize": [
+        1536,
+        1536
+      ],
+      "portrait": {
+        "url": "/assets/frontend/portraits/bd-natsume.bf97a9518e.png",
+        "sha256": "bf97a9518e9600b7a314d205faf0c4c14a2424c0afcd20ab266d92889f5714ce",
+        "candidateSha256": "a9c142458f7d55146596e7706b9523bc6c266396f28bfdd68a7f0b26a67bbe70",
+        "width": 128,
+        "height": 224,
+        "colors": 63
+      },
+      "avatar": {
+        "url": "/assets/frontend/portraits/bd-natsume.2b7feceefd.png",
+        "sha256": "2b7feceefd10f30aa1cb29a8dd163763c5f38fe13831912898edca8d64b925c0",
+        "candidateSha256": "7d271bf76b4b1e326dba3a3e6e2889ae23c5317ee8d4230d0a34f2c7088a9dce",
+        "width": 96,
+        "height": 96,
+        "colors": 51
+      },
+      "headRectSource": [
+        620,
+        117,
+        1050,
+        526
+      ],
+      "avatarCrop": {
+        "target": 96,
+        "cropRectOn384x672": [
+          70,
+          82,
+          262,
+          274
+        ],
+        "cropOriginOn384x672": [
+          70,
+          82
+        ],
+        "paddedTransparent": null,
+        "headSafeArea": {
+          "hairTopInCropPx": 19,
+          "chinInCropPx": 154,
+          "marginAboveHairPx": 19,
+          "marginBelowChinPx": 38,
+          "headCenterXInCropPx": 96,
+          "headCenterYInCropPx": 86
+        },
+        "alphaValues": [
+          0,
+          255
+        ],
+        "semiTransparentPixels": 0,
+        "uniqueColors": 51,
+        "warnings": [],
+        "sha256": "7d271bf76b4b1e326dba3a3e6e2889ae23c5317ee8d4230d0a34f2c7088a9dce"
+      },
+      "method": "retouch",
+      "palette": 64
+    },
+    "bd-nagi": {
+      "name": "琴平凪",
+      "band": "millsage",
+      "sourceFile": "18_millsage_琴平凪_基础全身立绘.png",
+      "sourceSha256": "cad49fb034dbc7d3f247383b6d2a08a8e2b651d2f477116b95b2bda71fed7545",
+      "sourceSize": [
+        1536,
+        1536
+      ],
+      "portrait": {
+        "url": "/assets/frontend/portraits/bd-nagi.954a04e853.png",
+        "sha256": "954a04e853d61b7389632d9c8a021d88b8eb147223fbd3671f0d860422d5b152",
+        "candidateSha256": "ef2ba78fd567fe12dd392a3ad284c84796dfef6b09944ded8b7d884df20415cd",
+        "width": 128,
+        "height": 224,
+        "colors": 64
+      },
+      "avatar": {
+        "url": "/assets/frontend/portraits/bd-nagi.e9e56964b2.png",
+        "sha256": "e9e56964b28140e85cef82207a99d9ed3e7bfc5f89d8994cf92821b6649ce0bc",
+        "candidateSha256": "6f3652ddc7a514c0992cbcfea600d002856dab6d7f7b78e6e2a01d5ffdcc2481",
+        "width": 96,
+        "height": 96,
+        "colors": 57
+      },
+      "headRectSource": [
+        581,
+        110,
+        960,
+        514
+      ],
+      "avatarCrop": {
+        "target": 96,
+        "cropRectOn384x672": [
+          76,
+          64,
+          268,
+          256
+        ],
+        "cropOriginOn384x672": [
+          76,
+          64
+        ],
+        "paddedTransparent": null,
+        "headSafeArea": {
+          "hairTopInCropPx": 19,
+          "chinInCropPx": 162,
+          "marginAboveHairPx": 19,
+          "marginBelowChinPx": 30,
+          "headCenterXInCropPx": 95,
+          "headCenterYInCropPx": 90
+        },
+        "alphaValues": [
+          0,
+          255
+        ],
+        "semiTransparentPixels": 0,
+        "uniqueColors": 57,
+        "warnings": [],
+        "sha256": "6f3652ddc7a514c0992cbcfea600d002856dab6d7f7b78e6e2a01d5ffdcc2481"
+      },
+      "method": "retouch",
+      "palette": 64
+    },
+    "bd-mahoro": {
+      "name": "浜崎まほろ",
+      "band": "millsage",
+      "sourceFile": "19_millsage_滨崎茉幌_基础全身立绘.png",
+      "sourceSha256": "cd4273ef1a1d86a96200606fa0651d8b2e14188a3383898c0b8331e4180f35ff",
+      "sourceSize": [
+        1082,
+        1536
+      ],
+      "portrait": {
+        "url": "/assets/frontend/portraits/bd-mahoro.f92f1d9157.png",
+        "sha256": "f92f1d9157c31fd555decb8d1f9791ccf5590eb390488a4defa545565aa2cf5f",
+        "candidateSha256": "6b059fe8b10c54df2accdb976ea109cb028f5e131110bc7b746d632e9523fe36",
+        "width": 128,
+        "height": 224,
+        "colors": 64
+      },
+      "avatar": {
+        "url": "/assets/frontend/portraits/bd-mahoro.6f7b297acb.png",
+        "sha256": "6f7b297acba65f2454888807b1dbae2499df651d03670d911229b18eae2477ca",
+        "candidateSha256": "9c264e782e7cd5e646422ec5a1d9c6eca2f9e649a4a53ebf468b6d642b74b38f",
+        "width": 96,
+        "height": 96,
+        "colors": 55
+      },
+      "headRectSource": [
+        271,
+        111,
+        697,
+        385
+      ],
+      "avatarCrop": {
+        "target": 96,
+        "cropRectOn384x672": [
+          76,
+          88,
+          268,
+          280
+        ],
+        "cropOriginOn384x672": [
+          76,
+          88
+        ],
+        "paddedTransparent": null,
+        "headSafeArea": {
+          "hairTopInCropPx": 19,
+          "chinInCropPx": 114,
+          "marginAboveHairPx": 19,
+          "marginBelowChinPx": 78,
+          "headCenterXInCropPx": 96,
+          "headCenterYInCropPx": 66
+        },
+        "alphaValues": [
+          0,
+          255
+        ],
+        "semiTransparentPixels": 0,
+        "uniqueColors": 55,
+        "warnings": [],
+        "sha256": "9c264e782e7cd5e646422ec5a1d9c6eca2f9e649a4a53ebf468b6d642b74b38f"
+      },
+      "method": "retouch",
+      "palette": 64
+    },
+    "bd-houka": {
+      "name": "和泉朋花",
+      "band": "millsage",
+      "sourceFile": "20_millsage_和泉朋花_基础全身立绘.png",
+      "sourceSha256": "e89834bae66b022aad16df6472b54f01669e5b574b09a4b1ae2daa410e42cdbf",
+      "sourceSize": [
+        1536,
+        1536
+      ],
+      "portrait": {
+        "url": "/assets/frontend/portraits/bd-houka.f7728b3d7d.png",
+        "sha256": "f7728b3d7dcecc181612db00db777d1d4e867629996fefef5bdb12d8907fd1e1",
+        "candidateSha256": "fcda84dff407f36f899d518ad6f9848ef53dc2a94d7864f8665538f3a643e68a",
+        "width": 128,
+        "height": 224,
+        "colors": 63
+      },
+      "avatar": {
+        "url": "/assets/frontend/portraits/bd-houka.774a0c05ba.png",
+        "sha256": "774a0c05bad721d4c07f1290e5d80e919eb2a203fa2a047fa91e9abaa2e76cd0",
+        "candidateSha256": "868cdc6c78d31197eb5979351b8e7e01369ef034c7ffca4dad386691c4ad2fac",
+        "width": 96,
+        "height": 96,
+        "colors": 62
+      },
+      "headRectSource": [
+        594,
+        112,
+        1015,
+        554
+      ],
+      "avatarCrop": {
+        "target": 96,
+        "cropRectOn384x672": [
+          99,
+          0,
+          291,
+          186
+        ],
+        "cropOriginOn384x672": [
+          99,
+          -6
+        ],
+        "paddedTransparent": [
+          0,
+          3,
+          0,
+          0
+        ],
+        "headSafeArea": {
+          "hairTopInCropPx": 19,
+          "chinInCropPx": 219,
+          "marginAboveHairPx": 19,
+          "marginBelowChinPx": -27,
+          "headCenterXInCropPx": 96,
+          "headCenterYInCropPx": 119
+        },
+        "alphaValues": [
+          0,
+          255
+        ],
+        "semiTransparentPixels": 0,
+        "uniqueColors": 62,
+        "warnings": [
+          "crop padded transparently l0 t6 r0 b0 instead of clamping",
+          "head margins tight: above=19px below=-27px of 192"
+        ],
+        "sha256": "868cdc6c78d31197eb5979351b8e7e01369ef034c7ffca4dad386691c4ad2fac"
+      },
+      "method": "retouch",
+      "palette": 64
+    },
+    "bd-raika": {
+      "name": "須賀蕾叶",
+      "band": "ikka-dumb-rock",
+      "sourceFile": "21_一家Dumb Rock!_须贺蕾叶_基础全身立绘.png",
+      "sourceSha256": "3ce1e220b2f17d018dd79f0f04c9ce062779709d7d20fa591ddc6667155e7a23",
+      "sourceSize": [
+        1231,
+        1413
+      ],
+      "portrait": {
+        "url": "/assets/frontend/portraits/bd-raika.2787fe4c1b.png",
+        "sha256": "2787fe4c1b7c3b392a7c94d210dcaf91731827819366bda5d37486d87bfdb3c6",
+        "candidateSha256": "eb68e8df66ef02f1d7a51d96a9ab4166f6f749076905cc1209999d65b9c17aa1",
+        "width": 128,
+        "height": 224,
+        "colors": 64
+      },
+      "avatar": {
+        "url": "/assets/frontend/portraits/bd-raika.cc17918655.png",
+        "sha256": "cc179186557e946a7ab142fdb0ed9dd2357d7a56cd212967f4a94c094e486ea5",
+        "candidateSha256": "e1b342ee3f81b1a1231bd7446ae6fd0ce416d52d3e48a1e3c7700314fd8036d1",
+        "width": 96,
+        "height": 96,
+        "colors": 46
+      },
+      "headRectSource": [
+        260,
+        1,
+        673,
+        477
+      ],
+      "avatarCrop": {
+        "target": 96,
+        "cropRectOn384x672": [
+          52,
+          99,
+          244,
+          291
+        ],
+        "cropOriginOn384x672": [
+          52,
+          99
+        ],
+        "paddedTransparent": null,
+        "headSafeArea": {
+          "hairTopInCropPx": 19,
+          "chinInCropPx": 166,
+          "marginAboveHairPx": 19,
+          "marginBelowChinPx": 26,
+          "headCenterXInCropPx": 95,
+          "headCenterYInCropPx": 92
+        },
+        "alphaValues": [
+          0,
+          255
+        ],
+        "semiTransparentPixels": 0,
+        "uniqueColors": 46,
+        "warnings": [],
+        "sha256": "e1b342ee3f81b1a1231bd7446ae6fd0ce416d52d3e48a1e3c7700314fd8036d1"
+      },
+      "method": "retouch",
+      "palette": 64
+    },
+    "bd-miku": {
+      "name": "馬橋心玖",
+      "band": "ikka-dumb-rock",
+      "sourceFile": "22_一家Dumb Rock!_马桥心玖_基础全身立绘.png",
+      "sourceSha256": "5597974c4348f2494e7b6a08f9b4f6dd99d5091d4367b08a07cbf579c4998dba",
+      "sourceSize": [
+        1184,
+        1415
+      ],
+      "portrait": {
+        "url": "/assets/frontend/portraits/bd-miku.81c9513fd0.png",
+        "sha256": "81c9513fd0024b688f034912fe82f5efcf58c107ab9bc108568afd8267b91bf8",
+        "candidateSha256": "2ca25d791e05c46ece11e80b99e30e227ed399573ce18cef4e2847f9ae4adda0",
+        "width": 128,
+        "height": 224,
+        "colors": 63
+      },
+      "avatar": {
+        "url": "/assets/frontend/portraits/bd-miku.b4c657f949.png",
+        "sha256": "b4c657f9494e63913e5884b0e414fadb37a2f7398e3d218815fda68703ef1ec5",
+        "candidateSha256": "961d0a5e60919489c0c28c406be110127eb36c36def31eae7c7419cf20209189",
+        "width": 96,
+        "height": 96,
+        "colors": 55
+      },
+      "headRectSource": [
+        213,
+        1,
+        665,
+        415
+      ],
+      "avatarCrop": {
+        "target": 96,
+        "cropRectOn384x672": [
+          47,
+          91,
+          239,
+          283
+        ],
+        "cropOriginOn384x672": [
+          47,
+          91
+        ],
+        "paddedTransparent": null,
+        "headSafeArea": {
+          "hairTopInCropPx": 19,
+          "chinInCropPx": 151,
+          "marginAboveHairPx": 19,
+          "marginBelowChinPx": 41,
+          "headCenterXInCropPx": 96,
+          "headCenterYInCropPx": 85
+        },
+        "alphaValues": [
+          0,
+          255
+        ],
+        "semiTransparentPixels": 0,
+        "uniqueColors": 55,
+        "warnings": [],
+        "sha256": "961d0a5e60919489c0c28c406be110127eb36c36def31eae7c7419cf20209189"
+      },
+      "method": "retouch",
+      "palette": 64
+    },
+    "bd-yomogi": {
+      "name": "矢倉蓬咲",
+      "band": "ikka-dumb-rock",
+      "sourceFile": "23_一家Dumb Rock!_矢仓蓬咲_基础全身立绘.png",
+      "sourceSha256": "943da67ff1bf257d58342dda28625c8a6ea5859051731688b083d6f1184ad26c",
+      "sourceSize": [
+        1536,
+        1536
+      ],
+      "portrait": {
+        "url": "/assets/frontend/portraits/bd-yomogi.2e3cd15788.png",
+        "sha256": "2e3cd15788c15af8655b8a17ce4be5c421ecd4bdaf4ee8512dad7ae7984e2420",
+        "candidateSha256": "ba281da110e93ee755ca5d2228357e506837ad4cfee72a1f6e6b20189204f425",
+        "width": 128,
+        "height": 224,
+        "colors": 64
+      },
+      "avatar": {
+        "url": "/assets/frontend/portraits/bd-yomogi.b93ba6638f.png",
+        "sha256": "b93ba6638ff05616255045a3b1070ef923252ae1b86033fed23cfa03916e26c8",
+        "candidateSha256": "3cfdc9057e0030223ab588bbab26c68c6116e7f1123e700c4ff74f8e15e11507",
+        "width": 96,
+        "height": 96,
+        "colors": 49
+      },
+      "headRectSource": [
+        551,
+        112,
+        942,
+        512
+      ],
+      "avatarCrop": {
+        "target": 96,
+        "cropRectOn384x672": [
+          71,
+          41,
+          263,
+          233
+        ],
+        "cropOriginOn384x672": [
+          71,
+          41
+        ],
+        "paddedTransparent": null,
+        "headSafeArea": {
+          "hairTopInCropPx": 19,
+          "chinInCropPx": 187,
+          "marginAboveHairPx": 19,
+          "marginBelowChinPx": 5,
+          "headCenterXInCropPx": 96,
+          "headCenterYInCropPx": 103
+        },
+        "alphaValues": [
+          0,
+          255
+        ],
+        "semiTransparentPixels": 0,
+        "uniqueColors": 49,
+        "warnings": [
+          "head margins tight: above=19px below=5px of 192"
+        ],
+        "sha256": "3cfdc9057e0030223ab588bbab26c68c6116e7f1123e700c4ff74f8e15e11507"
+      },
+      "method": "retouch",
+      "palette": 64
+    },
+    "bd-chieri": {
+      "name": "梅里ちえり",
+      "band": "ikka-dumb-rock",
+      "sourceFile": "24_一家Dumb Rock!_梅里千樱梨_基础全身立绘.png",
+      "sourceSha256": "9fea98676ee7fc1ec5b76756d7f024b09a5fcdcc3b8c5cefcb3eacce00b4f44e",
+      "sourceSize": [
+        805,
+        1536
+      ],
+      "portrait": {
+        "url": "/assets/frontend/portraits/bd-chieri.ce27d41686.png",
+        "sha256": "ce27d416865c38ef7a701f0df267e48491f5d2c9d612ad81787bc94c05d9d64c",
+        "candidateSha256": "18e7bec756e052268e9b54a918eb62c0f5ffcf1d67f3013d624fbb4ebcffab90",
+        "width": 128,
+        "height": 224,
+        "colors": 64
+      },
+      "avatar": {
+        "url": "/assets/frontend/portraits/bd-chieri.0632e4a848.png",
+        "sha256": "0632e4a848a04acadbf1895bd0b8e0baa847eeb3f65510d952c7a7884e65f2c3",
+        "candidateSha256": "b8be87d69884eb85f166cf539177966bef82924818e50ef547b86a9e7d40830a",
+        "width": 96,
+        "height": 96,
+        "colors": 60
+      },
+      "headRectSource": [
+        170,
+        121,
+        691,
+        510
+      ],
+      "avatarCrop": {
+        "target": 96,
+        "cropRectOn384x672": [
+          108,
+          45,
+          300,
+          237
+        ],
+        "cropOriginOn384x672": [
+          108,
+          45
+        ],
+        "paddedTransparent": null,
+        "headSafeArea": {
+          "hairTopInCropPx": 19,
+          "chinInCropPx": 182,
+          "marginAboveHairPx": 19,
+          "marginBelowChinPx": 10,
+          "headCenterXInCropPx": 96,
+          "headCenterYInCropPx": 100
+        },
+        "alphaValues": [
+          0,
+          255
+        ],
+        "semiTransparentPixels": 0,
+        "uniqueColors": 60,
+        "warnings": [
+          "head margins tight: above=19px below=10px of 192"
+        ],
+        "sha256": "b8be87d69884eb85f166cf539177966bef82924818e50ef547b86a9e7d40830a"
+      },
+      "method": "retouch",
+      "palette": 64
+    },
+    "bd-shizuku": {
+      "name": "四宮寧月",
+      "band": "ikka-dumb-rock",
+      "sourceFile": "25_一家Dumb Rock!_四宫宁月_基础全身立绘.png",
+      "sourceSha256": "13a5947335803408cc02717f010a2e6297696a314bfb6c0a3a979beda7a07224",
+      "sourceSize": [
+        576,
+        1415
+      ],
+      "portrait": {
+        "url": "/assets/frontend/portraits/bd-shizuku.7eae9de347.png",
+        "sha256": "7eae9de34740b855df8c72d951f1f220b26fd25ba78b2b9c27e7f3fe18da786b",
+        "candidateSha256": "d08a9a76ed7d0712cbebb9f64b65878f0c1348f38f3680b9113c5cb93b28ec01",
+        "width": 128,
+        "height": 224,
+        "colors": 63
+      },
+      "avatar": {
+        "url": "/assets/frontend/portraits/bd-shizuku.038c16f4ae.png",
+        "sha256": "038c16f4ae68401c12e0992281702340008717b9f6cf5030eb7ce9de0318aa5f",
+        "candidateSha256": "4c2ce2139dc6bb3161f0937f0b892eb10f710e90f33e5afc2eded10e345a78e5",
+        "width": 96,
+        "height": 96,
+        "colors": 52
+      },
+      "headRectSource": [
+        41,
+        2,
+        461,
+        533
+      ],
+      "avatarCrop": {
+        "target": 96,
+        "cropRectOn384x672": [
+          79,
+          0,
+          271,
+          186
+        ],
+        "cropOriginOn384x672": [
+          79,
+          -6
+        ],
+        "paddedTransparent": [
+          0,
+          3,
+          0,
+          0
+        ],
+        "headSafeArea": {
+          "hairTopInCropPx": 19,
+          "chinInCropPx": 261,
+          "marginAboveHairPx": 19,
+          "marginBelowChinPx": -69,
+          "headCenterXInCropPx": 96,
+          "headCenterYInCropPx": 140
+        },
+        "alphaValues": [
+          0,
+          255
+        ],
+        "semiTransparentPixels": 0,
+        "uniqueColors": 52,
+        "warnings": [
+          "crop padded transparently l0 t6 r0 b0 instead of clamping",
+          "head margins tight: above=19px below=-69px of 192"
+        ],
+        "sha256": "4c2ce2139dc6bb3161f0937f0b892eb10f710e90f33e5afc2eded10e345a78e5"
+      },
+      "method": "retouch",
+      "palette": 64
+    }
+  }
+}

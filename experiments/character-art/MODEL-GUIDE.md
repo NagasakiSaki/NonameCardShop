@@ -76,3 +76,7 @@ npm run art:install
 选人时清除按键/目的地并朝下；地图至少原生 1x，窄窗口局部滚动，不缩小像素或隐藏立绘。网页“导出立绘 PNG”导出五团完整 128×224；列表头像另用 generated 下的 portrait-96 文件。
 
 改共享渲染器后运行 `node tests/character-art.mjs`：除尺寸和 672 张正/侧面帧外，会逐像素比较浏览器与 CLI 的全部 28 张行走图和 25 张完整立绘。只检查 CLI PNG 不足以发现浏览器图层丢失。正式换装接入相关验证为 `node tests/frontend/assets.mjs` 与 `node tests/frontend-skins.mjs`；无相关业务修改无需重跑全套经济测试。
+
+## 当前正式立绘的用户图源覆盖
+
+2026-10-24 起，25 人正式 standing/avatar 使用用户指定的 `全部角色基础全身立绘/PNG透明格式` 转换结果；当前出处、SHA-256 与参数登记于 `data/character-portraits.json`，维护入口为 `tools/portrait-kit/README.md`。原网页参考审计保留为历史记录。原有几何绘制器继续用于代码换装实验；正式人物包安装后会应用立绘覆盖，不恢复旧几何稿。行走仍使用独立部件与帧流程。

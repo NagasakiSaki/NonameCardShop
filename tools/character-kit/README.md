@@ -32,3 +32,7 @@ npm run art:install
 核心模块可直接 import：`listParts()`、`validateConfig(input)`、`contactSheet(out,{overwrite})`。核心操作规范、绘制参数和脸部图层注意事项见 `experiments/character-art/MODEL-GUIDE.md`。定向检查：`node tests/character-kit/cli.mjs`。
 
 `audit.mjs` 是 QA-01 的独立只读检查入口，检查正式 manifest 的路径、每套格式、透明底、五团 ID/姓名/参考元数据和署名文件；输出 report.json / report.md。不能据此声称美术定稿或整个游戏无 bug。旧哈希只列报告，不删除。
+
+## 用户图源立绘（2026-10-24）
+
+新立绘工具见 `tools/portrait-kit/README.md`；登记入口 `data/character-portraits.json`，预览 `/experiments/character-portraits/index.html`。25 人立绘已采用用户 PNG，原生 128×224 与 96×96 头像。`import-portraits.mjs` 负责统一核验/导入，人物包重建保留新立绘覆盖；行走工具与旧几何画稿继续独立，不要将原图立绘当作四向行走帧。

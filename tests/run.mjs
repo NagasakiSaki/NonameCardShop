@@ -11,6 +11,7 @@ groups.backend.push('tests/basket.mjs');groups.frontend.push(...groups.trading.s
 groups.ui.push(...groups.trading.slice(1));
 groups.backend.push('tests/customer-visits.mjs');groups.frontend.push('tests/profile-menu.mjs');groups.ui.push('tests/profile-menu.mjs');groups.history.push('tests/profile-menu.mjs');
 groups.frontend.push('tests/gameplay-ui.mjs');groups.ui.push('tests/gameplay-ui.mjs');
+groups.frontend.push('tests/portrait-sources.mjs','tests/portrait-preview.mjs');groups.ui.push('tests/portrait-preview.mjs');
 groups.npc=['tests/customer-visits.mjs','tests/gameplay-adjustments.mjs'];
 groups.npcNatural=['tests/npc-natural-browser.mjs'];
 groups.backend.push('tests/day-starts.mjs','tests/gameplay-adjustments.mjs');groups.history.push('tests/day-starts.mjs');

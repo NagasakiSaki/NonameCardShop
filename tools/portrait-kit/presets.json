@@ -1,0 +1,338 @@
+{
+  "defaults": {
+    "subjectHeightFrac": 0.96,
+    "topMarginFrac": 0.02,
+    "alphaThreshold": 0.5,
+    "subgrid": 8,
+    "contrastK": 2.0,
+    "paletteColors": 64,
+    "dither": false
+  },
+  "characters": {
+    "bd-tomori": {
+      "officialName": "高松燈",
+      "band": "mygo",
+      "features": "用户指定图源：01_MyGO!!!!!_高松灯_基础全身立绘.png；外观以原图为准。",
+      "headRectSource": [
+        111,
+        1,
+        564,
+        422
+      ],
+      "headRectSourceNote": "新图包检测（hair-blob(81582px)+skin）",
+      "faceK": 8.0
+    },
+    "bd-anon": {
+      "officialName": "千早愛音",
+      "band": "mygo",
+      "features": "用户指定图源：02_MyGO!!!!!_千早爱音_基础全身立绘.png；外观以原图为准。",
+      "headRectSource": [
+        590,
+        143,
+        961,
+        491
+      ],
+      "headRectSourceNote": "新图包检测（hair-blob(65754px)+skin）",
+      "faceK": 8.0
+    },
+    "bd-rana": {
+      "officialName": "要楽奈",
+      "band": "mygo",
+      "features": "用户指定图源：03_MyGO!!!!!_要乐奈_基础全身立绘.png；外观以原图为准。",
+      "headRectSource": [
+        573,
+        145,
+        1011,
+        530
+      ],
+      "headRectSourceNote": "新图包检测（hair-blob(111484px)+skin）",
+      "faceK": 8.0
+    },
+    "bd-soyo": {
+      "officialName": "長崎そよ",
+      "band": "mygo",
+      "features": "用户指定图源：04_MyGO!!!!!_长崎爽世_基础全身立绘.png；外观以原图为准。",
+      "headRectSource": [
+        603,
+        142,
+        1011,
+        650
+      ],
+      "headRectSourceNote": "新图包检测（hair-blob(87289px)+skin）；列质量分布收窄（剔除琴颈/外扩发束列）",
+      "faceK": 8.0
+    },
+    "bd-taki": {
+      "officialName": "椎名立希",
+      "band": "mygo",
+      "features": "用户指定图源：05_MyGO!!!!!_椎名立希_基础全身立绘.png；外观以原图为准。",
+      "headRectSource": [
+        148,
+        0,
+        566,
+        399
+      ],
+      "headRectSourceNote": "新图包检测（hair-blob(81894px)+skin）",
+      "faceK": 8.0
+    },
+    "bd-uika": {
+      "officialName": "三角初華",
+      "band": "avemujica",
+      "features": "用户指定图源：06_Ave Mujica_Doloris_三角初华_基础全身立绘.png；外观以原图为准。",
+      "headRectSource": [
+        234,
+        2,
+        687,
+        395
+      ],
+      "headRectSourceNote": "新图包检测（hair-blob(112508px)+skin）；列质量分布收窄（剔除琴颈/外扩发束列）",
+      "faceK": 8.0
+    },
+    "bd-mutsumi": {
+      "officialName": "若葉睦",
+      "band": "avemujica",
+      "features": "用户指定图源：07_Ave Mujica_Mortis_若叶睦_基础全身立绘.png；外观以原图为准。",
+      "headRectSource": [
+        610,
+        193,
+        963,
+        586
+      ],
+      "headRectSourceNote": "新图包检测（hair-blob(65346px)+skin）",
+      "faceK": 8.0
+    },
+    "bd-umiri": {
+      "officialName": "八幡海鈴",
+      "band": "avemujica",
+      "features": "用户指定图源：08_Ave Mujica_Timoris_八幡海铃_基础全身立绘.png；外观以原图为准。",
+      "headRectSource": [
+        322,
+        24,
+        745,
+        358
+      ],
+      "headRectSourceNote": "新图包检测（hair-blob(83754px)）",
+      "faceK": 8.0
+    },
+    "bd-nyamu": {
+      "officialName": "祐天寺にゃむ",
+      "band": "avemujica",
+      "features": "用户指定图源：09_Ave Mujica_Amoris_祐天寺若麦_基础全身立绘.png；外观以原图为准。",
+      "headRectSource": [
+        210,
+        0,
+        612,
+        487
+      ],
+      "headRectSourceNote": "新图包检测（hair-blob(55139px)+skin）",
+      "faceK": 8.0
+    },
+    "bd-sakiko": {
+      "officialName": "豊川祥子",
+      "band": "avemujica",
+      "features": "用户指定图源：10_Ave Mujica_Oblivionis_丰川祥子_基础全身立绘.png；外观以原图为准。",
+      "headRectSource": [
+        783,
+        147,
+        987,
+        530
+      ],
+      "headRectSourceNote": "新图包检测（hair-blob(20799px)+skin）",
+      "faceK": 8.0
+    },
+    "bd-arale": {
+      "officialName": "仲町あられ",
+      "band": "yumemita",
+      "features": "用户指定图源：11_梦限大MewType_仲町阿拉蕾_基础全身立绘.png；外观以原图为准。",
+      "headRectSource": [
+        535,
+        169,
+        687,
+        455
+      ],
+      "headRectSourceNote": "新图包检测（hair-blob(9630px)+skin）",
+      "faceK": 8.0
+    },
+    "bd-nonoka": {
+      "officialName": "宮永ののか",
+      "band": "yumemita",
+      "features": "用户指定图源：12_梦限大MewType_宫永野乃花_基础全身立绘.png；外观以原图为准。",
+      "headRectSource": [
+        523,
+        117,
+        908,
+        637
+      ],
+      "headRectSourceNote": "新图包检测（hair-blob(86197px)+skin）；列质量分布收窄（剔除琴颈/外扩发束列）",
+      "faceK": 8.0
+    },
+    "bd-ritsu": {
+      "officialName": "峰月律",
+      "band": "yumemita",
+      "features": "用户指定图源：13_梦限大MewType_峰月律_基础全身立绘.png；外观以原图为准。",
+      "headRectSource": [
+        346,
+        3,
+        616,
+        417
+      ],
+      "headRectSourceNote": "新图包检测（hair-blob(42637px)+skin）",
+      "faceK": 8.0
+    },
+    "bd-miyako": {
+      "officialName": "藤都子",
+      "band": "yumemita",
+      "features": "用户指定图源：14_梦限大MewType_藤都子_基础全身立绘.png；外观以原图为准。",
+      "headRectSource": [
+        609,
+        190,
+        818,
+        568
+      ],
+      "headRectSourceNote": "新图包检测（hair-blob(28505px)+skin）",
+      "faceK": 8.0
+    },
+    "bd-yuno": {
+      "officialName": "千石ユノ",
+      "band": "yumemita",
+      "features": "用户指定图源：15_梦限大MewType_千石由乃_基础全身立绘.png；外观以原图为准。",
+      "headRectSource": [
+        514,
+        114,
+        957,
+        537
+      ],
+      "headRectSourceNote": "新图包检测（column-coverage+skin）",
+      "faceK": 8.0
+    },
+    "bd-hotaru": {
+      "officialName": "汐見蛍",
+      "band": "millsage",
+      "features": "用户指定图源：16_millsage_汐见萤_基础全身立绘.png；外观以原图为准。",
+      "headRectSource": [
+        596,
+        107,
+        1034,
+        529
+      ],
+      "headRectSourceNote": "新图包检测（hair-blob(115185px)+skin）",
+      "faceK": 8.0
+    },
+    "bd-natsume": {
+      "officialName": "伊沢なつめ",
+      "band": "millsage",
+      "features": "用户指定图源：17_millsage_伊泽枣_基础全身立绘.png；外观以原图为准。",
+      "headRectSource": [
+        620,
+        117,
+        1050,
+        526
+      ],
+      "headRectSourceNote": "新图包检测（hair-blob(90204px)+skin）",
+      "faceK": 8.0
+    },
+    "bd-nagi": {
+      "officialName": "琴平凪",
+      "band": "millsage",
+      "features": "用户指定图源：18_millsage_琴平凪_基础全身立绘.png；外观以原图为准。",
+      "headRectSource": [
+        581,
+        110,
+        960,
+        514
+      ],
+      "headRectSourceNote": "新图包检测（hair-blob(89337px)+skin）；列质量分布收窄（剔除琴颈/外扩发束列）",
+      "faceK": 8.0
+    },
+    "bd-mahoro": {
+      "officialName": "浜崎まほろ",
+      "band": "millsage",
+      "features": "用户指定图源：19_millsage_滨崎茉幌_基础全身立绘.png；外观以原图为准。",
+      "headRectSource": [
+        271,
+        111,
+        697,
+        385
+      ],
+      "headRectSourceNote": "新图包检测（hair-blob(69097px)）",
+      "faceK": 8.0
+    },
+    "bd-houka": {
+      "officialName": "和泉朋花",
+      "band": "millsage",
+      "features": "用户指定图源：20_millsage_和泉朋花_基础全身立绘.png；外观以原图为准。",
+      "headRectSource": [
+        594,
+        112,
+        1015,
+        554
+      ],
+      "headRectSourceNote": "新图包检测（hair-blob(113692px)+skin）",
+      "faceK": 8.0
+    },
+    "bd-raika": {
+      "officialName": "須賀蕾叶",
+      "band": "ikka-dumb-rock",
+      "features": "用户指定图源：21_一家Dumb Rock!_须贺蕾叶_基础全身立绘.png；外观以原图为准。",
+      "headRectSource": [
+        260,
+        1,
+        673,
+        477
+      ],
+      "headRectSourceNote": "新图包检测（hair-blob(54799px)+skin）",
+      "faceK": 8.0
+    },
+    "bd-miku": {
+      "officialName": "馬橋心玖",
+      "band": "ikka-dumb-rock",
+      "features": "用户指定图源：22_一家Dumb Rock!_马桥心玖_基础全身立绘.png；外观以原图为准。",
+      "headRectSource": [
+        213,
+        1,
+        665,
+        415
+      ],
+      "headRectSourceNote": "新图包检测（hair-blob(104940px)+skin）",
+      "faceK": 8.0
+    },
+    "bd-yomogi": {
+      "officialName": "矢倉蓬咲",
+      "band": "ikka-dumb-rock",
+      "features": "用户指定图源：23_一家Dumb Rock!_矢仓蓬咲_基础全身立绘.png；外观以原图为准。",
+      "headRectSource": [
+        551,
+        112,
+        942,
+        512
+      ],
+      "headRectSourceNote": "新图包检测（hair-blob(76175px)+skin）",
+      "faceK": 8.0
+    },
+    "bd-chieri": {
+      "officialName": "梅里ちえり",
+      "band": "ikka-dumb-rock",
+      "features": "用户指定图源：24_一家Dumb Rock!_梅里千樱梨_基础全身立绘.png；外观以原图为准。",
+      "headRectSource": [
+        170,
+        121,
+        691,
+        510
+      ],
+      "headRectSourceNote": "新图包检测（hair-blob(76568px)+skin）",
+      "faceK": 8.0
+    },
+    "bd-shizuku": {
+      "officialName": "四宮寧月",
+      "band": "ikka-dumb-rock",
+      "features": "用户指定图源：25_一家Dumb Rock!_四宫宁月_基础全身立绘.png；外观以原图为准。",
+      "headRectSource": [
+        41,
+        2,
+        461,
+        533
+      ],
+      "headRectSourceNote": "新图包检测（hair-blob(110288px)+skin）",
+      "faceK": 8.0
+    }
+  }
+}
