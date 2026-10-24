@@ -17,8 +17,9 @@ export interface SupplierBasketQuote {
 }
 /** supplier.placeBasketOrder has empty payload and automatically uses supplier credit for the cash shortfall. */
 export interface SupplierBasketOrderResult {
+  fulfillment:'received';inventoryRefs:string[];
   orderIds:string[];
-  orders:Array<{orderId:string;productId:string;themeName:string;productVersion:string;unit:'pack'|'box';quantity:number;unitCost:number;cost:number;total:number;status:'pending';dueAt:number;product:Record<string,unknown>}>;
+  orders:Array<{orderId:string;productId:string;themeName:string;productVersion:string;unit:'pack'|'box';quantity:number;unitCost:number;cost:number;total:number;status:'received';fulfillment:'instant';inventoryRefs:string[];receivedAt:{day:number;minute:number};dueAt:number;product:Record<string,unknown>}>;
   totalDebit:number;cashDebit:number;creditDebit:number;
 }
 /** inventory.list({grouped:true}); each group is one card + printing + location. */
@@ -37,6 +38,19 @@ export interface SealedInventoryGroup {
 export interface SealedInventorySummary {items:SealedInventoryGroup[];total:number}
 /** query('player.skins'); command({type:'player.setSkin',payload:{appearanceId}}). Cosmetic, archived with world.player. */
 export interface PlayerSkins { current:string; items:Array<{appearanceId:string;name:string;selected:boolean}> }
+/** query player.favorites; command player.setFavorite({cardKey,favorite}). Not inventory protection. */
+export interface PlayerFavorites {cardKeys:string[]}
+/** room.settings; room.setTableFee({amount:number|null}). null restores base + table upgrades. */
+export interface TableSettings {amount:number;automaticAmount:number;source:'automatic'|'manual';revision:number;min:0;max:1000}
+/** Applied only when creating a world, before its first day-start archive; never on load/import. */
+export interface StarterGiftConfig {enabled:boolean;unit:'pack'|'box';quantity:number;productId:string|null}
+export interface StarterGift {version:1;status:'granted'|'disabled';productId?:string;productVersion?:string;name?:string;unit?:'pack'|'box';quantity?:number;inventoryRefs?:string[];day?:number}
+/** combat.joinQueue({mode,inventoryRefs,tableId?}), combat.leaveQueue(), combat.setWaitMode({mode}). Waiting itself never pauses the world. */
+export interface MatchQueueEntry {queueId:string;ownerId:string;tableId:string|null;mode:'bo3'|'kof';inventoryRefs:string[];lineup?:Array<{cardKey:string;name:string;inventoryRef:string}>;fee:number;createdAt:number;expiresAt:number;waitMode:'manual'|'wander'}
+/** combat.queue. Match creation is separate from queue entry and requires an actual compatible opponent. */
+export interface MatchQueueView {player:MatchQueueEntry|null;waiting:Array<{queueId:string;ownerId:string;name:string;mode:'bo3'|'kof';tableId:string|null;fee:number;expiresAt:number}>;playerMatch:Record<string,unknown>|null}
+/** One session for a whole KOF/BO3 match; persisted applied prevents repeated thirty-minute advancement. NPC matches are serial. */
+export interface MatchTimeSession {startedAt:{day:number;minute:number};minutes:30;applied:boolean;appliedAt?:{day:number;minute:number}}
 export interface HostEvent { contractVersion:'card-shop-ui/1.0'; worldId:string; branchId:string; seq:number; revision:number; type:string; data:unknown }
 export interface PauseLease {leaseId:string; ownerId:string; reason:string}
 /** inventory.list({location:'trash'}) returns the shared bin, one row per actual card. */
@@ -79,7 +93,7 @@ export interface NeighborAction {
 export interface CombatEligibleView {
   mode:'bo3'|'kof'; slots:number;
   items:Array<{inventoryRef:string;cardKey:string;generalId:string;name:string;rarity:Rarity;eligible:boolean;
-    reasons:Array<{code:string;message:string}>;disabledReasons:Array<{code:string;message:string}>;reviewStatus:string}>;
+    imageUrl?:string;favorite:boolean;reasons:Array<{code:string;message:string}>;disabledReasons:Array<{code:string;message:string}>;reviewStatus:string}>;
 }
 export interface CardShopHost {
   connect(input:{contractVersion:'card-shop-ui/1.0';clientId:string}):Promise<{

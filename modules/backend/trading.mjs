@@ -2,6 +2,7 @@ import {clone,need,integer,serial,sum,credit,debit,clamp,random,page} from './co
 import {openPacket,unsealBox,makeSealed} from './products.mjs';
 import {note,enterCirculation} from './world.mjs';
 export {enterCirculation} from './world.mjs';
+export {receiveOrder} from './fulfillment.mjs';
 import {trashItems,discardCard,customerBehavior,ensureCustomerTraits,canScavenge,unwantedCards,scavenge} from './trash.mjs';
 import {pathfind,moveActor} from './navigation.mjs';
 import {managementEffects} from './management.mjs';
@@ -92,11 +93,6 @@ export function settleTrade(w,listing,buyerId){
   if(buyerId==='player')w.daily.purchases+=listing.unitAmount;
   listing.status='sold';listing.buyerId=buyerId;item.ownerId=buyerId;item.location='collection';item.lock=null;item.cost=listing.unitAmount;
   note(w,'secondaryTradeCompleted',{listingId:listing.listingId,cardKey:item.cardKey,buyerId,sellerId:listing.ownerId,amount:listing.unitAmount,fee});return {listingId:listing.listingId,amount:listing.unitAmount,fee,inventoryRef:item.inventoryRef};
-}
-export function receiveOrder(w,order){
-  need(order?.status==='arrived','NOT_READY','订单尚未送达或已签收。');
-  const refs=[];for(let i=0;i<order.quantity;i++)refs.push(makeSealed(w,order.product,order.unit,order.unitCost).inventoryRef);
-  order.status='received';w.lifetime.received+=order.quantity*(order.unit==='box'?24:1);note(w,'goodsReceived',{orderId:order.orderId,quantity:refs.length});return {inventoryRefs:refs,stock:{packs:order.quantity*(order.unit==='box'?24:1)}};
 }
 export function openCustomerPurchase(w,catalog,npc,inventoryRef){
   const item=w.items[inventoryRef];

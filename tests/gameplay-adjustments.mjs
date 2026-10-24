@@ -19,11 +19,11 @@ const p=products.filter(p=>p.prices).sort((a,b)=>a.prices.pack.wholesale-b.price
 const q=await query('products.quote',{productId:p.productId,unit:'pack',quantity:3});
 const request={requestId:'automatic-reward-idempotency',type:'supplier.placeOrder',quoteId:q.quoteId,payload:{productId:p.productId,quantity:3,unit:'pack'}};
 assert.ok((await host.command(request)).ok);const before=host.inspect();
-assert.equal(before.world.wallet.available,rules.startingCash-q.totalDebit+500,'starter + daily order rewards auto paid');
+assert.equal(before.world.wallet.available,rules.startingCash-q.totalDebit+700,'starter, daily order and instant receipt rewards auto paid');
 await host.command(request);assert.deepEqual(host.inspect(),before,'same request never pays twice');
 let taskList=(await query('tasks.list'));assert.ok(taskList.find(t=>t.taskId==='daily-stock').claimed);assert.ok(taskList.find(t=>t.taskId==='first-order').claimed);
 const archive=await cmd('saves.create');await cmd('business.open');for(let i=0;i<16;i++)await host.advance(1);
-const order=(await query('supplier.orders')).items[0];await cmd('supplier.receive',{orderId:order.orderId});
+const order=(await query('supplier.orders')).items[0];assert.equal(order.status,'received');
 const preview=await query('opening.preview',{quantity:1});await cmd('opening.execute',{}, {previewId:preview.previewId});
 const cards=(await query('inventory.list',{kind:'card'})).items;assert.ok(cards.length);assert.ok((await query('combat.eligible')).items.every(i=>!i.disabledReasons.some(r=>r.code==='NOT_IN_CIRCULATION')));
 assert.ok((await query('ledger.live')).items.some(e=>e.kind==='task'));assert.ok((await query('shop.snapshot')).cashJournal.length);

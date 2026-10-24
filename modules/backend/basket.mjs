@@ -2,6 +2,7 @@ import {clone,integer,need,serial,sum} from './common.mjs';
 import {productEnabled} from './distribution.mjs';
 import {productDTO} from './products.mjs';
 import {note} from './world.mjs';
+import {deliverImmediately} from './fulfillment.mjs';
 
 /** A basket has distinct product/unit rows. Reject duplicates instead of silently changing quantities. */
 export function basketQuote(world,input){
@@ -44,7 +45,8 @@ export function placeBasketOrder(world,quote){
     world.orders.push(order);world.daily.purchases+=order.cost;
     world.lifetime.ordered+=line.quantity*(line.unit==='box'?product.packsPerBox:1);
     note(world,'orderPlaced',{orderId:order.orderId,amount:order.cost});
+    deliverImmediately(world,order);
     return {...clone(order),themeName:product.name,productVersion:product.productVersion,total:order.cost,product:productDTO(product)};
   });
-  return {orderIds:orders.map(o=>o.orderId),orders,totalDebit:quote.totalDebit,cashDebit:quote.totalDebit-shortfall,creditDebit:shortfall};
+  return {fulfillment:'received',inventoryRefs:orders.flatMap(o=>o.inventoryRefs),orderIds:orders.map(o=>o.orderId),orders,totalDebit:quote.totalDebit,cashDebit:quote.totalDebit-shortfall,creditDebit:shortfall};
 }

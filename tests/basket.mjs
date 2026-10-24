@@ -38,14 +38,13 @@ assert.equal((await f.command('supplier.placeBasketOrder',{credit:true},{quoteId
 const request={requestId:'basket-idempotency',type:'supplier.placeBasketOrder',quoteId:quote.quoteId,payload:{}};
 const purchased=await f.host.command(request);assert.equal(purchased.ok,true,JSON.stringify(purchased));
 assert.equal(purchased.data.totalDebit,expected);assert.equal(purchased.data.orders.length,3);assert.equal(new Set(purchased.data.orderIds).size,3);
-const after=f.host.inspect();assert.equal(after.world.wallet.available,before.world.wallet.available-expected+500,'first and daily procurement rewards are separate from purchase cost');assert.equal(after.world.daily.purchases,expected);
-assert.equal(after.world.lifetime.ordered,29);assert.ok(after.world.orders.every(o=>o.status==='pending'&&o.dueAt===1*1440+480+rules.deliveryMinutes));
+const after=f.host.inspect();assert.equal(after.world.wallet.available,before.world.wallet.available-expected+700,'procurement and immediate receipt rewards are separate from purchase cost');assert.equal(after.world.daily.purchases,expected);
+assert.equal(after.world.lifetime.ordered,29);assert.ok(after.world.orders.every(o=>o.status==='received'&&o.fulfillment==='instant'&&o.dueAt===1*1440+480));
 assert.equal(after.world.orders[1].unitCost,a.prices.box.wholesale);assert.deepEqual(after.world.orders[1].product,a);
 assert.deepEqual(await f.host.command(request),purchased);assert.deepEqual(f.host.inspect(),after);
 assert.equal((await f.host.command({...request,payload:{different:true}})).error.code,'REQUEST_ID_REUSED');
-// The existing receiving path accepts every basket-created ordinary order and preserves unit costs.
-for(let i=0;i<16;i++)await f.host.advance(1);
-const received=await f.command('supplier.receiveAll');assert.equal(received.ok,true,JSON.stringify(received));assert.equal(received.data.orders,3);
+// Instant orders cannot be signed a second time; costs are already in the warehouse.
+const received=await f.command('supplier.receiveAll');assert.equal(received.ok,true,JSON.stringify(received));assert.equal(received.data.orders,0);
 assert.equal(Object.values(f.host.inspect().world.items).reduce((n,i)=>n+i.cost,0),expected);
 // Persisted idempotency survives reconnecting to the same repository.
 await f.host.disconnect();
@@ -58,11 +57,13 @@ assert.deepEqual(insufficient.host.inspect(),ib,'entire basket must roll back wi
 
 // Exactly the remaining supplier credit is accepted; one coin above it is rejected.
 const packCost=a.prices.pack.wholesale;
+const borrowed=Math.min(100,packCost);
 for(const [extra,ok] of [[0,true],[1,false]]){
-  const edge=await fixture({cash:packCost-100-extra,debt:200}),q=await edge.query('supplier.basketQuote',{lines:[{productId:a.productId,unit:'pack',quantity:1}]});
-  assert.equal(q.supplierCreditAvailable,100);const r=await edge.command('supplier.placeBasketOrder',{}, {quoteId:q.quoteId});assert.equal(r.ok,ok);
-  assert.equal(q.cashDebit,packCost-100-extra);assert.equal(q.creditDebit,100+extra);
-  if(ok){assert.equal(edge.host.inspect().world.wallet.available,0);assert.equal(edge.host.inspect().world.wallet.debt,300);assert.equal(r.data.cashDebit,packCost-100);assert.equal(r.data.creditDebit,100);}
+  const debt=rules.supplierCreditLimit-borrowed+extra;
+  const edge=await fixture({cash:packCost-borrowed,debt}),q=await edge.query('supplier.basketQuote',{lines:[{productId:a.productId,unit:'pack',quantity:1}]});
+  assert.equal(q.supplierCreditAvailable,borrowed-extra);const r=await edge.command('supplier.placeBasketOrder',{}, {quoteId:q.quoteId});assert.equal(r.ok,ok);
+  assert.equal(q.cashDebit,packCost-borrowed);assert.equal(q.creditDebit,borrowed);
+  if(ok){assert.equal(edge.host.inspect().world.wallet.available,0);assert.equal(edge.host.inspect().world.wallet.debt,300);assert.equal(r.data.cashDebit,packCost-borrowed);assert.equal(r.data.creditDebit,borrowed);}
   else assert.equal(edge.host.inspect().world.orders.length,0);
   await edge.host.disconnect();
 }

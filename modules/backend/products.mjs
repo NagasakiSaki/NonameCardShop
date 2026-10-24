@@ -1,9 +1,11 @@
 import {RARITIES,clone,need,sum,shuffle,pick,serial,clamp} from './common.mjs';
 import {boxRecipe,distribution} from './distribution.mjs';
-import {priceByStrength} from './supply-pricing.mjs';
+import {priceByStrength,strengthPricing} from './supply-pricing.mjs';
 
 export function publishProducts(catalog,rules,day,marketPrices={}){
   const ratingVersion=catalog.cards[0]?.ratingVersion||rules.ratingVersion;
+  let priceHash=2166136261;for(const ch of JSON.stringify([strengthPricing(rules),rules.referenceValues,rules.retailMargin,rules.roundTo]))priceHash=Math.imul(priceHash^ch.charCodeAt(0),16777619)>>>0;
+  const economyVersion=priceHash.toString(16);
   return catalog.packs.map(pack=>{
     const local=Object.fromEntries(RARITIES.map(r=>[r,catalog.cards.filter(c=>c.pack===pack.id&&c.currentRarity===r).map(c=>c.cardKey)]));
     const poolSummary=Object.fromEntries(RARITIES.map(r=>[r,local[r].length]));
@@ -17,7 +19,7 @@ export function publishProducts(catalog,rules,day,marketPrices={}){
     const boxValue=sum(RARITIES.map(r=>boxCounts[r]*values[r]));
     const substitutions=RARITIES.filter(r=>boxCounts[r]>0&&!local[r].length);
     const collationVersion=distribution(rules).version;
-    return {productId:pack.id,themeId:pack.id,name:pack.name,productVersion:`${ratingVersion}-${collationVersion}-day${day}`,ratingVersion,priceVersion:`supply-${collationVersion}-day${day}`,collationVersion,
+    return {productId:pack.id,themeId:pack.id,name:pack.name,productVersion:`${ratingVersion}-${collationVersion}-economy${economyVersion}-day${day}`,ratingVersion,priceVersion:`supply-${economyVersion}-${collationVersion}-day${day}`,collationVersion,
       cardsPerPack:5,packsPerBox:24,poolSummary,boxCounts,guaranteed,remainder,pools,values,packSlots,
       packExpectedCounts:Object.fromEntries(RARITIES.map(r=>[r,boxCounts[r]/24])),packAtLeastOneProbabilities:Object.fromEntries(RARITIES.map(r=>[r,1-packSlots.reduce((n,s)=>n*(1-s[r]),1)])),
       guarantees:['每包 4 张 N/R 基础槽 + 1 张 R/SR/SSR 进阶槽',`整盒固定 ${boxCounts.N}N / ${boxCounts.R}R / ${boxCounts.SR}SR / ${boxCounts.SSR}SSR；散包无累计大保底`],

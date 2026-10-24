@@ -4,7 +4,9 @@ import {storefrontView} from './presentation.mjs';
 export function createWorld(rules){
   const world={schemaVersion:2,customerVisitVersion:1,worldId:id('world'),branchId:id('branch'),revision:0,serial:0,seed:Math.floor(Math.random()*4294967296),rules:clone(rules),
     clock:{day:1,minute:480,phase:'preparing',speed:1,manualPaused:false},wallet:{available:rules.startingCash,debt:0,escrowLiability:0},
-    player:{actorId:'actor:owner',appearanceId:'owner',roomId:'store',x:240,y:272,direction:'down',moving:false,activity:'idle',navVersion:null},
+    player:{actorId:'actor:owner',appearanceId:'owner',roomId:'store',x:240,y:272,direction:'down',moving:false,activity:'idle',navVersion:null,favoriteCardKeys:[]},
+    storeSettings:{tableFee:null,feeRevision:0},
+    matchQueue:[],
     products:[],items:{},orders:[],listings:[],npcs:[],circulation:{},stats:{},matches:[],tables:[{tableId:'battleRoom.table.01',matchId:null},{tableId:'battleRoom.table.02',matchId:null}],
     daily:{goods:0,cogs:0,service:0,fees:0,matchNet:0,operating:0,purchases:0},reports:[],lifetime:{ordered:0,received:0,opened:0,sales:0,marketSales:0,matches:0},
     tasks:{},dailyTasks:{day:1,baseline:{},claimed:{}},cashJournal:[],log:[],nextNpcMinute:540,prices:{},configOverrides:{}};
@@ -22,6 +24,10 @@ export function validateWorld(world){
   for(const key of ['items','circulation','stats','daily','lifetime','tasks','prices'])need(world[key]&&typeof world[key]==='object'&&!Array.isArray(world[key]),'INVALID_SAVE',`世界缺少对象 ${key}。`);
   need(Number.isSafeInteger(world.seed)&&world.seed>=0&&world.seed<=4294967295&&Number.isSafeInteger(world.serial)&&world.serial>=0,'INVALID_SAVE','存档随机源或实物序号不合法。');
   need(world.player&&typeof world.player.roomId==='string'&&Number.isFinite(world.player.x)&&Number.isFinite(world.player.y),'INVALID_SAVE','店长位置数据不完整。');
+  need(world.player.favoriteCardKeys===undefined||Array.isArray(world.player.favoriteCardKeys)&&world.player.favoriteCardKeys.length<=20000&&new Set(world.player.favoriteCardKeys).size===world.player.favoriteCardKeys.length&&world.player.favoriteCardKeys.every(k=>typeof k==='string'&&k.length<=200),'INVALID_SAVE','收藏武将列表不合法。');
+  need(world.storeSettings===undefined||world.storeSettings&&typeof world.storeSettings==='object'&&(world.storeSettings.tableFee===null||Number.isSafeInteger(world.storeSettings.tableFee)&&world.storeSettings.tableFee>=0&&world.storeSettings.tableFee<=1000)&&Number.isSafeInteger(world.storeSettings.feeRevision)&&world.storeSettings.feeRevision>=0,'INVALID_SAVE','桌费设置不合法。');
+  need(world.matchQueue===undefined||Array.isArray(world.matchQueue)&&world.matchQueue.length<=1000&&new Set(world.matchQueue.map(q=>q.ownerId)).size===world.matchQueue.length&&new Set(world.matchQueue.map(q=>q.queueId)).size===world.matchQueue.length&&world.matchQueue.every(q=>q&&typeof q.queueId==='string'&&typeof q.ownerId==='string'&&['bo3','kof'].includes(q.mode)&&Array.isArray(q.inventoryRefs)&&q.inventoryRefs.length===(q.mode==='kof'?3:1)&&q.inventoryRefs.every(r=>typeof r==='string')&&Number.isSafeInteger(q.fee)&&q.fee>=0&&Number.isFinite(q.createdAt)&&Number.isFinite(q.expiresAt)&&q.expiresAt>q.createdAt&&['manual','wander'].includes(q.waitMode)),'INVALID_SAVE','等待比赛列表不合法。');
+  for(const m of world.matches||[])need(m.timeSession===undefined||m.timeSession&&m.timeSession.minutes===30&&typeof m.timeSession.applied==='boolean'&&Number.isFinite(m.timeSession.startedAt?.minute)&&Number.isSafeInteger(m.timeSession.startedAt?.day),'INVALID_SAVE','比赛耗时记录不合法。');
   for(const key of ['goods','cogs','service','fees','operating','purchases'])need(Number.isSafeInteger(world.daily[key])&&world.daily[key]>=0,'INVALID_SAVE',`日账 ${key} 不合法。`);
   need(Number.isSafeInteger(world.daily.matchNet),'INVALID_SAVE','对局净额不合法。');
   for(const value of Object.values(world.prices))need(Number.isSafeInteger(value)&&value>0,'INVALID_SAVE','单卡参考价必须是正整数。');
@@ -53,5 +59,7 @@ export function validateWorld(world){
   validateExperience(world);return world;
 }
 export function snapshot(world,pauseReasons=[]){return {worldId:world.worldId,branchId:world.branchId,revision:world.revision,
+  starterGift:clone(world.starterGift||null),
+  matchmaking:{player:clone((world.matchQueue||[]).find(q=>q.ownerId==='player')||null),waitingCount:(world.matchQueue||[]).length,match:clone(world.matches.filter(m=>!m.background&&m.status!=='finished').map(m=>({matchId:m.matchId,tableId:m.tableId,mode:m.mode,status:m.status,lineup:m.mine.map(c=>({name:c.name,cardKey:c.cardKey}))}))[0]||null)},
   clock:{...clone(world.clock),running:!world.clock.manualPaused&&!pauseReasons.length&&(world.clock.phase==='open'||world.clock.phase==='preparing'&&world.clock.minute<540),pauseReasons:[...(world.clock.manualPaused?[{code:'manual',label:'手动暂停'}]:[]),...pauseReasons]},
   wallet:{...clone(world.wallet),supplierCreditAvailable:Math.max(0,world.rules.supplierCreditLimit-world.wallet.debt)},daily:clone(world.daily),cashJournal:clone((world.cashJournal||[]).slice(-6).reverse()),experience:experienceSnapshot(world),storefront:storefrontView(world),actors:[world.player,...world.npcs.filter(n=>n.presence!=='offsite')].map(({wallet,trip,...actor})=>clone(actor)),allowedActions:world.clock.phase==='preparing'?['business.open']:['open','closing'].includes(world.clock.phase)?['business.close']:['business.nextDay']};}

@@ -87,8 +87,8 @@ export function mountPurchase({ root, view, actions, assets, format, notify, dra
       handleResult(result, {
         success: data => {
           state.basket.clear(); state.quote = null; state.quoteBasis = null;
-          state.tab = 'arrive';
-          return '已创建 ' + data.orderIds.length + ' 笔订单：现金 ' + money(data.cashDebit) + '，授信 ' + money(data.creditDebit) + '。到货前不能签收。';
+          state.tab = data.fulfillment === 'received' ? 'stock' : 'arrive';
+          return (data.fulfillment === 'received' ? '购买成功，商品已入库。' : '订单已提交。') + '现金 ' + money(data.cashDebit) + '，授信 ' + money(data.creditDebit) + '。';
         },
         invalid: ['QUOTE_EXPIRED', 'UNAVAILABLE_PRODUCT', 'INSUFFICIENT_FUNDS'],
       });
@@ -111,8 +111,8 @@ export function mountPurchase({ root, view, actions, assets, format, notify, dra
       handleResult(result, {
         success: data => {
           if (state.op.current?.type === 'supplier.placeBasketOrder') {
-            state.basket.clear(); state.quote = null; state.quoteBasis = null; state.tab = 'arrive';
-            return '已找回下单结果：' + (data.orderIds?.length || 0) + ' 笔订单，未重复扣款。';
+            state.basket.clear(); state.quote = null; state.quoteBasis = null; state.tab = data.fulfillment === 'received' ? 'stock' : 'arrive';
+            return data.fulfillment === 'received' ? '已确认购买结果，商品已在仓库，未重复扣款。' : '已找回下单结果，未重复扣款。';
           }
           return data?.note || '已找回原操作结果。';
         },

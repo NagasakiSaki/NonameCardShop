@@ -8,6 +8,7 @@ import { createInteractionRouter } from "./world/interaction-router.mjs";
 import { setSceneContext, createWorldSceneClass, worldSceneZoom } from "./scenes/world-scene.mjs";
 import { nearestInteraction, exitAt } from "./world/map-loader.mjs";
 import { normalizeQuery } from "./host/normalize.mjs";
+import {mountQueueStatus} from './ui/queue-status.mjs';
 
 const mockTrades = new URLSearchParams(location.search).get('mode') === 'mock';
 const classicTrades = mockTrades || new URLSearchParams(location.search).get('tradeUI') === 'classic';
@@ -15,10 +16,11 @@ const previousTrades = new URLSearchParams(location.search).get('tradeUI') === '
 const PANEL_LOADERS = {
   inventory: () => classicTrades?import("./ui/inventory.mjs").then(m=>m.openInventory):previousTrades?import('../frontend-next/screens/cards.mjs').then(m=>m.openCollection):import('../frontend-next/screens/workspace.mjs').then(m=>m.openCollection),
   cardDetail: () => classicTrades?import("./ui/card-detail.mjs").then(m=>m.openCardDetail):import('../frontend-next/screens/card-detail.mjs').then(m=>m.openCardDetail),
-  supplier: () => classicTrades?import("./ui/supplier.mjs").then(m=>m.openSupplier):previousTrades?import('../frontend-next/screens/supplier.mjs').then(m=>m.openSupply):import('../frontend-next/screens/workspace.mjs').then(m=>m.openSupply),
-  opening: () => classicTrades?import("./ui/opening.mjs").then(m=>m.openOpening):previousTrades?import('../frontend-next/screens/opening.mjs').then(m=>m.openOpening):import('../frontend-next/screens/workspace.mjs').then(m=>m.openOpening),
+  supplier: () => classicTrades?import("./ui/supplier.mjs").then(m=>m.openSupplier):previousTrades?import('../frontend-next/screens/supplier.mjs').then(m=>m.openSupply):import('../frontend-next/screens/stations.mjs').then(m=>m.openSupply),
+  warehouse: () => import('../frontend-next/screens/stations.mjs').then(m=>m.openWarehouse),
+  opening: () => classicTrades?import("./ui/opening.mjs").then(m=>m.openOpening):previousTrades?import('../frontend-next/screens/opening.mjs').then(m=>m.openOpening):import('../frontend-next/screens/stations.mjs').then(m=>m.openOpening),
   market: () => classicTrades?import("./ui/secondary-market.mjs").then(m=>m.openMarket):previousTrades?import('../frontend-next/screens/cards.mjs').then(m=>m.openCards):import('../frontend-next/screens/workspace.mjs').then(m=>m.openCards),
-  combat: () => import("./ui/combat-room.mjs").then((m) => m.openCombat),
+  combat: () => classicTrades||previousTrades?import('./ui/combat-room.mjs').then(m=>m.openCombat):import('../frontend-next/screens/combat.mjs').then(m=>m.openCombat),
   tasks: () => import("./ui/tasks.mjs").then((m) => m.openTasks),
   report: () => mockTrades?import('./ui/day-report.mjs').then(m=>m.openDayReport):import('../frontend-next/screens/management.mjs').then(m=>m.openDayReport),
   guide: () => import('../frontend-next/screens/management.mjs').then(m=>m.openGuide),
@@ -29,6 +31,7 @@ const PANEL_LOADERS = {
   settings: () => import("./ui/settings.mjs").then((m) => m.openSettings),
   trash: () => previousTrades||classicTrades?import('./ui/trash.mjs').then(m=>m.openTrash):import('../frontend-next/screens/trash.mjs').then(m=>m.openTrash),
   help: () => import("./ui/help.mjs").then((m) => m.openHelp),
+  more:()=>import('./ui/more.mjs').then(m=>m.openMore),
 };
 
 export async function startApp({ host, connection, mode, fixture }) {
@@ -71,12 +74,14 @@ export async function startApp({ host, connection, mode, fixture }) {
     modeBadge.title = "当前使用 Mock Host，交易与规则均为演示；不代表正式经济验收";
   }
 
+  let queueStatus=null;
   const windows = createWindowManager({
     host,
     mount: document.getElementById("windows"),
     onChange: (stack) => {
       document.body.classList.toggle("has-window", stack.length > 0);
       if (stack.length) movement.releaseAll();
+      queueStatus?.render();
     },
   });
 
@@ -151,9 +156,11 @@ export async function startApp({ host, connection, mode, fixture }) {
       document.getElementById('notebook-toggle').removeEventListener('click',onNotebookToggle);
       windows.closeAll();
       hud.destroy?.();
+      queueStatus?.dispose();
       if (game) game.destroy(true);
     },
   };
+  if(!mockTrades)queueStatus=mountQueueStatus(app);
 
   function flushWalk(){if(walkIntent&&windows.depth===0&&!snapshot.clock.manualPaused&&!(snapshot.clock.pauseReasons||[]).length){const fn=walkIntent;walkIntent=null;fn();}}
   function scheduleWalk(fn){walkIntent=fn;flushWalk();}
@@ -272,6 +279,8 @@ export async function startApp({ host, connection, mode, fixture }) {
         })().catch(e=>toast('error','操作失败',e.message));
       }
       else if (action === "inventory") app.openPanel("inventory", {});
+      else if(action==='warehouse')app.openPanel('warehouse');
+      else if(action==='more')app.openPanel('more');
       else if (action === "tasks") app.openPanel("tasks", {});
       else if (action === "report") app.openPanel("report", {});
       else if (action === 'finance') app.openPanel('finance', {});
@@ -404,6 +413,7 @@ export async function startApp({ host, connection, mode, fixture }) {
   function render() {
     if(destroying)return;
     hud.render(snapshot);
+    queueStatus?.render();
     if(notebookTask)return;
     notebookTask = setTimeout(() => {
       notebookTask=null;
@@ -456,7 +466,7 @@ export async function startApp({ host, connection, mode, fixture }) {
       lastBranch = event.branchId;
       actors = [];
       app.refreshSnapshot();
-      toast("info", "世界已切换", "视图缓存已清空，正在重新读取");
+      toast("info", "已读取进度", "正在刷新店铺。");
     } else if (lastSeq > 0 && event.seq > lastSeq + 1) {
       app.refreshSnapshot();
     }

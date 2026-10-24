@@ -3,6 +3,7 @@ import {mountTradeWorkspace} from '../components/workspace/workspace.mjs';
 import {el,clear,errorView,newRequestId} from '../../frontend/ui/components.mjs';
 import {queryAll,unwrap} from '../services/views.mjs';
 import {performOperation,recoverOperation,retryOperation} from '../services/operations.mjs';
+import {fitPanel} from '../services/panel-shell.mjs';
 
 const ACTIONS={placeBasketOrder:'supplier.placeBasketOrder',receiveAll:'supplier.receiveAll',receiveOrder:'supplier.receive',unsealBox:'boxes.unseal',retailList:'retail.list',retailWithdraw:'retail.withdraw',retailSetPrice:'retail.setPrice',retailListAll:'retail.listAll',openingExecute:'opening.execute',listSurplus:'market.listSurplus',marketAccept:'market.acceptTrade',placeListing:'market.placeListing',cancelListing:'market.cancelListing',setProtection:'inventory.setProtection'};
 const failure=(code,message)=>({ok:false,error:{code,message,retryable:false}});
@@ -11,10 +12,10 @@ export async function openTradeWorkspace(app,options={}){
   const existing=app.windows.stack.find(item=>item.id==='trade-workspace')?.handle;
   if(existing){existing.focus();existing.chooseTradeSection?.(options);return existing;}
   return app.windows.open({id:'trade-workspace',title:'卡店交易台',subtitle:'采购 · 仓库 · 开包 · 收藏与市场',width:'window--wide',pauseReason:'卡店交易',render:async ctx=>{
-    ctx.handle.tradeDispose?.();clear(ctx.body);let disposed=false,controller=null,loading=null,currentView=null;
+    ctx.handle.tradeDispose?.();clear(ctx.body);fitPanel(ctx);let disposed=false,controller=null,loading=null,currentView=null;
     const root=el('div',{class:'pbc-root','data-live-trade':'true',style:{minWidth:'0'}}),message=el('div',{role:'status','aria-live':'polite'}),stations=el('nav',{class:'surface-actions',style:{display:'flex',gap:'8px',flexWrap:'wrap',margin:'0 0 12px'},'aria-label':'前往交易设施'});
     for(const [label,id,panel,scope]of [['进货 / 收货柜台','store.counter','supplier',{}],['零售货架','store.retail','supplier',{purchaseTab:'retail'}],['拆包工作台','store.opening','opening',{}],['二级市场','store.secondaryMarket','market',{}]])stations.append(el('button',{class:'btn btn--sm',text:label,onclick:()=>app.goToInteraction(id,panel,scope)}));
-    ctx.body.append(stations,message,root);
+    ctx.body.append(message,root);root.dataset.facilityRoot='cards';root.style.flex='1';root.style.minHeight='0';
     const identity=branch(app),active=()=>!disposed&&!ctx.handle.closed&&identity===branch(app);
     let saved=app.playTradeDraft;
     if(saved?.identity!==identity)saved=null;
@@ -64,6 +65,7 @@ export async function openTradeWorkspace(app,options={}){
       controller=mountTradeWorkspace({root,view,actions,draft,initialSection:options.section||'collection',format:app.formatMoney,assets:{productImage:(id,kind)=>productArt.products[id]?.[kind]||productArt.products.standard?.[kind],portrait:personId=>app.manifest.characters[{'student':'bd-tomori','collector':'bd-anon','duelist':'bd-rana'}[personId]]?.avatar}});
       // Restore results/drafts only within the same authoritative world branch.
       choose(options);
+      root.querySelector('.pbc-nav')?.remove();const title=root.querySelector('.pbc-header__title');if(title)title.textContent='单卡市场';
       const pending=operation.operation;
       if(pending&&['unknown','submitting'].includes(pending.status)){
         const warning=el('section',{class:'surface-message',text:'上次操作结果尚未确认；请查询原操作，避免重复提交。'});

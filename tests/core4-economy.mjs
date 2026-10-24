@@ -1,0 +1,24 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';
+import {buildCatalog} from '../modules/backend/catalog.mjs';
+import {createWorld,validateWorld} from '../modules/backend/world.mjs';
+import {publishProducts,makeSealed} from '../modules/backend/products.mjs';
+import {DEFAULT_STRENGTH_PRICING} from '../modules/backend/supply-pricing.mjs';
+import {customerDecision,purchaseRetail,openCustomerPurchase} from '../modules/backend/trading.mjs';
+import {createRuntime} from '../modules/backend/runtime.mjs';
+import {memoryRepository} from '../modules/backend/storage.mjs';
+const source=JSON.parse(fs.readFileSync(new URL('../data/cards.json',import.meta.url))),rules=JSON.parse(fs.readFileSync(new URL('../data/backend-rules.json',import.meta.url)));
+const catalog=buildCatalog(source,rules),products=publishProducts(catalog,rules,1).filter(p=>p.availability==='available'),oldRules={...rules,strengthPricing:structuredClone(DEFAULT_STRENGTH_PRICING),referenceValues:{N:8,R:48,SR:160,SSR:480}},oldCatalog=buildCatalog(source,oldRules),oldProducts=publishProducts(oldCatalog,oldRules,1);
+assert.ok(products.every(p=>p.prices.pack.wholesale>=40&&p.prices.pack.wholesale<=65));
+assert.ok(products.every(p=>p.prices.pack.retail>p.prices.pack.wholesale&&p.prices.box.retail>p.prices.box.wholesale));
+assert.ok(products.every(p=>p.packExpectedValue<=p.prices.pack.wholesale*1.15),'reference scale must not remain six times larger than the new purchase scale');
+const low=[...products].sort((a,b)=>a.prices.box.retail-b.prices.box.retail)[0];assert.ok(low.prices.box.retail<=rules.npcInitialWallet);
+const w=createWorld(rules);w.clock.phase='open';w.products=products;const npc={actorId:'economic-buyer',name:'测试买家',wallet:{available:rules.npcInitialWallet},roomId:'store',x:120,y:120,presence:'onsite',activity:'idle'};w.npcs.push(npc);
+const item=makeSealed(w,low,'box',low.prices.box.wholesale);item.location='retail';assert.equal(customerDecision(w,catalog,npc).item.inventoryRef,item.inventoryRef);
+purchaseRetail(w,npc,item,{deferOpening:true});assert.equal(npc.wallet.available,rules.npcInitialWallet-low.prices.box.retail);assert.equal(w.daily.goods,low.prices.box.retail);assert.equal(w.daily.cogs,low.prices.box.wholesale);
+assert.equal(openCustomerPurchase(w,catalog,npc,item.inventoryRef).length,120);assert.ok(Object.keys(w.circulation).length>0);validateWorld(w);
+// Existing archived economies and physical stock never silently adopt new-world price defaults.
+const old=createWorld(oldRules);old.gameplayRevision=2;old.products=oldProducts;const oldProduct=oldProducts.find(p=>p.productId===low.productId),box=makeSealed(old,oldProduct,'box',oldProduct.prices.box.wholesale),frozen=structuredClone(box);
+const host=await createRuntime({source,rules,repository:memoryRepository({schemaVersion:2,revision:0,world:old,archives:[],requests:{}})});await host.connect({contractVersion:'card-shop-ui/1.0',clientId:'economy-compat'});
+assert.equal(host.inspect().world.rules.strengthPricing.version,'strength-tiers-1');assert.deepEqual(host.inspect().world.items[box.inventoryRef],frozen);
+assert.notEqual(oldProduct.productVersion,low.productVersion);assert.notEqual(oldProduct.priceVersion,low.priceVersion);assert.equal(oldCatalog.cards[0].ratingVersion,catalog.cards[0].ratingVersion,'affordability revision is not a new strength algorithm');await host.disconnect();
+console.log('PASS CORE4 economy: all 19 themes have reduced positive-margin prices, scaled card reference values, a budget-valid actual box purchase/open/circulation and frozen archived economy/box compatibility.');

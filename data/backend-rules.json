@@ -67,10 +67,10 @@
     "SSR": 0.25
   },
   "referenceValues": {
-    "N": 8,
-    "R": 48,
-    "SR": 160,
-    "SSR": 480
+    "N": 1,
+    "R": 7,
+    "SR": 24,
+    "SSR": 72
   },
   "cardsPerPack": 5,
   "packsPerBox": 24,
@@ -159,38 +159,38 @@
     "rewardMultiplier": 1
   },
   "strengthPricing": {
-    "version": "strength-tiers-1",
+    "version": "strength-tiers-2",
     "boxDiscount": 0.95,
     "tiers": [
       {
         "id": "entry",
         "label": "入门档",
         "maxScore": 51,
-        "packWholesale": 260
+        "packWholesale": 40
       },
       {
         "id": "standard",
         "label": "标准档",
         "maxScore": 53,
-        "packWholesale": 280
+        "packWholesale": 45
       },
       {
         "id": "advanced",
         "label": "进阶档",
         "maxScore": 55,
-        "packWholesale": 290
+        "packWholesale": 50
       },
       {
         "id": "expert",
         "label": "精英档",
         "maxScore": 60,
-        "packWholesale": 330
+        "packWholesale": 55
       },
       {
         "id": "legend",
         "label": "顶级档",
         "maxScore": 10000,
-        "packWholesale": 420
+        "packWholesale": 65
       }
     ]
   }

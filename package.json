@@ -33,6 +33,7 @@
     "test:backend": "node tests/run.mjs backend",
     "test:frontend": "node tests/run.mjs frontend",
     "test:trading": "node tests/run.mjs trading",
+    "test:core4": "node tests/run.mjs core4",
     "test:npc": "node tests/run.mjs npc",
     "test:audit": "node tests/run.mjs audit",
     "test:legacy": "node tests/run.mjs legacy",

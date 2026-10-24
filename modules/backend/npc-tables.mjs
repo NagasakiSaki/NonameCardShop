@@ -14,9 +14,15 @@ function routeToTable(npc,index,table,navigation){
   if(npc.roomId==='battle-room')return {kind:'match',stage:'seat',path:pathfind(room,npc,seat),seat:clone(seat)};
   const door=store.anchors['store.toBattleRoom'];need(door,'INVALID_MAP','主店缺少对战房出口。');return {kind:'match',stage:'store-door',path:pathfind(store,npc,door),seat:clone(seat)};
 }
-export function tickNpcTables(w,catalog,navigation,seconds,{schedule=true}={}){
+export function seatNpcMatch(w,match,navigation){
+  const npcs=[match.mineOwnerId,match.enemyOwnerId].map(id=>w.npcs.find(n=>n.actorId===id));
+  const table=w.tables.find(t=>t.tableId===match.tableId);
+  const routes=npcs.map((npc,index)=>routeToTable(npc,index,table,navigation));
+  npcs.forEach((npc,index)=>{npc.trip=routes[index];npc.activity=routes[index]?'going-to-table':'seated';if(!routes[index])npc.roomId='battle-room';});
+}
+export function tickNpcTables(w,catalog,navigation,seconds,{schedule=true,routes:moveRoutes=true,simulate=true}={}){
   const store=navigation.get('store'),room=navigation.get('battle-room');
-  for(const npc of w.npcs){
+  if(moveRoutes)for(const npc of w.npcs){
     try{
     if(npc.returnAfterMatch){
       if(!store||!room){departCustomer(w,npc,'match-finished');continue;}
@@ -37,7 +43,7 @@ export function tickNpcTables(w,catalog,navigation,seconds,{schedule=true}={}){
     else departCustomer(w,npc,'match-finished');
     }catch(error){note(w,'npcTableRouteUnavailable',{actorId:npc.actorId,reason:error.message});if(npc.currentMatchId)voidNpcMatch(w,npc.currentMatchId,error.message);if(!npc.currentMatchId)departCustomer(w,npc,'table-route-unavailable');}
   }
-  for(const m of w.matches)if(m.background&&m.simulated)advanceNpcSimulation(w,catalog,m,seconds);
+  if(simulate)for(const m of w.matches)if(m.background&&m.simulated)advanceNpcSimulation(w,catalog,m,seconds);
   if(!schedule||w.rules.npcAutoBattles===false||w.clock.phase!=='open'||w.matches.some(m=>m.background&&m.status!=='finished'))return;
   const stamp=w.clock.day*1440+w.clock.minute;if(stamp<(w.nextNpcMatchAt||0))return;w.nextNpcMatchAt=stamp+(w.rules.npcMatchIntervalMinutes||45);
   const table=w.tables.find(t=>!t.matchId&&!t.reservation);if(!table){for(const npc of w.npcs.filter(n=>onSite(n)&&n.activity==='idle'&&!n.currentMatchId&&eligible(w,catalog,n.actorId).some(i=>i.eligible)))customerFeedback(w,npc,'table-full');return;}

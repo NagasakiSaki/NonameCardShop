@@ -13,7 +13,6 @@ const TABS = [
 ];
 const STATUS_FILTERS = [['all', '全部持有'], ['sellable', '可上架'], ['protected', '含保护'], ['listed', '在售']];
 const SORTS = [['score-desc', '评分从高到低'], ['owned-desc', '持有数量'], ['name', '名称']];
-const PAGE_SIZE = 48;
 
 function listingAmount(value) {
   const text = String(value).trim(), amount = Number(text);
@@ -28,12 +27,13 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
     const money = createFormatter(format);
     const state = {
       tab: 'collection', search: '', rarity: '', statusFilter: 'all', sort: 'score-desc',
-      selected: null, page: 0, op: createOperationState(), busy: false,
+      selected: null, page: 0, detailPage:'trade',detailSegment:0,mobileView:'cards',op: createOperationState(), busy: false,
       quote: null, detail: null, detailLoading: false, detailVersion: 0, detailOpen: false,
       sellRef: {}, sellAmount: {}, expandedCopy: null,
       ...draft, op:createOperationState(draft.operation),busy:false,
     };
     let disposed = false;
+    const pageSize=()=>root.clientWidth<=600?4:8;
     const body = el('div', { class: 'pbc-body', 'data-collection-root': 'true' });
     root.replaceChildren(body);
     injectStyles(root);
@@ -105,15 +105,16 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
 
     function select(row) {
       state.selected = row ? row.id : null;
+      state.mobileView='detail';state.detailSegment=0;
       state.quote = null; state.detail = null; state.detailOpen = false; state.detailLoading = false; state.detailVersion++;
       if (state.tab === 'collection' && row?.availableRefs?.length) state.sellRef[row.id] ??= row.availableRefs[0];
       paint();
     }
     const selectedRow = () => visibleRows().find(r => r.id === state.selected) || null;
     function pageRows(rows) {
-      const last = Math.max(0, Math.ceil(rows.length / PAGE_SIZE) - 1);
+      const size=pageSize(),last = Math.max(0, Math.ceil(rows.length / size) - 1);
       state.page = Math.min(last, Math.max(0, Number.isFinite(state.page) ? Math.floor(state.page) : 0));
-      return rows.slice(state.page * PAGE_SIZE, (state.page + 1) * PAGE_SIZE);
+      return rows.slice(state.page * size, (state.page + 1) * size);
     }
     function ensureSelection(rows) {
       const page = pageRows(rows);
@@ -186,7 +187,9 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
       body.replaceChildren();
       if (state.op.pending) body.append(pendingBlock(state.op.current, { busy: state.busy, onQuery: () => recover(false), onRetry: () => recover(true) }));
       const rarityFilterLabel = (state.tab === 'bids' || state.tab === 'history') ? '全部全局强度' : '全部印刷稀有度';
+      body.dataset.mobileView=state.mobileView;
       const filters = el('div', { class: 'pbc-toolbar' }, [
+        button(state.mobileView==='cards'?'卡牌详情':'卡牌列表',()=>{state.mobileView=state.mobileView==='cards'?'detail':'cards';paint();},{small:true}),
         segmented(TABS, state.tab, id => {
           state.tab = id; state.selected = null; state.quote = null; state.detail = null; state.detailOpen = false;
           state.rarity = ''; state.statusFilter = 'all'; state.sort = 'score-desc'; state.page = 0; paint();
@@ -220,7 +223,7 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
     function paintGridArea(rows) {
       const area = el('div');
       const page = pageRows(rows);
-      const pages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+      const pages = Math.max(1, Math.ceil(rows.length / pageSize()));
       const label = el('div', { class: 'pbc-catalog__label' }, [
         el('span', { text: '共 ' + rows.length + ' 条 · 本页 ' + page.length + ' 条 · ' + tabCaption() }),
         state.tab === 'collection' ? chip('印刷稀有度与全局强度分开显示') : null,
@@ -290,9 +293,20 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
 
     function paintDetail() {
       const row = selectedRow();
-      const panel = el('aside', { class: 'pbc-detail', 'aria-label': '选中卡牌与交易确认' });
+      const panel = el('aside', { class: 'pbc-detail', 'aria-label': '选中卡牌与交易确认','data-detail-page':state.detailPage });
       if (!row) {
         panel.append(emptyState('点选一张卡', '卡面、持有量与交易操作会显示在这里。'));
+        return panel;
+      }
+      panel.append(segmented([['overview','卡面'],['trade','买卖'],['skills','技能']],state.detailPage,page=>{state.detailPage=page;if(page==='skills'&&!state.detail)loadDetail(row.cardKey);else paint();},'卡牌信息'));
+      if(state.detailPage==='skills'){
+        panel.append(el('h3',{text:row.name}));
+        const pages=(state.detail?.skills||[]).flatMap(skill=>{const text=skill.description||'暂无技能说明。';return Array.from({length:Math.max(1,Math.ceil(text.length/180))},(_,i)=>({title:skill.name||skill.id,text:text.slice(i*180,(i+1)*180)}));});
+        state.detailSegment=Math.max(0,Math.min(state.detailSegment,pages.length-1));
+        if(state.detailLoading)panel.append(muted('正在读取技能…'));
+        else if(pages.length){const part=pages[state.detailSegment];panel.append(el('h4',{text:part.title}),el('p',{text:part.text}),el('div',{class:'pbc-actions'},[button('上一段',()=>{state.detailSegment--;paint();},{small:true,disabled:state.detailSegment===0}),el('span',{text:(state.detailSegment+1)+' / '+pages.length}),button('下一段',()=>{state.detailSegment++;paint();},{small:true,disabled:state.detailSegment+1>=pages.length})]));}
+        else panel.append(muted('暂无技能说明。'));
+        panel.append(button('更多资料与技能源码',()=>callAction(actions,'openCardDetail',{cardKey:row.cardKey}),{small:true}));
         return panel;
       }
       panel.append(el('div', { class: 'pbc-detail__badges' }, [
@@ -300,20 +314,19 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
         rarityChip(row.current), el('span', { class: 'pbc-muted', style: 'font-size:12px', text: '当前全局强度' }),
       ]));
       const big = art(row.artUrl, row.name, 'pbc-detail__art');
-      panel.append(big, el('h3', { text: row.name }, row.raw._title ? [el('div', { class: 'pbc-muted', style: 'font-size:12px;font-weight:400', text: row.raw._title })] : []));
-      panel.append(muted([row.raw._pack && view.packNames?.[row.raw._pack] || row.raw._pack, row.raw._group && view.groupNames?.[row.raw._group] || row.raw._group, row.raw._hp ? '体力 ' + row.raw._hp : null].filter(Boolean).join(' · ') || tabCaption()));
+      if(state.detailPage==='overview')panel.append(big);
+      panel.append(el('h3', { text: row.name }, row.raw._title ? [el('div', { class: 'pbc-muted', style: 'font-size:12px;font-weight:400', text: row.raw._title })] : []));
+      if(state.detailPage==='overview')panel.append(muted([row.raw._pack && view.packNames?.[row.raw._pack] || row.raw._pack, row.raw._group && view.groupNames?.[row.raw._group] || row.raw._group, row.raw._hp ? '体力 ' + row.raw._hp : null].filter(Boolean).join(' · ') || tabCaption()));
       panel.append(el('div', { class: 'pbc-line' }, [el('span', { text: row.priceLabel }), el('strong', { text: Number.isSafeInteger(row.price) ? money(row.price) : '—' })]));
       if (row.owned != null) {
         panel.append(
           el('div', { class: 'pbc-line' }, [el('span', { text: '持有 / 可上架' }), el('strong', { text: row.owned + ' / ' + row.available })]),
-          el('div', { class: 'pbc-line' }, [el('span', { text: '受保护' }), el('strong', { text: row.protected })]),
-          el('div', { class: 'pbc-line' }, [el('span', { text: '交易 / 比赛锁定' }), el('strong', { text: row.locked })]),
-          el('div', { class: 'pbc-line' }, [el('span', { text: '已挂单' }), el('strong', { text: row.listed })]),
+          muted('保护 '+row.protected+' · 占用 '+row.locked+' · 在售 '+row.listed),
         );
       }
       if (row.personId) panel.append(el('div', { class: 'pbc-bid-row' }, [avatar(assets?.portrait?.(row.personId), row.seller), el('span', { text: row.seller + ' 求购 · 定金已托管 ' + money(row.raw.fundsHeld || 0) })]));
+      if(state.detailPage==='overview'){panel.append(button('买卖这张卡',()=>{state.detailPage='trade';paint();}));return panel;}
       panel.append(tabActions(row));
-      if (state.detailOpen) panel.append(detailSection(row));
       return panel;
     }
 
@@ -342,11 +355,7 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
               run({ type: 'market.placeListing', payload: { inventoryRef: chosenRef, amount } }, 'placeListing', { inventoryRef: chosenRef, amount }, () => '已挂单 ' + row.name + ' ×1，售价 ' + money(amount) + '；成交前不产生收入。');
             } catch (error) { notify(error.message, 'error'); }
           }, { primary: true, disabled: !chosenRef || state.busy || state.op.pending || !atMarket() }),
-          muted('上架会占用这个实物副本；真正成交后才产生收入。'),
-          button(state.detailOpen ? '收起大图与技能' : '查看大图与完整技能', () => {
-            state.detailOpen = !state.detailOpen;
-            if (state.detailOpen && !state.detail) loadDetail(row.cardKey); else paint();
-          }, { ghost: true }),
+          muted('成交后才计入收入。'),
         );
       } else if (state.tab === 'buy') {
         if (state.quote && state.quote.listingId === row.raw.listingId) {
@@ -487,12 +496,15 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
     }
 
     paint();
+    let lastSize=pageSize();
+    const observer=typeof ResizeObserver==='function'?new ResizeObserver(()=>{const size=pageSize();if(!disposed&&size!==lastSize){lastSize=size;const rows=visibleRows(),index=rows.findIndex(row=>row.id===state.selected);state.page=index>=0?Math.floor(index/size):0;paint();}}):null;
+    observer?.observe(root);
     return {
       setTab(tab){if(tab!==state.tab&&TABS.some(([id])=>id===tab)){state.tab=tab;state.selected=null;state.page=0;state.rarity='';paint();}},
       selectCard(cardKey){
         state.tab='collection';state.search='';state.rarity='';state.statusFilter='all';
         const rows=visibleRows(),index=rows.findIndex(c=>c.cardKey===cardKey);
-        if(index>=0){state.page=Math.floor(index/PAGE_SIZE);return select(rows[index]);}
+        if(index>=0){state.page=Math.floor(index/pageSize());return select(rows[index]);}
         state.selected=null;state.page=0;paint();return callAction(actions,'openCardDetail',{cardKey});
       },
       getDraft(){const {op,...values}=state;return structuredClone({...values,busy:false,operation:op.current});},
@@ -502,7 +514,7 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
         if (nextView.worldId+':'+nextView.branchId!==previous) { state.quote = null; state.detail = null; state.detailOpen = false; state.detailLoading = false; state.detailVersion++; state.selected = null; state.page = 0; surplusPreview = null; }
         paint();
       },
-      dispose() { disposed = true; root.replaceChildren(); },
+      dispose() { disposed = true; observer?.disconnect();root.replaceChildren(); },
     };
   }
 }

@@ -16,16 +16,12 @@ export function createHud({ mount, currency, onAction, getSnapshot, demo=false }
     { id: "business", label: "开门营业" },
     { id: "pause", label: "暂停时钟" },
     { id: "speed", label: "速度 1×" },
-    { id: "inventory", label: "背包 B" },
+    { id: "inventory", label: "卡牌 B" },
+    { id: "warehouse", label: "仓库" },
     { id: "tasks", label: "任务" },
-    { id: "guide", label: "引导 / 熟客" },
-    { id: "customers", label: "顾客 / 牌桌" },
-    { id: "report", label: "日报" },
     { id: "finance", label: "收支流水" },
     { id: "saves", label: "存档" },
-    { id: "management", label: "经营" },
-    { id: "help", label: "手册" },
-    { id: "settings", label: "设置" },
+    { id: "more", label: "更多" },
   ];
 
   clear(actionsNode);

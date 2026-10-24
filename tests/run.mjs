@@ -21,6 +21,8 @@ groups.frontend.push('tests/playability-integration.mjs');groups.ui.push('tests/
 groups.desktop=['tests/desktop-host.cjs'];groups.release=['tests/desktop-host.cjs'];
 groups.frontend.push('tests/high-quality-pass.mjs');groups.ui.push('tests/high-quality-pass.mjs');
 groups.frontend.push('tests/trade-workspace-pagination.mjs');groups.ui.push('tests/trade-workspace-pagination.mjs');groups.trading.push('tests/trade-workspace-pagination.mjs');
+groups.core4=['tests/core4-foundations.mjs','tests/core4-matchmaking.mjs','tests/core4-economy.mjs','tests/core4-ui.mjs'];
+groups.backend.push(...groups.core4.slice(0,3));groups.frontend.push('tests/core4-ui.mjs');groups.ui.push('tests/core4-ui.mjs');
 const selection=process.argv[2]||'all';if(selection!=='all'&&!groups[selection])throw new Error(`未知测试组：${selection}`);
 const output=path.join(root,'test-results',new Date().toISOString().replace(/[:.]/g,'-')+`-${process.pid}`);fs.mkdirSync(output,{recursive:true});
 const results=[],summary={selection,output,startedAt:new Date().toISOString(),results};let runtime;

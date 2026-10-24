@@ -11,15 +11,15 @@ export function eligible(w,catalog,ownerId='player'){
     if(!free(i))reasons.push({code:'ITEM_LOCKED',message:'副本受保护或被交易/其他比赛占用。'});
     if(i.location!=='collection')reasons.push({code:'NOT_IN_COLLECTION',message:'参赛副本必须在收藏中；请先捡回垃圾桶里的卡。'});
     const blocked=w.rules.compatibilityBlocks[c?.generalId];if(blocked)reasons.push({code:'SKILL_INCOMPATIBLE',message:blocked});
-    return {inventoryRef:i.inventoryRef,cardKey:i.cardKey,generalId:c?.generalId,name:c?.name,rarity:c?.currentRarity,eligible:!reasons.length,disabledReasons:reasons,reviewStatus:c?.reviewStatus};
-  });
+    return {inventoryRef:i.inventoryRef,cardKey:i.cardKey,generalId:c?.generalId,name:c?.name,imageUrl:c?.imageUrl,rarity:c?.currentRarity,favorite:ownerId==='player'&&(w.player.favoriteCardKeys||[]).includes(i.cardKey),eligible:!reasons.length,disabledReasons:reasons,reviewStatus:c?.reviewStatus};
+  }).sort((a,b)=>Number(b.favorite)-Number(a.favorite));
 }
-export function combatPreview(w,catalog,p){
+export function combatPreview(w,catalog,p,{tableFee=managementEffects(w).tableFee}={}){
   need(w.clock.phase==='open','SHOP_CLOSED','只在营业中接受新比赛登记。');
   need(!w.matches.some(m=>!m.background&&m.status!=='finished'),'MATCH_ACTIVE','请先完成或取消当前的玩家比赛。');
   const mode=p.mode||'bo3',n=mode==='bo3'?1:mode==='kof'?3:0;
   need(n,'INVALID_INPUT','只支持 KOF 与 BO3。');
-  const npc=p.opponentId?w.npcs.find(n=>n.actorId===p.opponentId):w.npcs.find(npc=>onSite(npc)&&!npc.currentMatchId&&npc.wallet.available>=managementEffects(w).tableFee&&new Set(eligible(w,catalog,npc.actorId).filter(i=>i.eligible).map(i=>i.generalId)).size>=n);need(npc&&onSite(npc)&&!npc.currentMatchId,'NOT_FOUND','暂时没有在店、实际持卡、付得起桌费且空闲的顾客可组成该赛制阵容。');
+  const npc=p.opponentId?w.npcs.find(n=>n.actorId===p.opponentId):w.npcs.find(npc=>onSite(npc)&&!npc.currentMatchId&&npc.wallet.available-(npc.wallet.reserved||0)>=tableFee&&new Set(eligible(w,catalog,npc.actorId).filter(i=>i.eligible).map(i=>i.generalId)).size>=n);need(npc&&onSite(npc)&&!npc.currentMatchId&&npc.wallet.available-(npc.wallet.reserved||0)>=tableFee,'NOT_FOUND','暂时没有在店、实际持卡、付得起桌费且空闲的顾客可组成该赛制阵容。');
   const choose=(owner,refs)=>{
     const options=eligible(w,catalog,owner).filter(i=>i.eligible),team=[];
     if(refs){need(Array.isArray(refs)&&refs.length===n,'INVALID_INPUT','阵容人数不正确。');for(const ref of refs){const found=options.find(i=>i.inventoryRef===ref);need(found,'NOT_ELIGIBLE','阵容包含不具备流通资格、被锁定或未持有的牌。');team.push(found);}}
@@ -34,11 +34,12 @@ export function combatPreview(w,catalog,p){
   need(!p.withStake||w.rules.wageringEnabled,'FEATURE_UNAVAILABLE','下注暂未开放：引擎完整随机状态重放尚未完成，当前可进行无赌注比赛。');
   const table=p.tableId?w.tables.find(t=>t.tableId===p.tableId):w.tables.find(t=>!t.matchId&&!t.reservation);
   need(table&&!table.matchId&&(!table.reservation||table.reservation==='player'),'TABLE_BUSY','没有空闲桌位。');
-  return {kind:'combat',mode,mine,enemy,opponentId:npc.actorId,tableId:table.tableId,tableFee:managementEffects(w).tableFee,stakeProposalId:id('stake-proposal'),stakeAmount:amount,multiplier,
+  return {kind:'combat',mode,mine,enemy,opponentId:npc.actorId,tableId:table.tableId,tableFee,stakeProposalId:id('stake-proposal'),stakeAmount:amount,multiplier,
     explanation:`顾客稀有度差 ${delta.toFixed(2)}，提议 ${multiplier} 倍；本金双方等额托管。店主参赛免该桌抽水。`,fingerprint:JSON.stringify([...mine,...enemy].map(i=>i.inventoryRef))};
 }
-export function registerMatch(w,catalog,preview,p){
-  const fresh=combatPreview(w,catalog,{mode:preview.mode,opponentId:preview.opponentId,inventoryRefs:preview.mine.map(i=>i.inventoryRef),opponentInventoryRefs:preview.enemy.map(i=>i.inventoryRef),tableId:preview.tableId,withStake:preview.stakeAmount>0});
+export function registerMatch(w,catalog,preview,p,{frozenFee=false}={}){
+  const fresh=combatPreview(w,catalog,{mode:preview.mode,opponentId:preview.opponentId,inventoryRefs:preview.mine.map(i=>i.inventoryRef),opponentInventoryRefs:preview.enemy.map(i=>i.inventoryRef),tableId:preview.tableId,withStake:preview.stakeAmount>0},frozenFee?{tableFee:preview.tableFee}:{});
+  need(fresh.tableFee===preview.tableFee,'PREVIEW_EXPIRED','桌费已变化，请重新确认。');
   need(fresh.fingerprint===preview.fingerprint,'PREVIEW_EXPIRED','阵容已变化。');
   if(preview.stakeAmount)need(p.stakeProposalId===preview.stakeProposalId,'PREVIEW_EXPIRED','请明确接受当前下注提议。');
   const npcWallet=wallet(w,preview.opponentId);
@@ -57,6 +58,8 @@ export function matchById(w,matchId){const m=w.matches.find(m=>m.matchId===match
 export function beginMatch(w,matchId){
   const m=matchById(w,matchId);need(['prepared','awaitingNext','interrupted'].includes(m.status),'INVALID_STATE','比赛当前不能开始。');
   need(!m.stake||m.status!=='interrupted','RECOVERY_REQUIRED','有赌注的中断比赛需要完整恢复，不能重新发牌。');
+  need(!w.matches.some(other=>other.matchId!==m.matchId&&other.timeSession&&!other.timeSession.applied&&other.status!=='finished'),'MATCH_ACTIVE','另一场比赛正在进行，请稍候。');
+  m.timeSession??={startedAt:{day:w.clock.day,minute:w.clock.minute},minutes:30,applied:false};
   m.gameId=serial(w,'game');m.status='running';m.progress={mine:0,enemy:0};return clone(m);
 }
 function ownerId(m,side){return side==='mine'?m.mineOwnerId||'player':m.enemyOwnerId||m.opponentId;}
@@ -117,11 +120,11 @@ export function cancelPrepared(w,matchId){
   note(w,'matchCancelled',{matchId});return clone(m);
 }
 
-export function registerNpcMatch(w,catalog,table,npcs,{mode='bo3'}={}){
+export function registerNpcMatch(w,catalog,table,npcs,{mode='bo3',tableFee=managementEffects(w).tableFee,inventoryRefs}={}){
   need(w.clock.phase==='open'&&npcs.length===2&&!table.matchId&&!table.reservation,'NOT_READY','当前不能开 NPC 桌。');
   need(['bo3','kof'].includes(mode),'INVALID_INPUT','NPC 赛制不正确。');
-  const teams=npcs.map(n=>{need(onSite(n)&&!n.currentMatchId,'ITEM_LOCKED','顾客未在店或已在其他牌局。');const cards=eligible(w,catalog,n.actorId).filter(i=>i.eligible).sort((a,b)=>catalog.byKey.get(b.cardKey).globalScore-catalog.byKey.get(a.cardKey).globalScore),team=[];for(const card of cards)if(!team.some(c=>c.generalId===card.generalId)&&team.length<(mode==='kof'?3:1))team.push(card);need(team.length===(mode==='kof'?3:1),'NOT_ELIGIBLE','顾客没有足够的不同流通武将。');return team;});
-  const fee=managementEffects(w).tableFee;for(const npc of npcs)need(npc.wallet.available-(npc.wallet.reserved||0)>=fee,'INSUFFICIENT_FUNDS','顾客支付不起开桌费。');
+  const teams=npcs.map((n,index)=>{need(onSite(n)&&!n.currentMatchId,'ITEM_LOCKED','顾客未在店或已在其他牌局。');const cards=eligible(w,catalog,n.actorId).filter(i=>i.eligible).sort((a,b)=>catalog.byKey.get(b.cardKey).globalScore-catalog.byKey.get(a.cardKey).globalScore),team=[];if(inventoryRefs){for(const ref of inventoryRefs[index]){const card=cards.find(c=>c.inventoryRef===ref);need(card,'NOT_ELIGIBLE','等待中的阵容已变化。');team.push(card);}}else for(const card of cards)if(!team.some(c=>c.generalId===card.generalId)&&team.length<(mode==='kof'?3:1))team.push(card);need(team.length===(mode==='kof'?3:1)&&new Set(team.map(c=>c.generalId)).size===team.length,'NOT_ELIGIBLE','顾客没有足够的不同流通武将。');return team;});
+  const fee=tableFee;for(const npc of npcs)need(npc.wallet.available-(npc.wallet.reserved||0)>=fee,'INSUFFICIENT_FUNDS','顾客支付不起开桌费。');
   const simulated=w.rules.npcSimulation!==false;
   if(!simulated)for(const npc of npcs)debit(npc.wallet,fee);
   const m={matchId:serial(w,'npc-match'),mode,mine:clone(teams[0]),enemy:clone(teams[1]),mineOwnerId:npcs[0].actorId,enemyOwnerId:npcs[1].actorId,opponentId:npcs[1].actorId,background:true,tableId:table.tableId,
@@ -135,7 +138,8 @@ export function advanceNpcSimulation(w,catalog,m,seconds){
   if(!m.simulated||m.status==='finished')return;
   const seated=[m.mineOwnerId,m.enemyOwnerId].every(id=>w.npcs.find(n=>n.actorId===id)?.activity==='seated');
   if(!seated)return;
-  if(m.status!=='running'){m.status='running';m.gameId=serial(w,'simulation');note(w,'npcSimulationStarted',{matchId:m.matchId});}
+  if(m.status!=='running'){if(w.matches.some(other=>other!==m&&other.timeSession&&!other.timeSession.applied&&other.status!=='finished'))return;m.status='running';m.gameId=serial(w,'simulation');note(w,'npcSimulationStarted',{matchId:m.matchId});}
+  m.timeSession??={startedAt:{day:w.clock.day,minute:w.clock.minute},minutes:30,applied:false};
   m.simulation.elapsedSeconds+=Math.max(0,seconds)*w.clock.speed;
   if(m.simulation.elapsedSeconds<m.simulation.durationSeconds)return;
   const strength=team=>sum(team.map(c=>catalog.byKey.get(c.cardKey)?.globalScore||0))/team.length;

@@ -2,8 +2,10 @@ import {RARITIES,clamp,need,page} from './common.mjs';
 import {DEFAULT_CUSTOMER_BEHAVIOR} from './trash.mjs';
 import {productEnabled,validateDistribution} from './distribution.mjs';
 import {validateStrengthPricing} from './supply-pricing.mjs';
+import {validateStarterGift} from './starter-gift.mjs';
 
 export function validateRules(r){
+  validateStarterGift(r||{});
   validateStrengthPricing(r||{});
   if(r.npcSimulation!==undefined)need(typeof r.npcSimulation==='boolean','INVALID_CONFIG','NPC 模拟开关不正确。');
   if(r.npcSimulationSeconds!==undefined)need(Number.isFinite(r.npcSimulationSeconds)&&r.npcSimulationSeconds>=1&&r.npcSimulationSeconds<=300,'INVALID_CONFIG','NPC 模拟时长须在 1～300 秒。');

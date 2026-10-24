@@ -38,7 +38,13 @@ try{
   const result=await page.evaluate(()=>{const w=backend.inspect().world,m=w.matches[0];return {result:m.result,wins:w.stats['noname-1.11.6:caocao|bo3'].wins,losses:w.stats['noname-1.11.6:zhangliao|bo3'].losses,fee:w.daily.service,escrow:w.wallet.escrowLiability,balanceA:w.npcs.find(n=>n.actorId==='npc-a').wallet.available,balanceB:w.npcs.find(n=>n.actorId==='npc-b').wallet.available,locked:!!w.items.a.lock};});
   assert.deepEqual(result,{result:'win',wins:1,losses:1,fee:20,escrow:0,balanceA:90,balanceB:90,locked:false});
   await page.evaluate(async()=>{
-    await worker.dispose();const {createBattleMount}=await import('/integration/host-battle.mjs');const preview=(await backend.query('combat.preview',{mode:'bo3',opponentId:'npc-a',inventoryRefs:['player-card']})).data;
+    await worker.dispose();
+    // Completing the whole match advances visits by 30 minutes. Seed a new on-site
+    // foreground encounter rather than requiring the previous visitor to stay.
+    const exported=await backend.command({requestId:'npc-fixture-export',type:'saves.export'}),archive=JSON.parse(exported.data.content),npc=archive.world.npcs.find(n=>n.actorId==='npc-a');
+    Object.assign(npc,{presence:'onsite',roomId:'store',activity:'idle',x:240,y:272,nextMatchAt:100000});delete npc.trip;delete npc.currentMatchId;
+    const imported=await backend.command({requestId:'npc-fixture-import',type:'saves.import',payload:{content:JSON.stringify(archive)}});if(!imported.ok)throw Error(JSON.stringify(imported));
+    const {createBattleMount}=await import('/integration/host-battle.mjs');const response=await backend.query('combat.preview',{mode:'bo3',opponentId:'npc-a',inventoryRefs:['player-card']});if(!response.ok)throw Error(JSON.stringify(response));const preview=response.data;
     const registered=await backend.command({requestId:'foreground-register',type:'combat.register',previewId:preview.previewId});if(!registered.ok)throw Error(JSON.stringify(registered));window.playerMatchId=registered.data.matchId;
     const container=document.createElement('div');container.id='player-engine';container.style.height='640px';document.body.append(container);window.playerMount=await createBattleMount(backend)({container,matchId:playerMatchId});
   });

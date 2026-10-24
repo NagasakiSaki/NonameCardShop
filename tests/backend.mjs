@@ -42,10 +42,8 @@ const quote=await query('products.quote',{productId:product.productId,quantity:1
 const request={requestId:'order-idempotency',type:'supplier.placeOrder',quoteId:quote.quoteId,payload:{productId:product.productId,quantity:1,unit:'box'}};
 const first=await host.command(request),duplicate=await host.command(request);assert.deepEqual(first,duplicate);assert.equal((await query('supplier.orders')).items.length,1);
 const beforeInvalid=host.inspect();const invalid=await host.command({requestId:'invalid-quantity',type:'supplier.placeOrder',quoteId:quote.quoteId,payload:{productId:product.productId,quantity:2,unit:'box'}});assert.equal(invalid.ok,false);assert.deepEqual(host.inspect(),beforeInvalid);
-for(let i=0;i<16;i++)await host.advance(1);
-const order=(await query('supplier.orders')).items[0];assert.equal(order.status,'arrived');
-await command('supplier.receive',{orderId:order.orderId});
-const preview=await query('opening.preview',{includeBoxes:true});assert.equal(preview.cards,120);
+const order=(await query('supplier.orders')).items[0];assert.equal(order.status,'received');
+const preview=await query('opening.preview',{includeBoxes:true,inventoryRefs:first.data.inventoryRefs});assert.equal(preview.cards,120);
 const openingRequest={requestId:'open-idempotency',type:'opening.execute',previewId:preview.previewId,payload:{}};
 assert.equal((await host.command(openingRequest)).ok,true);assert.equal((await host.command(openingRequest)).ok,true);
 let items=(await query('inventory.list',{kind:'card',limit:200})).items;
@@ -62,7 +60,7 @@ const cards=(await query('inventory.list',{kind:'card',location:'collection',lim
 const trashCard=cards.find(i=>i.available);await command('inventory.discard',{inventoryRef:trashCard.inventoryRef});
 await command('business.close');await command('business.nextDay');assert.ok(!host.inspect().world.items[trashCard.inventoryRef]);
 const dayOne=(await query('saves.list')).find(a=>a.day===1&&a.slot==='start');
-await command('saves.load',{archiveId:dayOne.id});assert.equal((await query('shop.snapshot')).clock.day,1);assert.equal(Object.keys(host.inspect().world.items).length,0);assert.notEqual(host.inspect().world.branchId,dayOne.branchId);
+await command('saves.load',{archiveId:dayOne.id});assert.equal((await query('shop.snapshot')).clock.day,1);assert.equal(Object.keys(host.inspect().world.items).length,1);assert.equal(host.inspect().world.starterGift.quantity,1);assert.notEqual(host.inspect().world.branchId,dayOne.branchId);
 await host.disconnect();
 const restored=await createRuntime({source,rules,repository});await restored.connect({contractVersion:'card-shop-ui/1.0',clientId:'reconnect'});
 assert.equal((await restored.command(request)).error.code,'STALE_OPERATION','old-branch success must not masquerade as a new-branch action');await restored.disconnect();

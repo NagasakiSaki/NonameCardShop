@@ -1,5 +1,7 @@
 // frontend/ui/combat-room.mjs — 对战房：桌位、配队、倍数提议、开桌费与战斗挂载区。
 import { el, clear, stateView, errorView, newRequestId, busyButton } from "./components.mjs";
+import {performOperation,recoverOperation} from '../../frontend-next/services/operations.mjs';
+import {fitPanel} from '../../frontend-next/services/panel-shell.mjs';
 
 const STATUS_LABEL = {
   idle: "空闲",
@@ -11,12 +13,12 @@ const STATUS_LABEL = {
 };
 
 export async function openCombat(app, options = {}) {
-  const state = { selectedTable: options.tableId || null, mode: "kof", picked: [], preview: null, mount: null, matchId: null, noStake: true,off:null,controller:null };
+  const state = { selectedTable: options.tableId || null, mode: "kof", picked: [], preview: null, mount: null, matchId: null, noStake: true,off:null,controller:null,mounting:false };
 
   return app.windows.open({
     id: "combat",
     title: "对战房",
-    subtitle: "KOF 三将固定次序，BO3 单将；倍数与费用来自 Host",
+    subtitle: "对局期间店内时间暂停，整场结束后经过 30 分钟",
     width: "window--wide",
     pauseReason: "对战房",
     onClose: () => {
@@ -29,17 +31,22 @@ export async function openCombat(app, options = {}) {
     },
     render: async (ctx) => {
       const body = ctx.body;
+      if(options.battleOnly)fitPanel(ctx);
       const rooms = await ctx.query("room.snapshot", { roomId: "battle-room" });
       if (!rooms.ok) {
         body.append(errorView(rooms.error, () => ctx.refresh()));
         return;
       }
       const room = rooms.data;
+      const settings=await ctx.query('room.settings');
+      if(settings.ok&&!options.battleOnly){const input=el('input',{type:'number',min:settings.data.min,max:settings.data.max,value:settings.data.amount,'aria-label':'开桌费',class:'input',style:{maxWidth:'100px'}});body.append(el('div',{class:'toolbar'},[el('label',{},['开桌费 ',input]),el('button',{class:'btn btn--sm',text:'保存桌费',onclick:async()=>{const r=await ctx.submit({requestId:newRequestId('table-fee'),type:'room.setTableFee',payload:{amount:Number(input.value)}});if(!r.ok)app.toast('error','未能保存',r.error.message);else ctx.refresh();}})]));}
       state.controller?.abort();state.controller=new AbortController();
       if(!state.off){state.off=app.host.subscribe(event=>{if(event.type!=='battleStatusChanged'||!state.matchId||event.data?.matchId!==state.matchId)return;if(event.data.status!=='running')ctx.refresh();else {const button=ctx.element.querySelector('[data-bout-surrender]');if(button)button.disabled=event.data.lastReadyGameId!==event.data.gameId;}});}
       if(state.mount){await state.mount.dispose();state.mount=null;}
       const active=(room.matches||[]).find(m=>!m.background&&m.status!=='finished');
       if(active){state.matchId=active.matchId;state.selectedTable=active.tableId;}
+      if(active&&options.battleOnly){renderBattle(active);return;}
+      if(!active&&options.battleOnly){const finished=room.matches.find(m=>m.matchId===state.matchId);body.append(el('h3',{text:finished?.result==='win'?'本场获胜':finished?.result==='loss'?'本场落败':finished?.result==='draw'?'本场平局':'牌局已结束'}),el('p',{text:finished?.timeSession?.applied?'店内时间已过去 30 分钟。':'可以关闭窗口回到店铺。'}));ctx.setFooter(el('button',{class:'btn',text:'返回店铺',onclick:()=>ctx.handle.close()}));return;}
 
       body.append(el("div", { class: "section" }, [
         el("h4", { class: "section__title", text: "桌位" }),
@@ -63,6 +70,8 @@ export async function openCombat(app, options = {}) {
       for(const match of (room.matches||[]).filter(m=>m.background&&m.error).slice(-3))body.append(el('p',{class:'note-card',text:'最近 NPC 对局技术中断（不计正常战绩）：'+match.error}));
       for(const match of (room.matches||[]).filter(m=>m.simulated&&m.status==='finished'&&m.result!=='cancelled').slice(-3).reverse())body.append(el('p',{class:'note-card',text:`NPC 模拟比赛已结束 · ${match.mode.toUpperCase()} · ${match.mode==='bo3'?match.wins+':'+match.losses:'三将接力'} · 已离桌，桌费 ${app.formatMoney(match.simulation.feePaid)} 已结算`}));
       if(active){renderBattle(active);return;}
+      const queued=await ctx.query('combat.queue');
+      if(queued.ok&&queued.data.player){body.append(el('p',{class:'note-card',text:'已在等待对手。可以关闭这里，回店内自由行动。'}),el('button',{class:'btn',text:'返回店内',onclick:()=>ctx.handle.close()}));return;}
       if(state.matchId){const finished=(room.matches||[]).find(m=>m.matchId===state.matchId);if(finished?.status==='finished')body.append(el('p',{class:'note-card',text:`比赛已结束：${finished.result}，小局 ${finished.wins}:${finished.losses}`}));state.matchId=null;}
 
       if (!state.selectedTable) {
@@ -148,6 +157,10 @@ export async function openCombat(app, options = {}) {
         body.append(grid);
 
         body.append(el("div", { class: "toolbar" }, [
+          el('button',{class:'btn btn--primary',text:'开始等待对手',disabled:state.picked.length!==slots,onclick:async event=>{
+            const restore=busyButton(event.currentTarget,'正在报名…'),operation=app.queueOperation??={};
+            try{const r=await performOperation(app,ctx,operation,{requestId:newRequestId('queue-join'),type:'combat.joinQueue',payload:{mode:state.mode,tableId:state.selectedTable,inventoryRefs:[...state.picked]}});if(r.ok)ctx.handle.close();else app.toast('error','报名尚未完成',r.error.message);}finally{restore();}
+          }}),
           el("button", {
             class: "btn btn--primary", type: "button", text: "生成参赛预览",
             disabled: state.picked.length === 0,
@@ -220,26 +233,27 @@ export async function openCombat(app, options = {}) {
       }
 
       function renderBattle(match){
+      async function mountBoard(button){
+        if(!state.matchId||ctx.handle.closed||state.mounting)return;
+        state.mounting=true;
+        const startButton=ctx.element.querySelector('[data-mount-board]');if(startButton){startButton.disabled=true;startButton.textContent='正在载入牌局…';}
+        const restore=button?busyButton(button,'载入中…'):()=>{};
+        try{if(state.mount)await state.mount.dispose();mountBox.replaceChildren();state.mount=await ctx.host.battle.mount({container:mountBox,matchId:state.matchId,signal:state.controller.signal});}
+        catch(error){if(!ctx.handle.closed&&error.code!=='MOUNT_CANCELLED'&&error.name!=='AbortError'){app.toast('error','牌局载入失败',error.message);ctx.refresh();}}
+        finally{state.mounting=false;restore();if(!ctx.handle.closed&&startButton?.isConnected){const r=await ctx.query('room.snapshot');const latest=r.ok?r.data.matches.find(m=>m.matchId===state.matchId):null;startButton.disabled=latest?.status==='running';if(startButton.disabled)startButton.textContent='牌局进行中';}}
+      }
       // 战斗挂载区
       const mountBox = el("div", { class: "battle-mount", id: "battle-mount" }, [
-        el("p", { text: "战斗主视图：正式模式下由主模型挂载无名杀引擎，前端只提供容器与工具栏。" }),
+        el("p", { text: "正在准备牌局…" }),
       ]);
-      body.append(el("div", { class: "section" }, [
+      body.append(el("div", { class: "section",style:options.battleOnly?{display:'flex',flexDirection:'column',flex:'1',minHeight:'0'}:{} }, [
         el("h4", { class: "section__title", text: "牌局" }),
         mountBox,
         el("div", { style: { display: "flex", gap: "8px", marginTop: "8px", flexWrap: "wrap" } }, [
           el("button", {
-            class: "btn btn--sm", type: "button", text: "挂载牌局视图",
-            onclick: async event => {
-              if(!state.matchId){app.toast('error','尚未登记','请先确认参赛');return;}
-              const restore=busyButton(event.currentTarget,'载入中…');
-              try{
-              if(state.mount)await state.mount.dispose();
-              const container = document.getElementById("battle-mount");
-              container.replaceChildren();
-              state.mount = await ctx.host.battle.mount({ container, matchId: state.matchId,signal:state.controller.signal });
-              }catch(e){if(!ctx.handle.closed&&e.code!=='MOUNT_CANCELLED'&&e.name!=='AbortError'){app.toast('error','牌局载入失败',e.message);ctx.refresh();}}finally{restore();}
-            },
+            class: "btn btn--sm", type: "button", text: match?.status==='awaitingNext'?'开始下一局':match?.status==='interrupted'?'重开本局（重新发牌）':'开始对局',
+            'data-mount-board':'true',
+            disabled:match?.status==='running',onclick:event=>mountBoard(event.currentTarget),
           }),
           el("button", {
             class: "btn btn--sm btn--danger", type: "button", text: "本局认输",
@@ -258,16 +272,17 @@ export async function openCombat(app, options = {}) {
           }),
           el('button',{class:'btn btn--sm',text:'整场认输',onclick:async()=>{const r=await ctx.submit({requestId:newRequestId('match-surrender'),type:'combat.surrender',payload:{matchId:state.matchId,scope:'match'}});if(!r.ok)app.toast('error',r.error.code,r.error.message);else ctx.refresh();}}),
           match&&!match.serviceRecognized&&!match.results?.length?el('button',{class:'btn btn--sm',text:'取消未开局比赛',onclick:async()=>{const r=await ctx.submit({requestId:newRequestId('match-cancel'),type:'combat.cancel',payload:{matchId:match.matchId}});if(!r.ok)app.toast('error',r.error.code,r.error.message);else ctx.refresh();}}):null,
-          el("button", {
+          options.battleOnly?null:el("button", {
             class: "btn btn--sm btn--ghost", type: "button", text: "回主店",
             onclick: () => { app.navigateScene("store"); ctx.handle.close(); },
           }),
         ]),
-        el("p", { class: "small muted", text: match?`${match.mode==='kof'?'KOF':'BO3'} ${match.wins}:${match.losses} · ${match.status}；待下一局时重新挂载。关窗只中断视图，重开对战房可继续。`:'确认参赛后可挂载真实牌局。' }),
+        el("p", { class: "small muted", text: match?`${match.mode==='kof'?'KOF':'BO3'} ${match.wins}:${match.losses}。关闭窗口会中断当前小局，重开时重新发牌；整场结束前店内时间保持暂停。`:'确认参赛后即可开始牌局。' }),
       ]));
       if(match?.error)body.append(el('p',{class:'note-card',text:match.error}));
 
       ctx.setFooter([el("button", { class: "btn btn--ghost", type: "button", text: "关闭", onclick: () => ctx.handle.close() })]);
+      if(options.autoStart&&match?.status==='prepared')void mountBoard();
       }
       renderBattle(null);
     },

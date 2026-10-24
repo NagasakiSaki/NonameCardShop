@@ -3,7 +3,7 @@ import {income} from './trading.mjs';
 import {note} from './world.mjs';
 export const STARTER_TASKS=[
   ['first-order','第一次进货','ordered',3,300,'store.counter'],
-  ['first-receipt','签收三包卡','received',3,200,'store.counter'],
+  ['first-receipt','三包商品入库','received',3,200,'store.counter'],
   ['first-opening','自己开一包','opened',1,200,'store.opening'],
   ['first-sale','迎来首位买包顾客','sales',1,300,'store.retail'],
   ['first-market','完成首笔单卡出售','marketSales',1,300,'store.secondaryMarket'],

@@ -42,7 +42,7 @@ export function createWindowManager({ host, mount, onChange } = {}) {
     const subNode = el("span", { class: "window__sub", text: subtitle || "" });
     const body = el("div", { class: "window__body" });
     const foot = el("div", { class: "window__foot" });
-    const note = el("p", { class: "small muted", style: { marginRight: "auto" }, text: "正在申请暂停令牌…" });
+    const note = el("p", { class: "small muted", style: { marginRight: "auto" }, text: "正在打开…" });
 
     const closeButton = el("button", { class: "btn btn--sm window__close", type: "button", text: "关闭 (Esc)" });
     const element = el("section", { class: "window " + width, role: "dialog", "aria-modal": "true", "aria-label": title || "窗口" }, [

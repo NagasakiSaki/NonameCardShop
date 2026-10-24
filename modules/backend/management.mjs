@@ -27,7 +27,7 @@ export function configureManagement(w,config){
 export function managementEffects(w){
   const m=w.management,c=m?.config;
   const level=effect=>c?sum(c.upgrades.filter(u=>u.effect===effect).map(u=>(m.levels[u.id]||0)*(u.dailyCost&&m.onDuty[u.id]===false?0:u.amount))):0;
-  return {shelfCapacity:Math.floor((c?.baseShelfCapacity??36)+level('shelf')),boxShelfUnits:c?.boxShelfUnits??4,tableFee:Math.round(w.rules.tableFee+level('table')),
+  return {shelfCapacity:Math.floor((c?.baseShelfCapacity??36)+level('shelf')),boxShelfUnits:c?.boxShelfUnits??4,tableFee:w.storeSettings?.tableFee??Math.round(w.rules.tableFee+level('table')),
     checkoutSeconds:level('cashier')?c.cashierCheckoutSeconds:c?.baseCheckoutSeconds??1,concurrentCustomers:Math.floor((c?.baseConcurrentCustomers??3)+level('cashier')),
     newCustomerWalletMultiplier:1+level('showcase'),stocker:level('stocker')>0,wages:c?sum(c.upgrades.map(u=>(m.levels[u.id]||0)*u.dailyCost)):0};
 }

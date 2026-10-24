@@ -64,7 +64,7 @@ export function mountTradeWorkspace({ root, view, actions = {}, assets = {}, for
   const container = el('div', { style: 'display:flex;flex-direction:column;flex:1;min-height:0' });
   root.replaceChildren(header, messageNode, nav, container);
   injectStyles(root);root.append(el('style',{text:FORMAL_CSS}));
-  Object.values(panels).forEach(p => container.append(p));
+  Object.values(panels).forEach(p => {p.style.display='flex';p.style.flexDirection='column';p.style.flex='1';container.append(p);});
 
   const shared = { actions, assets, format, notify };
   const children = {};

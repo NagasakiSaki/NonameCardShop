@@ -25,7 +25,7 @@ try{
   await command('saves.import',{content:JSON.stringify(archive)});await page.reload();await page.waitForFunction(()=>window.__cardShopReady===true);
   await page.evaluate(()=>__cardShopApp.goToInteraction('store.secondaryMarket','market',{tab:'collection'}));
   await tiles.first().waitFor();await page.waitForFunction(()=>__cardShopApp.isNearInteraction('store.secondaryMarket'));
-  assert.equal(await tiles.count(),48);
+  assert.equal(await tiles.count(),8);
   assert.equal(await page.locator('[data-purchase-root]').count(),0,'opening collection must not build the supplier pane');
   assert.equal(await page.locator('[data-unbox-root]').count(),0,'opening collection must not build the opening pane');
   const firstKey=JSON.parse(await tiles.first().getAttribute('data-card'))[0];
@@ -34,15 +34,15 @@ try{
   for(;;){
     reached.push(...await tiles.evaluateAll(nodes=>nodes.map(n=>n.dataset.card)));
     if(await next.isDisabled())break;
-    await next.click();assert.ok(await tiles.count()<=48);
+    await next.click();assert.ok(await tiles.count()<=8);
   }
   assert.equal(reached.length,1000);assert.equal(new Set(reached).size,1000,'every aggregate row is reachable exactly once');
-  assert.equal(await tiles.count(),40);
+  assert.equal(await tiles.count(),8);
   // A specific copy and its asking price survive closing and reopening on the final page.
   await tiles.last().click();const selected=await page.locator('[data-card][aria-pressed="true"]').getAttribute('data-card');
   await page.getByRole('spinbutton',{name:'单卡上架售价',exact:true}).fill('37');
   await close();await page.evaluate(()=>__cardShopApp.openPanel('inventory',{}));await tiles.first().waitFor();
-  assert.equal(await tiles.count(),40);assert.equal(await page.locator('[data-card][aria-pressed="true"]').getAttribute('data-card'),selected);
+  assert.equal(await tiles.count(),8);assert.equal(await page.locator('[data-card][aria-pressed="true"]').getAttribute('data-card'),selected);
   assert.equal(await page.getByRole('spinbutton',{name:'单卡上架售价',exact:true}).inputValue(),'37');
   // Search covers off-page rows and retains input focus; zero hits also clear the old details.
   const target=cards.find(c=>c.cardKey===firstKey);
@@ -52,7 +52,7 @@ try{
   assert.equal(await search.evaluate(node=>node===document.activeElement),true);
   await search.fill('不存在的卡牌测试词');assert.equal(await tiles.count(),0);
   assert.equal(await page.getByRole('button',{name:'确认单卡上架',exact:true}).count(),0);
-  await search.fill('');assert.equal(await tiles.count(),48);
+  await search.fill('');assert.equal(await tiles.count(),8);
   await page.getByRole('combobox',{name:'全部印刷稀有度',exact:true}).selectOption('SSR');
   const ssrKeys=await tiles.evaluateAll(nodes=>nodes.map(n=>JSON.parse(n.dataset.card)[0]));
   assert.ok(ssrKeys.length>0);assert.ok(ssrKeys.every(key=>cards.find(c=>c.cardKey===key).currentRarity==='SSR'));
@@ -72,8 +72,7 @@ try{
   await page.waitForFunction(async()=>{const r=await __cardShopApp.query('market.list',{tab:'mine'});return r.ok&&r.data.total===1;});
   const listed=(await query('market.list',{tab:'mine'})).items[0];assert.equal(listed.cardKey,offPage.cardKey);assert.equal(listed.unitAmount,37);
   assert.ok((await query('inventory.list',{kind:'card',grouped:false,limit:200})).items.some(c=>c.inventoryRef===ref)||listed.inventoryRef===ref);
-  await page.getByRole('button',{name:'采购与货架',exact:true}).click();await page.locator('[data-purchase-root]').waitFor();
-  await page.getByRole('button',{name:'收藏与市场',exact:true}).click();assert.equal(await page.locator('[data-purchase-root]:visible').count(),0);
+  assert.equal(await page.locator('[data-purchase-root]').count(),0,'single-card market stays separate from purchase');
   await page.screenshot({path:out+'/paginated-collection.png'});await close();
   // Late detail responses and unmounted drafts cannot cross into a different world branch.
   const guards=await page.evaluate(async()=>{
@@ -82,11 +81,11 @@ try{
     const v={worldId:'guard',branchId:'old',clock:{day:1},wallet:{},inventory:[{cardKey:'test',name:'测试卡',printedRarity:'N',currentRarity:'N',owned:1,available:0}],market:{}};
     const c=mountTradeWorkspace({root,view:v,initialSection:'collection',draft:{unbox:{preview:{previewId:'old-preview'}}},actions:{cardDetail:()=>new Promise(resolve=>release=resolve)}});
     const pendingPreserved=c.getDraft().unbox.preview.previewId==='old-preview';
-    [...root.querySelectorAll('button')].find(b=>b.textContent==='查看大图与完整技能').click();
+   [...root.querySelectorAll('button')].find(b=>b.textContent==='技能').click();
     c.update({...v,branchId:'new'});release({ok:true,data:{skills:[{name:'过期技能',description:'不应出现'}]}});await new Promise(r=>setTimeout(r,0));
     const result={pendingPreserved,cleared:c.getDraft().unbox===undefined,staleHidden:!root.textContent.includes('过期技能'),detailCleared:c.getDraft().collection.detail===null};
     c.dispose();root.remove();return result;
   });
   assert.deepEqual(guards,{pendingPreserved:true,cleared:true,staleHidden:true,detailCleared:true});assert.deepEqual(errors,[]);
-  console.log('PASS trade pagination: all 1000 real rows reachable, 48 DOM tiles/page, global-score sorting, full search/filter/focus, draft restore, off-page selection, actual Host listing, lazy sections and branch/late-response guards.');
+  console.log('PASS trade pagination: all 1000 real rows reachable, 8 DOM tiles/page, global-score sorting, full search/filter/focus, draft restore, off-page selection, actual Host listing, lazy sections and branch/late-response guards.');
 }finally{await browser?.close();await server.close();}

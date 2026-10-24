@@ -32,8 +32,8 @@ try{
   await product.locator('[data-role="qty"]').fill('7');await product.getByRole('button',{name:'获取报价',exact:true}).click();
   await product.getByRole('button',{name:'确认下单并冻结价格',exact:true}).click();
   assert.equal((await query('supplier.orders')).items[0].quantity,7);await close();
-  await until(async()=>(await query('supplier.orders')).items[0].status==='arrived','delivery');
-  await go('store.counter');await page.getByRole('button',{name:'待签收',exact:true}).click();await page.getByRole('button',{name:'签收',exact:true}).click();
+  await until(async()=>(await query('supplier.orders')).items[0].status==='received','instant delivery');
+  await go('store.counter');
   assert.equal((await query('inventory.list',{kind:'pack'})).total,7);
   await page.getByRole('button',{name:'开包柜台',exact:true}).click();
   await page.getByRole('spinbutton').fill('1');await page.getByRole('button',{name:'生成预览',exact:true}).click();
@@ -45,7 +45,7 @@ try{
   await go('store.counter');await page.getByRole('button',{name:'开包柜台',exact:true}).click();await page.getByRole('button',{name:'一键开所有包',exact:true}).click();await page.getByRole('button',{name:'确认开包',exact:true}).click();
   assert.equal((await query('inventory.list',{kind:'card'})).total,25);
   await page.screenshot({path:path.join(output,'opening.png')});await close();
-  await page.getByRole('button',{name:'背包 B',exact:true}).click();await page.locator('.card-tile').first().click();await page.getByRole('button',{name:'查看技能源码',exact:true}).click();
+  await page.getByRole('button',{name:'卡牌 B',exact:true}).click();await page.locator('.card-tile').first().click();await page.getByRole('button',{name:'查看技能源码',exact:true}).click();
   await until(()=>page.locator('pre').innerText().then(t=>t.length>100&&/audio:|content\(|trigger:|inherit:/.test(t)),'skill source');
   assert.equal((await query('shop.snapshot')).clock.running,false);await page.keyboard.press('Escape');assert.equal((await query('shop.snapshot')).clock.running,false);await close();
   await go('store.secondaryMarket');await page.getByRole('button',{name:'出售收藏',exact:true}).click();await page.getByRole('button',{name:'留一，其余上架',exact:true}).click();
@@ -62,7 +62,7 @@ try{
   await page.getByRole('button',{name:'生成参赛预览',exact:true}).click();await page.getByRole('button',{name:'确认参赛（冻结阵容与托管）',exact:true}).click();
   const before=(await query('ledger.daily')).service||0;
   for(let round=1;round<=2;round++){
-    await page.getByRole('button',{name:'挂载牌局视图',exact:true}).click();
+    await page.getByRole('button',{name:round===1?'开始对局':'开始下一局',exact:true}).click();
     await until(async()=>{const m=(await query('room.snapshot')).matches.find(m=>!m.background&&m.status==='running');return m?.lastReadyGameId===m?.gameId&&m;},'engine ready',25000);
     assert.equal(await page.getByRole('button',{name:'本局认输',exact:true}).isEnabled(),true);
     const frame=await page.locator('#battle-mount iframe').elementHandle().then(h=>h.contentFrame());
@@ -76,7 +76,7 @@ try{
   assert.equal((await query('ledger.daily')).service-before,10);await close();
   await page.getByRole('button',{name:'存档',exact:true}).click();await page.getByRole('button',{name:'保存当前进度',exact:true}).click();const saves=await query('saves.list'),manual=saves.filter(s=>s.slot==='manual').at(-1);assert.ok(manual?.archiveId);
   const downloadPromise=page.waitForEvent('download');await page.getByRole('button',{name:'导出',exact:true}).click();const download=await downloadPromise,savePath=path.join(output,'export.json');await download.saveAs(savePath);assert.equal(JSON.parse(fs.readFileSync(savePath)).format,'noname-shop-world-save');await close();
-  await page.getByRole('button',{name:'打烊结算',exact:true}).click();assert.equal((await query('shop.snapshot')).clock.phase,'closed');assert.match(await page.locator('[aria-label="当日日报"]').innerText(),/今日经营利润/);
+  await page.getByRole('button',{name:'打烊结算',exact:true}).click();assert.equal((await query('shop.snapshot')).clock.phase,'closed');await page.locator('[data-live-management=report] .pc-root').waitFor();assert.equal((await query('ledger.daily')).day,1);
   await close();await page.getByRole('button',{name:'开始下一天',exact:true}).click();assert.equal((await query('shop.snapshot')).clock.day,2);assert.equal((await query('inventory.list',{location:'trash'})).total,0);
   await page.getByRole('button',{name:'存档',exact:true}).click();await page.getByRole('button',{name:'即时备份',exact:true}).click();const row=page.locator('tr').filter({hasText:manual.branch}).filter({hasText:'手动'}).first();await row.getByRole('button',{name:'读取',exact:true}).click();await page.getByRole('button',{name:'确认读取',exact:true}).click();await until(async()=>(await query('shop.snapshot')).clock.day===1,'load day branch');
   const branch=(await query('shop.snapshot')).branchId;assert.notEqual(branch,manual.branchId);await close();
