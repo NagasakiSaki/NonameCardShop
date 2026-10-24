@@ -1,0 +1,15 @@
+{
+  "baseline": "1446b863",
+  "scope": "whole-project scope, risk-based depth; vendor integrity and integration boundaries",
+  "findings": [
+    {"id":"AUD-001","priority":"P2","status":"fixed","title":"返回主菜单再进入后手账折叠被重复监听抵消","evidence":"baseline dynamically reproduced; notebookTogglesOnSecondSession=false","file":"frontend/app-shell.mjs","line":150,"verification":"tests/high-quality-pass.mjs"},
+    {"id":"AUD-002","priority":"P1","status":"fixed","title":"桌面新版存档菜单和自动备份仍读取旧变量","evidence":"baseline ready Host returns null through old readSave expression","file":"desktop/save-bridge.cjs","line":2,"verification":"tests/desktop-host.cjs"},
+    {"id":"AUD-003","priority":"P1","status":"fixed-in-source-packaged-validation-pending","title":"打包过滤未包含新版前端和资源","evidence":"baseline extraResources excludes runtime frontend folders; no new installer built","file":"desktop/package.json","line":19,"verification":"tests/high-quality-pass.mjs inclusion assertions; full package build pending"},
+    {"id":"AUD-004","priority":"P2","status":"fixed","title":"熟客页参数 neighbors 落到设施升级","evidence":"baseline dynamically reproduced; active tab was 设施与升级","file":"frontend-next/screens/management.mjs","line":58,"verification":"tests/high-quality-pass.mjs"},
+    {"id":"AUD-005","priority":"P2","status":"fixed","title":"熟客单卡交付与购买绕过二级市场站位","evidence":"baseline runtime station table has no neighbors.act branch; post-fix out-of-range direct command rejected without transfer","file":"modules/backend/runtime.mjs","line":189,"verification":"tests/high-quality-pass.mjs and tests/backend-management.mjs"},
+    {"id":"AUD-006","priority":"P2","status":"fixed-current-test-routing","title":"桌面验收仍面向旧根页面变量与稀有度","evidence":"tests/desktop.cjs and desktop-development.cjs wait for legacy DATA/ShopGame on the new root","file":"tests/run.mjs","line":21,"verification":"tests/desktop-host.cjs; packaged execution pending new build"},
+    {"id":"AUD-007","priority":"P1","status":"fixed","title":"新 profile 再次清理同源旧进度及备份","evidence":"FAST-01 L-01; createHost called clearLegacyShopStorage once per fresh world; previous browser test expected deletion","file":"integration/frontend-host.mjs","line":16,"verification":"tests/profile-menu.mjs sentinel preservation"},
+    {"id":"AUD-008","priority":"P2","status":"fixed-bounded-demo","title":"旧 Mock snapshot 与默认新页面不匹配导致演示启动失败","evidence":"Mock snapshot lacks daily; HUD accessed snapshot.daily.goods; baseline explicit Mock never became ready","file":"frontend/ui/hud.mjs","line":65,"verification":"tests/high-quality-pass.mjs explicit Mock boot/inventory/disabled unsupported panels"}
+  ],
+  "notClaimed": ["all source lines manually reviewed", "all skills dynamically tested", "new EXE validated", "full Mock parity with live Host", "performance optimized", "no remaining bugs"]
+}

@@ -54,7 +54,7 @@ npm run art:install
 
 1. 从注册表找到稳定 ID，例如 `bd-yuno`。在新预览目录导出一份基线。
 2. 修改 `hair/cloth/iris` 三阶配色，以及 `base/front/back/clothes` 部件。三阶数组顺序是亮色、中间色、暗色，均为六位十六进制颜色。
-3. 舞台服由 `costume` 分派五团各自版型，`hairShape` 决定完整立绘发型，`walkLegwear` / `shoePalette` 决定地图腿装与鞋；定义见审计表。`originalCloth` 保留原版基准，网页修改 `cloth` 会对服装层染色，不能把皮肤一起染色。四人行走精修另外使用 `walkCostume` 分派，参数见 `data/walk-refinement.mjs`，新增版型为 `ref-college` / `ref-bluedress` / `ref-gothic`；可用 `sleevePalette` 设置三色袖子。保留立绘 `costume`，浏览器与 CLI 共用此分派，正式用户图源立绘仍由登记覆盖。
+3. 舞台服由 `costume` 分派五团各自版型，`hairShape` 决定完整立绘发型，`walkLegwear` / `shoePalette` 决定地图腿装与鞋；定义见审计表。`originalCloth` 保留原版基准，网页修改 `cloth` 会对服装层染色，不能把皮肤一起染色。全部 25 人行走使用 `walkCostume` 精修分派，参数见 `data/walk-refinement.mjs`；`sleevePalette` 设置三色袖子，新牛仔/腰衣/连帽模板和可选字段见 `tools/character-kit/README.md`。保留立绘 `costume`，浏览器与 CLI 共用此分派，正式用户图源立绘仍由登记覆盖。
 4. `walkStyle` 可用 `bob/asym-bob/medium/wavy-medium/long/wavy/twins/braids`；`accessory` 选已有样式，或在共享像素模块添加饰品。`streak` 是挑染，`otherEye` 是另一只眼的三阶色。
 5. 头像可用部件保存在 `sources/portraits/`；组合函数已处理没有 secondary 或 shadow 的已知部件。新增部件时先检查文件确实存在，不要猜路径。
 6. 在 A 页检查上、左、下、右和移动；C 页调色、表情、导出 JSON。五团模板的发色与服装主色会同步到行走图；基础 3 套保留原参考配色。

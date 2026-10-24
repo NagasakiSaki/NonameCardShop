@@ -17,6 +17,9 @@ groups.npcNatural=['tests/npc-natural-browser.mjs'];
 groups.backend.push('tests/day-starts.mjs','tests/gameplay-adjustments.mjs');groups.history.push('tests/day-starts.mjs');
 groups.backend.push('tests/shop-experience.mjs');groups.npc.push('tests/shop-experience.mjs');
 groups.frontend.push('tests/playability-integration.mjs');groups.ui.push('tests/playability-integration.mjs');groups.trading.push('tests/playability-integration.mjs');
+// Current desktop/root UI use the Host world; the older desktop scripts are historical legacy coverage.
+groups.desktop=['tests/desktop-host.cjs'];groups.release=['tests/desktop-host.cjs'];
+groups.frontend.push('tests/high-quality-pass.mjs');groups.ui.push('tests/high-quality-pass.mjs');
 const selection=process.argv[2]||'all';if(selection!=='all'&&!groups[selection])throw new Error(`未知测试组：${selection}`);
 const output=path.join(root,'test-results',new Date().toISOString().replace(/[:.]/g,'-')+`-${process.pid}`);fs.mkdirSync(output,{recursive:true});
 const results=[],summary={selection,output,startedAt:new Date().toISOString(),results};let runtime;

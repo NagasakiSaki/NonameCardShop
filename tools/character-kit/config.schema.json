@@ -27,7 +27,12 @@
         "walkTailLength": {"type": "integer", "minimum": 0, "maximum": 40},
         "band": {"enum": ["mygo", "avemujica", "yumemita", "millsage", "ikka-dumb-rock"]},
         "costume": {"type": "string", "description": "Existing portrait costume ID from data/character-audit.mjs; checked by the CLI."},
-        "walkCostume": {"type": "string", "description": "Optional refined walk renderer costume: existing costume ID or ref-college/ref-bluedress/ref-gothic; checked by the CLI."}
+        "walkCostume": {"type": "string", "description": "Optional registered refined walk costume; checked by the CLI."},
+        "walkInnerColor": {"type":"string","pattern":"^#[0-9a-fA-F]{6}$"},
+        "walkSkirtColor": {"type":"string","pattern":"^#[0-9a-fA-F]{6}$"},
+        "walkTrimColor": {"type":"string","pattern":"^#[0-9a-fA-F]{6}$"},
+        "walkHoodColor": {"type":"string","pattern":"^#[0-9a-fA-F]{6}$"},
+        "walkSleeveStripe": {"type":"string","pattern":"^#[0-9a-fA-F]{6}$"}
       },
       "if": {"required": ["band"]},
       "then": {"required": ["costume"]},

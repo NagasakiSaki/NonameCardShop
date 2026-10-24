@@ -9,7 +9,8 @@ import { setSceneContext, createWorldSceneClass, worldSceneZoom } from "./scenes
 import { nearestInteraction, exitAt } from "./world/map-loader.mjs";
 import { normalizeQuery } from "./host/normalize.mjs";
 
-const classicTrades = new URLSearchParams(location.search).get('tradeUI') === 'classic';
+const mockTrades = new URLSearchParams(location.search).get('mode') === 'mock';
+const classicTrades = mockTrades || new URLSearchParams(location.search).get('tradeUI') === 'classic';
 const previousTrades = new URLSearchParams(location.search).get('tradeUI') === 'previous';
 const PANEL_LOADERS = {
   inventory: () => classicTrades?import("./ui/inventory.mjs").then(m=>m.openInventory):previousTrades?import('../frontend-next/screens/cards.mjs').then(m=>m.openCollection):import('../frontend-next/screens/workspace.mjs').then(m=>m.openCollection),
@@ -19,14 +20,14 @@ const PANEL_LOADERS = {
   market: () => classicTrades?import("./ui/secondary-market.mjs").then(m=>m.openMarket):previousTrades?import('../frontend-next/screens/cards.mjs').then(m=>m.openCards):import('../frontend-next/screens/workspace.mjs').then(m=>m.openCards),
   combat: () => import("./ui/combat-room.mjs").then((m) => m.openCombat),
   tasks: () => import("./ui/tasks.mjs").then((m) => m.openTasks),
-  report: () => import('../frontend-next/screens/management.mjs').then(m=>m.openDayReport),
+  report: () => mockTrades?import('./ui/day-report.mjs').then(m=>m.openDayReport):import('../frontend-next/screens/management.mjs').then(m=>m.openDayReport),
   guide: () => import('../frontend-next/screens/management.mjs').then(m=>m.openGuide),
   customers: () => import('../frontend-next/screens/management.mjs').then(m=>m.openCustomers),
   finance: () => import('./ui/finance.mjs').then(m=>m.openFinance),
   saves: () => import("./ui/day-saves.mjs").then((m) => m.openDaySaves),
-  management: () => import("./ui/management.mjs").then((m) => m.openManagement),
+  management: () => previousTrades||classicTrades?import('./ui/management.mjs').then(m=>m.openManagement):import('../frontend-next/screens/management.mjs').then(m=>m.openManagement),
   settings: () => import("./ui/settings.mjs").then((m) => m.openSettings),
-  trash: () => import("./ui/trash.mjs").then((m) => m.openTrash),
+  trash: () => previousTrades||classicTrades?import('./ui/trash.mjs').then(m=>m.openTrash):import('../frontend-next/screens/trash.mjs').then(m=>m.openTrash),
   help: () => import("./ui/help.mjs").then((m) => m.openHelp),
 };
 
@@ -66,7 +67,7 @@ export async function startApp({ host, connection, mode, fixture }) {
 
   if (mode === "mock") {
     modeBadge.hidden = false;
-    modeBadge.textContent = "前端演示数据 · " + (snapshot.fixtureLabel || fixture);
+    modeBadge.textContent = "旧版演示界面 · " + (snapshot.fixtureLabel || fixture);
     modeBadge.title = "当前使用 Mock Host，交易与规则均为演示；不代表正式经济验收";
   }
 
@@ -103,7 +104,7 @@ export async function startApp({ host, connection, mode, fixture }) {
     command: (input) => host.command(input),
     async refreshSnapshot() {
       const result = await host.query("shop.snapshot");
-      if (result.ok) {
+      if (result.ok && !destroying) {
         snapshot = result.data;
         if (Array.isArray(snapshot.actors)) actors = snapshot.actors;
         syncRoom();
@@ -112,12 +113,14 @@ export async function startApp({ host, connection, mode, fixture }) {
       return result;
     },
     async openPanel(kind, options = {}) {
+      if(destroying)return null;
       const loader = PANEL_LOADERS[kind];
       if (!loader) {
         toast("error", "未实现的入口", kind);
         return null;
       }
       const open = await loader();
+      if(destroying)return null;
       return open(app, options);
     },
     goToInteraction(interactionId,panel,panelOptions={}) {
@@ -145,6 +148,7 @@ export async function startApp({ host, connection, mode, fixture }) {
     destroy() {
       destroying = true;
       movement.destroy();observer?.disconnect();clearTimeout(notebookTask);window.removeEventListener('keydown',onGlobalKeyDown);
+      document.getElementById('notebook-toggle').removeEventListener('click',onNotebookToggle);
       windows.closeAll();
       hud.destroy?.();
       if (game) game.destroy(true);
@@ -254,6 +258,7 @@ export async function startApp({ host, connection, mode, fixture }) {
   // ---- HUD ----
   const hud = createHud({
     mount: document.getElementById("hud"),
+    demo:mode==='mock',
     currency,
     getSnapshot: () => snapshot,
     onAction: (action) => {
@@ -336,11 +341,14 @@ export async function startApp({ host, connection, mode, fixture }) {
   requestAnimationFrame(() => fitStage());
 
   // ---- 手账 ----
-  let notebookTask = null;
+  let notebookTask = null,notebookLoading=false;
   async function renderNotebook() {
+    if(destroying||notebookLoading)return;
+    notebookLoading=true;const identity=snapshot.worldId+':'+snapshot.branchId;
+    try{
+    const [tasksResult,ledgerResult]=await Promise.all([app.query('tasks.list'),app.query('ledger.daily')]);
+    if(destroying||identity!==snapshot.worldId+':'+snapshot.branchId)return;
     clear(notebookBody);
-    const tasksResult = await app.query("tasks.list");
-    const ledgerResult = await app.query("ledger.daily");
     if (tasksResult.ok) {
       const daily=tasksResult.data.items.filter(task=>task.scope==='daily');
       const shown=daily.length?daily:tasksResult.data.items;
@@ -390,9 +398,11 @@ export async function startApp({ host, connection, mode, fixture }) {
         onclick: () => app.navigateScene(currentMapId === "store" ? "battle-room" : "store"),
       }),
     ]));
+    }finally{notebookLoading=false;}
   }
 
   function render() {
+    if(destroying)return;
     hud.render(snapshot);
     if(notebookTask)return;
     notebookTask = setTimeout(() => {
@@ -406,10 +416,11 @@ export async function startApp({ host, connection, mode, fixture }) {
     document.getElementById("notebook-toggle").setAttribute("aria-expanded", "false");
   }
 
-  document.getElementById("notebook-toggle").addEventListener("click", (event) => {
+  const onNotebookToggle=(event) => {
     const collapsed = notebook.classList.toggle("collapsed");
     event.currentTarget.setAttribute("aria-expanded", String(!collapsed));
-  });
+  };
+  document.getElementById("notebook-toggle").addEventListener("click",onNotebookToggle);
 
   // ---- 键盘 ----
   const onGlobalKeyDown=(event) => {

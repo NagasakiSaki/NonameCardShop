@@ -1,5 +1,5 @@
 import {createRuntime} from '../modules/backend/runtime.mjs';
-import {browserRepository,clearLegacyShopStorage} from '../modules/backend/storage.mjs';
+import {browserRepository} from '../modules/backend/storage.mjs';
 import {createBattleMount} from './host-battle.mjs';
 import {createNpcEngine} from './npc-engine.mjs';
 import {profileDatabase,profileRegistry} from '../modules/backend/profiles.mjs';
@@ -13,7 +13,9 @@ export async function createHost({profileId='legacy'}={}){
   // These files belong to the frontend team. Absence is a capability, not a fake map.
   for(const name of ['store','battle-room']){const response=await fetch(`/assets/frontend/maps/${name}.json`);if(response.ok)maps.push(await response.json());else if(response.status!==404)throw new Error(`无法加载导航：${name}`);}
   const runtime=await createRuntime({source,rules,repository:browserRepository(globalThis.indexedDB,profileDatabase(profileId)),maps,managementConfig,backgroundAvailable:true});
-  if(!runtime.inspect().legacyResetDone){await clearLegacyShopStorage();await runtime.markLegacyReset();}
+  // The historical one-time reset marker is retained for compatibility. Opening another
+  // profile must never erase a legacy world's saves/backups elsewhere on this origin.
+  if(!runtime.inspect().legacyResetDone)await runtime.markLegacyReset();
   const mount=createBattleMount(runtime);
   const npcEngine=createNpcEngine(runtime);
   let timer,last=performance.now(),backgroundLease=null,disconnectPromise=null,clockFailed=false;

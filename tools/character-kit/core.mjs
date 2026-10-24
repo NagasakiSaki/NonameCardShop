@@ -15,7 +15,7 @@ const color=/^#[0-9a-f]{6}$/i;
 const palettes=['hair','cloth','iris','secondary','otherEye','originalCloth','shoePalette','sleevePalette'];
 const protectedOutput=/^(assets|data|frontend|frontend-next|modules|vendor|experiments|tests|contracts|docs|tools|integration|desktop|dev|node_modules|\.git)([\\/]|$)/i;
 const costumes=new Set(Object.values(CHARACTER_AUDIT).map(c=>c.costume));
-const walkCostumes=new Set([...costumes,'ref-college','ref-bluedress','ref-gothic']);
+const walkCostumes=new Set([...costumes,'ref-college','ref-bluedress','ref-gothic','ref-denim-jacket','ref-waist-jacket','ref-mew-hoodie']);
 const inside=(parent,file)=>{const rel=path.relative(parent,file);return rel!==''&&!rel.startsWith('..'+path.sep)&&rel!=='..'&&!path.isAbsolute(rel);};
 export class KitError extends Error {
   constructor(code,message,details=[]){super(message);this.code=code;this.details=details;}
@@ -62,7 +62,7 @@ export function validateConfig(input){
       if(c[key]===undefined&&!['hair','cloth','iris'].includes(key))continue;
       if(!Array.isArray(c[key])||c[key].length!==3||!c[key].every(v=>typeof v==='string'&&color.test(v)))add(field(key),'PALETTE','需要恰好 3 个 #RRGGBB 颜色（亮、中、暗）');
     }
-    for(const key of ['streak','accent'])if(c[key]!=null&&(typeof c[key]!=='string'||!color.test(c[key])))add(field(key),'COLOR','需要 #RRGGBB 颜色');
+    for(const key of ['streak','accent','walkInnerColor','walkSkirtColor','walkTrimColor','walkHoodColor','walkSleeveStripe'])if(c[key]!=null&&(typeof c[key]!=='string'||!color.test(c[key])))add(field(key),'COLOR','需要 #RRGGBB 颜色');
     if(c.band!=null){
       if(!BANDS.some(b=>b.id===c.band))add(field('band'),'BAND','当前完整立绘只支持五个已有团的绘制主题');
       if(!costumes.has(c.costume))add(field('costume'),'COSTUME','复制现有完整立绘时保留已注册 costume，未知款式需扩展核心绘制器');

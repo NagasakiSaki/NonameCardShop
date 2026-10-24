@@ -186,7 +186,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
     const world=next.world;
     if(world.clock.phase==='closed'&&(input.type==='market.acceptTrade'||input.type==='neighbors.act'&&['accept','deliver','buy'].includes(p.action)))fail('SHOP_CLOSED','今天已结算，请开始下一天后交易。');
     const item=()=>playerItem(world,p.inventoryRef);
-    const station=input.type==='opening.execute'?'store.opening':input.type.startsWith('supplier.')||input.type==='boxes.unseal'?'store.counter':input.type.startsWith('market.')?'store.secondaryMarket':input.type.startsWith('retail.')?'store.retail':input.type==='inventory.discard'||input.type==='inventory.recover'?'store.trash':null;
+    const station=input.type==='opening.execute'?'store.opening':input.type.startsWith('supplier.')||input.type==='boxes.unseal'?'store.counter':input.type.startsWith('market.')?'store.secondaryMarket':input.type.startsWith('retail.')?'store.retail':input.type==='inventory.discard'||input.type==='inventory.recover'?'store.trash':input.type==='neighbors.act'&&['buy','deliver'].includes(p.action)?'store.secondaryMarket':null;
     if(station&&navigation.size){const map=navigation.get(world.player.roomId),anchor=map?.anchors[station];need(anchor&&Math.hypot(world.player.x-anchor.x,world.player.y-anchor.y)<=(anchor.radius||24),'NOT_IN_RANGE','请先走到对应柜台或家具旁边。');}
     switch(input.type){
       case 'clock.setManualPause':need(typeof p.paused==='boolean','INVALID_INPUT','暂停开关不正确。');world.clock.manualPaused=p.paused;return {};

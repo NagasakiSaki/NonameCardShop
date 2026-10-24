@@ -355,7 +355,7 @@
       }
     },
     "bd-anon": {
-      "sheet": "/assets/frontend/characters/bd-anon.e67566141f.png",
+      "sheet": "/assets/frontend/characters/bd-anon.c32c4710da.png",
       "portrait": "/assets/frontend/portraits/bd-anon.56c98768ed.png",
       "avatar": "/assets/frontend/portraits/bd-anon.79cfda23ed.png",
       "portraitSize": [
@@ -447,7 +447,7 @@
       }
     },
     "bd-soyo": {
-      "sheet": "/assets/frontend/characters/bd-soyo.70e1525b5c.png",
+      "sheet": "/assets/frontend/characters/bd-soyo.9c52830f6e.png",
       "portrait": "/assets/frontend/portraits/bd-soyo.d0e4a798c5.png",
       "avatar": "/assets/frontend/portraits/bd-soyo.8cf1adc0bd.png",
       "portraitSize": [
@@ -493,7 +493,7 @@
       }
     },
     "bd-taki": {
-      "sheet": "/assets/frontend/characters/bd-taki.ee02402d65.png",
+      "sheet": "/assets/frontend/characters/bd-taki.0c12852460.png",
       "portrait": "/assets/frontend/portraits/bd-taki.8a795a12b8.png",
       "avatar": "/assets/frontend/portraits/bd-taki.3b36dfa895.png",
       "portraitSize": [
@@ -539,7 +539,7 @@
       }
     },
     "bd-uika": {
-      "sheet": "/assets/frontend/characters/bd-uika.a062c12393.png",
+      "sheet": "/assets/frontend/characters/bd-uika.e04c7618f8.png",
       "portrait": "/assets/frontend/portraits/bd-uika.9bba0a55c5.png",
       "avatar": "/assets/frontend/portraits/bd-uika.f480dd60ea.png",
       "portraitSize": [
@@ -585,7 +585,7 @@
       }
     },
     "bd-mutsumi": {
-      "sheet": "/assets/frontend/characters/bd-mutsumi.4febe24813.png",
+      "sheet": "/assets/frontend/characters/bd-mutsumi.228b53245b.png",
       "portrait": "/assets/frontend/portraits/bd-mutsumi.dd76fc39d2.png",
       "avatar": "/assets/frontend/portraits/bd-mutsumi.fdc4f1e343.png",
       "portraitSize": [
@@ -631,7 +631,7 @@
       }
     },
     "bd-umiri": {
-      "sheet": "/assets/frontend/characters/bd-umiri.793effa46b.png",
+      "sheet": "/assets/frontend/characters/bd-umiri.80b698ccf0.png",
       "portrait": "/assets/frontend/portraits/bd-umiri.fd42539f78.png",
       "avatar": "/assets/frontend/portraits/bd-umiri.cc9cf8b202.png",
       "portraitSize": [
@@ -677,7 +677,7 @@
       }
     },
     "bd-nyamu": {
-      "sheet": "/assets/frontend/characters/bd-nyamu.daee0cab14.png",
+      "sheet": "/assets/frontend/characters/bd-nyamu.ffdd89a7d4.png",
       "portrait": "/assets/frontend/portraits/bd-nyamu.a932b82faa.png",
       "avatar": "/assets/frontend/portraits/bd-nyamu.8237400e0c.png",
       "portraitSize": [
@@ -769,7 +769,7 @@
       }
     },
     "bd-arale": {
-      "sheet": "/assets/frontend/characters/bd-arale.432f855f64.png",
+      "sheet": "/assets/frontend/characters/bd-arale.96c48d7257.png",
       "portrait": "/assets/frontend/portraits/bd-arale.cc3a183a55.png",
       "avatar": "/assets/frontend/portraits/bd-arale.fc8b68255f.png",
       "portraitSize": [
@@ -815,7 +815,7 @@
       }
     },
     "bd-nonoka": {
-      "sheet": "/assets/frontend/characters/bd-nonoka.798b6995e8.png",
+      "sheet": "/assets/frontend/characters/bd-nonoka.64edd19fb6.png",
       "portrait": "/assets/frontend/portraits/bd-nonoka.8a7e51a0a2.png",
       "avatar": "/assets/frontend/portraits/bd-nonoka.8a0c693121.png",
       "portraitSize": [
@@ -861,7 +861,7 @@
       }
     },
     "bd-ritsu": {
-      "sheet": "/assets/frontend/characters/bd-ritsu.96179dca1b.png",
+      "sheet": "/assets/frontend/characters/bd-ritsu.03ef4966fc.png",
       "portrait": "/assets/frontend/portraits/bd-ritsu.6d97f08d96.png",
       "avatar": "/assets/frontend/portraits/bd-ritsu.7b17dcbb21.png",
       "portraitSize": [
@@ -907,7 +907,7 @@
       }
     },
     "bd-miyako": {
-      "sheet": "/assets/frontend/characters/bd-miyako.9629d39720.png",
+      "sheet": "/assets/frontend/characters/bd-miyako.4e39ed25be.png",
       "portrait": "/assets/frontend/portraits/bd-miyako.4e4bf7702d.png",
       "avatar": "/assets/frontend/portraits/bd-miyako.ee39994c29.png",
       "portraitSize": [
@@ -953,7 +953,7 @@
       }
     },
     "bd-yuno": {
-      "sheet": "/assets/frontend/characters/bd-yuno.77df9f992f.png",
+      "sheet": "/assets/frontend/characters/bd-yuno.a7c15461f8.png",
       "portrait": "/assets/frontend/portraits/bd-yuno.e58d540f25.png",
       "avatar": "/assets/frontend/portraits/bd-yuno.d8eaab8333.png",
       "portraitSize": [
@@ -999,7 +999,7 @@
       }
     },
     "bd-nagi": {
-      "sheet": "/assets/frontend/characters/bd-nagi.f4f821c1f1.png",
+      "sheet": "/assets/frontend/characters/bd-nagi.524af3d8c3.png",
       "portrait": "/assets/frontend/portraits/bd-nagi.954a04e853.png",
       "avatar": "/assets/frontend/portraits/bd-nagi.e9e56964b2.png",
       "portraitSize": [
@@ -1045,7 +1045,7 @@
       }
     },
     "bd-mahoro": {
-      "sheet": "/assets/frontend/characters/bd-mahoro.d7a349aa07.png",
+      "sheet": "/assets/frontend/characters/bd-mahoro.22ed565fbe.png",
       "portrait": "/assets/frontend/portraits/bd-mahoro.f92f1d9157.png",
       "avatar": "/assets/frontend/portraits/bd-mahoro.6f7b297acb.png",
       "portraitSize": [
@@ -1091,7 +1091,7 @@
       }
     },
     "bd-hotaru": {
-      "sheet": "/assets/frontend/characters/bd-hotaru.87cdc64a6c.png",
+      "sheet": "/assets/frontend/characters/bd-hotaru.082c2c60af.png",
       "portrait": "/assets/frontend/portraits/bd-hotaru.0af30dcb60.png",
       "avatar": "/assets/frontend/portraits/bd-hotaru.a81134af45.png",
       "portraitSize": [
@@ -1137,7 +1137,7 @@
       }
     },
     "bd-houka": {
-      "sheet": "/assets/frontend/characters/bd-houka.ec93b06fe2.png",
+      "sheet": "/assets/frontend/characters/bd-houka.4d45944cd7.png",
       "portrait": "/assets/frontend/portraits/bd-houka.f7728b3d7d.png",
       "avatar": "/assets/frontend/portraits/bd-houka.774a0c05ba.png",
       "portraitSize": [
@@ -1183,7 +1183,7 @@
       }
     },
     "bd-natsume": {
-      "sheet": "/assets/frontend/characters/bd-natsume.6d16811777.png",
+      "sheet": "/assets/frontend/characters/bd-natsume.1a8e498436.png",
       "portrait": "/assets/frontend/portraits/bd-natsume.bf97a9518e.png",
       "avatar": "/assets/frontend/portraits/bd-natsume.2b7feceefd.png",
       "portraitSize": [
@@ -1229,7 +1229,7 @@
       }
     },
     "bd-raika": {
-      "sheet": "/assets/frontend/characters/bd-raika.bd67ef9fea.png",
+      "sheet": "/assets/frontend/characters/bd-raika.8f735904c6.png",
       "portrait": "/assets/frontend/portraits/bd-raika.2787fe4c1b.png",
       "avatar": "/assets/frontend/portraits/bd-raika.cc17918655.png",
       "portraitSize": [
@@ -1275,7 +1275,7 @@
       }
     },
     "bd-miku": {
-      "sheet": "/assets/frontend/characters/bd-miku.70d533a8a6.png",
+      "sheet": "/assets/frontend/characters/bd-miku.e9ba035ca6.png",
       "portrait": "/assets/frontend/portraits/bd-miku.81c9513fd0.png",
       "avatar": "/assets/frontend/portraits/bd-miku.b4c657f949.png",
       "portraitSize": [
@@ -1367,7 +1367,7 @@
       }
     },
     "bd-chieri": {
-      "sheet": "/assets/frontend/characters/bd-chieri.67106a5dbd.png",
+      "sheet": "/assets/frontend/characters/bd-chieri.c700ddc3b3.png",
       "portrait": "/assets/frontend/portraits/bd-chieri.ce27d41686.png",
       "avatar": "/assets/frontend/portraits/bd-chieri.0632e4a848.png",
       "portraitSize": [
@@ -1413,7 +1413,7 @@
       }
     },
     "bd-shizuku": {
-      "sheet": "/assets/frontend/characters/bd-shizuku.0cb060dc72.png",
+      "sheet": "/assets/frontend/characters/bd-shizuku.693d5cd8d0.png",
       "portrait": "/assets/frontend/portraits/bd-shizuku.7eae9de347.png",
       "avatar": "/assets/frontend/portraits/bd-shizuku.038c16f4ae.png",
       "portraitSize": [
@@ -1524,7 +1524,7 @@
     "cellSize": 192,
     "artScale": 2,
     "columns": 4,
-    "rows": 11,
+    "rows": 19,
     "list": [
       {
         "prop": "counter_retail",
@@ -1962,6 +1962,326 @@
         "x": 576,
         "y": 1920,
         "w": 96,
+        "h": 96,
+        "footY": 48,
+        "occludes": true
+      },
+      {
+        "prop": "pa_shelf_lv0_empty",
+        "cell": 44,
+        "x": 0,
+        "y": 2112,
+        "w": 128,
+        "h": 112,
+        "footY": 56,
+        "occludes": true
+      },
+      {
+        "prop": "pa_shelf_lv0_low",
+        "cell": 45,
+        "x": 192,
+        "y": 2112,
+        "w": 128,
+        "h": 112,
+        "footY": 56,
+        "occludes": true
+      },
+      {
+        "prop": "pa_shelf_lv0_full",
+        "cell": 46,
+        "x": 384,
+        "y": 2112,
+        "w": 128,
+        "h": 112,
+        "footY": 56,
+        "occludes": true
+      },
+      {
+        "prop": "pa_shelf_lv1_empty",
+        "cell": 47,
+        "x": 576,
+        "y": 2112,
+        "w": 128,
+        "h": 112,
+        "footY": 56,
+        "occludes": true
+      },
+      {
+        "prop": "pa_shelf_lv1_low",
+        "cell": 48,
+        "x": 0,
+        "y": 2304,
+        "w": 128,
+        "h": 112,
+        "footY": 56,
+        "occludes": true
+      },
+      {
+        "prop": "pa_shelf_lv1_full",
+        "cell": 49,
+        "x": 192,
+        "y": 2304,
+        "w": 128,
+        "h": 112,
+        "footY": 56,
+        "occludes": true
+      },
+      {
+        "prop": "pa_shelf_lv2_empty",
+        "cell": 50,
+        "x": 384,
+        "y": 2304,
+        "w": 128,
+        "h": 112,
+        "footY": 56,
+        "occludes": true
+      },
+      {
+        "prop": "pa_shelf_lv2_low",
+        "cell": 51,
+        "x": 576,
+        "y": 2304,
+        "w": 128,
+        "h": 112,
+        "footY": 56,
+        "occludes": true
+      },
+      {
+        "prop": "pa_shelf_lv2_full",
+        "cell": 52,
+        "x": 0,
+        "y": 2496,
+        "w": 128,
+        "h": 112,
+        "footY": 56,
+        "occludes": true
+      },
+      {
+        "prop": "pa_shelf_lv3_empty",
+        "cell": 53,
+        "x": 192,
+        "y": 2496,
+        "w": 128,
+        "h": 112,
+        "footY": 56,
+        "occludes": true
+      },
+      {
+        "prop": "pa_shelf_lv3_low",
+        "cell": 54,
+        "x": 384,
+        "y": 2496,
+        "w": 128,
+        "h": 112,
+        "footY": 56,
+        "occludes": true
+      },
+      {
+        "prop": "pa_shelf_lv3_full",
+        "cell": 55,
+        "x": 576,
+        "y": 2496,
+        "w": 128,
+        "h": 112,
+        "footY": 56,
+        "occludes": true
+      },
+      {
+        "prop": "pa_showcase_lv0_unbought",
+        "cell": 56,
+        "x": 0,
+        "y": 2688,
+        "w": 96,
+        "h": 128,
+        "footY": 64,
+        "occludes": true
+      },
+      {
+        "prop": "pa_showcase_lv1_bought",
+        "cell": 57,
+        "x": 192,
+        "y": 2688,
+        "w": 96,
+        "h": 128,
+        "footY": 64,
+        "occludes": true
+      },
+      {
+        "prop": "pa_table_lv0_idle",
+        "cell": 58,
+        "x": 384,
+        "y": 2688,
+        "w": 128,
+        "h": 96,
+        "footY": 48,
+        "occludes": true
+      },
+      {
+        "prop": "pa_table_lv0_reserved",
+        "cell": 59,
+        "x": 576,
+        "y": 2688,
+        "w": 128,
+        "h": 96,
+        "footY": 48,
+        "occludes": true
+      },
+      {
+        "prop": "pa_table_lv0_sim",
+        "cell": 60,
+        "x": 0,
+        "y": 2880,
+        "w": 128,
+        "h": 96,
+        "footY": 48,
+        "occludes": true
+      },
+      {
+        "prop": "pa_table_lv0_end",
+        "cell": 61,
+        "x": 192,
+        "y": 2880,
+        "w": 128,
+        "h": 96,
+        "footY": 48,
+        "occludes": true
+      },
+      {
+        "prop": "pa_table_lv1_idle",
+        "cell": 62,
+        "x": 384,
+        "y": 2880,
+        "w": 128,
+        "h": 96,
+        "footY": 48,
+        "occludes": true
+      },
+      {
+        "prop": "pa_table_lv1_reserved",
+        "cell": 63,
+        "x": 576,
+        "y": 2880,
+        "w": 128,
+        "h": 96,
+        "footY": 48,
+        "occludes": true
+      },
+      {
+        "prop": "pa_table_lv1_sim",
+        "cell": 64,
+        "x": 0,
+        "y": 3072,
+        "w": 128,
+        "h": 96,
+        "footY": 48,
+        "occludes": true
+      },
+      {
+        "prop": "pa_table_lv1_end",
+        "cell": 65,
+        "x": 192,
+        "y": 3072,
+        "w": 128,
+        "h": 96,
+        "footY": 48,
+        "occludes": true
+      },
+      {
+        "prop": "pa_table_lv2_idle",
+        "cell": 66,
+        "x": 384,
+        "y": 3072,
+        "w": 128,
+        "h": 96,
+        "footY": 48,
+        "occludes": true
+      },
+      {
+        "prop": "pa_table_lv2_reserved",
+        "cell": 67,
+        "x": 576,
+        "y": 3072,
+        "w": 128,
+        "h": 96,
+        "footY": 48,
+        "occludes": true
+      },
+      {
+        "prop": "pa_table_lv2_sim",
+        "cell": 68,
+        "x": 0,
+        "y": 3264,
+        "w": 128,
+        "h": 96,
+        "footY": 48,
+        "occludes": true
+      },
+      {
+        "prop": "pa_table_lv2_end",
+        "cell": 69,
+        "x": 192,
+        "y": 3264,
+        "w": 128,
+        "h": 96,
+        "footY": 48,
+        "occludes": true
+      },
+      {
+        "prop": "pa_counter_cashier_unhired",
+        "cell": 70,
+        "x": 384,
+        "y": 3264,
+        "w": 192,
+        "h": 96,
+        "footY": 48,
+        "occludes": true
+      },
+      {
+        "prop": "pa_counter_cashier_onduty",
+        "cell": 71,
+        "x": 576,
+        "y": 3264,
+        "w": 192,
+        "h": 96,
+        "footY": 48,
+        "occludes": true
+      },
+      {
+        "prop": "pa_counter_cashier_resting",
+        "cell": 72,
+        "x": 0,
+        "y": 3456,
+        "w": 192,
+        "h": 96,
+        "footY": 48,
+        "occludes": true
+      },
+      {
+        "prop": "pa_counter_stocker_unhired",
+        "cell": 73,
+        "x": 192,
+        "y": 3456,
+        "w": 192,
+        "h": 96,
+        "footY": 48,
+        "occludes": true
+      },
+      {
+        "prop": "pa_counter_stocker_onduty",
+        "cell": 74,
+        "x": 384,
+        "y": 3456,
+        "w": 192,
+        "h": 96,
+        "footY": 48,
+        "occludes": true
+      },
+      {
+        "prop": "pa_counter_stocker_resting",
+        "cell": 75,
+        "x": 576,
+        "y": 3456,
+        "w": 192,
         "h": 96,
         "footY": 48,
         "occludes": true

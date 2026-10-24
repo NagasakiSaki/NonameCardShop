@@ -14,9 +14,9 @@
     "productName":"无名卡店",
     "executableName":"NonameCardShop",
     "directories":{"output":"dist","buildResources":"build"},
-    "files":["main.cjs","package.json","build/icon.ico"],
+    "files":["main.cjs","save-bridge.cjs","package.json","build/icon.ico"],
     "extraResources":[
-      {"from":"..","to":"game","filter":["*.html","*.js","*.mjs","*.css","*.md","*.cmd","package.json","package-lock.json","NONAME-LICENSE","assets/shop/**/*","data/**/*","modules/**/*","integration/**/*","docs/**/*","tools/**/*","dev/**/*","tests/**/*","vendor/**/*","!data/balance-build.log","!vendor/noname/Home/**/*"]},
+      {"from":"..","to":"game","filter":["*.html","*.js","*.mjs","*.css","*.md","*.cmd","package.json","package-lock.json","NONAME-LICENSE","frontend/**/*","frontend-next/**/*","assets/frontend/**/*","assets/frontend-next/**/*","assets/shop/**/*","data/**/*","modules/**/*","integration/**/*","docs/**/*","tools/**/*","dev/**/*","tests/**/*","vendor/**/*","!data/balance-build.log","!vendor/noname/Home/**/*"]},
       {"from":"../node_modules/noname","to":"game/node_modules/noname","filter":["**/*"]},
       {"from":"../node_modules/dedent","to":"game/node_modules/dedent","filter":["**/*"]},
       {"from":"build/desktop-source","to":"desktop-source","filter":["**/*"]}

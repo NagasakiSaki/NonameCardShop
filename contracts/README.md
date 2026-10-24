@@ -1,5 +1,9 @@
 # card-shop-ui/1.0 集成约定
 
+经营操作接入补充：`neighbors.act` 的 `buy` / `deliver` 与其他单卡交易一样需要店长站在 `store.secondaryMarket`；交谈、接单、取消、雇佣与排班仍可在经营窗口管理。缺导航的隔离运行沿用原能力边界。未到柜台返回 `NOT_IN_RANGE`，不扣款或转移实物。
+
+只读补充：`world.maps` 返回当前已验证导航图数组；`snapshot.storefront.staff` 返回 cashier/stocker 的 `unhired / onduty / resting`，不推进员工或结算。后台取消命令 `room.cancelNpcMatch({matchId})` 仅能作废无赌注 NPC 比赛，释放实物/预留并按既有规则退款，不制造正常战绩。
+
 2026-10-24 可玩性后端第一批已增加经营观察、可跳过的三日引导、事件来源记录和可选交流会，仍为 v1 兼容扩展。接口与口径见 [经营体验接口](经营体验接口.md)，类型见 `shop-experience.d.ts`。A/B/C 不用改自己的交付目录边界；候选仍使用 Mock，主模型最终接入。
 
 权威方法定义：`card-shop-host.d.ts`；地图格式：`map.schema.json`。下面固定本次已集成的具体负载，后续页面不自行推导缺失金额或修改库存。

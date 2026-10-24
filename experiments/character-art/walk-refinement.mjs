@@ -140,6 +140,17 @@ function walkCostume(d,c,row){
     else if(style==='mew-blue'){open(white,'#a5cfe5');skirt('#4e5e83',5);d.line(-w,y(34),w,y(34),'#94d4ef');}
     else if(style==='mew-purple-lace'){torso('#45364f');skirt('#8a77a3',8);d.line(-w,y(36),w,y(36),white);if(front)for(let yy=y(23);yy<y(30);yy+=2){d.line(-2,yy,2,yy+1,gold);d.line(2,yy,-2,yy+1,gold);}}
     else {open('#c25d8b',black);if(!side){d.rect(-w-1,y(30),3,6,'#c25d8b');d.rect(w-1,y(30),3,6,'#c25d8b');}if(front)d.rect(-3,y(27),6,3,'#efc1ac');}
+  }else if(style==='ref-denim-jacket'){
+    open(c.cloth[1],c.walkInnerColor||'#292c35');skirt(c.walkSkirtColor||white,9);
+    if(front){d.line(-5,y(20),-3,y(24),'#a5bdd1');d.line(5,y(20),3,y(24),'#a5bdd1');d.line(-6,y(27),6,y(27),'#526c88');d.rect(2,y(25),2,1,gold);}
+  }else if(style==='ref-waist-jacket'){
+    torso(c.walkInnerColor||'#292c35');skirt(c.walkSkirtColor||white,10);
+    const blue=c.cloth[1];d.poly([[-w,y(27)],[w,y(27)],[w+1,y(31)],[2,y(34)],[-w-2,y(33)]],blue);
+    d.line(-w,y(32),1,y(33),'#a6b9ca');if(front)d.rect(-2,y(28),4,1,'#d6c4a5');
+  }else if(style==='ref-mew-hoodie'){
+    const trim=c.walkTrimColor||'#d9a5b5',outer=c.cloth[0];torso(outer);skirt(c.walkSkirtColor||'#b2b2ba',6);
+    if(front){d.rect(-2,y(20),4,12,c.walkInnerColor||'#545862');d.line(-5,y(20),-4,y(31),trim);d.line(5,y(20),4,y(31),trim);d.line(-6,y(32),6,y(32),trim);d.put(3,y(26),'#d4bd69');}
+    else d.line(-w,y(31),w,y(31),trim);
   }else if(style==='ref-college'){
     // Tomori reference redesign: blue-and-white varsity jacket (torso white via the main cloth
     // ramp, animated sleeves remapped blue by sleevePalette), white shirt V, gold trim,
@@ -290,6 +301,8 @@ export function composeWalk(c,sources,stage='final',diag){
   // base is built, so the remapped sleeves ride the arm animation and re-blend with the near arm.
   if(c.sleevePalette){const sr=recolor(shirt,c.sleevePalette);
     for(const info of armInfo)for(const {sleeve}of info)for(const j of sleeve)shirtR.data.set(sr.data.subarray(j,j+4),j);}
+  // Stripes are remapped only inside the moving sleeve mask; never paint across the hands.
+  if(c.walkSleeveStripe)for(const [row,info]of armInfo.entries())for(const [col,{sleeve}]of info.entries())for(const j of sleeve){const y=Math.floor(j/4/512)%64-anchors0[row][col].body.top;if(y>=3&&y<19&&Math.floor(y/3)%2===0)shirtR.data.set(rgb(c.walkSleeveStripe),j);}
   if(SLEEVELESS.includes(c.costume))for(let row=0;row<4;row++)for(let col=0;col<8;col++){const cx=anchors0[row][col].garment.cx,fx=col*64,fy=row*64;
     for(let y=0;y<64;y++)for(let x=0;x<64;x++)if(Math.abs(x-cx)>4){const j=((fy+y)*512+fx+x)*4;if(shirtR.data[j+3])shirtR.data[j+3]=0;}}
   const base=blank(512,256);blend(base,body);blend(base,legwear);blend(base,shirtR);blend(base,recolor(shoes,c.shoePalette||['#57586b','#353645','#202636']));
@@ -332,6 +345,12 @@ export function composeWalk(c,sources,stage='final',diag){
   }
   const coloredHead=headIrisRecolor(head,c);
   blend(out,coloredHead);blend(out,recolor(hair,c.hair));
+  if(c.walkHoodColor)for(let row=0;row<4;row++)for(let col=0;col<8;col++){
+    const a=frameAnchor(head,row,col),d=painter(out,a.fx+a.cx,a.fy+a.top),hood=c.walkHoodColor,trim=c.walkTrimColor||'#c2b7c4';
+    if(row===0){d.poly([[-9,1],[-5,-3],[5,-3],[9,1],[11,17],[6,22],[-6,22],[-11,17]],hood);d.line(-6,20,6,20,trim);d.line(0,2,0,17,'#d1d3dc');}
+    else if(row===2){d.line(-8,1,-5,-2,hood);d.line(-5,-2,5,-2,hood);d.line(5,-2,9,2,hood);for(const s of [-1,1]){d.line(s*10,3,s*11,19,hood);d.line(s*11,19,s*7,23,trim);}}
+    else {const s=row===1?1:-1;d.poly([[s*3,-2],[s*9,0],[s*11,8],[s*10,19],[s*5,23],[s*4,16],[s*6,9]],hood);d.line(s*10,7,s*10,18,trim);}
+  }
   // Neck accessories (choker/chain) sit on the front neck below the chin, above hair.
   if(c.refChoker)for(let col=0;col<8;col++){
     const a=frameAnchor(head,2,col),d=painter(out,a.fx+a.cx,a.fy+a.top);

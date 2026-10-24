@@ -53,8 +53,11 @@ export function createWorldSceneClass(){return class WorldScene extends Phaser.S
     const snapshot=CONTEXT.getSnapshot();for(const light of this.lights)light.update(snapshot?.clock);
     if(snapshot?.revision!==this.lastStorefrontRevision){this.lastStorefrontRevision=snapshot?.revision;const view=snapshot?.storefront;
       if(view)for(const image of this.propSprites){const p=image.shopProp;let target=p.prop;
-        if(p.family==='shelf'&&p.mapId==='store'){const n=view.sealed.pack+view.sealed.box;target=n===0?'pa_shelf_empty':n<3?'pa_shelf_low':'pa_shelf_full';}
-        if(p.family==='table'){const t=view.tables.find(t=>t.tableId===p.tableId);target='pa_table_'+({playing:'sim',reserved:'reserved',ended:'end',idle:'idle'}[t?.state]||'idle');}
+        if(p.family==='shelf'&&p.mapId==='store'){const n=view.sealed.pack+view.sealed.box;target=`pa_shelf_lv${Math.min(3,view.upgrades?.shelf||0)}_${n===0?'empty':n<3?'low':'full'}`;}
+        if(p.family==='table'){const t=view.tables.find(t=>t.tableId===p.tableId);target=`pa_table_lv${Math.min(2,view.upgrades?.table||0)}_`+({playing:'sim',reserved:'reserved',ended:'end',idle:'idle'}[t?.state]||'idle');}
+        if(p.prop==='pa_cabinet_collect')target=view.upgrades?.showcase?'pa_showcase_lv1_bought':'pa_showcase_lv0_unbought';
+        if(p.prop==='pa_counter_cashier')target='pa_counter_cashier_'+(view.staff?.cashier||'unhired');
+        if(p.prop==='pa_counter_procure')target='pa_counter_stocker_'+(view.staff?.stocker||'unhired');
         const frame=this.propIndex.get(target);if(frame&&image.frame.name!==frame.cell)image.setFrame(frame.cell);
       }
     }

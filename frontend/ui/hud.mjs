@@ -3,7 +3,7 @@ import { el, clear, formatMoney, formatClock, formatPhase, formatShort } from ".
 
 const SPEED_LABEL = { 0.5: "0.5×", 1: "1×", 2: "2×", 3: "3×", 4: "4×" };
 
-export function createHud({ mount, currency, onAction, getSnapshot }) {
+export function createHud({ mount, currency, onAction, getSnapshot, demo=false }) {
   const clockNode = document.getElementById("hud-clock");
   const walletNode = document.getElementById("hud-wallet");
   const actionsNode = document.getElementById("hud-actions");
@@ -35,6 +35,8 @@ export function createHud({ mount, currency, onAction, getSnapshot }) {
       type: "button",
       "data-action": action.id,
       text: action.label,
+      disabled:demo&&['guide','customers'].includes(action.id),
+      title:demo&&['guide','customers'].includes(action.id)?'旧演示数据不包含经营观察与活动，请进入正式隔离卡店查看。':null,
       onclick: () => onAction(action.id),
     }));
   }
@@ -61,7 +63,8 @@ export function createHud({ mount, currency, onAction, getSnapshot }) {
     if (snapshot.wallet.debt > 0) walletParts.push(el("span", { class: "wallet__debt", text: "欠款 " + formatShort(snapshot.wallet.debt, currency) }));
     if (snapshot.wallet.escrowLiability > 0) walletParts.push(el("span", { class: "badge", text: "托管 " + formatShort(snapshot.wallet.escrowLiability, currency) }));
     walletNode.append(...walletParts);
-    walletNode.append(el('span',{class:'hud__phase',text:'今日营业 '+formatShort((snapshot.daily.goods||0)+(snapshot.daily.service||0),currency)+' · 奖励 '+formatShort(snapshot.daily.taskRewards||0,currency)}));
+    const daily=snapshot.daily;
+    walletNode.append(el('span',{class:'hud__phase',text:'今日营业 '+(daily?formatShort((daily.goods||0)+(daily.service||0),currency):'—')+' · 奖励 '+(daily?formatShort(daily.taskRewards||0,currency):'—')}));
     const entries=snapshot.cashJournal||[];
     const branch=snapshot.worldId+':'+snapshot.branchId;if(ledgerBranch!==branch){ledgerBranch=branch;lastEntryId=null;ticker.hidden=true;}
     if(lastEntryId&&entries[0]?.entryId!==lastEntryId){

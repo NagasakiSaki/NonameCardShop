@@ -2,7 +2,7 @@
 import { el, clear, stateView, errorView, newRequestId, busyButton, imgWithFallback } from "./components.mjs";
 
 export async function openManagement(app, options={}) {
-  const state = { tab: ['upgrades','people','orders'].includes(options.tab)?options.tab:'upgrades' };
+  const state = { tab: options.tab==='neighbors'?'people':['upgrades','people','orders'].includes(options.tab)?options.tab:'upgrades' };
 
   return app.windows.open({
     id: "management",

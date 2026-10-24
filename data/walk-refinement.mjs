@@ -50,3 +50,19 @@ export const OVERRIDES={
     refChain:'#b9c0c8',
   },
 };
+
+// Second batch: use the shared refined face/arm pipeline for the remaining registered styles.
+// Clothing changes below were visually compared with the user's actual PNGs, not zone histograms.
+for(const id of ['anon','soyo','taki','uika','mutsumi','umiri','nyamu','arale','nonoka','ritsu','miyako','yuno','nagi','mahoro','hotaru','houka','natsume','raika','miku','chieri','shizuku'])OVERRIDES['bd-'+id]??={};
+Object.assign(OVERRIDES,{
+ 'bd-anon':{costume:'ref-denim-jacket',cloth:['#a3b9ce','#6e94ba','#3f5e7b'],sleevePalette:['#a3b9ce','#6e94ba','#3f5e7b'],walkInnerColor:'#292c35',walkSkirtColor:'#f3f3ef',walkLegwear:'bare',refChoker:'#22252d'},
+ 'bd-soyo':{costume:'ref-waist-jacket',cloth:['#9cbed6','#6b92b5','#425d7a'],walkInnerColor:'#272b35',walkSkirtColor:'#f7f5ef',walkLegwear:'bare'},
+ 'bd-nonoka':{costume:'ref-mew-hoodie',cloth:['#fafafa','#dddce3','#a9a6b6'],walkTrimColor:'#e9a7bd',walkInnerColor:'#efb4c9',walkSkirtColor:'#f4edf0',walkHoodColor:'#f7f4f4',walkSleeveStripe:'#e7a5bd'},
+ 'bd-arale':{costume:'ref-mew-hoodie',cloth:['#fafafa','#dfdcde','#aaa7b1'],walkTrimColor:'#e9c734',walkInnerColor:'#5b5c63',walkSkirtColor:'#b8b6b5',walkHoodColor:'#f6f5ed',walkSleeveStripe:'#e6bd50'},
+ 'bd-ritsu':{costume:'ref-mew-hoodie',cloth:['#fafbfc','#d5e2ec','#a3b1c2'],walkTrimColor:'#6cb8e6',walkInnerColor:'#60829e',walkSkirtColor:'#e9eff5',walkHoodColor:'#f5f7fb',walkSleeveStripe:'#72b2de'},
+ 'bd-miyako':{costume:'ref-mew-hoodie',cloth:['#faf9f7','#dedde4','#aaa6b9'],walkTrimColor:'#a392bf',walkInnerColor:'#57556c',walkSkirtColor:'#eeeaf2',walkHoodColor:'#f8f6f2',walkLegwear:'dark'},
+ 'bd-yuno':{costume:'ref-mew-hoodie',cloth:['#faf9f7','#dfdbde','#aaa6af'],walkTrimColor:'#e56762',walkInnerColor:'#50535d',walkSkirtColor:'#bab7ba',walkHoodColor:'#f8f5ef',walkSleeveStripe:'#da645d',walkLegwear:'dark'},
+ 'bd-nyamu':{walkLegwear:'dark'},
+});
+// Uika's supplied PNG has black open shoulders, NOT a white hood. Keep her registered style.
+// Miku's red lower-zone pixels are her guitar; feet are cropped out. Do not invent red boots.

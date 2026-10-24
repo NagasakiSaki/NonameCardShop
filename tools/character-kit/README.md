@@ -17,6 +17,8 @@ node tools/character-kit/audit.mjs --out .local/collaboration/QA-01/new-review -
 
 行走精修使用可选 `walkCostume`，与立绘的 `costume` 分开；四人覆盖参数在 `data/walk-refinement.mjs`，绘制器在 `experiments/character-art/walk-refinement.mjs`。`ref-college`、`ref-bluedress`、`ref-gothic` 是新增行走版型，其余已注册版型也可用于精修路径。`sleevePalette` 为可选的三色袖子调色板。修改行走时保留原 `costume`，避免误改完整立绘；正式用户图源立绘继续走登记覆盖。
 
+第二批已为全部 25 人启用精修分派；新增 `ref-denim-jacket`、`ref-waist-jacket`、`ref-mew-hoodie`。后者支持 `walkInnerColor / walkSkirtColor / walkTrimColor / walkHoodColor / walkSleeveStripe`（均为可选 #RRGGBB），袖条纹只改移动袖子遮罩，不画到手上。原四人 PNG 保持；取舍与源图核对见 [第二批接入](../../docs/人物行走与设施升级第二批.md)。
+
 校验失败返回结构化 `errors:[{path,code,message}]`；例如 `/presets/0/hair`。输出目录必须在本工程内，不能在正式源码、资源或 `.git` 下；推荐 `.local/character-kit/`。已有目录默认拒绝；`--overwrite` 只接受带本工具标记的目录，不递归清理任何内容，不跟随输出文件符号链接。只读取 generated 中原生 PNG，不使用官方参考大图。
 
 `--json` 的 stdout 始终只有一个 JSON 对象，包含 ok、command 等；不输出进度杂项。退出码：0 成功/帮助、1 配置校验失败、2 参数/文件/导出错误。工具内部不联网、不安装依赖、无 API 密钥。

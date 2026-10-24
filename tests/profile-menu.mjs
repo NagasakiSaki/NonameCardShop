@@ -10,8 +10,10 @@ try{
   const command=(type,payload={},extra={})=>page.evaluate(async({type,payload,extra})=>{const r=await __cardShopApp.host.command({requestId:'profiles-'+crypto.randomUUID(),type,payload,...extra});if(!r.ok)throw Error(JSON.stringify(r));return r.data;},{type,payload,extra});
   const menu=async()=>{await page.evaluate(()=>__cardShopReturnToMenu());await page.locator('#start-menu').waitFor();assert.equal(await page.evaluate(()=>window.__cardShopReady),false);};
   await page.goto(server.origin);await page.locator('#start-menu').waitFor();assert.equal(await page.locator('[data-profile-id]').count(),0);
+  await page.evaluate(()=>{localStorage.setItem('noname-packer-v1','legacy-progress-sentinel');localStorage.setItem('noname-packer-before-business-v1','legacy-backup-sentinel');});
   await page.getByRole('textbox',{name:'新存档名称',exact:true}).fill('第一间卡店');await button('新建存档并开始').click();await ready();
   const first=new URL(page.url()).searchParams.get('profile');assert.ok(first.startsWith('profile-'));assert.equal((await query('shop.snapshot')).clock.day,1);assert.equal((await query('shop.snapshot')).actors.length,1);
+  assert.deepEqual(await page.evaluate(()=>[localStorage.getItem('noname-packer-v1'),localStorage.getItem('noname-packer-before-business-v1')]),['legacy-progress-sentinel','legacy-backup-sentinel'],'new profile must preserve legacy progress and backups');
   await page.evaluate(()=>__cardShopApp.goToInteraction('store.counter','supplier',{tab:'order'}));await button('获取整篮报价').waitFor();
   const quote=await query('products.quote',{productId:'standard',unit:'pack',quantity:1});await command('supplier.placeOrder',{productId:'standard',unit:'pack',quantity:1},{quoteId:quote.quoteId});
   await command('business.open');await command('business.close');await command('business.nextDay');

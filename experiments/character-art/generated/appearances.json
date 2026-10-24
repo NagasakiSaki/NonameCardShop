@@ -315,9 +315,9 @@
         "#8e567e"
       ],
       "cloth": [
-        "#46444c",
-        "#2c2d38",
-        "#171f2b"
+        "#a3b9ce",
+        "#6e94ba",
+        "#3f5e7b"
       ],
       "originalCloth": [
         "#46444c",
@@ -342,7 +342,7 @@
       "hairShape": "straight-long",
       "costume": "mygo-black-coat",
       "notes": "粉色长直发、侧分；蓝灰眼；黑外套与黑内搭，青色腰侧饰边和金黄袖口。",
-      "walkLegwear": "dark",
+      "walkLegwear": "bare",
       "lowerBody": "黑色长外套尾摆、裸露膝部、深色长靴。",
       "shoePalette": [
         "#66606b",
@@ -350,6 +350,15 @@
         "#252630"
       ],
       "portraitVersion": 3,
+      "sleevePalette": [
+        "#a3b9ce",
+        "#6e94ba",
+        "#3f5e7b"
+      ],
+      "walkInnerColor": "#292c35",
+      "walkSkirtColor": "#f3f3ef",
+      "refChoker": "#22252d",
+      "walkCostume": "ref-denim-jacket",
       "portrait": "bd-anon-standing-128x224.png",
       "avatar": "bd-anon-portrait-96.png",
       "portraitSize": [
@@ -500,9 +509,9 @@
         "#6a5252"
       ],
       "cloth": [
-        "#f0f3ee",
-        "#a9c1c5",
-        "#566d81"
+        "#9cbed6",
+        "#6b92b5",
+        "#425d7a"
       ],
       "originalCloth": [
         "#f0f3ee",
@@ -535,6 +544,9 @@
         "#22232e"
       ],
       "portraitVersion": 3,
+      "walkInnerColor": "#272b35",
+      "walkSkirtColor": "#f7f5ef",
+      "walkCostume": "ref-waist-jacket",
       "portrait": "bd-soyo-standing-128x224.png",
       "avatar": "bd-soyo-portrait-96.png",
       "portraitSize": [
@@ -624,6 +636,7 @@
         "#303843"
       ],
       "portraitVersion": 3,
+      "walkCostume": "mygo-wrap-skirt",
       "portrait": "bd-taki-standing-128x224.png",
       "avatar": "bd-taki-portrait-96.png",
       "portraitSize": [
@@ -713,6 +726,7 @@
         "#2b2934"
       ],
       "portraitVersion": 3,
+      "walkCostume": "mujica-shorts",
       "portrait": "bd-uika-standing-128x224.png",
       "avatar": "bd-uika-portrait-96.png",
       "portraitSize": [
@@ -802,6 +816,7 @@
         "#272934"
       ],
       "portraitVersion": 3,
+      "walkCostume": "mujica-red-corset",
       "portrait": "bd-mutsumi-standing-128x224.png",
       "avatar": "bd-mutsumi-portrait-96.png",
       "portraitSize": [
@@ -891,6 +906,7 @@
         "#3a3337"
       ],
       "portraitVersion": 3,
+      "walkCostume": "mujica-cape",
       "portrait": "bd-umiri-standing-128x224.png",
       "avatar": "bd-umiri-portrait-96.png",
       "portraitSize": [
@@ -972,7 +988,7 @@
       "hairShape": "rounded-bob",
       "costume": "mujica-red-skirt",
       "notes": "紫灰短鲍勃、齐刘海；红粉眼；红黑束身短裙、灰纱袖、高领与红色耳饰。",
-      "walkLegwear": "bare",
+      "walkLegwear": "dark",
       "lowerBody": "灰色腿饰、黑色交叉系带、红色高跟鞋。",
       "shoePalette": [
         "#e0828b",
@@ -980,6 +996,7 @@
         "#642d44"
       ],
       "portraitVersion": 3,
+      "walkCostume": "mujica-red-skirt",
       "portrait": "bd-nyamu-standing-128x224.png",
       "avatar": "bd-nyamu-portrait-96.png",
       "portraitSize": [
@@ -1124,9 +1141,9 @@
         "#aa795c"
       ],
       "cloth": [
-        "#c6ecf7",
-        "#83c6e0",
-        "#4c7f9e"
+        "#fafafa",
+        "#dfdcde",
+        "#aaa7b1"
       ],
       "originalCloth": [
         "#c6ecf7",
@@ -1161,6 +1178,12 @@
         "#6f9cc1"
       ],
       "portraitVersion": 3,
+      "walkTrimColor": "#e9c734",
+      "walkInnerColor": "#5b5c63",
+      "walkSkirtColor": "#b8b6b5",
+      "walkHoodColor": "#f6f5ed",
+      "walkSleeveStripe": "#e6bd50",
+      "walkCostume": "ref-mew-hoodie",
       "portrait": "bd-arale-standing-128x224.png",
       "avatar": "bd-arale-portrait-96.png",
       "portraitSize": [
@@ -1215,9 +1238,9 @@
         "#7f94b5"
       ],
       "cloth": [
-        "#f0a3b9",
-        "#cf708d",
-        "#8f496e"
+        "#fafafa",
+        "#dddce3",
+        "#a9a6b6"
       ],
       "originalCloth": [
         "#f0a3b9",
@@ -1251,6 +1274,12 @@
         "#7aa9d4"
       ],
       "portraitVersion": 3,
+      "walkTrimColor": "#e9a7bd",
+      "walkInnerColor": "#efb4c9",
+      "walkSkirtColor": "#f4edf0",
+      "walkHoodColor": "#f7f4f4",
+      "walkSleeveStripe": "#e7a5bd",
+      "walkCostume": "ref-mew-hoodie",
       "portrait": "bd-nonoka-standing-128x224.png",
       "avatar": "bd-nonoka-portrait-96.png",
       "portraitSize": [
@@ -1305,9 +1334,9 @@
         "#547da8"
       ],
       "cloth": [
-        "#f0f6ff",
-        "#9ed0ee",
-        "#527fac"
+        "#fafbfc",
+        "#d5e2ec",
+        "#a3b1c2"
       ],
       "originalCloth": [
         "#f0f6ff",
@@ -1340,6 +1369,12 @@
         "#527fb7"
       ],
       "portraitVersion": 3,
+      "walkTrimColor": "#6cb8e6",
+      "walkInnerColor": "#60829e",
+      "walkSkirtColor": "#e9eff5",
+      "walkHoodColor": "#f5f7fb",
+      "walkSleeveStripe": "#72b2de",
+      "walkCostume": "ref-mew-hoodie",
       "portrait": "bd-ritsu-standing-128x224.png",
       "avatar": "bd-ritsu-portrait-96.png",
       "portraitSize": [
@@ -1394,9 +1429,9 @@
         "#332c54"
       ],
       "cloth": [
-        "#806d9d",
-        "#554267",
-        "#302a49"
+        "#faf9f7",
+        "#dedde4",
+        "#aaa6b9"
       ],
       "originalCloth": [
         "#806d9d",
@@ -1421,7 +1456,7 @@
       "hairShape": "rounded-bob",
       "costume": "mew-purple-lace",
       "notes": "深紫短发；紫眼；白头带与有尖角轮廓的紫色薄纱、黑紫束腰裙、白色花边与星饰。",
-      "walkLegwear": "bare",
+      "walkLegwear": "dark",
       "lowerBody": "黑紫白层叠花边裙、裸腿、浅色踝饰和橄榄色鞋。",
       "shoePalette": [
         "#c2be99",
@@ -1429,6 +1464,11 @@
         "#555645"
       ],
       "portraitVersion": 3,
+      "walkTrimColor": "#a392bf",
+      "walkInnerColor": "#57556c",
+      "walkSkirtColor": "#eeeaf2",
+      "walkHoodColor": "#f8f6f2",
+      "walkCostume": "ref-mew-hoodie",
       "portrait": "bd-miyako-standing-128x224.png",
       "avatar": "bd-miyako-portrait-96.png",
       "portraitSize": [
@@ -1483,9 +1523,9 @@
         "#1b1c2b"
       ],
       "cloth": [
-        "#ec709e",
-        "#b64476",
-        "#70304f"
+        "#faf9f7",
+        "#dfdbde",
+        "#aaa6af"
       ],
       "originalCloth": [
         "#ec709e",
@@ -1511,7 +1551,7 @@
       "hairShape": "straight-long",
       "costume": "mew-red-jacket",
       "notes": "黑色长发、粉色挑染；红粉眼；粉色猫耳耳机、黑色内搭、宽松玫红外套和深色短裤。",
-      "walkLegwear": "pink",
+      "walkLegwear": "dark",
       "lowerBody": "深色短下装、腿部束带、玫红高靴。",
       "shoePalette": [
         "#f47eaa",
@@ -1519,6 +1559,12 @@
         "#812f5c"
       ],
       "portraitVersion": 3,
+      "walkTrimColor": "#e56762",
+      "walkInnerColor": "#50535d",
+      "walkSkirtColor": "#bab7ba",
+      "walkHoodColor": "#f8f5ef",
+      "walkSleeveStripe": "#da645d",
+      "walkCostume": "ref-mew-hoodie",
       "portrait": "bd-yuno-standing-128x224.png",
       "avatar": "bd-yuno-portrait-96.png",
       "portraitSize": [
@@ -1608,6 +1654,7 @@
         "#9baebd"
       ],
       "portraitVersion": 3,
+      "walkCostume": "millsage-ruffle",
       "portrait": "bd-nagi-standing-128x224.png",
       "avatar": "bd-nagi-portrait-96.png",
       "portraitSize": [
@@ -1697,6 +1744,7 @@
         "#9baebd"
       ],
       "portraitVersion": 3,
+      "walkCostume": "millsage-pleats",
       "portrait": "bd-mahoro-standing-128x224.png",
       "avatar": "bd-mahoro-portrait-96.png",
       "portraitSize": [
@@ -1786,6 +1834,7 @@
         "#9baebd"
       ],
       "portraitVersion": 3,
+      "walkCostume": "millsage-tie",
       "portrait": "bd-hotaru-standing-128x224.png",
       "avatar": "bd-hotaru-portrait-96.png",
       "portraitSize": [
@@ -1875,6 +1924,7 @@
         "#9baebd"
       ],
       "portraitVersion": 3,
+      "walkCostume": "millsage-crop",
       "portrait": "bd-houka-standing-128x224.png",
       "avatar": "bd-houka-portrait-96.png",
       "portraitSize": [
@@ -1964,6 +2014,7 @@
         "#9baebd"
       ],
       "portraitVersion": 3,
+      "walkCostume": "millsage-drape",
       "portrait": "bd-natsume-standing-128x224.png",
       "avatar": "bd-natsume-portrait-96.png",
       "portraitSize": [
@@ -2054,6 +2105,7 @@
         "#664b42"
       ],
       "portraitVersion": 3,
+      "walkCostume": "ikka-purple-bomber",
       "portrait": "bd-raika-standing-128x224.png",
       "avatar": "bd-raika-portrait-96.png",
       "portraitSize": [
@@ -2144,6 +2196,7 @@
         "#252934"
       ],
       "portraitVersion": 3,
+      "walkCostume": "ikka-teal-plaid",
       "portrait": "bd-miku-standing-128x224.png",
       "avatar": "bd-miku-portrait-96.png",
       "portraitSize": [
@@ -2325,6 +2378,7 @@
         "#34485f"
       ],
       "portraitVersion": 3,
+      "walkCostume": "ikka-patchwork",
       "portrait": "bd-chieri-standing-128x224.png",
       "avatar": "bd-chieri-portrait-96.png",
       "portraitSize": [
@@ -2416,6 +2470,7 @@
         "#88899c"
       ],
       "portraitVersion": 3,
+      "walkCostume": "ikka-grey-harness",
       "portrait": "bd-shizuku-standing-128x224.png",
       "avatar": "bd-shizuku-portrait-96.png",
       "portraitSize": [

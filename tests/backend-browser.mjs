@@ -22,7 +22,7 @@ try{
     const snap=await second.query('shop.snapshot');await second.disconnect();
     return {oldRemoved,otherKept,persisted:snap.data.clock.manualPaused,commandOK:response.ok};
   });
-  assert.deepEqual(result,{oldRemoved:true,otherKept:true,persisted:true,commandOK:true});
+  assert.deepEqual(result,{oldRemoved:false,otherKept:true,persisted:true,commandOK:true});
 
   await page.evaluate(async()=>{
     const [{createRuntime},{memoryRepository},{createWorld},{buildCatalog},{publishProducts},{createBattleMount}]=await Promise.all([
