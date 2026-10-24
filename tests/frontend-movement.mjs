@@ -18,12 +18,12 @@ try{
     w.orders=[{orderId:'bulk-1',product,unit:'pack',quantity:2,unitCost:50,status:'arrived'},{orderId:'bulk-2',product,unit:'pack',quantity:2,unitCost:50,status:'arrived'}];
     const repo=browserRepository();await repo.commit({schemaVersion:2,revision:0,world:w,archives:[],requests:{},legacyResetDone:true},null);await repo.close();
   });
-  await page.goto(server.origin);await page.waitForFunction(()=>window.__cardShopReady===true);
+  await page.goto(server.origin+'/?profile=legacy');await page.waitForFunction(()=>window.__cardShopReady===true);
   const player=()=>page.evaluate(()=>__cardShopApp.getPlayer()),query=(name,p={})=>page.evaluate(async({name,p})=>(await __cardShopApp.host.query(name,p)).data,{name,p});
   await page.waitForFunction(()=>document.querySelector('#notebook-body').innerText.includes('店面导航'));
   const before=await player();await page.keyboard.down('ArrowRight');await page.keyboard.down('ArrowDown');await page.waitForTimeout(350);const after=await player();assert.ok(after.x-before.x>10&&after.y-before.y>10);assert.ok(Math.abs((after.x-before.x)-(after.y-before.y))<2,'both axes move simultaneously');
   await page.keyboard.up('ArrowDown');const released=await player();await page.waitForTimeout(150);const afterOne=await player();assert.ok(afterOne.x>released.x);assert.ok(Math.abs(afterOne.y-released.y)<1);await page.keyboard.up('ArrowRight');
-  const labels=await page.evaluate(()=>[...__cardShopApp.getWorldScene().actorView.sprites.values()].map(e=>({text:e.label.text,visible:e.label.visible,alpha:e.label.alpha})));assert.ok(labels.length>=4);assert.ok(labels.every(l=>l.visible&&l.alpha>.9&&l.text.split('\n').length>=2));
+  const labels=await page.evaluate(()=>[...__cardShopApp.getWorldScene().actorView.sprites.values()].map(e=>({text:e.label.text,visible:e.label.visible,alpha:e.label.alpha})));assert.equal(labels.length,1,'new shop has the owner, without permanent regular-customer actors');assert.ok(labels.every(l=>l.visible&&l.alpha>.9&&l.text.split('\n').length>=2));
   await page.screenshot({path:output+'/store.png'});
   await page.evaluate(()=>{window.__v2Sprite=__cardShopApp.getWorldScene().actorView.getSprite('actor:owner');window.__v2Steps=[];window.__v2Off=__cardShopApp.host.subscribe(e=>{if(e.type==='actorsUpdated'){const p=e.data.find(a=>a.actorId==='actor:owner');if(p)__v2Steps.push({room:p.roomId,x:p.x+(p.roomId==='battle-room'?480:0),y:p.y});}});__cardShopApp.navigateScene('battle-room');});
   await page.waitForFunction(()=>__cardShopApp.getPlayer().roomId==='battle-room',null,{timeout:18000});await page.waitForTimeout(400);

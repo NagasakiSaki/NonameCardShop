@@ -7,7 +7,7 @@ const output=process.env.CARD_SHOP_TEST_RESULTS||'.local/frontend-v3';fs.mkdirSy
 const server=await startShopServer({port:0,enginePort:0});let browser;
 try{
   browser=await chromium.launch();const page=await browser.newPage({viewport:{width:1440,height:1000}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
-  await page.goto(server.origin);await page.waitForFunction(()=>window.__cardShopReady===true);
+  await page.goto(server.origin+'/?profile=legacy');await page.waitForFunction(()=>window.__cardShopReady===true);
   await page.evaluate(()=>__cardShopApp.openPanel('settings'));
   await page.locator('[data-skin="collector"]').waitFor();assert.equal(await page.locator('[data-skin]').count(),PLAYER_SKINS.length);
   const state=()=>page.evaluate(()=>{const e=__cardShopApp.getWorldScene().actorView.sprites.get('actor:owner');return {texture:e.sprite.texture.key,frame:Number(e.sprite.frame.name),label:e.label.text,width:e.sprite.frame.width,height:e.sprite.frame.height};});

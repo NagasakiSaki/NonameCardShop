@@ -1,6 +1,6 @@
 import {id, clone, serial, need} from './common.mjs';
 export function createWorld(rules){
-  const world={schemaVersion:2,worldId:id('world'),branchId:id('branch'),revision:0,serial:0,seed:Math.floor(Math.random()*4294967296),rules:clone(rules),
+  const world={schemaVersion:2,customerVisitVersion:1,worldId:id('world'),branchId:id('branch'),revision:0,serial:0,seed:Math.floor(Math.random()*4294967296),rules:clone(rules),
     clock:{day:1,minute:480,phase:'preparing',speed:1,manualPaused:false},wallet:{available:rules.startingCash,debt:0,escrowLiability:0},
     player:{actorId:'actor:owner',appearanceId:'owner',roomId:'store',x:240,y:272,direction:'down',moving:false,activity:'idle',navVersion:null},
     products:[],items:{},orders:[],listings:[],npcs:[],circulation:{},stats:{},matches:[],tables:[{tableId:'battleRoom.table.01',matchId:null},{tableId:'battleRoom.table.02',matchId:null}],
@@ -12,6 +12,7 @@ export function note(world,type,data={}){world.log.push({eventId:serial(world,'e
 export function enterCirculation(w,cardKey,source,reference){if(!w.circulation[cardKey]){w.circulation[cardKey]={day:w.clock.day,source,reference};note(w,'cardEnteredCirculation',{cardKey,source,reference});}}
 export function validateWorld(world){
   if(world?.schemaVersion!==2||!world.worldId||!world.branchId||!world.items||!world.clock||!world.wallet||!Array.isArray(world.products))throw new Error('新版世界存档格式不完整，未覆盖原数据。');
+  need(world.branchLineage===undefined||Array.isArray(world.branchLineage)&&world.branchLineage.length<=120&&world.branchLineage.every(id=>typeof id==='string'&&id.length<=150),'INVALID_SAVE','存档分支来源不合法。');
   if(!Number.isSafeInteger(world.clock.day)||world.clock.day<1||!Number.isFinite(world.clock.minute)||world.clock.minute<0||world.clock.minute>=1440||!['preparing','open','closing','closed'].includes(world.clock.phase)||![1,2,4].includes(world.clock.speed))throw new Error('营业日期或时钟状态不合法。');
   if(!Number.isSafeInteger(world.wallet.available)||world.wallet.available<0||!Number.isSafeInteger(world.wallet.escrowLiability)||world.wallet.escrowLiability<0)throw new Error('资金账目不合法。');
   for(const key of ['orders','listings','npcs','matches','tables','reports','log'])need(Array.isArray(world[key]),'INVALID_SAVE',`世界缺少列表 ${key}。`);
@@ -26,6 +27,11 @@ export function validateWorld(world){
   if(!Number.isSafeInteger(world.wallet.debt)||world.wallet.debt<0)throw new Error('欠款数据不合法。');
   const owners=new Set(['player',...world.npcs.map(n=>n.actorId)]);
   for(const n of world.npcs)if(!Number.isSafeInteger(n.wallet?.available)||n.wallet.available<0)throw new Error('NPC 余额不合法。');
+  for(const n of world.npcs)need(n.presence===undefined||['onsite','offsite'].includes(n.presence),'INVALID_SAVE','顾客在店状态不合法。');
+  for(const n of world.npcs){
+    if(n.trip)need(typeof n.trip.stage==='string'&&Array.isArray(n.trip.path)&&n.trip.path.every(p=>p&&Number.isFinite(p.x)&&Number.isFinite(p.y)),'INVALID_SAVE','顾客行程数据不合法。');
+    if(n.visit)need(Number.isFinite(n.visit.elapsedSeconds)&&n.visit.elapsedSeconds>=0&&Number.isFinite(n.visit.idleSeconds)&&n.visit.idleSeconds>=0,'INVALID_SAVE','顾客访问计时不合法。');
+  }
   for(const [ref,i] of Object.entries(world.items)){
     const publicTrash=i?.ownerId==='public:trash'&&i.kind==='card'&&i.location==='trash'&&!i.lock&&!i.protected&&owners.has(i.trash?.discardedBy);
     if(i?.inventoryRef!==ref||!(owners.has(i.ownerId)||publicTrash)||!['pack','box','card'].includes(i.kind)||!Number.isSafeInteger(i.cost)||i.cost<0)throw new Error('库存实物或成本数据不合法。');
@@ -39,4 +45,4 @@ export function validateWorld(world){
 }
 export function snapshot(world,pauseReasons=[]){return {worldId:world.worldId,branchId:world.branchId,revision:world.revision,
   clock:{...clone(world.clock),running:!world.clock.manualPaused&&!pauseReasons.length&&(world.clock.phase==='open'||world.clock.phase==='preparing'&&world.clock.minute<540),pauseReasons:[...(world.clock.manualPaused?[{code:'manual',label:'手动暂停'}]:[]),...pauseReasons]},
-  wallet:clone(world.wallet),daily:clone(world.daily),actors:[world.player,...world.npcs].map(({wallet,trip,...actor})=>clone(actor)),allowedActions:world.clock.phase==='preparing'?['business.open']:['open','closing'].includes(world.clock.phase)?['business.close']:['business.nextDay']};}
+  wallet:clone(world.wallet),daily:clone(world.daily),actors:[world.player,...world.npcs.filter(n=>n.presence!=='offsite')].map(({wallet,trip,...actor})=>clone(actor)),allowedActions:world.clock.phase==='preparing'?['business.open']:['open','closing'].includes(world.clock.phase)?['business.close']:['business.nextDay']};}

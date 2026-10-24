@@ -1,0 +1,36 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {createWorld,snapshot,validateWorld} from '../modules/backend/world.mjs';
+import {createRuntime} from '../modules/backend/runtime.mjs';
+import {memoryRepository} from '../modules/backend/storage.mjs';
+import {buildCatalog} from '../modules/backend/catalog.mjs';
+import {publishProducts} from '../modules/backend/products.mjs';
+import {tickEconomy} from '../modules/backend/trading.mjs';
+import {arriveCustomer,departCustomer,customerTarget,onSite} from '../modules/backend/visits.mjs';
+import {validateMap} from '../modules/backend/navigation.mjs';
+const read=name=>JSON.parse(fs.readFileSync(new URL('../'+name,import.meta.url)));
+const source=read('data/cards.json'),rules=read('data/backend-rules.json'),managementConfig=read('data/backend-management.json');rules.npcAutoBattles=false;
+const map=validateMap({mapId:'store',navVersion:'visit-test',tileSize:16,width:10,height:10,walkable:Array(10).fill('1111111111'),anchors:{'store.entry':{x:24,y:136},'store.counter':{x:72,y:24},'store.trash':{x:136,y:24},'store.secondaryMarket':{x:72,y:72}}});
+const host=await createRuntime({source,rules,managementConfig,maps:[map],repository:memoryRepository()});await host.connect({contractVersion:'card-shop-ui/1.0',clientId:'visits'});
+const query=async name=>(await host.query(name)).data,command=async(type,payload={})=>{const r=await host.command({requestId:'visits-'+crypto.randomUUID(),type,payload});assert.equal(r.ok,true,JSON.stringify(r));return r.data;};
+assert.equal((await query('shop.snapshot')).actors.length,1);assert.equal(host.inspect().world.npcs.length,3,'regular profiles still exist, without initial store actors');
+const pause=await host.pause.acquire({ownerId:'test',reason:'paused'});await host.advance(1);assert.equal((await query('shop.snapshot')).actors.length,1);await host.pause.release(pause.leaseId);
+await command('business.open');await host.advance(0);const afterArrival=host.inspect().world,visitor=afterArrival.npcs.find(onSite);assert.ok(visitor);assert.equal((await query('shop.snapshot')).actors.length,2);
+const archive=await command('saves.create');let events=[];const off=host.subscribe(e=>{if(e.type==='actorsUpdated')events=e.data;});
+for(let i=0;i<100&&host.inspect().world.npcs.find(n=>n.actorId===visitor.actorId).presence!=='offsite';i++)await host.advance(.25);
+assert.equal(host.inspect().world.npcs.find(n=>n.actorId===visitor.actorId).presence,'offsite');assert.ok(!events.some(n=>n.actorId===visitor.actorId));
+await command('saves.load',{archiveId:archive.archiveId});assert.ok((await query('shop.snapshot')).actors.some(n=>n.actorId===visitor.actorId),'archive restores the visit, not a duplicate identity');
+await command('business.close');assert.equal((await query('shop.snapshot')).actors.length,1);assert.ok(host.inspect().world.npcs.every(n=>!onSite(n)));off();await host.disconnect();
+
+const catalog=buildCatalog(source,rules),w=createWorld(rules);w.clock.phase='open';w.clock.minute=540;w.nextNpcMinute=10000;w.products=publishProducts(catalog,rules,1);
+const npc=id=>({actorId:id,name:id,appearanceId:'owner',wallet:{available:999},roomId:'store',x:24,y:136,activity:'idle',scavenger:false,presence:'offsite'});w.npcs=[npc('a'),npc('b')];
+const card=catalog.byId.get('caocao');w.items.keep={inventoryRef:'keep',ownerId:'a',kind:'card',cardKey:card.cardKey,printedRarity:card.currentRarity,printVersion:'test',location:'collection',cost:73,protected:false,lock:null};
+for(const n of w.npcs)arriveCustomer(w,n,map);
+const routeA=customerTarget(w,map,map.anchors['store.counter'],w.npcs[0]);w.npcs[0].trip={stage:'checkout',...routeA};const routeB=customerTarget(w,map,map.anchors['store.counter'],w.npcs[1]);assert.ok(routeB);assert.notDeepEqual(routeA.target,routeB.target,'customers reserve distinct service positions');
+const wallet=structuredClone(w.npcs[0].wallet),item=structuredClone(w.items.keep);departCustomer(w,w.npcs[0]);assert.deepEqual(w.npcs[0].wallet,wallet);assert.deepEqual(w.items.keep,item);assert.ok(!snapshot(w).actors.some(n=>n.actorId==='a'));
+w.rules.maxNpcs=2;w.nextNpcMinute=540;w.npcs[0].nextVisitAt=0;tickEconomy(w,catalog,{map,seconds:0});assert.equal(w.npcs[0].presence,'onsite','existing customer revisits with same identity');assert.deepEqual(w.items.keep,item);assert.equal(w.npcs[0].wallet.available,999);
+// A pre-upgrade idle crowd becomes offsite; an in-progress visit and card ownership survive.
+const legacy=structuredClone(w);delete legacy.customerVisitVersion;legacy.npcs[0].trip=null;legacy.npcs[0].activity='idle';delete legacy.npcs[0].presence;legacy.npcs[1].trip={stage:'checkout',path:[]};delete legacy.npcs[1].presence;
+const restored=await createRuntime({source,rules,repository:memoryRepository({schemaVersion:2,revision:0,world:legacy,archives:[],requests:{},legacyResetDone:true}),maps:[map]});await restored.connect({contractVersion:'card-shop-ui/1.0',clientId:'migration'});
+assert.equal(restored.inspect().world.npcs[0].presence,'offsite');assert.equal(restored.inspect().world.npcs[1].presence,'onsite');assert.deepEqual(restored.inspect().world.items.keep,item);validateWorld(restored.inspect().world);await restored.disconnect();
+console.log('PASS visits: empty new shop, regular profiles, paused arrivals, finite exit, actor removal, repeat visits, distinct targets, ownership/wallet conservation, archive restore, close and legacy-crowd migration.');

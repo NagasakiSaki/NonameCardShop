@@ -2,6 +2,7 @@ import {clone,need,integer,serial,debit,credit,random,sum} from './common.mjs';
 import {owned,free,referencePrice,income,enterCirculation} from './trading.mjs';
 import {note} from './world.mjs';
 import {productEnabled} from './distribution.mjs';
+import {onSite} from './visits.mjs';
 
 export function validateManagement(c){
   need(c?.version===1&&Array.isArray(c.upgrades)&&Array.isArray(c.regulars),'INVALID_CONFIG','经营扩展配置格式不正确。');
@@ -40,7 +41,7 @@ export function purchaseUpgrade(w,upgradeId){
 }
 export function ensureRegulars(w){
   if(!w.management)return;
-  for(const [index,r] of w.management.config.regulars.entries()){const actorId=`regular:${r.id}`;if(w.npcs.some(n=>n.actorId===actorId))continue;const homes=[{x:176,y:104},{x:400,y:128},{x:208,y:208}],home=homes[index%homes.length];w.npcs.push({actorId,regularId:r.id,name:r.name,appearanceId:r.appearanceId,wallet:{available:r.initialWallet},roomId:'store',...home,direction:'down',moving:false,activity:'idle'});note(w,'regularJoined',{actorId,externalFunds:r.initialWallet});}
+  for(const r of w.management.config.regulars){const actorId=`regular:${r.id}`;if(w.npcs.some(n=>n.actorId===actorId))continue;w.npcs.push({actorId,regularId:r.id,name:r.name,appearanceId:r.appearanceId,wallet:{available:r.initialWallet},roomId:'store',x:240,y:272,direction:'down',moving:false,activity:'away',presence:'offsite'});note(w,'regularJoined',{actorId,externalFunds:r.initialWallet});}
 }
 function refundRequest(w,request){
   if(request.fundsHeld){const npc=w.npcs.find(n=>n.actorId===request.actorId);credit(npc.wallet,request.fundsHeld);w.wallet.escrowLiability-=request.fundsHeld;request.fundsHeld=0;}
@@ -70,7 +71,7 @@ export function tickManagement(w,catalog){
 }
 export function peopleView(w,catalog){
   const m=w.management;
-  const customers=w.npcs.map(({wallet,trip,...npc})=>({...clone(npc),budget:wallet.available,ownedCards:owned(w,npc.actorId).filter(i=>i.kind==='card').length}));
+  const customers=w.npcs.filter(onSite).map(({wallet,trip,...npc})=>({...clone(npc),budget:wallet.available,ownedCards:owned(w,npc.actorId).filter(i=>i.kind==='card').length}));
   if(!m)return {items:[],neighbors:[],customers};
   return {items:m.config.upgrades.filter(u=>u.dailyCost>0).map(u=>({personId:`staff:${u.id}`,name:u.name,role:u.id==='cashier'?'收银':'补货',wage:u.dailyCost,hired:(m.levels[u.id]||0)>0,mood:m.onDuty[u.id]===false?'休息':'当班',note:u.description})),neighbors:m.config.regulars.map(r=>{const relation=m.relationships[r.id]||0;const request=m.requests.find(o=>o.personId===r.id&&['offered','accepted'].includes(o.status));return {personId:r.id,name:r.name,relation,portrait:r.appearanceId,dialog:r.dialogue[Math.min(r.dialogue.length-1,Math.floor(relation/10))],pending:request?{...clone(request),cardName:catalog?.byKey.get(request.cardKey)?.name,offer:request.amount,note:`第 ${request.expiresDay} 天结束前有效；${request.status==='accepted'?'资金已托管':'尚未接单'}`} :null};}),customers};
 }

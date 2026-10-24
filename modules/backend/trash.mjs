@@ -4,7 +4,7 @@ import {INTERNATIONAL_NAMES} from './customer-identity.mjs';
 
 export const TRASH_OWNER='public:trash';
 export const DEFAULT_CUSTOMER_BEHAVIOR=Object.freeze({
-  openingSeconds:3,sortingSeconds:2,searchSeconds:2,
+  openingSeconds:3,sortingSeconds:2,searchSeconds:2,lingerSeconds:18,maxVisitSeconds:120,pathStallSeconds:12,
   keepCopies:1,minimumKeptCards:3,discardChance:{N:.65,R:.25,SR:0,SSR:0},
   scavengerChance:.3,poorWallet:400,poorInitialWallet:200,
   pickupLimit:2,pickupCooldownMinutes:90,

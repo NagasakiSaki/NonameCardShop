@@ -5,7 +5,7 @@
 const LIST_QUERIES = new Set([
   "catalog.list", "inventory.list", "products.list", "supplier.orders",
   "market.list", "tasks.list", "management.upgrades", "management.people",
-  "management.orders", "saves.list", "combat.eligible", "config.list",
+  "management.orders", "saves.list", "saves.days", "combat.eligible", "config.list",
 ]);
 
 function toList(data) {

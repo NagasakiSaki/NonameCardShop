@@ -46,7 +46,7 @@ export default async function preload(context) {
   window.addEventListener("unhandledrejection", (event) => notify("error", { text: String(event.reason?.message || event.reason) }));
   if (collectionBattle) {
     const config = {
-      ...(backgroundBattle?{game_speed:'vvfast',background_audio:false,volumn_audio:0}:{}),
+      ...(backgroundBattle?{game_speed:'vvfast',animation:false,background_audio:false,volumn_audio:0}:{}),
       mode: "identity", show_splash: "off", new_tutorial: true, version: "1.11.6",
       extensions: [], hiddenCharacterPack: [], characters: Object.keys((await import("/game/package.js"), window.noname_package.character)),
       cards: ["standard", "extra"], background_music: "music_off", confirm_exit: false,
@@ -77,10 +77,15 @@ export default async function preload(context) {
       _status.auto=true;
       const roundLimit=Math.max(10,Math.min(200,Number(params.get('shopRoundLimit'))||60));
       lib.onload2.push(()=>{
+        // The engine resets duration to 500 during config loading. Change presentation
+        // timing here, after loading, only for the invisible AI table.
+        lib.config.duration=60;
         lib.skill._shop_npc_round_limit={trigger:{global:'phaseBefore'},forced:true,silent:true,charlotte:true,priority:100000,
           filter(){return (game.roundNumber||0)>roundLimit;},async content(){game.over();}};
         game.addGlobalSkill('_shop_npc_round_limit');
       });
+      const statusTimer=setInterval(()=>{const event=_status.event;notify('engine-status',{round:game.roundNumber||0,phase:event?.name||'loading',skill:event?.skill||null,actor:event?.player?.name||null,choosing:!!_status.imchoosing,paused:!!_status.paused2});},1000);
+      window.addEventListener('pagehide',()=>clearInterval(statusTimer),{once:true});
     }
   } else {
     await seedConfig(lib.configprefix, { new_tutorial: true, version: "1.11.6", show_splash: "always", confirm_exit: false, background_music: "music_off", card_style: "default" });

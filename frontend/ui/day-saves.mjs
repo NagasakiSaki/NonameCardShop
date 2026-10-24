@@ -2,34 +2,41 @@
 import { el, clear, stateView, errorView, newRequestId, busyButton } from "./components.mjs";
 
 export async function openDaySaves(app) {
+  const state={tab:'days'};
   return app.windows.open({
     id: "day-saves",
     title: "按天存档",
-    subtitle: "读档前需要确认；旧档重置由主模型执行，前端不碰浏览器存储",
+    subtitle: "按天回到 08:00 开店前；即时备份单独管理",
     pauseReason: "查看存档",
     render: async (ctx) => {
       const body = ctx.body;
       body.append(stateView({ kind: "loading", title: "正在读取日档…" }));
-      const result = await ctx.query("saves.list");
+      const result = await ctx.query(state.tab==='days'?"saves.days":"saves.list");
       clear(body);
       if (!result.ok) {
         body.append(errorView(result.error, () => ctx.refresh()));
         return;
       }
       const rows = result.data.items;
+      body.append(el('div',{class:'toolbar'},[
+        el('button',{class:'btn'+(state.tab==='days'?' btn--primary':''),text:'按天回退',onclick:()=>{state.tab='days';ctx.refresh();}}),
+        el('button',{class:'btn'+(state.tab==='backups'?' btn--primary':''),text:'即时备份',onclick:()=>{state.tab='backups';ctx.refresh();}}),
+        window.__cardShopReturnToMenu?el('button',{class:'btn',text:'返回主菜单 / 管理卡店存档',onclick:()=>window.__cardShopReturnToMenu()}):null
+      ]));
+      body.append(el('p',{class:'small muted',text:state.tab==='days'?'选择日期后恢复该天 08:00 的资金、库存、行情和顾客状态，当天已经发生的经营会回退。':'即时备份恢复保存时刻；这里同时保留日初、打烊与读档前备份，不等同于按天回退。'}));
       body.append(el("div", { style: { display: "flex", gap: "6px", flexWrap: "wrap" } }, (result.data.branches || []).map((branch) =>
         el("span", { class: "chip", text: "分支 " + branch }),
       )));
 
       const table = el("table", { class: "data-table" }, [
         el("thead", {}, [el("tr", {}, [
-          el("th", { text: "日期" }), el("th", { text: "分支" }), el("th", { text: "时间" }), el("th", { text: "来源" }), el("th", { text: "状态" }), el("th", { text: "" }),
+          el("th", { text: "日期" }), el("th", { text: state.tab==='days'?"记录":"分支" }), el("th", { text: "时间" }), el("th", { text: "来源" }), el("th", { text: "状态" }), el("th", { text: "" }),
         ])]),
         el("tbody", {}, rows.map((row) => el("tr", {}, [
           el("td", { text: "第 " + row.day + " 天" }),
-          el("td", { text: row.branch }),
+          el("td", { text: state.tab==='days'?'当天开始':row.branch }),
           el("td", { class: "mono", text: Math.floor(row.minute / 60) + ":" + String(Math.floor(row.minute % 60)).padStart(2, "0") }),
-          el("td", { text: row.source === "auto" ? "自动" : "手动" }),
+          el("td", { text: row.source === 'day-start'?'日初自动':row.source === "auto" ? "自动" : "手动" }),
           el("td", {}, [el("span", { class: row.status === "readable" ? "chip chip--ok" : "chip chip--lock", text: row.status === "readable" ? "可读" : "不可读" })]),
           el("td", {}, [
             el("button", {
@@ -40,14 +47,14 @@ export async function openDaySaves(app) {
                 const old = body.querySelector(".confirm-load");
                 if (old) old.remove();
                 const box = el("div", { class: "note-card confirm-load" }, [
-                  el("p", { class: "note-card__title", text: "读取第 " + row.day + " 天（" + row.branch + "）？" }),
-                  el("p", { class: "small muted", text: row.recoveryNote || "读取前会备份当前世界，再建立新分支。中断牌局只能从当前小局开头继续。" }),
+                  el("p", { class: "note-card__title", text: state.tab==='days'?`回到第 ${row.day} 天 08:00 开店前？`:"读取第 " + row.day + " 天（" + row.branch + "）？" }),
+                  el("p", { class: "small muted", text: state.tab==='days'?'恢复到当天 08:00 开店前，当天已经发生的经营会回退；读取前先备份当前进度。':row.recoveryNote || "读取前会备份当前世界，再建立新分支。中断牌局只能从当前小局开头继续。" }),
                   el("div", { style: { display: "flex", gap: "8px" } }, [
                     el("button", {
                       class: "btn btn--primary", type: "button", text: "确认读取",
                       onclick: async (event2) => {
                         const restore = busyButton(event2.currentTarget, "读取中…");
-                        const response = await ctx.submit({ requestId: newRequestId("saveload"), type: "saves.load", payload: { archiveId: row.archiveId||row.id||row.saveId, saveId: row.saveId } });
+                        const response = await ctx.submit({ requestId: newRequestId("saveload"), type: state.tab==='days'?"saves.loadDay":"saves.load", payload: { archiveId: row.archiveId||row.id||row.saveId, saveId: row.saveId } });
                         restore();
                         if (!response.ok) {
                           body.append(errorView(response.error, null));
@@ -68,7 +75,7 @@ export async function openDaySaves(app) {
         ]))),
       ]);
       body.append(table);
-      body.append(el("p", { class: "small muted", text: "格式校验未通过的档只展示、不加载；世界重置后会发布 worldReset，前端清理视图缓存。" }));
+      if(!rows.length)body.append(el('p',{class:'small muted',text:state.tab==='days'?'这份进度暂没有可用的日初档。旧的即时备份不会被伪造成日初状态；开始下一天后会自动生成。':'还没有备份。'}));
 
       const fileInput=el('input',{type:'file',accept:'.json,application/json',hidden:true});body.append(fileInput);
       fileInput.addEventListener('change',async()=>{
@@ -92,6 +99,7 @@ export async function openDaySaves(app) {
               return;
             }
             app.toast("ok", "已保存", response.data.archiveId||response.data.save?.saveId||'');
+            state.tab='backups';
             ctx.refresh();
           },
         }),

@@ -7,6 +7,7 @@ import {pathfind,moveActor} from './navigation.mjs';
 import {managementEffects} from './management.mjs';
 import {productEnabled} from './distribution.mjs';
 import {customerAppearance} from './customer-identity.mjs';
+import {onSite,arriveCustomer,departCustomer,lingerCustomer,customerTarget} from './visits.mjs';
 
 export const owned=(w,ownerId='player')=>Object.values(w.items).filter(i=>i.ownerId===ownerId);
 export const free=i=>!i.lock&&!i.protected;
@@ -128,29 +129,49 @@ function customerPurchase(w,catalog,npc,{deferOpening=false}={}){
   }
   consignSurplus(w,catalog,npc);return null;
 }
-function exitShop(map,npc){const exit=map.anchors['store.entry'];npc.trip=exit?{stage:'exit',path:pathfind(map,npc,exit)}:null;npc.activity='leaving';npc.label='离店';}
+function exitShop(w,map,npc,reason='visit-complete'){
+  const exit=map?.anchors['store.entry'];
+  try{if(exit){npc.trip={stage:'exit',target:{...exit},path:pathfind(map,npc,exit),reason};npc.activity='leaving';npc.label='离店';return;}}catch(error){note(w,'npcPathUnavailable',{actorId:npc.actorId,stage:'exit',reason:error.message});}
+  departCustomer(w,npc,reason);
+}
+function finishShopping(w,map,npc){if(w.clock.phase==='open')lingerCustomer(w,npc,customerBehavior(w).lingerSeconds);else exitShop(w,map,npc,'closing');}
 function discardSelected(w,npc,refs){for(const ref of refs||[]){const i=w.items[ref];if(i?.ownerId===npc.actorId&&i.location==='collection'&&free(i))discardCard(w,i,npc.actorId);}}
 // A manual early close completes paid visits once, so saves never strand sealed purchases or discard references across days.
 export function finishCustomerVisits(w,catalog){
-  for(const npc of w.npcs){const t=npc.trip;if(!t||t.kind==='match')continue;
-    if(t.stage==='opening'){const refs=openCustomerPurchase(w,catalog,npc,t.purchaseRef);discardSelected(w,npc,unwantedCards(w,catalog,npc,refs));}
-    else if(t.stage==='sorting'||t.stage==='discard')discardSelected(w,npc,t.discardRefs);
-    npc.trip=null;npc.activity='idle';npc.label='';npc.moving=false;
+  for(const npc of w.npcs){const t=npc.trip;if(t?.kind==='match'||npc.currentMatchId)continue;
+    if(t?.stage==='opening'){const refs=openCustomerPurchase(w,catalog,npc,t.purchaseRef);discardSelected(w,npc,unwantedCards(w,catalog,npc,refs));}
+    else if(t?.stage==='sorting'||t?.stage==='discard')discardSelected(w,npc,t.discardRefs);
+    if(onSite(npc))departCustomer(w,npc,'business-closed');
   }
 }
 export function tickEconomy(w,catalog,{map=null,seconds=0}={}){
   if(!['open','closing'].includes(w.clock.phase))return;
   for(const order of w.orders)if(order.status==='pending'&&w.clock.day*1440+w.clock.minute>=order.dueAt)order.status='arrived';
-  if(map)for(const npc of w.npcs.filter(n=>n.trip&&n.trip.kind!=='match')){
+  const elapsed=Math.max(0,seconds)*w.clock.speed,behavior=customerBehavior(w);
+  if(map)for(const npc of w.npcs.filter(n=>onSite(n)&&n.roomId==='store'&&!n.returnAfterMatch&&!n.currentMatchId&&n.trip?.kind!=='match')){
+    if(npc.visit)npc.visit.elapsedSeconds+=elapsed;
+    if(!npc.trip){
+      if(npc.visit)npc.visit.idleSeconds=Math.max(0,(npc.visit.idleSeconds||0)-elapsed);
+      if(w.clock.phase!=='open'||npc.visit&&(npc.visit.elapsedSeconds>=behavior.maxVisitSeconds||npc.visit.idleSeconds<=0))exitShop(w,map,npc,w.clock.phase==='open'?'visit-complete':'closing');
+      if(!npc.trip)continue;
+    }
+    const oldX=npc.x,oldY=npc.y;
     moveActor(map,npc,npc.trip,seconds*w.clock.speed);
+    if(npc.trip.path.length){
+      npc.trip.stallSeconds=Math.hypot(npc.x-oldX,npc.y-oldY)<.01?(npc.trip.stallSeconds||0)+elapsed:0;
+      if(npc.trip.stallSeconds>=behavior.pathStallSeconds){const stage=npc.trip.stage;note(w,'npcPathStalled',{actorId:npc.actorId,stage});if(stage==='exit')departCustomer(w,npc,'exit-path-stalled');else exitShop(w,map,npc,'path-stalled');}
+      else if(npc.visit?.elapsedSeconds>=behavior.maxVisitSeconds&&!['opening','sorting','discard','exit'].includes(npc.trip.stage))exitShop(w,map,npc,'visit-timeout');
+      continue;
+    }
     if(!npc.trip.path.length){
       if(npc.trip.stage==='checkout'){
-        if(w.clock.phase!=='open'){exitShop(map,npc);continue;}
+        if(w.clock.phase!=='open'){exitShop(w,map,npc,'closing');continue;}
         if(npc.trip.waitSeconds==null)npc.trip.waitSeconds=managementEffects(w).checkoutSeconds;
         npc.trip.waitSeconds-=seconds*w.clock.speed;if(npc.trip.waitSeconds>0)continue;
         const purchaseRef=customerPurchase(w,catalog,npc,{deferOpening:true});
         if(purchaseRef){npc.trip={stage:'opening',path:[],purchaseRef,waitSeconds:customerBehavior(w).openingSeconds};npc.activity='opening';npc.label='拆卡包';}
-        else exitShop(map,npc);
+        else if(owned(w,npc.actorId).some(i=>i.kind==='card'&&i.location==='collection'&&free(i)&&w.circulation[i.cardKey]))finishShopping(w,map,npc);
+        else exitShop(w,map,npc,'no-purchase');
       }else if(npc.trip.stage==='opening'){
         npc.trip.waitSeconds-=seconds*w.clock.speed;if(npc.trip.waitSeconds>0)continue;
         const refs=openCustomerPurchase(w,catalog,npc,npc.trip.purchaseRef),discardRefs=unwantedCards(w,catalog,npc,refs);
@@ -158,40 +179,42 @@ export function tickEconomy(w,catalog,{map=null,seconds=0}={}){
       }else if(npc.trip.stage==='sorting'){
         npc.trip.waitSeconds-=seconds*w.clock.speed;if(npc.trip.waitSeconds>0)continue;
         const anchor=map.anchors['store.trash'];
-        if(npc.trip.discardRefs.length&&anchor){npc.trip={stage:'discard',discardRefs:npc.trip.discardRefs,path:pathfind(map,npc,anchor)};npc.activity='discarding';npc.label='去丢弃卡牌';}
-        else {consignSurplus(w,catalog,npc);exitShop(map,npc);}
+        if(npc.trip.discardRefs.length&&anchor){try{npc.trip={stage:'discard',discardRefs:npc.trip.discardRefs,path:pathfind(map,npc,anchor)};npc.activity='discarding';npc.label='去丢弃卡牌';}catch(error){note(w,'npcPathUnavailable',{actorId:npc.actorId,stage:'discard',reason:error.message});exitShop(w,map,npc,'trash-unreachable');}}
+        else {consignSurplus(w,catalog,npc);finishShopping(w,map,npc);}
       }else if(npc.trip.stage==='discard'){
-        discardSelected(w,npc,npc.trip.discardRefs);consignSurplus(w,catalog,npc);exitShop(map,npc);
+        discardSelected(w,npc,npc.trip.discardRefs);consignSurplus(w,catalog,npc);finishShopping(w,map,npc);
       }else if(npc.trip.stage==='scavenge'){
         npc.trip.waitSeconds-=seconds*w.clock.speed;if(npc.trip.waitSeconds>0)continue;
         const picked=scavenge(w,catalog,npc);npc.trip={stage:'pickup-result',path:[],waitSeconds:1};npc.activity='scavenging';npc.label=picked.length?`捡到 ${picked.length} 张卡`:'桶里没合适的卡';
       }else if(npc.trip.stage==='pickup-result'){
-        npc.trip.waitSeconds-=seconds*w.clock.speed;if(npc.trip.waitSeconds>0)continue;exitShop(map,npc);
-      }else {npc.trip=null;npc.activity='idle';npc.label='';npc.moving=false;}
+        npc.trip.waitSeconds-=seconds*w.clock.speed;if(npc.trip.waitSeconds>0)continue;finishShopping(w,map,npc);
+      }else if(npc.trip.stage==='exit'){departCustomer(w,npc,npc.trip.reason);}
+      else {exitShop(w,map,npc,'unknown-stage');}
     }
   }
   if(w.clock.phase!=='open')return;
   const effects=managementEffects(w);
   for(const n of w.npcs)ensureCustomerTraits(w,n);
   // Scavenging has its own cooldown and uses the same customer capacity and navigation as shopping.
-  for(const npc of w.npcs.filter(n=>!n.trip&&!n.currentMatchId&&n.roomId==='store'&&canScavenge(w,n))){
+  for(const npc of w.npcs.filter(n=>onSite(n)&&!n.trip&&!n.currentMatchId&&n.roomId==='store'&&canScavenge(w,n))){
     if(!trashItems(w).length||w.npcs.filter(n=>n.trip&&n.trip.kind!=='match').length>=effects.concurrentCustomers)break;
     const anchor=map?.anchors['store.trash'];
-    if(map&&anchor){npc.trip={stage:'scavenge',path:pathfind(map,npc,anchor),waitSeconds:customerBehavior(w).searchSeconds};npc.activity='scavenging';npc.label='去翻垃圾桶';}
+    if(map&&anchor){try{const route=customerTarget(w,map,anchor,npc);if(route){npc.trip={stage:'scavenge',...route,waitSeconds:customerBehavior(w).searchSeconds};npc.activity='scavenging';npc.label='去翻垃圾桶';}}catch(error){note(w,'npcPathUnavailable',{actorId:npc.actorId,stage:'scavenge',reason:error.message});}}
     else if(!map)scavenge(w,catalog,npc);
   }
   if(w.clock.minute<w.nextNpcMinute)return;
   w.nextNpcMinute=w.clock.minute+w.rules.npcIntervalMinutes;
   let npc;
-  if(w.npcs.filter(n=>n.trip&&n.trip.kind!=='match').length>=effects.concurrentCustomers)return;
-  if(w.npcs.length<w.rules.maxNpcs){const i=w.npcs.length,scavenger=random(w)<customerBehavior(w).scavengerChance,initialWallet=Math.round((scavenger?customerBehavior(w).poorInitialWallet:w.rules.npcInitialWallet)*effects.newCustomerWalletMultiplier);npc={actorId:serial(w,'npc'),name:customerBehavior(w).names[i%customerBehavior(w).names.length],appearanceId:customerAppearance(i),appearancePackVersion:1,wallet:{available:initialWallet},roomId:'store',x:240,y:272,direction:'up',moving:false,activity:'shopping',scavenger};w.npcs.push(npc);note(w,'npcArrived',{actorId:npc.actorId,externalFunds:initialWallet});}
-  else {const available=w.npcs.filter(n=>!n.trip&&!n.currentMatchId&&n.roomId==='store');if(!available.length)return;npc=available[Math.floor(random(w)*available.length)];}
-  if(canScavenge(w,npc)&&trashItems(w).length){const anchor=map?.anchors['store.trash'];if(anchor){npc.trip={stage:'scavenge',path:pathfind(map,npc,anchor),waitSeconds:customerBehavior(w).searchSeconds};npc.activity='scavenging';npc.label='去翻垃圾桶';return;}if(!map){scavenge(w,catalog,npc);npc.activity='idle';return;}}
+  if(w.npcs.filter(onSite).length>=Math.min(w.rules.maxNpcs,effects.concurrentCustomers))return;
+  const visitors=w.npcs.filter(n=>!onSite(n)&&!n.currentMatchId&&(n.nextVisitAt||0)<=w.clock.day*1440+w.clock.minute).sort((a,b)=>(a.lastVisit?.leftAt||0)-(b.lastVisit?.leftAt||0));
+  if(visitors.length&&(w.npcs.length>=w.rules.maxNpcs||random(w)<.5))npc=visitors[0];
+  else {if(w.npcs.length>=w.rules.maxNpcs)return;const i=w.npcs.length,scavenger=random(w)<customerBehavior(w).scavengerChance,initialWallet=Math.round((scavenger?customerBehavior(w).poorInitialWallet:w.rules.npcInitialWallet)*effects.newCustomerWalletMultiplier);npc={actorId:serial(w,'npc'),name:customerBehavior(w).names[i%customerBehavior(w).names.length],appearanceId:customerAppearance(i),appearancePackVersion:1,wallet:{available:initialWallet},roomId:'store',x:240,y:272,direction:'up',moving:false,activity:'shopping',scavenger};w.npcs.push(npc);note(w,'npcArrived',{actorId:npc.actorId,externalFunds:initialWallet});}
+  arriveCustomer(w,npc,map);
+  if(canScavenge(w,npc)&&trashItems(w).length){const anchor=map?.anchors['store.trash'];if(anchor){const route=customerTarget(w,map,anchor,npc);if(route){npc.trip={stage:'scavenge',...route,waitSeconds:customerBehavior(w).searchSeconds};npc.activity='scavenging';npc.label='去翻垃圾桶';return;}}if(!map){scavenge(w,catalog,npc);departCustomer(w,npc);return;}}
   if(map){
-    const entry=map.anchors['store.entry'];if((npc.activity==='idle'||!npc.navVersion)&&entry){npc.x=entry.x;npc.y=entry.y;}
     const hasMarket=w.listings.some(l=>acceptableListing(w,catalog,npc,l));
     const anchor=map.anchors[hasMarket?'store.secondaryMarket':'store.counter'];
-    if(anchor){npc.trip={stage:'checkout',path:pathfind(map,npc,anchor)};npc.navVersion=map.navVersion;npc.activity='walking';npc.label='选购卡牌';return;}
+    if(anchor){const route=customerTarget(w,map,anchor,npc);if(route){npc.trip={stage:'checkout',...route};npc.navVersion=map.navVersion;npc.activity='walking';npc.label='选购卡牌';return;}exitShop(w,map,npc,'counter-unreachable');return;}
   }
-  customerPurchase(w,catalog,npc);npc.activity='idle';
+  customerPurchase(w,catalog,npc);departCustomer(w,npc);
 }

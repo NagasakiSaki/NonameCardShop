@@ -41,11 +41,17 @@ export interface TrashCardView {
 /** backend-rules.customerBehavior; missing fields use the shipped defaults, including in old saves. */
 export interface CustomerBehaviorConfig {
   openingSeconds:number; sortingSeconds:number; searchSeconds:number;
+  /** Optional in old saves; defaults are 18 / 120 / 12 active simulation seconds. */
+  lingerSeconds?:number;maxVisitSeconds?:number;pathStallSeconds?:number;
   keepCopies:number; minimumKeptCards:number; discardChance:Record<Rarity,number>;
   scavengerChance:number; poorWallet:number; poorInitialWallet:number;
   pickupLimit:number; pickupCooldownMinutes:number;
   names:string[];
 }
+/** saves.days and saves.loadDay always target an actual 08:00 start snapshot. */
+export interface DayStartArchive {id:string;archiveId:string;day:number;minute:480;slot:'start';branchId:string;source:'day-start';restoresDayStart:true;status:'readable'}
+/** Startup registry is separate from a connected Host. Each profile has its own world database. */
+export interface ProfileSummary {profileId:string;name:string;createdAt:number;worldId:string|null;day:number;minute:number;phase:string;cash:number|null;revision:number|null;days:number}
 export interface UpgradeView {
   upgradeId:string; name:string; description:string; level:number; maxLevel:number;
   nextCost:number; dailyCost:number; effect:string; unlocked:boolean; unlockHint:string;

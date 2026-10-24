@@ -1,8 +1,9 @@
 import {clone,need} from './common.mjs';
-import {eligible,registerNpcMatch} from './matches.mjs';
+import {eligible,registerNpcMatch,voidNpcMatch} from './matches.mjs';
 import {managementEffects} from './management.mjs';
 import {pathfind,moveActor} from './navigation.mjs';
 import {note} from './world.mjs';
+import {onSite,departCustomer} from './visits.mjs';
 
 function tableSeat(map,tableId,index){const table=map.tables?.find(t=>t.id===tableId||tableId.endsWith(t.id));return table?.seatAnchors?.[index];}
 function routeToTable(npc,index,table,navigation){
@@ -15,26 +16,31 @@ function routeToTable(npc,index,table,navigation){
 export function tickNpcTables(w,catalog,navigation,seconds,{schedule=true}={}){
   const store=navigation.get('store'),room=navigation.get('battle-room');
   for(const npc of w.npcs){
+    try{
     if(npc.returnAfterMatch){
-      if(!store||!room){npc.roomId='store';npc.activity='idle';npc.returnAfterMatch=false;continue;}
+      if(!store||!room){departCustomer(w,npc,'match-finished');continue;}
       if(npc.roomId==='store')npc.trip={kind:'match',stage:'store-return',path:pathfind(store,npc,store.anchors['store.entry'])};
       else {const door=room.anchors['battleRoom.toStore'];npc.trip={kind:'match',stage:'room-exit',path:pathfind(room,npc,door)};}
       npc.activity='leaving-table';npc.returnAfterMatch=false;
     }
     if(npc.trip?.kind!=='match')continue;
-    const map=navigation.get(npc.roomId);if(!map)continue;
+    const map=navigation.get(npc.roomId);need(map,'INVALID_MAP','顾客牌桌路线所在地图不可用。');
+    npc.trip.travelSeconds=(npc.trip.travelSeconds||0)+Math.max(0,seconds)*w.clock.speed;
+    need(npc.trip.travelSeconds<=60,'NPC_ROUTE_TIMEOUT','顾客未能在规定时间内完成牌桌行程。');
     moveActor(map,npc,npc.trip,seconds*w.clock.speed);if(npc.trip.path.length)continue;
     if(npc.trip.stage==='store-door'){
       const door=store.anchors['store.toBattleRoom'],entry=room.anchors[door.targetAnchor];need(entry,'INVALID_MAP','对战房入口未匹配。');npc.roomId='battle-room';npc.navVersion=room.navVersion;npc.x=entry.x;npc.y=entry.y;npc.trip.stage='seat';npc.trip.path=pathfind(room,npc,npc.trip.seat);
     }else if(npc.trip.stage==='room-exit'){
       const door=room.anchors['battleRoom.toStore'],entry=store.anchors[door.targetAnchor];need(entry,'INVALID_MAP','主店入口未匹配。');npc.roomId='store';npc.navVersion=store.navVersion;npc.x=entry.x;npc.y=entry.y;npc.trip={kind:'match',stage:'store-return',path:pathfind(store,npc,store.anchors['store.entry'])};
-    }else {npc.activity=npc.trip.stage==='seat'?'seated':'idle';npc.trip=null;npc.moving=false;}
+    }else if(npc.trip.stage==='seat'){npc.activity='seated';npc.trip=null;npc.moving=false;}
+    else departCustomer(w,npc,'match-finished');
+    }catch(error){note(w,'npcTableRouteUnavailable',{actorId:npc.actorId,reason:error.message});if(npc.currentMatchId)voidNpcMatch(w,npc.currentMatchId,error.message);if(!npc.currentMatchId)departCustomer(w,npc,'table-route-unavailable');}
   }
   if(!schedule||w.rules.npcAutoBattles===false||w.clock.phase!=='open'||w.matches.some(m=>m.background&&m.status!=='finished'))return;
   const stamp=w.clock.day*1440+w.clock.minute;if(stamp<(w.nextNpcMatchAt||0))return;w.nextNpcMatchAt=stamp+(w.rules.npcMatchIntervalMinutes||45);
   const table=w.tables.find(t=>!t.matchId&&!t.reservation);if(!table)return;
   const fee=managementEffects(w).tableFee;
-  const npcs=w.npcs.filter(n=>!n.trip&&!n.currentMatchId&&n.activity==='idle'&&n.wallet.available>=fee&&(n.nextMatchAt||0)<=stamp&&eligible(w,catalog,n.actorId).some(i=>i.eligible)).slice(0,2);
+  const npcs=w.npcs.filter(n=>onSite(n)&&!n.trip&&!n.currentMatchId&&n.activity==='idle'&&n.wallet.available>=fee&&(n.nextMatchAt||0)<=stamp&&eligible(w,catalog,n.actorId).some(i=>i.eligible)).slice(0,2);
   if(npcs.length<2)return;
   let routes;
   try{routes=npcs.map((npc,index)=>routeToTable(npc,index,table,navigation));}

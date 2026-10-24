@@ -22,7 +22,7 @@ try{
     const c=catalog.byId.get('caocao');for(let i=0;i<3;i++)w.items['test-copy-'+i]={inventoryRef:'test-copy-'+i,ownerId:'player',kind:'card',cardKey:c.cardKey,printedRarity:c.currentRarity,printVersion:'formal-test',location:'collection',cost:20,protected:false,lock:null};
     const repo=browserRepository();await repo.commit({schemaVersion:2,revision:0,world:w,archives:[],requests:{},legacyResetDone:true},null);await repo.close();
   });
-  await page.goto(server.origin);await page.waitForFunction(()=>window.__cardShopReady===true);
+  await page.goto(server.origin+'/?profile=legacy');await page.waitForFunction(()=>window.__cardShopReady===true);
   await page.evaluate(()=>__cardShopApp.openPanel('supplier',{tab:'order'}));await page.locator('[data-trade-workspace]').waitFor();await page.locator('.product-tile').first().waitFor();
   assert.equal(await page.locator('.product-tile').count(),19);
   const box=page.locator('.product-tile').filter({has:page.getByRole('button',{name:'标准 · 密封盒 商品信息',exact:true})});await box.getByRole('button',{name:'＋ 加入购物篮',exact:true}).click();

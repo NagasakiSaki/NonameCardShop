@@ -54,5 +54,5 @@ routeWorld.tables=routeWorld.tables.slice(0,1);routeWorld.npcs.forEach(n=>{n.x=2
 const maps=new Map([['store',store],['battle-room',room]]);tickNpcTables(routeWorld,catalog,maps,0);assert.equal(routeWorld.matches.length,1);
 voidNpcMatch(routeWorld,routeWorld.matches[0].matchId,'Cancel while walking inside store');
 for(let i=0;i<10;i++)tickNpcTables(routeWorld,catalog,maps,.25,{schedule:false});
-assert.ok(routeWorld.npcs.every(n=>n.roomId==='store'&&n.activity==='idle'&&!n.trip));assert.equal(routeWorld.wallet.escrowLiability,0);
+assert.ok(routeWorld.npcs.every(n=>n.presence==='offsite'&&!n.trip));assert.equal(routeWorld.wallet.escrowLiability,0);
 console.log('PASS management/NPC: upgrades, employee effects and wages, one talk/day, real-card orders and escrow expiry, restock, NPC ownership, paused results, one BO3 stat and table fee, safe walking cancellation.');

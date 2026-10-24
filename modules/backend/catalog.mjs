@@ -23,6 +23,7 @@ export function validateRules(r){
     const c={...DEFAULT_CUSTOMER_BEHAVIOR,...r.customerBehavior};
     need(Array.isArray(c.names)&&c.names.length>0&&c.names.length<=100&&c.names.every(n=>typeof n==='string'&&n.trim().length>0&&n.length<=32&&!/[\r\n\t]/.test(n)),'INVALID_CONFIG','顾客姓名池须包含 1～100 个不超过 32 字符的姓名。');
     for(const key of ['openingSeconds','sortingSeconds','searchSeconds'])need(Number.isFinite(c[key])&&c[key]>=.25&&c[key]<=60,'INVALID_CONFIG',`${key} 必须在 0.25～60 秒之间。`);
+    for(const key of ['lingerSeconds','maxVisitSeconds','pathStallSeconds'])need(Number.isFinite(c[key])&&c[key]>=1&&c[key]<=600,'INVALID_CONFIG',`${key} 必须在 1～600 秒之间。`);
     for(const key of ['keepCopies','minimumKeptCards','pickupLimit'])need(Number.isSafeInteger(c[key])&&c[key]>=1&&c[key]<=120,'INVALID_CONFIG',`${key} 必须在 1～120 之间。`);
     for(const key of ['poorWallet','poorInitialWallet','pickupCooldownMinutes'])need(Number.isSafeInteger(c[key])&&c[key]>=0&&c[key]<=1000000,'INVALID_CONFIG',`${key} 必须是支持范围内的非负整数。`);
     need(c.pickupCooldownMinutes>0&&Number.isFinite(c.scavengerChance)&&c.scavengerChance>=0&&c.scavengerChance<=1,'INVALID_CONFIG','拾荒比例必须在 0～1 之间，冷却时间必须大于零。');

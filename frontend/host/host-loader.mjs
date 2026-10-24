@@ -31,7 +31,7 @@ export function readMode(params = new URLSearchParams(location.search)) {
   return { mode, fixture, scene };
 }
 
-async function loadFactory({ mode, fixture }) {
+async function loadFactory({ mode, fixture, profileId }) {
   if (mode === "mock") {
     let module;
     try {
@@ -58,16 +58,16 @@ async function loadFactory({ mode, fixture }) {
   if (typeof module.createHost !== "function") {
     throw new HostConnectionError("CONTRACT_MISMATCH", "正式 Host 未导出 createHost()", null);
   }
-  return module.createHost();
+  return module.createHost({profileId});
 }
 
 /**
  * 载入并连接 Host。返回 { host, connection, mode, fixture, clientId, teardown }。
  * clientId 在整个页面会话内复用，重试连接不会新建身份。
  */
-export async function connectHost({ mode, fixture }) {
+export async function connectHost({ mode, fixture, profileId }) {
   const clientId = stableClientId();
-  const host = await loadFactory({ mode, fixture });
+  const host = await loadFactory({ mode, fixture, profileId });
   let connection;
   const input = { contractVersion: "card-shop-ui/1.0", clientId };
   try {

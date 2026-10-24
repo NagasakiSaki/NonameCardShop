@@ -24,7 +24,7 @@ try{
     const repo=browserRepository();await repo.commit({schemaVersion:2,revision:0,world:w,archives:[],requests:{},legacyResetDone:true},null);await repo.close();
     return {keys:cards.map(c=>c.cardKey),quantity:5};
   });
-  await page.goto(server.origin+'/frontend/index.html');await page.waitForFunction(()=>window.__cardShopReady===true);
+  await page.goto(server.origin+'/frontend/index.html?profile=legacy');await page.waitForFunction(()=>window.__cardShopReady===true);
   const query=(name,p={})=>page.evaluate(async({name,p})=>(await __cardShopApp.host.query(name,p)).data,{name,p});
   async function waitForCount(location,count){const started=Date.now();while(Date.now()-started<20000){if((await query('inventory.list',{kind:'card',location})).total===count)return;await page.waitForTimeout(100);}throw Error(`inventory ${location} did not reach ${count}`);}
   await page.waitForFunction(()=>__cardShopApp.snapshot().actors.find(n=>n.actorId==='buyer')?.activity==='opening');

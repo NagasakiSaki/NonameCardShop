@@ -13,12 +13,13 @@ export function createNpcEngine(runtime,{document=globalThis.document,window=glo
     need(world.worldId===expected.worldId&&world.branchId===expected.branchId&&world.matches.some(m=>m.matchId===match.matchId&&m.gameId===match.gameId),'STALE_EVENT','载入期间世界或比赛已切换。');
     frame.title='NPC 后台对局';frame.dataset.shopNpcEngine=match.matchId;frame.setAttribute('aria-hidden','true');frame.tabIndex=-1;frame.style.cssText='position:fixed;left:-10000px;top:0;width:960px;height:640px;visibility:hidden;pointer-events:none;border:0';
     for(const [key,value] of Object.entries({packer:1,match:match.gameId,parentOrigin:window.location.origin,general:match.mine[0].generalId,opponent:match.enemy[0].generalId,duelMode:match.mode,roster:JSON.stringify(match.mine.map(c=>c.generalId)),opponentRoster:JSON.stringify(match.enemy.map(c=>c.generalId)),first:match.first,initialHand:match.rules.initialHand,firstDrawPenalty:match.rules.firstDrawPenalty,shopBackground:1,shopControlToken:token,shopRoundLimit:match.rules.aiRoundLimit||60}))url.searchParams.set(key,String(value));
-    const instance={frame,gameId:match.gameId,matchId:match.matchId,worldId:world.worldId,branchId:world.branchId,origin:engine.engineOrigin,token,ready:false,paused:null,lastCheckedAt:Date.now(),loadingMs:0,idleMs:0,listener:null};
+    const instance={frame,gameId:match.gameId,matchId:match.matchId,worldId:world.worldId,branchId:world.branchId,origin:engine.engineOrigin,token,ready:false,paused:null,lastCheckedAt:Date.now(),loadingMs:0,idleMs:0,activeMs:0,phase:'loading',round:0,listener:null};
     instance.listener=event=>{
       const message=event.data;
       if(active!==instance||event.origin!==instance.origin||event.source!==frame.contentWindow||message?.channel!=='noname-packer'||message.matchId!==instance.gameId)return;
       if(message.type==='ready'){instance.ready=true;control(runtime.backgroundState().paused);}
       if(message.type==='playing')instance.idleMs=0;
+      if(message.type==='engine-status'){for(const field of ['phase','skill','actor'])instance[field]=typeof message[field]==='string'?message[field].slice(0,80):null;instance.round=Number.isSafeInteger(message.round)?message.round:0;instance.choosing=!!message.choosing;}
       if(['ready','replacement','result'].includes(message.type))runtime.trustedEngineEvent(instance.matchId,message).catch(error=>console.warn('NPC 过期事件已忽略：',error.message));
       if(message.type==='error')instance.error=String(message.text||'后台引擎报告错误。');
     };
@@ -34,8 +35,9 @@ export function createNpcEngine(runtime,{document=globalThis.document,window=glo
         else {
           control(state.paused);
           const elapsed=Math.min(2000,Math.max(0,Date.now()-active.lastCheckedAt));active.lastCheckedAt=Date.now();
-          if(!state.paused){if(active.ready)active.idleMs+=elapsed;else active.loadingMs+=elapsed;}
-          if(!state.paused&&(active.error||active.loadingMs>loadTimeoutMs||active.idleMs>stallTimeoutMs)){const {matchId}=active;const reason=active.error||(active.ready?'后台牌局长时间无进展，按技术中断作废，不计战绩。':'后台引擎载入超时。');remove();await runtime.failBackgroundMatch(matchId,reason);}
+          if(!state.paused){active.activeMs+=elapsed;if(active.ready)active.idleMs+=elapsed;else active.loadingMs+=elapsed;}
+          runtime.reportBackgroundProgress?.(active.matchId,{gameId:active.gameId,phase:active.phase,round:active.round,skill:active.skill||null,actor:active.actor||null,choosing:!!active.choosing,ready:active.ready,paused:state.paused,activeSeconds:Math.floor(active.activeMs/1000),idleSeconds:Math.floor(active.idleMs/1000)});
+          if(!state.paused&&(active.error||active.loadingMs>loadTimeoutMs||active.idleMs>stallTimeoutMs||active.activeMs>600000)){const {matchId}=active;const detail=`第 ${active.round} 轮 / ${active.phase||'loading'}${active.skill?' / '+active.skill:''}`;const reason=active.error||(active.ready?`后台牌局无进展或超过运行上限（${detail}），按技术中断作废，不计战绩。`:'后台引擎载入超时。');remove();await runtime.failBackgroundMatch(matchId,reason);}
           return;
         }
       }

@@ -9,12 +9,12 @@ export function memoryRepository(initial=null){
   };
 }
 
-export function browserRepository(indexedDB=globalThis.indexedDB){
+export function browserRepository(indexedDB=globalThis.indexedDB,databaseName='noname-card-shop-world-v2'){
   let opening,archiveIds=new Set();
   function open(){
     if(!opening)opening=new Promise((resolve,reject)=>{
       if(!indexedDB)return reject(new Error('当前环境不支持新版存档所需的 IndexedDB。'));
-      const request=indexedDB.open('noname-card-shop-world-v2',1);
+      const request=indexedDB.open(databaseName,1);
       request.onupgradeneeded=()=>request.result.createObjectStore('worlds');
       request.onerror=()=>reject(request.error);
       request.onblocked=()=>reject(new Error('存档库被另一页面占用，请关闭旧页面。'));

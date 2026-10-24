@@ -49,6 +49,14 @@
 
 ## 移动、对局、档案
 
+2026-10-24 修复补充：`actorsUpdated` 与 `shop.snapshot.actors` 只包含在场角色；离店 NPC 档案仍持久保存，`presence='offsite'` 不渲染、不占店内容量，不删除持卡/资金。旧无 presence 的活跃行程兼容，原闲置人群在载入时迁移离店。顾客停留/访问上限/路径停滞参数见 customerBehavior 的 lingerSeconds/maxVisitSeconds/pathStallSeconds，缺字段使用默认。
+
+`room.diagnostics` 返回 `{paused,pauseReasons,items}`，其中最近 20 场后台比赛含 matchId/gameId/status/mode/bout/wins/losses/result/error 和当前小局的实时 progress（round/phase/skill/actor/choosing/ready/paused/activeSeconds/idleSeconds）。通信心跳不作为实际出牌进展；实时诊断不计胜率，不承担完整引擎恢复。技术作废原因持久保存在比赛 error；牌桌提示区分交互暂停与技术中断。
+
+新增 `saves.days` 查询：`{items,note}`，每个自然日一条实际 `slot='start'`、08:00 档案，优先当前分支及其祖先。`saves.loadDay({archiveId})` 必须传真实日初档 ID，手动/打烊备份即使时间恰好 08:00 也返回 NOT_DAY_START。成功整体恢复当天起点、创建新分支和该分支日初档，并触发 worldReset；旧报价/操作不能跨分支复用。日初档优先保留在配置容量内，另保留新备份空间。原 saves.load 仍为精确时刻备份读取，两者在 UI 中分开。
+
+启动菜单通过 `modules/backend/profiles.mjs` 的 `profileRegistry` 管理本地卡店目录：list/create/get/rename/days/remove/close。它不连接 Host，不推进时间。`createHost({profileId})` 选择独立世界数据库；省略参数维持 legacy 兼容。旧 `noname-card-shop-world-v2` 原地保留并显示“原有卡店”，新 profile 使用独立数据库；不得用清空整个 origin 实现新建/删除。删除操作只清理选定档案库，用户须在菜单确认。
+
 - 玩家 actorId='actor:owner'，库存 ownerId='player'；两者不同。外观使用 owner/rookie/collector/competitor/passerby/regular/bigspender。
 - 查询 `player.skins` 返回 `{current,items:[{appearanceId,name,selected}]}`；命令 `player.setSkin({appearanceId})` 免费修改店长外观，非法 ID 原子拒绝。外观随世界存档恢复，身份、资金和持卡不变。
 - world.input 的 inputSeq 单调递增，仅为移动意图；不能通过 roomId 让角色瞬移。跨房先到出口，command `world.changeRoom({anchorId})`，确认权威 actorsUpdated 后换场景。

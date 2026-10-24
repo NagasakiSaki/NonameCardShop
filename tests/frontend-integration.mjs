@@ -21,7 +21,7 @@ try{
     const repo=browserRepository();await repo.commit({schemaVersion:2,revision:0,world:w,archives:[],requests:{},legacyResetDone:true},null);await repo.close();
   });
   // Keep the original UI as a compatibility/reference regression. Formal new trading has its own real-Host test.
-  await page.goto(server.origin+'/?tradeUI=classic');await page.waitForFunction(()=>window.__cardShopReady===true,null,{timeout:25000});
+  await page.goto(server.origin+'/?tradeUI=classic&profile=legacy');await page.waitForFunction(()=>window.__cardShopReady===true,null,{timeout:25000});
   assert.match(page.url(),/frontend\/index.html/);assert.equal(await page.locator('#mode-badge').isVisible(),false);
   // Exercise the public config contract in this isolated test world, keeping the foreground opponent free.
   await page.evaluate(async()=>{const h=__cardShopApp.host,c=(await h.query('config.list')).data.items.find(c=>c.configId==='backend-rules'),value=JSON.parse(c.text);value.npcAutoBattles=false;const r=await h.command({requestId:'integration-ai-config',type:'config.apply',payload:{configId:c.configId,value}});if(!r.ok)throw Error(JSON.stringify(r));});
@@ -78,7 +78,7 @@ try{
   const downloadPromise=page.waitForEvent('download');await page.getByRole('button',{name:'导出',exact:true}).click();const download=await downloadPromise,savePath=path.join(output,'export.json');await download.saveAs(savePath);assert.equal(JSON.parse(fs.readFileSync(savePath)).format,'noname-shop-world-save');await close();
   await page.getByRole('button',{name:'打烊结算',exact:true}).click();assert.equal((await query('shop.snapshot')).clock.phase,'closed');assert.match(await page.locator('[aria-label="当日日报"]').innerText(),/今日经营利润/);
   await close();await page.getByRole('button',{name:'开始下一天',exact:true}).click();assert.equal((await query('shop.snapshot')).clock.day,2);assert.equal((await query('inventory.list',{location:'trash'})).total,0);
-  await page.getByRole('button',{name:'存档',exact:true}).click();const row=page.locator('tr').filter({hasText:manual.branch}).filter({hasText:'手动'}).first();await row.getByRole('button',{name:'读取',exact:true}).click();await page.getByRole('button',{name:'确认读取',exact:true}).click();await until(async()=>(await query('shop.snapshot')).clock.day===1,'load day branch');
+  await page.getByRole('button',{name:'存档',exact:true}).click();await page.getByRole('button',{name:'即时备份',exact:true}).click();const row=page.locator('tr').filter({hasText:manual.branch}).filter({hasText:'手动'}).first();await row.getByRole('button',{name:'读取',exact:true}).click();await page.getByRole('button',{name:'确认读取',exact:true}).click();await until(async()=>(await query('shop.snapshot')).clock.day===1,'load day branch');
   const branch=(await query('shop.snapshot')).branchId;assert.notEqual(branch,manual.branchId);await close();
   await page.getByRole('button',{name:'存档',exact:true}).click();await page.locator('input[type=file]').setInputFiles(savePath);await page.getByRole('button',{name:'确认导入',exact:true}).click();await until(async()=>(await query('shop.snapshot')).branchId!==branch,'import branch');await close();
   await page.evaluate(()=>__cardShopApp.navigateScene('store'));await until(()=>page.evaluate(()=>__cardShopApp.currentMap().mapId==='store'&&__cardShopApp.getPlayer().roomId==='store'),'return room',20000);

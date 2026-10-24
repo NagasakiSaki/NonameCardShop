@@ -9,6 +9,9 @@ groups.dev.push('tests/character-kit/cli.mjs');groups.frontend.push('tests/front
 groups.trading=['tests/basket.mjs','tests/trade-cards.mjs','tests/trade-opening.mjs','tests/trade-card-detail.mjs','tests/trade-formal.mjs'];
 groups.backend.push('tests/basket.mjs');groups.frontend.push(...groups.trading.slice(1));
 groups.ui.push(...groups.trading.slice(1));
+groups.backend.push('tests/customer-visits.mjs');groups.frontend.push('tests/profile-menu.mjs');groups.ui.push('tests/profile-menu.mjs');groups.history.push('tests/profile-menu.mjs');
+groups.npc=['tests/customer-visits.mjs','tests/npc-natural-browser.mjs'];
+groups.backend.push('tests/day-starts.mjs');groups.history.push('tests/day-starts.mjs');
 const selection=process.argv[2]||'all';if(selection!=='all'&&!groups[selection])throw new Error(`未知测试组：${selection}`);
 const output=path.join(root,'test-results',new Date().toISOString().replace(/[:.]/g,'-')+`-${process.pid}`);fs.mkdirSync(output,{recursive:true});
 const results=[],summary={selection,output,startedAt:new Date().toISOString(),results};let runtime;

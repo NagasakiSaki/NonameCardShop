@@ -62,6 +62,12 @@ export function marketView(w,catalog,p){
   return page(w.listings.filter(l=>(p.status?l.status===p.status:l.status==='active')&&(!p.ownerId||l.ownerId===p.ownerId)&&(!p.tab||p.tab!=='mine'||l.ownerId==='player')&&(!p.tab||p.tab!=='buy'||l.ownerId!=='player')&&matches(l.cardKey,w.items[l.inventoryRef]?.printedRarity)).map(l=>({...fields(l.cardKey),...clone(l),quantity:1,rarity:w.items[l.inventoryRef]?.printedRarity,sellerType:l.ownerId==='player'?'shop':'npc',sellerName:l.ownerId==='player'?'本店':w.npcs.find(n=>n.actorId===l.ownerId)?.name})),p);
 }
 export function archiveMeta(a){const {world,...meta}=a;return {...clone(meta),saveId:a.id,archiveId:a.id,branch:a.branchId,source:['start','close'].includes(a.slot)?'auto':'manual',status:'readable'};}
+export function dayArchiveViews(archives,branchId,lineage=[]){
+  const byDay=new Map();
+  const branches=[branchId,...lineage],rank=a=>{const index=branches.indexOf(a.branchId);return index<0?Number.MAX_SAFE_INTEGER:index;};
+  for(const a of archives.filter(a=>a.slot==='start'&&a.minute===480).sort((a,b)=>rank(a)-rank(b)||(b.createdAt-a.createdAt))){if(!byDay.has(a.day))byDay.set(a.day,{...archiveMeta(a),source:'day-start',restoresDayStart:true});}
+  return [...byDay.values()].sort((a,b)=>b.day-a.day);
+}
 
 /** Public sealed inventory excludes manufactured packet/card contents. Counts and refs are authoritative. */
 export function sealedInventoryView(w){

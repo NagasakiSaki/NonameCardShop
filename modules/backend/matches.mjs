@@ -2,6 +2,7 @@ import {clone,need,integer,serial,sum,debit,credit,id} from './common.mjs';
 import {owned,free,wallet,income} from './trading.mjs';
 import {note} from './world.mjs';
 import {managementEffects} from './management.mjs';
+import {onSite} from './visits.mjs';
 
 export function eligible(w,catalog,ownerId='player'){
   return owned(w,ownerId).filter(i=>i.kind==='card').map(i=>{
@@ -18,7 +19,7 @@ export function combatPreview(w,catalog,p){
   need(!w.matches.some(m=>!m.background&&m.status!=='finished'),'MATCH_ACTIVE','请先完成或取消当前的玩家比赛。');
   const mode=p.mode||'bo3',n=mode==='bo3'?1:mode==='kof'?3:0;
   need(n,'INVALID_INPUT','只支持 KOF 与 BO3。');
-  const npc=p.opponentId?w.npcs.find(n=>n.actorId===p.opponentId):w.npcs.find(npc=>!npc.currentMatchId&&npc.wallet.available>=managementEffects(w).tableFee&&new Set(eligible(w,catalog,npc.actorId).filter(i=>i.eligible).map(i=>i.generalId)).size>=n);need(npc&&!npc.currentMatchId,'NOT_FOUND','暂时没有实际持卡、付得起桌费且空闲的顾客可组成该赛制阵容。');
+  const npc=p.opponentId?w.npcs.find(n=>n.actorId===p.opponentId):w.npcs.find(npc=>onSite(npc)&&!npc.currentMatchId&&npc.wallet.available>=managementEffects(w).tableFee&&new Set(eligible(w,catalog,npc.actorId).filter(i=>i.eligible).map(i=>i.generalId)).size>=n);need(npc&&onSite(npc)&&!npc.currentMatchId,'NOT_FOUND','暂时没有在店、实际持卡、付得起桌费且空闲的顾客可组成该赛制阵容。');
   const choose=(owner,refs)=>{
     const options=eligible(w,catalog,owner).filter(i=>i.eligible),team=[];
     if(refs){need(Array.isArray(refs)&&refs.length===n,'INVALID_INPUT','阵容人数不正确。');for(const ref of refs){const found=options.find(i=>i.inventoryRef===ref);need(found,'NOT_ELIGIBLE','阵容包含不具备流通资格、被锁定或未持有的牌。');team.push(found);}}
@@ -114,12 +115,13 @@ export function cancelPrepared(w,matchId){
   note(w,'matchCancelled',{matchId});return clone(m);
 }
 
-export function registerNpcMatch(w,catalog,table,npcs){
+export function registerNpcMatch(w,catalog,table,npcs,{mode='bo3'}={}){
   need(w.clock.phase==='open'&&npcs.length===2&&!table.matchId&&!table.reservation,'NOT_READY','当前不能开 NPC 桌。');
-  const teams=npcs.map(n=>{need(!n.currentMatchId,'ITEM_LOCKED','顾客已在其他牌局。');const card=eligible(w,catalog,n.actorId).filter(i=>i.eligible).sort((a,b)=>catalog.byKey.get(b.cardKey).globalScore-catalog.byKey.get(a.cardKey).globalScore)[0];need(card,'NOT_ELIGIBLE','顾客没有可用的流通卡。');return [card];});
+  need(['bo3','kof'].includes(mode),'INVALID_INPUT','NPC 赛制不正确。');
+  const teams=npcs.map(n=>{need(onSite(n)&&!n.currentMatchId,'ITEM_LOCKED','顾客未在店或已在其他牌局。');const cards=eligible(w,catalog,n.actorId).filter(i=>i.eligible).sort((a,b)=>catalog.byKey.get(b.cardKey).globalScore-catalog.byKey.get(a.cardKey).globalScore),team=[];for(const card of cards)if(!team.some(c=>c.generalId===card.generalId)&&team.length<(mode==='kof'?3:1))team.push(card);need(team.length===(mode==='kof'?3:1),'NOT_ELIGIBLE','顾客没有足够的不同流通武将。');return team;});
   const fee=managementEffects(w).tableFee;for(const npc of npcs)need(npc.wallet.available>=fee,'INSUFFICIENT_FUNDS','顾客支付不起开桌费。');
   for(const npc of npcs)debit(npc.wallet,fee);
-  const m={matchId:serial(w,'npc-match'),mode:'bo3',mine:clone(teams[0]),enemy:clone(teams[1]),mineOwnerId:npcs[0].actorId,enemyOwnerId:npcs[1].actorId,opponentId:npcs[1].actorId,background:true,tableId:table.tableId,
+  const m={matchId:serial(w,'npc-match'),mode,mine:clone(teams[0]),enemy:clone(teams[1]),mineOwnerId:npcs[0].actorId,enemyOwnerId:npcs[1].actorId,opponentId:npcs[1].actorId,background:true,tableId:table.tableId,
     status:'prepared',wins:0,losses:0,bout:1,results:[],gameId:null,first:0,stake:0,serviceHeld:fee*2,serviceContributions:npcs.map(n=>({ownerId:n.actorId,amount:fee})),serviceRecognized:false,progress:{mine:0,enemy:0},rules:{initialHand:4,firstDrawPenalty:1,winsRequired:2,ratingVersion:w.rules.ratingVersion,aiRoundLimit:w.rules.npcRoundLimit||60},createdDay:w.clock.day};
   w.wallet.escrowLiability+=fee*2;table.matchId=m.matchId;w.matches.push(m);for(const team of teams)for(const c of team)w.items[c.inventoryRef].lock=m.matchId;for(const npc of npcs)npc.currentMatchId=m.matchId;
   note(w,'npcMatchRegistered',{matchId:m.matchId,owners:npcs.map(n=>n.actorId),serviceHeld:fee*2});return m;
