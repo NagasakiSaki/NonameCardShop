@@ -1,0 +1,28 @@
+{
+  "reviewedAt": "2026-10-24T13:16:42.049Z",
+  "acceptedCodeCommit": "512e900e",
+  "packages": [
+    {
+      "id": "FAST-01",
+      "delivery": "deliverables/playability-v3/FAST-01/DELIVERY.md",
+      "sha256": "91d3f2964011ac8c37172660db0178c680401dad5c72821f04b61da824139fb6"
+    },
+    {
+      "id": "FAST-02",
+      "delivery": "deliverables/playability-v3/FAST-02/DELIVERY.md",
+      "sha256": "4ef72fc5a46770a04fbdad3c66aa63b7bebb120da25b39ddbda9077eaa0b2043"
+    },
+    {
+      "id": "FAST-03",
+      "delivery": "deliverables/playability-v3/FAST-03/DELIVERY.md",
+      "sha256": "133d4040d2ea599505d9362446dd64a7032026d691571d94f5a445bf2a2f98ff"
+    }
+  ],
+  "checks": {
+    "refinedCharacters": 25,
+    "facilityStates": 32,
+    "adaptedFacilitySources": 7
+  },
+  "status": "accepted-with-main-model-corrections",
+  "notes": "Original delivery folders retained. FAST-02 source interpretation corrections and HQ templates are recorded in docs/人物行走与设施升级第二批.md. FAST-04 is a separate next task."
+}
