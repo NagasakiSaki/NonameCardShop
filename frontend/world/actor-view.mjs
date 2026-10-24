@@ -65,7 +65,7 @@ export class ActorView {
       entry.activity = actor.activity;
       const meta=this.scene.characterMeta[appearance],parts=(actor.name||(actor.actorId===playerActorId?'店长':meta.displayName)).split(/[·｜|]/).map(s=>s.trim());
       if(entry.appearance!==appearance){entry.sprite.setTexture('char-'+appearance);entry.sprite.setOrigin(meta.anchorPx[0]/meta.frameWidth,meta.anchorPx[1]/meta.frameHeight).setScale(meta.displayScale||1);entry.appearance=appearance;}
-      const role=actor.actorId===playerActorId?'店主':(parts[1]||meta.role)+(actor.scavenger?' / 拾荒客':'');
+      const role=actor.actorId===playerActorId?'店主':actor.customerCategory||(parts[1]||meta.role)+(actor.scavenger?' / 拾牌客':'');
       const text=parts[0]+'\n'+role+(actor.label?'\n'+actor.label:'');
       if(entry.label&&entry.label.text!==text)entry.label.setText(text);
       entry.headHeight=meta.anchorPx[1]*(meta.displayScale||1)+5;

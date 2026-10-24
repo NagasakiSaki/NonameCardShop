@@ -12,9 +12,10 @@ const ART=path.join(ROOT,'experiments/character-art');
 const slug=/^[a-z][a-z0-9-]{0,63}$/;
 const part=/^[a-zA-Z0-9-]+$/;
 const color=/^#[0-9a-f]{6}$/i;
-const palettes=['hair','cloth','iris','secondary','otherEye','originalCloth','shoePalette'];
+const palettes=['hair','cloth','iris','secondary','otherEye','originalCloth','shoePalette','sleevePalette'];
 const protectedOutput=/^(assets|data|frontend|frontend-next|modules|vendor|experiments|tests|contracts|docs|tools|integration|desktop|dev|node_modules|\.git)([\\/]|$)/i;
 const costumes=new Set(Object.values(CHARACTER_AUDIT).map(c=>c.costume));
+const walkCostumes=new Set([...costumes,'ref-college','ref-bluedress','ref-gothic']);
 const inside=(parent,file)=>{const rel=path.relative(parent,file);return rel!==''&&!rel.startsWith('..'+path.sep)&&rel!=='..'&&!path.isAbsolute(rel);};
 export class KitError extends Error {
   constructor(code,message,details=[]){super(message);this.code=code;this.details=details;}
@@ -66,6 +67,7 @@ export function validateConfig(input){
       if(!BANDS.some(b=>b.id===c.band))add(field('band'),'BAND','当前完整立绘只支持五个已有团的绘制主题');
       if(!costumes.has(c.costume))add(field('costume'),'COSTUME','复制现有完整立绘时保留已注册 costume，未知款式需扩展核心绘制器');
     }
+    if(c.walkCostume!==undefined&&!walkCostumes.has(c.walkCostume))add(field('walkCostume'),'WALK_COSTUME','使用已注册行走版型，未知款式需扩展行走绘制器');
     if(c.walkTailLength!==undefined&&(!Number.isInteger(c.walkTailLength)||c.walkTailLength<0||c.walkTailLength>40))add(field('walkTailLength'),'RANGE','发尾长度必须是 0～40 的整数');
     if(partsValid){
       const lookup={base:'hair/base/',front:'hair/front/',back:'hair/back/',clothes:'cloths/',eyes:'eyes/',mouth:'mouth/'};

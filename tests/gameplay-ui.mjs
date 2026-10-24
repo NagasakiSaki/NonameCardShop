@@ -5,7 +5,7 @@ import {startShopServer} from '../server.mjs';
 const server=await startShopServer({port:0,enginePort:0});const browser=await chromium.launch();
 try{
  const page=await browser.newPage({viewport:{width:1440,height:950}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
- await page.goto(server.origin+'/?profile=legacy');await page.waitForFunction(()=>window.__cardShopReady===true);
+ await page.goto(server.origin+'/?tradeUI=previous&profile=legacy');await page.waitForFunction(()=>window.__cardShopReady===true);
  await page.evaluate(()=>__cardShopApp.goToInteraction('store.counter','supplier',{tab:'order'}));
  await page.getByRole('button',{name:'加入购物篮',exact:false}).first().waitFor();
  await page.waitForFunction(()=>__cardShopApp.isNearInteraction('store.counter'));

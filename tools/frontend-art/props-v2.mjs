@@ -1,3 +1,4 @@
+import {FACILITIES,paintFacility} from './facilities.mjs';
 // 二倍原生采样的设施和装饰；地图仍使用 16 像素导航单位。
 import {Img,mix,hash2} from './pixkit.mjs';
 export const ART_SCALE=2,PROP_CELL=192;
@@ -23,7 +24,9 @@ function kit(c){return {
 function panel(k,x,y,w,h,c){k.r(x,y,w,h,P.ink);k.r(x+1,y+1,w-2,h-2,c);k.r(x+2,y+1,w-4,.5,mix(c,'#fff5d8',.35));k.r(x+w-2,y+2,1,h-3,mix(c,P.ink,.25));}
 function pack(k,x,y,c,w=6,h=10){panel(k,x,y,w,h,c);k.r(x+1,y+1,w-2,1,P.gold);k.r(x+1,y+h-2,w-2,.5,P.cream);k.r(x+w/2-1,y+3,2,3,P.cream);k.d(x+w/2,y+4,P.gold);}
 function wood(k,x,y,w,h,c=P.wood){panel(k,x,y,w,h,c);for(let yy=y+3;yy<y+h-2;yy+=4){k.r(x+2,yy,w-4,.5,mix(c,P.ink,.12));for(let xx=x+4;xx<x+w-4;xx+=13)k.r(xx,yy+1,6,.5,mix(c,P.edge,.18));}}
+for(const f of FACILITIES){PROPS.push(f.id);const {id,...meta}=f;PROP_META[f.id]=meta;}
 function prop(name){
+  if(name.startsWith('pa_'))return paintFacility(name);
   const c=new Img(PROP_CELL,PROP_CELL),k=kit(c),m=PROP_META[name];
   // 接触阴影有低对比软边，避免家具像贴纸悬浮。
   if(m.blocks.length){k.e(m.w/2,m.h-2,m.w/2-1,3,[35,30,40,45]);}

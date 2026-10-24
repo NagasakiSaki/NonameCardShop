@@ -1,3 +1,4 @@
+import {OVERRIDES as WALK_REFINEMENTS} from './walk-refinement.mjs';
 // Appearance only. Never use this registry to decide wallets, personalities or card preferences.
 // Official visual references were inspected on 2026-10-24; the PNGs are redrawn/composed pixel studies.
 import {CHARACTER_AUDIT} from './character-audit.mjs';
@@ -38,4 +39,4 @@ export const BAND_APPEARANCES=[
   p('yomogi','ikka-dumb-rock','矢仓蓬咲','yakura-yomogi',['#b8b5c9','#827f9b','#51506d'],['#c6d8ae','#8ca579','#53674f'],'female10','female02','short01','female11',['#6b8094','#3c5268','#293b51'],'asym-bob','earrings','灰紫不对称短鲍勃、长侧刘海、浅绿眼、蓝条纹宽外套'),
   p('chieri','ikka-dumb-rock','梅里千绘里','umezato-chieri',['#f8b9b8','#d78b96','#955d77'],['#e4d7a8','#ab9f71','#6f6b53'],'female07','female01','pigtails01','female07',['#ed9acb','#bc6ba0','#7f477b'],'braids','star-clips','珊瑚粉双辫、黑色交叉夹与星星夹、粉紫短上衣'),
   p('shizuku','ikka-dumb-rock','四宫宁月','shinomiya-shizuku',['#fff0d5','#e7c3a7','#ac877e'],['#d4b9e9','#a27db8','#665084'],'female08','female06','pigtails01','female11',['#a6a7a9','#747b88','#474e65'],'twins','cross-pins','浅金粉双马尾、交叉发夹、紫眼、灰衣黄背带与条纹袖',{accent:'#e6dc7c'})
-];
+].map(c=>{const o=WALK_REFINEMENTS[c.id];return o?{...c,...o,costume:c.costume,walkCostume:o.costume||c.costume}:c;});

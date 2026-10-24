@@ -1,6 +1,6 @@
 import {buildStoreMap as originalStore,buildBattleRoomMap as originalBattle} from './maps.mjs';
 import {PROP_META,TILES} from './props-v2.mjs';
-export const TILE=16,MAP_W=30,MAP_H=20,NAV_VERSION='nav-2026-10-24-split-counters';
+export const TILE=16,MAP_W=30,MAP_H=20,NAV_VERSION='nav-2026-10-24-playability-facilities';
 const at=(x,y)=>({x:x*16+8,y:y*16+8,tile:{x,y}});
 const storeProps=[
   ['rug',176,112],['shelf',24,40],['shelf',24,112],['shelf',192,32],
@@ -21,6 +21,14 @@ const battleProps=[
   ['clock',240,2],['speaker',424,96],['lamp',8,48],['lamp',336,224],
   ['door_mat',0,136],['case_stack',352,160],
 ];
+const PROP_UPGRADES={shelf:'pa_shelf_full',display_packs:'pa_display_packs',display_boxes:'pa_display_boxes',counter_retail:'pa_counter_cashier',counter_service:'pa_counter_procure',trash:'pa_trash',table:'pa_table_idle',rug:'pa_rug_round'};
+ for(const list of [storeProps,battleProps])for(const p of list){p[0]=PROP_UPGRADES[p[0]]||p[0];}
+ storeProps.find(p=>p[0]==='pa_counter_procure'&&p[1]===144)[0]='pa_counter_opening';
+ const market=storeProps.find(p=>p[0]==='kiosk');market[0]='pa_counter_market';market[2]+=16;
+ storeProps.push(['pa_wall_display',136,2],['pa_wall_display',352,2],['pa_lamp_hang',208,0],['pa_cabinet_collect',416,120]);
+ // The candidate's extra rack at (296,232) blocks the procurement stand: replace an existing stack instead.
+ const rack=storeProps.find(p=>p[0]==='case_stack'&&p[1]===352);rack[0]='pa_box_rack';
+
 function make(id,base,placements){
   const map=structuredClone(base.map),walk=Array(MAP_W*MAP_H).fill(0),floor=[],walls=[];
   const index=name=>TILES.indexOf(name);
@@ -55,19 +63,19 @@ function make(id,base,placements){
     {x:240,y:29,text:'CARD CLUB  /  PLAY & CHILL',color:'#405d58',brand:true},
   ];
   for(const i of map.interactions){
-    const kind=i.kind==='retail'?'display_packs':i.kind==='counter'?'counter_service':i.kind==='trash'?'trash':'kiosk';
-    i.props=map.props.filter(p=>i.kind==='retail'?['display_packs','display_boxes','counter_retail','shelf'].includes(p.prop):p.prop===kind).map(p=>p.id);
+    const kind=i.kind==='retail'?'pa_display_packs':i.kind==='counter'?'pa_counter_procure':i.kind==='trash'?'pa_trash':id==='store'?'pa_counter_market':'kiosk';
+    i.props=map.props.filter(p=>i.kind==='retail'?['pa_display_packs','pa_display_boxes','pa_counter_cashier','pa_shelf_full'].includes(p.prop):p.prop===kind).map(p=>p.id);
     if(i.kind==='retail'){i.anchor={x:136,y:80};i.label='卡包 / 卡盒零售';}
     if(i.kind==='trash'){i.anchor={x:444,y:274};i.label='共享垃圾桶';}
   }
   if(id==='store'){
-    const counter=map.interactions.find(i=>i.id==='store.counter');counter.label='进货 / 收货台';counter.props=['counter_service.08'];
-    map.interactions.find(i=>i.id==='store.retail').props=map.interactions.find(i=>i.id==='store.retail').props.filter(id=>id!=='counter_retail.07');
-    map.interactions.push({id:'store.checkout',label:'顾客收银台',kind:'retail',anchor:{x:80,y:240},stand:at(5,16),radius:24,props:['counter_retail.07']});
-    map.interactions.push({id:'store.opening',label:'独立拆包工作台',kind:'opening',panel:'opening',anchor:{x:176,y:240},stand:at(11,16),radius:24,props:['counter_service.29']});
+    const counter=map.interactions.find(i=>i.id==='store.counter');counter.label='进货 / 收货台';counter.props=['pa_counter_procure.08'];
+    map.interactions.find(i=>i.id==='store.retail').props=map.interactions.find(i=>i.id==='store.retail').props.filter(id=>id!=='pa_counter_cashier.07');
+    map.interactions.push({id:'store.checkout',label:'顾客收银台',kind:'retail',anchor:{x:80,y:240},stand:at(5,16),radius:24,props:['pa_counter_cashier.07']});
+    map.interactions.push({id:'store.opening',label:'独立拆包工作台',kind:'opening',panel:'opening',anchor:{x:176,y:240},stand:at(11,16),radius:24,props:['pa_counter_opening.29']});
   }
   if(id==='battle-room')map.tables.forEach((table,index)=>{
-    const p=map.props.filter(p=>p.prop==='table')[index];
+    const p=map.props.filter(p=>p.prop==='pa_table_idle')[index];
     map.interactions.push({id:'battleRoom.'+table.id,label:table.label+' · 直接入座',kind:'table',tableId:'battleRoom.'+table.id,anchor:{x:p.x+p.w/2,y:p.y+p.h/2},stand:table.observerSpots[0],radius:28,props:[p.id]});
   });
   const door=map.exits.find(e=>e.target);

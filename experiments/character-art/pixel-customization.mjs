@@ -1,3 +1,4 @@
+import {composeWalk as composeRefinedWalk} from './walk-refinement.mjs';
 // Pure pixel operations, shared by the browser and Node exporter. No DOM or game state.
 export const blank=(width,height)=>({width,height,data:new Uint8ClampedArray(width*height*4)});
 export const rgb=hex=>hex.replace('#','').match(/../g).map(v=>parseInt(v,16));
@@ -102,7 +103,7 @@ function walkCostume(d,c,row,col){
     else {torso('#999da2');skirt(black);if(front){d.line(-4,20,-1,29,'#e2d77e');d.line(4,20,1,29,'#e2d77e');d.rect(-9,25,2,6,'#bf7778');for(let y=25;y<32;y+=2)d.put(-9,y,white);}}
   }
 }
-export function composeWalk(c,sources){
+function composeLegacyWalk(c,sources){
   const out=blank(512,256),names=walkLayerNames(c);if(!c.band){for(const name of names)blend(out,sources[name]);return walkFaces(out,c,sources.head);}
   const [body,pants,shirt,shoes,head,hair]=names.map(n=>sources[n]);
   const legwear=recolor(pants,c.walkLegwear==='pants-white'?['#faf8f0','#ccd5dc','#8b9aa8']:['#596174','#303744','#202636']);
@@ -139,3 +140,5 @@ export function composeWalk(c,sources){
   }
   return walkFaces(out,c,head);
 }
+
+export function composeWalk(c,sources,...args){return c.walkCostume?composeRefinedWalk({...c,costume:c.walkCostume},sources,...args):composeLegacyWalk(c,sources);}

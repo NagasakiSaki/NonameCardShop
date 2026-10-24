@@ -25,7 +25,7 @@ export function validateExperienceConfig(c){
 export function initialiseExperience(w,{fresh=false}={}){
   if(!w.experience)w.experience={version:1,config:clone(DEFAULT_SHOP_EXPERIENCE),trackingSince:{day:w.clock.day,minute:w.clock.minute},guide:{skipped:!fresh},milestones:{},days:{},stories:[],events:[]};
   const x=w.experience,key=String(w.clock.day);
-  if(!x.days[key])x.days[key]={day:w.clock.day,coverage:fresh||w.clock.day>x.trackingSince.day&&w.clock.minute===480&&w.clock.phase==='preparing'?'complete':'partial',arrived:0,departed:0,outcomes:{purchased:0,played:0,scavenged:0,unconverted:0,interrupted:0},reasons:{},issues:{},products:{},taskRewards:0,openingCash:w.wallet.available,openingDebt:w.wallet.debt};
+  if(!x.days[key])x.days[key]={day:w.clock.day,coverage:fresh||w.clock.day>x.trackingSince.day&&w.clock.minute===480&&w.clock.phase==='preparing'?'complete':'partial',arrived:0,departed:0,outcomes:{purchased:0,played:0,scavenged:0,unconverted:0,interrupted:0},reasons:{},issues:{},products:{},departures:[],taskRewards:0,procurementCash:0,procurementCredit:0,taskCash:0,taskDebtOffset:0,openingCash:w.wallet.available,openingDebt:w.wallet.debt};
   const cutoff=w.clock.day-Math.max(2,Math.min(w.rules.maxDays||30,120))+1;
   for(const key of Object.keys(x.days))if(Number(key)<cutoff)delete x.days[key];
   return x;
@@ -44,6 +44,8 @@ export function validateExperience(w){
     need(String(d.day)===key&&Number.isSafeInteger(d.day)&&d.day>=1&&['complete','partial'].includes(d.coverage)&&['arrived','departed','taskRewards','openingCash','openingDebt'].every(k=>number(d[k]))&&object(d.outcomes)&&['purchased','played','scavenged','unconverted','interrupted'].every(k=>number(d.outcomes[k]))&&object(d.reasons)&&object(d.issues)&&object(d.products),'INVALID_SAVE','顾客日统计不正确。');
     need(Object.values(d.outcomes).reduce((a,b)=>a+b,0)===d.departed&&Object.entries(d.reasons).every(([k,v])=>Object.hasOwn(FEEDBACK_REASONS,k)&&number(v))&&Object.entries(d.issues).every(([k,v])=>Object.hasOwn(FEEDBACK_REASONS,k)&&number(v))&&Object.values(d.reasons).reduce((a,b)=>a+b,0)===d.outcomes.unconverted,'INVALID_SAVE','离店人数与原因口径不一致。');
     for(const key of ['closingCash','closingDebt'])need(d[key]===undefined||number(d[key]),'INVALID_SAVE','历史日终余额不正确。');
+    for(const key of ['procurementCash','procurementCredit','taskCash','taskDebtOffset'])need(d[key]===undefined||number(d[key]),'INVALID_SAVE','日现金流拆分不正确。');
+    need(d.departures===undefined||Array.isArray(d.departures)&&d.departures.length<=20&&d.departures.every(e=>typeof e.visitId==='string'&&typeof e.actorId==='string'&&typeof e.name==='string'&&Number.isFinite(e.minute)&&Object.hasOwn(d.outcomes,e.outcome)&&Object.hasOwn(FEEDBACK_REASONS,e.reason)),'INVALID_SAVE','最近离店记录不正确。');
     need(Object.keys(d.products).length<=200&&Object.values(d.products).every(p=>typeof p.productId==='string'&&['pack','box'].includes(p.kind)&&['sold','revenue','stockoutVisits'].every(k=>number(p[k]))),'INVALID_SAVE','商品需求记录不正确。');
   }
   for(const s of x.stories)need(typeof s?.storyId==='string'&&typeof s.sourceEventId==='string'&&typeof s.type==='string'&&Number.isSafeInteger(s.day)&&Number.isFinite(s.minute),'INVALID_SAVE','本店记录来源不完整。');
@@ -52,6 +54,15 @@ export function validateExperience(w){
 function productRow(d,productId,kind='pack'){
   const key=JSON.stringify([productId,kind]);
   return d.products[key]??=( {productId,kind,sold:0,revenue:0,stockoutVisits:0} );
+}
+export function recordExperienceCash(w,entry){
+  const d=w.experience?.days[String(w.clock.day)];if(!d)return;
+  // Missing fields in an older day's observations remain unknown, never retrofilled as zero.
+  if(entry.kind==='task'){if(d.taskCash!==undefined)d.taskCash+=Math.max(0,entry.amount);if(d.taskDebtOffset!==undefined)d.taskDebtOffset+=Math.max(0,-entry.debtDelta);}
+  if(['supplier.placeOrder','supplier.placeBasketOrder','market.acceptTrade','neighbors.act'].includes(entry.operation)){
+    if(d.procurementCash!==undefined)d.procurementCash+=Math.max(0,-entry.amount);
+    if(d.procurementCredit!==undefined)d.procurementCredit+=Math.max(0,entry.debtDelta);
+  }
 }
 function story(w,e,type,extra={}){
   const x=w.experience;
@@ -102,6 +113,8 @@ export function recordExperienceEvent(w,e){
       const technical=/path|route|unreachable|unknown-stage/.test(e.reason||'');
       const outcome=v.purchases?'purchased':v.matches?'played':v.pickups?'scavenged':technical?'interrupted':'unconverted';
       d.outcomes[outcome]++;
+      const reason=outcome==='interrupted'?'technical':['closing','business-closed'].includes(e.reason)?'closed':e.reason==='visit-timeout'?'queue-timeout':v.lastIssue||'no-offer';
+      (d.departures??=[]).push({visitId:v.visitId,actorId:e.actorId,name:npc.name||'顾客',minute:w.clock.minute,outcome,reason});d.departures=d.departures.slice(-20);
       if(outcome==='unconverted'){
         const reason=['closing','business-closed'].includes(e.reason)?'closed':e.reason==='visit-timeout'?'queue-timeout':v.lastIssue||'no-offer';
         d.reasons[reason]=(d.reasons[reason]||0)+1;
@@ -176,5 +189,5 @@ export function experienceInsights(w,catalog,day=w.clock.day){
   if(d.issues['table-full'])suggestions.push({code:'TABLE_CAPACITY',text:'顾客遇到了满桌；观察占桌时间和实际桌位，不要只提高收费。',evidence:{visits:d.issues['table-full']},guide:'battleRoom.service'});
   if(!suggestions.length)suggestions.push({code:'OBSERVE',text:d.arrived?'比较密封商品、单卡与桌费的收入，再选择下一次投资。':'准备好货架再开门，观察第一位顾客的购买反馈。',evidence:{arrivals:d.arrived},guide:'store.retail'});
   const endCash=current?w.wallet.available:d.closingCash,endDebt=current?w.wallet.debt:d.closingDebt;
-  return {day,coverage:d.coverage,trackingSince:clone(w.experience.trackingSince),visits:{arrived:d.arrived,departed:d.departed,active:current?w.npcs.filter(n=>n.presence!=='offsite'&&n.visit).length:0,outcomes:clone(d.outcomes),unconvertedReasons:Object.entries(d.reasons).map(([code,count])=>({code,label:FEEDBACK_REASONS[code],count})),issueVisits:Object.entries(d.issues).map(([code,count])=>({code,label:FEEDBACK_REASONS[code],count})),note:'离店结果每次访问只记一种；问题按访问与原因去重，一个访问可能有多个问题。技术中断单列，不算经营流失。'},products,suggestions,cash:{opening:d.openingCash,closing:endCash??null,change:endCash===undefined?null:endCash-d.openingCash,debtChange:endDebt===undefined?null:endDebt-d.openingDebt,taskRewards:d.taskRewards},...(current?{customers:w.npcs.filter(n=>n.presence!=='offsite').map(n=>({actorId:n.actorId,name:n.name,category:n.customerCategory||'顾客',intent:clone(n.visit?.intent||null),activity:n.activity,label:n.label,lastIssue:n.visit?.lastIssue||null}))}:{})};
+  return {day,coverage:d.coverage,trackingSince:clone(w.experience.trackingSince),departures:clone(d.departures||[]),visits:{arrived:d.arrived,departed:d.departed,active:current?w.npcs.filter(n=>n.presence!=='offsite'&&n.visit).length:0,outcomes:clone(d.outcomes),unconvertedReasons:Object.entries(d.reasons).map(([code,count])=>({code,label:FEEDBACK_REASONS[code],count})),issueVisits:Object.entries(d.issues).map(([code,count])=>({code,label:FEEDBACK_REASONS[code],count})),note:'离店结果每次访问只记一种；问题按访问与原因去重，一个访问可能有多个问题。技术中断单列，不算经营流失。'},products,suggestions,cash:{opening:d.openingCash,openingDebt:d.openingDebt,closing:endCash??null,change:endCash===undefined?null:endCash-d.openingCash,debtChange:endDebt===undefined?null:endDebt-d.openingDebt,taskRewards:d.taskRewards,procurementCash:d.procurementCash??null,procurementCredit:d.procurementCredit??null,taskCash:d.taskCash??null,taskDebtOffset:d.taskDebtOffset??null},...(current?{customers:w.npcs.filter(n=>n.presence!=='offsite').map(n=>({actorId:n.actorId,name:n.name,category:n.customerCategory||'顾客',intent:clone(n.visit?.intent||null),activity:n.activity,label:n.label,lastIssue:n.visit?.lastIssue||null}))}:{})};
 }

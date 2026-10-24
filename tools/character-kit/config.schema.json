@@ -22,11 +22,12 @@
         "eyes": {"$ref": "#/$defs/part"}, "mouth": {"$ref": "#/$defs/part"}, "walkHair": {"$ref": "#/$defs/part"},
         "hair": {"$ref": "#/$defs/palette"}, "cloth": {"$ref": "#/$defs/palette"}, "iris": {"$ref": "#/$defs/palette"},
         "secondary": {"$ref": "#/$defs/palette"}, "otherEye": {"$ref": "#/$defs/palette"},
-        "originalCloth": {"$ref": "#/$defs/palette"}, "shoePalette": {"$ref": "#/$defs/palette"},
+        "originalCloth": {"$ref": "#/$defs/palette"}, "shoePalette": {"$ref": "#/$defs/palette"}, "sleevePalette": {"$ref": "#/$defs/palette"},
         "streak": {"type": "string", "pattern": "^#[0-9a-fA-F]{6}$"}, "accent": {"type": "string", "pattern": "^#[0-9a-fA-F]{6}$"},
         "walkTailLength": {"type": "integer", "minimum": 0, "maximum": 40},
         "band": {"enum": ["mygo", "avemujica", "yumemita", "millsage", "ikka-dumb-rock"]},
-        "costume": {"type": "string", "description": "Existing costume ID from data/character-audit.mjs; checked by the CLI."}
+        "costume": {"type": "string", "description": "Existing portrait costume ID from data/character-audit.mjs; checked by the CLI."},
+        "walkCostume": {"type": "string", "description": "Optional refined walk renderer costume: existing costume ID or ref-college/ref-bluedress/ref-gothic; checked by the CLI."}
       },
       "if": {"required": ["band"]},
       "then": {"required": ["costume"]},

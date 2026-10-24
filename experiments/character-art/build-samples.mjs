@@ -1,5 +1,6 @@
 // Model-independent, deterministic CLI. No game saves or browser session required.
 import fs from 'node:fs';
+import {writeFileAtomic} from '../../tools/frontend-art/atomic-file.mjs';
 import path from 'node:path';
 import {createRequire} from 'node:module';
 import assert from 'node:assert/strict';
@@ -38,11 +39,11 @@ function gallery(items,columns,scale=2){const native=blank(columns*104,Math.ceil
 const bands=presets.filter(c=>c.band);if(bands.length)write('five-bands-portraits.png',gallery(bands,5));
 for(const band of [...new Set(bands.map(c=>c.band))]){const items=bands.filter(c=>c.band===band),im=blank(136*items.length,240);for(let i=0;i<im.data.length;i+=4)im.data.set([32,42,42,255],i);items.forEach((c,i)=>blend(im,standing.get(c.id),i*136+4,8));write(band+'-standing-lineup.png',im);}
 if(presets.length===PRESETS.length){write('portraits-comparison.png',gallery(presets.slice(0,3),3,4));write('collector-closed-96.png',portrait({...presets[1],eyes:'closed01'}));}
-fs.writeFileSync(path.join(out,'appearances.json'),JSON.stringify({version:3,avatarSize:[96,96],standingSize:[128,224],walkFrame:[64,64],walkDirections:{up:0,left:1,down:2,right:3},presets:rows,sources:['../CREDITS.md']},null,2));
+writeFileAtomic(path.join(out,'appearances.json'),JSON.stringify({version:3,avatarSize:[96,96],standingSize:[128,224],walkFrame:[64,64],walkDirections:{up:0,left:1,down:2,right:3},presets:rows,sources:['../CREDITS.md']},null,2));
 fs.writeFileSync(path.join(out,'gallery.html'),'<!doctype html><meta charset="utf-8"><title>人物素材导出</title><style>body{background:#202a2a;color:#f2ede0;font:16px sans-serif;margin:24px}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(144px,1fr));gap:12px}figure{margin:0;background:#2b3838;padding:12px}img{width:128px;height:224px;object-fit:contain;image-rendering:pixelated}small{display:block;color:#b8c7bf}</style><h1>人物像素外观 · 导出目录</h1><p>外观与职业、性格、资金无关。</p><main>'+[...rows.filter(c=>c.band),...rows.filter(c=>!c.band)].map(c=>`<figure><img src="${c.portrait}" alt="${c.name}"><figcaption>${c.name}<small>${c.band||'基础模板'} / ${c.id}</small></figcaption></figure>`).join('')+'</main>');
 if(args.includes('--install')){
   assert.ok(!input&&!arg('--id')&&out===path.join(here,'generated'),'安装必须使用完整内置配置及默认输出目录');
   const {applyCharacterPack}=await import('../../tools/frontend-art/character-pack.mjs');
-  const file=path.join(root,'assets/frontend/manifest.json'),manifest=JSON.parse(fs.readFileSync(file));applyCharacterPack(manifest);fs.writeFileSync(file,JSON.stringify(manifest,null,2));
+  const file=path.join(root,'assets/frontend/manifest.json'),manifest=JSON.parse(fs.readFileSync(file));applyCharacterPack(manifest);writeFileAtomic(file,JSON.stringify(manifest,null,2));
 }
 console.log(`PASS: ${rows.length} 套透明头像与四向八帧图集，表情/调色/确定性导出通过。输出 ${out}${args.includes('--install')?'；已接入游戏资源清单':''}`);

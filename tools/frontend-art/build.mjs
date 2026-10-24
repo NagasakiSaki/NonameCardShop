@@ -1,5 +1,6 @@
 // tools/frontend-art/build.mjs — 生成 assets/frontend 全部素材与清单。可重复执行，同参数同输出。
 import fs from "node:fs";
+import {writeFileAtomic} from './atomic-file.mjs';
 import path from "node:path";
 import { encodePng } from "./png.mjs";
 import { PALETTE, Img } from "./pixkit.mjs";
@@ -60,8 +61,8 @@ export function buildAll() {
   const battle = buildBattleRoomMap();
   if (!store.ok) throw new Error("store 地图校验失败: " + store.problems.join("; "));
   if (!battle.ok) throw new Error("battle-room 地图校验失败: " + battle.problems.join("; "));
-  fs.writeFileSync(path.join(OUT, "maps", "store.json"), JSON.stringify(store.map, null, 1));
-  fs.writeFileSync(path.join(OUT, "maps", "battle-room.json"), JSON.stringify(battle.map, null, 1));
+  writeFileAtomic(path.join(OUT, "maps", "store.json"), JSON.stringify(store.map, null, 1));
+  writeFileAtomic(path.join(OUT, "maps", "battle-room.json"), JSON.stringify(battle.map, null, 1));
 
   const manifest = {
     schemaVersion: 1,
@@ -112,7 +113,7 @@ export function buildAll() {
     },
   };
   applyCharacterPack(manifest);
-  fs.writeFileSync(path.join(OUT, "manifest.json"), JSON.stringify(manifest, null, 2));
+  writeFileAtomic(path.join(OUT, "manifest.json"), JSON.stringify(manifest, null, 2));
 
   const total = written.reduce((sum, item) => sum + item.bytes, 0);
   return { written, totalBytes: total, manifest, maps: { store: store.map, battle: battle.map } };

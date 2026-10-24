@@ -1,7 +1,7 @@
 {
  "mapId": "battle-room",
  "label": "牌友会馆 · 对战与休憩",
- "navVersion": "nav-2026-10-24-split-counters",
+ "navVersion": "nav-2026-10-24-playability-facilities",
  "tileSize": 16,
  "width": 30,
  "height": 20,
@@ -1221,35 +1221,52 @@
  ],
  "props": [
   {
-   "id": "rug.01",
-   "prop": "rug",
+   "id": "pa_rug_round.01",
+   "prop": "pa_rug_round",
    "x": 72,
    "y": 72,
    "w": 96,
-   "h": 64,
-   "footY": 64,
+   "h": 48,
+   "footY": 48,
+   "occludes": false,
    "blocks": [],
-   "occludes": false
+   "stand": [
+    48,
+    56
+   ],
+   "depth": "flat",
+   "family": null,
+   "state": null,
+   "label": "圆毯"
   },
   {
-   "id": "rug.02",
-   "prop": "rug",
+   "id": "pa_rug_round.02",
+   "prop": "pa_rug_round",
    "x": 248,
    "y": 168,
    "w": 96,
-   "h": 64,
-   "footY": 64,
+   "h": 48,
+   "footY": 48,
+   "occludes": false,
    "blocks": [],
-   "occludes": false
+   "stand": [
+    48,
+    56
+   ],
+   "depth": "flat",
+   "family": null,
+   "state": null,
+   "label": "圆毯"
   },
   {
-   "id": "table.03",
-   "prop": "table",
+   "id": "pa_table_idle.03",
+   "prop": "pa_table_idle",
    "x": 80,
    "y": 64,
    "w": 64,
    "h": 48,
    "footY": 48,
+   "occludes": true,
    "blocks": [
     [
      0,
@@ -1258,16 +1275,24 @@
      32
     ]
    ],
-   "occludes": true
+   "stand": [
+    32,
+    58
+   ],
+   "depth": "y",
+   "family": "table",
+   "state": "idle",
+   "label": "牌桌·空闲"
   },
   {
-   "id": "table.04",
-   "prop": "table",
+   "id": "pa_table_idle.04",
+   "prop": "pa_table_idle",
    "x": 256,
    "y": 160,
    "w": 64,
    "h": 48,
    "footY": 48,
+   "occludes": true,
    "blocks": [
     [
      0,
@@ -1276,7 +1301,14 @@
      32
     ]
    ],
-   "occludes": true
+   "stand": [
+    32,
+    58
+   ],
+   "depth": "y",
+   "family": "table",
+   "state": "idle",
+   "label": "牌桌·空闲"
   },
   {
    "id": "chair.05",
@@ -1369,13 +1401,14 @@
    "occludes": true
   },
   {
-   "id": "shelf.10",
-   "prop": "shelf",
+   "id": "pa_shelf_full.10",
+   "prop": "pa_shelf_full",
    "x": 24,
    "y": 24,
    "w": 64,
    "h": 56,
    "footY": 56,
+   "occludes": true,
    "blocks": [
     [
      0,
@@ -1384,7 +1417,14 @@
      16
     ]
    ],
-   "occludes": true
+   "stand": [
+    32,
+    62
+   ],
+   "depth": "y",
+   "family": "shelf",
+   "state": "full",
+   "label": "货架·充足"
   },
   {
    "id": "board.11",
@@ -1477,13 +1517,14 @@
    "occludes": true
   },
   {
-   "id": "shelf.16",
-   "prop": "shelf",
+   "id": "pa_shelf_full.16",
+   "prop": "pa_shelf_full",
    "x": 400,
    "y": 192,
    "w": 64,
    "h": 56,
    "footY": 56,
+   "occludes": true,
    "blocks": [
     [
      0,
@@ -1492,7 +1533,14 @@
      16
     ]
    ],
-   "occludes": true
+   "stand": [
+    32,
+    62
+   ],
+   "depth": "y",
+   "family": "shelf",
+   "state": "full",
+   "label": "货架·充足"
   },
   {
    "id": "plant.17",
@@ -2311,7 +2359,7 @@
    },
    "radius": 28,
    "props": [
-    "table.03"
+    "pa_table_idle.03"
    ]
   },
   {
@@ -2333,7 +2381,7 @@
    },
    "radius": 28,
    "props": [
-    "table.04"
+    "pa_table_idle.04"
    ]
   }
  ],

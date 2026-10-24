@@ -70,7 +70,7 @@ function releaseMatch(w,m){
 function refundService(w,m){if(!m.serviceRecognized){for(const c of m.serviceContributions||[{ownerId:m.opponentId,amount:m.serviceHeld}])credit(wallet(w,c.ownerId),c.amount);w.wallet.escrowLiability-=m.serviceHeld;m.serviceHeld=0;}}
 function finish(w,m,result){
   if(m.status==='finished')return;
-  m.status='finished';m.result=result;w.lifetime.matches++;
+  m.status='finished';m.result=result;m.finishedAt={day:w.clock.day,minute:w.clock.minute};w.lifetime.matches++;
   const metric=m.background?'npcMatches':'playerMatches';w.lifetime[metric]=(w.lifetime[metric]||0)+1;
   const mine=ownerId(m,'mine'),enemy=ownerId(m,'enemy'),pool=m.stake*2;
   if(result==='draw'){pay(w,mine,m.stake);pay(w,enemy,m.stake);}

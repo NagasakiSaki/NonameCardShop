@@ -15,6 +15,8 @@ node tools/character-kit/audit.mjs --out .local/collaboration/QA-01/new-review -
 
 `list-parts` 返回实际存在的 PNG 部件（路径、尺寸、许可）、28 套模板的完整配置、规格和署名入口。复制模板配置后编辑，不猜文件名。`validate` 接受人物对象、非空数组、`{presets:[...]}`、网页导出的 `{portrait:{...}}`；生成清单中的 portrait PNG 路径不能作为人物配置。字段补全用 [config.schema.json](config.schema.json)；文件存在性、ID 重复、costume 注册等额外约束由 CLI 核对。允许原工具的附加元数据，不把它们伪装成已冻结的 v2 契约。
 
+行走精修使用可选 `walkCostume`，与立绘的 `costume` 分开；四人覆盖参数在 `data/walk-refinement.mjs`，绘制器在 `experiments/character-art/walk-refinement.mjs`。`ref-college`、`ref-bluedress`、`ref-gothic` 是新增行走版型，其余已注册版型也可用于精修路径。`sleevePalette` 为可选的三色袖子调色板。修改行走时保留原 `costume`，避免误改完整立绘；正式用户图源立绘继续走登记覆盖。
+
 校验失败返回结构化 `errors:[{path,code,message}]`；例如 `/presets/0/hair`。输出目录必须在本工程内，不能在正式源码、资源或 `.git` 下；推荐 `.local/character-kit/`。已有目录默认拒绝；`--overwrite` 只接受带本工具标记的目录，不递归清理任何内容，不跟随输出文件符号链接。只读取 generated 中原生 PNG，不使用官方参考大图。
 
 `--json` 的 stdout 始终只有一个 JSON 对象，包含 ok、command 等；不输出进度杂项。退出码：0 成功/帮助、1 配置校验失败、2 参数/文件/导出错误。工具内部不联网、不安装依赖、无 API 密钥。

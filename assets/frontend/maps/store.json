@@ -1,7 +1,7 @@
 {
  "mapId": "store",
  "label": "无名小店 · 卡牌商店",
- "navVersion": "nav-2026-10-24-split-counters",
+ "navVersion": "nav-2026-10-24-playability-facilities",
  "tileSize": 16,
  "width": 30,
  "height": 20,
@@ -1221,24 +1221,33 @@
  ],
  "props": [
   {
-   "id": "rug.01",
-   "prop": "rug",
+   "id": "pa_rug_round.01",
+   "prop": "pa_rug_round",
    "x": 176,
    "y": 112,
    "w": 96,
-   "h": 64,
-   "footY": 64,
+   "h": 48,
+   "footY": 48,
+   "occludes": false,
    "blocks": [],
-   "occludes": false
+   "stand": [
+    48,
+    56
+   ],
+   "depth": "flat",
+   "family": null,
+   "state": null,
+   "label": "圆毯"
   },
   {
-   "id": "shelf.02",
-   "prop": "shelf",
+   "id": "pa_shelf_full.02",
+   "prop": "pa_shelf_full",
    "x": 24,
    "y": 40,
    "w": 64,
    "h": 56,
    "footY": 56,
+   "occludes": true,
    "blocks": [
     [
      0,
@@ -1247,16 +1256,24 @@
      16
     ]
    ],
-   "occludes": true
+   "stand": [
+    32,
+    62
+   ],
+   "depth": "y",
+   "family": "shelf",
+   "state": "full",
+   "label": "货架·充足"
   },
   {
-   "id": "shelf.03",
-   "prop": "shelf",
+   "id": "pa_shelf_full.03",
+   "prop": "pa_shelf_full",
    "x": 24,
    "y": 112,
    "w": 64,
    "h": 56,
    "footY": 56,
+   "occludes": true,
    "blocks": [
     [
      0,
@@ -1265,16 +1282,24 @@
      16
     ]
    ],
-   "occludes": true
+   "stand": [
+    32,
+    62
+   ],
+   "depth": "y",
+   "family": "shelf",
+   "state": "full",
+   "label": "货架·充足"
   },
   {
-   "id": "shelf.04",
-   "prop": "shelf",
+   "id": "pa_shelf_full.04",
+   "prop": "pa_shelf_full",
    "x": 192,
    "y": 32,
    "w": 64,
    "h": 56,
    "footY": 56,
+   "occludes": true,
    "blocks": [
     [
      0,
@@ -1283,16 +1308,24 @@
      16
     ]
    ],
-   "occludes": true
+   "stand": [
+    32,
+    62
+   ],
+   "depth": "y",
+   "family": "shelf",
+   "state": "full",
+   "label": "货架·充足"
   },
   {
-   "id": "display_packs.05",
-   "prop": "display_packs",
+   "id": "pa_display_packs.05",
+   "prop": "pa_display_packs",
    "x": 104,
    "y": 48,
    "w": 64,
    "h": 48,
    "footY": 48,
+   "occludes": true,
    "blocks": [
     [
      0,
@@ -1301,16 +1334,24 @@
      20
     ]
    ],
-   "occludes": true
+   "stand": [
+    32,
+    54
+   ],
+   "depth": "y",
+   "family": "display",
+   "state": "packs",
+   "label": "卡包陈列柜"
   },
   {
-   "id": "display_boxes.06",
-   "prop": "display_boxes",
+   "id": "pa_display_boxes.06",
+   "prop": "pa_display_boxes",
    "x": 104,
    "y": 144,
    "w": 64,
    "h": 48,
    "footY": 48,
+   "occludes": true,
    "blocks": [
     [
      0,
@@ -1319,70 +1360,102 @@
      20
     ]
    ],
-   "occludes": true
+   "stand": [
+    32,
+    54
+   ],
+   "depth": "y",
+   "family": "display",
+   "state": "boxes",
+   "label": "卡盒陈列柜"
   },
   {
-   "id": "counter_retail.07",
-   "prop": "counter_retail",
+   "id": "pa_counter_cashier.07",
+   "prop": "pa_counter_cashier",
    "x": 32,
    "y": 208,
    "w": 96,
    "h": 48,
    "footY": 48,
+   "occludes": true,
    "blocks": [
     [
      0,
-     24,
+     26,
      96,
-     24
+     22
     ]
    ],
-   "occludes": true
+   "stand": [
+    48,
+    56
+   ],
+   "depth": "y",
+   "family": null,
+   "state": null,
+   "label": "NPC 收银台"
   },
   {
-   "id": "counter_service.08",
-   "prop": "counter_service",
+   "id": "pa_counter_procure.08",
+   "prop": "pa_counter_procure",
    "x": 256,
    "y": 192,
    "w": 96,
    "h": 48,
    "footY": 48,
+   "occludes": true,
    "blocks": [
     [
      0,
-     24,
+     26,
      96,
-     24
+     22
     ]
    ],
-   "occludes": true
+   "stand": [
+    48,
+    56
+   ],
+   "depth": "y",
+   "family": null,
+   "state": null,
+   "label": "采购/收货柜台"
   },
   {
-   "id": "kiosk.09",
-   "prop": "kiosk",
+   "id": "pa_counter_market.09",
+   "prop": "pa_counter_market",
    "x": 336,
-   "y": 32,
+   "y": 48,
    "w": 80,
-   "h": 64,
-   "footY": 64,
+   "h": 48,
+   "footY": 48,
+   "occludes": true,
    "blocks": [
     [
      0,
-     44,
+     26,
      80,
-     20
+     22
     ]
    ],
-   "occludes": true
+   "stand": [
+    40,
+    56
+   ],
+   "depth": "y",
+   "family": null,
+   "state": null,
+   "label": "单卡二级市场柜台"
   },
   {
-   "id": "trash.10",
-   "prop": "trash",
+   "id": "pa_trash.10",
+   "prop": "pa_trash",
    "x": 432,
    "y": 256,
    "w": 24,
    "h": 32,
    "footY": 32,
+   "occludes": true,
    "blocks": [
     [
      4,
@@ -1391,7 +1464,14 @@
      20
     ]
    ],
-   "occludes": true
+   "stand": [
+    12,
+    40
+   ],
+   "depth": "y",
+   "family": null,
+   "state": null,
+   "label": "共享垃圾桶"
   },
   {
    "id": "plant.11",
@@ -1553,22 +1633,30 @@
    "occludes": true
   },
   {
-   "id": "case_stack.21",
-   "prop": "case_stack",
+   "id": "pa_box_rack.21",
+   "prop": "pa_box_rack",
    "x": 352,
    "y": 144,
-   "w": 32,
-   "h": 32,
-   "footY": 32,
+   "w": 48,
+   "h": 48,
+   "footY": 48,
+   "occludes": true,
    "blocks": [
     [
      0,
-     16,
      32,
+     48,
      16
     ]
    ],
-   "occludes": true
+   "stand": [
+    24,
+    54
+   ],
+   "depth": "y",
+   "family": null,
+   "state": null,
+   "label": "整盒箱架"
   },
   {
    "id": "case_stack.22",
@@ -1669,22 +1757,113 @@
    "occludes": true
   },
   {
-   "id": "counter_service.29",
-   "prop": "counter_service",
+   "id": "pa_counter_opening.29",
+   "prop": "pa_counter_opening",
    "x": 144,
    "y": 200,
-   "w": 96,
+   "w": 80,
    "h": 48,
    "footY": 48,
+   "occludes": true,
    "blocks": [
     [
      0,
-     24,
-     96,
-     24
+     26,
+     80,
+     22
     ]
    ],
-   "occludes": true
+   "stand": [
+    40,
+    56
+   ],
+   "depth": "y",
+   "family": null,
+   "state": null,
+   "label": "拆包工作台"
+  },
+  {
+   "id": "pa_wall_display.30",
+   "prop": "pa_wall_display",
+   "x": 136,
+   "y": 2,
+   "w": 96,
+   "h": 32,
+   "footY": 32,
+   "occludes": false,
+   "blocks": [],
+   "stand": [
+    48,
+    40
+   ],
+   "depth": "wall",
+   "family": null,
+   "state": null,
+   "label": "墙面陈列轨"
+  },
+  {
+   "id": "pa_wall_display.31",
+   "prop": "pa_wall_display",
+   "x": 352,
+   "y": 2,
+   "w": 96,
+   "h": 32,
+   "footY": 32,
+   "occludes": false,
+   "blocks": [],
+   "stand": [
+    48,
+    40
+   ],
+   "depth": "wall",
+   "family": null,
+   "state": null,
+   "label": "墙面陈列轨"
+  },
+  {
+   "id": "pa_lamp_hang.32",
+   "prop": "pa_lamp_hang",
+   "x": 208,
+   "y": 0,
+   "w": 32,
+   "h": 48,
+   "footY": 48,
+   "occludes": false,
+   "blocks": [],
+   "stand": [
+    16,
+    56
+   ],
+   "depth": "wall",
+   "family": null,
+   "state": null,
+   "label": "吊灯"
+  },
+  {
+   "id": "pa_cabinet_collect.33",
+   "prop": "pa_cabinet_collect",
+   "x": 416,
+   "y": 120,
+   "w": 48,
+   "h": 64,
+   "footY": 64,
+   "occludes": true,
+   "blocks": [
+    [
+     2,
+     48,
+     44,
+     16
+    ]
+   ],
+   "stand": [
+    24,
+    70
+   ],
+   "depth": "y",
+   "family": null,
+   "state": null,
+   "label": "收藏展示柜"
   }
  ],
  "walkable": [
@@ -2010,16 +2189,6 @@
   0,
   1,
   1,
-  0,
-  0,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  0,
-  1,
   1,
   1,
   1,
@@ -2027,21 +2196,8 @@
   0,
   0,
   0,
+  1,
   0,
-  0,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
   1,
   1,
   1,
@@ -2049,7 +2205,7 @@
   1,
   0,
   0,
-  1,
+  0,
   0,
   0,
   1,
@@ -2063,19 +2219,15 @@
   1,
   1,
   1,
+  0,
+  0,
+  0,
   1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
+  0,
+  0,
+  0,
+  0,
+  0,
   1,
   0,
   0,
@@ -2094,6 +2246,33 @@
   1,
   1,
   1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  0,
+  0,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
   0,
   0,
   0,
@@ -2122,6 +2301,22 @@
   0,
   0,
   0,
+  1,
+  1,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  0,
   0,
   1,
   0,
@@ -2131,28 +2326,12 @@
   0,
   0,
   1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  0,
-  0,
-  1,
-  0,
   0,
   0,
   0,
   0,
   0,
   1,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
   1,
   1,
   1,
@@ -2358,11 +2537,11 @@
    },
    "radius": 30,
    "props": [
-    "shelf.02",
-    "shelf.03",
-    "shelf.04",
-    "display_packs.05",
-    "display_boxes.06"
+    "pa_shelf_full.02",
+    "pa_shelf_full.03",
+    "pa_shelf_full.04",
+    "pa_display_packs.05",
+    "pa_display_boxes.06"
    ]
   },
   {
@@ -2383,7 +2562,7 @@
    },
    "radius": 28,
    "props": [
-    "counter_service.08"
+    "pa_counter_procure.08"
    ]
   },
   {
@@ -2404,7 +2583,7 @@
    },
    "radius": 30,
    "props": [
-    "kiosk.09"
+    "pa_counter_market.09"
    ]
   },
   {
@@ -2425,7 +2604,7 @@
    },
    "radius": 24,
    "props": [
-    "trash.10"
+    "pa_trash.10"
    ]
   },
   {
@@ -2446,7 +2625,7 @@
    },
    "radius": 24,
    "props": [
-    "counter_retail.07"
+    "pa_counter_cashier.07"
    ]
   },
   {
@@ -2468,7 +2647,7 @@
    },
    "radius": 24,
    "props": [
-    "counter_service.29"
+    "pa_counter_opening.29"
    ]
   }
  ],

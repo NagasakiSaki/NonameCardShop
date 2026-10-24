@@ -44,6 +44,7 @@ const order=(await api.query('supplier.orders')).items[0];const receipt=await ap
 await api.command('retail.listAll',{inventoryRefs:receipt.inventoryRefs});
 assert.ok((await api.query('experience.guide')).steps.find(s=>s.id==='stock-first').completed);
 const rewards=host.inspect().world.daily.taskRewards;assert.ok(rewards>=700);
+const cashBreakdown=await api.query('management.insights');assert.equal(cashBreakdown.cash.procurementCash,quote.totalDebit);assert.equal(cashBreakdown.cash.taskCash,rewards);assert.equal(cashBreakdown.cash.taskDebtOffset,0);
 await api.command('experience.setGuideSkipped',{skipped:true});const balance=host.inspect().world.wallet.available;
 await api.command('business.open');await api.command('business.close');await api.command('business.nextDay');
 assert.equal((await api.query('management.insights')).coverage,'complete');assert.equal((await api.query('management.insights',{day:1})).cash.taskRewards,rewards);

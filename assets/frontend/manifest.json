@@ -10,7 +10,7 @@
     "pixelWidth": 480,
     "pixelHeight": 320
   },
-  "navVersion": "nav-2026-10-24-split-counters",
+  "navVersion": "nav-2026-10-24-playability-facilities",
   "palette": {
     "ink": "#20182a",
     "inkSoft": "#3a2d47",
@@ -71,45 +71,6 @@
     "warmLamp": "#ffd27a"
   },
   "characters": {
-    "owner": {
-      "sheet": "/assets/frontend/characters/owner.3437effd37.png",
-      "portrait": "/assets/frontend/portraits/owner.0cd78218fd.png",
-      "avatar": "/assets/frontend/portraits/owner.0cd78218fd.png",
-      "portraitSize": [
-        96,
-        96
-      ],
-      "frameWidth": 64,
-      "frameHeight": 64,
-      "columns": 8,
-      "displayScale": 1,
-      "anchorPx": [
-        32,
-        61
-      ],
-      "directions": {
-        "up": 0,
-        "left": 1,
-        "down": 2,
-        "right": 3
-      },
-      "idleColumn": 0,
-      "walkColumns": [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7
-      ],
-      "frameRate": 9,
-      "displayName": "店长",
-      "role": "店主",
-      "appearanceReference": null,
-      "band": null
-    },
     "rookie": {
       "sheet": "/assets/frontend/characters/rookie.png",
       "portrait": "/assets/frontend/portraits/rookie.png",
@@ -308,8 +269,47 @@
       "appearanceReference": "弦卷心：金色长发与鲜明红金配色",
       "skinTone": "fair"
     },
+    "owner": {
+      "sheet": "/assets/frontend/characters/owner.3437effd37.png",
+      "portrait": "/assets/frontend/portraits/owner.0cd78218fd.png",
+      "avatar": "/assets/frontend/portraits/owner.0cd78218fd.png",
+      "portraitSize": [
+        96,
+        96
+      ],
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayName": "店长",
+      "role": "店主",
+      "appearanceReference": null,
+      "band": null
+    },
     "bd-tomori": {
-      "sheet": "/assets/frontend/characters/bd-tomori.8f900f0b56.png",
+      "sheet": "/assets/frontend/characters/bd-tomori.41ae9f88ef.png",
       "portrait": "/assets/frontend/portraits/bd-tomori.11fe94c1b6.png",
       "avatar": "/assets/frontend/portraits/bd-tomori.2e555cd2d0.png",
       "portraitSize": [
@@ -401,7 +401,7 @@
       }
     },
     "bd-rana": {
-      "sheet": "/assets/frontend/characters/bd-rana.dae42c3df9.png",
+      "sheet": "/assets/frontend/characters/bd-rana.37dffee9ba.png",
       "portrait": "/assets/frontend/portraits/bd-rana.f81b2f6466.png",
       "avatar": "/assets/frontend/portraits/bd-rana.021e2c4022.png",
       "portraitSize": [
@@ -723,7 +723,7 @@
       }
     },
     "bd-sakiko": {
-      "sheet": "/assets/frontend/characters/bd-sakiko.d1b7c24108.png",
+      "sheet": "/assets/frontend/characters/bd-sakiko.213fce0606.png",
       "portrait": "/assets/frontend/portraits/bd-sakiko.2a4e7b28ac.png",
       "avatar": "/assets/frontend/portraits/bd-sakiko.08fe1ab48a.png",
       "portraitSize": [
@@ -1321,7 +1321,7 @@
       }
     },
     "bd-yomogi": {
-      "sheet": "/assets/frontend/characters/bd-yomogi.087cd3fd9e.png",
+      "sheet": "/assets/frontend/characters/bd-yomogi.e3704d44f5.png",
       "portrait": "/assets/frontend/portraits/bd-yomogi.2e3cd15788.png",
       "avatar": "/assets/frontend/portraits/bd-yomogi.b93ba6638f.png",
       "portraitSize": [
@@ -1524,7 +1524,7 @@
     "cellSize": 192,
     "artScale": 2,
     "columns": 4,
-    "rows": 6,
+    "rows": 11,
     "list": [
       {
         "prop": "counter_retail",
@@ -1764,6 +1764,206 @@
         "w": 48,
         "h": 80,
         "footY": 40,
+        "occludes": true
+      },
+      {
+        "prop": "pa_counter_procure",
+        "cell": 24,
+        "x": 0,
+        "y": 1152,
+        "w": 192,
+        "h": 96,
+        "footY": 48,
+        "occludes": true
+      },
+      {
+        "prop": "pa_counter_cashier",
+        "cell": 25,
+        "x": 192,
+        "y": 1152,
+        "w": 192,
+        "h": 96,
+        "footY": 48,
+        "occludes": true
+      },
+      {
+        "prop": "pa_counter_market",
+        "cell": 26,
+        "x": 384,
+        "y": 1152,
+        "w": 160,
+        "h": 96,
+        "footY": 48,
+        "occludes": true
+      },
+      {
+        "prop": "pa_counter_opening",
+        "cell": 27,
+        "x": 576,
+        "y": 1152,
+        "w": 160,
+        "h": 96,
+        "footY": 48,
+        "occludes": true
+      },
+      {
+        "prop": "pa_shelf_empty",
+        "cell": 28,
+        "x": 0,
+        "y": 1344,
+        "w": 128,
+        "h": 112,
+        "footY": 56,
+        "occludes": true
+      },
+      {
+        "prop": "pa_shelf_low",
+        "cell": 29,
+        "x": 192,
+        "y": 1344,
+        "w": 128,
+        "h": 112,
+        "footY": 56,
+        "occludes": true
+      },
+      {
+        "prop": "pa_shelf_full",
+        "cell": 30,
+        "x": 384,
+        "y": 1344,
+        "w": 128,
+        "h": 112,
+        "footY": 56,
+        "occludes": true
+      },
+      {
+        "prop": "pa_display_packs",
+        "cell": 31,
+        "x": 576,
+        "y": 1344,
+        "w": 128,
+        "h": 96,
+        "footY": 48,
+        "occludes": true
+      },
+      {
+        "prop": "pa_display_boxes",
+        "cell": 32,
+        "x": 0,
+        "y": 1536,
+        "w": 128,
+        "h": 96,
+        "footY": 48,
+        "occludes": true
+      },
+      {
+        "prop": "pa_trash",
+        "cell": 33,
+        "x": 192,
+        "y": 1536,
+        "w": 48,
+        "h": 64,
+        "footY": 32,
+        "occludes": true
+      },
+      {
+        "prop": "pa_table_idle",
+        "cell": 34,
+        "x": 384,
+        "y": 1536,
+        "w": 128,
+        "h": 96,
+        "footY": 48,
+        "occludes": true
+      },
+      {
+        "prop": "pa_table_reserved",
+        "cell": 35,
+        "x": 576,
+        "y": 1536,
+        "w": 128,
+        "h": 96,
+        "footY": 48,
+        "occludes": true
+      },
+      {
+        "prop": "pa_table_sim",
+        "cell": 36,
+        "x": 0,
+        "y": 1728,
+        "w": 128,
+        "h": 96,
+        "footY": 48,
+        "occludes": true
+      },
+      {
+        "prop": "pa_table_end",
+        "cell": 37,
+        "x": 192,
+        "y": 1728,
+        "w": 128,
+        "h": 96,
+        "footY": 48,
+        "occludes": true
+      },
+      {
+        "prop": "pa_cabinet_collect",
+        "cell": 38,
+        "x": 384,
+        "y": 1728,
+        "w": 96,
+        "h": 128,
+        "footY": 64,
+        "occludes": true
+      },
+      {
+        "prop": "pa_box_rack",
+        "cell": 39,
+        "x": 576,
+        "y": 1728,
+        "w": 96,
+        "h": 96,
+        "footY": 48,
+        "occludes": true
+      },
+      {
+        "prop": "pa_wall_display",
+        "cell": 40,
+        "x": 0,
+        "y": 1920,
+        "w": 192,
+        "h": 64,
+        "footY": 32,
+        "occludes": false
+      },
+      {
+        "prop": "pa_lamp_hang",
+        "cell": 41,
+        "x": 192,
+        "y": 1920,
+        "w": 64,
+        "h": 96,
+        "footY": 48,
+        "occludes": false
+      },
+      {
+        "prop": "pa_rug_round",
+        "cell": 42,
+        "x": 384,
+        "y": 1920,
+        "w": 192,
+        "h": 96,
+        "footY": 48,
+        "occludes": false
+      },
+      {
+        "prop": "pa_shelf_upgrade_before",
+        "cell": 43,
+        "x": 576,
+        "y": 1920,
+        "w": 96,
+        "h": 96,
+        "footY": 48,
         "occludes": true
       }
     ]

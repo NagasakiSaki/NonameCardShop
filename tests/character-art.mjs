@@ -14,8 +14,10 @@ for(const c of PRESETS){
   const sheet=read(c.id+'-walk.png');
   if(c.band){const portrait=read(c.id+'-standing-128x224.png'),avatar=read(c.id+'-portrait-96.png');assert.deepEqual([portrait.width,portrait.height],[128,224]);assert.deepEqual([avatar.width,avatar.height],[96,96]);}
   for(let row=1;row<4;row++)for(let col=0;col<8;col++){
-    let mouth=0,highlight=0;for(let y=27;y<40;y++)for(let x=20;x<44;x++){const i=((row*64+y)*512+col*64+x)*4,[r,g,b,a]=sheet.rgba.subarray(i,i+4);if(a===255&&r===131&&g===89&&b===100)mouth++;if(a===255&&r===255&&g===253&&b===247)highlight++;}
-    assert.ok(mouth>0&&highlight>0,`${c.id}: row ${row}, frame ${col} lost its face`);
+    let mouth=0,highlight=0,skin=0,duplicateEye=0;for(let y=27;y<40;y++)for(let x=20;x<44;x++){const i=((row*64+y)*512+col*64+x)*4,[r,g,b,a]=sheet.rgba.subarray(i,i+4);if(a===255&&r===131&&g===89&&b===100)mouth++;if(a===255&&r===255&&g===(c.walkCostume?255:253)&&b===(c.walkCostume?255:247))highlight++;if(a===255&&r===237&&g===197&&b===168)skin++;if(a===255&&r===255&&g===253&&b===247)duplicateEye++;}
+    // Refined profiles retain LPC's baked mouth; require visible skin/eye highlights rather than the removed overlay mouth color.
+    assert.ok((c.walkCostume&&row!==2?skin>0:mouth>0)&&highlight>0,`${c.id}: row ${row}, frame ${col} lost its face`);
+    if(c.walkCostume)assert.equal(duplicateEye,0,`${c.id}: old overlay eye system returned`);
   }
 }
 assert.equal(new Set(BAND_APPEARANCES.map(c=>c.officialName)).size,25);assert.ok(BAND_APPEARANCES.some(c=>c.characterName==='千石ユノ'));assert.ok(BAND_APPEARANCES.some(c=>c.characterName==='梅里ちえり'));assert.equal(worldSceneZoom(360,300),1);

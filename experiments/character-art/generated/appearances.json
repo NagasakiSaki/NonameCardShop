@@ -214,14 +214,14 @@
       "eyes": "female01",
       "mouth": "neutral02",
       "hair": [
-        "#a5a2a5",
-        "#6e6872",
-        "#393641"
+        "#b1a2b5",
+        "#877c93",
+        "#5a5166"
       ],
       "cloth": [
-        "#f3f5ef",
-        "#b5c7c9",
-        "#5c768a"
+        "#f2f2ec",
+        "#c9c6c4",
+        "#8e8a90"
       ],
       "originalCloth": [
         "#f3f5ef",
@@ -247,14 +247,20 @@
       "costume": "mygo-hoodie",
       "eyeShape": "round",
       "notes": "灰褐色短鲍勃与碎齐刘海；灰粉眼；白灰连帽外套、青色块、黄色扣件、黑短裤。",
-      "walkLegwear": "warmers",
+      "walkLegwear": "bare",
       "lowerBody": "黑短裤、黑色腿套、白青运动鞋。",
       "shoePalette": [
-        "#faf8f1",
-        "#a9cbd5",
-        "#617b92"
+        "#f6efe6",
+        "#e8bcbc",
+        "#b8848e"
       ],
       "portraitVersion": 3,
+      "sleevePalette": [
+        "#7ba2c8",
+        "#5c81a6",
+        "#3a5674"
+      ],
+      "walkCostume": "ref-college",
       "portrait": "bd-tomori-standing-128x224.png",
       "avatar": "bd-tomori-portrait-96.png",
       "portraitSize": [
@@ -398,9 +404,9 @@
         "#7b8291"
       ],
       "cloth": [
-        "#43464e",
-        "#292e38",
-        "#171d2a"
+        "#78a0c6",
+        "#587fa8",
+        "#33506f"
       ],
       "originalCloth": [
         "#43464e",
@@ -430,14 +436,16 @@
       "hairShape": "side-bob",
       "costume": "mygo-offshoulder",
       "notes": "白银短发；画面左眼金色、右眼蓝色；黑高领无袖上衣，白青外套滑落肩部，黑色长裤和白底鞋。",
-      "walkLegwear": "pants",
+      "walkLegwear": "net",
       "lowerBody": "黑色长裤、白底运动鞋；不是短裤。",
       "shoePalette": [
-        "#faf8f1",
-        "#c2cbd2",
-        "#6d788b"
+        "#f4f2ea",
+        "#d8d5c8",
+        "#9aa0a4"
       ],
       "portraitVersion": 3,
+      "refChoker": "#14141c",
+      "walkCostume": "ref-bluedress",
       "portrait": "bd-rana-standing-128x224.png",
       "avatar": "bd-rana-portrait-96.png",
       "portraitSize": [
@@ -1021,14 +1029,14 @@
       "eyes": "female01",
       "mouth": "neutral02",
       "hair": [
-        "#c3e9f4",
-        "#80afc6",
-        "#47718f"
+        "#b6c9d5",
+        "#89a3b4",
+        "#516c7d"
       ],
       "cloth": [
-        "#b24d56",
-        "#793044",
-        "#3e2539"
+        "#96262e",
+        "#6e151d",
+        "#400a10"
       ],
       "originalCloth": [
         "#b24d56",
@@ -1056,11 +1064,12 @@
       "walkLegwear": "bare",
       "lowerBody": "奶白内裙、黑金外裙、交叉系带和深色鞋。",
       "shoePalette": [
-        "#b9ab8d",
-        "#49404a",
-        "#292b37"
+        "#3a3a40",
+        "#26262c",
+        "#141418"
       ],
       "portraitVersion": 3,
+      "walkCostume": "ref-gothic",
       "portrait": "bd-sakiko-standing-128x224.png",
       "avatar": "bd-sakiko-portrait-96.png",
       "portraitSize": [
@@ -2184,14 +2193,14 @@
       "eyes": "female01",
       "mouth": "neutral02",
       "hair": [
-        "#b8b5c9",
-        "#827f9b",
-        "#51506d"
+        "#a29ab2",
+        "#7d7690",
+        "#4e4860"
       ],
       "cloth": [
-        "#6b8094",
-        "#3c5268",
-        "#293b51"
+        "#5f7284",
+        "#465664",
+        "#2a3440"
       ],
       "originalCloth": [
         "#6b8094",
@@ -2216,14 +2225,17 @@
       "hairShape": "asymmetric-bob",
       "costume": "ikka-pinstripe",
       "notes": "灰紫不对称短发，画面左侧刘海较长；浅绿眼；蓝色细条纹宽外套、黑内搭和银链。",
-      "walkLegwear": "striped",
+      "walkLegwear": "net",
       "lowerBody": "黑短下装、网纹与条纹腿饰、深色鞋。",
       "shoePalette": [
-        "#7e7988",
-        "#3c3947",
-        "#262933"
+        "#f2ead2",
+        "#cfc4a4",
+        "#95896c"
       ],
       "portraitVersion": 3,
+      "refChoker": "#14141c",
+      "refChain": "#b9c0c8",
+      "walkCostume": "ikka-pinstripe",
       "portrait": "bd-yomogi-standing-128x224.png",
       "avatar": "bd-yomogi-portrait-96.png",
       "portraitSize": [

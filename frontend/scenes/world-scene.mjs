@@ -30,12 +30,12 @@ export function createWorldSceneClass(){return class WorldScene extends Phaser.S
   worldActors(){return CONTEXT.getActors().map(a=>{const map=CONTEXT.getMap(a.roomId||'store'),o=map?.worldOffset||{x:0,y:0};return {...a,x:a.x+o.x,y:a.y+o.y};});}
   create(){
     const m=CONTEXT.manifest;this.characterMeta=m.characters;this.map=CONTEXT.getMap(this.mapId);this.roomMaps=Object.keys(m.maps).map(id=>CONTEXT.getMap(id));this.lights=[];this.propSprites=[];
-    ensureAnims(this,m.characters);const propIndex=new Map(m.props.list.map(p=>[p.prop,p]));
+    ensureAnims(this,m.characters);const propIndex=new Map(m.props.list.map(p=>[p.prop,p]));this.propIndex=propIndex;
     for(const map of this.roomMaps){
       bakeMap(this,map);const o=map.worldOffset||{x:0,y:0};
       for(const p of map.props){const meta=propIndex.get(p.prop);if(!meta)continue;
         const image=this.add.image(p.x+o.x,p.y+o.y,'props',meta.cell).setOrigin(0,0).setScale(1/(m.props.artScale||1));
-        image.setDepth(['rug','door_mat'].includes(p.prop)?-800:p.y+o.y+p.footY);this.propSprites.push(image);
+        image.setDepth(p.prop.includes('rug')||p.prop==='door_mat'?-800:p.y+o.y+p.footY);image.shopProp={...p,mapId:map.mapId,tableId:p.family==='table'?'battleRoom.'+map.tables[map.props.filter(v=>v.family==='table').indexOf(p)]?.id:null};this.propSprites.push(image);
       }
       for(const s of map.signs||[]){this.add.text(s.x+o.x,s.y+o.y,s.text,{fontFamily:'Microsoft YaHei, sans-serif',fontSize:s.brand?'7px':'8px',fontStyle:'bold',color:s.color,resolution:4,backgroundColor:s.brand?undefined:'#344b51',padding:{x:3,y:2}}).setOrigin(.5,1).setDepth(s.brand?200:7000);}
       this.lights.push(new LightingView(this,map));
@@ -51,6 +51,13 @@ export function createWorldSceneClass(){return class WorldScene extends Phaser.S
   update(time,delta){
     if(!this.ready)return;this.actorView.sync(this.worldActors(),{playerActorId:this.playerActorId});this.actorView.update(delta);
     const snapshot=CONTEXT.getSnapshot();for(const light of this.lights)light.update(snapshot?.clock);
+    if(snapshot?.revision!==this.lastStorefrontRevision){this.lastStorefrontRevision=snapshot?.revision;const view=snapshot?.storefront;
+      if(view)for(const image of this.propSprites){const p=image.shopProp;let target=p.prop;
+        if(p.family==='shelf'&&p.mapId==='store'){const n=view.sealed.pack+view.sealed.box;target=n===0?'pa_shelf_empty':n<3?'pa_shelf_low':'pa_shelf_full';}
+        if(p.family==='table'){const t=view.tables.find(t=>t.tableId===p.tableId);target='pa_table_'+({playing:'sim',reserved:'reserved',ended:'end',idle:'idle'}[t?.state]||'idle');}
+        const frame=this.propIndex.get(target);if(frame&&image.frame.name!==frame.cell)image.setFrame(frame.cell);
+      }
+    }
     const player=CONTEXT.getActors().find(a=>a.actorId===this.playerActorId);
     if(player&&!CONTEXT.isBlocked()&&time-this.lastInteractionRefresh>35){this.lastInteractionRefresh=time;CONTEXT.onPlayerMoved(player,this.map);}
   }

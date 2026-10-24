@@ -18,6 +18,8 @@ export function createHud({ mount, currency, onAction, getSnapshot }) {
     { id: "speed", label: "速度 1×" },
     { id: "inventory", label: "背包 B" },
     { id: "tasks", label: "任务" },
+    { id: "guide", label: "引导 / 熟客" },
+    { id: "customers", label: "顾客 / 牌桌" },
     { id: "report", label: "日报" },
     { id: "finance", label: "收支流水" },
     { id: "saves", label: "存档" },
@@ -47,7 +49,7 @@ export function createHud({ mount, currency, onAction, getSnapshot }) {
     clear(clockNode);
     const clockParts = [
       el("span", { class: "hud__day", text: "第 " + clock.day + " 天" }),
-      el("span", { class: "hud__time", text: formatClock(clock).split(" ").slice(2).join(" ") }),
+      el("span", { class: "hud__time", text: formatClock(clock).split(" ").at(-1) }),
       el("span", { class: "hud__phase", text: formatPhase(clock.phase) }),
       el("span", { class: "hud__phase", text: SPEED_LABEL[clock.speed] || clock.speed + "×" }),
     ];
@@ -59,6 +61,7 @@ export function createHud({ mount, currency, onAction, getSnapshot }) {
     if (snapshot.wallet.debt > 0) walletParts.push(el("span", { class: "wallet__debt", text: "欠款 " + formatShort(snapshot.wallet.debt, currency) }));
     if (snapshot.wallet.escrowLiability > 0) walletParts.push(el("span", { class: "badge", text: "托管 " + formatShort(snapshot.wallet.escrowLiability, currency) }));
     walletNode.append(...walletParts);
+    walletNode.append(el('span',{class:'hud__phase',text:'今日营业 '+formatShort((snapshot.daily.goods||0)+(snapshot.daily.service||0),currency)+' · 奖励 '+formatShort(snapshot.daily.taskRewards||0,currency)}));
     const entries=snapshot.cashJournal||[];
     const branch=snapshot.worldId+':'+snapshot.branchId;if(ledgerBranch!==branch){ledgerBranch=branch;lastEntryId=null;ticker.hidden=true;}
     if(lastEntryId&&entries[0]?.entryId!==lastEntryId){
@@ -83,5 +86,5 @@ export function createHud({ mount, currency, onAction, getSnapshot }) {
     }
   }
 
-  return { render, refresh: () => render(getSnapshot()) };
+  return { render, refresh: () => render(getSnapshot()),destroy(){clearTimeout(tickerTimer);ledgerNode.remove();ticker.remove();} };
 }

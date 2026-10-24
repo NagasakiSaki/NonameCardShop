@@ -45,7 +45,8 @@ export interface ManagementInsights {
     issueVisits:Array<{code:FeedbackReason;label:string;count:number}>;note:string};
   products:ExperienceProduct[];
   suggestions:Array<{code:string;text:string;evidence:Record<string,number>;guide:string}>;
-  cash:{opening:number;closing:number|null;change:number|null;debtChange:number|null;taskRewards:number};
+  cash:{opening:number;openingDebt:number;closing:number|null;change:number|null;debtChange:number|null;taskRewards:number;procurementCash:number|null;procurementCredit:number|null;taskCash:number|null;taskDebtOffset:number|null};
+  departures:Array<{visitId:string;actorId:string;name:string;minute:number;outcome:VisitOutcome;reason:FeedbackReason}>;
   /** Omitted for historical days; identities and appearance never determine wallet/behavior. */
   customers?:Array<{actorId:string;name:string;category:string;intent:CustomerIntent|null;activity:string;label:string;lastIssue:FeedbackReason|null}>;
 }

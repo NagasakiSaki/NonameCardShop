@@ -1,5 +1,6 @@
 import {id, clone, serial, need} from './common.mjs';
 import {initialiseExperience,recordExperienceEvent,validateExperience,experienceSnapshot,FEEDBACK_REASONS} from './experience.mjs';
+import {storefrontView} from './presentation.mjs';
 export function createWorld(rules){
   const world={schemaVersion:2,customerVisitVersion:1,worldId:id('world'),branchId:id('branch'),revision:0,serial:0,seed:Math.floor(Math.random()*4294967296),rules:clone(rules),
     clock:{day:1,minute:480,phase:'preparing',speed:1,manualPaused:false},wallet:{available:rules.startingCash,debt:0,escrowLiability:0},
@@ -53,4 +54,4 @@ export function validateWorld(world){
 }
 export function snapshot(world,pauseReasons=[]){return {worldId:world.worldId,branchId:world.branchId,revision:world.revision,
   clock:{...clone(world.clock),running:!world.clock.manualPaused&&!pauseReasons.length&&(world.clock.phase==='open'||world.clock.phase==='preparing'&&world.clock.minute<540),pauseReasons:[...(world.clock.manualPaused?[{code:'manual',label:'手动暂停'}]:[]),...pauseReasons]},
-  wallet:clone(world.wallet),daily:clone(world.daily),cashJournal:clone((world.cashJournal||[]).slice(-6).reverse()),experience:experienceSnapshot(world),actors:[world.player,...world.npcs.filter(n=>n.presence!=='offsite')].map(({wallet,trip,...actor})=>clone(actor)),allowedActions:world.clock.phase==='preparing'?['business.open']:['open','closing'].includes(world.clock.phase)?['business.close']:['business.nextDay']};}
+  wallet:{...clone(world.wallet),supplierCreditAvailable:Math.max(0,world.rules.supplierCreditLimit-world.wallet.debt)},daily:clone(world.daily),cashJournal:clone((world.cashJournal||[]).slice(-6).reverse()),experience:experienceSnapshot(world),storefront:storefrontView(world),actors:[world.player,...world.npcs.filter(n=>n.presence!=='offsite')].map(({wallet,trip,...actor})=>clone(actor)),allowedActions:world.clock.phase==='preparing'?['business.open']:['open','closing'].includes(world.clock.phase)?['business.close']:['business.nextDay']};}

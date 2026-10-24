@@ -10,15 +10,18 @@ import { nearestInteraction, exitAt } from "./world/map-loader.mjs";
 import { normalizeQuery } from "./host/normalize.mjs";
 
 const classicTrades = new URLSearchParams(location.search).get('tradeUI') === 'classic';
+const previousTrades = new URLSearchParams(location.search).get('tradeUI') === 'previous';
 const PANEL_LOADERS = {
-  inventory: () => classicTrades?import("./ui/inventory.mjs").then(m=>m.openInventory):import('../frontend-next/screens/cards.mjs').then(m=>m.openCollection),
+  inventory: () => classicTrades?import("./ui/inventory.mjs").then(m=>m.openInventory):previousTrades?import('../frontend-next/screens/cards.mjs').then(m=>m.openCollection):import('../frontend-next/screens/workspace.mjs').then(m=>m.openCollection),
   cardDetail: () => classicTrades?import("./ui/card-detail.mjs").then(m=>m.openCardDetail):import('../frontend-next/screens/card-detail.mjs').then(m=>m.openCardDetail),
-  supplier: () => classicTrades?import("./ui/supplier.mjs").then(m=>m.openSupplier):import('../frontend-next/screens/supplier.mjs').then(m=>m.openSupply),
-  opening: () => classicTrades?import("./ui/opening.mjs").then(m=>m.openOpening):import('../frontend-next/screens/opening.mjs').then(m=>m.openOpening),
-  market: () => classicTrades?import("./ui/secondary-market.mjs").then(m=>m.openMarket):import('../frontend-next/screens/cards.mjs').then(m=>m.openCards),
+  supplier: () => classicTrades?import("./ui/supplier.mjs").then(m=>m.openSupplier):previousTrades?import('../frontend-next/screens/supplier.mjs').then(m=>m.openSupply):import('../frontend-next/screens/workspace.mjs').then(m=>m.openSupply),
+  opening: () => classicTrades?import("./ui/opening.mjs").then(m=>m.openOpening):previousTrades?import('../frontend-next/screens/opening.mjs').then(m=>m.openOpening):import('../frontend-next/screens/workspace.mjs').then(m=>m.openOpening),
+  market: () => classicTrades?import("./ui/secondary-market.mjs").then(m=>m.openMarket):previousTrades?import('../frontend-next/screens/cards.mjs').then(m=>m.openCards):import('../frontend-next/screens/workspace.mjs').then(m=>m.openCards),
   combat: () => import("./ui/combat-room.mjs").then((m) => m.openCombat),
   tasks: () => import("./ui/tasks.mjs").then((m) => m.openTasks),
-  report: () => import("./ui/day-report.mjs").then((m) => m.openDayReport),
+  report: () => import('../frontend-next/screens/management.mjs').then(m=>m.openDayReport),
+  guide: () => import('../frontend-next/screens/management.mjs').then(m=>m.openGuide),
+  customers: () => import('../frontend-next/screens/management.mjs').then(m=>m.openCustomers),
   finance: () => import('./ui/finance.mjs').then(m=>m.openFinance),
   saves: () => import("./ui/day-saves.mjs").then((m) => m.openDaySaves),
   management: () => import("./ui/management.mjs").then((m) => m.openManagement),
@@ -143,6 +146,7 @@ export async function startApp({ host, connection, mode, fixture }) {
       destroying = true;
       movement.destroy();observer?.disconnect();clearTimeout(notebookTask);window.removeEventListener('keydown',onGlobalKeyDown);
       windows.closeAll();
+      hud.destroy?.();
       if (game) game.destroy(true);
     },
   };
@@ -268,6 +272,8 @@ export async function startApp({ host, connection, mode, fixture }) {
       else if (action === 'finance') app.openPanel('finance', {});
       else if (action === "saves") app.openPanel("saves", {});
       else if (action === "management") app.openPanel("management", {});
+      else if (action === 'guide') app.openPanel('guide');
+      else if (action === 'customers') app.openPanel('customers');
       else if (action === "help") app.openPanel("help", {});
       else if (action === "settings") app.openPanel("settings", {});
     },
