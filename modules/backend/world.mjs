@@ -1,6 +1,7 @@
 import {id, clone, serial, need} from './common.mjs';
 import {initialiseExperience,recordExperienceEvent,validateExperience,experienceSnapshot,FEEDBACK_REASONS} from './experience.mjs';
 import {storefrontView} from './presentation.mjs';
+import {validateNarrative,recordNarrativeEvent,narrativeSummary} from '../narrative/state.mjs';
 export function createWorld(rules){
   const world={schemaVersion:2,customerVisitVersion:1,worldId:id('world'),branchId:id('branch'),revision:0,serial:0,seed:Math.floor(Math.random()*4294967296),rules:clone(rules),
     clock:{day:1,minute:480,phase:'preparing',speed:1,manualPaused:false},wallet:{available:rules.startingCash,debt:0,escrowLiability:0},
@@ -12,7 +13,7 @@ export function createWorld(rules){
     tasks:{},dailyTasks:{day:1,baseline:{},claimed:{}},cashJournal:[],log:[],nextNpcMinute:540,prices:{},configOverrides:{}};
   initialiseExperience(world,{fresh:true});return world;
 }
-export function note(world,type,data={}){const event={eventId:serial(world,'event'),type,day:world.clock.day,minute:world.clock.minute,...clone(data)};world.log.push(event);world.log=world.log.slice(-1000);recordExperienceEvent(world,event);}
+export function note(world,type,data={}){const event={eventId:serial(world,'event'),type,day:world.clock.day,minute:world.clock.minute,...clone(data)};world.log.push(event);world.log=world.log.slice(-1000);recordExperienceEvent(world,event);recordNarrativeEvent(world,event);}
 export function enterCirculation(w,cardKey,source,reference){if(!w.circulation[cardKey]){w.circulation[cardKey]={day:w.clock.day,source,reference};note(w,'cardEnteredCirculation',{cardKey,source,reference});}}
 export function validateWorld(world){
   if(world?.schemaVersion!==2||!world.worldId||!world.branchId||!world.items||!world.clock||!world.wallet||!Array.isArray(world.products))throw new Error('新版世界存档格式不完整，未覆盖原数据。');
@@ -56,9 +57,10 @@ export function validateWorld(world){
   const escrow=world.matches.filter(m=>m.status!=='finished').reduce((n,m)=>n+m.stake*2+m.serviceHeld,0)+(world.management?.requests||[]).reduce((n,r)=>n+(r.fundsHeld||0),0);
   for(const r of world.management?.requests||[])if(!Number.isSafeInteger(r.fundsHeld)||r.fundsHeld<0||r.fundsHeld>0&&(r.status!=='accepted'||r.kind!=='purchase'||r.fundsHeld!==r.amount))throw new Error('街坊订单托管数据不合法。');
   if(escrow!==world.wallet.escrowLiability)throw new Error('托管余额与未结比赛不一致。');
-  validateExperience(world);return world;
+  validateExperience(world);validateNarrative(world);return world;
 }
 export function snapshot(world,pauseReasons=[]){return {worldId:world.worldId,branchId:world.branchId,revision:world.revision,
+  ...(world.narrative?{narrative:narrativeSummary(world)}:{}),
   starterGift:clone(world.starterGift||null),
   matchmaking:{player:clone((world.matchQueue||[]).find(q=>q.ownerId==='player')||null),waitingCount:(world.matchQueue||[]).length,match:clone(world.matches.filter(m=>!m.background&&m.status!=='finished').map(m=>({matchId:m.matchId,tableId:m.tableId,mode:m.mode,status:m.status,lineup:m.mine.map(c=>({name:c.name,cardKey:c.cardKey}))}))[0]||null)},
   clock:{...clone(world.clock),running:!world.clock.manualPaused&&!pauseReasons.length&&(world.clock.phase==='open'||world.clock.phase==='preparing'&&world.clock.minute<540),pauseReasons:[...(world.clock.manualPaused?[{code:'manual',label:'手动暂停'}]:[]),...pauseReasons]},

@@ -1,0 +1,86 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {chromium} from 'playwright';
+import {startShopServer} from '../server.mjs';
+const out=process.env.CARD_SHOP_TEST_RESULTS||'.local/narrative-browser';fs.mkdirSync(out,{recursive:true});
+const server=await startShopServer({port:0,enginePort:0});let browser;
+try{
+  browser=await chromium.launch(fs.existsSync(chromium.executablePath())?{}:{channel:'chrome'});
+  const context=await browser.newContext({viewport:{width:1440,height:900}}),page=await context.newPage(),errors=[];
+  page.setDefaultTimeout(20000);page.on('pageerror',e=>errors.push(e.message));
+  const q=(name,p={})=>page.evaluate(async({name,p})=>{const r=await __cardShopApp.query(name,p);if(!r.ok)throw Error(JSON.stringify(r));return r.data;},{name,p});
+  const c=(type,payload={})=>page.evaluate(async({type,payload})=>{const r=await __cardShopApp.command({requestId:'story-ui-'+crypto.randomUUID(),type,payload});if(!r.ok)throw Error(JSON.stringify(r));return r.data;},{type,payload});
+  const session=()=>q('narrative.session');
+  const panel=()=>page.locator('.window[aria-label="街角故事"]');
+  const close=()=>page.evaluate(()=>__cardShopApp.windows.closeAll());
+  const until=async(fn,ms=45000)=>{const end=Date.now()+ms;while(!await fn()){if(Date.now()>end)throw Error('Story browser condition timed out');await page.waitForTimeout(100);}};
+  async function next(){await panel().getByRole('button',{name:'继续',exact:true}).click();}
+  async function fit(name){
+    const state=await panel().evaluate(e=>({body:e.querySelector('.window__body').scrollHeight<=e.querySelector('.window__body').clientHeight+2,inside:e.getBoundingClientRect().right<=innerWidth+1&&e.getBoundingClientRect().bottom<=innerHeight+1}));
+    assert(state.body&&state.inside,JSON.stringify({name,state}));
+  }
+  await page.goto(server.origin+'/?profile=legacy');await page.waitForFunction(()=>window.__cardShopReady===true);
+  const firstDay=(await q('saves.days')).items[0];
+  assert((await q('narrative.available')).enabled);
+  await page.locator('[data-action="story"]').click();await panel().getByRole('button',{name:'序章《灯亮之前》',exact:true}).click();
+  await panel().getByText('林澄',{exact:true}).waitFor();
+  const paused=(await q('shop.snapshot')).clock.minute;await page.waitForTimeout(350);assert.equal((await q('shop.snapshot')).clock.minute,paused);
+  assert.equal(await panel().locator('.story-portrait').evaluate(i=>i.complete&&i.naturalWidth>0),true);
+  for(const size of [{width:1440,height:900},{width:390,height:720},{width:900,height:620}]){await page.setViewportSize(size);await page.waitForTimeout(80);await fit('line-'+size.width);await page.screenshot({path:path.join(out,`story-line-${size.width}x${size.height}.png`)});}
+  await page.setViewportSize({width:1440,height:900});
+  await next();await panel().getByRole('button',{name:'先把货架上的基础卡包排整齐。',exact:true}).click();await next();
+  await panel().getByRole('button',{name:'第一章《第一张收据》',exact:true}).click();await next();await panel().getByRole('button',{name:'先介绍最容易入门的卡包。',exact:true}).click();await next();
+  await until(async()=>await panel().count()===0);assert.equal((await session()).status,'waiting');
+  const waiting=(await q('shop.snapshot')).clock.minute;await page.waitForTimeout(350);assert((await q('shop.snapshot')).clock.minute>waiting,'waiting releases only the story modal lease');
+  async function go(id,options={}){
+    await page.evaluate(({id,options})=>__cardShopApp.goToInteraction(id,'supplier',options),{id,options});
+    await page.locator('.facility-window').last().waitFor();await page.waitForFunction(id=>__cardShopApp.isNearInteraction(id),id);
+  }
+  await go('store.counter');
+  const boxes=(await q('inventory.list',{kind:'box'})).items;
+  const gift=boxes.find(i=>i.ownerId==='player')||boxes[0];assert(gift?.inventoryRef);
+  const packs=await c('boxes.unseal',{inventoryRef:gift.inventoryRef});
+  await go('store.retail',{purchaseTab:'retail'});await c('retail.listAll',{inventoryRefs:packs.inventoryRefs});await close();
+  await page.locator('[data-action="business"]').click();
+  await until(async()=>(await session()).status==='presenting');assert((await q('checkout.status')).transactions.length>0);
+  await page.locator('[data-action="story"]').click();
+  while((await session()).nodeType==='line')await next();
+  assert.equal((await session()).proof.nodeId,'c01_priority');
+  await page.evaluate(()=>{const host=__cardShopApp.host,original=host.command.bind(host);let once=false;host.command=async input=>{const result=await original(input);if(!once&&input.type==='narrative.choose'){once=true;throw Error('controlled lost response');}return result;};});
+  await page.setViewportSize({width:390,height:720});await page.waitForTimeout(80);await fit('choices-mobile');
+  await page.screenshot({path:path.join(out,'story-choices-mobile.png')});
+  await panel().getByRole('button',{name:'先聊收藏与卡牌来历。',exact:true}).click();
+  await panel().getByRole('button',{name:'核对上次操作',exact:true}).click();
+  // Short viewports paginate text locally before advancing the authoritative node.
+  while((await session()).nodeType==='line'){
+    const localNext=panel().getByRole('button',{name:'下一页',exact:true});
+    if(await localNext.count())await localNext.click();else await next();
+  }
+  assert.equal((await session()).status,'completed');await fit('completed-mobile');
+  await close();await page.setViewportSize({width:1440,height:900});
+  const save=await c('saves.create');await page.reload();await page.waitForFunction(()=>window.__cardShopReady===true);assert.equal((await session()).status,'completed');
+  // Loading while the old dialogue is still open must not let its close callback
+  // defer the restored session just because it has the same stable session ID.
+  await page.locator('[data-action="story"]').click();
+  await panel().getByRole('button',{name:/^林澄支线/}).click();
+  const activeSave=await c('saves.create'),oldSession=(await session()).proof.sessionId;
+  await c('saves.load',{archiveId:activeSave.archiveId});await until(async()=>await panel().count()===0);await page.waitForTimeout(150);
+  assert.equal((await session()).status,'presenting');assert.equal((await session()).proof.sessionId,oldSession);
+  // Controlled compatibility fixture: retained r1 uses identical IDs/logic but older
+  // wording. Import must install that package without resetting/reloading the page.
+  const exported=await c('saves.export',{archiveId:activeSave.archiveId}),fixture=JSON.parse(exported.content);
+  const storyIndex=JSON.parse(fs.readFileSync('data/story/index.json','utf8'));
+  const oldFile=storyIndex.packs.find(f=>f!==storyIndex.current),oldPack=JSON.parse(fs.readFileSync('data/story/'+oldFile,'utf8'));
+  for(const s of Object.values(fixture.world.narrative.sessions)){s.contentRevision=oldPack.payload.contentRevision;s.contentHash=oldPack.contentHash;}
+  for(const done of Object.values(fixture.world.narrative.completed)){done.contentRevision=oldPack.payload.contentRevision;done.contentHash=oldPack.contentHash;}
+  for(const receipt of Object.values(fixture.world.narrative.receipts))receipt.contentHash=oldPack.contentHash;
+  await c('saves.import',{content:JSON.stringify(fixture)});
+  assert.equal((await session()).status,'presenting');assert.equal((await session()).proof.contentHash,oldPack.contentHash);
+  await c('saves.loadDay',{archiveId:firstDay.archiveId||firstDay.id});
+  await until(async()=>(await q('shop.snapshot')).clock.minute<500);
+  const state=await q('narrative.available');assert.equal(state.items.find(i=>i.chapterId==='chapter_00').status,'not-started');
+  assert.equal(errors.length,0,errors.join('\n'));
+  fs.writeFileSync(path.join(out,'narrative-browser.json'),JSON.stringify({evidenceType:'browser-real',realSale:true,pausedDialogue:true,releasedWait:true,reload:true,dayRewind:true,viewports:3,errors,manualArchive:save.archiveId},null,2));
+  console.log('PASS: real browser prologue/first sale/choices, portrait, three viewport paging, pause/wait, reload and day-start rewind');
+}finally{await browser?.close();await server.close();}

@@ -1,0 +1,1128 @@
+{
+  "format": "card-shop-storypack/1",
+  "apiVersion": "card-shop-narrative/1",
+  "contentHash": "678b7b40d916b9bd302c9c827d72dcc234b189833af4922b105dd8169f246179",
+  "payload": {
+    "schemaVersion": 1,
+    "campaignId": "corner_card_shop",
+    "contentRevision": "corner-shop-ch01-r2",
+    "defaultLocale": "zh-CN",
+    "characters": [
+      {
+        "personId": "person_lin_cheng",
+        "displayName": "林澄"
+      },
+      {
+        "personId": "person_xu_yao",
+        "displayName": "许遥"
+      },
+      {
+        "personId": "person_zhou_ye",
+        "displayName": "周野"
+      },
+      {
+        "personId": "person_gu_heng",
+        "displayName": "顾衡"
+      },
+      {
+        "personId": "person_meng_lan",
+        "displayName": "孟岚"
+      },
+      {
+        "personId": "person_tang_he",
+        "displayName": "唐禾"
+      },
+      {
+        "personId": "person_han_xu",
+        "displayName": "韩序"
+      }
+    ],
+    "flags": [
+      {
+        "flagId": "introStarted",
+        "type": "boolean",
+        "default": false,
+        "allowedValues": [
+          true,
+          false
+        ],
+        "writableByStory": false
+      },
+      {
+        "flagId": "prologueFocus",
+        "type": "enum",
+        "default": "none",
+        "allowedValues": [
+          "none",
+          "stock",
+          "history",
+          "later"
+        ],
+        "writableByStory": true
+      },
+      {
+        "flagId": "shelfGuided",
+        "type": "boolean",
+        "default": false,
+        "allowedValues": [
+          true,
+          false
+        ],
+        "writableByStory": false
+      },
+      {
+        "flagId": "loreAcknowledged",
+        "type": "boolean",
+        "default": false,
+        "allowedValues": [
+          true,
+          false
+        ],
+        "writableByStory": false
+      },
+      {
+        "flagId": "c01_active",
+        "type": "boolean",
+        "default": false,
+        "allowedValues": [
+          true,
+          false
+        ],
+        "writableByStory": false
+      },
+      {
+        "flagId": "firstSaleCompleted",
+        "type": "boolean",
+        "default": false,
+        "allowedValues": [
+          true,
+          false
+        ],
+        "writableByStory": false
+      },
+      {
+        "flagId": "receiptRecorded",
+        "type": "boolean",
+        "default": false,
+        "allowedValues": [
+          true,
+          false
+        ],
+        "writableByStory": false
+      },
+      {
+        "flagId": "twoVisitorsIntroduced",
+        "type": "boolean",
+        "default": false,
+        "allowedValues": [
+          true,
+          false
+        ],
+        "writableByStory": false
+      },
+      {
+        "flagId": "visitPriority",
+        "type": "enum",
+        "default": "none",
+        "allowedValues": [
+          "none",
+          "collection",
+          "practice",
+          "later"
+        ],
+        "writableByStory": true
+      },
+      {
+        "flagId": "collectionQuestUnlocked",
+        "type": "boolean",
+        "default": false,
+        "allowedValues": [
+          true,
+          false
+        ],
+        "writableByStory": false
+      },
+      {
+        "flagId": "practiceQuestUnlocked",
+        "type": "boolean",
+        "default": false,
+        "allowedValues": [
+          true,
+          false
+        ],
+        "writableByStory": true
+      },
+      {
+        "flagId": "c01_milestoneDone",
+        "type": "boolean",
+        "default": false,
+        "allowedValues": [
+          true,
+          false
+        ],
+        "writableByStory": false
+      },
+      {
+        "flagId": "dayOneReviewCompleted",
+        "type": "boolean",
+        "default": false,
+        "allowedValues": [
+          true,
+          false
+        ],
+        "writableByStory": false
+      },
+      {
+        "flagId": "c02_cardIdentified",
+        "type": "boolean",
+        "default": false,
+        "allowedValues": [
+          true,
+          false
+        ],
+        "writableByStory": false
+      },
+      {
+        "flagId": "cardFate",
+        "type": "enum",
+        "default": "pending",
+        "allowedValues": [
+          "pending",
+          "display",
+          "market",
+          "binder"
+        ],
+        "writableByStory": true
+      },
+      {
+        "flagId": "mengLanContactUnlocked",
+        "type": "boolean",
+        "default": false,
+        "allowedValues": [
+          true,
+          false
+        ],
+        "writableByStory": false
+      },
+      {
+        "flagId": "fridayEventPlanned",
+        "type": "boolean",
+        "default": false,
+        "allowedValues": [
+          true,
+          false
+        ],
+        "writableByStory": true
+      },
+      {
+        "flagId": "zhouYeMatchResolved",
+        "type": "boolean",
+        "default": false,
+        "allowedValues": [
+          true,
+          false
+        ],
+        "writableByStory": false
+      },
+      {
+        "flagId": "guHengAwareness",
+        "type": "boolean",
+        "default": false,
+        "allowedValues": [
+          true,
+          false
+        ],
+        "writableByStory": false
+      },
+      {
+        "flagId": "hanXuInvitationReceived",
+        "type": "boolean",
+        "default": false,
+        "allowedValues": [
+          true,
+          false
+        ],
+        "writableByStory": false
+      },
+      {
+        "flagId": "visitedDengQiao",
+        "type": "boolean",
+        "default": false,
+        "allowedValues": [
+          true,
+          false
+        ],
+        "writableByStory": false
+      },
+      {
+        "flagId": "stallDirection",
+        "type": "enum",
+        "default": "none",
+        "allowedValues": [
+          "none",
+          "casual",
+          "challenge"
+        ],
+        "writableByStory": false
+      },
+      {
+        "flagId": "tangHeRegularContact",
+        "type": "boolean",
+        "default": false,
+        "allowedValues": [
+          true,
+          false
+        ],
+        "writableByStory": false
+      },
+      {
+        "flagId": "tournamentSeasonStarted",
+        "type": "boolean",
+        "default": false,
+        "allowedValues": [
+          true,
+          false
+        ],
+        "writableByStory": false
+      },
+      {
+        "flagId": "teamStrategy",
+        "type": "enum",
+        "default": "none",
+        "allowedValues": [
+          "none",
+          "elite",
+          "grassroots",
+          "manager"
+        ],
+        "writableByStory": false
+      },
+      {
+        "flagId": "tournamentOutcomeRecorded",
+        "type": "boolean",
+        "default": false,
+        "allowedValues": [
+          true,
+          false
+        ],
+        "writableByStory": false
+      },
+      {
+        "flagId": "finalReunionActive",
+        "type": "boolean",
+        "default": false,
+        "allowedValues": [
+          true,
+          false
+        ],
+        "writableByStory": false
+      },
+      {
+        "flagId": "endingRoute",
+        "type": "enum",
+        "default": "none",
+        "allowedValues": [
+          "none",
+          "community_hub",
+          "competitive_anchor"
+        ],
+        "writableByStory": false
+      },
+      {
+        "flagId": "campaignCompleted",
+        "type": "boolean",
+        "default": false,
+        "allowedValues": [
+          true,
+          false
+        ],
+        "writableByStory": false
+      },
+      {
+        "flagId": "freePlayUnlocked",
+        "type": "boolean",
+        "default": false,
+        "allowedValues": [
+          true,
+          false
+        ],
+        "writableByStory": false
+      }
+    ],
+    "lines": {
+      "c00.arrival": "灯真的亮了。我还以为这块招牌只剩下照路的用处。",
+      "c00.question": "开门前还有一点时间，要先看哪一块？",
+      "c00.stock_opt": "先把货架上的基础卡包排整齐。",
+      "c00.history_opt": "这家店以前……真的是澄川最热闹的地方吗？",
+      "c00.later_opt": "店长手册还没翻完，我先自己核对一下。",
+      "c00.shelf": "那我先不挡着收银台。记牢了，卖出去的第一包卡，无论多少钱，都给自己留一张底单。",
+      "c00.memory": "十年前的周六下午，两张桌子挤下八个人，站着看的比坐着打的还多。后来大家毕业、上班、换手机，桌椅一张没少，人倒是一个接一个散了。",
+      "c00.deferred_intro": "不急。开店就像洗牌，手忙脚乱容易切坏边缘。你先忙，我就在街口转转。",
+      "c01.arrival": "门帘已经挂好。接下来，就等第一位愿意买包的客人。",
+      "c01.question": "第一天，你想怎样招呼进门的牌友？",
+      "c01.stock": "先介绍最容易入门的卡包。",
+      "c01.memory_option": "先聊聊他们玩过什么牌。",
+      "c01.later": "今天先把店顾好，稍后再聊。",
+      "c01.shelf": "嗯。先听客人想要什么，再说明价格和卡盒规则。等第一笔交易完成，记得把收据留下。",
+      "c01.memory": "聊牌能让人放松。只要价格、货品和找零都交代清楚，慢一点也没关系。",
+      "c01.wait_sale_prompt": "【经营目标】在店内货架或柜台促成至少第一笔密封卡包销售（不限主题）。",
+      "c01.deferred_sale": "今天还没开单？别慌，刚挂牌的新店都这样。把玻璃擦亮，货摆整齐，客人总会停下脚步的。",
+      "c01.receipt": "这张收据别丢。以后你会记得，第一位推门进来的顾客到底买了什么。",
+      "c01.receipt_item": "第一笔密封商品销售已经记下。许遥认真地把收据展平，像是在替这间店留住一个新的开头。",
+      "c01.visitors": "你这里能打牌吗？我想知道，手里这些基础牌能打到哪一步。",
+      "c01.xu_yao_greeting": "我只想打听一张很多年前的旧活动卡，不会占你的对战桌太久。",
+      "c01.priority": "两位客人同时进门，接下来先聊什么？",
+      "c01.collection_option": "先聊收藏与卡牌来历。",
+      "c01.practice_option": "先看对战练习与牌技切磋。",
+      "c01.contact_later": "今天先把柜台顾好，稍后再详谈。",
+      "c01.collection": "我找的不是最贵的那张闪卡。哪怕只是一张白板普通卡，只要有人记得它陪伴过谁，它就有留在册子里的理由。",
+      "c01.practice": "别让我挑最贵的主流强卡。我想知道，哪怕是打工攒钱买的基础预组，能不能靠技术在桌上抬起头来！",
+      "c01.later_ack": "做生意的纪律是对的。开门第一天，手忙脚乱容易算错账。我们就在店里看看，你先忙柜台。",
+      "c01.return": "先后没那么要紧。答应客人的事，明天还记得去做，这间店就比空桌子好上太多。",
+      "c01.effect_failed": "当前无法记录这项安排。可以稍后再谈，店铺仍能正常营业。",
+      "c01.close_title": "【澄川街角卡店 · 首日营业复盘】",
+      "c01.close_body": "收据平整地夹在账本首页。老相片仍在墙角，柜台前已经多了两个年轻的名字。今天的生意，还要继续。",
+      "side.xu01.intro": "店长，你柜台边放的那个杂卡盒，能让我翻翻看吗？这本收集册缺了第2014号活动的一枚小卡标。",
+      "side.xu01.choice": "如何回应许遥的寻卡请求？",
+      "side.xu01.opt_show": "请随意翻看，如果找到有纪念意义的卡，可以在店内展示柜陈列。",
+      "side.xu01.opt_sell": "按正常单卡回收与寄售流程估价，合规交易。",
+      "side.xu01.opt_later": "今天正在盘点库存，等分类理清后再邀你来看。",
+      "side.xu01.show_resp": "太感谢了！你看这道压痕，真的是当年澄川第一届夏季杯随门票送的纪念基础卡！如果能摆在橱窗里，老朋友们路过一定会认出来的。",
+      "side.xu01.sell_resp": "合情合理，正规交易才能让店长长久开下去。按市价算就好，我替这张卡有了归宿而高兴。",
+      "side.xu01.later_resp": "没问题，仓促翻乱了你的库存反而不美。我明天下午再过来。",
+      "side.xu01.wrap": "记录完成。卡牌的价值不在于炒作出的泡沫，而在于见证过的真实岁月。",
+      "side.zhou01.intro": "店长，隔壁破军俱乐部的人说，没十个金币组出的主流牌根本不配坐他们的桌子。我不信这个邪！",
+      "side.zhou01.choice": "如何回应周野的求战与不服？",
+      "side.zhou01.opt_spar": "把卡组拿出来，我们就在1号桌打一局教学切磋，不赌卡、不算分。",
+      "side.zhou01.opt_deck": "先帮你看看构筑曲线，基础卡的配合比高费大怪更考验节奏。",
+      "side.zhou01.opt_later": "现在牌桌正满着，等晚上散客空出来再约对局。",
+      "side.zhou01.spar_resp": "好！输了我认罚擦两张桌子，赢了你教我换两张解牌！看招！",
+      "side.zhou01.deck_resp": "原来这里的低费随从可以替后排挡一次攻击？！难怪之前我总觉得节奏断档……店长你真懂！",
+      "side.zhou01.later_resp": "行，那我先坐在观战席看别人打，正好研究一下他们的出牌习惯。",
+      "side.zhou01.wrap": "对局切磋完成。周野的目光越发清澈，他开始理解‘胜负在牌面，也在心性’。",
+      "side.lin01.intro": "周五晚上要是能把那帮老伙计再叫齐三四个，咱们办个小交流赛，你这小身板吃得消吗？",
+      "side.lin01.choice": "如何回应林澄的办赛提议？",
+      "side.lin01.opt_agree": "只要他们愿意来，裁判席和温水我都备好，绝不掉链子。",
+      "side.lin01.opt_cautious": "现在店内流动资金还不充裕，先办四人小规模测试赛，稳扎稳打。",
+      "side.lin01.agree_resp": "有你这句话就行。名单上的电话我都试着打一遍，能来几个算几个，不给你吹嘘大场面。",
+      "side.lin01.cautious_resp": "谨慎是对的。老店当年就是一口气订了二十套大奖品，结果人没来齐，货砸在手里把现金流拖垮的。按你说的办。",
+      "side.lin01.wrap": "林澄在记事本上郑重记下周五筹备备忘，老店长的老相框似乎也多了一丝暖意。"
+    },
+    "cast": {
+      "person_lin_cheng": "regular",
+      "person_xu_yao": "bd-tomori",
+      "person_zhou_ye": "competitor",
+      "person_meng_lan": "bd-soyo",
+      "person_han_xu": "owner",
+      "person_tang_he": "rookie",
+      "person_gu_heng": "bigspender"
+    },
+    "entries": [
+      {
+        "chapterId": "chapter_00",
+        "condition": {
+          "predicateId": "world.dayAtLeast",
+          "params": {
+            "value": 1
+          }
+        }
+      },
+      {
+        "chapterId": "chapter_01",
+        "condition": {
+          "predicateId": "chapter.completed",
+          "params": {
+            "chapterId": "chapter_00"
+          }
+        },
+        "lockedReason": "先完成序章《灯亮之前》"
+      },
+      {
+        "chapterId": "side_lin_cheng_01",
+        "condition": {
+          "predicateId": "chapter.completed",
+          "params": {
+            "chapterId": "chapter_01"
+          }
+        },
+        "lockedReason": "先完成第一章《第一张收据》"
+      },
+      {
+        "chapterId": "side_xu_yao_01",
+        "condition": {
+          "predicateId": "chapter.completed",
+          "params": {
+            "chapterId": "chapter_01"
+          }
+        },
+        "lockedReason": "先完成第一章《第一张收据》"
+      },
+      {
+        "chapterId": "side_zhou_ye_01",
+        "condition": {
+          "predicateId": "chapter.completed",
+          "params": {
+            "chapterId": "chapter_01"
+          }
+        },
+        "lockedReason": "先完成第一章《第一张收据》"
+      }
+    ],
+    "chapters": [
+      {
+        "schemaVersion": 1,
+        "campaignId": "corner_card_shop",
+        "contentRevision": "corner-shop-ch01-r2",
+        "chapterId": "chapter_00",
+        "chapterTitle": "序章《灯亮之前》",
+        "sceneId": "prologue_arrival",
+        "entryNodeId": "c00_arrival",
+        "characters": [
+          {
+            "personId": "person_lin_cheng",
+            "displayName": "林澄"
+          }
+        ],
+        "nodes": [
+          {
+            "nodeId": "c00_arrival",
+            "type": "line",
+            "lineId": "c00.arrival",
+            "speakerId": "person_lin_cheng",
+            "next": "c00_question"
+          },
+          {
+            "nodeId": "c00_question",
+            "type": "choice",
+            "lineId": "c00.question",
+            "choices": [
+              {
+                "choiceId": "c00_opt_stock",
+                "lineId": "c00.stock_opt",
+                "target": "c00_shelf"
+              },
+              {
+                "choiceId": "c00_opt_history",
+                "lineId": "c00.history_opt",
+                "target": "c00_memory"
+              },
+              {
+                "choiceId": "c00_opt_later",
+                "lineId": "c00.later_opt",
+                "target": "c00_deferred"
+              }
+            ]
+          },
+          {
+            "nodeId": "c00_shelf",
+            "type": "line",
+            "lineId": "c00.shelf",
+            "speakerId": "person_lin_cheng",
+            "next": "c00_action_stock"
+          },
+          {
+            "nodeId": "c00_action_stock",
+            "type": "action",
+            "effectId": "eff_c00_focus_stock",
+            "actionId": "narrative.setFlag",
+            "params": {
+              "flagId": "prologueFocus",
+              "value": "stock"
+            },
+            "onSuccess": "c00_end_open",
+            "onFailure": "c00_end_open"
+          },
+          {
+            "nodeId": "c00_memory",
+            "type": "line",
+            "lineId": "c00.memory",
+            "speakerId": "person_lin_cheng",
+            "next": "c00_action_history"
+          },
+          {
+            "nodeId": "c00_action_history",
+            "type": "action",
+            "effectId": "eff_c00_focus_history",
+            "actionId": "narrative.setFlag",
+            "params": {
+              "flagId": "prologueFocus",
+              "value": "history"
+            },
+            "onSuccess": "c00_end_open",
+            "onFailure": "c00_end_open"
+          },
+          {
+            "nodeId": "c00_deferred",
+            "type": "line",
+            "lineId": "c00.deferred_intro",
+            "speakerId": "person_lin_cheng",
+            "next": "c00_action_later"
+          },
+          {
+            "nodeId": "c00_action_later",
+            "type": "action",
+            "effectId": "eff_c00_focus_later",
+            "actionId": "narrative.setFlag",
+            "params": {
+              "flagId": "prologueFocus",
+              "value": "later"
+            },
+            "onSuccess": "c00_end_open",
+            "onFailure": "c00_end_open"
+          },
+          {
+            "nodeId": "c00_end_open",
+            "type": "end",
+            "result": "scene-completed",
+            "resumeAt": null
+          }
+        ]
+      },
+      {
+        "schemaVersion": 1,
+        "campaignId": "corner_card_shop",
+        "contentRevision": "corner-shop-ch01-r2",
+        "chapterId": "chapter_01",
+        "chapterTitle": "第一章《第一张收据》",
+        "sceneId": "first_receipt",
+        "entryNodeId": "c01_arrival",
+        "characters": [
+          {
+            "personId": "person_lin_cheng",
+            "displayName": "林澄"
+          },
+          {
+            "personId": "person_xu_yao",
+            "displayName": "许遥"
+          },
+          {
+            "personId": "person_zhou_ye",
+            "displayName": "周野"
+          }
+        ],
+        "nodes": [
+          {
+            "nodeId": "c01_arrival",
+            "type": "line",
+            "lineId": "c01.arrival",
+            "speakerId": "person_lin_cheng",
+            "next": "c01_question"
+          },
+          {
+            "nodeId": "c01_question",
+            "type": "choice",
+            "lineId": "c01.question",
+            "choices": [
+              {
+                "choiceId": "c01_opt_stock",
+                "lineId": "c01.stock",
+                "target": "c01_shelf"
+              },
+              {
+                "choiceId": "c01_opt_memory",
+                "lineId": "c01.memory_option",
+                "target": "c01_memory"
+              },
+              {
+                "choiceId": "c01_opt_later",
+                "lineId": "c01.later",
+                "target": "c01_deferred_intro"
+              }
+            ]
+          },
+          {
+            "nodeId": "c01_shelf",
+            "type": "line",
+            "lineId": "c01.shelf",
+            "speakerId": "person_lin_cheng",
+            "next": "c01_wait_sale"
+          },
+          {
+            "nodeId": "c01_memory",
+            "type": "line",
+            "lineId": "c01.memory",
+            "speakerId": "person_lin_cheng",
+            "next": "c01_wait_sale"
+          },
+          {
+            "nodeId": "c01_wait_sale",
+            "type": "wait",
+            "condition": {
+              "predicateId": "metric.atLeast",
+              "params": {
+                "metric": "sales",
+                "value": 1
+              },
+              "sourcePolicy": "actual-business"
+            },
+            "pausePolicy": "release-modal",
+            "onSatisfied": "c01_receipt",
+            "onDeferred": "c01_deferred_sale",
+            "historyPolicy": "include-prior-actual-business"
+          },
+          {
+            "nodeId": "c01_receipt",
+            "type": "line",
+            "lineId": "c01.receipt",
+            "speakerId": "person_xu_yao",
+            "next": "c01_receipt_log"
+          },
+          {
+            "nodeId": "c01_receipt_log",
+            "type": "line",
+            "lineId": "c01.receipt_item",
+            "speakerId": null,
+            "next": "c01_visitors"
+          },
+          {
+            "nodeId": "c01_visitors",
+            "type": "line",
+            "lineId": "c01.visitors",
+            "speakerId": "person_zhou_ye",
+            "next": "c01_visitors_xu"
+          },
+          {
+            "nodeId": "c01_visitors_xu",
+            "type": "line",
+            "lineId": "c01.xu_yao_greeting",
+            "speakerId": "person_xu_yao",
+            "next": "c01_priority"
+          },
+          {
+            "nodeId": "c01_priority",
+            "type": "choice",
+            "lineId": "c01.priority",
+            "choices": [
+              {
+                "choiceId": "c01_opt_collection",
+                "lineId": "c01.collection_option",
+                "target": "c01_collection"
+              },
+              {
+                "choiceId": "c01_opt_practice",
+                "lineId": "c01.practice_option",
+                "target": "c01_practice"
+              },
+              {
+                "choiceId": "c01_opt_contact_later",
+                "lineId": "c01.contact_later",
+                "target": "c01_save_later"
+              }
+            ]
+          },
+          {
+            "nodeId": "c01_collection",
+            "type": "line",
+            "lineId": "c01.collection",
+            "speakerId": "person_xu_yao",
+            "next": "c01_save_collection"
+          },
+          {
+            "nodeId": "c01_practice",
+            "type": "line",
+            "lineId": "c01.practice",
+            "speakerId": "person_zhou_ye",
+            "next": "c01_save_practice"
+          },
+          {
+            "nodeId": "c01_save_collection",
+            "type": "action",
+            "effectId": "eff_c01_prio_collection",
+            "actionId": "narrative.setFlag",
+            "params": {
+              "flagId": "visitPriority",
+              "value": "collection"
+            },
+            "onSuccess": "c01_return",
+            "onFailure": "c01_effect_failed"
+          },
+          {
+            "nodeId": "c01_save_practice",
+            "type": "action",
+            "effectId": "eff_c01_prio_practice",
+            "actionId": "narrative.setFlag",
+            "params": {
+              "flagId": "visitPriority",
+              "value": "practice"
+            },
+            "onSuccess": "c01_return",
+            "onFailure": "c01_effect_failed"
+          },
+          {
+            "nodeId": "c01_save_later",
+            "type": "action",
+            "effectId": "eff_c01_prio_later",
+            "actionId": "narrative.setFlag",
+            "params": {
+              "flagId": "visitPriority",
+              "value": "later"
+            },
+            "onSuccess": "c01_return_later",
+            "onFailure": "c01_effect_failed"
+          },
+          {
+            "nodeId": "c01_return_later",
+            "type": "line",
+            "lineId": "c01.later_ack",
+            "speakerId": "person_lin_cheng",
+            "next": "c01_return"
+          },
+          {
+            "nodeId": "c01_return",
+            "type": "line",
+            "lineId": "c01.return",
+            "speakerId": "person_lin_cheng",
+            "next": "c01_close"
+          },
+          {
+            "nodeId": "c01_close",
+            "type": "line",
+            "lineId": "c01.close_body",
+            "speakerId": null,
+            "next": "c01_complete"
+          },
+          {
+            "nodeId": "c01_effect_failed",
+            "type": "line",
+            "lineId": "c01.effect_failed",
+            "speakerId": null,
+            "next": "c01_deferred_choice"
+          },
+          {
+            "nodeId": "c01_deferred_intro",
+            "type": "end",
+            "result": "deferred",
+            "resumeAt": "c01_arrival"
+          },
+          {
+            "nodeId": "c01_deferred_sale",
+            "type": "end",
+            "result": "deferred",
+            "resumeAt": "c01_wait_sale"
+          },
+          {
+            "nodeId": "c01_deferred_choice",
+            "type": "end",
+            "result": "deferred",
+            "resumeAt": "c01_priority"
+          },
+          {
+            "nodeId": "c01_complete",
+            "type": "end",
+            "result": "scene-completed",
+            "resumeAt": null
+          }
+        ]
+      },
+      {
+        "schemaVersion": 1,
+        "campaignId": "corner_card_shop",
+        "contentRevision": "corner-shop-ch01-r2",
+        "chapterId": "side_lin_cheng_01",
+        "chapterTitle": "林澄支线《周五交流会提议》",
+        "sceneId": "scene_gathering_pitch",
+        "entryNodeId": "lin01_intro",
+        "characters": [
+          {
+            "personId": "person_lin_cheng",
+            "displayName": "林澄"
+          }
+        ],
+        "nodes": [
+          {
+            "nodeId": "lin01_intro",
+            "type": "line",
+            "lineId": "side.lin01.intro",
+            "speakerId": "person_lin_cheng",
+            "next": "lin01_choice"
+          },
+          {
+            "nodeId": "lin01_choice",
+            "type": "choice",
+            "lineId": "side.lin01.choice",
+            "choices": [
+              {
+                "choiceId": "lin01_opt_agree",
+                "lineId": "side.lin01.opt_agree",
+                "target": "lin01_agree_line"
+              },
+              {
+                "choiceId": "lin01_opt_cautious",
+                "lineId": "side.lin01.opt_cautious",
+                "target": "lin01_cautious_line"
+              }
+            ]
+          },
+          {
+            "nodeId": "lin01_agree_line",
+            "type": "line",
+            "lineId": "side.lin01.agree_resp",
+            "speakerId": "person_lin_cheng",
+            "next": "lin01_action_agree"
+          },
+          {
+            "nodeId": "lin01_action_agree",
+            "type": "action",
+            "effectId": "eff_lin01_plan_event",
+            "actionId": "narrative.setFlag",
+            "params": {
+              "flagId": "fridayEventPlanned",
+              "value": true
+            },
+            "onSuccess": "lin01_wrap",
+            "onFailure": "lin01_wrap"
+          },
+          {
+            "nodeId": "lin01_cautious_line",
+            "type": "line",
+            "lineId": "side.lin01.cautious_resp",
+            "speakerId": "person_lin_cheng",
+            "next": "lin01_action_cautious"
+          },
+          {
+            "nodeId": "lin01_action_cautious",
+            "type": "action",
+            "effectId": "eff_lin01_plan_cautious",
+            "actionId": "narrative.setFlag",
+            "params": {
+              "flagId": "fridayEventPlanned",
+              "value": true
+            },
+            "onSuccess": "lin01_wrap",
+            "onFailure": "lin01_wrap"
+          },
+          {
+            "nodeId": "lin01_wrap",
+            "type": "line",
+            "lineId": "side.lin01.wrap",
+            "speakerId": null,
+            "next": "lin01_complete"
+          },
+          {
+            "nodeId": "lin01_complete",
+            "type": "end",
+            "result": "scene-completed"
+          }
+        ]
+      },
+      {
+        "schemaVersion": 1,
+        "campaignId": "corner_card_shop",
+        "contentRevision": "corner-shop-ch01-r2",
+        "chapterId": "side_xu_yao_01",
+        "chapterTitle": "许遥支线《缺页卡册》",
+        "sceneId": "scene_binder_search",
+        "entryNodeId": "xu01_intro",
+        "characters": [
+          {
+            "personId": "person_xu_yao",
+            "displayName": "许遥"
+          }
+        ],
+        "nodes": [
+          {
+            "nodeId": "xu01_intro",
+            "type": "line",
+            "lineId": "side.xu01.intro",
+            "speakerId": "person_xu_yao",
+            "next": "xu01_choice"
+          },
+          {
+            "nodeId": "xu01_choice",
+            "type": "choice",
+            "lineId": "side.xu01.choice",
+            "choices": [
+              {
+                "choiceId": "xu01_opt_show",
+                "lineId": "side.xu01.opt_show",
+                "target": "xu01_show_line"
+              },
+              {
+                "choiceId": "xu01_opt_sell",
+                "lineId": "side.xu01.opt_sell",
+                "target": "xu01_sell_line"
+              },
+              {
+                "choiceId": "xu01_opt_later",
+                "lineId": "side.xu01.opt_later",
+                "target": "xu01_later_line"
+              }
+            ]
+          },
+          {
+            "nodeId": "xu01_show_line",
+            "type": "line",
+            "lineId": "side.xu01.show_resp",
+            "speakerId": "person_xu_yao",
+            "next": "xu01_action_show"
+          },
+          {
+            "nodeId": "xu01_action_show",
+            "type": "action",
+            "effectId": "eff_xu01_display",
+            "actionId": "narrative.setFlag",
+            "params": {
+              "flagId": "cardFate",
+              "value": "display"
+            },
+            "onSuccess": "xu01_wrap",
+            "onFailure": "xu01_wrap"
+          },
+          {
+            "nodeId": "xu01_sell_line",
+            "type": "line",
+            "lineId": "side.xu01.sell_resp",
+            "speakerId": "person_xu_yao",
+            "next": "xu01_action_sell"
+          },
+          {
+            "nodeId": "xu01_action_sell",
+            "type": "action",
+            "effectId": "eff_xu01_market",
+            "actionId": "narrative.setFlag",
+            "params": {
+              "flagId": "cardFate",
+              "value": "market"
+            },
+            "onSuccess": "xu01_wrap",
+            "onFailure": "xu01_wrap"
+          },
+          {
+            "nodeId": "xu01_later_line",
+            "type": "line",
+            "lineId": "side.xu01.later_resp",
+            "speakerId": "person_xu_yao",
+            "next": "xu01_deferred"
+          },
+          {
+            "nodeId": "xu01_wrap",
+            "type": "line",
+            "lineId": "side.xu01.wrap",
+            "speakerId": null,
+            "next": "xu01_complete"
+          },
+          {
+            "nodeId": "xu01_deferred",
+            "type": "end",
+            "result": "deferred",
+            "resumeAt": "xu01_intro"
+          },
+          {
+            "nodeId": "xu01_complete",
+            "type": "end",
+            "result": "scene-completed"
+          }
+        ]
+      },
+      {
+        "schemaVersion": 1,
+        "campaignId": "corner_card_shop",
+        "contentRevision": "corner-shop-ch01-r2",
+        "chapterId": "side_zhou_ye_01",
+        "chapterTitle": "周野支线《起手平民牌》",
+        "sceneId": "scene_practice_deck",
+        "entryNodeId": "zhou01_intro",
+        "characters": [
+          {
+            "personId": "person_zhou_ye",
+            "displayName": "周野"
+          }
+        ],
+        "nodes": [
+          {
+            "nodeId": "zhou01_intro",
+            "type": "line",
+            "lineId": "side.zhou01.intro",
+            "speakerId": "person_zhou_ye",
+            "next": "zhou01_choice"
+          },
+          {
+            "nodeId": "zhou01_choice",
+            "type": "choice",
+            "lineId": "side.zhou01.choice",
+            "choices": [
+              {
+                "choiceId": "zhou01_opt_spar",
+                "lineId": "side.zhou01.opt_spar",
+                "target": "zhou01_spar_line"
+              },
+              {
+                "choiceId": "zhou01_opt_deck",
+                "lineId": "side.zhou01.opt_deck",
+                "target": "zhou01_deck_line"
+              },
+              {
+                "choiceId": "zhou01_opt_later",
+                "lineId": "side.zhou01.opt_later",
+                "target": "zhou01_later_line"
+              }
+            ]
+          },
+          {
+            "nodeId": "zhou01_spar_line",
+            "type": "line",
+            "lineId": "side.zhou01.spar_resp",
+            "speakerId": "person_zhou_ye",
+            "next": "zhou01_action_spar"
+          },
+          {
+            "nodeId": "zhou01_action_spar",
+            "type": "action",
+            "effectId": "eff_zhou01_spar_prep",
+            "actionId": "narrative.setFlag",
+            "params": {
+              "flagId": "practiceQuestUnlocked",
+              "value": true
+            },
+            "onSuccess": "zhou01_wrap",
+            "onFailure": "zhou01_wrap"
+          },
+          {
+            "nodeId": "zhou01_deck_line",
+            "type": "line",
+            "lineId": "side.zhou01.deck_resp",
+            "speakerId": "person_zhou_ye",
+            "next": "zhou01_action_deck"
+          },
+          {
+            "nodeId": "zhou01_action_deck",
+            "type": "action",
+            "effectId": "eff_zhou01_deck_review",
+            "actionId": "narrative.setFlag",
+            "params": {
+              "flagId": "practiceQuestUnlocked",
+              "value": true
+            },
+            "onSuccess": "zhou01_wrap",
+            "onFailure": "zhou01_wrap"
+          },
+          {
+            "nodeId": "zhou01_later_line",
+            "type": "line",
+            "lineId": "side.zhou01.later_resp",
+            "speakerId": "person_zhou_ye",
+            "next": "zhou01_deferred"
+          },
+          {
+            "nodeId": "zhou01_wrap",
+            "type": "line",
+            "lineId": "side.zhou01.wrap",
+            "speakerId": null,
+            "next": "zhou01_complete"
+          },
+          {
+            "nodeId": "zhou01_deferred",
+            "type": "end",
+            "result": "deferred",
+            "resumeAt": "zhou01_intro"
+          },
+          {
+            "nodeId": "zhou01_complete",
+            "type": "end",
+            "result": "scene-completed"
+          }
+        ]
+      }
+    ]
+  }
+}

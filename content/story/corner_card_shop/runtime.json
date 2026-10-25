@@ -1,0 +1,63 @@
+{
+  "contentRevision": "corner-shop-ch01-r2",
+  "cast": {
+    "person_lin_cheng": "regular",
+    "person_xu_yao": "bd-tomori",
+    "person_zhou_ye": "competitor",
+    "person_meng_lan": "bd-soyo",
+    "person_han_xu": "owner",
+    "person_tang_he": "rookie",
+    "person_gu_heng": "bigspender"
+  },
+  "entries": [
+    {
+      "chapterId": "chapter_00",
+      "condition": {
+        "predicateId": "world.dayAtLeast",
+        "params": {
+          "value": 1
+        }
+      }
+    },
+    {
+      "chapterId": "chapter_01",
+      "condition": {
+        "predicateId": "chapter.completed",
+        "params": {
+          "chapterId": "chapter_00"
+        }
+      },
+      "lockedReason": "先完成序章《灯亮之前》"
+    },
+    {
+      "chapterId": "side_lin_cheng_01",
+      "condition": {
+        "predicateId": "chapter.completed",
+        "params": {
+          "chapterId": "chapter_01"
+        }
+      },
+      "lockedReason": "先完成第一章《第一张收据》"
+    },
+    {
+      "chapterId": "side_xu_yao_01",
+      "condition": {
+        "predicateId": "chapter.completed",
+        "params": {
+          "chapterId": "chapter_01"
+        }
+      },
+      "lockedReason": "先完成第一章《第一张收据》"
+    },
+    {
+      "chapterId": "side_zhou_ye_01",
+      "condition": {
+        "predicateId": "chapter.completed",
+        "params": {
+          "chapterId": "chapter_01"
+        }
+      },
+      "lockedReason": "先完成第一章《第一张收据》"
+    }
+  ]
+}

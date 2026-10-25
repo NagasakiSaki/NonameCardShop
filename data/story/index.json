@@ -1,0 +1,11 @@
+{
+  "format": "card-shop-story-index/1",
+  "packs": [
+    "corner_card_shop.69e6b658cc288511.storypack.json",
+    "corner_card_shop.678b7b40d916b9bd.storypack.json"
+  ],
+  "active": [
+    "corner_card_shop.678b7b40d916b9bd.storypack.json"
+  ],
+  "current": "corner_card_shop.678b7b40d916b9bd.storypack.json"
+}

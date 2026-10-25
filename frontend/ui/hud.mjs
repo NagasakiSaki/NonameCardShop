@@ -3,7 +3,7 @@ import { el, clear, formatMoney, formatClock, formatPhase, formatShort } from ".
 
 const SPEED_LABEL = { 0.5: "0.5×", 1: "1×", 2: "2×", 3: "3×", 4: "4×" };
 
-export function createHud({ mount, currency, onAction, getSnapshot, demo=false }) {
+export function createHud({ mount, currency, onAction, getSnapshot, demo=false,storyAvailable=false }) {
   const clockNode = document.getElementById("hud-clock");
   const walletNode = document.getElementById("hud-wallet");
   const actionsNode = document.getElementById("hud-actions");
@@ -21,6 +21,7 @@ export function createHud({ mount, currency, onAction, getSnapshot, demo=false }
     { id: "tasks", label: "任务" },
     { id: "finance", label: "收支流水" },
     { id: "saves", label: "存档" },
+    ...(storyAvailable?[{id:'story',label:'故事'}]:[]),
     { id: "more", label: "更多" },
   ];
 
@@ -40,6 +41,8 @@ export function createHud({ mount, currency, onAction, getSnapshot, demo=false }
   function render(snapshot) {
     if (!snapshot) return;
     const clock = snapshot.clock;
+    const story=actionsNode.querySelector('[data-action="story"]');
+    if(story)story.textContent=snapshot.narrative?.readyCount>0?'故事 · 可继续':snapshot.narrative?.status==='waiting'?'故事 · 待续':snapshot.narrative?.status==='presenting'?'故事 · 可继续':'故事';
     const business=actionsNode.querySelector('[data-action="business"]');
     business.textContent=clock.phase==='preparing'?'开门营业':clock.phase==='closed'?'开始下一天':'打烊结算';
     actionsNode.querySelector('[data-action="pause"]').textContent=clock.manualPaused?'继续时钟':'暂停时钟';

@@ -32,6 +32,7 @@ const PANEL_LOADERS = {
   trash: () => previousTrades||classicTrades?import('./ui/trash.mjs').then(m=>m.openTrash):import('../frontend-next/screens/trash.mjs').then(m=>m.openTrash),
   help: () => import("./ui/help.mjs").then((m) => m.openHelp),
   more:()=>import('./ui/more.mjs').then(m=>m.openMore),
+  story:()=>import('./ui/story.mjs').then(m=>m.openStory),
 };
 
 export async function startApp({ host, connection, mode, fixture }) {
@@ -266,6 +267,7 @@ export async function startApp({ host, connection, mode, fixture }) {
   const hud = createHud({
     mount: document.getElementById("hud"),
     demo:mode==='mock',
+    storyAvailable:!!connection.capabilities?.narrative,
     currency,
     getSnapshot: () => snapshot,
     onAction: (action) => {
@@ -281,6 +283,7 @@ export async function startApp({ host, connection, mode, fixture }) {
       else if (action === "inventory") app.openPanel("inventory", {});
       else if(action==='warehouse')app.openPanel('warehouse');
       else if(action==='more')app.openPanel('more');
+      else if(action==='story')app.openPanel('story');
       else if (action === "tasks") app.openPanel("tasks", {});
       else if (action === "report") app.openPanel("report", {});
       else if (action === 'finance') app.openPanel('finance', {});
