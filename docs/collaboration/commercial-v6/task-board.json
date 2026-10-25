@@ -1,0 +1,326 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-10-25",
+  "baseCommit": "74c7a8e9",
+  "privatePublishedCommit": "55d6d8e6",
+  "status": "planning-only",
+  "supersedes": "maturity-v5 future dispatch; existing accepted code remains authoritative",
+  "tasks": [
+    {
+      "id": "CV6-01",
+      "title": "成熟经营与剧情产品研究",
+      "status": "planned",
+      "taskFile": "tasks/CV6-01-成熟经营与剧情产品研究.md",
+      "outputDir": "deliverables/commercial-v6/CV6-01/",
+      "dependsOn": [],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "CV6-02",
+      "title": "默认体验与首周实测",
+      "status": "planned",
+      "taskFile": "tasks/CV6-02-默认体验与首周实测.md",
+      "outputDir": "deliverables/commercial-v6/CV6-02/",
+      "dependsOn": [],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "CV6-03",
+      "title": "经济仿真与调参",
+      "status": "planned",
+      "taskFile": "tasks/CV6-03-经济仿真与调参.md",
+      "outputDir": "deliverables/commercial-v6/CV6-03/",
+      "dependsOn": [
+        "CV6-02"
+      ],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "CV6-04",
+      "title": "成长任务与内容配置",
+      "status": "planned",
+      "taskFile": "tasks/CV6-04-成长任务与内容配置.md",
+      "outputDir": "deliverables/commercial-v6/CV6-04/",
+      "dependsOn": [
+        "CV6-19"
+      ],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "CV6-05",
+      "title": "NPC客群与剧情角色",
+      "status": "planned",
+      "taskFile": "tasks/CV6-05-NPC客群与剧情角色.md",
+      "outputDir": "deliverables/commercial-v6/CV6-05/",
+      "dependsOn": [
+        "CV6-02",
+        "CV6-19"
+      ],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "CV6-06",
+      "title": "经营赛事前端",
+      "status": "planned",
+      "taskFile": "tasks/CV6-06-经营赛事前端.md",
+      "outputDir": "deliverables/commercial-v6/CV6-06/",
+      "dependsOn": [
+        "CV6-04",
+        "CV6-07"
+      ],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "CV6-07",
+      "title": "赛制注册与扩展",
+      "status": "planned",
+      "taskFile": "tasks/CV6-07-赛制注册与扩展.md",
+      "outputDir": "deliverables/commercial-v6/CV6-07/",
+      "dependsOn": [],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "CV6-08",
+      "title": "真实考核与训练",
+      "status": "planned",
+      "taskFile": "tasks/CV6-08-真实考核与训练.md",
+      "outputDir": "deliverables/commercial-v6/CV6-08/",
+      "dependsOn": [
+        "CV6-04",
+        "CV6-07"
+      ],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "CV6-09",
+      "title": "赛事运营与结算",
+      "status": "planned",
+      "taskFile": "tasks/CV6-09-赛事运营与结算.md",
+      "outputDir": "deliverables/commercial-v6/CV6-09/",
+      "dependsOn": [
+        "CV6-04",
+        "CV6-05",
+        "CV6-07"
+      ],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "CV6-10",
+      "title": "战绩市场与评分数据",
+      "status": "planned",
+      "taskFile": "tasks/CV6-10-战绩市场与评分数据.md",
+      "outputDir": "deliverables/commercial-v6/CV6-10/",
+      "dependsOn": [
+        "CV6-03",
+        "CV6-07"
+      ],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "CV6-11",
+      "title": "无名杀耦合盘点",
+      "status": "planned",
+      "taskFile": "tasks/CV6-11-无名杀耦合盘点.md",
+      "outputDir": "deliverables/commercial-v6/CV6-11/",
+      "dependsOn": [],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "CV6-12",
+      "title": "引擎适配与能力探测",
+      "status": "planned",
+      "taskFile": "tasks/CV6-12-引擎适配与能力探测.md",
+      "outputDir": "deliverables/commercial-v6/CV6-12/",
+      "dependsOn": [
+        "CV6-11"
+      ],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "CV6-13",
+      "title": "内核更新与回滚工具",
+      "status": "planned",
+      "taskFile": "tasks/CV6-13-内核更新与回滚工具.md",
+      "outputDir": "deliverables/commercial-v6/CV6-13/",
+      "dependsOn": [
+        "CV6-11",
+        "CV6-12",
+        "CV6-14"
+      ],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "CV6-14",
+      "title": "存档身份与剧情迁移",
+      "status": "planned",
+      "taskFile": "tasks/CV6-14-存档身份与剧情迁移.md",
+      "outputDir": "deliverables/commercial-v6/CV6-14/",
+      "dependsOn": [
+        "CV6-11",
+        "CV6-21"
+      ],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "CV6-15",
+      "title": "美术声音与可读性",
+      "status": "planned",
+      "taskFile": "tasks/CV6-15-美术声音与可读性.md",
+      "outputDir": "deliverables/commercial-v6/CV6-15/",
+      "dependsOn": [
+        "CV6-06",
+        "CV6-26"
+      ],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "CV6-16",
+      "title": "独立全项目审计",
+      "status": "planned",
+      "taskFile": "tasks/CV6-16-独立全项目审计.md",
+      "outputDir": "deliverables/commercial-v6/CV6-16/",
+      "dependsOn": [],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "CV6-17",
+      "title": "沙盒集成与维护工具",
+      "status": "planned",
+      "taskFile": "tasks/CV6-17-沙盒集成与维护工具.md",
+      "outputDir": "deliverables/commercial-v6/CV6-17/",
+      "dependsOn": [],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "CV6-18",
+      "title": "完整发行与维护",
+      "status": "planned",
+      "taskFile": "tasks/CV6-18-完整发行与维护.md",
+      "outputDir": "deliverables/commercial-v6/CV6-18/",
+      "dependsOn": [
+        "CV6-13",
+        "CV6-14",
+        "CV6-16",
+        "CV6-17",
+        "CV6-20",
+        "CV6-23",
+        "CV6-25",
+        "CV6-26"
+      ],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "CV6-19",
+      "title": "主线角色与剧情总案",
+      "status": "planned",
+      "taskFile": "tasks/CV6-19-主线角色与剧情总案.md",
+      "outputDir": "deliverables/commercial-v6/CV6-19/",
+      "dependsOn": [],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "CV6-20",
+      "title": "首章台本与角色支线",
+      "status": "planned",
+      "taskFile": "tasks/CV6-20-首章台本与角色支线.md",
+      "outputDir": "deliverables/commercial-v6/CV6-20/",
+      "dependsOn": [
+        "CV6-19",
+        "CV6-21"
+      ],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "CV6-21",
+      "title": "剧情运行器与业务桥接",
+      "status": "planned",
+      "taskFile": "tasks/CV6-21-剧情运行器与业务桥接.md",
+      "outputDir": "deliverables/commercial-v6/CV6-21/",
+      "dependsOn": [
+        "CV6-19"
+      ],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "CV6-22",
+      "title": "剧情编辑器",
+      "status": "planned",
+      "taskFile": "tasks/CV6-22-剧情编辑器.md",
+      "outputDir": "deliverables/commercial-v6/CV6-22/",
+      "dependsOn": [
+        "CV6-21"
+      ],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "CV6-23",
+      "title": "剧情校验预演与发布",
+      "status": "planned",
+      "taskFile": "tasks/CV6-23-剧情校验预演与发布.md",
+      "outputDir": "deliverables/commercial-v6/CV6-23/",
+      "dependsOn": [
+        "CV6-21"
+      ],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "CV6-24",
+      "title": "店外世界与地图注册",
+      "status": "planned",
+      "taskFile": "tasks/CV6-24-店外世界与地图注册.md",
+      "outputDir": "deliverables/commercial-v6/CV6-24/",
+      "dependsOn": [],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "CV6-25",
+      "title": "首个店外街区",
+      "status": "planned",
+      "taskFile": "tasks/CV6-25-首个店外街区.md",
+      "outputDir": "deliverables/commercial-v6/CV6-25/",
+      "dependsOn": [
+        "CV6-24",
+        "CV6-19"
+      ],
+      "executor": null,
+      "acceptedCommit": null
+    },
+    {
+      "id": "CV6-26",
+      "title": "剧情演出与任务追踪界面",
+      "status": "planned",
+      "taskFile": "tasks/CV6-26-剧情演出与任务追踪界面.md",
+      "outputDir": "deliverables/commercial-v6/CV6-26/",
+      "dependsOn": [
+        "CV6-20",
+        "CV6-21"
+      ],
+      "executor": null,
+      "acceptedCommit": null
+    }
+  ]
+}
