@@ -10,6 +10,7 @@ import {productEnabled} from './distribution.mjs';
 import {preferredPurchaseChannel} from './customer-demand.mjs';
 import {customerAppearance} from './customer-identity.mjs';
 import {onSite,arriveCustomer,departCustomer,lingerCustomer,customerTarget} from './visits.mjs';
+import {isV7,customerBudget,customerClass,initialCustomerWallet} from './v7-policy.mjs';
 import {FEEDBACK_REASONS} from './experience.mjs';
 
 export const owned=(w,ownerId='player')=>Object.values(w.items).filter(i=>i.ownerId===ownerId);
@@ -87,7 +88,8 @@ export function listSurplus(w,catalog,preview,p){
 export function settleTrade(w,listing,buyerId){
   need(listing?.status==='active'&&listing.ownerId!==buyerId,'OUT_OF_STOCK','该挂单不可购买。');
   const item=w.items[listing.inventoryRef];need(item?.lock===listing.listingId,'OUT_OF_STOCK','挂单实物已变化。');
-  debit(wallet(w,buyerId),listing.unitAmount);
+  const buyer=buyerId==='player'?null:w.npcs.find(n=>n.actorId===buyerId);if(buyer)need(listing.unitAmount<=customerBudget(w,buyer),'INSUFFICIENT_FUNDS','本次购买预算不足。');
+  debit(wallet(w,buyerId),listing.unitAmount);if(buyer?.visit)buyer.visit.budgetSpent=(buyer.visit.budgetSpent||0)+listing.unitAmount;
   const fee=listing.ownerId==='player'?0:Math.floor(listing.unitAmount*w.rules.marketFee);
   if(listing.ownerId==='player'){income(w,listing.unitAmount);w.daily.goods+=listing.unitAmount;w.daily.cogs+=item.cost;w.lifetime.marketSales++;}
   else {credit(wallet(w,listing.ownerId),listing.unitAmount-fee);income(w,fee);w.daily.service+=fee;}
@@ -104,16 +106,18 @@ export function openCustomerPurchase(w,catalog,npc,inventoryRef){
   return cards.map(i=>i.inventoryRef);
 }
 export function purchaseRetail(w,npc,item,{deferOpening=false}={}){
+  need(item.retailPrice<=customerBudget(w,npc),'INSUFFICIENT_FUNDS','超出顾客本次消费预算。');
   need(productEnabled(w.rules,item.productId),'PRODUCT_UNAVAILABLE','该主题已停产，不再出售。');
   need(item.ownerId==='player'&&['pack','box'].includes(item.kind)&&item.location==='retail'&&free(item),'OUT_OF_STOCK','商品已售完或不可出售。');
   debit(npc.wallet,item.retailPrice);income(w,item.retailPrice);w.daily.goods+=item.retailPrice;w.daily.sealedSales=(w.daily.sealedSales||0)+item.retailPrice;w.daily.cogs+=item.cost;w.lifetime.sales++;
+  if(npc.visit)npc.visit.budgetSpent=(npc.visit.budgetSpent||0)+item.retailPrice;
   item.ownerId=npc.actorId;item.location='stock';item.cost=item.retailPrice;
   note(w,'packSaleCompleted',{buyerId:npc.actorId,amount:item.retailPrice,productId:item.productId,kind:item.kind});
   if(!deferOpening)openCustomerPurchase(w,null,npc,item.inventoryRef);
   return item.inventoryRef;
 }
-function acceptableListing(w,catalog,npc,l){return l.status==='active'&&l.ownerId!==npc.actorId&&l.unitAmount<=npc.wallet.available-(npc.wallet.reserved||0)&&l.unitAmount<=referencePrice(w,catalog,l.cardKey)*(w.rules.npcSinglePriceCeiling??1.4);}
-function acceptableRetail(w,npc,i){const suggested=i.suggestedRetail??i.cost/(1-w.rules.retailMargin);return productEnabled(w.rules,i.productId)&&['pack','box'].includes(i.kind)&&i.location==='retail'&&free(i)&&i.retailPrice<=npc.wallet.available-(npc.wallet.reserved||0)&&i.retailPrice<=suggested*(w.rules.npcSealedPriceCeiling??1.4);}
+function acceptableListing(w,catalog,npc,l){return l.status==='active'&&l.ownerId!==npc.actorId&&l.unitAmount<=customerBudget(w,npc)&&l.unitAmount<=referencePrice(w,catalog,l.cardKey)*(w.rules.npcSinglePriceCeiling??1.4);}
+function acceptableRetail(w,npc,i){const suggested=i.suggestedRetail??i.cost/(1-w.rules.retailMargin);return productEnabled(w.rules,i.productId)&&['pack','box'].includes(i.kind)&&i.location==='retail'&&free(i)&&i.retailPrice<=customerBudget(w,npc)&&i.retailPrice<=suggested*(w.rules.npcSealedPriceCeiling??1.4);}
 export function customerFeedback(w,npc,reason,extra={}){
   if(!Object.hasOwn(FEEDBACK_REASONS,reason)||!npc.visit||npc.visit.issues?.includes(reason))return;
   note(w,'customerPurchaseRejected',{...extra,actorId:npc.actorId,visitId:npc.visit.visitId,reason});
@@ -123,11 +127,13 @@ export function customerDecision(w,catalog,npc){
   const regular=w.management?.config.regulars.find(r=>r.id===npc.regularId),held=new Set(owned(w,npc.actorId).filter(i=>i.kind==='card').map(i=>i.cardKey));
   const listings=w.listings.filter(l=>acceptableListing(w,catalog,npc,l)).sort((a,b)=>Number(held.has(a.cardKey))-Number(held.has(b.cardKey))||Number(catalog.byKey.get(b.cardKey)?.group===regular?.preferredGroup)-Number(catalog.byKey.get(a.cardKey)?.group===regular?.preferredGroup)||a.unitAmount-b.unitAmount);
   const retail=owned(w).filter(i=>productEnabled(w.rules,i.productId)&&['pack','box'].includes(i.kind)&&i.location==='retail'&&free(i));
-  const item=retail.filter(i=>acceptableRetail(w,npc,i)).sort((a,b)=>a.retailPrice-b.retailPrice)[0];
+  const buyerClass=customerClass(npc),targetRetail=buyerClass==='boxBuyer'?510:buyerClass==='enthusiast'?360:210;
+  const desirability=i=>Math.abs((i.suggestedRetail??i.retailPrice)/(i.kind==='box'?24*.95:1)-targetRetail);
+  const item=retail.filter(i=>acceptableRetail(w,npc,i)).sort((a,b)=>isV7(w)?(buyerClass==='boxBuyer'?Number(b.kind==='box')-Number(a.kind==='box'):0)||desirability(a)-desirability(b)||a.retailPrice-b.retailPrice:a.retailPrice-b.retailPrice)[0];
   if(listings.length&&(!item||preferredPurchaseChannel(npc)==='single'))return {listing:listings[0],intent:{kind:'single',label:held.has(listings[0].cardKey)?'看看单卡市场':'补一张缺少的卡',cardKey:listings[0].cardKey}};
   if(item)return {item,intent:{kind:'sealed',label:item.kind==='box'?'选购整盒':'选购卡包',productId:item.productId,unit:item.kind}};
   const offers=[...retail.map(i=>i.retailPrice),...w.listings.filter(l=>l.status==='active'&&l.ownerId!==npc.actorId).map(l=>l.unitAmount)];
-  const reason=!offers.length?'out-of-stock':offers.every(price=>price>npc.wallet.available-(npc.wallet.reserved||0))?'budget':'price';
+  const reason=!offers.length?'out-of-stock':offers.every(price=>price>customerBudget(w,npc))?'budget':'price';
   return {reason,intent:{kind:'shopping',label:FEEDBACK_REASONS[reason]}};
 }
 function consignSurplus(w,catalog,npc){
@@ -163,7 +169,7 @@ export function tickEconomy(w,catalog,{map=null,seconds=0}={}){
   if(!['open','closing'].includes(w.clock.phase))return;
   for(const order of w.orders)if(order.status==='pending'&&w.clock.day*1440+w.clock.minute>=order.dueAt)order.status='arrived';
   const elapsed=Math.max(0,seconds)*w.clock.speed,behavior=customerBehavior(w);
-  if(map)for(const npc of w.npcs.filter(n=>onSite(n)&&n.roomId==='store'&&!n.returnAfterMatch&&!n.currentMatchId&&n.trip?.kind!=='match')){
+  if(map)for(const npc of w.npcs.filter(n=>!n.specialist&&!n.allyId&&onSite(n)&&n.roomId==='store'&&!n.playerInviteUntil&&!n.returnAfterMatch&&!n.currentMatchId&&n.trip?.kind!=='match')){
     if(npc.visit)npc.visit.elapsedSeconds+=elapsed;
     if(!npc.trip){
       if(npc.visit)npc.visit.idleSeconds=Math.max(0,(npc.visit.idleSeconds||0)-elapsed);
@@ -213,25 +219,25 @@ export function tickEconomy(w,catalog,{map=null,seconds=0}={}){
   }
   if(w.clock.phase!=='open')return;
   const effects=managementEffects(w);
-  for(const n of w.npcs)ensureCustomerTraits(w,n);
+  for(const n of w.npcs.filter(n=>!n.specialist&&!n.allyId))ensureCustomerTraits(w,n);
   // Scavenging has its own cooldown and uses the same customer capacity and navigation as shopping.
-  for(const npc of w.npcs.filter(n=>onSite(n)&&!n.trip&&!n.currentMatchId&&n.roomId==='store'&&canScavenge(w,n))){
-    if(!trashItems(w).length||w.npcs.filter(n=>n.trip&&n.trip.kind!=='match').length>=effects.concurrentCustomers)break;
+  for(const npc of w.npcs.filter(n=>!n.specialist&&!n.allyId&&onSite(n)&&!n.trip&&!n.currentMatchId&&n.roomId==='store'&&canScavenge(w,n))){
+    if(!trashItems(w).length||w.npcs.filter(n=>!n.specialist&&!n.allyId&&n.trip&&n.trip.kind!=='match').length>=effects.concurrentCustomers)break;
     const anchor=map?.anchors['store.trash'];
     if(map&&anchor){try{const route=customerTarget(w,map,anchor,npc);if(route){npc.trip={stage:'scavenge',...route,waitSeconds:customerBehavior(w).searchSeconds};npc.activity='scavenging';npc.label='去翻垃圾桶';}}catch(error){note(w,'npcPathUnavailable',{actorId:npc.actorId,stage:'scavenge',reason:error.message});}}
     else if(!map)scavenge(w,catalog,npc);
   }
   if(w.clock.minute<w.nextNpcMinute)return;
-  w.nextNpcMinute=w.clock.minute+w.rules.npcIntervalMinutes;
+  w.nextNpcMinute=w.clock.minute+w.rules.npcIntervalMinutes/(1+(effects.attractionRate||0));
   let npc;
-  if(w.npcs.filter(onSite).length>=Math.min(w.rules.maxNpcs,effects.concurrentCustomers))return;
+  if(w.npcs.filter(n=>!n.specialist&&!n.allyId&&onSite(n)).length>=Math.min(w.rules.maxNpcs,effects.concurrentCustomers))return;
   const invited=w.experience?.events.find(e=>e.day===w.clock.day&&e.status==='scheduled')?.actorIds||[];
-  const visitors=w.npcs.filter(n=>!onSite(n)&&!n.currentMatchId&&(n.nextVisitAt||0)<=w.clock.day*1440+w.clock.minute).sort((a,b)=>Number(invited.includes(b.actorId))-Number(invited.includes(a.actorId))||(a.lastVisit?.leftAt||0)-(b.lastVisit?.leftAt||0));
-  if(visitors.length&&(invited.includes(visitors[0].actorId)||w.npcs.length>=w.rules.maxNpcs||random(w)<.5))npc=visitors[0];
-  else {if(w.npcs.length>=w.rules.maxNpcs)return;const i=w.npcs.length,scavenger=random(w)<customerBehavior(w).scavengerChance,initialWallet=Math.round((scavenger?customerBehavior(w).poorInitialWallet:w.rules.npcInitialWallet)*effects.newCustomerWalletMultiplier);npc={actorId:serial(w,'npc'),name:customerBehavior(w).names[i%customerBehavior(w).names.length],appearanceId:customerAppearance(i),appearancePackVersion:1,wallet:{available:initialWallet},roomId:'store',x:240,y:272,direction:'up',moving:false,activity:'shopping',scavenger};w.npcs.push(npc);note(w,'npcArrived',{actorId:npc.actorId,externalFunds:initialWallet});}
+  const visitors=w.npcs.filter(n=>!n.specialist&&!n.allyId&&!onSite(n)&&!n.currentMatchId&&(n.nextVisitAt||0)<=w.clock.day*1440+w.clock.minute).sort((a,b)=>Number(invited.includes(b.actorId))-Number(invited.includes(a.actorId))||(a.lastVisit?.leftAt||0)-(b.lastVisit?.leftAt||0));
+  if(visitors.length&&(invited.includes(visitors[0].actorId)||w.npcs.filter(n=>!n.specialist&&!n.allyId).length>=w.rules.maxNpcs||random(w)<.5))npc=visitors[0];
+  else {if(w.npcs.filter(n=>!n.specialist&&!n.allyId).length>=w.rules.maxNpcs)return;const i=w.npcs.length,actorId=serial(w,'npc'),purse=isV7(w)?initialCustomerWallet(w,actorId):null,scavenger=purse?purse.scavenger:random(w)<customerBehavior(w).scavengerChance,initialWallet=purse?purse.available:Math.round((scavenger?customerBehavior(w).poorInitialWallet:w.rules.npcInitialWallet)*effects.newCustomerWalletMultiplier);npc={actorId,name:customerBehavior(w).names[i%customerBehavior(w).names.length],appearanceId:customerAppearance(i),appearancePackVersion:1,wallet:purse||{available:initialWallet},roomId:'store',x:240,y:272,direction:'up',moving:false,activity:'shopping',scavenger};w.npcs.push(npc);note(w,'npcArrived',{actorId:npc.actorId,externalFunds:initialWallet});}
   const decision=customerDecision(w,catalog,npc);arriveCustomer(w,npc,map,invited.includes(npc.actorId)?{kind:'event',label:'参加新手交流会'}:decision.intent);
   if(invited.includes(npc.actorId)){lingerCustomer(w,npc,behavior.maxVisitSeconds);npc.label='等交流会牌友';return;}
-  if(canScavenge(w,npc)&&trashItems(w).length){npc.visit.intent={kind:'scavenge',label:'找可回收的卡牌'};const anchor=map?.anchors['store.trash'];if(anchor){const route=customerTarget(w,map,anchor,npc);if(route){npc.trip={stage:'scavenge',...route,waitSeconds:customerBehavior(w).searchSeconds};npc.activity='scavenging';npc.label='去翻垃圾桶';return;}}if(!map){scavenge(w,catalog,npc);departCustomer(w,npc);return;}}
+  if(!npc.specialist&&!npc.allyId&&canScavenge(w,npc)&&trashItems(w).length){npc.visit.intent={kind:'scavenge',label:'找可回收的卡牌'};const anchor=map?.anchors['store.trash'];if(anchor){const route=customerTarget(w,map,anchor,npc);if(route){npc.trip={stage:'scavenge',...route,waitSeconds:customerBehavior(w).searchSeconds};npc.activity='scavenging';npc.label='去翻垃圾桶';return;}}if(!map){scavenge(w,catalog,npc);departCustomer(w,npc);return;}}
   if(map){
     const hasMarket=!!decision.listing;
     const anchor=map.anchors[hasMarket?'store.secondaryMarket':map.anchors['store.checkout']?'store.checkout':'store.counter'];

@@ -1,4 +1,5 @@
 {
+  "operationsV7": true,
   "version": 1,
   "ratingVersion": "global-resource-3",
   "distribution": {
@@ -160,26 +161,29 @@
     "rewardMultiplier": 1
   },
   "strengthPricing": {
-    "version": "strength-tiers-3",
+    "version": "strength-tiers-4",
     "boxDiscount": 0.95,
     "tiers": [
       {
         "id": "entry",
         "label": "基础档",
         "maxScore": 53,
-        "packWholesale": 70
+        "packWholesale": 150,
+        "packRetail": 210
       },
       {
         "id": "standard",
         "label": "进阶档",
         "maxScore": 57,
-        "packWholesale": 140
+        "packWholesale": 255,
+        "packRetail": 360
       },
       {
         "id": "expert",
         "label": "旗舰档",
         "maxScore": 10000,
-        "packWholesale": 210
+        "packWholesale": 360,
+        "packRetail": 510
       }
     ]
   }

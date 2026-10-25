@@ -1,3 +1,4 @@
+import {validateV7} from './v7-policy.mjs';
 import {id, clone, serial, need} from './common.mjs';
 import {initialiseExperience,recordExperienceEvent,validateExperience,experienceSnapshot,FEEDBACK_REASONS} from './experience.mjs';
 import {storefrontView} from './presentation.mjs';
@@ -16,6 +17,7 @@ export function createWorld(rules){
 export function note(world,type,data={}){const event={eventId:serial(world,'event'),type,day:world.clock.day,minute:world.clock.minute,...clone(data)};world.log.push(event);world.log=world.log.slice(-1000);recordExperienceEvent(world,event);recordNarrativeEvent(world,event);}
 export function enterCirculation(w,cardKey,source,reference){if(!w.circulation[cardKey]){w.circulation[cardKey]={day:w.clock.day,source,reference};note(w,'cardEnteredCirculation',{cardKey,source,reference});}}
 export function validateWorld(world){
+  validateV7(world);
   if(world?.schemaVersion!==2||!world.worldId||!world.branchId||!world.items||!world.clock||!world.wallet||!Array.isArray(world.products))throw new Error('新版世界存档格式不完整，未覆盖原数据。');
   need(world.branchLineage===undefined||Array.isArray(world.branchLineage)&&world.branchLineage.length<=120&&world.branchLineage.every(id=>typeof id==='string'&&id.length<=150),'INVALID_SAVE','存档分支来源不合法。');
   need(world.cashJournal===undefined||Array.isArray(world.cashJournal)&&world.cashJournal.length<=300&&world.cashJournal.every(e=>e&&typeof e.label==='string'&&Number.isSafeInteger(e.amount)&&Number.isSafeInteger(e.debtDelta)&&Number.isSafeInteger(e.day)&&Number.isFinite(e.minute)),'INVALID_SAVE','收支流水数据不合法。');

@@ -1,0 +1,18 @@
+import assert from 'node:assert/strict';
+import {createBattleMount} from '../integration/host-battle.mjs';
+const plan={version:1,worldId:'world',branchId:'branch',matchId:'match',gameId:'match:r1:g1',roundId:'match:r1',formatId:'versus2v2-bo3',engineMode:'versus',nativeVariant:'two',profileId:'noname-1.11.6-versus-two-shop-1',seed:1,reserveDigest:'abc',playerTeamId:'mine',controlledSeatId:'mine-main',seats:[['mine-main','mine','human','caocao'],['mine-ally','mine','ai','liubei'],['enemy-main','enemy','ai','sunquan'],['enemy-ally','enemy','ai','ganning']].map(([seatId,teamId,controller,generalId],i)=>({seatId,teamId,controller,generalId,role:'teammate',sourceRef:'item-'+i}))};
+let acquired=0,released=0,interrupted=0,removed=0,finishAcquire;
+const container={isConnected:true,children:[],replaceChildren(...nodes){this.children=nodes;}},listeners=new Map();
+const window={location:{origin:'http://127.0.0.1:8080'},addEventListener(type,fn){listeners.set(type,fn);},removeEventListener(type,fn){if(listeners.get(type)===fn)listeners.delete(type);}};
+const document={createElement(){return {style:{},contentWindow:{postMessage(){}},remove(){removed++;container.children=[];}};}};
+const match={matchId:'match',mode:'versus2v2-bo3',status:'prepared',bout:1,gameId:plan.gameId,series:{phase:'confirmed'},background:false};
+const runtime={inspect:()=>({world:{matches:[match]}}),async command(input){assert(!input.requestId.includes(':'));match.status='running';return {ok:true};},async query(){return {ok:true,data:plan};},pause:{async acquire(){acquired++;return new Promise(resolve=>{finishAcquire=()=>resolve({leaseId:'lease'});});},async release(){released++;}},async interrupt(){interrupted++;}};
+const fetch=async url=>({ok:true,async json(){return String(url)==='/api/runtime'?{ready:true,integrationVersion:2,engineOrigin:'http://127.0.0.1:8081'}:{items:[{profileId:plan.profileId,supported:true}]};}});
+const mount=createBattleMount(runtime,{window,document,fetch});
+const loading=mount({container,matchId:'match'});
+while(!finishAcquire)await new Promise(resolve=>setImmediate(resolve));
+await mount.disposeAll();finishAcquire();
+await assert.rejects(loading,e=>e.code==='MOUNT_CANCELLED');
+assert.equal(acquired,1);assert.equal(released,1);assert.equal(interrupted,1);assert.equal(container.children.length,0);assert.equal(listeners.size,0);assert.equal(removed,1);
+await mount.disposeAll();assert.equal(released,1);
+console.log('PASS Host shutdown during native mount: frame/listener/lease cleanup once, stable operation id and interrupted recovery');

@@ -1,0 +1,164 @@
+{
+  "$schema": "./economy.schema.json",
+  "version": "v7-economy-1",
+  "contract": "card-shop-v7-candidate/1",
+  "retailPriceMeaning": "suggested sealed pack retail",
+  "roundTo": 5,
+  "packsPerBox": 24,
+  "cardsPerPack": 5,
+  "boxDiscount": 0.95,
+  "boxRoundUpTo": 5,
+  "pricing": {
+    "version": "strength-tiers-v7",
+    "thresholds": {
+      "entryMaxScoreExclusive": 53,
+      "standardMaxScoreExclusive": 57
+    },
+    "tiers": [
+      {
+        "id": "entry",
+        "label": "基础档",
+        "maxScoreExclusive": 53,
+        "packWholesale": 150,
+        "packRetail": 210,
+        "boxWholesale": 3420,
+        "boxRetail": 4790,
+        "nominalGrossMargin": 0.2857
+      },
+      {
+        "id": "standard",
+        "label": "进阶档",
+        "maxScoreExclusive": 57,
+        "packWholesale": 255,
+        "packRetail": 360,
+        "boxWholesale": 5815,
+        "boxRetail": 8210,
+        "nominalGrossMargin": 0.2917
+      },
+      {
+        "id": "expert",
+        "label": "旗舰档",
+        "maxScoreExclusive": null,
+        "packWholesale": 360,
+        "packRetail": 510,
+        "boxWholesale": 8210,
+        "boxRetail": 11630,
+        "nominalGrossMargin": 0.2941
+      }
+    ]
+  },
+  "retiredProductIds": {
+    "newRetired": ["newjiang", "offline", "standard"],
+    "legacyRetired": ["diy", "old", "key", "collab", "sixiang", "onlyOL", "xianding"],
+    "allRetired": [
+      "newjiang",
+      "offline",
+      "standard",
+      "diy",
+      "old",
+      "key",
+      "collab",
+      "sixiang",
+      "onlyOL",
+      "xianding"
+    ]
+  },
+  "initialUnlockedProductIds": ["yijiang"],
+  "starterGift": {
+    "enabled": true,
+    "unit": "box",
+    "quantity": 1,
+    "productId": "yijiang",
+    "newWorldOnly": true,
+    "cost": 0,
+    "policyVersion": "v7-starter-1"
+  },
+  "collation": {
+    "version": "tcg-collation-v7-1",
+    "cardsPerPack": 5,
+    "packsPerBox": 24,
+    "cardsPerBox": 120,
+    "minRarityPerPack": "R",
+    "starterBoxNoSsr": {
+      "boxCounts": { "N": 60, "R": 42, "SR": 18, "SSR": 0 },
+      "guaranteed": { "N": 0, "R": 6, "SR": 18, "SSR": 0 },
+      "remainder": { "N": 60, "R": 36, "SR": 0, "SSR": 0 },
+      "description": "入门无SSR特供版：60N/42R/18SR/0SSR，每包保底R，整盒固定数量"
+    },
+    "standardBox": {
+      "baseCounts": { "N": 60, "R": 42, "SR": 15, "SSR": 3 },
+      "guaranteed": { "N": 0, "R": 6, "SR": 15, "SSR": 3 },
+      "remainder": { "N": 60, "R": 36, "SR": 0, "SSR": 0 },
+      "description": "常规配盒：60N/42R/15SR/3SSR"
+    },
+    "fallbackPoolPolicy": "unlocked-only",
+    "leakPrevention": true
+  },
+  "buyerClasses": {
+    "weights": {
+      "regular": 70,
+      "enthusiast": 20,
+      "boxBuyer": 5,
+      "poor": 5
+    },
+    "classes": {
+      "regular": {
+        "id": "regular",
+        "label": "普通客",
+        "initialWalletRange": [900, 1800],
+        "singleVisitBudgetRange": [450, 900],
+        "targetTier": "entry",
+        "allowsBox": false,
+        "dailyIncomeRange": [150, 300],
+        "dailyMaxSupplement": 600,
+        "sealedPriceCeiling": 1.4,
+        "singlePriceCeiling": 1.4,
+        "scavenger": false
+      },
+      "enthusiast": {
+        "id": "enthusiast",
+        "label": "爱好客",
+        "initialWalletRange": [1800, 4500],
+        "singleVisitBudgetRange": [900, 1800],
+        "targetTier": "standard",
+        "allowsBox": false,
+        "dailyIncomeRange": [300, 600],
+        "dailyMaxSupplement": 1200,
+        "sealedPriceCeiling": 1.4,
+        "singlePriceCeiling": 1.4,
+        "scavenger": false
+      },
+      "boxBuyer": {
+        "id": "boxBuyer",
+        "label": "整盒客",
+        "initialWalletRange": [12000, 18000],
+        "singleVisitBudgetRange": [12000, 18000],
+        "targetTier": "expert",
+        "allowsBox": true,
+        "dailyIncomeRange": [2000, 4000],
+        "dailyMaxSupplement": 6000,
+        "sealedPriceCeiling": 1.3,
+        "singlePriceCeiling": 1.4,
+        "scavenger": false
+      },
+      "poor": {
+        "id": "poor",
+        "label": "贫穷客",
+        "initialWalletRange": [200, 400],
+        "singleVisitBudgetRange": [50, 200],
+        "targetTier": "singles",
+        "allowsBox": false,
+        "dailyIncomeRange": [50, 100],
+        "dailyMaxSupplement": 200,
+        "sealedPriceCeiling": 1.2,
+        "singlePriceCeiling": 1.3,
+        "scavenger": true
+      }
+    }
+  },
+  "allyCaps": {
+    "wholesaleDiscountRate": 0.15,
+    "attractionRate": 0.3,
+    "checkoutReductionRate": 0.4
+  }
+}

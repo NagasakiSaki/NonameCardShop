@@ -68,7 +68,7 @@ export class ActorView {
       const role=actor.actorId===playerActorId?'店主':actor.customerCategory||(parts[1]||meta.role)+(actor.scavenger?' / 拾牌客':'');
       const playerTag=actor.actorId===playerActorId?'店长（你）':null;
       const text=playerTag?playerTag+(actor.label&&actor.label!==playerTag?'\n'+actor.label:''):parts[0]+'\n'+role+(actor.label?'\n'+actor.label:'');
-      if(entry.label&&entry.label.text!==text)entry.label.setText(text);
+      if(entry.label){if(entry.label.text!==text)entry.label.setText(text);entry.label.setColor(actor.nameColor||'#f6e6b8');}
       entry.headHeight=meta.anchorPx[1]*(meta.displayScale||1)+5;
       const anim = (actor.moving ? "walk-" : "idle-") + appearance + "-" + (DIRECTIONS[actor.direction] == null ? "down" : actor.direction);
       if (entry.sprite.anims.currentAnim?.key !== anim) entry.sprite.play(anim, true);

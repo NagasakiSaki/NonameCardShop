@@ -3,6 +3,7 @@ import {owned,free,referencePrice,income,enterCirculation} from './trading.mjs';
 import {note} from './world.mjs';
 import {productEnabled} from './distribution.mjs';
 import {onSite} from './visits.mjs';
+import {allyEffects} from './v7-policy.mjs';
 
 export function validateManagement(c){
   need(c?.version===1&&Array.isArray(c.upgrades)&&Array.isArray(c.regulars),'INVALID_CONFIG','经营扩展配置格式不正确。');
@@ -26,9 +27,10 @@ export function configureManagement(w,config){
 }
 export function managementEffects(w){
   const m=w.management,c=m?.config;
+  const partners=allyEffects(w);
   const level=effect=>c?sum(c.upgrades.filter(u=>u.effect===effect).map(u=>(m.levels[u.id]||0)*(u.dailyCost&&m.onDuty[u.id]===false?0:u.amount))):0;
   return {shelfCapacity:Math.floor((c?.baseShelfCapacity??36)+level('shelf')),boxShelfUnits:c?.boxShelfUnits??4,tableFee:w.storeSettings?.tableFee??Math.round(w.rules.tableFee+level('table')),
-    checkoutSeconds:level('cashier')?c.cashierCheckoutSeconds:c?.baseCheckoutSeconds??1,concurrentCustomers:Math.floor((c?.baseConcurrentCustomers??3)+level('cashier')),
+    checkoutSeconds:Math.max(.2,(level('cashier')?c.cashierCheckoutSeconds:c?.baseCheckoutSeconds??1)*(1-partners.checkoutReductionRate)),concurrentCustomers:Math.floor((c?.baseConcurrentCustomers??3)+level('cashier')),attractionRate:partners.attractionRate,
     newCustomerWalletMultiplier:1+level('showcase'),stocker:level('stocker')>0,wages:c?sum(c.upgrades.map(u=>(m.levels[u.id]||0)*u.dailyCost)):0};
 }
 export function shelfUsed(w){const e=managementEffects(w);return sum(owned(w).filter(i=>i.location==='retail').map(i=>i.kind==='box'?e.boxShelfUnits:1));}

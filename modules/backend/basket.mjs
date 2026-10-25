@@ -3,6 +3,7 @@ import {productEnabled} from './distribution.mjs';
 import {productDTO} from './products.mjs';
 import {note} from './world.mjs';
 import {deliverImmediately} from './fulfillment.mjs';
+import {assertSupply} from './v7-policy.mjs';
 
 /** A basket has distinct product/unit rows. Reject duplicates instead of silently changing quantities. */
 export function basketQuote(world,input){
@@ -13,6 +14,7 @@ export function basketQuote(world,input){
     need(line&&typeof line==='object'&&!Array.isArray(line),'INVALID_INPUT','采购商品行格式不正确。');
     need(typeof line.productId==='string'&&line.productId.length>0&&['pack','box'].includes(line.unit),'INVALID_INPUT','商品编号或采购单位不正确。');
     const quantity=integer(line.quantity,1,20),key=`${line.productId}|${line.unit}`;
+    assertSupply(world,line.productId);
     need(!seen.has(key),'INVALID_INPUT','相同商品和单位只能出现一行，请先合并数量。');seen.add(key);
     const product=world.products.find(p=>p.productId===line.productId);
     need(productEnabled(world.rules,line.productId)&&product?.availability==='available','UNAVAILABLE_PRODUCT','购物篮内商品已停止发行或无法供货。');
@@ -31,6 +33,7 @@ export function placeBasketOrder(world,quote){
   need(world.clock.phase!=='closed','SHOP_CLOSED','请在准备或营业时下单。');
   need(quote.kind==='supplier-basket'&&quote.validUntil.day===world.clock.day&&world.clock.minute<=quote.validUntil.minute,'QUOTE_EXPIRED','采购购物篮报价已过期。');
   const products=quote.lines.map(line=>{
+    assertSupply(world,line.productId);
     const product=world.products.find(p=>p.productId===line.productId);
     need(productEnabled(world.rules,line.productId)&&product?.availability==='available','UNAVAILABLE_PRODUCT','购物篮内商品已停止发行或无法供货。');
     need(product.productVersion===line.productVersion&&product.priceVersion===line.priceVersion&&product.prices[line.unit].wholesale===line.unitAmount,'QUOTE_EXPIRED','购物篮内商品的供货版本或价格已变化。');

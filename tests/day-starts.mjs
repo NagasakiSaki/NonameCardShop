@@ -5,7 +5,7 @@ import {memoryRepository} from '../modules/backend/storage.mjs';
 const source=JSON.parse(fs.readFileSync(new URL('../data/cards.json',import.meta.url))),rules=JSON.parse(fs.readFileSync(new URL('../data/backend-rules.json',import.meta.url)));rules.maxArchives=10;rules.npcAutoBattles=false;
 const host=await createRuntime({source,rules,repository:memoryRepository()});await host.connect({contractVersion:'card-shop-ui/1.0',clientId:'day-start-test'});
 let seq=0;const command=async(type,payload={},extra={})=>{const r=await host.command({requestId:'day-'+ ++seq,type,payload,...extra});assert.equal(r.ok,true,JSON.stringify(r));return r.data;},query=async(name,p={})=>{const r=await host.query(name,p);assert.equal(r.ok,true);return r.data;};
-const buy=async()=>{const q=await query('products.quote',{productId:'standard',unit:'pack',quantity:1});await command('supplier.placeOrder',{productId:'standard',unit:'pack',quantity:1},{quoteId:q.quoteId});};
+const buy=async()=>{const q=await query('products.quote',{productId:'yijiang',unit:'pack',quantity:1});await command('supplier.placeOrder',{productId:'yijiang',unit:'pack',quantity:1},{quoteId:q.quoteId});};
 const nextDay=async()=>{if(host.inspect().world.clock.phase==='preparing')await command('business.open');await command('business.close');await command('business.nextDay');};
 const day=async n=>(await query('saves.days')).items.find(a=>a.day===n);
 assert.equal((await day(1)).minute,480);const first=await day(1);

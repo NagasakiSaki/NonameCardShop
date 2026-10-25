@@ -65,13 +65,13 @@ export function beginMatch(w,matchId){
 function ownerId(m,side){return side==='mine'?m.mineOwnerId||'player':m.enemyOwnerId||m.opponentId;}
 function pay(w,owner,amount){if(owner==='player')income(w,amount);else credit(wallet(w,owner),amount);}
 function releaseMatch(w,m){
-  for(const i of [...m.mine,...m.enemy])if(w.items[i.inventoryRef]?.lock===m.matchId)w.items[i.inventoryRef].lock=null;
+  for(const i of [...m.mine,...m.enemy])if(w.items[i.inventoryRef]&&(w.items[i.inventoryRef].lock===m.matchId||w.items[i.inventoryRef].lock===m.series?.lock?.lockId))w.items[i.inventoryRef].lock=null;
   for(const side of ['mine','enemy']){const npc=w.npcs.find(n=>n.actorId===ownerId(m,side));if(npc?.currentMatchId===m.matchId){npc.currentMatchId=null;npc.trip=null;npc.moving=false;npc.activity=m.background?'leaving-table':'idle';if(m.background)npc.returnAfterMatch=true;}}
   if(m.simulated&&m.serviceDue){for(const owner of [m.mineOwnerId,m.enemyOwnerId]){const purse=wallet(w,owner);purse.reserved=Math.max(0,(purse.reserved||0)-m.serviceDue/2);}m.serviceDue=0;}
   const table=w.tables.find(t=>t.tableId===m.tableId);if(table?.matchId===m.matchId)table.matchId=null;
 }
 function refundService(w,m){if(!m.serviceRecognized){for(const c of m.serviceContributions||[{ownerId:m.opponentId,amount:m.serviceHeld}])credit(wallet(w,c.ownerId),c.amount);w.wallet.escrowLiability-=m.serviceHeld;m.serviceHeld=0;}}
-function finish(w,m,result){
+export function finish(w,m,result){
   if(m.status==='finished')return;
   m.status='finished';m.result=result;m.finishedAt={day:w.clock.day,minute:w.clock.minute};w.lifetime.matches++;
   const metric=m.background?'npcMatches':'playerMatches';w.lifetime[metric]=(w.lifetime[metric]||0)+1;
@@ -82,7 +82,7 @@ function finish(w,m,result){
   if(mine==='player')w.daily.matchNet+=result==='win'?m.stake:result==='loss'?-m.stake:0;
   refundService(w,m);releaseMatch(w,m);
   for(const [side,team] of m.results.length||m.serviceRecognized?[['mine',m.mine],['enemy',m.enemy]]:[]){
-    const deployed=m.mode==='kof'?team.slice(0,m.progress[side]+1):team;
+    const deployed=m.series&&m.mode!=='kof'?team.filter(c=>m.series.rounds.some(r=>r.seats.some(s=>s.teamId===side&&s.generalId===c.generalId))):m.mode==='kof'?team.slice(0,m.progress[side]+1):team;
     for(const c of deployed){const key=`${c.cardKey}|${m.mode}`,s=w.stats[key]||={wins:0,losses:0,draws:0,rulesVersion:1};const sideResult=side==='mine'?result:result==='win'?'loss':result==='loss'?'win':'draw';s[sideResult==='win'?'wins':sideResult==='loss'?'losses':'draws']++;}
   }
   note(w,'officialMatchSettled',{matchId:m.matchId,result,mode:m.mode});
@@ -155,4 +155,11 @@ export function advanceNpcSimulation(w,catalog,m,seconds){
 export function voidNpcMatch(w,matchId,reason){
   const m=matchById(w,matchId);need(m.background,'INVALID_STATE','该操作仅用于 NPC 后台牌局。');if(m.status==='finished')return clone(m);
   need(m.stake===0,'RECOVERY_REQUIRED','带赌注牌局不能直接作废。');refundService(w,m);m.status='finished';m.result='cancelled';m.error=String(reason).slice(0,300);releaseMatch(w,m);note(w,'npcMatchVoided',{matchId,reason:m.error});return clone(m);
+}
+
+// Technical cancellation may follow settled rounds. It never produces a rated win.
+export function cancelSeriesAccounting(w,m){
+  need(m.stake===0,'RECOVERY_REQUIRED','带赌注比赛不能技术取消。');
+  refundService(w,m);releaseMatch(w,m);m.status='finished';m.result='cancelled';
+  if(m.timeSession)m.timeSession.applied=true;if(m.series){m.series.time.applied=true;m.series.time.policy='cancelled-no-time';}note(w,'matchCancelled',{matchId:m.matchId});
 }

@@ -1,3 +1,6 @@
+import * as V7 from './operations-v7.mjs';
+import {getFormat,buildRoundPlan} from '../combat-formats/index.mjs';
+import {initialiseV7,isV7,assertSupply,replenishCustomer} from './v7-policy.mjs';
 import {CONTRACT,RARITIES,clone,id,need,fail,integer,errorDTO,page,serial,debit,credit,sum} from './common.mjs';
 import {validateRules,buildCatalog,cardSummary,catalogList} from './catalog.mjs';
 import {publishProducts,productDTO,unsealBox} from './products.mjs';
@@ -29,7 +32,7 @@ import {loadStoryPack} from '../narrative/content.mjs';
 import {createRegistry} from '../narrative/registry.mjs';
 
 
-export async function createRuntime({source,rules,repository,maps=[],managementConfig=null,backgroundAvailable=false,now=()=>Date.now(),storyPacks=[],storyExtensions={},storyDiagnostics=[],storyActiveHashes=null}){
+export async function createRuntime({source,rules,repository,maps=[],managementConfig=null,backgroundAvailable=false,now=()=>Date.now(),storyPacks=[],storyExtensions={},storyDiagnostics=[],storyActiveHashes=null,modeCapabilities=[]}){
   validateRules(rules);
   const verifiedPacks=await Promise.all(storyPacks.map(p=>loadStoryPack(p,{registry:createRegistry(storyExtensions)})));
   const narrative=createNarrativeRuntime({packs:verifiedPacks,extensions:storyExtensions,diagnostics:storyDiagnostics,currentHashes:storyActiveHashes});
@@ -38,12 +41,12 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
   function upgradeDistribution(world){
     if(!world.rules.distribution||world.products.some(p=>p.collationVersion!==DEFAULT_DISTRIBUTION.version)){
       world.rules.distribution??=clone(rules.distribution||DEFAULT_DISTRIBUTION);
-      world.products=publishProducts(buildCatalog(source,world.rules),world.rules,world.clock.day,world.prices);
+      world.products=publishProducts(buildCatalog(source,world.rules),world.rules,world.clock.day,world.prices,world);
       note(world,'distributionUpgraded',{version:DEFAULT_DISTRIBUTION.version,legacyContentsPreserved:true});
     }
     for(const item of Object.values(world.items))if(item.ownerId==='player'&&item.location==='retail'&&['pack','box'].includes(item.kind)&&!productEnabled(world.rules,item.productId))item.location='stock';
   }
-  if(!record){const world=createWorld(rules);if(narrative.contentAvailable)narrative.initialise(world,true);initialiseManagement(world,managementConfig);ensureRegulars(world);world.products=publishProducts(catalog,rules,1);grantStarterGift(world);record={schemaVersion:2,revision:0,world,archives:[],requests:{},legacyResetDone:false};record.archives.push(archive(world,'start'));await repository.commit(record,null);}
+  if(!record){const world=createWorld(rules);initialiseV7(world,rules,{fresh:true});if(narrative.contentAvailable)narrative.initialise(world,true);initialiseManagement(world,managementConfig);ensureRegulars(world);world.products=publishProducts(catalog,world.rules,1,world.prices,world);grantStarterGift(world);record={schemaVersion:2,revision:0,world,archives:[],requests:{},legacyResetDone:false};record.archives.push(archive(world,'start'));await repository.commit(record,null);}
   upgradeDistribution(record.world);initialiseManagement(record.world,managementConfig);ensureRegulars(record.world);record.world.player.actorId='actor:owner';
   validateWorld(record.world);validateRules(record.world.rules);catalog=buildCatalog(source,record.world.rules);
   for(const m of record.world.matches)if(m.status==='running'&&!m.simulated){
@@ -53,13 +56,14 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
   const listeners=new Set(),pauses=new Map(),quotes=new Map(),previews=new Map(),engineProgress=new Map();
   let connected=false,clientId,sessionId,seq=0,queue=Promise.resolve(),disconnected=false,lastInputSeq=-1,movement=null;
   function normaliseActors(world){
+    if(initialiseV7(world,rules))world.products=publishProducts(buildCatalog(source,world.rules),world.rules,world.clock.day,world.prices,world);
     if(narrative.contentAvailable||world.narrative)narrative.initialise(world,false);
     initialiseExperience(world);
     if(world.gameplayRevision!==2){
       world.rules.npcSimulation=rules.npcSimulation!==false;world.rules.npcSimulationSeconds=rules.npcSimulationSeconds||18;
       world.rules.strengthPricing??=clone(DEFAULT_STRENGTH_PRICING);
       for(const m of world.matches)if(world.rules.npcSimulation!==false&&m.background&&!m.simulated&&m.status!=='finished')voidNpcMatch(world,m.matchId,'切换到 NPC 模拟对局，旧后台桌已取消并释放。');
-      world.products=publishProducts(buildCatalog(source,world.rules),world.rules,world.clock.day,world.prices);world.gameplayRevision=2;
+      world.products=publishProducts(buildCatalog(source,world.rules),world.rules,world.clock.day,world.prices,world);world.gameplayRevision=2;
     }
     initialiseDailyTasks(world);
     migrateVisits(world);
@@ -79,7 +83,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
       }
     }
   }
-  normaliseActors(record.world);
+  normaliseActors(record.world);V7.restoreV7(record.world);
   for(const operation of Object.values(record.requests)){operation.worldId??=record.world.worldId;operation.branchId??=record.world.branchId;}
   const serially=fn=>{const result=queue.then(fn);queue=result.catch(()=>{});return result;};
   const reasons=()=>[...[...pauses.values()].map(p=>({code:p.ownerId,label:p.reason})),...(activeTimeMatch(record.world)?[{code:'match-time',label:'店长对局中'}]:[])];
@@ -132,7 +136,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
     const quantity=integer(input.quantity??1,1,20),unit=input.unit||'pack',direction=input.action||'purchase';
     let values,priceVersion,productVersion,extra={};
     if(input.listingId){const listing=w().listings.find(l=>l.listingId===input.listingId&&l.status==='active');need(listing,'OUT_OF_STOCK','挂单已售出或撤回。');need(quantity===1,'INVALID_INPUT','实体卡挂单每笔一张。');values={unitAmount:listing.unitAmount,feeAmount:0,totalDebit:listing.unitAmount,totalCredit:0};priceVersion=`listing:${listing.listingId}:${listing.unitAmount}`;extra={listingId:listing.listingId,ownerId:listing.ownerId};}
-    else {need(['pack','box'].includes(unit),'INVALID_INPUT','商品单位不正确。');need(productEnabled(w().rules,input.productId),'UNAVAILABLE_PRODUCT','该卡包已停止发行。');const product=w().products.find(p=>p.productId===input.productId);need(product?.availability==='available','UNAVAILABLE_PRODUCT',product?.unavailableReason||'商品不存在。');values={unitAmount:product.prices[unit][direction==='purchase'?'wholesale':'retail'],feeAmount:0};values.totalDebit=values.unitAmount*quantity;values.totalCredit=0;priceVersion=product.priceVersion;productVersion=product.productVersion;extra={productId:product.productId,unit,action:direction};}
+    else {assertSupply(w(),input.productId);need(['pack','box'].includes(unit),'INVALID_INPUT','商品单位不正确。');need(productEnabled(w().rules,input.productId),'UNAVAILABLE_PRODUCT','该卡包已停止发行。');const product=w().products.find(p=>p.productId===input.productId);need(product?.availability==='available','UNAVAILABLE_PRODUCT',product?.unavailableReason||'商品不存在。');values={unitAmount:product.prices[unit][direction==='purchase'?'wholesale':'retail'],feeAmount:0};values.totalDebit=values.unitAmount*quantity;values.totalCredit=0;priceVersion=product.priceVersion;productVersion=product.productVersion;extra={productId:product.productId,unit,action:direction};}
     const value={quantity,...values,subtotal:values.unitAmount*quantity,priceVersion,productVersion,validUntil:{day:w().clock.day,minute:1200},explanation:['报价按当前供货/挂单版本冻结；确认前库存变化需重新报价。'],...(!input.listingId?{availableCash:w().wallet.available,supplierCreditAvailable:Math.max(0,w().rules.supplierCreditLimit-w().wallet.debt),creditExplanation:'仅对货款不足部分记供应商欠款；后续收入自动先还欠款，不会直接增加可用游戏币。'}:{}),...extra};
     return {...value,quoteId:token(quotes,value)};
   }
@@ -143,6 +147,11 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
     try{live();await queue;
       let data;
       switch(name){
+        case 'combat.formats':data=V7.formatsView(modeCapabilities);break;
+        case 'combat.series':data=V7.seriesView(w(),p.matchId);break;
+        case 'combat.roundPlan':{const m=matchById(w(),p.matchId);need(m.series,'INVALID_STATE','该比赛没有原生计划。');const r=buildRoundPlan(m.series);need(r.ok,r.error?.code,r.error?.message);data=r.data.plan;break;}
+        case 'dialogue.offer':data=V7.dialogueView(w());break;
+        case 'progression.status':case 'challenges.status':case 'allies.list':data=V7.progressionQuery(w(),name);break;
         case 'narrative.available':data=narrative.available(w());break;
         case 'narrative.session':data=narrative.view(w(),p.sessionId);break;
         case 'shop.snapshot':data=snapshot(w(),reasons());break;
@@ -167,7 +176,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
         case 'cardStats.summary':data=stats(p.cardKey,p.mode);break;
         case 'room.snapshot':data={roomId:'battle-room',tables:w().tables.map((t,i)=>{const m=w().matches.find(m=>m.matchId===t.matchId);return {...clone(t),label:`${i+1} 号牌桌`,status:m?(m.status==='running'?'in-progress':'waiting'):t.reservation?'reserved':'idle',mode:m?.mode||'BO3 / KOF',seated:m?2:0,maxSeats:2,stake:{base:w().rules.baseStake,final:m?.stake||0},fee:managementEffects(w()).tableFee,rakeRate:w().rules.rake,note:npcTableNote(m)};}),matches:clone(w().matches),tableFee:managementEffects(w()).tableFee,rake:w().rules.rake,wageringEnabled:w().rules.wageringEnabled,note:'NPC 使用实际持有的流通卡；当前开放无赌注比赛。'};break;
         case 'room.diagnostics':data={paused:!backgroundRunning(),pauseReasons:reasons(),items:w().matches.filter(m=>m.background).slice(-20).map(m=>({matchId:m.matchId,gameId:m.gameId,status:m.status,mode:m.mode,bout:m.bout,wins:m.wins,losses:m.losses,result:m.result||null,error:m.error||null,progress:clone(currentProgress(m))}))};break;
-        case 'combat.eligible':data={mode:p.mode||'bo3',slots:p.mode==='kof'?3:1,items:eligible(w(),catalog,p.ownerId||'player').map(i=>({...i,reasons:i.disabledReasons}))};break;
+        case 'combat.eligible':data={mode:p.formatId||p.mode||'bo3',slots:getFormat(p.formatId||p.mode||'bo3')?.reservePerSide||1,items:V7.eligibleV7(w(),catalog,p.ownerId||'player',p.formatId||p.mode||'bo3',modeCapabilities).map(i=>({...i,reasons:i.disabledReasons}))};break;
         case 'combat.preview':{const value=combatPreview(w(),catalog,p);data={...value,previewId:token(previews,value),lineup:value.mine,fee:0,opponentFee:value.tableFee,noStake:value.stakeAmount===0,balance:w().wallet.available,rules:['实体副本锁定至整场结束','店主免自身开桌费；对手支付桌费','玩家参赛免该桌抽水','当前只开放无赌注比赛'],stakeProposal:{proposalId:value.stakeProposalId,multiplier:value.multiplier,base:w().rules.baseStake,final:value.stakeAmount,reason:value.explanation}};break;}
         case 'tasks.list':data=taskViews(w());break;
         case 'ledger.live':data=financeView(w());break;
@@ -221,6 +230,12 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
     const station=input.type==='opening.execute'?'store.opening':input.type.startsWith('supplier.')||input.type==='boxes.unseal'?'store.counter':input.type.startsWith('market.')?'store.secondaryMarket':input.type.startsWith('retail.')?'store.retail':input.type==='inventory.discard'||input.type==='inventory.recover'?'store.trash':input.type==='neighbors.act'&&['buy','deliver'].includes(p.action)?'store.secondaryMarket':null;
     if(station&&navigation.size){const map=navigation.get(world.player.roomId),anchor=map?.anchors[station];need(anchor&&Math.hypot(world.player.x-anchor.x,world.player.y-anchor.y)<=(anchor.radius||24),'NOT_IN_RANGE','请先走到对应柜台或家具旁边。');}
     switch(input.type){
+      case 'actors.interact':case 'challenges.offer':return V7.interactV7(world,p,navigation);
+      case 'dialogue.respond':case 'challenges.reply':return V7.respondV7(world,p,navigation);
+      case 'allies.assign':return V7.assignV7(world,catalog,p);
+      case 'combat.prepareSeries':return V7.prepareV7(world,catalog,p,navigation,modeCapabilities);
+      case 'combat.selectRound':return V7.selectV7(world,p);
+      case 'combat.restartRound':case 'combat.abandon':return V7.lifecycleV7(world,catalog,input.type,p);
       case 'clock.setManualPause':need(typeof p.paused==='boolean','INVALID_INPUT','暂停开关不正确。');world.clock.manualPaused=p.paused;return {};
       case 'player.setSkin':need(PLAYER_SKINS.some(s=>s.appearanceId===p.appearanceId),'INVALID_INPUT','没有这个店长外观。');world.player.appearanceId=p.appearanceId;note(world,'playerSkinChanged',{appearanceId:p.appearanceId});return {appearanceId:p.appearanceId};
       case 'player.setFavorite':return setFavorite(world,catalog,p);
@@ -232,7 +247,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
       case 'business.close':{
         need(['open','closing'].includes(world.clock.phase),'INVALID_STATE','今天已关闭或尚未开门。');need(!world.matches.some(m=>m.status!=='finished'),'MATCH_ACTIVE','请先完成或取消未结束的牌局。');
         for(const entry of [...(world.matchQueue||[])])leaveQueue(world,entry.ownerId,'business-closed');
-        finishCustomerVisits(world,catalog);
+        finishCustomerVisits(world,catalog);V7.endV7Day(world);
         const wages=managementEffects(world).wages,cost=world.rules.operatingCost+wages,paid=Math.min(cost,world.wallet.available);world.wallet.available-=paid;world.wallet.debt+=cost-paid;world.daily.operating=cost;world.daily.wages=wages;world.clock.phase='closed';note(world,'businessClosed');const ledger=ledgerView(world,catalog);world.reports.push({day:world.clock.day,...clone(world.daily),walletAtClose:clone(world.wallet),unsoldValuationAtClose:ledger.unsoldValuation});saveArchive(next,'close');return {report:clone(world.daily)};
       }
       case 'business.nextDay':{
@@ -241,8 +256,8 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
         world.clock.day++;world.clock.minute=480;world.clock.phase='preparing';world.daily={goods:0,cogs:0,service:0,fees:0,matchNet:0,operating:0,purchases:0};
         initialiseExperience(world);
         initialiseDailyTasks(world);
-        for(const n of world.npcs){credit(n.wallet,world.rules.npcDailyIncome);note(world,'npcDailyIncome',{actorId:n.actorId,externalFunds:world.rules.npcDailyIncome});}
-        updatePrices(world,buildCatalog(source,world.rules));world.products=publishProducts(buildCatalog(source,world.rules),world.rules,world.clock.day,world.prices);world.nextNpcMinute=540;
+        for(const n of world.npcs){if(isV7(world)){const result=replenishCustomer(world,n);if(result?.supplementedAmount)note(world,'npcDailyIncome',{actorId:n.actorId,externalFunds:result.supplementedAmount});}else{credit(n.wallet,world.rules.npcDailyIncome);note(world,'npcDailyIncome',{actorId:n.actorId,externalFunds:world.rules.npcDailyIncome});}}
+        updatePrices(world,buildCatalog(source,world.rules));world.products=publishProducts(buildCatalog(source,world.rules),world.rules,world.clock.day,world.prices,world);world.nextNpcMinute=540;
         for(const o of world.orders)if(o.status==='pending'&&o.dueAt<=world.clock.day*1440+480)o.status='arrived';
         if(world.management){world.management.nextRestockAt=world.clock.day*1440+480+world.management.config.restockIntervalMinutes;tickManagement(world,buildCatalog(source,world.rules));}
         saveArchive(next,'start');return {};
@@ -253,7 +268,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
       }
       case 'supplier.placeOrder':{
         need(world.clock.phase!=='closed','SHOP_CLOSED','请在准备或营业时下单。');const q=lookup(quotes,input.quoteId);need(q.action==='purchase'&&q.productId===p.productId&&q.quantity===p.quantity&&q.unit===(p.unit||'pack'),'QUOTE_EXPIRED','采购参数与报价不一致。');
-        const product=world.products.find(x=>x.productId===p.productId);need(productEnabled(world.rules,p.productId),'UNAVAILABLE_PRODUCT','该卡包已停止发行。');need(product?.productVersion===q.productVersion&&product?.priceVersion===q.priceVersion&&product?.prices[q.unit]?.wholesale===q.unitAmount,'QUOTE_EXPIRED','供货版本或价格已变化。');
+        assertSupply(world,p.productId);const product=world.products.find(x=>x.productId===p.productId);need(productEnabled(world.rules,p.productId),'UNAVAILABLE_PRODUCT','该卡包已停止发行。');need(product?.productVersion===q.productVersion&&product?.priceVersion===q.priceVersion&&product?.prices[q.unit]?.wholesale===q.unitAmount,'QUOTE_EXPIRED','供货版本或价格已变化。');
         const shortfall=Math.max(0,q.totalDebit-world.wallet.available);need(!shortfall||p.credit&&world.wallet.debt+shortfall<=world.rules.supplierCreditLimit,'INSUFFICIENT_FUNDS','游戏币或供应商信用额度不足。');
         world.wallet.available-=q.totalDebit-shortfall;world.wallet.debt+=shortfall;
         const order={orderId:serial(world,'order'),product:clone(product),productId:product.productId,unit:q.unit,quantity:q.quantity,unitCost:q.unitAmount,cost:q.totalDebit,status:'pending',dueAt:world.clock.day*1440+world.clock.minute+world.rules.deliveryMinutes};
@@ -285,9 +300,9 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
       case 'combat.leaveQueue':return leaveQueue(world);
       case 'combat.setWaitMode':return setWaitMode(world,p);
       case 'combat.register':{const m=registerMatch(world,catalog,lookup(previews,input.previewId,'combat'),p);return {...m,match:clone(m),note:'阵容与开桌费用已冻结。'};}
-      case 'combat.start':case 'combat.continue':need(!matchById(world,p.matchId).background,'NPC_MATCH_CONTROLLED','NPC 牌局由后台引擎调度。');return beginMatch(world,p.matchId);
-      case 'combat.surrender':need(!matchById(world,p.matchId).background,'NPC_MATCH_CONTROLLED','不能替 NPC 认输并刷战绩。');return surrender(world,p.matchId,p.scope);
-      case 'combat.cancel':need(!matchById(world,p.matchId).background,'NPC_MATCH_CONTROLLED','请使用对战房的取消后台牌局操作。');return cancelPrepared(world,p.matchId);
+      case 'combat.start':case 'combat.continue':if(matchById(world,p.matchId).series)return V7.startV7(world,p);need(!matchById(world,p.matchId).background,'NPC_MATCH_CONTROLLED','NPC 牌局由后台引擎调度。');return beginMatch(world,p.matchId);
+      case 'combat.surrender':if(matchById(world,p.matchId).series)return V7.lifecycleV7(world,catalog,input.type,p);need(!matchById(world,p.matchId).background,'NPC_MATCH_CONTROLLED','不能替 NPC 认输并刷战绩。');return surrender(world,p.matchId,p.scope);
+      case 'combat.cancel':if(matchById(world,p.matchId).series)return V7.lifecycleV7(world,catalog,input.type,p);need(!matchById(world,p.matchId).background,'NPC_MATCH_CONTROLLED','请使用对战房的取消后台牌局操作。');return cancelPrepared(world,p.matchId);
       case 'room.cancelNpcMatch':return voidNpcMatch(world,p.matchId,'店主取消后台对局；不计战绩。');
       case 'upgrades.purchase':return purchaseUpgrade(world,p.upgradeId);
       case 'neighbors.act':return neighborAct(world,catalog,p);
@@ -302,7 +317,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
         if(input.type==='saves.loadDay')need(a?.slot==='start'&&a.minute===480&&a.world?.clock.minute===480&&a.world?.clock.phase==='preparing','NOT_DAY_START','请选择对应日期的日初档；即时备份不能冒充当天开始。');
         need(a?.format==='noname-shop-world-save'&&a.version===2,'INVALID_SAVE','档案格式不支持。');validateWorld(a.world);validateRules(a.world.rules);
         for(const i of Object.values(a.world.items))need(['pack','box','card'].includes(i.kind)&&Number.isSafeInteger(i.cost)&&i.cost>=0&&(!i.cardKey||catalog.byKey.has(i.cardKey)),'INVALID_SAVE','库存数据不完整。');
-        saveArchive(next,'before-load');next.world=clone(a.world);upgradeDistribution(next.world);initialiseManagement(next.world,managementConfig);ensureRegulars(next.world);next.world.player.actorId='actor:owner';normaliseActors(next.world);next.world.branchLineage=[next.world.branchId,...(next.world.branchLineage||[])].slice(0,120);next.world.branchId=id('branch');next.world.pendingEngineEvents=[];for(const m of next.world.matches)if(m.status==='running'&&!m.simulated)m.status='interrupted';if(input.type==='saves.loadDay')saveArchive(next,'start');return {worldId:next.world.worldId,branchId:next.world.branchId};
+        saveArchive(next,'before-load');next.world=clone(a.world);upgradeDistribution(next.world);initialiseManagement(next.world,managementConfig);ensureRegulars(next.world);next.world.player.actorId='actor:owner';normaliseActors(next.world);next.world.branchLineage=[next.world.branchId,...(next.world.branchLineage||[])].slice(0,120);next.world.branchId=id('branch');V7.restoreV7(next.world);next.world.pendingEngineEvents=[];for(const m of next.world.matches)if(m.status==='running'&&!m.simulated)m.status='interrupted';if(input.type==='saves.loadDay')saveArchive(next,'start');return {worldId:next.world.worldId,branchId:next.world.branchId};
       }
       case 'world.changeRoom':{
         const map=navigation.get(world.player.roomId),door=map?.anchors[p.anchorId];need(door?.targetRoom&&door?.targetAnchor,'NOT_FOUND','房间出口不存在。');need(Math.hypot(world.player.x-door.x,world.player.y-door.y)<=(door.radius||24),'NOT_IN_RANGE','请先走到门口。');const nextMap=navigation.get(door.targetRoom);let anchor=door.targetSpawn||nextMap?.anchors[door.targetAnchor];
@@ -327,13 +342,14 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
     tickManagement(world,catalog);
     if(world.clock.phase==='open'&&world.clock.minute>=1200){world.clock.phase='closing';note(world,'shopClosing');}
     if(clockRunning||world.clock.phase==='closing')tickEconomy(world,catalog,{map:navigation.get('store'),seconds});
+    V7.tickV7(world,catalog,navigation,seconds);
     tickNpcTables(world,catalog,navigation,seconds,{schedule:false});
     tickMatchQueue(world,catalog,navigation,{schedule:world.rules.npcSimulation!==false||backgroundAvailable});
     const map=navigation.get(world.player.roomId);if(map){world.player.navVersion=map.navVersion;const waiting=playerQueue(world);if(movement&&waiting){waiting.waitMode='manual';delete waiting.wanderTrip;}if(movement||!moveWaitingPlayer(world,navigation,seconds))moveActor(map,world.player,movement,seconds);}
     await persist(next);
   });}
   return {
-    async connect(p){need(p?.contractVersion===CONTRACT,'CONTRACT_MISMATCH','前后端契约版本不一致。');need(typeof p.clientId==='string','INVALID_INPUT','缺少会话 ID。');clientId=p.clientId;sessionId=id('session');connected=true;disconnected=false;return {contractVersion:CONTRACT,worldId:w().worldId,branchId:w().branchId,sessionId,revision:record.revision,currency:{code:'SHOP',label:'游戏币',minorUnit:1},capabilities:{narrative:narrative.contentAvailable||!!w().narrative,clock:true,inventory:true,products:true,market:true,combat:true,wagering:false,saves:true,navigation:navigation.size>0,upgrades:!!w().management,neighbors:!!w().management,npcAutoBattles:w().rules.npcSimulation!==false||backgroundAvailable},initialSnapshot:snapshot(w(),reasons())};},
+    async connect(p){need(p?.contractVersion===CONTRACT,'CONTRACT_MISMATCH','前后端契约版本不一致。');need(typeof p.clientId==='string','INVALID_INPUT','缺少会话 ID。');clientId=p.clientId;sessionId=id('session');connected=true;disconnected=false;return {contractVersion:CONTRACT,worldId:w().worldId,branchId:w().branchId,sessionId,revision:record.revision,currency:{code:'SHOP',label:'游戏币',minorUnit:1},capabilities:{operationsV7:isV7(w()),nativeModes:true,narrative:narrative.contentAvailable||!!w().narrative,clock:true,inventory:true,products:true,market:true,combat:true,wagering:false,saves:true,navigation:navigation.size>0,upgrades:!!w().management,neighbors:!!w().management,npcAutoBattles:w().rules.npcSimulation!==false||backgroundAvailable},initialSnapshot:snapshot(w(),reasons())};},
     query,command,subscribe(listener){listeners.add(listener);publish();return()=>listeners.delete(listener);},
     pause:{async acquire(p){live();need(p?.ownerId&&p?.reason,'INVALID_INPUT','缺少暂停原因。');const lease={leaseId:id('pause'),ownerId:p.ownerId,reason:p.reason};pauses.set(lease.leaseId,lease);movement=null;publish();return clone(lease);},async release(leaseId){pauses.delete(leaseId);publish();}},
     world:{input(p){
@@ -349,12 +365,12 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
     advance,
     async installStoryPacks(packs){return serially(async()=>{for(const raw of packs)narrative.install(await loadStoryPack(raw,{registry:createRegistry(storyExtensions)}));});},
     storyReferences(archiveId){return Object.values(record.archives.find(a=>a.id===archiveId)?.world?.narrative?.sessions||{}).map(s=>s?.contentHash).filter(h=>typeof h==='string'&&/^[a-f0-9]{64}$/.test(h));},
-    async trustedEngineEvent(matchId,message){return serially(async()=>{const next=fork(),m=matchById(next.world,matchId);if(m.background&&!backgroundRunning()){need(m.status==='running'&&m.gameId===message.matchId,'STALE_EVENT','过期的后台牌局事件。');const events=next.world.pendingEngineEvents||=[];if(!events.some(e=>e.matchId===matchId&&JSON.stringify(e.message)===JSON.stringify(message)))events.push({matchId,message:clone(message)});await persist(next);return {deferred:true};}const data=engineMessage(next.world,matchId,message);await persist(next);emit('battleStatusChanged',data);return data;});},
+    async trustedEngineEvent(matchId,message){return serially(async()=>{const next=fork(),m=matchById(next.world,matchId);if(m.background&&!backgroundRunning()){need(m.status==='running'&&m.gameId===message.matchId,'STALE_EVENT','过期的后台牌局事件。');const events=next.world.pendingEngineEvents||=[];if(!events.some(e=>e.matchId===matchId&&JSON.stringify(e.message)===JSON.stringify(message)))events.push({matchId,message:clone(message)});await persist(next);return {deferred:true};}const data=m.series?V7.trustedV7(next.world,catalog,matchId,message):engineMessage(next.world,matchId,message);await persist(next);emit('battleStatusChanged',data);return data;});},
     backgroundState(){return backgroundState(w(),!backgroundRunning());},
     reportBackgroundProgress(matchId,progress){const m=w().matches.find(m=>m.matchId===matchId);if(!m||m.status!=='running'||m.gameId!==progress.gameId)return;for(const key of engineProgress.keys())if(key!==matchId)engineProgress.delete(key);engineProgress.set(matchId,clone(progress));},
     async startBackgroundMatch(matchId){return serially(async()=>{need(backgroundRunning(),'WORLD_PAUSED','经营世界已暂停。');const next=fork(),m=matchById(next.world,matchId);need(m.background&&backgroundState(next.world,false).matches.find(x=>x.matchId===matchId)?.seated,'NOT_READY','NPC 还未入座。');const data=beginMatch(next.world,matchId);await persist(next);return data;});},
     async failBackgroundMatch(matchId,reason){return serially(async()=>{const next=fork();if(matchById(next.world,matchId).status==='finished')return clone(matchById(next.world,matchId));const data=voidNpcMatch(next.world,matchId,reason);await persist(next);emit('battleStatusChanged',data);emit('notification',{level:'error',message:'NPC 牌局技术中断，不计正常战绩：'+data.error});return data;});},
-    async interrupt(matchId,reason){return serially(async()=>{const next=fork(),m=matchById(next.world,matchId);if(m.status==='running'&&!m.simulated){m.status='interrupted';if(reason)m.error=String(reason).slice(0,300);await persist(next);emit('battleStatusChanged',clone(m));}});},
+    async interrupt(matchId,reason){return serially(async()=>{const next=fork(),m=matchById(next.world,matchId);if(m.status==='running'&&!m.simulated){if(m.series)V7.interruptV7(next.world,m,reason);else m.status='interrupted';if(reason)m.error=String(reason).slice(0,300);await persist(next);emit('battleStatusChanged',clone(m));}});},
     inspect(){return clone(record);},
     async markLegacyReset(){return serially(async()=>{if(record.legacyResetDone)return;const next=fork();next.legacyResetDone=true;await persist(next);});}
   };

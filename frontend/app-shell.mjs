@@ -1,3 +1,4 @@
+import {installWorldDialogue} from './v7-dialogue.mjs';
 // frontend/app-shell.mjs — 应用外壳：Host 连接、场景、HUD、手账、窗口调度与交互路由。
 import { el, clear, toast, formatMoney, formatShort, formatClock, formatPhase, newRequestId } from "./ui/components.mjs";
 import { createHud } from "./ui/hud.mjs";
@@ -20,7 +21,8 @@ const PANEL_LOADERS = {
   warehouse: () => import('../frontend-next/screens/stations.mjs').then(m=>m.openWarehouse),
   opening: () => classicTrades?import("./ui/opening.mjs").then(m=>m.openOpening):previousTrades?import('../frontend-next/screens/opening.mjs').then(m=>m.openOpening):import('../frontend-next/screens/stations.mjs').then(m=>m.openOpening),
   market: () => classicTrades?import("./ui/secondary-market.mjs").then(m=>m.openMarket):previousTrades?import('../frontend-next/screens/cards.mjs').then(m=>m.openCards):import('../frontend-next/screens/workspace.mjs').then(m=>m.openCards),
-  combat: () => classicTrades||previousTrades?import('./ui/combat-room.mjs').then(m=>m.openCombat):import('../frontend-next/screens/combat.mjs').then(m=>m.openCombat),
+  allies:()=>import('./combat/v7-room.mjs').then(m=>m.openAllies),
+  combat: () => classicTrades||previousTrades?import('./ui/combat-room.mjs').then(m=>m.openCombat):import('./combat/v7-room.mjs').then(m=>m.openCombat),
   tasks: () => import("./ui/tasks.mjs").then((m) => m.openTasks),
   report: () => mockTrades?import('./ui/day-report.mjs').then(m=>m.openDayReport):import('../frontend-next/screens/management.mjs').then(m=>m.openDayReport),
   guide: () => import('../frontend-next/screens/management.mjs').then(m=>m.openGuide),
@@ -75,7 +77,7 @@ export async function startApp({ host, connection, mode, fixture }) {
     modeBadge.title = "当前使用 Mock Host，交易与规则均为演示；不代表正式经济验收";
   }
 
-  let queueStatus=null;
+  let queueStatus=null,v7=null,pendingActor=null;
   const windows = createWindowManager({
     host,
     mount: document.getElementById("windows"),
@@ -119,14 +121,14 @@ export async function startApp({ host, connection, mode, fixture }) {
       return result;
     },
     async openPanel(kind, options = {}) {
-      if(destroying)return null;
+      if(destroying||v7?.blocked)return null;
       const loader = PANEL_LOADERS[kind];
       if (!loader) {
         toast("error", "未实现的入口", kind);
         return null;
       }
       const open = await loader();
-      if(destroying)return null;
+      if(destroying||v7?.blocked)return null;
       return open(app, options);
     },
     goToInteraction(interactionId,panel,panelOptions={}) {
@@ -152,7 +154,7 @@ export async function startApp({ host, connection, mode, fixture }) {
       scheduleWalk(()=>movement.moveTo(exit.seamlessEdge?(exit.seamlessEdge==='east'?maps[currentMapId].width*16-1:1):exit.fromTile.x*16+8,exit.fromTile.y*16+8));
     },
     destroy() {
-      destroying = true;
+      destroying = true;v7?.dispose();
       movement.destroy();observer?.disconnect();clearTimeout(notebookTask);window.removeEventListener('keydown',onGlobalKeyDown);
       document.getElementById('notebook-toggle').removeEventListener('click',onNotebookToggle);
       windows.closeAll();
@@ -225,10 +227,13 @@ export async function startApp({ host, connection, mode, fixture }) {
     getActors: () => actors,
     getPlayerActorId: () => playerActorId,
     getSnapshot: () => snapshot,
-    isBlocked: () => windows.depth > 0 || window.__bootFailed === true,
+    isBlocked: () => windows.depth > 0 || v7?.blocked || window.__bootFailed === true,
     onWorldClick: (x, y, roomId=currentMapId) => {
       if(roomId!==currentMapId){const destination=maps[roomId],hit=destination.interactions.find(i=>(i.props||[]).some(id=>{const p=destination.props.find(p=>p.id===id);return p&&x>=p.x&&x<=p.x+p.w&&y>=p.y&&y<=p.y+p.h;}));if(hit)app.goToInteraction(hit.id);else app.navigateScene(roomId);return;}
       const map = maps[currentMapId];
+      const person=actors.filter(n=>n.actorId!==playerActorId&&n.roomId===currentMapId).find(n=>Math.abs(n.x-x)<17&&y>=n.y-48&&y<=n.y+10);
+      if(person&&v7){router.clearPending();const player=app.getPlayer();if(Math.hypot(player.x-person.x,player.y-person.y)<=52)void v7.interact(person.actorId);else{pendingActor={actorId:person.actorId,until:performance.now()+12000,lastX:person.x,lastY:person.y};movement.moveTo(person.x,person.y+12);}return;}
+      pendingActor=null;
       const hit=map.interactions.find(i=>(i.props||[]).some(id=>{const p=map.props.find(p=>p.id===id);return p&&x>=p.x&&x<=p.x+p.w&&y>=p.y&&y<=p.y+p.h;}));
       if(hit){app.goToInteraction(hit.id);return;}
       const near = nearestInteraction(map, x, y, 6);
@@ -242,6 +247,7 @@ export async function startApp({ host, connection, mode, fixture }) {
     },
     onPlayerMoved: (player) => {
       router.refresh(player);
+      if(pendingActor&&v7){const n=actors.find(n=>n.actorId===pendingActor.actorId);if(!n||n.roomId!==currentMapId||performance.now()>pendingActor.until)pendingActor=null;else if(Math.hypot(player.x-n.x,player.y-n.y)<=48){pendingActor=null;movement.stop();void v7.interact(n.actorId);}else if(Math.hypot(n.x-pendingActor.lastX,n.y-pendingActor.lastY)>24){pendingActor.lastX=n.x;pendingActor.lastY=n.y;movement.moveTo(n.x,n.y+12);}}
     },
     onSceneReady: (mapId) => {
       router.clearPending();
@@ -258,9 +264,9 @@ export async function startApp({ host, connection, mode, fixture }) {
     host,
     sessionId: connection.sessionId,
     getRoom: () => ({ mapId: currentMapId, navVersion: maps[currentMapId].navVersion }),
-    isBlocked: () => windows.depth > 0 || changingRoom,
+    isBlocked: () => windows.depth > 0 || v7?.blocked || changingRoom,
     // 用户自己按方向键即放弃自动寻路与待触发的交互
-    onManualMove: () => {walkIntent=null;travelTarget=null;router.clearPending();},
+    onManualMove: () => {pendingActor=null;walkIntent=null;travelTarget=null;router.clearPending();},
   });
 
   // ---- HUD ----
@@ -271,6 +277,7 @@ export async function startApp({ host, connection, mode, fixture }) {
     currency,
     getSnapshot: () => snapshot,
     onAction: (action) => {
+      if(v7?.blocked)return;
       if (['business','pause','speed'].includes(action)) {
         (async()=>{
           const lease=await host.pause.acquire({ownerId:'hud-action',reason:'店铺操作'});
@@ -446,13 +453,13 @@ export async function startApp({ host, connection, mode, fixture }) {
       }
       return;
     }
-    if (typing) return;
+    if (typing||v7?.blocked) return;
     if (event.code === "KeyB") {
       event.preventDefault();
       app.openPanel("inventory", {});
     } else if (event.code === "KeyE") {
       event.preventDefault();
-      if (windows.depth === 0) router.activateNearest();
+      if (windows.depth === 0){const p=app.getPlayer(),n=actors.filter(n=>n.actorId!==playerActorId&&n.roomId===currentMapId&&Math.hypot(n.x-p.x,n.y-p.y)<=48).sort((a,b)=>Math.hypot(a.x-p.x,a.y-p.y)-Math.hypot(b.x-p.x,b.y-p.y))[0];if(n&&v7)void v7.interact(n.actorId);else router.activateNearest();}
     }
   };
   window.addEventListener('keydown',onGlobalKeyDown);
@@ -517,6 +524,7 @@ export async function startApp({ host, connection, mode, fixture }) {
     flushWalk();
   });
 
+  if(connection.capabilities?.operationsV7)v7=installWorldDialogue(app,{stopMovement:()=>movement.releaseAll()});
   movement.bindTouchpad(document.getElementById("touchpad"));
   window.__cardShopApp = app;
   render();

@@ -2,6 +2,7 @@
 import {serial} from './common.mjs';
 import {note} from './world.mjs';
 import {canStand,pathfind} from './navigation.mjs';
+import {initialiseVisitBudget} from './v7-policy.mjs';
 
 export const onSite=npc=>npc.presence!=='offsite';
 const stamp=w=>w.clock.day*1440+w.clock.minute;
@@ -24,7 +25,7 @@ export function arriveCustomer(w,npc,map,intent=null){
   const entry=map?.anchors['store.entry'];npc.presence='onsite';npc.roomId='store';npc.activity='shopping';npc.label='刚进店';npc.moving=false;npc.trip=null;
   if(entry){npc.x=entry.x;npc.y=entry.y;npc.navVersion=map.navVersion;}
   npc.customerCategory=npc.regularId==='collector'?'收藏客':npc.regularId==='duelist'?'对战客':npc.regularId==='student'?'学生玩家':npc.scavenger?'拾牌客':'顾客';
-  npc.visit={visitId:serial(w,'visit'),enteredAt:stamp(w),elapsedSeconds:0,idleSeconds:0,intent:intent||{kind:'shopping',label:npc.regularId==='collector'?'寻找缺少的单卡':'看看合适的卡牌'},purchases:0,pickups:0,matches:0,issues:[]};note(w,'npcVisitStarted',{actorId:npc.actorId,visitId:npc.visit.visitId});
+  npc.visit={visitId:serial(w,'visit'),enteredAt:stamp(w),elapsedSeconds:0,idleSeconds:0,intent:intent||{kind:'shopping',label:npc.regularId==='collector'?'寻找缺少的单卡':'看看合适的卡牌'},purchases:0,pickups:0,matches:0,issues:[]};initialiseVisitBudget(w,npc);note(w,'npcVisitStarted',{actorId:npc.actorId,visitId:npc.visit.visitId});
 }
 export function lingerCustomer(w,npc,seconds){
   npc.trip=null;npc.activity='idle';npc.label='逛店 / 找牌友';npc.moving=false;
@@ -36,6 +37,7 @@ export function customerTarget(w,map,anchor,npc){
   const candidates=[anchor];
   for(let ring=1;ring<=3;ring++)for(const [dx,dy]of [[ring,0],[-ring,0],[0,ring],[0,-ring],[ring,ring],[-ring,ring],[ring,-ring],[-ring,-ring]])candidates.push({x:anchor.x+dx*16,y:anchor.y+dy*16});
   for(const p of candidates){
+    if(w.player.roomId===map.mapId&&Math.hypot(w.player.x-p.x,w.player.y-p.y)<22)continue;
     if(!canStand(map,p.x,p.y)||Math.hypot(p.x-anchor.x,p.y-anchor.y)>(anchor.radius||24)||entry&&Math.hypot(p.x-entry.x,p.y-entry.y)<24||occupied.some(n=>Math.hypot(n.x-p.x,n.y-p.y)<15))continue;
     try{return {target:{x:p.x,y:p.y},path:pathfind(map,npc,p)};}catch{}
   }

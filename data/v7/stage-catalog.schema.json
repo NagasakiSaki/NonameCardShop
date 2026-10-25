@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "V7StageCatalog",
+  "type": "object",
+  "required": ["version", "contract", "policyVersion", "stages"],
+  "properties": {
+    "version": { "type": "string" },
+    "contract": { "type": "string" },
+    "policyVersion": { "type": "string" },
+    "stages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "ordinal",
+          "stageId",
+          "productId",
+          "productName",
+          "challengerId",
+          "personId",
+          "appearanceId",
+          "displayName",
+          "dueDay",
+          "formatId",
+          "tierId",
+          "unlockedInitially"
+        ],
+        "properties": {
+          "ordinal": { "type": "integer", "minimum": 0 },
+          "stageId": { "type": "string" },
+          "productId": { "type": "string" },
+          "productName": { "type": "string" },
+          "challengerId": { "type": "string" },
+          "personId": { "type": "string" },
+          "appearanceId": { "type": "string" },
+          "displayName": { "type": "string" },
+          "dueDay": { "type": "integer", "minimum": 0 },
+          "formatId": { "type": "string" },
+          "tierId": { "type": "string" },
+          "unlockedInitially": { "type": "boolean" },
+          "description": { "type": "string" }
+        }
+      }
+    }
+  }
+}

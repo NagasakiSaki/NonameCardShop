@@ -21,7 +21,9 @@ export async function createHost({profileId='legacy',storyExtensions={}}={}){
   const storyPacks=[];
   for(const raw of content.packs){try{storyPacks.push(await loadStoryPack(raw,{registry:createRegistry(storyExtensions)}));}catch{content.diagnostics.push('一份剧情内容校验失败，未加载该版本。');}}
   const cachedRepository={...repository,async read(){if(firstRead!==undefined){const value=firstRead;firstRead=undefined;return value;}return repository.read();}};
-  const runtime=await createRuntime({source,rules,repository:cachedRepository,maps,managementConfig,backgroundAvailable:true,storyPacks,storyExtensions,storyDiagnostics:content.diagnostics,storyActiveHashes:content.activeHashes});
+  let modeCapabilities=[];
+  try{const engine=await json('/api/runtime');if(engine.ready)modeCapabilities=(await json(new URL('/shop-integration/modes/capabilities.json',engine.engineOrigin))).items||[];}catch{}
+  const runtime=await createRuntime({source,rules,modeCapabilities,repository:cachedRepository,maps,managementConfig,backgroundAvailable:true,storyPacks,storyExtensions,storyDiagnostics:content.diagnostics,storyActiveHashes:content.activeHashes});
   const knownStoryHashes=new Set(storyPacks.map(p=>p.contentHash));
   async function prepareStoryRestore(input){
     if(!['saves.load','saves.loadDay','saves.import'].includes(input?.type))return;
@@ -45,7 +47,7 @@ export async function createHost({profileId='legacy',storyExtensions={}}={}){
       if(result.ok&&name==='catalog.detail'&&input?.includeCode){try{const card=source.cards.find(c=>c.id===result.data.generalId),records=await json(`/data/skills/${encodeURIComponent(card.pack)}.json`);result.data.skills=result.data.skills.map(s=>({...s,code:records.skills?.[s.key]?.code||null}));}catch{result.data.skillSourceAvailable=false;}}
       return result;
     },
-    async command(input){await prepareStoryRestore(input);return runtime.command(input);},subscribe:listener=>runtime.subscribe(listener),pause:runtime.pause,world:runtime.world,battle:{mount},
+    async command(input){await prepareStoryRestore(input);return runtime.command(input);},subscribe:listener=>runtime.subscribe(listener),pause:runtime.pause,world:runtime.world,battle:{mount,control:input=>mount.control(input)},
     disconnect(){return disconnectPromise??=(async()=>{clearInterval(timer);timer=null;document.removeEventListener('visibilitychange',onVisibility);await mount.disposeAll();await npcEngine.dispose();await runtime.disconnect();})();}
   };
   return host;

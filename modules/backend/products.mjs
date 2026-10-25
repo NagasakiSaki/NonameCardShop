@@ -1,12 +1,21 @@
 import {RARITIES,clone,need,sum,shuffle,pick,serial,clamp} from './common.mjs';
 import {boxRecipe,distribution} from './distribution.mjs';
 import {priceByStrength,strengthPricing} from './supply-pricing.mjs';
+import {planCollation} from '../economy-v7/collation-policy.mjs';
+import {quoteThemePricing} from '../economy-v7/pricing.mjs';
+import {unlockedProducts,allyEffects,economyPolicy} from './v7-policy.mjs';
 
-export function publishProducts(catalog,rules,day,marketPrices={}){
+export function publishProducts(catalog,rules,day,marketPrices={},world=null){
   const ratingVersion=catalog.cards[0]?.ratingVersion||rules.ratingVersion;
   let priceHash=2166136261;for(const ch of JSON.stringify([strengthPricing(rules),rules.referenceValues,rules.retailMargin,rules.roundTo]))priceHash=Math.imul(priceHash^ch.charCodeAt(0),16777619)>>>0;
   const economyVersion=priceHash.toString(16);
   return catalog.packs.map(pack=>{
+    if(rules.operationsV7){
+      const unlocked=unlockedProducts(world),plan=planCollation({productId:pack.id,unlockedProductIds:unlocked,catalog});need(plan.ok,'INVALID_CONFIG',plan.error?.message||'配盒无效。');
+      const c=plan.data,pricing=quoteThemePricing(catalog.cards.filter(c=>c.pack===pack.id),economyPolicy(rules),allyEffects(world));
+      const locked=!unlocked.includes(pack.id),valid=RARITIES.every(r=>!c.boxCounts[r]||c.pools[r].length);
+      return {...c,themeId:pack.id,name:pack.name,ratingVersion,productVersion:`${ratingVersion}-${c.productVersion}-discount${pricing.allyDiscountApplied}-day${day}`,priceVersion:`v7-${pricing.pricingVersion}-${pricing.allyDiscountApplied}-day${day}`,priceTier:{id:pricing.tierId,label:pricing.tierLabel,version:pricing.pricingVersion},prices:pricing.prices,averageStrength:pricing.averageStrength,availability:locked?'locked':valid?'available':'unavailable',locked,unavailableReason:locked?'击败来访高手后解锁供货':valid?null:'已解锁卡池缺少必需稀有度',effectiveDay:day};
+    }
     const local=Object.fromEntries(RARITIES.map(r=>[r,catalog.cards.filter(c=>c.pack===pack.id&&c.currentRarity===r).map(c=>c.cardKey)]));
     const poolSummary=Object.fromEntries(RARITIES.map(r=>[r,local[r].length]));
     const pools=Object.fromEntries(RARITIES.map(r=>[r,local[r].length?local[r]:catalog.pools[r]]));
@@ -41,7 +50,7 @@ function pickRarity(world,weights){let n=pickUnit(world);for(const r of RARITIES
 function pickUnit(world){world.seed=(Math.imul(world.seed,1664525)+1013904223)>>>0;return world.seed/4294967296;}
 export function makeSealed(world,product,unit,cost,ownerId='player'){
   const item={inventoryRef:serial(world,'item'),kind:unit,productId:product.productId,productVersion:product.productVersion,ownerId,location:'stock',cost,protected:false,lock:null,retailPrice:product.prices[unit].retail,suggestedRetail:product.prices[unit].retail,
-    spec:{cardsPerPack:5,packsPerBox:24,boxCounts:clone(product.boxCounts),guarantees:clone(product.guarantees)}};
+    spec:{cardsPerPack:5,packsPerBox:24,boxCounts:clone(product.boxCounts),guarantees:clone(product.guarantees),...(product.isStarterNoSsr!==undefined?{packSuggestedRetail:product.prices.pack.retail}:{})}};
   if(unit==='box')item.packets=manufactureBox(world,product);else item.cards=manufacturePack(world,product);
   world.items[item.inventoryRef]=item;return item;
 }
@@ -49,6 +58,7 @@ export function unsealBox(world,item){
   need(item.kind==='box'&&item.location==='stock'&&!item.lock,'ITEM_LOCKED','只能拆开仓库中未锁定的卡盒。');
   const total=item.packets.length;
   const packets=item.packets.map((cards,i)=>({inventoryRef:serial(world,'item'),kind:'pack',productId:item.productId,productVersion:item.productVersion,ownerId:item.ownerId,location:'stock',cost:Math.floor(item.cost/total)+(i<item.cost%total?1:0),cards:clone(cards),boxId:item.inventoryRef,protected:false,lock:null,retailPrice:Math.ceil(item.retailPrice/total),suggestedRetail:Math.ceil((item.suggestedRetail??item.cost/(1-world.rules.retailMargin))/total),spec:clone(item.spec)}));
+  if(item.spec?.packSuggestedRetail)for(const packet of packets){packet.retailPrice=item.spec.packSuggestedRetail;packet.suggestedRetail=item.spec.packSuggestedRetail;}
   delete world.items[item.inventoryRef];for(const packet of packets)world.items[packet.inventoryRef]=packet;return packets;
 }
 export function openPacket(world,packet){

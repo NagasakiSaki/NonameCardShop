@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "V7EconomyPolicy",
+  "type": "object",
+  "required": [
+    "version",
+    "contract",
+    "retailPriceMeaning",
+    "roundTo",
+    "packsPerBox",
+    "cardsPerPack",
+    "boxDiscount",
+    "pricing",
+    "retiredProductIds",
+    "initialUnlockedProductIds",
+    "starterGift",
+    "collation",
+    "buyerClasses"
+  ],
+  "properties": {
+    "version": { "type": "string" },
+    "contract": { "type": "string" },
+    "retailPriceMeaning": { "type": "string" },
+    "roundTo": { "type": "integer", "minimum": 1 },
+    "packsPerBox": { "type": "integer", "minimum": 1 },
+    "cardsPerPack": { "type": "integer", "minimum": 1 },
+    "boxDiscount": { "type": "number", "minimum": 0, "maximum": 1 },
+    "boxRoundUpTo": { "type": "integer", "minimum": 1 },
+    "pricing": {
+      "type": "object",
+      "required": ["version", "tiers"],
+      "properties": {
+        "version": { "type": "string" },
+        "thresholds": { "type": "object" },
+        "tiers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "label", "packWholesale", "packRetail", "boxWholesale", "boxRetail"],
+            "properties": {
+              "id": { "type": "string" },
+              "label": { "type": "string" },
+              "maxScoreExclusive": { "type": ["number", "null"] },
+              "packWholesale": { "type": "integer", "minimum": 1 },
+              "packRetail": { "type": "integer", "minimum": 1 },
+              "boxWholesale": { "type": "integer", "minimum": 1 },
+              "boxRetail": { "type": "integer", "minimum": 1 }
+            }
+          }
+        }
+      }
+    },
+    "retiredProductIds": {
+      "type": "object",
+      "required": ["newRetired", "legacyRetired", "allRetired"],
+      "properties": {
+        "newRetired": { "type": "array", "items": { "type": "string" } },
+        "legacyRetired": { "type": "array", "items": { "type": "string" } },
+        "allRetired": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "initialUnlockedProductIds": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "starterGift": {
+      "type": "object",
+      "required": ["enabled", "unit", "quantity", "productId", "newWorldOnly"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "unit": { "type": "string", "enum": ["pack", "box"] },
+        "quantity": { "type": "integer", "minimum": 1 },
+        "productId": { "type": "string" },
+        "newWorldOnly": { "type": "boolean" }
+      }
+    },
+    "collation": {
+      "type": "object",
+      "required": ["version", "cardsPerPack", "packsPerBox", "cardsPerBox", "starterBoxNoSsr", "standardBox"],
+      "properties": {
+        "version": { "type": "string" },
+        "cardsPerPack": { "type": "integer" },
+        "packsPerBox": { "type": "integer" },
+        "cardsPerBox": { "type": "integer" }
+      }
+    },
+    "buyerClasses": {
+      "type": "object",
+      "required": ["weights", "classes"],
+      "properties": {
+        "weights": { "type": "object" },
+        "classes": { "type": "object" }
+      }
+    }
+  }
+}

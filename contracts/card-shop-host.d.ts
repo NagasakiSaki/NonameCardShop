@@ -1,6 +1,7 @@
 export type Rarity = 'N' | 'R' | 'SR' | 'SSR';
 export type * from './shop-experience';
 export type * from './narrative';
+export type * from './operations-v7';
 /** ledger.live and snapshot.cashJournal: actual spendable cash delta, separate from supplier debt. */
 export interface CashEntry {entryId:string;day:number;minute:number;kind:string;label:string;amount:number;debtDelta:number;balance:number;debt:number;grossIncome?:number}
 export interface LiveLedger {day:number;cash:number;debt:number;items:CashEntry[]}
@@ -92,7 +93,7 @@ export interface NeighborAction {
   orderId?:string; inventoryRef?:string; onDuty?:boolean;
 }
 export interface CombatEligibleView {
-  mode:'bo3'|'kof'; slots:number;
+  mode:'bo3'|'kof'|'doudizhu-bo3'|'versus2v2-bo3'; slots:number;
   items:Array<{inventoryRef:string;cardKey:string;generalId:string;name:string;rarity:Rarity;eligible:boolean;
     imageUrl?:string;favorite:boolean;reasons:Array<{code:string;message:string}>;disabledReasons:Array<{code:string;message:string}>;reviewStatus:string}>;
 }
@@ -106,6 +107,6 @@ export interface CardShopHost {
   subscribe(listener:(event:HostEvent)=>void):()=>void;
   pause:{acquire(input:{ownerId:string;reason:string}):Promise<PauseLease>;release(leaseId:string):Promise<void>};
   world:{input(input:{sessionId:string;inputSeq:number;roomId:string;navVersion:string;direction?:'up'|'down'|'left'|'right';vector?:{x:number;y:number};destination?:{x:number;y:number};stop?:boolean}):void};
-  battle:{mount(input:{container:HTMLElement;matchId:string;signal?:AbortSignal}):Promise<{dispose():void|Promise<void>}>};
+  battle:{mount(input:{container:HTMLElement;matchId:string;signal?:AbortSignal}):Promise<{dispose():void|Promise<void>}>;control(input:import('./operations-v7').BattleControl):{requestId:string}|Promise<{requestId:string}>};
   disconnect():Promise<void>;
 }

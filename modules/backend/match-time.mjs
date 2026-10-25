@@ -24,6 +24,7 @@ export function applyMatchTime(w,catalog,navigation){
       tickNpcTables(w,catalog,navigation,seconds,{schedule:false,simulate:false});
     }
     session.applied=true;session.appliedAt={day,minute:w.clock.minute};
+    if(match.series){match.series.time.applied=true;match.series.time.appliedAt={day,minute:w.clock.minute};}
     match.finishedAt={day,minute:w.clock.minute};
     note(w,'matchTimeApplied',{matchId:match.matchId,minutes:30,from,to:w.clock.minute});
   }
