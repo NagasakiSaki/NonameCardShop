@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "date": "2026-10-25",
   "sourceOfTruth": "docs/collaboration/operations-v7",
-  "sourceTreeSha256LF": "bcf0a04f40d5b0b7409284b095df3f2ca5b9b5885aadbac478b99befc88e8ba1",
+  "sourceTreeSha256LF": "f0743b53354d65d32041319a3ac8f37b43d47105237e9298d3e52035a51184cb",
   "sourceFiles": [
     {
       "path": "docs/collaboration/operations-v7/01-冻结玩法与默认参数.md",
@@ -14,11 +14,15 @@
     },
     {
       "path": "docs/collaboration/operations-v7/03-实施顺序与整合验收.md",
-      "sha256LF": "402ba760214638edb12507636c157116f3f93f9238fed01215952c9902b8f52b"
+      "sha256LF": "6c5a1975eef80e7c13c33567a7977c55be27ed633a5c7ce6c1866164a672ff24"
     },
     {
       "path": "docs/collaboration/operations-v7/04-参考研究与工程风险.md",
       "sha256LF": "8020de0b65e227a0e58dd4471676bf3193b8d66838e91657878eb5d37be65e8a"
+    },
+    {
+      "path": "docs/collaboration/operations-v7/05-主模型负责的高风险工序.md",
+      "sha256LF": "714d690d407c24fcfe630d44fdc37507bfe6a95d1d88b06a84d2d4f50645d72b"
     },
     {
       "path": "docs/collaboration/operations-v7/fixtures/协作样例.json",
@@ -26,7 +30,7 @@
     },
     {
       "path": "docs/collaboration/operations-v7/README.md",
-      "sha256LF": "68934d220b78cd330946868207a76785a6eee11848e470021bd14a9c2edcb6cf"
+      "sha256LF": "2c3b63936426b75130fe915abdc8b90d0272328fe9bd8d1e104a6b3a493ff916"
     },
     {
       "path": "docs/collaboration/operations-v7/交付模板.md",
@@ -34,31 +38,31 @@
     },
     {
       "path": "docs/collaboration/operations-v7/任务书/V7-A-经济与卡包.md",
-      "sha256LF": "312b4fa71ecabc176434796a9240dae3ffde606a6800551f125eedbd7e45ab66"
+      "sha256LF": "c4927b1fc8d2a87608b7516c949ae94c5e3df9ee43c84bd4c4cc90e8a5e70425"
     },
     {
       "path": "docs/collaboration/operations-v7/任务书/V7-B-高手与约战.md",
-      "sha256LF": "64b2b777f722a47b17cb8fb87d5c419d927dcb0a732a5c74fdb0280f720c172e"
+      "sha256LF": "57958000628b42abc26d9380ae4846949b8fd23b13087d490bc42b93e5ee432d"
     },
     {
       "path": "docs/collaboration/operations-v7/任务书/V7-C-赛制与系列赛.md",
-      "sha256LF": "2efafc463eb818903b424c67a39f7e6ba762bf18aca40ad14e66f0390d57a673"
+      "sha256LF": "94608b3de696711ef4d9701c5615cde9c049507f15cc1ae6360cd8bc55a4cc7e"
     },
     {
       "path": "docs/collaboration/operations-v7/任务书/V7-D-无名杀适配.md",
-      "sha256LF": "421e292d6dba2884761b840dacf2f0e08e32ead860f3d62b348a2abf4dc02cb9"
+      "sha256LF": "0503a812f35d773c1a80e2d87d152e1f5ccedef19d4ab7caa54020b3d7fedba3"
     },
     {
       "path": "docs/collaboration/operations-v7/任务书/V7-E-场景对话与前端.md",
-      "sha256LF": "1c1862e4fcbf64f80d6659b241a22e31124dde1fcf5a122191cc93d0cc01537c"
+      "sha256LF": "fbc7be77b06a158e3e259036fd6a8d7b7bbd8e92f68dd60dc74f91aefe319b56"
     },
     {
       "path": "docs/collaboration/operations-v7/任务书/V7-F-独立审计与验收.md",
-      "sha256LF": "7991b7d0fe9b8c2768598a41c0b175fc270ebd1eceeeb48e107290ddcb4395c1"
+      "sha256LF": "927f3987d49418b8bb25634624ded56300ba2c29c77fe1de761c841ee34d4cab"
     },
     {
       "path": "docs/collaboration/operations-v7/任务登记.json",
-      "sha256LF": "d386f5fe7942f6a54065c0837eef8906af4477f1eff83130a476e424abf001cb"
+      "sha256LF": "3016c277afce9539e6cc64cb65b6467e8de8fe53d1a3afcdd28e2bcb91145171"
     },
     {
       "path": "docs/collaboration/operations-v7/共享合同-v1.json",
@@ -66,17 +70,18 @@
     },
     {
       "path": "docs/collaboration/operations-v7/统一执行指令.md",
-      "sha256LF": "b52d073613a46c5a1ad663987eedf4a3636c3c049d9c3a11110ff1bf5133b0ef"
+      "sha256LF": "9f008709a3fa283f85c7eea9a2167548578da1a26bbe52c8fc0871c169f3adec"
     }
   ],
   "tasks": [
     {
       "id": "V7-A",
       "title": "经济与卡包",
-      "capability": "standard-code",
-      "folder": "01-标准模型-经济与卡包",
+      "capability": "高速代码模型",
+      "folder": "01-高速模型-经济与卡包",
       "taskFile": "任务书/V7-A-经济与卡包.md",
       "status": "ready-to-dispatch",
+      "dispatchExternally": true,
       "candidateDir": "deliverables/operations-v7/V7-A/",
       "waitForOtherCandidates": false,
       "implementedInGame": false
@@ -84,10 +89,11 @@
     {
       "id": "V7-B",
       "title": "高手与约战",
-      "capability": "standard-state-machine-with-primary-review",
-      "folder": "02-标准模型-高手与约战",
+      "capability": "高速代码模型，纯状态机与意图",
+      "folder": "02-高速模型-高手与约战",
       "taskFile": "任务书/V7-B-高手与约战.md",
       "status": "ready-to-dispatch",
+      "dispatchExternally": true,
       "candidateDir": "deliverables/operations-v7/V7-B/",
       "waitForOtherCandidates": false,
       "implementedInGame": false
@@ -95,10 +101,11 @@
     {
       "id": "V7-C",
       "title": "赛制与系列赛",
-      "capability": "standard-code-with-rigorous-tests",
-      "folder": "03-标准模型-赛制与系列赛",
+      "capability": "高速代码模型，纯校验与归约",
+      "folder": "03-高速模型-赛制与系列赛",
       "taskFile": "任务书/V7-C-赛制与系列赛.md",
       "status": "ready-to-dispatch",
+      "dispatchExternally": true,
       "candidateDir": "deliverables/operations-v7/V7-C/",
       "waitForOtherCandidates": false,
       "implementedInGame": false
@@ -106,10 +113,11 @@
     {
       "id": "V7-D",
       "title": "无名杀适配",
-      "capability": "high-quality-code-or-primary",
-      "folder": "04-高质量模型-无名杀适配",
+      "capability": "主模型本人，不外发",
+      "folder": "04-主模型自办-无名杀适配",
       "taskFile": "任务书/V7-D-无名杀适配.md",
-      "status": "ready-to-dispatch",
+      "status": "assigned-to-primary-not-started",
+      "dispatchExternally": false,
       "candidateDir": "deliverables/operations-v7/V7-D/",
       "waitForOtherCandidates": false,
       "implementedInGame": false
@@ -117,21 +125,23 @@
     {
       "id": "V7-E",
       "title": "场景对话与前端",
-      "capability": "frontend-with-browser-and-visual-review",
-      "folder": "05-前端模型-场景对话与开桌",
+      "capability": "高速前端模型，需浏览器看图",
+      "folder": "05-高速前端-场景对话与开桌",
       "taskFile": "任务书/V7-E-场景对话与前端.md",
       "status": "ready-to-dispatch",
+      "dispatchExternally": true,
       "candidateDir": "deliverables/operations-v7/V7-E/",
       "waitForOtherCandidates": false,
       "implementedInGame": false
     },
     {
       "id": "V7-F",
-      "title": "独立审计与验收",
-      "capability": "independent-code-and-browser",
-      "folder": "06-独立模型-审计与验收",
+      "title": "独立排查与验收",
+      "capability": "独立高速代码与浏览器模型",
+      "folder": "06-高速独立-排查与验收",
       "taskFile": "任务书/V7-F-独立审计与验收.md",
       "status": "ready-to-dispatch",
+      "dispatchExternally": true,
       "candidateDir": "deliverables/operations-v7/V7-F/",
       "waitForOtherCandidates": false,
       "implementedInGame": false

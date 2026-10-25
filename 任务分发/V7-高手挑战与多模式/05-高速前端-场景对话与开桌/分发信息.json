@@ -1,0 +1,60 @@
+{
+  "id": "V7-E",
+  "sourceOfTruth": "docs/collaboration/operations-v7",
+  "contract": "card-shop-v7-candidate/1",
+  "baseCommit": "8e3313e9",
+  "sourceTreeSha256LF": "f0743b53354d65d32041319a3ac8f37b43d47105237e9298d3e52035a51184cb",
+  "candidateDir": "deliverables/operations-v7/V7-E/",
+  "status": "ready-to-dispatch",
+  "dispatchExternally": true,
+  "files": [
+    {
+      "path": "共享资料/01-冻结玩法与默认参数.md",
+      "sha256": "2e961fe8f592c9bc98eb0d4f4b4b668c826cf180607a3d1fe40812da6b988b9e"
+    },
+    {
+      "path": "共享资料/02-共享接口与数据归属.md",
+      "sha256": "4af2fca6c4121f491802b9e4af60232752649bacbd75d0af68229260527eeb1c"
+    },
+    {
+      "path": "共享资料/03-实施顺序与整合验收.md",
+      "sha256": "6c5a1975eef80e7c13c33567a7977c55be27ed633a5c7ce6c1866164a672ff24"
+    },
+    {
+      "path": "共享资料/04-参考研究与工程风险.md",
+      "sha256": "8020de0b65e227a0e58dd4471676bf3193b8d66838e91657878eb5d37be65e8a"
+    },
+    {
+      "path": "共享资料/05-主模型负责的高风险工序.md",
+      "sha256": "714d690d407c24fcfe630d44fdc37507bfe6a95d1d88b06a84d2d4f50645d72b"
+    },
+    {
+      "path": "共享资料/fixtures/协作样例.json",
+      "sha256": "80d3d93502a43ef222a29b5926df8de610a7f507546e69e0acae93e8874fa47a"
+    },
+    {
+      "path": "共享资料/交付模板.md",
+      "sha256": "e27e144e9c56c8924ef09fad87bef48d9059b2cc035b24d9ec58d7d0594db9de"
+    },
+    {
+      "path": "共享资料/任务登记.json",
+      "sha256": "3016c277afce9539e6cc64cb65b6467e8de8fe53d1a3afcdd28e2bcb91145171"
+    },
+    {
+      "path": "共享资料/共享合同-v1.json",
+      "sha256": "de8d6b7ffdb57f46d7796933bcc3d22fb0f7e8dc6bbb82de4740f6f1f1fd9997"
+    },
+    {
+      "path": "共享资料/统一执行指令.md",
+      "sha256": "9f008709a3fa283f85c7eea9a2167548578da1a26bbe52c8fc0871c169f3adec"
+    },
+    {
+      "path": "任务书.md",
+      "sha256": "fbc7be77b06a158e3e259036fd6a8d7b7bbd8e92f68dd60dc74f91aefe319b56"
+    },
+    {
+      "path": "README-先读.md",
+      "sha256": "a78fbc87d8b4cdcd3fb68c65532044ac162210031bd2df617f476984efc17548"
+    }
+  ]
+}

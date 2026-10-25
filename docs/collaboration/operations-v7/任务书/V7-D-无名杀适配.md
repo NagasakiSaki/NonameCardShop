@@ -1,6 +1,6 @@
 # V7-D：原生斗地主、2v2与长期适配
 
-优先唯一高质量代码模型；不可用时由主模型承担本组。只写 `deliverables/operations-v7/V7-D/`，禁止修改vendor。其他组不是前置条件，使用共享RoundPlan启动自己的隔离引擎试验。
+**本包由主模型本人承担，不下发外部模型。** 可在 `deliverables/operations-v7/V7-D/` 做自己的隔离试验，再由主模型按正式接入流程修改桥接源码；禁止修改vendor。其他组不是前置条件，使用共享RoundPlan独立启动。外部A/B/C/E/F不等本包完成。
 
 ## 连续任务
 

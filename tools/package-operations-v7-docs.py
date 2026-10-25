@@ -18,6 +18,7 @@ FIXTURE = json.loads((SOURCE / 'fixtures/协作样例.json').read_text(encoding=
 assert BOARD['contract'] == CONTRACT['contract'] == FIXTURE['contract']
 assert len(BOARD['tasks']) == 6 and len({t['id'] for t in BOARD['tasks']}) == 6
 assert all(not t['waitForOtherCandidates'] and not t['implementedInGame'] for t in BOARD['tasks'])
+assert [t['id'] for t in BOARD['tasks'] if not t['dispatchExternally']] == ['V7-D']
 assert [t['packRetail'] for t in CONTRACT['economy']['tiers']] == [210, 360, 510]
 assert sum(CONTRACT['economy']['noSsrStarterBoxCounts'].values()) == 120
 
@@ -81,9 +82,12 @@ for task in BOARD['tasks']:
     write(own, normalized(SOURCE / task['taskFile']))
     package_files.append(own)
     readme = category / 'README-先读.md'
+    assignment = '外发高速模型，按冻结规则完成本包。' if task['dispatchExternally'] else '**主模型自办清单，不外发，不需要另找高质量模型。**'
     write(readme, f'''# {task['id']} {task['title']}
 
 这是一份独立分工包，不是已完成的游戏更新。完整工程基线 `{BOARD['baseCommit']}`；只写 `{task['candidateDir']}`。最终由主模型整合。
+
+{assignment}
 
 1. 读 [本组任务书](任务书.md)，按全部连续工序执行，不问先做哪个。
 2. 读 [冻结玩法](共享资料/01-冻结玩法与默认参数.md)、[共享接口](共享资料/02-共享接口与数据归属.md)、[隔离与验收](共享资料/03-实施顺序与整合验收.md)。
@@ -94,7 +98,7 @@ for task in BOARD['tasks']:
 ''')
     package_files.append(readme)
     meta = category / '分发信息.json'
-    write(meta, as_json({'id': task['id'], 'sourceOfTruth': BOARD['sourceOfTruth'], 'contract': BOARD['contract'], 'baseCommit': BOARD['baseCommit'], 'sourceTreeSha256LF': source_hash, 'candidateDir': task['candidateDir'], 'status': 'ready-to-dispatch-not-implemented', 'files': [{'path': p.relative_to(category).as_posix(), 'sha256': digest(p.read_bytes())} for p in package_files]}))
+    write(meta, as_json({'id': task['id'], 'sourceOfTruth': BOARD['sourceOfTruth'], 'contract': BOARD['contract'], 'baseCommit': BOARD['baseCommit'], 'sourceTreeSha256LF': source_hash, 'candidateDir': task['candidateDir'], 'status': task['status'], 'dispatchExternally': task['dispatchExternally'], 'files': [{'path': p.relative_to(category).as_posix(), 'sha256': digest(p.read_bytes())} for p in package_files]}))
     package_files.append(meta)
     check_links(package_files)
     all_generated.extend(package_files)
@@ -104,13 +108,13 @@ for task in BOARD['tasks']:
 overview = OUT / 'README.md'
 write(overview, '''# V7 独立分工包：高手挑战与多模式
 
-本轮是开发任务，游戏尚未实现。先将各组对应ZIP/文件夹和完整工程交给执行模型，最后主模型统一合并；不需要各组中途等其他模型。
+本轮是开发任务，游戏尚未实现。**只外发A/B/C/E/F五包；D为主模型自己的清单，不外发。** 把对应ZIP/文件夹和完整工程交给高速模型，最后主模型统一合并；不需要各组中途等其他模型。
 
 | 包 | 内容与入口 | 能力 | 压缩包 |
 | --- | --- | --- | --- |
 ''' + '\n'.join(rows) + '''
 
-每包包含独立任务书、统一指令、冻结规则、共享接口和fixture。若只有一个高质量模型，优先给D；B/C由标准模型按冻结合同做候选并由主模型审查；F保持独立。
+每包包含独立任务书、统一指令、冻结规则、共享接口和fixture。唯一高质量模型就是主模型本人，承担D、权威事务、迁移、接线和最终整合；其他五包由高速模型按步骤做候选，F保持独立。无需寻找外部高质量模型。
 
 [全部分工ZIP](压缩包/V7-全部任务包.zip)包含六组文件，不内嵌六份ZIP。唯一可编辑源在工程 `docs/collaboration/operations-v7/`，修改后运行 `python tools/package-operations-v7-docs.py` 重新生成。V6不冲突的长期任务保留，重叠规则以V7为准。
 ''')
