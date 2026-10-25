@@ -36,13 +36,11 @@ export function installCollectionDuel(context, options, notify) {
             // Mark all returning seats alive before revive(), whose seat walk assumes an alive neighbour.
             for(const t of dead){t.player.classList.remove('dead');game.players.add(t.player);game.dead.remove(t.player);}
             for(const t of dead){
-              const p=t.player,oldGeneral=p.name,oldIndex=t.index,hand=t.hand.slice();t.hand=[];t.index++;
+              const p=t.player,oldGeneral=p.name;t.hand=[];t.index++;
               p.revive(null,false);p.uninit();p.init(t.ids[t.index]);p.isZhu=false;p.identity=t.side==='mine'?'zhu':'fan';p.identityShown=true;p.ai.shown=1;p.setIdentity();p._shopGeneration=t.index;
-              // Remove old role-bound tags; the physical cards and suits/numbers survive.
-              for(const card of hand){if(card.gaintag?.length)card.removeGaintag(true);}
-              p.directgain(hand);p.update();
-              game.addVideo('reinit',p,[p.name,p.node.identity.dataset.color]);game.log(p,'接替',get.translation(oldGeneral),'登场，继承',hand.length,'张手牌');
-              notify('replacement',{side:t.side,index:t.index,oldGeneral,newGeneral:p.name,inherited:hand.length});
+              await p.draw(4);p.update();
+              game.addVideo('reinit',p,[p.name,p.node.identity.dataset.color]);game.log(p,'接替',get.translation(oldGeneral),'登场，重新摸四张牌');
+              notify('replacement',{side:t.side,index:t.index,oldGeneral,newGeneral:p.name,inherited:0,drawn:4,handPolicy:'fresh-four'});
               game.triggerEnter(p);
               if(_status.roundStart===p||!_status.roundStart?.isAlive())_status.roundStart=firstPlayer;
             }
@@ -56,7 +54,7 @@ export function installCollectionDuel(context, options, notify) {
           await originalDie[0](event,trigger,player);await originalDie[1](event,trigger,player);await originalDie[2](event,trigger,player);
           if(team&&player.isDead()&&!event.reserveOut){
             notify('defeated',{side:team.side,index:team.index,general:player.name});
-            if(mode==='kof'&&team.index+1<team.ids.length){const cards=player.getCards('h');team.hand=cards.slice();if(cards.length)await player.lose(cards,ui.special).set('forceDie',true).set('getlx',false);}
+            // The native death steps discard the old general's cards. Never reserve them for a successor.
             const phase=event.getParent('phase');if(phase?.name==='phase'&&phase.player===player)phase.finish();
             game.shopDuel.pending.add(team.side);
           }

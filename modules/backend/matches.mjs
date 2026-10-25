@@ -58,8 +58,8 @@ export function matchById(w,matchId){const m=w.matches.find(m=>m.matchId===match
 export function beginMatch(w,matchId){
   const m=matchById(w,matchId);need(['prepared','awaitingNext','interrupted'].includes(m.status),'INVALID_STATE','比赛当前不能开始。');
   need(!m.stake||m.status!=='interrupted','RECOVERY_REQUIRED','有赌注的中断比赛需要完整恢复，不能重新发牌。');
-  need(!w.matches.some(other=>other.matchId!==m.matchId&&other.timeSession&&!other.timeSession.applied&&other.status!=='finished'),'MATCH_ACTIVE','另一场比赛正在进行，请稍候。');
-  m.timeSession??={startedAt:{day:w.clock.day,minute:w.clock.minute},minutes:30,applied:false};
+  need(!w.matches.some(other=>!other.background&&other.matchId!==m.matchId&&other.timeSession&&!other.timeSession.applied&&other.status!=='finished'),'MATCH_ACTIVE','另一场玩家比赛正在进行，请稍候。');
+  if(!m.background)m.timeSession??={startedAt:{day:w.clock.day,minute:w.clock.minute},minutes:30,applied:false};
   m.gameId=serial(w,'game');m.status='running';m.progress={mine:0,enemy:0};return clone(m);
 }
 function ownerId(m,side){return side==='mine'?m.mineOwnerId||'player':m.enemyOwnerId||m.opponentId;}
@@ -138,8 +138,7 @@ export function advanceNpcSimulation(w,catalog,m,seconds){
   if(!m.simulated||m.status==='finished')return;
   const seated=[m.mineOwnerId,m.enemyOwnerId].every(id=>w.npcs.find(n=>n.actorId===id)?.activity==='seated');
   if(!seated)return;
-  if(m.status!=='running'){if(w.matches.some(other=>other!==m&&other.timeSession&&!other.timeSession.applied&&other.status!=='finished'))return;m.status='running';m.gameId=serial(w,'simulation');note(w,'npcSimulationStarted',{matchId:m.matchId});}
-  m.timeSession??={startedAt:{day:w.clock.day,minute:w.clock.minute},minutes:30,applied:false};
+  if(m.status!=='running'){if(w.matches.some(other=>!other.background&&other!==m&&other.timeSession&&!other.timeSession.applied&&other.status!=='finished'))return;m.status='running';m.gameId=serial(w,'simulation');note(w,'npcSimulationStarted',{matchId:m.matchId});}
   m.simulation.elapsedSeconds+=Math.max(0,seconds)*w.clock.speed;
   if(m.simulation.elapsedSeconds<m.simulation.durationSeconds)return;
   const strength=team=>sum(team.map(c=>catalog.byKey.get(c.cardKey)?.globalScore||0))/team.length;

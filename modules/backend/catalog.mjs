@@ -3,6 +3,7 @@ import {DEFAULT_CUSTOMER_BEHAVIOR} from './trash.mjs';
 import {productEnabled,validateDistribution} from './distribution.mjs';
 import {validateStrengthPricing} from './supply-pricing.mjs';
 import {validateStarterGift} from './starter-gift.mjs';
+import {resourcePower,RESOURCE_MODEL_VERSION,RESOURCE_CALIBRATIONS} from './resource-power.mjs';
 
 export function validateRules(r){
   validateStarterGift(r||{});
@@ -15,6 +16,7 @@ export function validateRules(r){
   need(['R','SR','SSR'].every(k=>Number.isFinite(r.thresholds?.[k])),'INVALID_CONFIG','分数界线必须是有限数值。');
   need(r.thresholds?.R<r.thresholds?.SR&&r.thresholds.SR<r.thresholds.SSR,'INVALID_CONFIG','全局稀有度界线必须递增。');
   need(r.scoring&&['baseline','hpPoint','hpCap'].every(k=>Number.isFinite(r.scoring[k]))&&['cards','damage','guard','heal','control','quality','cost','hpLoss','burst','carry'].every(k=>Number.isFinite(r.scoring.weights?.[k])),'INVALID_CONFIG','全局评分权重不完整。');
+  need(!r.scoring.method||r.scoring.method===RESOURCE_MODEL_VERSION,'INVALID_CONFIG','不支持的资源收益评分版本。');
   need(r.cardsPerPack===5&&r.packsPerBox===24,'INVALID_CONFIG','当前配盒器采用 24 包 × 5 张。');
   for(const key of ['referenceValues','rarityWeights'])for(const rarity of RARITIES)need(Number.isFinite(r[key]?.[rarity])&&r[key][rarity]>0,'INVALID_CONFIG',`${key}.${rarity} 必须大于零。`);
   for(const key of ['marketFee','rake','retailMargin','maxWalletStakeFraction','priceDailyLimit'])need(Number.isFinite(r[key])&&r[key]>=0&&r[key]<1,'INVALID_CONFIG',`${key} 比例不合法。`);
@@ -41,17 +43,17 @@ export function validateRules(r){
 }
 export function buildCatalog(source,rules){
   validateRules(rules);
-  const model=rules.scoring,text=JSON.stringify([model,rules.thresholds,rules.modeWeights]);let hash=2166136261;
+  const model=rules.scoring,text=JSON.stringify([model,rules.thresholds,rules.modeWeights,...(model.method?[RESOURCE_CALIBRATIONS]:[])]);let hash=2166136261;
   for(const ch of text)hash=Math.imul(hash^ch.charCodeAt(0),16777619)>>>0;
   const ratingVersion=`${rules.ratingVersion}-${hash.toString(16)}`;
   const cards=source.cards.map(card=>{
-    const vector=card.power?.vector||{};
+    const assessed=model.method?resourcePower(card,model):null,vector=card.power?.vector||{};
     const base=model.baseline+model.hpPoint*(Math.min(model.hpCap,Number(card.hp)||4)-4)+Object.entries(model.weights).filter(([key])=>key!=='carry').reduce((n,[key,weight])=>n+(Number(vector[key])||0)*weight,0);
-    const bo3=Math.max(0,base),kof=Math.max(0,base+(Number(vector.carry)||0)*model.weights.carry);
+    const bo3=assessed?.duel??Math.max(0,base),kof=assessed?.kof??Math.max(0,base+(Number(vector.carry)||0)*model.weights.carry);
     const score=Math.round((bo3*rules.modeWeights.bo3+kof*rules.modeWeights.kof)*1000)/1000;
     const rarity=score>=rules.thresholds.SSR?'SSR':score>=rules.thresholds.SR?'SR':score>=rules.thresholds.R?'R':'N';
-    return {...card,power:{...card.power,score,duel:bo3,kof},cardKey:`noname-1.11.6:${card.id}`,generalId:card.id,skillVersion:'noname-1.11.6',currentRarity:rarity,globalScore:score,ratingVersion,
-      imageUrl:`/img/${encodeURIComponent(card.img)}`,reviewStatus:card.power?.method==='规则校准估算'?'calibrated':'estimated',
+    return {...card,power:{...card.power,...assessed,score,duel:bo3,kof},cardKey:`noname-1.11.6:${card.id}`,generalId:card.id,skillVersion:'noname-1.11.6',currentRarity:rarity,globalScore:score,ratingVersion,
+      imageUrl:`/img/${encodeURIComponent(card.img)}`,reviewStatus:(assessed?assessed.calibrated:card.power?.method==='规则校准估算')?'calibrated':'estimated',
       issuanceValue:Math.max(1,Math.round(rules.referenceValues[rarity]*clamp(score/65,.8,1.35)))};
   });
   const activeCards=cards.filter(c=>productEnabled(rules,c.pack));

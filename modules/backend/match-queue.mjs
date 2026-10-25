@@ -54,7 +54,7 @@ export function tickMatchQueue(w,catalog,navigation,{schedule=true}={}){
     const options=eligible(w,catalog,npc.actorId).filter(c=>c.eligible),unique=options.filter((c,i)=>options.findIndex(other=>other.generalId===c.generalId)===i),mode=player?.mode||'bo3',n=mode==='kof'?3:1;
     if(unique.length>=n)joinQueue(w,catalog,{mode,inventoryRefs:unique.slice(0,n).map(c=>c.inventoryRef)},npc.actorId);
   }
-  // Serial whole matches: one time session, one post-match 30-minute advance.
+  // Keep the current serial matchmaking policy. Only player matches claim business time.
   if(w.matches.some(m=>m.status!=='finished'))return;
   const entries=w.matchQueue||[];
   const pairs=player?entries.filter(q=>q.ownerId!=='player'&&q.mode===player.mode).map(n=>[player,n]):[];

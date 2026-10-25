@@ -22,7 +22,7 @@ try{
   await page.goto(server.origin+'/?profile=legacy');await page.waitForFunction(()=>window.__cardShopReady===true);
   assert.equal((await q('player.starterGift')).quantity,1);
   await go('store.counter','supplier');await page.locator('[data-purchase-root] .f6-tile').first().waitFor();
-  const product=(await q('products.list',{limit:200})).items.find(p=>p.availability==='available');assert.ok(product.prices.pack.wholesale<=65);
+  const product=(await q('products.list',{limit:200})).items.find(p=>p.availability==='available');assert.ok(product.prices.pack.wholesale<=210);
   for(let i=0;i<3;i++)await page.locator('[data-purchase-root] .pbc-stepper button').last().click();
   await page.evaluate(()=>{const send=__cardShopApp.host.command;let lose=true;__cardShopApp.host.command=async request=>{const r=await send(request);if(lose&&request.type==='supplier.placeBasketOrder'&&r.ok){lose=false;throw Error('fixture response lost after commit');}return r;};});
   await page.getByRole('button',{name:'购买',exact:true}).click();await page.getByRole('button',{name:'查看结果',exact:true}).click();await page.locator('[data-purchase-receipt]').waitFor();
@@ -77,7 +77,7 @@ try{
         if(checkpoint){const record=()=>{game.uiCheckpoint={expected,hand:player.getCards('h').map(c=>c.cardid),index:team.index};game.pause();};if(game.shopDuel.scheduled){const anchor=game.shopDuel.boundaryAnchor,next=game.createEvent('core4UiCheckpoint',false,anchor);anchor.next.remove(next);anchor.after.push(next);next.forceDie=true;next.setContent(async()=>record());}else record();}
       });if(!_status.auto)ui.click.auto();game.resume();
     },{side,checkpoint});
-    if(checkpoint){const result=await frame.waitForFunction(()=>__engine.game.uiCheckpoint,null,{timeout:20000}).then(h=>h.jsonValue());assert.deepEqual(result.hand.sort(),result.expected.sort(),'KOF actual hand card IDs survive replacement');return result;}
+    if(checkpoint){const result=await frame.waitForFunction(()=>__engine.game.uiCheckpoint,null,{timeout:20000}).then(h=>h.jsonValue());assert.equal(result.hand.length,4,'KOF successor draws four new cards');assert.ok(result.hand.every(id=>!result.expected.includes(id)),'old hand is discarded, never inherited');return result;}
   }
   await seedEngineFixture(false);await selectTeam('bo3',true);assert.ok((await q('combat.queue')).player);
   const player=()=>page.evaluate(()=>{const p=__cardShopApp.getPlayer();return {x:p.x,y:p.y};}),before=await player(),minuteWaiting=(await q('shop.snapshot')).clock.minute;
@@ -92,5 +92,5 @@ try{
   await seedEngineFixture();frame=await selectTeam('kof');startMinute=(await q('shop.snapshot')).clock.minute;
   assert.equal((await kill(frame,0,true)).index,1);assert.equal((await kill(frame,1,true)).index,1);assert.equal((await kill(frame,1,true)).index,2);await kill(frame,1);
   await page.getByRole('heading',{name:'本场获胜',exact:true}).waitFor();assert.equal((await q('shop.snapshot')).clock.minute,startMinute+30);assert.deepEqual(errors,[]);
-  console.log('PASS CORE4 UI: real isolated procurement/lost-response receipt, gift-box opening, independent warehouse/retail/checkout/market/trash, bounded five-size picker/skills/favorites/multiple selection, real-engine BO3 and KOF controlled terminal fixtures, inherited hand IDs and one-time thirty-minute settlement.');
+  console.log('PASS CORE4 UI: real isolated procurement/lost-response receipt, gift-box opening, independent warehouse/retail/checkout/market/trash, bounded five-size picker/skills/favorites/multiple selection, real-engine BO3 and KOF controlled terminal fixtures, fresh four-card replacement and one-time thirty-minute settlement.');
 }finally{await browser?.close();await server.close();}

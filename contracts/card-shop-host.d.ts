@@ -49,7 +49,7 @@ export interface StarterGift {version:1;status:'granted'|'disabled';productId?:s
 export interface MatchQueueEntry {queueId:string;ownerId:string;tableId:string|null;mode:'bo3'|'kof';inventoryRefs:string[];lineup?:Array<{cardKey:string;name:string;inventoryRef:string}>;fee:number;createdAt:number;expiresAt:number;waitMode:'manual'|'wander'}
 /** combat.queue. Match creation is separate from queue entry and requires an actual compatible opponent. */
 export interface MatchQueueView {player:MatchQueueEntry|null;waiting:Array<{queueId:string;ownerId:string;name:string;mode:'bo3'|'kof';tableId:string|null;fee:number;expiresAt:number}>;playerMatch:Record<string,unknown>|null}
-/** One session for a whole KOF/BO3 match; persisted applied prevents repeated thirty-minute advancement. NPC matches are serial. */
+/** One session for a player KOF/BO3 match; persisted applied prevents repeated thirty-minute advancement. NPC matches never freeze business or add post-match time. */
 export interface MatchTimeSession {startedAt:{day:number;minute:number};minutes:30;applied:boolean;appliedAt?:{day:number;minute:number}}
 export interface HostEvent { contractVersion:'card-shop-ui/1.0'; worldId:string; branchId:string; seq:number; revision:number; type:string; data:unknown }
 export interface PauseLease {leaseId:string; ownerId:string; reason:string}

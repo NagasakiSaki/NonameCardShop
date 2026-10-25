@@ -9,7 +9,7 @@ export const DEFAULT_STRENGTH_PRICING={version:'strength-tiers-1',boxDiscount:0.
 ]};
 export function strengthPricing(rules){return rules.strengthPricing||DEFAULT_STRENGTH_PRICING;}
 export function validateStrengthPricing(rules){
- const p=strengthPricing(rules);need(['strength-tiers-1','strength-tiers-2'].includes(p.version)&&p.boxDiscount>0&&p.boxDiscount<=1&&Array.isArray(p.tiers)&&p.tiers.length>0,'INVALID_CONFIG','强度价格档配置不正确。');
+ const p=strengthPricing(rules);need(['strength-tiers-1','strength-tiers-2','strength-tiers-3'].includes(p.version)&&p.boxDiscount>0&&p.boxDiscount<=1&&Array.isArray(p.tiers)&&p.tiers.length>0,'INVALID_CONFIG','强度价格档配置不正确。');
  p.tiers.forEach((t,i)=>need(typeof t.id==='string'&&typeof t.label==='string'&&Number.isFinite(t.maxScore)&&Number.isSafeInteger(t.packWholesale)&&t.packWholesale>0&&(!i||t.maxScore>p.tiers[i-1].maxScore&&t.packWholesale>=p.tiers[i-1].packWholesale),'INVALID_CONFIG','强度档分数必须递增，价格不得倒挂。'));
 }
 export function priceByStrength(cards,rules){

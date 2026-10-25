@@ -76,8 +76,8 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
   normaliseActors(record.world);
   for(const operation of Object.values(record.requests)){operation.worldId??=record.world.worldId;operation.branchId??=record.world.branchId;}
   const serially=fn=>{const result=queue.then(fn);queue=result.catch(()=>{});return result;};
-  const reasons=()=>[...[...pauses.values()].map(p=>({code:p.ownerId,label:p.reason})),...(activeTimeMatch(record.world)?[{code:'match-time',label:'比赛进行中'}]:[])];
-  const backgroundRunning=()=>connected&&!disconnected&&!record.world.clock.manualPaused&&!pauses.size&&['open','closing'].includes(record.world.clock.phase);
+  const reasons=()=>[...[...pauses.values()].map(p=>({code:p.ownerId,label:p.reason})),...(activeTimeMatch(record.world)?[{code:'match-time',label:'店长对局中'}]:[])];
+  const backgroundRunning=()=>connected&&!disconnected&&!record.world.clock.manualPaused&&!pauses.size&&!activeTimeMatch(record.world)&&['open','closing'].includes(record.world.clock.phase);
   const w=()=>record.world;
   // Archives and completed operation records are immutable; copy only mutable containers.
   const fork=()=>({...record,world:clone(record.world),archives:[...record.archives],requests:{...record.requests}});
@@ -301,17 +301,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
   async function advance(seconds){return serially(async()=>{
     if(!connected||disconnected||w().clock.manualPaused||pauses.size)return;
     const timed=activeTimeMatch(w());
-    if(timed){
-      if(timed.background){
-        const next=fork(),world=next.world;
-        for(const event of world.pendingEngineEvents||[]){const match=world.matches.find(m=>m.matchId===event.matchId);if(match?.status==='running'&&match.gameId===event.message.matchId)engineMessage(world,event.matchId,event.message);}
-        world.pendingEngineEvents=[];
-        for(const match of world.matches)if(match.needsRestartAfterEvents){if(match.status==='running')match.status='interrupted';delete match.needsRestartAfterEvents;}
-        if(timed.simulated)tickNpcTables(world,catalog,navigation,seconds,{schedule:false,routes:false});
-        await persist(next);
-      }
-      return;
-    }
+    if(timed)return;
     const clockRunning=w().clock.phase==='open'||w().clock.phase==='preparing'&&w().clock.minute<540;
     if(!clockRunning&&!movement&&!w().matches.some(m=>m.background&&m.status!=='finished')&&!(w().clock.phase==='closing'&&w().npcs.some(onSite))&&!(w().pendingEngineEvents||[]).length)return;
     const next=fork(),world=next.world,limit=world.clock.phase==='preparing'?540:1200;

@@ -4,10 +4,12 @@ import {tickManagement} from './management.mjs';
 import {tickEconomy} from './trading.mjs';
 import {tickNpcTables} from './npc-tables.mjs';
 
-export const activeTimeMatch=w=>w.matches.find(m=>m.timeSession&&!m.timeSession.applied&&m.status!=='finished');
+export const activeTimeMatch=w=>w.matches.find(m=>!m.background&&m.timeSession&&!m.timeSession.applied&&m.status!=='finished');
 export function applyMatchTime(w,catalog,navigation){
   for(const match of w.matches){
     const session=match.timeSession;
+    // Retire time leases saved by the old NPC policy without jumping the store clock.
+    if(match.background&&session&&!session.applied){session.applied=true;session.policy='background-continuous';continue;}
     if(!session||session.applied||match.status!=='finished'||match.result==='cancelled')continue;
     need(session.minutes===30&&Number.isFinite(w.clock.minute)&&w.clock.minute+30<1440,'INVALID_STATE','比赛耗时不能跨过当前营业日边界。');
     const from=w.clock.minute,target=from+30,day=w.clock.day;

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "ratingVersion": "global-power-2",
+  "ratingVersion": "global-resource-3",
   "distribution": {
     "version": "tcg-slots-3",
     "excludedPacks": [
@@ -45,20 +45,21 @@
   },
   "scoring": {
     "baseline": 50,
-    "hpPoint": 6,
+    "hpPoint": 5,
     "hpCap": 6,
     "weights": {
       "cards": 10,
-      "damage": 16,
-      "guard": 14,
-      "heal": 13,
-      "control": 12,
+      "damage": 20,
+      "guard": 20,
+      "heal": 20,
+      "control": 10,
       "quality": 5,
       "cost": -10,
-      "hpLoss": -16,
-      "burst": 3,
-      "carry": 3
-    }
+      "hpLoss": -20,
+      "burst": 0,
+      "carry": 0
+    },
+    "method": "resource-yield-1"
   },
   "rarityWeights": {
     "N": 1,
@@ -67,10 +68,10 @@
     "SSR": 0.25
   },
   "referenceValues": {
-    "N": 1,
-    "R": 7,
-    "SR": 24,
-    "SSR": 72
+    "N": 2,
+    "R": 12,
+    "SR": 40,
+    "SSR": 110
   },
   "cardsPerPack": 5,
   "packsPerBox": 24,
@@ -159,38 +160,26 @@
     "rewardMultiplier": 1
   },
   "strengthPricing": {
-    "version": "strength-tiers-2",
+    "version": "strength-tiers-3",
     "boxDiscount": 0.95,
     "tiers": [
       {
         "id": "entry",
-        "label": "入门档",
-        "maxScore": 51,
-        "packWholesale": 40
+        "label": "基础档",
+        "maxScore": 53,
+        "packWholesale": 70
       },
       {
         "id": "standard",
-        "label": "标准档",
-        "maxScore": 53,
-        "packWholesale": 45
-      },
-      {
-        "id": "advanced",
         "label": "进阶档",
-        "maxScore": 55,
-        "packWholesale": 50
+        "maxScore": 57,
+        "packWholesale": 140
       },
       {
         "id": "expert",
-        "label": "精英档",
-        "maxScore": 60,
-        "packWholesale": 55
-      },
-      {
-        "id": "legend",
-        "label": "顶级档",
+        "label": "旗舰档",
         "maxScore": 10000,
-        "packWholesale": 65
+        "packWholesale": 210
       }
     ]
   }

@@ -260,7 +260,7 @@ export function mount({ root, view, actions = {}, assets = {} }) {
         } else if (t.match && t.match.mode === "kof") {
           const p = t.match.progress || {};
           main = "真实局 · KOF 三将接力";
-          sub = "我方第 " + numOrDash(p.mine) + " 将 / 对方第 " + numOrDash(p.enemy) + " 将 · 阵亡换将继承手牌，不按小局计分" + (t.match.paused ? " · 暂停冻结中" : "");
+          sub = "我方第 " + numOrDash(p.mine) + " 将 / 对方第 " + numOrDash(p.enemy) + " 将 · 阵亡换将重新摸4张牌，不按小局计分" + (t.match.paused ? " · 暂停冻结中" : "");
         } else if (t.match) {
           main = "真实局 · BO3";
           const awaiting = t.match.status === "awaitingNext";

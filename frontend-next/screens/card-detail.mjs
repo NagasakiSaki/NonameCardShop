@@ -60,6 +60,7 @@ export function openCardDetail(app,options={}){
           el('div',{class:'detail-badges'},[el('span',{text:'印刷：'+(card.printedRarity||'未持有')}),rarity(card.currentRarity),el('span',{class:'muted',text:'当前全局强度分级'})]),
           el('p',{class:'detail-meta',text:[card.title,card.faction,card.pack,'技能版本 '+(card.skillVersion||'—')].filter(Boolean).join(' · ')}),
           el('section',{class:'surface-card','aria-label':'评分与参考价格'},[el('h3',{text:'全局评分与参考行情'}),line('全局综合分',card.globalScore),line('评分状态',review),line('评分置信度（模型估计）',confidence),line('当前参考价',app.formatMoney(card.referencePrice?.amount)),
+            card.power?.modelVersion?el('p',{class:'detail-meta',text:'收益论估算：每己方回合 '+card.power.netCardEquivalent+' 等效牌；'+card.power.notes}):null,
             el('p',{class:'detail-meta',text:'评分版本 '+(card.ratingVersion||'—')+'。强度评分与模型置信度不等于实战胜率；印刷稀有度保留在各实物副本上。'})]),
           skillsSection()
         ]);
