@@ -1,0 +1,447 @@
+{
+  "date": "2026-10-25",
+  "baseCommit": "1bd720c5",
+  "status": "stage-integrated-not-complete-commercial-release",
+  "records": [
+    {
+      "packageId": "CV6-19",
+      "source": "deliverables/commercial-v6/CV6-19/story-bible.md",
+      "target": "docs/narrative/story-bible.md",
+      "sourceSha256": "4e9f96285f19a4524e5c4d87433c0ae757f0e8b0cdebdba790028bdfe48f7e84",
+      "adoptedSha256LF": "b4aed36ba3227a84fb1662833e95f5fb273584714a4acdeb1aab600dbf56b0c2"
+    },
+    {
+      "packageId": "CV6-19",
+      "source": "deliverables/commercial-v6/CV6-19/chapter-beats.csv",
+      "target": "docs/narrative/chapter-beats.csv",
+      "sourceSha256": "793f6e234610ee48a87d42bfca32175168ce1039a709c323bfd94103fdc35c96",
+      "adoptedSha256LF": "793f6e234610ee48a87d42bfca32175168ce1039a709c323bfd94103fdc35c96"
+    },
+    {
+      "packageId": "CV6-19",
+      "source": "deliverables/commercial-v6/CV6-19/relationship-graph.md",
+      "target": "docs/narrative/relationship-graph.md",
+      "sourceSha256": "e2c9e6e9b06dae867c19206f92862da771b89d289e650aa1e6457d441dad9619",
+      "adoptedSha256LF": "e2c9e6e9b06dae867c19206f92862da771b89d289e650aa1e6457d441dad9619"
+    },
+    {
+      "packageId": "CV6-19",
+      "source": "deliverables/commercial-v6/CV6-19/branch-consequences.md",
+      "target": "docs/narrative/branch-consequences.md",
+      "sourceSha256": "fe970b6dcf33a377fc4ed4358f077b4326288123f2bab89f85864f2604e41372",
+      "adoptedSha256LF": "fe970b6dcf33a377fc4ed4358f077b4326288123f2bab89f85864f2604e41372"
+    },
+    {
+      "packageId": "CV6-19",
+      "source": "deliverables/commercial-v6/CV6-19/first-chapter-handoff.md",
+      "target": "docs/narrative/first-chapter-handoff.md",
+      "sourceSha256": "c828306fc0d4f83681a005cd868d626b16e42a804a5554785f52b3aeb613d874",
+      "adoptedSha256LF": "444742836dbd5d6f3355ecf0e50453df78c36b871583dc464c8a22ea8c8dba58"
+    },
+    {
+      "packageId": "CV6-19",
+      "source": "deliverables/commercial-v6/CV6-19/characters.json",
+      "target": "content/story/corner_card_shop/characters.json",
+      "sourceSha256": "61fd3b7bb38287ea4dd3832ec894af103187e1a50140cb7ee4f8cbacfb976804",
+      "adoptedSha256LF": "bd19687c1b0d85d3523106c261f5e6908983b6cded201717a7d5c4c1a042e285"
+    },
+    {
+      "packageId": "CV6-19",
+      "source": "deliverables/commercial-v6/CV6-19/flags.json",
+      "target": "content/story/corner_card_shop/flags.json",
+      "sourceSha256": "165888ea1a3996a5d84cb10262438a98df0bf6d9cf5fa3393f74eb2237e7d7b7",
+      "adoptedSha256LF": "ae42bd013f761e8d2b62dd7158b7b09de9aacfd6370655a506973b3dbce782c9"
+    },
+    {
+      "packageId": "CV6-20",
+      "source": "deliverables/commercial-v6/CV6-20/chapters/chapter_00.story.json",
+      "target": "content/story/corner_card_shop/chapters/chapter_00.story.json",
+      "sourceSha256": "e61ada48597d0b990835ca0590cf11497677557e7c2dbb1ba8640aabe8a23410",
+      "adoptedSha256LF": "fad92b181594d34de0d12fe582230b221e94562bb4ed1167be24eb02f7d547ba"
+    },
+    {
+      "packageId": "CV6-20",
+      "source": "deliverables/commercial-v6/CV6-20/chapters/chapter_01.story.json",
+      "target": "content/story/corner_card_shop/chapters/chapter_01.story.json",
+      "sourceSha256": "8ef48039376697ede02debd2c2145d36ce3417cf02eafd6cccdc36f9c393f64c",
+      "adoptedSha256LF": "e11f41f5972778de5841df61b66948905cd3d1229f8131229638eef3313a3126"
+    },
+    {
+      "packageId": "CV6-20",
+      "source": "deliverables/commercial-v6/CV6-20/chapters/side_lin_cheng_01.story.json",
+      "target": "content/story/corner_card_shop/chapters/side_lin_cheng_01.story.json",
+      "sourceSha256": "a5db1c2c532ce549da194142533297d70835d022c510aa0fd32c051c65ff27b7",
+      "adoptedSha256LF": "a138a4f18651466e5cc4ee0e705a8160a4e54575bd83242297dbde9056d7d2ce"
+    },
+    {
+      "packageId": "CV6-20",
+      "source": "deliverables/commercial-v6/CV6-20/chapters/side_xu_yao_01.story.json",
+      "target": "content/story/corner_card_shop/chapters/side_xu_yao_01.story.json",
+      "sourceSha256": "e181ac9ae0c8527ee2cbd9778c68ba6f063d114a697ea7e447bdab3e58828929",
+      "adoptedSha256LF": "6c494597784bca93c36a43e95c0ce2059d566e3389300e304851218b9017d791"
+    },
+    {
+      "packageId": "CV6-20",
+      "source": "deliverables/commercial-v6/CV6-20/chapters/side_zhou_ye_01.story.json",
+      "target": "content/story/corner_card_shop/chapters/side_zhou_ye_01.story.json",
+      "sourceSha256": "3d215f5884f5337e2850773b89737cd681d29ef9912e29bcb3e99f45a423fdc0",
+      "adoptedSha256LF": "c19f62e62982fecb0e9d01ca776e1808122d00825a559a3fd4a5069235024df4"
+    },
+    {
+      "packageId": "CV6-20",
+      "source": "deliverables/commercial-v6/CV6-20/text/zh-CN.json",
+      "target": "content/story/corner_card_shop/text/zh-CN.json",
+      "sourceSha256": "e4b2c2e3de7d22536e15e0a3cd74ffa2ffd1a93bb217b69831580fb7eda6e87a",
+      "adoptedSha256LF": "e4b2c2e3de7d22536e15e0a3cd74ffa2ffd1a93bb217b69831580fb7eda6e87a"
+    },
+    {
+      "packageId": "CV6-20",
+      "source": "deliverables/commercial-v6/CV6-20/tests/scenario-tests.json",
+      "target": "content/story/corner_card_shop/tests/scenario-tests.json",
+      "sourceSha256": "a1e210265831404c85972fa50455341c8506c8c479d43e9bf0a89ada89e7f392",
+      "adoptedSha256LF": "a1e210265831404c85972fa50455341c8506c8c479d43e9bf0a89ada89e7f392"
+    },
+    {
+      "packageId": "CV6-20",
+      "source": "deliverables/commercial-v6/CV6-20/conditions-and-assets.csv",
+      "target": "docs/narrative/conditions-and-assets.csv",
+      "sourceSha256": "ea2d29f8593036a1885ebccaba3eb61057fa8c2c5689debb2e171f0685fb627d",
+      "adoptedSha256LF": "ea2d29f8593036a1885ebccaba3eb61057fa8c2c5689debb2e171f0685fb627d"
+    },
+    {
+      "packageId": "CV6-20",
+      "source": "deliverables/commercial-v6/CV6-20/script-readable-export.md",
+      "target": "docs/narrative/script-readable-export.md",
+      "sourceSha256": "992730aabaa8b3bf7a63d06e55046a833ceefe1be50e5effa7bde566ac8870e8",
+      "adoptedSha256LF": "78886d0597227c5e75a2e407142c706d8e402d1622d9c2715fd3705815cf36cf"
+    },
+    {
+      "packageId": "CV6-04",
+      "source": "deliverables/commercial-v6/CV6-04/config/assessments.json",
+      "target": "docs/proposals/progression-v6/assessments.json",
+      "sourceSha256": "9c1003b807cf597998bcaa58f351aa6faec8fa4fd4151c603fdcb28114b3b1b9",
+      "adoptedSha256LF": "2b9ccaa4bdedc8f3cea954d23bfa438f5b233de43f2a588ec1b7dde8426eda3e"
+    },
+    {
+      "packageId": "CV6-04",
+      "source": "deliverables/commercial-v6/CV6-04/config/events.json",
+      "target": "docs/proposals/progression-v6/events.json",
+      "sourceSha256": "327cb2dc66c2d7d3e665220d10bc5fc2627c04e023d2c203c5e6d879b9b7c1bf",
+      "adoptedSha256LF": "9249645bebecba6ed766663b208ffe2b60b66c8ccc26f7761744c7b9d758465a"
+    },
+    {
+      "packageId": "CV6-04",
+      "source": "deliverables/commercial-v6/CV6-04/config/progression.json",
+      "target": "docs/proposals/progression-v6/progression.json",
+      "sourceSha256": "f2d81a2d78e8383ce14333dbc37e31e6a77e1dbbb2b7508cf3f90acbddb04afb",
+      "adoptedSha256LF": "1f144bfa6bf962235f82238fde571583ee53776c9276616a8fdf75c7feec4abe"
+    },
+    {
+      "packageId": "CV6-04",
+      "source": "deliverables/commercial-v6/CV6-04/config/quests.json",
+      "target": "docs/proposals/progression-v6/quests.json",
+      "sourceSha256": "fa06454cc95913c2626b73c393e2f1ff68c3ef54ecfce8de033d0295e0f1fd6a",
+      "adoptedSha256LF": "03b217bc9701ebec7c81047ddfaafbec72bd2553b7a38a4b77197641e61e6771"
+    },
+    {
+      "packageId": "CV6-04",
+      "source": "deliverables/commercial-v6/CV6-04/content-map.csv",
+      "target": "docs/proposals/progression-v6/content-map.csv",
+      "sourceSha256": "7b97ce7fcad49dc924addb3ad337d6ec0531c8fc572bb9418f2aa300760e6b58",
+      "adoptedSha256LF": "7b97ce7fcad49dc924addb3ad337d6ec0531c8fc572bb9418f2aa300760e6b58"
+    },
+    {
+      "packageId": "CV6-04",
+      "source": "deliverables/commercial-v6/CV6-04/failure-paths.md",
+      "target": "docs/proposals/progression-v6/failure-paths.md",
+      "sourceSha256": "d4b9e72c4db5044c0c900616a4502e53ffa310b853cb1d513615753f441f5553",
+      "adoptedSha256LF": "d7cc3ea4ad3a55cda13045a3e3af0b2aff455b87931c7dd5141bb136c92b6f6a"
+    },
+    {
+      "packageId": "CV6-01",
+      "source": "deliverables/commercial-v6/CV6-01/reference-matrix.csv",
+      "target": "docs/research/cv6-01/reference-matrix.csv",
+      "sourceSha256": "2c6230c0c7e697c84010364b2769d8add93e684375ba6e8ecb990f6dc8aaa513",
+      "adoptedSha256LF": "2c6230c0c7e697c84010364b2769d8add93e684375ba6e8ecb990f6dc8aaa513"
+    },
+    {
+      "packageId": "CV6-01",
+      "source": "deliverables/commercial-v6/CV6-01/decision-loops.md",
+      "target": "docs/research/cv6-01/decision-loops.md",
+      "sourceSha256": "6b486716c6cd238389a28de0f13e2533eecbcd8f7799fa27cbe6088923654116",
+      "adoptedSha256LF": "ecd8583827d0c4d064825a5a799a671378c5eae2ecd9456b0c5f7b6f96708bef"
+    },
+    {
+      "packageId": "CV6-01",
+      "source": "deliverables/commercial-v6/CV6-01/experiments.json",
+      "target": "docs/research/cv6-01/experiments.json",
+      "sourceSha256": "9c24fadf3b0825f410e55efa98045c149bd23f31fc470021bb2bc6fbeaaf416b",
+      "adoptedSha256LF": "9c24fadf3b0825f410e55efa98045c149bd23f31fc470021bb2bc6fbeaaf416b"
+    },
+    {
+      "packageId": "CV6-01",
+      "source": "deliverables/commercial-v6/CV6-01/scope-tradeoffs.md",
+      "target": "docs/research/cv6-01/scope-tradeoffs.md",
+      "sourceSha256": "76944111fef75403c77f203b5e9b15fef27c0215c048fcddca0f3111dcce73f2",
+      "adoptedSha256LF": "27b50a5e2802bf94ff85285393ab3dd146aa9f756b34508d00b1de2011865f3b"
+    },
+    {
+      "packageId": "CV6-11",
+      "source": "deliverables/commercial-v6/CV6-11/couplings.csv",
+      "target": "docs/architecture/noname-v6/couplings.csv",
+      "sourceSha256": "6f35120ee0fd0ce71e21cfa099f5826a850d73cb7fd459b5922eb6750559a514",
+      "adoptedSha256LF": "6f35120ee0fd0ce71e21cfa099f5826a850d73cb7fd459b5922eb6750559a514"
+    },
+    {
+      "packageId": "CV6-11",
+      "source": "deliverables/commercial-v6/CV6-11/version-evidence.json",
+      "target": "docs/architecture/noname-v6/version-evidence.json",
+      "sourceSha256": "a2ce7c143298523b9a086b8e676c1766714568077817b6f71595314745e88c95",
+      "adoptedSha256LF": "9be49d2c377a8e1effedf0409eb5c42c7c5896d782482f43987bb953072e5da6"
+    },
+    {
+      "packageId": "CV6-11",
+      "source": "deliverables/commercial-v6/CV6-11/profile-proposal.md",
+      "target": "docs/architecture/noname-v6/profile-proposal.md",
+      "sourceSha256": "aa06f19d52481742096e697a37eb5adfcc63717c0477fe9e58d75a791fb84274",
+      "adoptedSha256LF": "e8c597dca76c3cab8fb95d423e283e3eae997a3e00b37543005ff771f0658d29"
+    },
+    {
+      "packageId": "CV6-11",
+      "source": "deliverables/commercial-v6/CV6-11/diff-report.md",
+      "target": "docs/architecture/noname-v6/diff-report.md",
+      "sourceSha256": "a1f165bff577abd1128f693e451053ed0e47cf1b3110a38140b56c81dc7e5957",
+      "adoptedSha256LF": "0ae26339cbab2f97cfc2b499ec491c35d15608cc24301e232d3470707f5b3e7f"
+    },
+    {
+      "packageId": "CV6-11",
+      "source": "deliverables/commercial-v6/CV6-11/probe-plan.md",
+      "target": "docs/architecture/noname-v6/probe-plan.md",
+      "sourceSha256": "e6b77ca5419e3c801ce6af87b67e6c39dc5928744ea8116ab8ee64057788042f",
+      "adoptedSha256LF": "e4a3df2339b5a19dc3991d2cb65b81373c0674682bc77e3b7deb2334aad0da81"
+    },
+    {
+      "packageId": "CV6-15",
+      "source": "deliverables/commercial-v6/CV6-15/implementation/feedback/cue-registry.mjs",
+      "target": "frontend/feedback/cue-registry.mjs",
+      "sourceSha256": "b4be0a3d779a0b27013e65e4bb03f1900eaba66121b40493d12f646904cb559c",
+      "adoptedSha256LF": "b4be0a3d779a0b27013e65e4bb03f1900eaba66121b40493d12f646904cb559c"
+    },
+    {
+      "packageId": "CV6-15",
+      "source": "deliverables/commercial-v6/CV6-15/implementation/feedback/feedback-prefs.mjs",
+      "target": "frontend/feedback/feedback-prefs.mjs",
+      "sourceSha256": "76c693bf02abf1b8c2ae0c88a30614bdc184bc84db1da6be5f8cffcb351d6754",
+      "adoptedSha256LF": "51052f5a81c626c564858c841fc7c98992e739a8197fd3e4c1202857af59734f"
+    },
+    {
+      "packageId": "CV6-15",
+      "source": "deliverables/commercial-v6/CV6-15/implementation/feedback/index.mjs",
+      "target": "frontend/feedback/index.mjs",
+      "sourceSha256": "e0c2b4db247a74dddcf6d764d21480203966e6afaef84b95b99d01c9a41e2827",
+      "adoptedSha256LF": "6bedd21e9d82042243bcd158f0a06f36f482bc1dec29e37aab7e4497e1bfa946"
+    },
+    {
+      "packageId": "CV6-15",
+      "source": "deliverables/commercial-v6/CV6-15/implementation/feedback/subtitles.mjs",
+      "target": "frontend/feedback/subtitles.mjs",
+      "sourceSha256": "7ab7ed4746254ea8c1a78e9bb0959f318412b2b033428fd91db9dc32f87b3609",
+      "adoptedSha256LF": "f903fd60dd2d1601adea9c400f90c13461284bc68f0d77308ab3249a9c3b0483"
+    },
+    {
+      "packageId": "CV6-15",
+      "source": "deliverables/commercial-v6/CV6-15/implementation/tests/feedback.test.mjs",
+      "target": "tests/feedback/feedback.test.mjs",
+      "sourceSha256": "6e129db6973c492b4df719148428134b91b237f61a5b8dabccfa575d38e8594c",
+      "adoptedSha256LF": "68d1c0110ee9509293e3fdb99163a611721e3a19fedc6b121f3c031aa90f0540"
+    },
+    {
+      "packageId": "CV6-15",
+      "source": "deliverables/commercial-v6/CV6-15/implementation/tests/assert.mjs",
+      "target": "tests/feedback/assert.mjs",
+      "sourceSha256": "76d8ed65b360384ec93a7213eb4482ae81d07121ed00f6ec655117b4e352ba62",
+      "adoptedSha256LF": "76d8ed65b360384ec93a7213eb4482ae81d07121ed00f6ec655117b4e352ba62"
+    },
+    {
+      "packageId": "CV6-17",
+      "source": "deliverables/commercial-v6/CV6-17/src/cli.mjs",
+      "target": "tools/cv6/src/cli.mjs",
+      "sourceSha256": "a6cd43d7be4008044cae85b08fef61fc511075c1ab2ba85b2d17c5276ba8ff41",
+      "adoptedSha256LF": "4ec3755bb84c60df68befb294bb8bbd12947726bee1375e7934a58d6493921e9"
+    },
+    {
+      "packageId": "CV6-17",
+      "source": "deliverables/commercial-v6/CV6-17/src/lib/aggregate.mjs",
+      "target": "tools/cv6/src/lib/aggregate.mjs",
+      "sourceSha256": "233111d09189c826433e1b8e43822c20678b57595316b93b1a705696e1318a57",
+      "adoptedSha256LF": "233111d09189c826433e1b8e43822c20678b57595316b93b1a705696e1318a57"
+    },
+    {
+      "packageId": "CV6-17",
+      "source": "deliverables/commercial-v6/CV6-17/src/lib/check.mjs",
+      "target": "tools/cv6/src/lib/check.mjs",
+      "sourceSha256": "a04b635622bfa06a836cd14211c9ce8fce50d11489346b8f9624ba62b017caa7",
+      "adoptedSha256LF": "a04b635622bfa06a836cd14211c9ce8fce50d11489346b8f9624ba62b017caa7"
+    },
+    {
+      "packageId": "CV6-17",
+      "source": "deliverables/commercial-v6/CV6-17/src/lib/config.mjs",
+      "target": "tools/cv6/src/lib/config.mjs",
+      "sourceSha256": "776f4d2e27fdb525a5c5e943fc5bf5aba87f963ba0e86292250eb298426a4923",
+      "adoptedSha256LF": "75e66f7ad4f912cd3ef5aadbed1fd01ed1d6525f75bbe07dc90b313fd9411a8f"
+    },
+    {
+      "packageId": "CV6-17",
+      "source": "deliverables/commercial-v6/CV6-17/src/lib/delivery.mjs",
+      "target": "tools/cv6/src/lib/delivery.mjs",
+      "sourceSha256": "d04a16bf1099c4537432e04878358465a70ce404c73fbe9fa1545c7756b8983b",
+      "adoptedSha256LF": "d04a16bf1099c4537432e04878358465a70ce404c73fbe9fa1545c7756b8983b"
+    },
+    {
+      "packageId": "CV6-17",
+      "source": "deliverables/commercial-v6/CV6-17/src/lib/deps.mjs",
+      "target": "tools/cv6/src/lib/deps.mjs",
+      "sourceSha256": "f3d4cdbf986314ac6fc698d02a232664dc0538eae38fc108317e1d0fc4648f39",
+      "adoptedSha256LF": "f3d4cdbf986314ac6fc698d02a232664dc0538eae38fc108317e1d0fc4648f39"
+    },
+    {
+      "packageId": "CV6-17",
+      "source": "deliverables/commercial-v6/CV6-17/src/lib/fs-safe.mjs",
+      "target": "tools/cv6/src/lib/fs-safe.mjs",
+      "sourceSha256": "a5723b4a066509ed1db352901d9db6485325cbe6713462c3473856397dd1402a",
+      "adoptedSha256LF": "5cc7a90962b1a983cca2e65649c262ced547961d355f77a248f2aa12e3ac3098"
+    },
+    {
+      "packageId": "CV6-17",
+      "source": "deliverables/commercial-v6/CV6-17/src/lib/hash.mjs",
+      "target": "tools/cv6/src/lib/hash.mjs",
+      "sourceSha256": "310334cf778d6bd3aff198b57979f08dd8a3d145d0efcc855c136a451e8bbc06",
+      "adoptedSha256LF": "310334cf778d6bd3aff198b57979f08dd8a3d145d0efcc855c136a451e8bbc06"
+    },
+    {
+      "packageId": "CV6-17",
+      "source": "deliverables/commercial-v6/CV6-17/src/lib/integrate.mjs",
+      "target": "tools/cv6/src/lib/integrate.mjs",
+      "sourceSha256": "a0dd9225c278bbfb5470badc73e94e3450133c158c3cf5acc374aee5c45fb39c",
+      "adoptedSha256LF": "d26143855ef4f95b247887eb195a70d0922ddea68c3b984fbbf61c7e3686ef30"
+    },
+    {
+      "packageId": "CV6-17",
+      "source": "deliverables/commercial-v6/CV6-17/src/lib/links.mjs",
+      "target": "tools/cv6/src/lib/links.mjs",
+      "sourceSha256": "d2a951480ca1d67c89b71345c552aeb9a8e0f8e897769fd64aa456ee152fe634",
+      "adoptedSha256LF": "d2a951480ca1d67c89b71345c552aeb9a8e0f8e897769fd64aa456ee152fe634"
+    },
+    {
+      "packageId": "CV6-17",
+      "source": "deliverables/commercial-v6/CV6-17/src/lib/manifest.mjs",
+      "target": "tools/cv6/src/lib/manifest.mjs",
+      "sourceSha256": "f471dedb5ce5ef74c9f9ff4128e89e3055d7286706183ee6d3438c3c770c4230",
+      "adoptedSha256LF": "39c37c7af28ce69d2e85266c35370858eeaecd211ac8a73a75c3bf6802b9b34c"
+    },
+    {
+      "packageId": "CV6-17",
+      "source": "deliverables/commercial-v6/CV6-17/src/lib/patch.mjs",
+      "target": "tools/cv6/src/lib/patch.mjs",
+      "sourceSha256": "c770ad7c2149d241453aacbb40a361b0f0afd5fc9c9e18508b23edf1659b931a",
+      "adoptedSha256LF": "d8414acd4ed690893a194940b5cc182f25374c3a19af86ec709b51d35f044db8"
+    },
+    {
+      "packageId": "CV6-17",
+      "source": "deliverables/commercial-v6/CV6-17/src/lib/report.mjs",
+      "target": "tools/cv6/src/lib/report.mjs",
+      "sourceSha256": "f149fe65549b01de2a062a93ad49dfdba277b36da7b560ed2e3d1f7015597fe3",
+      "adoptedSha256LF": "f149fe65549b01de2a062a93ad49dfdba277b36da7b560ed2e3d1f7015597fe3"
+    },
+    {
+      "packageId": "CV6-17",
+      "source": "deliverables/commercial-v6/CV6-17/src/lib/rework.mjs",
+      "target": "tools/cv6/src/lib/rework.mjs",
+      "sourceSha256": "98ce2bee3dfb8aca0b4d3bec0599ae8f23344386c12fdb8161efe903709902d9",
+      "adoptedSha256LF": "57a0da884c838eb1e9a09d6ba5f3e2ed36e1b4c93684358476a0d06867d51a2e"
+    },
+    {
+      "packageId": "CV6-17",
+      "source": "deliverables/commercial-v6/CV6-17/src/lib/sandbox.mjs",
+      "target": "tools/cv6/src/lib/sandbox.mjs",
+      "sourceSha256": "8597b928e9288f745a26d79b168778715ab958419bc0be388220ab417288d32e",
+      "adoptedSha256LF": "076991adb478a885713a5938a86117b49bf0a63f6afcadf3df6ef6f0c876ad6f"
+    },
+    {
+      "packageId": "CV6-17",
+      "source": "deliverables/commercial-v6/CV6-17/src/lib/summary.mjs",
+      "target": "tools/cv6/src/lib/summary.mjs",
+      "sourceSha256": "51da1311d4b947c02ff4592658f277f34f899319031a05ba16c18fee52530f70",
+      "adoptedSha256LF": "e2f4513207bde4265b18bebcde5a1330496da18e3986b0129c0256e28ee27e17"
+    },
+    {
+      "packageId": "CV6-17",
+      "source": "deliverables/commercial-v6/CV6-17/tools/collect-evidence.mjs",
+      "target": "tools/cv6/tools/collect-evidence.mjs",
+      "sourceSha256": "8fec6402db6fdc7c54a443cab4dac86ec7ab2b98107984916212ecd22c885279",
+      "adoptedSha256LF": "8fec6402db6fdc7c54a443cab4dac86ec7ab2b98107984916212ecd22c885279"
+    },
+    {
+      "packageId": "CV6-17",
+      "source": "deliverables/commercial-v6/CV6-17/tools/generate-manifest.mjs",
+      "target": "tools/cv6/tools/generate-manifest.mjs",
+      "sourceSha256": "6511b69b37d2628bd95f1859e36cb2d570b7aab1373e36e1098b8358b954d6de",
+      "adoptedSha256LF": "6511b69b37d2628bd95f1859e36cb2d570b7aab1373e36e1098b8358b954d6de"
+    },
+    {
+      "packageId": "CV6-17",
+      "source": "deliverables/commercial-v6/CV6-17/tests/fixtures.mjs",
+      "target": "tools/cv6/tests/fixtures.mjs",
+      "sourceSha256": "d7ffae89015cb6c0cfd2869b50e704c18ffbb50a8c3f32a6e95261847d423f95",
+      "adoptedSha256LF": "9fb026e55b1e35ac70d2d8b6f5580161864e413580598cbfe31ac96a11a44e03"
+    },
+    {
+      "packageId": "CV6-17",
+      "source": "deliverables/commercial-v6/CV6-17/tests/run-tests.mjs",
+      "target": "tools/cv6/tests/run-tests.mjs",
+      "sourceSha256": "4a022c66900b0bc58ffd786421c6467d8ec8386f581a56455cd659d64f0bed7a",
+      "adoptedSha256LF": "f7292607024f5e7272dd45473ccf5dd07c0948320adc2b4864ee0f773f2b2b14"
+    },
+    {
+      "packageId": "CV6-15",
+      "source": "deliverables/commercial-v6/CV6-15/implementation/patches/0001-v15-001-talk-attribution.patch",
+      "target": "frontend-next/components/management/operations.mjs",
+      "sourceSha256": "a94a9c3f29ae855aaa680c54d55fe91fdece6a8fe891bcfe6ee27a557b073083",
+      "adoption": "reviewed patch plus primary corrections",
+      "adoptedSha256LF": "a80f670c3f568a075e1d5398443266c8f9c7314960136b6f8bf8f5e720363bd5"
+    },
+    {
+      "packageId": "CV6-15",
+      "source": "deliverables/commercial-v6/CV6-15/implementation/patches/0002-v15-003-player-label.patch",
+      "target": "frontend/world/actor-view.mjs",
+      "sourceSha256": "882cafa9602511f06531bfef3405e0a8207a7d9ac12fa68e2596d9058e18cbf6",
+      "adoption": "reviewed patch plus primary corrections",
+      "adoptedSha256LF": "977df6ee88811880b9fd06b9654ddac21098aa86d8972921c49b957149f92f6e"
+    },
+    {
+      "packageId": "CV6-15",
+      "source": "deliverables/commercial-v6/CV6-15/implementation/patches/0003-v15-005-camera-band-color.patch",
+      "target": "frontend/scenes/world-scene.mjs",
+      "sourceSha256": "0277d0c7abf1bed3d9848753ff384771a9ece26b9b5c55e53495d72697919841",
+      "adoption": "reviewed patch plus primary corrections",
+      "adoptedSha256LF": "1a46d2033f24178c671aef4dbc4c9c16f2c0952ce4f985b5b3e00507d850d2d4"
+    }
+  ],
+  "primaryRewrites": [
+    "tools/qa/first-week.mjs",
+    "tools/story/validate.mjs",
+    "tools/story/validate-progression.mjs",
+    "modules/backend/customer-demand.mjs"
+  ],
+  "excluded": [
+    "raw deliverables",
+    "player saves",
+    "original art",
+    "vendor engine changes",
+    "EXE updates"
+  ],
+  "acceptedLocalCodeCommits": [
+    "c5bdc33a",
+    "7b17c6ee"
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "date": "2026-10-25",
   "sourceOfTruth": "docs/collaboration/commercial-v6",
-  "sourceTreeSha256LF": "3ac92a6e5510fc12779a673a990f5fa1be19959c4ba0abdc41669e7b2a5ed1d8",
+  "sourceTreeSha256LF": "d5678f952aafd7c197b80df2a98428697b2a8f362a033107abf27cabec1a917f",
   "sourceFiles": [
     {
       "path": "docs/collaboration/commercial-v6/01-剧情总纲与具体线路.md",
@@ -49,11 +49,11 @@
     },
     {
       "path": "docs/collaboration/commercial-v6/README.md",
-      "sha256LF": "301308953a02fdcd98380e0cf17d54bd31c5cb81dd34dd140ea7665a2989eced"
+      "sha256LF": "8af5647a2167c8036a4488b6ef5bfc5eeca1319a73438aa25233a1f5529c5a4c"
     },
     {
       "path": "docs/collaboration/commercial-v6/task-board.json",
-      "sha256LF": "109ba163e2e9bc7e8f719f973253b9268bee57a7e0ce9613594c384e437b94da"
+      "sha256LF": "0d17a3c9acd1c5c178b98b99bc150d063e1d856389955d2d2fd8f5732eaadc89"
     },
     {
       "path": "docs/collaboration/commercial-v6/tasks/CV6-01-成熟经营与剧情产品研究.md",
@@ -161,7 +161,7 @@
     },
     {
       "path": "docs/collaboration/commercial-v6/模型能力分类.json",
-      "sha256LF": "71af85fe105ba652a1377f91a39d75c3cfd871e5da510f12faa5cc5e93efe407"
+      "sha256LF": "ced8ec03336f2fff17ca57ea97b297f650d15d058d331f7a0e50c936113f80a8"
     }
   ],
   "groups": [
@@ -237,5 +237,5 @@
       "notes": "不必是最强推理模型，但必须能实际看截图/图源并使用素材工具；文本模型不能宣称完成视觉验收。代码接线仍由标准模型承接。"
     }
   ],
-  "status": "planning-only-not-assigned"
+  "status": "see-shared-task-board"
 }

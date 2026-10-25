@@ -115,7 +115,7 @@ for group in GROUPS:
 
 {role_rules[group['id']]}
 
-这是待下发任务文档，未自动指派或开始实施。只执行用户点名的一个包/阶段，不因为共享资料包含26包就同时开展。
+这是能力分类目录，不代表每个任务都尚未开始。先核对共享资料的 task-board.json 中 acceptedStage/remaining，再执行用户分配给你的剩余范围，不重做已接入阶段，不因为共享资料包含26包就同时开展。
 
 ## 可以直接复制给模型的话
 
@@ -135,7 +135,7 @@ for group in GROUPS:
 本压缩包只有任务与共享文档，不含游戏源码、素材、内核或玩家档。同机模型按原工程只读输入工作；异机模型需用户提供对应任务的最小源码，不能凭任务书假设API已存在。共享目录中的其他包只是上下文，不是已分配给你。不要编辑分发副本；正式任务源在原工程docs/collaboration/commercial-v6，改源后重建。
 '''
     write(category / 'README-先读.md', readme)
-    write(category / '分发信息.json', json_text({'date': CONFIG['date'], 'group': group['id'], 'role': group['title'], 'primaryTasks': group['primaryTasks'], 'implementationTasks': group['implementationTasks'], 'sourceTreeSha256LF': tree_hash, 'status': 'not-assigned'}))
+    write(category / '分发信息.json', json_text({'date': CONFIG['date'], 'group': group['id'], 'role': group['title'], 'primaryTasks': group['primaryTasks'], 'implementationTasks': group['implementationTasks'], 'sourceTreeSha256LF': tree_hash, 'status': 'see-shared-task-board'}))
 
 table = ['| 文件夹 | 适合能力 | 主任务/阶段 |', '| --- | --- | --- |']
 for group in GROUPS:
@@ -143,13 +143,13 @@ for group in GROUPS:
     table.append(f'| [{group["folder"]}]({group["folder"]}/README-先读.md) | {group["title"]} | {summary} |')
 write(OUT / 'README.md', '''# CV6 按模型能力分类：转交入口
 
-2026-10-25。只整理和打包，不自动派发任务，不修改游戏功能。26个任务按角色分级；智能档次、代码能力、工具权限和看图能力是不同条件。
+2026-10-25。26个任务按角色分级；智能档次、代码能力、工具权限和看图能力是不同条件。部分首批阶段已经接入，实际状态以共享资料的task-board.json为准；本打包工具不自动派发任务。
 
 '''+'\n'.join(table)+'''
 
 强推理组的8个高风险包已分成“标准代码模型实施”和“强推理模型合同/风险审查”，分别写implementation/review，避免强模型重写整包。16单独做独立审计。没有额外强模型时，主模型只保留这些关键门槛，其他作者继续交可测候选。
 
-建议先发：高速组CV6-19；标准组CV6-17A，并可准备CV6-21A/24A的样例；强推理角色审21/24的合同。依赖只读上下文不等于任务已下发，同一包不要重复分配两个实现作者。
+首批19/20制作源、17工具和15局部修正等阶段已收，先看task-board.json，不重派这些已接入阶段。下一依赖门槛是21的最小运行合同与实现，24A可独立准备；22/23/26共用同一schema后展开。依赖上下文不等于任务已下发，同一包不要重复分配两个实现作者。
 
 ## 怎么给模型
 
@@ -172,7 +172,7 @@ write(OUT / '分工索引.csv', csv_io.getvalue().encode('utf-8-sig'))
 
 zip_names = [g['folder'] + '.zip' for g in GROUPS] + ['CV6-全部分类任务包.zip', '99-旧版分工归档-勿作为新任务.zip']
 write(OUT / '压缩包/README.md', '# 可直接转交的 ZIP\n\n' + '\n'.join(f'- [{name}]({name})' for name in zip_names) + '\n\n总包包含四类文档；不再内嵌四个分类ZIP。99只用于历史查询，不含当前游戏/素材/存档，跨工程历史引用需在原工程查看。\n')
-write(OUT / '分发清单.json', json_text({'date': CONFIG['date'], 'sourceOfTruth': CONFIG['sourceOfTruth'], 'sourceTreeSha256LF': tree_hash, 'sourceFiles': source_index, 'groups': GROUPS, 'status': 'planning-only-not-assigned'}))
+write(OUT / '分发清单.json', json_text({'date': CONFIG['date'], 'sourceOfTruth': CONFIG['sourceOfTruth'], 'sourceTreeSha256LF': tree_hash, 'sourceFiles': source_index, 'groups': GROUPS, 'status': 'see-shared-task-board'}))
 
 
 def zip_files(target, paths, base):

@@ -1,0 +1,8 @@
+day,minute,openingCash,closingCash,cashChange,debt,revenue,cogs,operating,goodsMargin,operatingProfit,taskRewards,taskCash,procurementCash,soldUnits,arrived,departed,purchasedVisits,unconverted,stockoutVisits,departedPurchaseRate
+1,1200,1200,2780,1580,0,960,0,30,960,930,650,650,0,10,30,30,21,0,0,0.7
+2,1200,2780,3388,608,0,288,0,30,288,258,350,350,0,3,30,30,29,0,0,0.9666666666666667
+3,1200,3388,3358,-30,0,0,0,30,0,-30,0,0,0,0,30,30,30,0,0,1
+4,1200,3358,3328,-30,0,0,0,30,0,-30,0,0,0,0,30,30,30,0,0,1
+5,1200,3328,3298,-30,0,0,0,30,0,-30,0,0,0,0,30,30,30,0,0,1
+6,1200,3298,3268,-30,0,0,0,30,0,-30,0,0,0,0,30,30,30,0,0,1
+7,1200,3268,3238,-30,0,0,0,30,0,-30,0,0,0,0,30,30,30,0,0,1

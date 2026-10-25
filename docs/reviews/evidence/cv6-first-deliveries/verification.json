@@ -1,0 +1,67 @@
+{
+  "date": "2026-10-25",
+  "cv6": {
+    "selection": "cv6",
+    "output": "D:\\GameDev\\NonameCardShop\\test-results\\2026-10-25T09-00-52-256Z-36316",
+    "startedAt": "2026-10-25T09:00:52.259Z",
+    "results": [
+      {
+        "group": "cv6",
+        "file": "tools/cv6/tests/run-tests.mjs",
+        "passed": true,
+        "code": 0,
+        "seconds": 6.7
+      },
+      {
+        "group": "cv6",
+        "file": "tests/cv6-first-deliveries.mjs",
+        "passed": true,
+        "code": 0,
+        "seconds": 0.5
+      },
+      {
+        "group": "cv6",
+        "file": "tests/feedback/feedback.test.mjs",
+        "passed": true,
+        "code": 0,
+        "seconds": 0.1
+      },
+      {
+        "group": "cv6",
+        "file": "tests/cv6-frontend.mjs",
+        "passed": true,
+        "code": 0,
+        "seconds": 2.4
+      },
+      {
+        "group": "cv6",
+        "file": "tests/customer-demand.mjs",
+        "passed": true,
+        "code": 0,
+        "seconds": 0.2
+      }
+    ],
+    "finishedAt": "2026-10-25T09:01:02.253Z",
+    "passed": true
+  },
+  "additionalPassed": [
+    "node tests/shop-experience.mjs",
+    "node tests/customer-trash.mjs"
+  ],
+  "weekRuns": [
+    {
+      "report": "before-demand-fix.json",
+      "days": 7,
+      "stepSeconds": 0.25
+    },
+    {
+      "report": "after-demand-fix.json",
+      "days": 7,
+      "stepSeconds": 1
+    }
+  ],
+  "limits": [
+    "Pure story scenarios are preview-fixture evidence only.",
+    "No full story Host/save integration, natural engine qualification or EXE rebuild."
+  ]
+}

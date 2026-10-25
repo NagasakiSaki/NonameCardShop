@@ -3,28 +3,32 @@
   "createdAt": "2026-10-25",
   "baseCommit": "74c7a8e9",
   "privatePublishedCommit": "55d6d8e6",
-  "status": "planning-only",
+  "status": "in-development",
   "supersedes": "maturity-v5 future dispatch; existing accepted code remains authoritative",
   "tasks": [
     {
       "id": "CV6-01",
       "title": "成熟经营与剧情产品研究",
-      "status": "planned",
+      "status": "stage-integrated",
       "taskFile": "tasks/CV6-01-成熟经营与剧情产品研究.md",
       "outputDir": "deliverables/commercial-v6/CV6-01/",
       "dependsOn": [],
-      "executor": null,
-      "acceptedCommit": null
+      "executor": "external candidate; primary integration and fixes",
+      "acceptedCommit": "7b17c6ee",
+      "acceptedStage": "research-proposal-reviewed",
+      "remaining": "Dynamic experiments and implemented decision loops remain future work."
     },
     {
       "id": "CV6-02",
       "title": "默认体验与首周实测",
-      "status": "planned",
+      "status": "stage-integrated",
       "taskFile": "tasks/CV6-02-默认体验与首周实测.md",
       "outputDir": "deliverables/commercial-v6/CV6-02/",
       "dependsOn": [],
-      "executor": null,
-      "acceptedCommit": null
+      "executor": "external candidate; primary integration and fixes",
+      "acceptedCommit": "7b17c6ee",
+      "acceptedStage": "sampler-corrected-headless-stage",
+      "remaining": "UI first-week playthrough, navigation and story coverage remain unverified."
     },
     {
       "id": "CV6-03",
@@ -41,14 +45,16 @@
     {
       "id": "CV6-04",
       "title": "成长任务与内容配置",
-      "status": "planned",
+      "status": "stage-integrated",
       "taskFile": "tasks/CV6-04-成长任务与内容配置.md",
       "outputDir": "deliverables/commercial-v6/CV6-04/",
       "dependsOn": [
         "CV6-19"
       ],
-      "executor": null,
-      "acceptedCommit": null
+      "executor": "external candidate; primary integration and fixes",
+      "acceptedCommit": "7b17c6ee",
+      "acceptedStage": "content-proposal-validated",
+      "remaining": "Rewards, qualifications and tournaments are not activated."
     },
     {
       "id": "CV6-05",
@@ -129,12 +135,14 @@
     {
       "id": "CV6-11",
       "title": "无名杀耦合盘点",
-      "status": "planned",
+      "status": "stage-integrated",
       "taskFile": "tasks/CV6-11-无名杀耦合盘点.md",
       "outputDir": "deliverables/commercial-v6/CV6-11/",
       "dependsOn": [],
-      "executor": null,
-      "acceptedCommit": null
+      "executor": "external candidate; primary integration and fixes",
+      "acceptedCommit": "7b17c6ee",
+      "acceptedStage": "coupling-inventory-reviewed",
+      "remaining": "Dynamic probes, adapters and upgrade execution remain future work."
     },
     {
       "id": "CV6-12",
@@ -178,15 +186,17 @@
     {
       "id": "CV6-15",
       "title": "美术声音与可读性",
-      "status": "planned",
+      "status": "stage-integrated",
       "taskFile": "tasks/CV6-15-美术声音与可读性.md",
       "outputDir": "deliverables/commercial-v6/CV6-15/",
       "dependsOn": [
         "CV6-06",
         "CV6-26"
       ],
-      "executor": null,
-      "acceptedCommit": null
+      "executor": "external candidate; primary integration and fixes",
+      "acceptedCommit": "7b17c6ee",
+      "acceptedStage": "local-fixes-integrated-components-tested",
+      "remaining": "Global dialogue/event wiring and missing audio/expression assets remain future work."
     },
     {
       "id": "CV6-16",
@@ -201,12 +211,14 @@
     {
       "id": "CV6-17",
       "title": "沙盒集成与维护工具",
-      "status": "planned",
+      "status": "stage-integrated",
       "taskFile": "tasks/CV6-17-沙盒集成与维护工具.md",
       "outputDir": "deliverables/commercial-v6/CV6-17/",
       "dependsOn": [],
-      "executor": null,
-      "acceptedCommit": null
+      "executor": "external candidate; primary integration and fixes",
+      "acceptedCommit": "c5bdc33a",
+      "acceptedStage": "intake-tool-integrated",
+      "remaining": "Future gameplay package assembly and independent CV6-16 acceptance are not complete."
     },
     {
       "id": "CV6-18",
@@ -230,25 +242,29 @@
     {
       "id": "CV6-19",
       "title": "主线角色与剧情总案",
-      "status": "planned",
+      "status": "stage-integrated",
       "taskFile": "tasks/CV6-19-主线角色与剧情总案.md",
       "outputDir": "deliverables/commercial-v6/CV6-19/",
       "dependsOn": [],
-      "executor": null,
-      "acceptedCommit": null
+      "executor": "external candidate; primary integration and fixes",
+      "acceptedCommit": "7b17c6ee",
+      "acceptedStage": "story-bible-and-first-chapter-source-reviewed",
+      "remaining": "Later chapter dialogue and runtime content binding remain future work."
     },
     {
       "id": "CV6-20",
       "title": "首章台本与角色支线",
-      "status": "planned",
+      "status": "stage-integrated",
       "taskFile": "tasks/CV6-20-首章台本与角色支线.md",
       "outputDir": "deliverables/commercial-v6/CV6-20/",
       "dependsOn": [
         "CV6-19",
         "CV6-21"
       ],
-      "executor": null,
-      "acceptedCommit": null
+      "executor": "external candidate; primary integration and fixes",
+      "acceptedCommit": "7b17c6ee",
+      "acceptedStage": "first-batch-authoring-and-fixture-preview-tested",
+      "remaining": "No real Host narrative runtime; chapters two through six not authored."
     },
     {
       "id": "CV6-21",
@@ -322,5 +338,7 @@
       "executor": null,
       "acceptedCommit": null
     }
-  ]
+  ],
+  "lastReviewedAt": "2026-10-25",
+  "integrationReview": "docs/reviews/2026-10-25-cv6-first-deliveries.md"
 }
