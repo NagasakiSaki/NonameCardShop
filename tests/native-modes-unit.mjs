@@ -5,6 +5,7 @@ import {nativeProfile,validateRoundPlan,digestPlan,expectedIdentity,mapNativeRes
 import {probeModeCapabilities} from '../integration/modes/capabilities.mjs';
 import {createAllyControl} from '../integration/modes/ally-control.mjs';
 const profile=nativeProfile('doudizhu-bo3');
+assert.equal(nativeProfile('constructor'),null);
 const plan={version:1,worldId:'world',branchId:'branch',matchId:'series',gameId:'game',roundId:'round',formatId:'doudizhu-bo3',engineMode:'doudizhu',nativeVariant:'normal',profileId:profile.id,seed:42,reserveDigest:'reserve',playerTeamId:'farmers',controlledSeatId:'f1',seats:[
   {seatId:'z',teamId:'landlord',role:'landlord',controller:'ai',generalId:'caocao',loanRef:'loan1'},
   {seatId:'f1',teamId:'farmers',role:'farmer',controller:'human',generalId:'guanyu',sourceRef:'card1'},

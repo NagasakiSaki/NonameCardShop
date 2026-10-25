@@ -21,7 +21,7 @@ export async function installNativeRound(context,raw,send){
       lib.init.onfree();
       return game.createEvent('chooseShopNativeSeats',false).setContent(async()=>{
         check(game.players.length===plan.seats.length,'原生引擎实际座位数不正确。');
-        const unavailable=plan.seats.filter(s=>!lib.character[s.generalId]||lib.filter.characterDisabled(s.generalId));
+        const unavailable=plan.seats.filter(s=>!Object.hasOwn(lib.character,s.generalId)||lib.filter.characterDisabled(s.generalId));
         check(!unavailable.length,'以下武将未载入或被原生模式禁用：'+unavailable.map(s=>s.generalId).join('、'));
         const humanIndex=plan.seats.findIndex(s=>s.seatId===plan.controlledSeatId),ordered=[...plan.seats.slice(humanIndex),...plan.seats.slice(0,humanIndex)];
         let current=game.me;const bindings=[];
@@ -49,15 +49,21 @@ export async function installNativeRound(context,raw,send){
         const snapshot=()=>bindings.map(({seat,player:p})=>({seatId:seat.seatId,teamId:seat.teamId,role:seat.role,controller:seat.controller,generalId:seat.generalId,currentGeneralId:p.name1,alive:p.isAlive(),hp:p.hp,maxHp:p.maxHp,handCount:p.countCards('h'),controlled:p.isUnderControl(true)}));
         control=createAllyControl({context,plan,bindings,emit,snapshot,isFinalised:()=>finalised});
         game.shopNative={plan,planHash,profileId:profile.id,bindings,snapshot,controlState:control.state};
+        const announceReady=()=>{
+          if(ready||finalised)return;
+          check(game.me._shopSeatId===plan.controlledSeatId&&!bindings.some(({player:p})=>p!==game.me&&p.isUnderControl(true)),'原生模式错误地接管了AI席位。');
+          ready=true;emit('ready',{formatId:plan.formatId,engineMode:profile.engineMode,nativeVariant:profile.nativeVariant,seats:snapshot(),firstSeatId:_status.currentPhase?._shopSeatId||game.zhu?._shopSeatId,rules:profile.rules});
+        };
+        // Some legitimate skills can finish a game during gameStart. Announce
+        // valid seats before those skills, rather than rejecting an early win.
+        lib.skill._shop_native_ready={trigger:{global:'gameStart'},forced:true,popup:false,silent:true,charlotte:true,forceDie:true,firstDo:true,priority:1000000000,async content(){announceReady();}};
+        game.addGlobalSkill('_shop_native_ready');
         lib.skill._shop_native_control_boundary={trigger:{global:'phaseBefore'},forced:true,popup:false,silent:true,charlotte:true,forceDie:true,firstDo:true,priority:1000000,async content(){control.apply();}};
         game.addGlobalSkill('_shop_native_control_boundary');
         lib.skill._shop_native_progress={trigger:{global:['phaseBefore','useCardAfter','damageEnd','dieAfter']},forced:true,popup:false,silent:true,charlotte:true,forceDie:true,priority:-100000,
           async content(){
             if(finalised)return;
-            if(!ready){
-              if(game.me._shopSeatId!==plan.controlledSeatId||bindings.some(({seat,player:p})=>p!==game.me&&p.isUnderControl(true)))throw Error('原生模式错误地接管了AI席位。');
-              ready=true;emit('ready',{formatId:plan.formatId,engineMode:profile.engineMode,nativeVariant:profile.nativeVariant,seats:snapshot(),firstSeatId:_status.currentPhase?._shopSeatId||game.zhu?._shopSeatId,rules:profile.rules});
-            }
+            if(!ready)announceReady();
             emit('playing',{round:game.roundNumber||0,seats:snapshot()});
           }};
         game.addGlobalSkill('_shop_native_progress');

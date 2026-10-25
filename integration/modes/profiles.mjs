@@ -14,4 +14,4 @@ export const NATIVE_PROFILES=Object.freeze({
     hashes:Object.freeze({...shared,'mode/versus.js':'ad57477a3529519ebeb73818405e944e22bdc663519dcef5cbcc5b0ab8bd72f5'}),
     rules:Object.freeze({twoPhaseSwap:false,replacements:false,lastSeatExtraCard:false,nativeFirstDrawPenalty:true,nativeSharedTeamHandVisibility:true,optionalAllyTakeover:true,persistEngineVideos:false,seedScope:'initial-seat-order',exactMidRoundResume:false})}),
 });
-export const nativeProfile=formatId=>NATIVE_PROFILES[formatId]||null;
+export const nativeProfile=formatId=>Object.hasOwn(NATIVE_PROFILES,formatId)?NATIVE_PROFILES[formatId]:null;
