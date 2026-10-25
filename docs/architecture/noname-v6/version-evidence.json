@@ -1,0 +1,36 @@
+{
+  "documentStatus": "candidate-ready",
+  "auditDate": "2026-10-25",
+  "currentVendorBaseline": {
+    "packageName": "@noname/electron",
+    "packageVersion": "1.11.6",
+    "productName": "无名杀",
+    "license": "GPL-3.0-only",
+    "manifestFile": "data/engine-manifest.json",
+    "entryFile": "vendor/noname/entry.js",
+    "statistics": {
+      "totalManifestEntries": 16326,
+      "requiredVerifiedFiles": 15876,
+      "excludedHomeCacheFiles": 450,
+      "verificationStatus": "manifest counts rechecked; full engine file hashes not rerun in this batch"
+    }
+  },
+  "versioningDisambiguation": {
+    "projectRootVersion": "0.8.1",
+    "notes": "必须严格区分外层卡店工程版本（非游戏引擎）与内嵌的无名杀内核版本（1.11.6）。严禁将root package.json版本当成无名杀版本，严禁使用npm latest动态拉取未经测试的上游破坏性改动。"
+  },
+  "upstreamCompatibilityRisks": [
+    {
+      "area": "lib.onload2生命周期",
+      "risk": "上游若推行现代ESM打包并移除onload2全局数组，将导致duel.js补丁无法注入。"
+    },
+    {
+      "area": "事件驱动循环 (Event Stack)",
+      "risk": "shopRelayBoundary强依赖内部事件树anchor，上游重构事件循环将导致KOF接替流程死锁。"
+    },
+    {
+      "area": "武将重构 (revive/uninit/init)",
+      "risk": "连续重置状态依赖特定的内部执行时序，上游若增加不可变武将实例包装将破坏fresh-four摸牌逻辑。"
+    }
+  ]
+}

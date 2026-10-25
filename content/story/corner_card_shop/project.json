@@ -1,0 +1,18 @@
+{
+  "format": "card-shop-story-authoring/1",
+  "campaignId": "corner_card_shop",
+  "status": "authoring-only",
+  "runtimeContract": null,
+  "characters": "characters.json",
+  "flags": "flags.json",
+  "text": "text/zh-CN.json",
+  "chapters": [
+    "chapters/chapter_00.story.json",
+    "chapters/chapter_01.story.json",
+    "chapters/side_lin_cheng_01.story.json",
+    "chapters/side_xu_yao_01.story.json",
+    "chapters/side_zhou_ye_01.story.json"
+  ],
+  "scenarios": "tests/scenario-tests.json",
+  "notes": "Authoring and isolated text previews only. No Host runtime, rewards, NPC spawning or qualification activation. Asset/person bindings remain proposals."
+}

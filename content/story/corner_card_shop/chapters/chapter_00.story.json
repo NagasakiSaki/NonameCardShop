@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "campaignId": "corner_card_shop",
+  "contentRevision": "candidate-2026-10-25",
+  "chapterId": "chapter_00",
+  "chapterTitle": "序章《灯亮之前》",
+  "sceneId": "prologue_arrival",
+  "entryNodeId": "c00_arrival",
+  "characters": [
+    {
+      "personId": "person_lin_cheng",
+      "displayName": "林澄"
+    }
+  ],
+  "nodes": [
+    {
+      "nodeId": "c00_arrival",
+      "type": "line",
+      "lineId": "c00.arrival",
+      "speakerId": "person_lin_cheng",
+      "next": "c00_question"
+    },
+    {
+      "nodeId": "c00_question",
+      "type": "choice",
+      "lineId": "c00.question",
+      "choices": [
+        {
+          "choiceId": "c00_opt_stock",
+          "lineId": "c00.stock_opt",
+          "target": "c00_shelf"
+        },
+        {
+          "choiceId": "c00_opt_history",
+          "lineId": "c00.history_opt",
+          "target": "c00_memory"
+        },
+        {
+          "choiceId": "c00_opt_later",
+          "lineId": "c00.later_opt",
+          "target": "c00_deferred"
+        }
+      ]
+    },
+    {
+      "nodeId": "c00_shelf",
+      "type": "line",
+      "lineId": "c00.shelf",
+      "speakerId": "person_lin_cheng",
+      "next": "c00_action_stock"
+    },
+    {
+      "nodeId": "c00_action_stock",
+      "type": "action",
+      "effectId": "eff_c00_focus_stock",
+      "actionId": "narrative.setFlag",
+      "params": {
+        "flagId": "prologueFocus",
+        "value": "stock"
+      },
+      "onSuccess": "c00_end_open",
+      "onFailure": "c00_end_open"
+    },
+    {
+      "nodeId": "c00_memory",
+      "type": "line",
+      "lineId": "c00.memory",
+      "speakerId": "person_lin_cheng",
+      "next": "c00_action_history"
+    },
+    {
+      "nodeId": "c00_action_history",
+      "type": "action",
+      "effectId": "eff_c00_focus_history",
+      "actionId": "narrative.setFlag",
+      "params": {
+        "flagId": "prologueFocus",
+        "value": "history"
+      },
+      "onSuccess": "c00_end_open",
+      "onFailure": "c00_end_open"
+    },
+    {
+      "nodeId": "c00_deferred",
+      "type": "line",
+      "lineId": "c00.deferred_intro",
+      "speakerId": "person_lin_cheng",
+      "next": "c00_action_later"
+    },
+    {
+      "nodeId": "c00_action_later",
+      "type": "action",
+      "effectId": "eff_c00_focus_later",
+      "actionId": "narrative.setFlag",
+      "params": {
+        "flagId": "prologueFocus",
+        "value": "later"
+      },
+      "onSuccess": "c00_end_open",
+      "onFailure": "c00_end_open"
+    },
+    {
+      "nodeId": "c00_end_open",
+      "type": "end",
+      "result": "scene-completed",
+      "resumeAt": null
+    }
+  ]
+}

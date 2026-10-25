@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "campaignId": "corner_card_shop",
+  "documentStatus": "proposal-not-activated",
+  "lastUpdated": "2026-10-25",
+  "qualificationLevels": [
+    {
+      "level": 1,
+      "title": "街角新店主",
+      "requiredMetrics": {
+        "daysClosed": 1,
+        "sales": 1,
+        "shelved": 1
+      },
+      "perks": "解锁林澄每日建言与首周基础任务"
+    },
+    {
+      "level": 2,
+      "title": "社区熟稔据点",
+      "requiredMetrics": {
+        "daysClosed": 3,
+        "sales": 10,
+        "marketSales": 2,
+        "regularTalks": 3,
+        "communityEvents": 1
+      },
+      "perks": "解锁单卡寄售柜台、孟岚渠道进货与灯桥街社区离店资格"
+    },
+    {
+      "level": 3,
+      "title": "澄川信誉名店",
+      "requiredMetrics": {
+        "daysClosed": 7,
+        "sales": 30,
+        "marketSales": 8,
+        "upgrades": 2,
+        "communityEvents": 2
+      },
+      "perks": "解锁破军俱乐部观摩函、季前赛战队组建与官方特配包配售"
+    }
+  ],
+  "chapterMilestones": [
+    {
+      "chapterId": "chapter_00",
+      "title": "序章《灯亮之前》",
+      "trigger": "new_game_preparation",
+      "exitCondition": "flags.prologueFocus != 'none'",
+      "allowsFreePlay": true
+    },
+    {
+      "chapterId": "chapter_01",
+      "title": "第一章《第一张收据》",
+      "trigger": "flags.prologueFocus != 'none'",
+      "exitCondition": "metrics.sales >= 1 && flags.visitPriority != 'none' && metrics.daysClosed >= 1",
+      "allowsFreePlay": true
+    },
+    {
+      "chapterId": "chapter_02",
+      "title": "第二章《留下来的那张牌》",
+      "trigger": "chapter_01.completed && metrics.daysClosed >= 2",
+      "exitCondition": "flags.cardFate != 'pending' && flags.mengLanContactUnlocked == true",
+      "allowsFreePlay": true
+    },
+    {
+      "chapterId": "chapter_03",
+      "title": "第三章《牌桌不是摆设》",
+      "trigger": "chapter_02.completed && metrics.daysClosed >= 3 && shop.tables >= 1",
+      "exitCondition": "flags.zhouYeMatchResolved == true && flags.guHengAwareness == true",
+      "allowsFreePlay": true
+    },
+    {
+      "chapterId": "chapter_04",
+      "title": "第四章《隔壁街的邀请》",
+      "trigger": "chapter_03.completed && world.awayPolicyApproved == true",
+      "exitCondition": "flags.visitedDengQiao == true && flags.stallDirection != 'none'",
+      "allowsFreePlay": true
+    },
+    {
+      "chapterId": "chapter_05",
+      "title": "第五章《名次与店名》",
+      "trigger": "chapter_04.completed && shop.cash >= 1000",
+      "exitCondition": "flags.tournamentOutcomeRecorded == true",
+      "allowsFreePlay": true
+    },
+    {
+      "chapterId": "chapter_06",
+      "title": "终章《下一场在这里》",
+      "trigger": "chapter_05.completed && shop.isProfitable == true",
+      "exitCondition": "flags.endingRoute != 'none' && flags.campaignCompleted == true",
+      "allowsFreePlay": true
+    }
+  ]
+}

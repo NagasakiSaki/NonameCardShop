@@ -1,0 +1,7 @@
+"referenceTarget","category","verifiedFacts","ourDeduction","sourceUrlOrGame","checkDate","evidenceType"
+"TCG Card Shop Simulator","经营循环","3D进货开包陈列、货架定价影响客流购买意愿、无剧情NPC情感羁绊、纯数值规模扩张","本项目借鉴开包陈列与库存周转，但必须加入原创深度剧情与常客羁绊，采用2D像素轻量呈现","Steam官方已发售游戏","2026-10-25","manual-observation"
+"Moonlighter","昼夜与探索","白天当店长定价售货、夜晚地牢冒险探宝、小镇NPC需求简单委托式","本项目昼夜节奏借鉴白天营业/晚间熟客打牌，店外世界聚焦现代街区而非奇幻打怪","Steam官方已发售游戏","2026-10-25","manual-observation"
+"Recettear: An Item Shop's Tale","商业与债务","经典每周还贷压力机制、常客忠诚度影响议价预算、自由营业不阻断主线","本项目借鉴周复盘与收据留存，但移除苛刻高利贷强制清档惩罚，改用稳健现金流引导","Steam官方已发售游戏","2026-10-25","manual-observation"
+"ink / Inky / inkjs","剧情工具","轻量标记语言、状态机流转、支持跳转与条件分支、inkjs提供纯JS运行器","本项目首版采用更易校验与版本控制的受约束JSON源（.story.json），将inkjs保留为后续扩展候选","https://www.inklestudios.com/ink/","2026-10-25","static"
+"Yarn Spinner","剧情工具","节点树状结构、对话与表现层解耦、命令与本地化分离、清晰支持Choice与Jump","本项目采用Yarn式节点与文本分离哲学，台词单列多语言JSON，流程用节点拓扑组织","https://docs.yarnspinner.dev/","2026-10-25","static"
+"Tiled Map Editor","地图工具","Tiled World支持多地图相对偏移组织、自定义属性绑定出入口锚点与触发区域","本项目采用Tiled式世界注册规范，将地图ID、物理文件与逻辑地点严格解耦","https://doc.mapeditor.org/en/stable/manual/worlds/","2026-10-25","static"

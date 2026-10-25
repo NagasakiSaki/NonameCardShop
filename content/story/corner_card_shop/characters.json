@@ -1,0 +1,320 @@
+{
+  "schemaVersion": 1,
+  "campaignId": "corner_card_shop",
+  "documentStatus": "candidate-ready",
+  "lastUpdated": "2026-10-25",
+  "characters": [
+    {
+      "personId": "person_lin_cheng",
+      "displayName": "林澄",
+      "title": "前社区牌局召集人 / 守望者",
+      "role": "主线引导人、老牌店兴衰见证者、交流会协办者",
+      "archetype": "理智守成、外冷内热的前辈牌友",
+      "appearanceDecoupling": {
+        "rule": "纯原创人格与职业设定，严禁套用外部武将或二次元立绘原作设定；存档内全局单例，唯一映射至actorId，绝不生成复制人NPC。",
+        "placeholderRef": "sprite_lin_cheng_default",
+        "visualKeywords": "素色风衣、磨损卡盒、沉稳目光、双手插兜"
+      },
+      "desire": "希望看到一家真正具备持久经营生命力、能让牌友长期落脚的实体卡店，而不是又一场靠三分钟热度支撑、随后狼藉散场的泡影。",
+      "conflict": "内心对卡牌聚点怀有深厚感情，但经历过老店倒闭与牌友四散，深知纯凭热情无法对抗经营现实，因此初期对玩家持谨慎观望态度。",
+      "speechStyle": "简炼、客观、切中要害；习惯用事实和具体物件说话；不作廉价赞美，话虽克制但关键处有温度。",
+      "sampleDialogue": [
+        "灯真的亮了。我还以为这块招牌只剩下照路的用处。",
+        "那我先不挡柜台。卖出去的第一包，记得给自己留张收据。",
+        "先后没那么要紧。你答应了什么，明天还记得，就已经比空桌子好。"
+      ],
+      "firstMeetingCondition": {
+        "chapterId": "chapter_00",
+        "sceneId": "arrival",
+        "predicate": "dayState.isDayOnePreparation",
+        "note": "新档首日开门准备阶段触发，仅出现一次，支持稍后再聊延期。"
+      },
+      "subsequentMeetingPolicy": {
+        "triggerType": "scheduled-and-event",
+        "locationPreference": "store-counter-or-table",
+        "maxVisitsPerDay": 1,
+        "deferrable": true,
+        "blockerPolicy": "若玩家处于高压营业中，林澄在旁静默等待或次日再来，不强制模态中断。"
+      },
+      "growthTrajectory": "从序章的‘旁观者’，到第三章协助筹备周五交流会，再到终章决定是以平等的社区合伙人身份常驻，还是作为终生老友保持独立。",
+      "relationships": [
+        {
+          "targetPersonId": "person_xu_yao",
+          "relationType": "旧识记录",
+          "description": "知道许遥一直在搜集当年老聚会的活动散卡，对其执着表示理解但担心其投入过多精力。"
+        },
+        {
+          "targetPersonId": "person_zhou_ye",
+          "relationType": "长辈指点",
+          "description": "欣赏周野的冲劲，但常常提醒他‘把每张牌摸透比抱怨卡包掉率更管用’。"
+        },
+        {
+          "targetPersonId": "person_gu_heng",
+          "relationType": "理念分歧",
+          "description": "多年前与顾衡共同经历过澄川早期的牌店变迁，认可顾衡的商业执行力，但反对把卡店彻底变成唯胜负论的功利赛场。"
+        }
+      ]
+    },
+    {
+      "personId": "person_xu_yao",
+      "displayName": "许遥",
+      "title": "卡牌记忆收集者 / 编目者",
+      "role": "收藏线支线核心、卡牌背景记录、流通与陈列见证者",
+      "archetype": "温文尔雅、专注细节的卡牌文化寻访者",
+      "appearanceDecoupling": {
+        "rule": "纯原创人格与职业设定，严禁套用外部原作人设；唯一持久身份，绝不随随机顾客生成或销毁。",
+        "placeholderRef": "sprite_xu_yao_default",
+        "visualKeywords": "细框眼镜、厚重编目夹、整理整齐的单卡保护袋、温和神态"
+      },
+      "desire": "寻回散落在澄川各个角落的旧活动散卡与流转记录，还原那段被商业狂潮冲淡的卡牌生活记忆，给普通卡以尊严。",
+      "conflict": "当下二级市场唯金钱论与炒作盛行，绝大多数人只盯着天价罕贵卡，真正承载过往对战故事的基础卡往往被视为废纸遗弃。",
+      "speechStyle": "轻声细语、措辞讲究、富于观察力与叙事感；谈及具体卡牌时眼神发亮。",
+      "sampleDialogue": [
+        "这张收据别丢。以后你会记得，第一位顾客到底买了什么。",
+        "我找的不是最贵的那张。有人记得它，就够了。",
+        "磨损的边角不是瑕疵，那是它被人在牌桌上紧紧捏过很多次的印记。"
+      ],
+      "firstMeetingCondition": {
+        "chapterId": "chapter_01",
+        "sceneId": "first_receipt",
+        "predicate": "business.sealedSalesCount >= 1",
+        "note": "玩家在真实营业中完成第一笔密封商品成交后触发进店。"
+      },
+      "subsequentMeetingPolicy": {
+        "triggerType": "card-event-or-schedule",
+        "locationPreference": "store-showcase-or-binder",
+        "maxVisitsPerDay": 1,
+        "deferrable": true,
+        "blockerPolicy": "若店内正举行大型赛事，许遥在角落翻阅展示柜，不争抢中心交互。"
+      },
+      "growthTrajectory": "从第一章委托寻找一张旧活动参与卡，到第二章引导玩家建立店内展示柜，再到后续梳理澄川卡牌史，最终成为店内独树一帜的卡牌文化策展人。",
+      "relationships": [
+        {
+          "targetPersonId": "person_lin_cheng",
+          "relationType": "共同记忆",
+          "description": "依靠林澄保留的老相片和旧活动签到表确认当年的散卡流向。"
+        },
+        {
+          "targetPersonId": "person_zhou_ye",
+          "relationType": "互补对照",
+          "description": "与周野常常并排坐，一个看卡图文字，一个算费用攻防，形成奇妙的默契。"
+        }
+      ]
+    },
+    {
+      "personId": "person_zhou_ye",
+      "displayName": "周野",
+      "title": "预算拮据的年轻牌手 / 挑战者",
+      "role": "竞技线支线核心、战术切磋对象、平民构筑践行者",
+      "archetype": "倔强热血、直率执着的新生代竞技爱好者",
+      "appearanceDecoupling": {
+        "rule": "纯原创设定，严禁套用外部作品人设；独立持久身份，严禁作为随机路人被复制或覆盖。",
+        "placeholderRef": "sprite_zhou_ye_default",
+        "visualKeywords": "连帽卫衣、磨旧帆布背包、缠着胶带的旧卡盒、充满斗志的眼神"
+      },
+      "desire": "用自己靠打零工攒钱组出的基础平民套牌，在正规比赛中击败主流昂贵构筑，证明理解与牌技重于钱包厚度。",
+      "conflict": "囊中羞涩买不起主流强力单卡，常在高端赛事中受到冷遇；有时会因战绩不佳而陷入‘非氪不能赢’的自我怀疑。",
+      "speechStyle": "快人快语、直接坦率、带有少年特有的倔强和不服输；言辞偶尔急躁但本心赤诚。",
+      "sampleDialogue": [
+        "你这里能打牌吗？我想知道，手里这些牌能打到哪一步。",
+        "别让我挑最贵的。先教我怎么把已有的牌用好！",
+        "输了就是输了，我不找借口。明天这个时间，我还会来。"
+      ],
+      "firstMeetingCondition": {
+        "chapterId": "chapter_01",
+        "sceneId": "first_receipt",
+        "predicate": "business.sealedSalesCount >= 1",
+        "note": "伴随首笔交易完成，与许遥一同进入视野，提出练习需求。"
+      },
+      "subsequentMeetingPolicy": {
+        "triggerType": "table-match-or-schedule",
+        "locationPreference": "battle-table",
+        "maxVisitsPerDay": 2,
+        "deferrable": true,
+        "blockerPolicy": "若店内所有牌桌已满，周野在观战位耐心等待，不引发业务自锁。"
+      },
+      "growthTrajectory": "从第一章迫切寻找对局，到第三章挑战店长建立个人风格，再到第五章代表小店出战街区季前赛，成为受人尊敬的平民大师。",
+      "relationships": [
+        {
+          "targetPersonId": "person_gu_heng",
+          "relationType": "目标超越",
+          "description": "曾去过顾衡的大型俱乐部，因买不起高配卡被其他会员轻视，发誓要凭技术战胜顾衡培养的队伍。"
+        },
+        {
+          "targetPersonId": "person_tang_he",
+          "relationType": "忘年牌友",
+          "description": "常在晚上与刚下班的唐禾切磋，唐禾的丰富阅历常常让周野在焦躁时平静下来。"
+        }
+      ]
+    },
+    {
+      "personId": "person_gu_heng",
+      "displayName": "顾衡",
+      "title": "破军俱乐部主理人 / 商业经营者",
+      "role": "商业卡店对照组、街区赛事主导者、合作竞争者",
+      "archetype": "务实高效、精明干练的现代连锁店主",
+      "appearanceDecoupling": {
+        "rule": "纯原创人格与商业立场；绝非扁平反派，而是商业现实的严谨代言人；唯一持久实体。",
+        "placeholderRef": "sprite_gu_heng_default",
+        "visualKeywords": "合身西装外套、整洁手提包、平板电脑、考究的名片夹"
+      },
+      "desire": "将澄川的卡牌竞技推向职业化、正规化，打造具备商业造血能力和全省竞争力的赛事平台。",
+      "conflict": "认为实体卡店必须依赖高流转、高单价与赛事门票生存，对玩家这种‘温情街角小店’的盈利持续性持怀疑态度，但尊重守约者。",
+      "speechStyle": "清晰、果断、注重数据与契约；善于分析利弊，即便提出竞争也不失商业礼节。",
+      "sampleDialogue": [
+        "实体店不是靠情怀交房租的。客单价和周转率，才是让招牌立住的底气。",
+        "我赞赏你的坚守，但商场更认结果。季前赛的席位是公开的，我们赛场上见。",
+        "有意思。你居然真能用那种构筑把局面盘活，看来我得重新评估街角小店的潜力了。"
+      ],
+      "firstMeetingCondition": {
+        "chapterId": "chapter_03",
+        "sceneId": "invitation_notice",
+        "predicate": "shop.reputationLevel >= 2 && business.completedMatches >= 3",
+        "note": "店铺有一定对战活跃度后，顾衡主动发来观摩函或派人接触。"
+      },
+      "subsequentMeetingPolicy": {
+        "triggerType": "business-hours-or-appointment",
+        "locationPreference": "store-counter-or-outside",
+        "maxVisitsPerDay": 1,
+        "deferrable": true,
+        "blockerPolicy": "顾衡通常携带具体商业/赛事议题拜访，玩家可暂缓回应，不卡死店务。"
+      },
+      "growthTrajectory": "从初期的商业审视与怀疑，到中期通过跨店友谊赛互相摸底，最终在第五章承认玩家店铺的独特生态，形成‘破军负责职业争冠，街角负责大众培育’的共存格局。",
+      "relationships": [
+        {
+          "targetPersonId": "person_lin_cheng",
+          "relationType": "老相识",
+          "description": "多年前与林澄就卡店定位产生分歧，各自选择了不同的道路，但始终保持对彼此底线的尊重。"
+        },
+        {
+          "targetPersonId": "person_meng_lan",
+          "relationType": "大宗客户",
+          "description": "孟岚的重要批发合作伙伴，其订货量远超玩家，但在特定稀缺货品上与玩家存在良性竞争。"
+        }
+      ]
+    },
+    {
+      "personId": "person_meng_lan",
+      "displayName": "孟岚",
+      "title": "区域渠道供货代表 / 批发商",
+      "role": "进货供应链把关人、商业信用见证者、现金流挑战发起者",
+      "archetype": "雷厉风行、信守合同的独立商业女性",
+      "appearanceDecoupling": {
+        "rule": "纯原创角色设定；唯一持久实体，绝不随进货事件无限复制同名批发商。",
+        "placeholderRef": "sprite_meng_lan_default",
+        "visualKeywords": "干练风衣、工牌、供货清单夹、守时看表的习惯"
+      },
+      "desire": "建立稳定高效、坏账率为零的本地分销网络，挖掘具备潜力的长期合作门店。",
+      "conflict": "理解初创小店资金吃紧的苦衷，但作为批发渠道受限于上游结款周期，绝不能无限制提供账期或兜底滞销库存。",
+      "speechStyle": "条理清晰、就事论事、时间观念极强；谈及货品与账期时毫不含糊，但对于按期履约的伙伴极为优待。",
+      "sampleDialogue": [
+        "做生意最怕账面繁华、抽屉空空。守住你的现金流，比盲目囤十箱货更重要。",
+        "只要你按时结清上一批单子，下一批限额配售的特卡包，我优先给你留一箱。",
+        "我不对你的销量做保证，但我保证我的货品来源清白、出库准时。"
+      ],
+      "firstMeetingCondition": {
+        "chapterId": "chapter_02",
+        "sceneId": "supply_contact",
+        "predicate": "business.totalRevenue >= 500",
+        "note": "店铺累计营收到达一定门槛后，孟岚主动上门考察合作意向。"
+      },
+      "subsequentMeetingPolicy": {
+        "triggerType": "restock-cycle-or-order",
+        "locationPreference": "store-counter",
+        "maxVisitsPerDay": 1,
+        "deferrable": true,
+        "blockerPolicy": "订货委托完成后定期出现，或在特定进货日上门核对发票。"
+      },
+      "growthTrajectory": "从小额试探性供货，到验证玩家守信后开放特约配额与批发折扣，成为玩家店铺最稳固的商业后盾。",
+      "relationships": [
+        {
+          "targetPersonId": "person_gu_heng",
+          "relationType": "业务往来",
+          "description": "向顾衡俱乐部稳定供货，深谙顾衡的资金运作模式。"
+        }
+      ]
+    },
+    {
+      "personId": "person_tang_he",
+      "displayName": "唐禾",
+      "title": "下班族常客 / 休闲牌友",
+      "role": "大众休闲客群代表、夜间营业与新手友好度温度计",
+      "archetype": "随和亲切、生活压力下寻找片刻慰藉的普通市民",
+      "appearanceDecoupling": {
+        "rule": "纯原创角色设定；代表澄川最广大的普通工薪客群；唯一持久实体。",
+        "placeholderRef": "sprite_tang_he_default",
+        "visualKeywords": "微皱的衬衫工装、公文包、随身保温杯、略带倦容但微笑的脸"
+      },
+      "desire": "在忙碌一天的工作后，能有一个不卷胜负、环境舒适、消费透明的地方，安静拆两包牌或打一场轻松对局。",
+      "conflict": "工作时间长、空闲零碎，常遇到大型卡店晚间只接待战队训练或收取高昂桌费，普通散客无处可去。",
+      "speechStyle": "随和、礼貌、带有一点自嘲幽默；讲话温声细语，害怕给店家添麻烦。",
+      "sampleDialogue": [
+        "加班刚结束……老板，店里还能坐半小时吗？就打一局，输了我也回去了。",
+        "我技术不行，跟年轻人打总被嫌慢。但下班能摸摸这些卡片，心里就踏实了。",
+        "多谢店长留着这张桌子，明天上班又得被领导催报表了，今晚这局牌算给我续命了。"
+      ],
+      "firstMeetingCondition": {
+        "chapterId": "chapter_01",
+        "sceneId": "evening_regular",
+        "predicate": "time.minuteOfDay >= 1080 && dayState.isOpen",
+        "note": "首章或次日傍晚18:00后，店铺保持营业时首次推门而入。"
+      },
+      "subsequentMeetingPolicy": {
+        "triggerType": "evening-schedule",
+        "locationPreference": "store-table-or-counter",
+        "maxVisitsPerDay": 1,
+        "deferrable": true,
+        "blockerPolicy": "若打烊时间临近，唐禾主动结账离开，绝不给店长带来困扰。"
+      },
+      "growthTrajectory": "从拘谨的晚间单次散客，到逐渐熟悉并带来同单位牌友，成为店内‘夜间交流桌’的活跃核心与长情支持者。",
+      "relationships": [
+        {
+          "targetPersonId": "person_zhou_ye",
+          "relationType": "耐心听众",
+          "description": "喜欢听周野兴致勃勃地讲解新卡战术，周野输牌气馁时常自费请周野喝汽水开导。"
+        }
+      ]
+    },
+    {
+      "personId": "person_han_xu",
+      "displayName": "韩序",
+      "title": "灯桥街社区空间活动协调员",
+      "role": "店外世界桥梁、公共空间合作者、第四章外展引路人",
+      "archetype": "充满活力、注重公众规则与社区活力的青年社工",
+      "appearanceDecoupling": {
+        "rule": "纯原创角色设定；外展场景主要承接人；唯一持久身份。",
+        "placeholderRef": "sprite_han_xu_default",
+        "visualKeywords": "社区文化衫、志愿活动马甲、活动流程板、亲和力十足的笑容"
+      },
+      "desire": "利用桌面游戏等健康的社交媒介活化灯桥街社区空间，拉近邻里特别是青少年与工薪阶层的联系。",
+      "conflict": "自身不懂深奥的卡牌竞技规则，既担心商业卡店引入赌博投机风气扰乱社区，又渴望引入专业力量活跃场地。",
+      "speechStyle": "热情洋溢、条理清晰、格外强调场地规范、公共安全与普及性；做事极具亲和力。",
+      "sampleDialogue": [
+        "店长你好！灯桥街社区活动中心下周办青年文化周，想邀请你们做卡牌体验展位。",
+        "我们这里不要门票，但有两个硬要求：一是不吵扰邻居，二是要让零基础的新人也能十分钟学会。",
+        "你看，走出店门这条街，其实有很多想玩但不敢进专业卡店的人呢。"
+      ],
+      "firstMeetingCondition": {
+        "chapterId": "chapter_04",
+        "sceneId": "community_invitation",
+        "predicate": "world.awayPolicyApproved && shop.reputationLevel >= 2",
+        "note": "进入第四章且离店机制与准备就绪后触发访问。"
+      },
+      "subsequentMeetingPolicy": {
+        "triggerType": "outdoors-community-center",
+        "locationPreference": "community-center-desk",
+        "maxVisitsPerDay": 1,
+        "deferrable": true,
+        "blockerPolicy": "在社区活动中心常驻，店内只有特定洽谈时前来。"
+      },
+      "growthTrajectory": "从对卡牌抱有疑虑的公共活动协调员，到被玩家的健康运营理念打动，将玩家卡店评为‘澄川青年友好示范据点’，提供长期外展支持。",
+      "relationships": [
+        {
+          "targetPersonId": "person_lin_cheng",
+          "relationType": "社区老街坊",
+          "description": "认识林澄多年，敬重林澄在老街坊中的人品，经林澄背书才放心地与玩家接触。"
+        }
+      ]
+    }
+  ]
+}

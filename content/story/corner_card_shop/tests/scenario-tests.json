@@ -1,0 +1,88 @@
+{
+  "documentStatus": "candidate-ready",
+  "lastUpdated": "2026-10-25",
+  "scenarios": [
+    {
+      "scenarioId": "S_C01_COLLECTION",
+      "chapterId": "chapter_01",
+      "description": "首章全流程分支：达成首单销售后优先选择收藏路线",
+      "initialState": {
+        "flags": {},
+        "business": { "sales": 1 }
+      },
+      "choiceInputs": [
+        { "nodeId": "c01_question", "choiceId": "c01_opt_stock" },
+        { "nodeId": "c01_priority", "choiceId": "c01_opt_collection" }
+      ],
+      "expectedResult": {
+        "endResult": "scene-completed",
+        "flags": { "visitPriority": "collection" }
+      }
+    },
+    {
+      "scenarioId": "S_C01_PRACTICE",
+      "chapterId": "chapter_01",
+      "description": "首章全流程分支：达成首单销售后优先选择练习路线",
+      "initialState": {
+        "flags": {},
+        "business": { "sales": 1 }
+      },
+      "choiceInputs": [
+        { "nodeId": "c01_question", "choiceId": "c01_opt_memory" },
+        { "nodeId": "c01_priority", "choiceId": "c01_opt_practice" }
+      ],
+      "expectedResult": {
+        "endResult": "scene-completed",
+        "flags": { "visitPriority": "practice" }
+      }
+    },
+    {
+      "scenarioId": "S_C01_DEFER_EARLY",
+      "chapterId": "chapter_01",
+      "description": "首章开篇选择暂缓沟通，释放模态焦点自由营业",
+      "initialState": {
+        "flags": {},
+        "business": { "sales": 0 }
+      },
+      "choiceInputs": [
+        { "nodeId": "c01_question", "choiceId": "c01_opt_later" }
+      ],
+      "expectedResult": {
+        "endResult": "deferred",
+        "resumeAt": "c01_arrival"
+      }
+    },
+    {
+      "scenarioId": "S_C01_DEFER_SALE",
+      "chapterId": "chapter_01",
+      "description": "首日营业打烊时未达成销售，wait_sale 触发安全延期挂起",
+      "initialState": {
+        "flags": {},
+        "business": { "sales": 0 }
+      },
+      "choiceInputs": [
+        { "nodeId": "c01_question", "choiceId": "c01_opt_stock" }
+      ],
+      "triggerEvent": "day_closed_without_sale",
+      "expectedResult": {
+        "endResult": "deferred",
+        "resumeAt": "c01_wait_sale"
+      }
+    },
+    {
+      "scenarioId": "S_SIDE_XU_SHOWCASE",
+      "chapterId": "side_xu_yao_01",
+      "description": "许遥支线选择将流通旧卡放入店内展示柜陈列",
+      "initialState": {
+        "flags": { "visitPriority": "collection" }
+      },
+      "choiceInputs": [
+        { "nodeId": "xu01_choice", "choiceId": "xu01_opt_show" }
+      ],
+      "expectedResult": {
+        "endResult": "scene-completed",
+        "flags": { "cardFate": "display" }
+      }
+    }
+  ]
+}

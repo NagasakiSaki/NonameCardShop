@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "campaignId": "corner_card_shop",
+  "documentStatus": "proposal-not-activated",
+  "lastUpdated": "2026-10-25",
+  "events": [
+    {
+      "eventId": "event_intro_gathering",
+      "title": "老街角新手交流会",
+      "chapterId": "chapter_03",
+      "minDay": 3,
+      "requiredPlayers": 2,
+      "matchesRequired": 1,
+      "tableRequirement": 1,
+      "entryFee": 0,
+      "tableFeeRevenue": 20,
+      "description": "林澄引荐两位初入卡牌的熟客来店切磋，测试店铺办赛承办流程。按正常桌费入账，不额外凭空印卡发奖金。",
+      "cancellationPolicy": "若当日到店熟客不足2人，自动顺延至次日，不扣除店铺违约金。"
+    },
+    {
+      "eventId": "event_friday_gathering",
+      "title": "周五晚间牌友交流赛",
+      "chapterId": "chapter_03",
+      "minDay": 5,
+      "requiredPlayers": 4,
+      "matchesRequired": 2,
+      "tableRequirement": 2,
+      "entryFee": 10,
+      "tableFeeRevenue": 40,
+      "description": "周五晚间常规赛事，采用双败淘汰制，四名持合法卡组的玩家参与，周野常驻参赛。",
+      "cancellationPolicy": "周五晚间打烊前若未凑齐，活动转为自由对战，报名费全额原路退还玩家钱包。"
+    },
+    {
+      "eventId": "event_dengqiao_youth_day",
+      "title": "灯桥街青年文化日展位",
+      "chapterId": "chapter_04",
+      "minDay": 6,
+      "requiredPlayers": 2,
+      "matchesRequired": 1,
+      "tableRequirement": 1,
+      "entryFee": 0,
+      "tableFeeRevenue": 0,
+      "description": "韩序协调的社区空间公益展台。以教学普及为主，唐禾等工薪族初次接触，带来大量社区声誉。",
+      "cancellationPolicy": "社区中心下雨或日程冲突时可协商改期，绝不触发主线惩罚。"
+    },
+    {
+      "eventId": "event_chenchuan_preseason",
+      "title": "澄川杯商圈季前公开赛",
+      "chapterId": "chapter_05",
+      "minDay": 7,
+      "requiredPlayers": 4,
+      "matchesRequired": 3,
+      "tableRequirement": 2,
+      "entryFee": 50,
+      "tableFeeRevenue": 100,
+      "description": "顾衡与破军俱乐部发起的全省正规季前赛，本店战队出战，胜负均有真实战报归档。",
+      "cancellationPolicy": "选手临时缺席可由店长或替补合法牌手顶上，不直接取消赛事资格。"
+    }
+  ]
+}

@@ -1,0 +1,507 @@
+{
+  "schemaVersion": 1,
+  "campaignId": "corner_card_shop",
+  "documentStatus": "candidate-ready",
+  "lastUpdated": "2026-10-25",
+  "flags": [
+    {
+      "flagId": "introStarted",
+      "type": "boolean",
+      "allowedValues": [
+        true,
+        false
+      ],
+      "default": false,
+      "scope": "world",
+      "description": "序章招牌亮起事件是否已启动",
+      "setByScene": "c00_arrival",
+      "readByConditions": [
+        "dayState.isDayOnePreparation"
+      ],
+      "writableByStory": false
+    },
+    {
+      "flagId": "prologueFocus",
+      "type": "enum",
+      "allowedValues": [
+        "none",
+        "stock",
+        "history",
+        "later"
+      ],
+      "default": "none",
+      "scope": "world",
+      "description": "序章玩家初始关注焦点：先整理货物、询问老店历史、或暂缓稍后",
+      "setByScene": "c00_question",
+      "readByConditions": [
+        "c00_shelf",
+        "c00_memory"
+      ],
+      "writableByStory": true
+    },
+    {
+      "flagId": "shelfGuided",
+      "type": "boolean",
+      "allowedValues": [
+        true,
+        false
+      ],
+      "default": false,
+      "scope": "world",
+      "description": "林澄是否已指导玩家查看货架并提示留存收据",
+      "setByScene": "c00_shelf",
+      "readByConditions": [
+        "c01_arrival"
+      ],
+      "writableByStory": false
+    },
+    {
+      "flagId": "loreAcknowledged",
+      "type": "boolean",
+      "allowedValues": [
+        true,
+        false
+      ],
+      "default": false,
+      "scope": "world",
+      "description": "玩家是否已听取老店当年的兴衰历史",
+      "setByScene": "c00_memory",
+      "readByConditions": [
+        "c01_collection"
+      ],
+      "writableByStory": false
+    },
+    {
+      "flagId": "c01_active",
+      "type": "boolean",
+      "allowedValues": [
+        true,
+        false
+      ],
+      "default": false,
+      "scope": "world",
+      "description": "第一章主线《第一张收据》是否正处于激活观察期",
+      "setByScene": "c01_arrival",
+      "readByConditions": [
+        "c01_wait_sale"
+      ],
+      "writableByStory": false
+    },
+    {
+      "flagId": "firstSaleCompleted",
+      "type": "boolean",
+      "allowedValues": [
+        true,
+        false
+      ],
+      "default": false,
+      "scope": "world",
+      "description": "是否已真实达成第一笔密封商品（pack/box）销售",
+      "setByScene": "c01_wait_sale",
+      "readByConditions": [
+        "c01_receipt"
+      ],
+      "writableByStory": false
+    },
+    {
+      "flagId": "receiptRecorded",
+      "type": "boolean",
+      "allowedValues": [
+        true,
+        false
+      ],
+      "default": false,
+      "scope": "world",
+      "description": "首张收据是否已被许遥与林澄记录在案",
+      "setByScene": "c01_receipt",
+      "readByConditions": [
+        "c01_two_visitors"
+      ],
+      "writableByStory": false
+    },
+    {
+      "flagId": "twoVisitorsIntroduced",
+      "type": "boolean",
+      "allowedValues": [
+        true,
+        false
+      ],
+      "default": false,
+      "scope": "world",
+      "description": "许遥与周野的双人进店场景是否已触发",
+      "setByScene": "c01_two_visitors",
+      "readByConditions": [
+        "c01_priority"
+      ],
+      "writableByStory": false
+    },
+    {
+      "flagId": "visitPriority",
+      "type": "enum",
+      "allowedValues": [
+        "none",
+        "collection",
+        "practice",
+        "later"
+      ],
+      "default": "none",
+      "scope": "world",
+      "description": "第一章核心分支：接待优先级（先聊收藏、先看练习、今天先顾店）",
+      "setByScene": "c01_priority",
+      "readByConditions": [
+        "c01_collection",
+        "c01_practice",
+        "c01_return",
+        "schedule.dailyVisitorQueue"
+      ],
+      "writableByStory": true
+    },
+    {
+      "flagId": "collectionQuestUnlocked",
+      "type": "boolean",
+      "allowedValues": [
+        true,
+        false
+      ],
+      "default": false,
+      "scope": "world",
+      "description": "许遥的收藏册寻访任务是否已开启",
+      "setByScene": "c01_collection",
+      "readByConditions": [
+        "c02_abandoned_card"
+      ],
+      "writableByStory": false
+    },
+    {
+      "flagId": "practiceQuestUnlocked",
+      "type": "boolean",
+      "allowedValues": [
+        true,
+        false
+      ],
+      "default": false,
+      "scope": "world",
+      "description": "周野的平民构筑切磋任务是否已开启",
+      "setByScene": "c01_practice",
+      "readByConditions": [
+        "c03_challenge_match"
+      ],
+      "writableByStory": true
+    },
+    {
+      "flagId": "c01_milestoneDone",
+      "type": "boolean",
+      "allowedValues": [
+        true,
+        false
+      ],
+      "default": false,
+      "scope": "world",
+      "description": "首章核心对话节点与承诺记录是否已全部落定",
+      "setByScene": "c01_return",
+      "readByConditions": [
+        "c01_close",
+        "chapter_02"
+      ],
+      "writableByStory": false
+    },
+    {
+      "flagId": "dayOneReviewCompleted",
+      "type": "boolean",
+      "allowedValues": [
+        true,
+        false
+      ],
+      "default": false,
+      "scope": "world",
+      "description": "首日打烊经营复盘日报是否已查看完成",
+      "setByScene": "c01_close",
+      "readByConditions": [
+        "dayState.dayNumber >= 2"
+      ],
+      "writableByStory": false
+    },
+    {
+      "flagId": "c02_cardIdentified",
+      "type": "boolean",
+      "allowedValues": [
+        true,
+        false
+      ],
+      "default": false,
+      "scope": "world",
+      "description": "第二章散卡流通/拾取事实是否已确认",
+      "setByScene": "c02_abandoned_card",
+      "readByConditions": [
+        "c02_three_way_choice"
+      ],
+      "writableByStory": false
+    },
+    {
+      "flagId": "cardFate",
+      "type": "enum",
+      "allowedValues": [
+        "pending",
+        "display",
+        "market",
+        "binder"
+      ],
+      "default": "pending",
+      "scope": "world",
+      "description": "旧散卡的去向抉择：店内展示柜陈列、按市价出售、或放入个人借阅卡册",
+      "setByScene": "c02_three_way_choice",
+      "readByConditions": [
+        "c03_gathering_pitch",
+        "shop.showcaseStatus"
+      ],
+      "writableByStory": true
+    },
+    {
+      "flagId": "mengLanContactUnlocked",
+      "type": "boolean",
+      "allowedValues": [
+        true,
+        false
+      ],
+      "default": false,
+      "scope": "world",
+      "description": "供货商孟岚的定期订货与特配渠道是否已解锁",
+      "setByScene": "c02_supply_contact",
+      "readByConditions": [
+        "shop.wholesaleMenu"
+      ],
+      "writableByStory": false
+    },
+    {
+      "flagId": "fridayEventPlanned",
+      "type": "boolean",
+      "allowedValues": [
+        true,
+        false
+      ],
+      "default": false,
+      "scope": "world",
+      "description": "周五晚间牌友交流会是否已正式列入日程",
+      "setByScene": "c03_gathering_pitch",
+      "readByConditions": [
+        "c03_challenge_match"
+      ],
+      "writableByStory": true
+    },
+    {
+      "flagId": "zhouYeMatchResolved",
+      "type": "boolean",
+      "allowedValues": [
+        true,
+        false
+      ],
+      "default": false,
+      "scope": "world",
+      "description": "与周野的切磋对局是否已产生权威有效赛果",
+      "setByScene": "c03_challenge_match",
+      "readByConditions": [
+        "c03_gu_heng_letter"
+      ],
+      "writableByStory": false
+    },
+    {
+      "flagId": "guHengAwareness",
+      "type": "boolean",
+      "allowedValues": [
+        true,
+        false
+      ],
+      "default": false,
+      "scope": "world",
+      "description": "破军俱乐部主理人顾衡是否已发来关注与观摩函",
+      "setByScene": "c03_gu_heng_letter",
+      "readByConditions": [
+        "chapter_04",
+        "chapter_05"
+      ],
+      "writableByStory": false
+    },
+    {
+      "flagId": "hanXuInvitationReceived",
+      "type": "boolean",
+      "allowedValues": [
+        true,
+        false
+      ],
+      "default": false,
+      "scope": "world",
+      "description": "韩序的灯桥街社区青年文化日展位邀请是否已送达",
+      "setByScene": "c04_han_xu_arrival",
+      "readByConditions": [
+        "c04_stepping_out"
+      ],
+      "writableByStory": false
+    },
+    {
+      "flagId": "visitedDengQiao",
+      "type": "boolean",
+      "allowedValues": [
+        true,
+        false
+      ],
+      "default": false,
+      "scope": "world",
+      "description": "玩家是否已成功通过离店出入口首次抵达灯桥街",
+      "setByScene": "c04_stepping_out",
+      "readByConditions": [
+        "c04_stall_choice"
+      ],
+      "writableByStory": false
+    },
+    {
+      "flagId": "stallDirection",
+      "type": "enum",
+      "allowedValues": [
+        "none",
+        "casual",
+        "challenge"
+      ],
+      "default": "none",
+      "scope": "world",
+      "description": "社区展台方向：零基础大众普及区 vs 青年高手挑战擂台",
+      "setByScene": "c04_stall_choice",
+      "readByConditions": [
+        "c04_evening_tang_he",
+        "shop.reputationType"
+      ],
+      "writableByStory": false
+    },
+    {
+      "flagId": "tangHeRegularContact",
+      "type": "boolean",
+      "allowedValues": [
+        true,
+        false
+      ],
+      "default": false,
+      "scope": "world",
+      "description": "下班族常客唐禾是否已成为店内晚间交流桌的固定牌友",
+      "setByScene": "c04_evening_tang_he",
+      "readByConditions": [
+        "shop.eveningVisits"
+      ],
+      "writableByStory": false
+    },
+    {
+      "flagId": "tournamentSeasonStarted",
+      "type": "boolean",
+      "allowedValues": [
+        true,
+        false
+      ],
+      "default": false,
+      "scope": "world",
+      "description": "澄川杯季前赛公开赛事是否已进入备战期",
+      "setByScene": "c05_chenchuan_preview",
+      "readByConditions": [
+        "c05_team_strategy"
+      ],
+      "writableByStory": false
+    },
+    {
+      "flagId": "teamStrategy",
+      "type": "enum",
+      "allowedValues": [
+        "none",
+        "elite",
+        "grassroots",
+        "manager"
+      ],
+      "default": "none",
+      "scope": "world",
+      "description": "季前赛组队策略：高额赞助精英争冠、平民互助配合、或店长亲上擂台",
+      "setByScene": "c05_team_strategy",
+      "readByConditions": [
+        "c05_match_climax"
+      ],
+      "writableByStory": false
+    },
+    {
+      "flagId": "tournamentOutcomeRecorded",
+      "type": "boolean",
+      "allowedValues": [
+        true,
+        false
+      ],
+      "default": false,
+      "scope": "world",
+      "description": "季前赛真实对决结果是否已被顾衡与澄川各界公证记录",
+      "setByScene": "c05_match_climax",
+      "readByConditions": [
+        "chapter_06"
+      ],
+      "writableByStory": false
+    },
+    {
+      "flagId": "finalReunionActive",
+      "type": "boolean",
+      "allowedValues": [
+        true,
+        false
+      ],
+      "default": false,
+      "scope": "world",
+      "description": "终章全员回归老名单的庆功聚会场景是否激活",
+      "setByScene": "c06_reunion",
+      "readByConditions": [
+        "c06_future_path"
+      ],
+      "writableByStory": false
+    },
+    {
+      "flagId": "endingRoute",
+      "type": "enum",
+      "allowedValues": [
+        "none",
+        "community_hub",
+        "competitive_anchor"
+      ],
+      "default": "none",
+      "scope": "world",
+      "description": "终极定位路线：街角据点（烟火长存） vs 竞技招牌（破浪争锋）",
+      "setByScene": "c06_future_path",
+      "readByConditions": [
+        "c06_infinite_loop",
+        "shop.perks"
+      ],
+      "writableByStory": false
+    },
+    {
+      "flagId": "campaignCompleted",
+      "type": "boolean",
+      "allowedValues": [
+        true,
+        false
+      ],
+      "default": false,
+      "scope": "world",
+      "description": "主线战役六章是否已全部圆满通关",
+      "setByScene": "c06_infinite_loop",
+      "readByConditions": [
+        "game.mode.freePlay"
+      ],
+      "writableByStory": false
+    },
+    {
+      "flagId": "freePlayUnlocked",
+      "type": "boolean",
+      "allowedValues": [
+        true,
+        false
+      ],
+      "default": false,
+      "scope": "world",
+      "description": "终局后无尽自由经营与街区联赛模式是否已无缝开启",
+      "setByScene": "c06_infinite_loop",
+      "readByConditions": [
+        "game.save.persistence"
+      ],
+      "writableByStory": false
+    }
+  ]
+}

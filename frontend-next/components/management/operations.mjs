@@ -7,11 +7,12 @@ export function mount({root,view,actions,assets={}}){
  .pc-ops .pc-op-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
  .pc-ops button{min-height:40px}.pc-ops img{width:90px;height:145px;object-fit:contain;float:right;margin-left:10px}
  .pc-ops p{overflow-wrap:anywhere}.pc-ops [aria-selected=true]{border-color:var(--pc-gold)}
+ .pc-ops .pc-card h3{font-size:15px;line-height:1.35}
  `);
- root.classList.add('pc-root','pc-ops');let disposed=false,busy=false,tab='upgrades',message='';
+ root.classList.add('pc-root','pc-ops');let disposed=false,busy=false,tab='upgrades',message='',tileMessage={};
  const money=n=>n==null?'—':assets.money?.(n)??`${n} 游戏币`;
  const button=(label,fn,disabled=false)=>el('button',{class:'btn',text:label,disabled:busy||disabled,onclick:fn});
- async function act(name,payload){if(busy||disposed)return;busy=true;message='正在提交…';render();try{const r=await actions[name](payload);if(!disposed)message=r.ok?(r.data?.note||'操作已完成。'):(r.error?.message||'操作失败。');}catch(e){if(!disposed)message=e.message;}finally{busy=false;if(!disposed)render();}}
+ async function act(name,payload){if(busy||disposed)return;busy=true;const key=payload&&payload.personId;message='正在提交…';if(key)tileMessage[key]='正在提交…';render();try{const r=await actions[name](payload);if(!disposed){message=r.ok?(r.data?.note||'操作已完成。'):(r.error?.message||'操作失败。');if(key)tileMessage[key]=message;}}catch(e){if(!disposed)message=e.message;if(key&&!disposed)tileMessage[key]=e.message;}finally{busy=false;if(!disposed)render();}}
  function render(){
   if(disposed)return;const v=view;root.replaceChildren();
   root.append(el('p',{text:`可用现金 ${money(v.snapshot.wallet.available)} · 设施和订单按真实状态结算。`}),el('div',{class:'pc-op-actions',role:'tablist'},[['upgrades','设施与升级'],['people','员工与熟客'],['orders','待办订单']].map(([id,label])=>button(label,()=>{tab=id;render();}))),el('p',{role:'status',text:message}));
@@ -26,6 +27,7 @@ export function mount({root,view,actions,assets={}}){
     if(p.kind==='purchase'&&p.status==='accepted'){text.push(`收藏中可交付 ${held} 张`);buttons.push(button('交付一张并收款',()=>act('neighbor',{personId:n.personId,orderId:p.orderId,action:'deliver'}),!v.atMarket||held<1));}
     buttons.push(button('拒绝 / 取消申请',()=>act('neighbor',{personId:n.personId,orderId:p.orderId,action:'decline'})));if(!v.atMarket)buttons.push(station());
    }else text.push('目前没有待处理申请。');
+   if(tileMessage[n.personId])text.push(`操作反馈：${tileMessage[n.personId]}`);
    return tile(n.name,text,buttons,assets.portrait?.(n.portrait));
   }
   if(tab==='upgrades')for(const u of v.upgrades.items)grid.append(tile(`${u.name} · Lv ${u.level}/${u.maxLevel}`,[u.effect,`下一档 ${u.level>=u.maxLevel?'已满级':money(u.nextCost)}`,u.unlockHint||'',u.dailyCost?`每日合同工资 ${money(u.dailyCost)}`:'无每日工资'],[button('购买下一档',()=>act('upgrade',{upgradeId:u.upgradeId}),!u.unlocked||v.snapshot.wallet.available<u.nextCost)]));

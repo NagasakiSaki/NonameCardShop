@@ -1,0 +1,37 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {preferredPurchaseChannel} from '../modules/backend/customer-demand.mjs';
+import {createWorld,validateWorld} from '../modules/backend/world.mjs';
+import {buildCatalog} from '../modules/backend/catalog.mjs';
+import {publishProducts,makeSealed,openPacket} from '../modules/backend/products.mjs';
+import {customerDecision,placeListing,purchaseRetail,settleTrade} from '../modules/backend/trading.mjs';
+const read=p=>JSON.parse(fs.readFileSync(new URL('../'+p,import.meta.url),'utf8'));
+const rules=read('data/backend-rules.json'),catalog=buildCatalog(read('data/cards.json'),rules);
+const w=createWorld(rules);w.products=publishProducts(catalog,rules,1);
+const product=w.products.filter(p=>p.availability==='available').sort((a,b)=>a.prices.pack.retail-b.prices.pack.retail)[0];
+const npc=(actorId,purchaseChannel)=>({actorId,purchaseChannel,name:actorId,wallet:{available:10000},presence:'offsite',appearanceId:'owner',roomId:'store',x:240,y:272,direction:'up'});
+const buyer=npc('sealed-buyer','sealed'),collector=npc('single-buyer','single'),seller=npc('seller','single');w.npcs=[buyer,collector,seller];
+const sell=makeSealed(w,product,'pack',product.prices.pack.wholesale);sell.location='retail';
+const cards=openPacket(w,makeSealed(w,product,'pack',0,seller.actorId));
+const card=cards[0],listing=placeListing(w,catalog,card,catalog.byKey.get(card.cardKey).issuanceValue);
+const before=JSON.stringify(w);
+for(let i=0;i<5;i++){
+ assert.equal(customerDecision(w,catalog,buyer).item.inventoryRef,sell.inventoryRef,'sealed preference survives active market listings');
+ assert.equal(customerDecision(w,catalog,collector).listing.listingId,listing.listingId,'single preference still works');
+}
+assert.equal(JSON.stringify(w),before,'read-only decisions do not advance RNG or mutate demand');
+const balance=buyer.wallet.available;purchaseRetail(w,buyer,sell);
+assert.equal(buyer.wallet.available,balance-sell.retailPrice);assert.equal(w.daily.sealedSales,sell.retailPrice);
+assert.equal(customerDecision(w,catalog,buyer).listing.listingId,listing.listingId,'fallback when sealed stock runs out');
+const sellerCash=seller.wallet.available;settleTrade(w,listing,collector.actorId);assert(seller.wallet.available>sellerCash);
+buyer.wallet.available=0;assert.equal(customerDecision(w,catalog,buyer).reason,'out-of-stock');
+const expensive=makeSealed(w,product,'pack',product.prices.pack.wholesale);expensive.location='retail';expensive.retailPrice=1000000;
+assert.equal(customerDecision(w,catalog,buyer).reason,'budget');buyer.wallet.available=2000000;
+assert.equal(customerDecision(w,catalog,buyer).reason,'price','preference cannot bypass price ceilings');
+assert.equal(preferredPurchaseChannel({actorId:'x',regularId:'collector'}),'single');
+assert.equal(preferredPurchaseChannel({actorId:'x',scavenger:true}),'single');
+const ids=Array.from({length:100},(_,i)=>({actorId:`npc-same-world-${i}`}));
+const count=ids.filter(n=>preferredPurchaseChannel(n)==='sealed').length;assert(count>35&&count<85,count);
+for(const n of ids)assert.equal(preferredPurchaseChannel(n),preferredPurchaseChannel({...n,appearanceId:'another-skin',wallet:{available:1}}));
+validateWorld(w);
+console.log('PASS: pack/single demand coexist, stable mixed identities, real settlement, stock/budget/price fallbacks and save validation');

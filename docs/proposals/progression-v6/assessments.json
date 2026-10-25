@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "campaignId": "corner_card_shop",
+  "documentStatus": "proposal-not-activated",
+  "lastUpdated": "2026-10-25",
+  "rulesNotes": [
+    "模拟赛果绝不颁发正式牌技资格！必须调用规则引擎真实对决有效结算。",
+    "承诺不当作已完成；考核失败必须支持无限次战术复盘重试。",
+    "资格认证与一次性奖励严格原子提交，防止刷重发。"
+  ],
+  "assessments": [
+    {
+      "assessmentId": "assess_player_novice",
+      "title": "店长基础战术认证",
+      "targetQualification": "qual_player_novice",
+      "requiredChapter": "chapter_03",
+      "examinerPersonId": "person_zhou_ye",
+      "matchFormat": "kof-3v3-standard",
+      "deckRequirement": "standard-budget-deck",
+      "verificationPolicy": "engine-natural-or-controlled",
+      "allowSimulated": false,
+      "passCondition": "match_completed_with_valid_replay",
+      "onPassReward": {
+        "qualificationId": "qual_player_novice",
+        "reputation": 25,
+        "onceOffKey": "reward_assess_player_novice"
+      },
+      "onFailPolicy": {
+        "allowRetry": true,
+        "cooldownMinutes": 0,
+        "feedbackDialogue": "周野：‘刚才那套出牌把费用算死了一点，换两张解牌再来试试！’"
+      }
+    },
+    {
+      "assessmentId": "assess_host_community",
+      "title": "社区赛事承办资质",
+      "targetQualification": "qual_host_community",
+      "requiredChapter": "chapter_03",
+      "examinerPersonId": "person_lin_cheng",
+      "prerequisites": {
+        "tablesAvailable": 1,
+        "daysClosed": 3,
+        "completedEvents": 1
+      },
+      "verificationPolicy": "host-integration-metrics",
+      "allowSimulated": false,
+      "passCondition": "host_table_and_service_validated",
+      "onPassReward": {
+        "qualificationId": "qual_host_community",
+        "reputation": 35,
+        "onceOffKey": "reward_assess_host_community"
+      },
+      "onFailPolicy": {
+        "allowRetry": true,
+        "feedbackDialogue": "林澄：‘桌子还差一张椅子，把杂物挪一挪就能达标。’"
+      }
+    },
+    {
+      "assessmentId": "assess_chenchuan_qualifier",
+      "title": "澄川杯正规赛选拔资格",
+      "targetQualification": "qual_chenchuan_competitor",
+      "requiredChapter": "chapter_05",
+      "examinerPersonId": "person_gu_heng",
+      "prerequisites": {
+        "reputationLevel": 2,
+        "cashReserve": 1000,
+        "teamStrategySelected": true
+      },
+      "verificationPolicy": "engine-controlled",
+      "allowSimulated": false,
+      "passCondition": "team_lineup_and_rule_compliance_verified",
+      "onPassReward": {
+        "qualificationId": "qual_chenchuan_competitor",
+        "reputation": 60,
+        "onceOffKey": "reward_assess_chenchuan_qualifier"
+      },
+      "onFailPolicy": {
+        "allowRetry": true,
+        "feedbackDialogue": "顾衡：‘你的队伍在构筑协同上还有破绽，商圈季前赛下周五才截止报名，改好再来。’"
+      }
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "campaignId": "corner_card_shop",
+  "contentRevision": "candidate-2026-10-25",
+  "chapterId": "side_lin_cheng_01",
+  "chapterTitle": "林澄支线《周五交流会提议》",
+  "sceneId": "scene_gathering_pitch",
+  "entryNodeId": "lin01_intro",
+  "characters": [
+    {
+      "personId": "person_lin_cheng",
+      "displayName": "林澄"
+    }
+  ],
+  "nodes": [
+    {
+      "nodeId": "lin01_intro",
+      "type": "line",
+      "lineId": "side.lin01.intro",
+      "speakerId": "person_lin_cheng",
+      "next": "lin01_choice"
+    },
+    {
+      "nodeId": "lin01_choice",
+      "type": "choice",
+      "lineId": "side.lin01.choice",
+      "choices": [
+        {
+          "choiceId": "lin01_opt_agree",
+          "lineId": "side.lin01.opt_agree",
+          "target": "lin01_agree_line"
+        },
+        {
+          "choiceId": "lin01_opt_cautious",
+          "lineId": "side.lin01.opt_cautious",
+          "target": "lin01_cautious_line"
+        }
+      ]
+    },
+    {
+      "nodeId": "lin01_agree_line",
+      "type": "line",
+      "lineId": "side.lin01.agree_resp",
+      "speakerId": "person_lin_cheng",
+      "next": "lin01_action_agree"
+    },
+    {
+      "nodeId": "lin01_action_agree",
+      "type": "action",
+      "effectId": "eff_lin01_plan_event",
+      "actionId": "narrative.setFlag",
+      "params": {
+        "flagId": "fridayEventPlanned",
+        "value": true
+      },
+      "onSuccess": "lin01_wrap",
+      "onFailure": "lin01_wrap"
+    },
+    {
+      "nodeId": "lin01_cautious_line",
+      "type": "line",
+      "lineId": "side.lin01.cautious_resp",
+      "speakerId": "person_lin_cheng",
+      "next": "lin01_action_cautious"
+    },
+    {
+      "nodeId": "lin01_action_cautious",
+      "type": "action",
+      "effectId": "eff_lin01_plan_cautious",
+      "actionId": "narrative.setFlag",
+      "params": {
+        "flagId": "fridayEventPlanned",
+        "value": true
+      },
+      "onSuccess": "lin01_wrap",
+      "onFailure": "lin01_wrap"
+    },
+    {
+      "nodeId": "lin01_wrap",
+      "type": "line",
+      "lineId": "side.lin01.wrap",
+      "speakerId": null,
+      "next": "lin01_complete"
+    },
+    {
+      "nodeId": "lin01_complete",
+      "type": "end",
+      "result": "scene-completed"
+    }
+  ]
+}

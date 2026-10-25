@@ -42,7 +42,7 @@ export function createWorldSceneClass(){return class WorldScene extends Phaser.S
     }
     this.actorView=new ActorView(this);this.actorView.sync(this.worldActors(),{playerActorId:this.playerActorId});
     const camera=this.cameras.main,maxX=Math.max(...this.roomMaps.map(map=>(map.worldOffset?.x||0)+map.width*16));
-    camera.setBounds(0,0,maxX,320);camera.setBackgroundColor('#253c3d');camera.setZoom(this.zoom);
+    camera.setBounds(0,0,maxX,320);camera.setBackgroundColor('#0e0b14');camera.setZoom(this.zoom);
     const player=this.actorView.getSprite(this.playerActorId);if(player){camera.startFollow(player,false,.18,.18);camera.centerOn(player.x,player.y);}
     this.input.on('pointerdown',pointer=>{if(CONTEXT.isBlocked())return;const world=pointer.positionToCamera(camera),map=this.roomMaps.find(map=>{const o=map.worldOffset||{x:0,y:0};return world.x>=o.x&&world.x<o.x+map.width*16&&world.y>=o.y&&world.y<o.y+map.height*16;});if(map){const o=map.worldOffset||{x:0,y:0};CONTEXT.onWorldClick(world.x-o.x,world.y-o.y,map.mapId);}});
     this.ready=true;this.events.once('shutdown',()=>this.destroyScene());CONTEXT.onSceneReady(this.mapId);

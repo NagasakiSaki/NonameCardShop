@@ -7,6 +7,7 @@ import {trashItems,discardCard,customerBehavior,ensureCustomerTraits,canScavenge
 import {pathfind,moveActor} from './navigation.mjs';
 import {managementEffects} from './management.mjs';
 import {productEnabled} from './distribution.mjs';
+import {preferredPurchaseChannel} from './customer-demand.mjs';
 import {customerAppearance} from './customer-identity.mjs';
 import {onSite,arriveCustomer,departCustomer,lingerCustomer,customerTarget} from './visits.mjs';
 import {FEEDBACK_REASONS} from './experience.mjs';
@@ -121,9 +122,9 @@ export function customerFeedback(w,npc,reason,extra={}){
 export function customerDecision(w,catalog,npc){
   const regular=w.management?.config.regulars.find(r=>r.id===npc.regularId),held=new Set(owned(w,npc.actorId).filter(i=>i.kind==='card').map(i=>i.cardKey));
   const listings=w.listings.filter(l=>acceptableListing(w,catalog,npc,l)).sort((a,b)=>Number(held.has(a.cardKey))-Number(held.has(b.cardKey))||Number(catalog.byKey.get(b.cardKey)?.group===regular?.preferredGroup)-Number(catalog.byKey.get(a.cardKey)?.group===regular?.preferredGroup)||a.unitAmount-b.unitAmount);
-  if(listings.length)return {listing:listings[0],intent:{kind:'single',label:held.has(listings[0].cardKey)?'看看单卡市场':'补一张缺少的卡',cardKey:listings[0].cardKey}};
   const retail=owned(w).filter(i=>productEnabled(w.rules,i.productId)&&['pack','box'].includes(i.kind)&&i.location==='retail'&&free(i));
   const item=retail.filter(i=>acceptableRetail(w,npc,i)).sort((a,b)=>a.retailPrice-b.retailPrice)[0];
+  if(listings.length&&(!item||preferredPurchaseChannel(npc)==='single'))return {listing:listings[0],intent:{kind:'single',label:held.has(listings[0].cardKey)?'看看单卡市场':'补一张缺少的卡',cardKey:listings[0].cardKey}};
   if(item)return {item,intent:{kind:'sealed',label:item.kind==='box'?'选购整盒':'选购卡包',productId:item.productId,unit:item.kind}};
   const offers=[...retail.map(i=>i.retailPrice),...w.listings.filter(l=>l.status==='active'&&l.ownerId!==npc.actorId).map(l=>l.unitAmount)];
   const reason=!offers.length?'out-of-stock':offers.every(price=>price>npc.wallet.available-(npc.wallet.reserved||0))?'budget':'price';

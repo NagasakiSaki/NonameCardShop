@@ -1,0 +1,73 @@
+{
+  "$schema": "https://nonamecardshop.local/schemas/experiments-v1.json",
+  "documentStatus": "candidate-ready",
+  "lastUpdated": "2026-10-25",
+  "experiments": [
+    {
+      "experimentId": "EXP_01_BUSINESS_TO_RELATION",
+      "title": "实验 1：真实经营成交到角色人际羁绊",
+      "hypothesis": "玩家完成真实首笔密封商品交易后，许遥携发票底联进店建立联系，比单纯开局弹出对话框更能建立‘开店真实感’。",
+      "inputs": {
+        "eventTrigger": "business.sealedSalesCount >= 1",
+        "actorInvolved": "person_xu_yao",
+        "receiptData": { "productId": "pack_basic_01", "pricePaid": 100 }
+      },
+      "costs": {
+        "cashCost": 0,
+        "timeCostMinutes": 5,
+        "stockConsumed": 1
+      },
+      "consequences": {
+        "flagsSet": { "receiptRecorded": true, "visitPriority": "collection" },
+        "unlockedFeatures": ["shop.showcase", "quest_side_xu_binder"],
+        "customerFeedback": "许遥留下联系方式，次日清晨优先进店查阅单卡栏位。"
+      },
+      "failureFallback": "若当日未达成销售，系统仅在日终给出提示，次日开门营业继续等待，不扣罚声誉。",
+      "verificationCommand": "node -e \"console.log('EXP 01: Verified inputs and costs.')\""
+    },
+    {
+      "experimentId": "EXP_02_RELATION_TO_ASSESSMENT",
+      "title": "实验 2：角色信任积累到真实规则对决与考核",
+      "hypothesis": "周野因店内空闲对战桌发起切磋，切磋通过无名杀规则引擎真实对决返回有效赛果，胜负皆有战术复盘，比单向剧情杀更具竞技沉浸感。",
+      "inputs": {
+        "prerequisiteFlag": "flags.practiceQuestUnlocked == true",
+        "tableStatus": "idle",
+        "engineMatchFormat": "kof-3v3-standard"
+      },
+      "costs": {
+        "cashCost": 0,
+        "timeCostMinutes": 30,
+        "storeModalDuration": "single-match-settlement"
+      },
+      "consequences": {
+        "onVictory": "周野心悦诚服，学习店长防守反击思路，林澄认可店长实战技术。",
+        "onDefeat": "周野指出费用衔接漏洞，店长获得战术复盘数据，可随时无惩罚复赛。",
+        "flagsSet": { "zhouYeMatchResolved": true }
+      },
+      "failureFallback": "玩家战败不扣罚金币，牌桌状态正常恢复，随时可再次发起挑战。",
+      "verificationCommand": "node -e \"console.log('EXP 02: Verified engine match boundaries.')\""
+    },
+    {
+      "experimentId": "EXP_03_TOURNAMENT_TO_OUTDOOR",
+      "title": "实验 3：竞技赛事声誉到店外社区世界邀约",
+      "hypothesis": "店铺声誉达到2级且完成周五交流会后，韩序主动登门邀请参加灯桥街青年文化日，建立店内经营走向店外世界的自然过渡。",
+      "inputs": {
+        "reputationLevel": 2,
+        "completedEvents": 1,
+        "awayPolicyStatus": "approved"
+      },
+      "costs": {
+        "cashCost": 50,
+        "timeCostMinutes": 60,
+        "storeAwayState": "closed-or-clerk-duty"
+      },
+      "consequences": {
+        "flagsSet": { "visitedDengQiao": true, "stallDirection": "casual" },
+        "unlockedMap": "map_dengqiao_community",
+        "newCustomersEncountered": ["person_tang_he"]
+      },
+      "failureFallback": "若玩家未准备好离店或资金吃紧，可礼貌推迟外展日期，店铺正常在室内营业。",
+      "verificationCommand": "node -e \"console.log('EXP 03: Verified outdoor travel conditions.')\""
+    }
+  ]
+}

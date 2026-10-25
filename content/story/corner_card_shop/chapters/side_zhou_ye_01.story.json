@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "campaignId": "corner_card_shop",
+  "contentRevision": "candidate-2026-10-25",
+  "chapterId": "side_zhou_ye_01",
+  "chapterTitle": "周野支线《起手平民牌》",
+  "sceneId": "scene_practice_deck",
+  "entryNodeId": "zhou01_intro",
+  "characters": [
+    {
+      "personId": "person_zhou_ye",
+      "displayName": "周野"
+    }
+  ],
+  "nodes": [
+    {
+      "nodeId": "zhou01_intro",
+      "type": "line",
+      "lineId": "side.zhou01.intro",
+      "speakerId": "person_zhou_ye",
+      "next": "zhou01_choice"
+    },
+    {
+      "nodeId": "zhou01_choice",
+      "type": "choice",
+      "lineId": "side.zhou01.choice",
+      "choices": [
+        {
+          "choiceId": "zhou01_opt_spar",
+          "lineId": "side.zhou01.opt_spar",
+          "target": "zhou01_spar_line"
+        },
+        {
+          "choiceId": "zhou01_opt_deck",
+          "lineId": "side.zhou01.opt_deck",
+          "target": "zhou01_deck_line"
+        },
+        {
+          "choiceId": "zhou01_opt_later",
+          "lineId": "side.zhou01.opt_later",
+          "target": "zhou01_later_line"
+        }
+      ]
+    },
+    {
+      "nodeId": "zhou01_spar_line",
+      "type": "line",
+      "lineId": "side.zhou01.spar_resp",
+      "speakerId": "person_zhou_ye",
+      "next": "zhou01_action_spar"
+    },
+    {
+      "nodeId": "zhou01_action_spar",
+      "type": "action",
+      "effectId": "eff_zhou01_spar_prep",
+      "actionId": "narrative.setFlag",
+      "params": {
+        "flagId": "practiceQuestUnlocked",
+        "value": true
+      },
+      "onSuccess": "zhou01_wrap",
+      "onFailure": "zhou01_wrap"
+    },
+    {
+      "nodeId": "zhou01_deck_line",
+      "type": "line",
+      "lineId": "side.zhou01.deck_resp",
+      "speakerId": "person_zhou_ye",
+      "next": "zhou01_action_deck"
+    },
+    {
+      "nodeId": "zhou01_action_deck",
+      "type": "action",
+      "effectId": "eff_zhou01_deck_review",
+      "actionId": "narrative.setFlag",
+      "params": {
+        "flagId": "practiceQuestUnlocked",
+        "value": true
+      },
+      "onSuccess": "zhou01_wrap",
+      "onFailure": "zhou01_wrap"
+    },
+    {
+      "nodeId": "zhou01_later_line",
+      "type": "line",
+      "lineId": "side.zhou01.later_resp",
+      "speakerId": "person_zhou_ye",
+      "next": "zhou01_deferred"
+    },
+    {
+      "nodeId": "zhou01_wrap",
+      "type": "line",
+      "lineId": "side.zhou01.wrap",
+      "speakerId": null,
+      "next": "zhou01_complete"
+    },
+    {
+      "nodeId": "zhou01_deferred",
+      "type": "end",
+      "result": "deferred",
+      "resumeAt": "zhou01_intro"
+    },
+    {
+      "nodeId": "zhou01_complete",
+      "type": "end",
+      "result": "scene-completed"
+    }
+  ]
+}

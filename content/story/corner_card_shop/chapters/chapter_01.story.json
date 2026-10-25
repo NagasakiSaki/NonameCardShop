@@ -1,0 +1,236 @@
+{
+  "schemaVersion": 1,
+  "campaignId": "corner_card_shop",
+  "contentRevision": "candidate-2026-10-25",
+  "chapterId": "chapter_01",
+  "chapterTitle": "第一章《第一张收据》",
+  "sceneId": "first_receipt",
+  "entryNodeId": "c01_arrival",
+  "characters": [
+    {
+      "personId": "person_lin_cheng",
+      "displayName": "林澄"
+    },
+    {
+      "personId": "person_xu_yao",
+      "displayName": "许遥"
+    },
+    {
+      "personId": "person_zhou_ye",
+      "displayName": "周野"
+    }
+  ],
+  "nodes": [
+    {
+      "nodeId": "c01_arrival",
+      "type": "line",
+      "lineId": "c01.arrival",
+      "speakerId": "person_lin_cheng",
+      "next": "c01_question"
+    },
+    {
+      "nodeId": "c01_question",
+      "type": "choice",
+      "lineId": "c01.question",
+      "choices": [
+        {
+          "choiceId": "c01_opt_stock",
+          "lineId": "c01.stock",
+          "target": "c01_shelf"
+        },
+        {
+          "choiceId": "c01_opt_memory",
+          "lineId": "c01.memory_option",
+          "target": "c01_memory"
+        },
+        {
+          "choiceId": "c01_opt_later",
+          "lineId": "c01.later",
+          "target": "c01_deferred_intro"
+        }
+      ]
+    },
+    {
+      "nodeId": "c01_shelf",
+      "type": "line",
+      "lineId": "c01.shelf",
+      "speakerId": "person_lin_cheng",
+      "next": "c01_wait_sale"
+    },
+    {
+      "nodeId": "c01_memory",
+      "type": "line",
+      "lineId": "c01.memory",
+      "speakerId": "person_lin_cheng",
+      "next": "c01_wait_sale"
+    },
+    {
+      "nodeId": "c01_wait_sale",
+      "type": "wait",
+      "condition": {
+        "predicateId": "metric.atLeast",
+        "params": {
+          "metric": "sales",
+          "value": 1
+        },
+        "sourcePolicy": "actual-business"
+      },
+      "pausePolicy": "release-modal",
+      "onSatisfied": "c01_receipt",
+      "onDeferred": "c01_deferred_sale",
+      "historyPolicy": "include-prior-actual-business"
+    },
+    {
+      "nodeId": "c01_receipt",
+      "type": "line",
+      "lineId": "c01.receipt",
+      "speakerId": "person_xu_yao",
+      "next": "c01_receipt_log"
+    },
+    {
+      "nodeId": "c01_receipt_log",
+      "type": "line",
+      "lineId": "c01.receipt_item",
+      "speakerId": null,
+      "next": "c01_visitors"
+    },
+    {
+      "nodeId": "c01_visitors",
+      "type": "line",
+      "lineId": "c01.visitors",
+      "speakerId": "person_zhou_ye",
+      "next": "c01_visitors_xu"
+    },
+    {
+      "nodeId": "c01_visitors_xu",
+      "type": "line",
+      "lineId": "c01.xu_yao_greeting",
+      "speakerId": "person_xu_yao",
+      "next": "c01_priority"
+    },
+    {
+      "nodeId": "c01_priority",
+      "type": "choice",
+      "lineId": "c01.priority",
+      "choices": [
+        {
+          "choiceId": "c01_opt_collection",
+          "lineId": "c01.collection_option",
+          "target": "c01_collection"
+        },
+        {
+          "choiceId": "c01_opt_practice",
+          "lineId": "c01.practice_option",
+          "target": "c01_practice"
+        },
+        {
+          "choiceId": "c01_opt_contact_later",
+          "lineId": "c01.contact_later",
+          "target": "c01_save_later"
+        }
+      ]
+    },
+    {
+      "nodeId": "c01_collection",
+      "type": "line",
+      "lineId": "c01.collection",
+      "speakerId": "person_xu_yao",
+      "next": "c01_save_collection"
+    },
+    {
+      "nodeId": "c01_practice",
+      "type": "line",
+      "lineId": "c01.practice",
+      "speakerId": "person_zhou_ye",
+      "next": "c01_save_practice"
+    },
+    {
+      "nodeId": "c01_save_collection",
+      "type": "action",
+      "effectId": "eff_c01_prio_collection",
+      "actionId": "narrative.setFlag",
+      "params": {
+        "flagId": "visitPriority",
+        "value": "collection"
+      },
+      "onSuccess": "c01_return",
+      "onFailure": "c01_effect_failed"
+    },
+    {
+      "nodeId": "c01_save_practice",
+      "type": "action",
+      "effectId": "eff_c01_prio_practice",
+      "actionId": "narrative.setFlag",
+      "params": {
+        "flagId": "visitPriority",
+        "value": "practice"
+      },
+      "onSuccess": "c01_return",
+      "onFailure": "c01_effect_failed"
+    },
+    {
+      "nodeId": "c01_save_later",
+      "type": "action",
+      "effectId": "eff_c01_prio_later",
+      "actionId": "narrative.setFlag",
+      "params": {
+        "flagId": "visitPriority",
+        "value": "later"
+      },
+      "onSuccess": "c01_return_later",
+      "onFailure": "c01_effect_failed"
+    },
+    {
+      "nodeId": "c01_return_later",
+      "type": "line",
+      "lineId": "c01.later_ack",
+      "speakerId": "person_lin_cheng",
+      "next": "c01_return"
+    },
+    {
+      "nodeId": "c01_return",
+      "type": "line",
+      "lineId": "c01.return",
+      "speakerId": "person_lin_cheng",
+      "next": "c01_close"
+    },
+    {
+      "nodeId": "c01_close",
+      "type": "line",
+      "lineId": "c01.close_body",
+      "speakerId": null,
+      "next": "c01_complete"
+    },
+    {
+      "nodeId": "c01_effect_failed",
+      "type": "line",
+      "lineId": "c01.effect_failed",
+      "speakerId": null,
+      "next": "c01_deferred_choice"
+    },
+    {
+      "nodeId": "c01_deferred_intro",
+      "type": "end",
+      "result": "deferred",
+      "resumeAt": "c01_arrival"
+    },
+    {
+      "nodeId": "c01_deferred_sale",
+      "type": "end",
+      "result": "deferred",
+      "resumeAt": "c01_wait_sale"
+    },
+    {
+      "nodeId": "c01_deferred_choice",
+      "type": "end",
+      "result": "deferred",
+      "resumeAt": "c01_priority"
+    },
+    {
+      "nodeId": "c01_complete",
+      "type": "end",
+      "result": "scene-completed",
+      "resumeAt": null
+    }
+  ]
+}

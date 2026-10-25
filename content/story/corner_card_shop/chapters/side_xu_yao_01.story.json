@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "campaignId": "corner_card_shop",
+  "contentRevision": "candidate-2026-10-25",
+  "chapterId": "side_xu_yao_01",
+  "chapterTitle": "许遥支线《缺页卡册》",
+  "sceneId": "scene_binder_search",
+  "entryNodeId": "xu01_intro",
+  "characters": [
+    {
+      "personId": "person_xu_yao",
+      "displayName": "许遥"
+    }
+  ],
+  "nodes": [
+    {
+      "nodeId": "xu01_intro",
+      "type": "line",
+      "lineId": "side.xu01.intro",
+      "speakerId": "person_xu_yao",
+      "next": "xu01_choice"
+    },
+    {
+      "nodeId": "xu01_choice",
+      "type": "choice",
+      "lineId": "side.xu01.choice",
+      "choices": [
+        {
+          "choiceId": "xu01_opt_show",
+          "lineId": "side.xu01.opt_show",
+          "target": "xu01_show_line"
+        },
+        {
+          "choiceId": "xu01_opt_sell",
+          "lineId": "side.xu01.opt_sell",
+          "target": "xu01_sell_line"
+        },
+        {
+          "choiceId": "xu01_opt_later",
+          "lineId": "side.xu01.opt_later",
+          "target": "xu01_later_line"
+        }
+      ]
+    },
+    {
+      "nodeId": "xu01_show_line",
+      "type": "line",
+      "lineId": "side.xu01.show_resp",
+      "speakerId": "person_xu_yao",
+      "next": "xu01_action_show"
+    },
+    {
+      "nodeId": "xu01_action_show",
+      "type": "action",
+      "effectId": "eff_xu01_display",
+      "actionId": "narrative.setFlag",
+      "params": {
+        "flagId": "cardFate",
+        "value": "display"
+      },
+      "onSuccess": "xu01_wrap",
+      "onFailure": "xu01_wrap"
+    },
+    {
+      "nodeId": "xu01_sell_line",
+      "type": "line",
+      "lineId": "side.xu01.sell_resp",
+      "speakerId": "person_xu_yao",
+      "next": "xu01_action_sell"
+    },
+    {
+      "nodeId": "xu01_action_sell",
+      "type": "action",
+      "effectId": "eff_xu01_market",
+      "actionId": "narrative.setFlag",
+      "params": {
+        "flagId": "cardFate",
+        "value": "market"
+      },
+      "onSuccess": "xu01_wrap",
+      "onFailure": "xu01_wrap"
+    },
+    {
+      "nodeId": "xu01_later_line",
+      "type": "line",
+      "lineId": "side.xu01.later_resp",
+      "speakerId": "person_xu_yao",
+      "next": "xu01_deferred"
+    },
+    {
+      "nodeId": "xu01_wrap",
+      "type": "line",
+      "lineId": "side.xu01.wrap",
+      "speakerId": null,
+      "next": "xu01_complete"
+    },
+    {
+      "nodeId": "xu01_deferred",
+      "type": "end",
+      "result": "deferred",
+      "resumeAt": "xu01_intro"
+    },
+    {
+      "nodeId": "xu01_complete",
+      "type": "end",
+      "result": "scene-completed"
+    }
+  ]
+}

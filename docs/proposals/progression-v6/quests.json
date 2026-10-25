@@ -1,0 +1,231 @@
+{
+  "schemaVersion": 1,
+  "campaignId": "corner_card_shop",
+  "documentStatus": "proposal-not-activated",
+  "lastUpdated": "2026-10-25",
+  "quests": [
+    {
+      "questId": "quest_day01_first_receipt",
+      "day": 1,
+      "chapterId": "chapter_01",
+      "title": "留存第一张收据",
+      "category": "mainline",
+      "description": "整理货架并完成开业以来的第一笔密封商品销售，记录收据流水。",
+      "optional": false,
+      "goals": [
+        {
+          "metric": "shelved",
+          "target": 1,
+          "description": "货架上至少陈列1件商品"
+        },
+        {
+          "metric": "sales",
+          "target": 1,
+          "description": "促成至少1笔密封卡包销售"
+        }
+      ],
+      "reward": {
+        "cash": 50,
+        "reputation": 10,
+        "onceOffKey": "reward_quest_day01_first_receipt"
+      },
+      "failurePolicy": "打烊未达成不扣款，次日开门继续有效，绝不锁死主线。"
+    },
+    {
+      "questId": "quest_day02_secondary_market",
+      "day": 2,
+      "chapterId": "chapter_02",
+      "title": "柜角流转的单卡",
+      "category": "mainline",
+      "description": "在拆包台取得单卡，并完成一笔真实单卡成交。",
+      "optional": false,
+      "goals": [
+        {
+          "metric": "opened",
+          "target": 1,
+          "description": "在拆包台体验开包"
+        },
+        {
+          "metric": "marketSales",
+          "target": 1,
+          "description": "完成1笔单卡成交；仅上架不算成交"
+        }
+      ],
+      "reward": {
+        "cash": 60,
+        "reputation": 15,
+        "onceOffKey": "reward_quest_day02_secondary_market"
+      },
+      "failurePolicy": "若无散卡流转，可选择任意基础卡寄售，无需稀有SSR。"
+    },
+    {
+      "questId": "quest_day03_community_prep",
+      "day": 3,
+      "chapterId": "chapter_03",
+      "title": "擦亮对战桌",
+      "category": "mainline",
+      "description": "准备至少1张可用对战桌，并与熟客完成交流，筹备周五交流会。",
+      "optional": false,
+      "goals": [
+        {
+          "metric": "regularTalks",
+          "target": 2,
+          "description": "与到店熟客对话交流"
+        },
+        {
+          "metric": "communityEvents",
+          "target": 1,
+          "description": "组织或承办1次交流对战"
+        }
+      ],
+      "reward": {
+        "cash": 80,
+        "reputation": 20,
+        "onceOffKey": "reward_quest_day03_community_prep"
+      },
+      "failurePolicy": "缺少参赛客人可延期至次日举办，不扣罚场地费。"
+    },
+    {
+      "questId": "quest_day04_supply_chain",
+      "day": 4,
+      "chapterId": "chapter_03",
+      "title": "稳健现金流",
+      "category": "daily",
+      "description": "完成一次正规进货并当日结清，维持抽屉现金在安全线以上。",
+      "optional": true,
+      "goals": [
+        {
+          "metric": "ordered",
+          "target": 2,
+          "description": "按现有指标累计购入至少2件商品，不是2个订单批次"
+        },
+        {
+          "metric": "received",
+          "target": 2,
+          "description": "入库验收完成"
+        }
+      ],
+      "reward": {
+        "cash": 40,
+        "reputation": 10,
+        "onceOffKey": "reward_quest_day04_supply_chain"
+      },
+      "failurePolicy": "资金不足可选择小额单包订货，不强制整箱。"
+    },
+    {
+      "questId": "quest_day05_friday_cup",
+      "day": 5,
+      "chapterId": "chapter_03",
+      "title": "周五晚间牌友会",
+      "category": "milestone",
+      "description": "周五晚间顺利举办牌友聚会，记录胜负对局流水。",
+      "optional": false,
+      "goals": [
+        {
+          "metric": "communityEvents",
+          "target": 1,
+          "description": "完成周五晚间交流活动"
+        }
+      ],
+      "reward": {
+        "cash": 120,
+        "reputation": 30,
+        "onceOffKey": "reward_quest_day05_friday_cup"
+      },
+      "failurePolicy": "若当日客流不足可顺延至周六举行。"
+    },
+    {
+      "questId": "quest_day06_outdoor_prep",
+      "day": 6,
+      "chapterId": "chapter_04",
+      "title": "灯桥街的晨曦",
+      "category": "mainline",
+      "description": "了解离店经营守则，为灯桥街社区中心外展备好物资。",
+      "optional": false,
+      "goals": [
+        {
+          "metric": "shelved",
+          "target": 5,
+          "description": "店内货架货品充实"
+        },
+        {
+          "metric": "daysClosed",
+          "target": 5,
+          "description": "累计稳健营业5日"
+        }
+      ],
+      "reward": {
+        "cash": 100,
+        "reputation": 25,
+        "onceOffKey": "reward_quest_day06_outdoor_prep"
+      },
+      "failurePolicy": "未达成前保持店内正常营业积累指标。"
+    },
+    {
+      "questId": "quest_day07_weekly_review",
+      "day": 7,
+      "chapterId": "chapter_04",
+      "title": "首周经营账本",
+      "category": "milestone",
+      "description": "完成第一周完整经营复盘，核对总营收、常客关系与名誉评级。",
+      "optional": false,
+      "goals": [
+        {
+          "metric": "daysClosed",
+          "target": 7,
+          "description": "顺利完成首周7日经营"
+        }
+      ],
+      "reward": {
+        "cash": 200,
+        "reputation": 50,
+        "onceOffKey": "reward_quest_day07_weekly_review"
+      },
+      "failurePolicy": "无失败条件，自然营业满7日结算。"
+    },
+    {
+      "questId": "quest_side_xu_binder",
+      "day": 2,
+      "chapterId": "side_xu_yao_01",
+      "title": "缺页的记忆",
+      "category": "character_side",
+      "description": "协助许遥搜寻一张旧活动基础卡，决定陈列还是流转。",
+      "optional": true,
+      "goals": [
+        {
+          "metric": "marketSales",
+          "target": 1,
+          "description": "单卡完成流转或陈列"
+        }
+      ],
+      "reward": {
+        "cash": 30,
+        "reputation": 20,
+        "onceOffKey": "reward_quest_side_xu_binder"
+      },
+      "failurePolicy": "未找到指定卡不阻断主线，可随时在卡册挑选替代品。"
+    },
+    {
+      "questId": "quest_side_zhou_spar",
+      "day": 2,
+      "chapterId": "side_zhou_ye_01",
+      "title": "平民牌的第一局",
+      "category": "character_side",
+      "description": "与周野完成一次基础平民套牌切磋，复盘费用曲线。",
+      "optional": true,
+      "goals": [
+        {
+          "metric": "regularTalks",
+          "target": 1,
+          "description": "完成战术对局与复盘"
+        }
+      ],
+      "reward": {
+        "cash": 30,
+        "reputation": 20,
+        "onceOffKey": "reward_quest_side_zhou_spar"
+      },
+      "failurePolicy": "切磋战败同样计入复盘完成，绝不卡死任务。"
+    }
+  ]
+}
