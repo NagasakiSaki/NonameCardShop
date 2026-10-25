@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "date": "2026-10-25",
+  "date": "2026-10-26",
   "baseCommit": "8e3313e9",
-  "status": "documents-ready-gameplay-not-implemented",
+  "status": "integrated-accepted",
   "sourceOfTruth": "docs/collaboration/operations-v7",
   "contract": "card-shop-v7-candidate/1",
   "supersedesOverlappingScope": [
@@ -20,7 +20,7 @@
     "private repository",
     "no EXE update"
   ],
-  "integrationOwner": "primary agent after all candidate deliveries",
+  "integrationOwner": "primary agent",
   "resourcePolicy": "The primary agent is the only high-quality model. Dispatch A/B/C/E/F to fast models; D and authoritative integration belong to the primary agent.",
   "tasks": [
     {
@@ -29,11 +29,12 @@
       "capability": "高速代码模型",
       "folder": "01-高速模型-经济与卡包",
       "taskFile": "任务书/V7-A-经济与卡包.md",
-      "status": "assigned-external-awaiting-delivery",
+      "status": "candidate-reviewed-integrated",
       "dispatchExternally": true,
       "candidateDir": "deliverables/operations-v7/V7-A/",
       "waitForOtherCandidates": false,
-      "implementedInGame": false
+      "implementedInGame": true,
+      "verificationComplete": true
     },
     {
       "id": "V7-B",
@@ -41,11 +42,12 @@
       "capability": "高速代码模型，纯状态机与意图",
       "folder": "02-高速模型-高手与约战",
       "taskFile": "任务书/V7-B-高手与约战.md",
-      "status": "assigned-external-awaiting-delivery",
+      "status": "candidate-reviewed-integrated",
       "dispatchExternally": true,
       "candidateDir": "deliverables/operations-v7/V7-B/",
       "waitForOtherCandidates": false,
-      "implementedInGame": false
+      "implementedInGame": true,
+      "verificationComplete": true
     },
     {
       "id": "V7-C",
@@ -53,11 +55,12 @@
       "capability": "高速代码模型，纯校验与归约",
       "folder": "03-高速模型-赛制与系列赛",
       "taskFile": "任务书/V7-C-赛制与系列赛.md",
-      "status": "assigned-external-awaiting-delivery",
+      "status": "candidate-reviewed-integrated",
       "dispatchExternally": true,
       "candidateDir": "deliverables/operations-v7/V7-C/",
       "waitForOtherCandidates": false,
-      "implementedInGame": false
+      "implementedInGame": true,
+      "verificationComplete": true
     },
     {
       "id": "V7-D",
@@ -65,14 +68,15 @@
       "capability": "主模型本人，不外发",
       "folder": "04-主模型自办-无名杀适配",
       "taskFile": "任务书/V7-D-无名杀适配.md",
-      "status": "stage-implemented-awaiting-store-integration",
+      "status": "candidate-reviewed-integrated",
       "dispatchExternally": false,
       "candidateDir": "deliverables/operations-v7/V7-D/",
       "waitForOtherCandidates": false,
-      "implementedInGame": false,
+      "implementedInGame": true,
       "implementationCommit": "594de6117fb6a36e3309ca80d73fc1034f80b38e",
       "acceptedStage": "native-three-four-seat-adapters-and-optional-ally-control-tested",
-      "remaining": "Integrate trusted store series plans, lifecycle, fees and progression after external candidates; full skill combinations and exact mid-round resume not certified."
+      "remaining": "Full skill combinations, balancing and exact mid-round resume are not certified; active store Host integration is implemented.",
+      "verificationComplete": true
     },
     {
       "id": "V7-E",
@@ -80,11 +84,12 @@
       "capability": "高速前端模型，需浏览器看图",
       "folder": "05-高速前端-场景对话与开桌",
       "taskFile": "任务书/V7-E-场景对话与前端.md",
-      "status": "assigned-external-awaiting-delivery",
+      "status": "candidate-reviewed-integrated",
       "dispatchExternally": true,
       "candidateDir": "deliverables/operations-v7/V7-E/",
       "waitForOtherCandidates": false,
-      "implementedInGame": false
+      "implementedInGame": true,
+      "verificationComplete": true
     },
     {
       "id": "V7-F",
@@ -92,13 +97,23 @@
       "capability": "独立高速代码与浏览器模型",
       "folder": "06-高速独立-排查与验收",
       "taskFile": "任务书/V7-F-独立审计与验收.md",
-      "status": "assigned-external-awaiting-delivery",
+      "status": "audit-reviewed-findings-triaged",
       "dispatchExternally": true,
       "candidateDir": "deliverables/operations-v7/V7-F/",
       "waitForOtherCandidates": false,
-      "implementedInGame": false
+      "implementedInGame": false,
+      "verificationComplete": true
     }
   ],
   "nativeAdapterReview": "docs/reviews/2026-10-25-V7D原生模式与接管.md",
-  "latestImplementationCommit": "594de6117fb6a36e3309ca80d73fc1034f80b38e"
+  "latestImplementationCommit": "7f94868dc8b478882d18a6f7031798e6a51a332d",
+  "integrationGuide": "docs/architecture/V7经营挑战与赛制接入.md",
+  "integrationReview": "docs/reviews/2026-10-26-V7正式整合验收.md",
+  "acceptance": {
+    "command": "npm run test:v7",
+    "passed": 7,
+    "total": 7,
+    "report": "test-results/2026-10-25T17-01-32-139Z-27032",
+    "engineEvidence": "real store Host + controlled native engine deaths; separate prior natural AI evidence"
+  }
 }
