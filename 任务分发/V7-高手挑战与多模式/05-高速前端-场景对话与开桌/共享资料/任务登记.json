@@ -5,16 +5,100 @@
   "status": "documents-ready-gameplay-not-implemented",
   "sourceOfTruth": "docs/collaboration/operations-v7",
   "contract": "card-shop-v7-candidate/1",
-  "supersedesOverlappingScope": ["V6 pricing 100/200/300", "unrestricted initial product procurement", "external story list as primary dialogue", "two-format-only future combat scope"],
-  "preserves": ["V6 accepted code", "narrative VM and content pinning", "causal day-start saves", "original art", "vendor engine bytes", "private repository", "no EXE update"],
+  "supersedesOverlappingScope": [
+    "V6 pricing 100/200/300",
+    "unrestricted initial product procurement",
+    "external story list as primary dialogue",
+    "two-format-only future combat scope"
+  ],
+  "preserves": [
+    "V6 accepted code",
+    "narrative VM and content pinning",
+    "causal day-start saves",
+    "original art",
+    "vendor engine bytes",
+    "private repository",
+    "no EXE update"
+  ],
   "integrationOwner": "primary agent after all candidate deliveries",
   "resourcePolicy": "The primary agent is the only high-quality model. Dispatch A/B/C/E/F to fast models; D and authoritative integration belong to the primary agent.",
   "tasks": [
-    {"id": "V7-A", "title": "经济与卡包", "capability": "高速代码模型", "folder": "01-高速模型-经济与卡包", "taskFile": "任务书/V7-A-经济与卡包.md", "status": "ready-to-dispatch", "dispatchExternally": true, "candidateDir": "deliverables/operations-v7/V7-A/", "waitForOtherCandidates": false, "implementedInGame": false},
-    {"id": "V7-B", "title": "高手与约战", "capability": "高速代码模型，纯状态机与意图", "folder": "02-高速模型-高手与约战", "taskFile": "任务书/V7-B-高手与约战.md", "status": "ready-to-dispatch", "dispatchExternally": true, "candidateDir": "deliverables/operations-v7/V7-B/", "waitForOtherCandidates": false, "implementedInGame": false},
-    {"id": "V7-C", "title": "赛制与系列赛", "capability": "高速代码模型，纯校验与归约", "folder": "03-高速模型-赛制与系列赛", "taskFile": "任务书/V7-C-赛制与系列赛.md", "status": "ready-to-dispatch", "dispatchExternally": true, "candidateDir": "deliverables/operations-v7/V7-C/", "waitForOtherCandidates": false, "implementedInGame": false},
-    {"id": "V7-D", "title": "无名杀适配", "capability": "主模型本人，不外发", "folder": "04-主模型自办-无名杀适配", "taskFile": "任务书/V7-D-无名杀适配.md", "status": "assigned-to-primary-not-started", "dispatchExternally": false, "candidateDir": "deliverables/operations-v7/V7-D/", "waitForOtherCandidates": false, "implementedInGame": false},
-    {"id": "V7-E", "title": "场景对话与前端", "capability": "高速前端模型，需浏览器看图", "folder": "05-高速前端-场景对话与开桌", "taskFile": "任务书/V7-E-场景对话与前端.md", "status": "ready-to-dispatch", "dispatchExternally": true, "candidateDir": "deliverables/operations-v7/V7-E/", "waitForOtherCandidates": false, "implementedInGame": false},
-    {"id": "V7-F", "title": "独立排查与验收", "capability": "独立高速代码与浏览器模型", "folder": "06-高速独立-排查与验收", "taskFile": "任务书/V7-F-独立审计与验收.md", "status": "ready-to-dispatch", "dispatchExternally": true, "candidateDir": "deliverables/operations-v7/V7-F/", "waitForOtherCandidates": false, "implementedInGame": false}
-  ]
+    {
+      "id": "V7-A",
+      "title": "经济与卡包",
+      "capability": "高速代码模型",
+      "folder": "01-高速模型-经济与卡包",
+      "taskFile": "任务书/V7-A-经济与卡包.md",
+      "status": "assigned-external-awaiting-delivery",
+      "dispatchExternally": true,
+      "candidateDir": "deliverables/operations-v7/V7-A/",
+      "waitForOtherCandidates": false,
+      "implementedInGame": false
+    },
+    {
+      "id": "V7-B",
+      "title": "高手与约战",
+      "capability": "高速代码模型，纯状态机与意图",
+      "folder": "02-高速模型-高手与约战",
+      "taskFile": "任务书/V7-B-高手与约战.md",
+      "status": "assigned-external-awaiting-delivery",
+      "dispatchExternally": true,
+      "candidateDir": "deliverables/operations-v7/V7-B/",
+      "waitForOtherCandidates": false,
+      "implementedInGame": false
+    },
+    {
+      "id": "V7-C",
+      "title": "赛制与系列赛",
+      "capability": "高速代码模型，纯校验与归约",
+      "folder": "03-高速模型-赛制与系列赛",
+      "taskFile": "任务书/V7-C-赛制与系列赛.md",
+      "status": "assigned-external-awaiting-delivery",
+      "dispatchExternally": true,
+      "candidateDir": "deliverables/operations-v7/V7-C/",
+      "waitForOtherCandidates": false,
+      "implementedInGame": false
+    },
+    {
+      "id": "V7-D",
+      "title": "无名杀适配",
+      "capability": "主模型本人，不外发",
+      "folder": "04-主模型自办-无名杀适配",
+      "taskFile": "任务书/V7-D-无名杀适配.md",
+      "status": "stage-implemented-awaiting-store-integration",
+      "dispatchExternally": false,
+      "candidateDir": "deliverables/operations-v7/V7-D/",
+      "waitForOtherCandidates": false,
+      "implementedInGame": false,
+      "implementationCommit": "594de6117fb6a36e3309ca80d73fc1034f80b38e",
+      "acceptedStage": "native-three-four-seat-adapters-and-optional-ally-control-tested",
+      "remaining": "Integrate trusted store series plans, lifecycle, fees and progression after external candidates; full skill combinations and exact mid-round resume not certified."
+    },
+    {
+      "id": "V7-E",
+      "title": "场景对话与前端",
+      "capability": "高速前端模型，需浏览器看图",
+      "folder": "05-高速前端-场景对话与开桌",
+      "taskFile": "任务书/V7-E-场景对话与前端.md",
+      "status": "assigned-external-awaiting-delivery",
+      "dispatchExternally": true,
+      "candidateDir": "deliverables/operations-v7/V7-E/",
+      "waitForOtherCandidates": false,
+      "implementedInGame": false
+    },
+    {
+      "id": "V7-F",
+      "title": "独立排查与验收",
+      "capability": "独立高速代码与浏览器模型",
+      "folder": "06-高速独立-排查与验收",
+      "taskFile": "任务书/V7-F-独立审计与验收.md",
+      "status": "assigned-external-awaiting-delivery",
+      "dispatchExternally": true,
+      "candidateDir": "deliverables/operations-v7/V7-F/",
+      "waitForOtherCandidates": false,
+      "implementedInGame": false
+    }
+  ],
+  "nativeAdapterReview": "docs/reviews/2026-10-25-V7D原生模式与接管.md",
+  "latestImplementationCommit": "594de6117fb6a36e3309ca80d73fc1034f80b38e"
 }

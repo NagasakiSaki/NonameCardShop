@@ -2,11 +2,11 @@
   "schemaVersion": 1,
   "date": "2026-10-25",
   "sourceOfTruth": "docs/collaboration/operations-v7",
-  "sourceTreeSha256LF": "f0743b53354d65d32041319a3ac8f37b43d47105237e9298d3e52035a51184cb",
+  "sourceTreeSha256LF": "d493cf6571cb4d7d218e72df812632b1bca56853c6202249fa0d1b1025c61a71",
   "sourceFiles": [
     {
       "path": "docs/collaboration/operations-v7/01-冻结玩法与默认参数.md",
-      "sha256LF": "2e961fe8f592c9bc98eb0d4f4b4b668c826cf180607a3d1fe40812da6b988b9e"
+      "sha256LF": "30bb5ce45b7badecdaf0e194bfb0ad7be2c13934c1f138451fd37d719644bd46"
     },
     {
       "path": "docs/collaboration/operations-v7/02-共享接口与数据归属.md",
@@ -25,12 +25,20 @@
       "sha256LF": "714d690d407c24fcfe630d44fdc37507bfe6a95d1d88b06a84d2d4f50645d72b"
     },
     {
+      "path": "docs/collaboration/operations-v7/06-队友接管补充.md",
+      "sha256LF": "eb0daf0bc34063cac4a947ab3ace51ef258951552bdfb4f7f6b03c15eaf9f3dc"
+    },
+    {
+      "path": "docs/collaboration/operations-v7/07-D组阶段交付与接线.md",
+      "sha256LF": "bea70e0eb45c1f062b6c60a8147c22e299d0d1878a68a5ecdaaf90333168f83c"
+    },
+    {
       "path": "docs/collaboration/operations-v7/fixtures/协作样例.json",
       "sha256LF": "80d3d93502a43ef222a29b5926df8de610a7f507546e69e0acae93e8874fa47a"
     },
     {
       "path": "docs/collaboration/operations-v7/README.md",
-      "sha256LF": "2c3b63936426b75130fe915abdc8b90d0272328fe9bd8d1e104a6b3a493ff916"
+      "sha256LF": "511541201bd9825f75bc4cb9db4f30f353d32e68318a8b5abf71cf9fc8e3bd6e"
     },
     {
       "path": "docs/collaboration/operations-v7/交付模板.md",
@@ -50,7 +58,7 @@
     },
     {
       "path": "docs/collaboration/operations-v7/任务书/V7-D-无名杀适配.md",
-      "sha256LF": "0503a812f35d773c1a80e2d87d152e1f5ccedef19d4ab7caa54020b3d7fedba3"
+      "sha256LF": "0031ec624a7a849d62ca78a498599a3ee703d7f320b120218c3ef49f07369486"
     },
     {
       "path": "docs/collaboration/operations-v7/任务书/V7-E-场景对话与前端.md",
@@ -62,11 +70,11 @@
     },
     {
       "path": "docs/collaboration/operations-v7/任务登记.json",
-      "sha256LF": "3016c277afce9539e6cc64cb65b6467e8de8fe53d1a3afcdd28e2bcb91145171"
+      "sha256LF": "62d5a54a9793b0ee2e53e69146b9a460af72b2526be2b50160915c5ecc81148f"
     },
     {
       "path": "docs/collaboration/operations-v7/共享合同-v1.json",
-      "sha256LF": "de8d6b7ffdb57f46d7796933bcc3d22fb0f7e8dc6bbb82de4740f6f1f1fd9997"
+      "sha256LF": "afa9adf4b1207d8cf9051961b81c587dae362d801aefb51112683dc1dbd61610"
     },
     {
       "path": "docs/collaboration/operations-v7/统一执行指令.md",
@@ -80,7 +88,7 @@
       "capability": "高速代码模型",
       "folder": "01-高速模型-经济与卡包",
       "taskFile": "任务书/V7-A-经济与卡包.md",
-      "status": "ready-to-dispatch",
+      "status": "assigned-external-awaiting-delivery",
       "dispatchExternally": true,
       "candidateDir": "deliverables/operations-v7/V7-A/",
       "waitForOtherCandidates": false,
@@ -92,7 +100,7 @@
       "capability": "高速代码模型，纯状态机与意图",
       "folder": "02-高速模型-高手与约战",
       "taskFile": "任务书/V7-B-高手与约战.md",
-      "status": "ready-to-dispatch",
+      "status": "assigned-external-awaiting-delivery",
       "dispatchExternally": true,
       "candidateDir": "deliverables/operations-v7/V7-B/",
       "waitForOtherCandidates": false,
@@ -104,7 +112,7 @@
       "capability": "高速代码模型，纯校验与归约",
       "folder": "03-高速模型-赛制与系列赛",
       "taskFile": "任务书/V7-C-赛制与系列赛.md",
-      "status": "ready-to-dispatch",
+      "status": "assigned-external-awaiting-delivery",
       "dispatchExternally": true,
       "candidateDir": "deliverables/operations-v7/V7-C/",
       "waitForOtherCandidates": false,
@@ -116,11 +124,14 @@
       "capability": "主模型本人，不外发",
       "folder": "04-主模型自办-无名杀适配",
       "taskFile": "任务书/V7-D-无名杀适配.md",
-      "status": "assigned-to-primary-not-started",
+      "status": "stage-implemented-awaiting-store-integration",
       "dispatchExternally": false,
       "candidateDir": "deliverables/operations-v7/V7-D/",
       "waitForOtherCandidates": false,
-      "implementedInGame": false
+      "implementedInGame": false,
+      "implementationCommit": "594de6117fb6a36e3309ca80d73fc1034f80b38e",
+      "acceptedStage": "native-three-four-seat-adapters-and-optional-ally-control-tested",
+      "remaining": "Integrate trusted store series plans, lifecycle, fees and progression after external candidates; full skill combinations and exact mid-round resume not certified."
     },
     {
       "id": "V7-E",
@@ -128,7 +139,7 @@
       "capability": "高速前端模型，需浏览器看图",
       "folder": "05-高速前端-场景对话与开桌",
       "taskFile": "任务书/V7-E-场景对话与前端.md",
-      "status": "ready-to-dispatch",
+      "status": "assigned-external-awaiting-delivery",
       "dispatchExternally": true,
       "candidateDir": "deliverables/operations-v7/V7-E/",
       "waitForOtherCandidates": false,
@@ -140,7 +151,7 @@
       "capability": "独立高速代码与浏览器模型",
       "folder": "06-高速独立-排查与验收",
       "taskFile": "任务书/V7-F-独立审计与验收.md",
-      "status": "ready-to-dispatch",
+      "status": "assigned-external-awaiting-delivery",
       "dispatchExternally": true,
       "candidateDir": "deliverables/operations-v7/V7-F/",
       "waitForOtherCandidates": false,

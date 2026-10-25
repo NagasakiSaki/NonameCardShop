@@ -1,0 +1,405 @@
+{
+  "date": "2026-10-25",
+  "codeCommit": "594de6117fb6a36e3309ca80d73fc1034f80b38e",
+  "initialImplementationCommit": "049c499a",
+  "authorship": "primary implementation and directed tests, not independent audit",
+  "stage": "adapter implemented and tested; official shop series/progression integration pending",
+  "suite": {
+    "selection": "nativeModes",
+    "startedAt": "2026-10-25T14:33:41.151Z",
+    "results": [
+      {
+        "group": "nativeModes",
+        "file": "tests/native-modes-unit.mjs",
+        "passed": true,
+        "code": 0,
+        "seconds": 0.1
+      },
+      {
+        "group": "nativeModes",
+        "file": "tests/native-modes-browser.mjs",
+        "passed": true,
+        "code": 0,
+        "seconds": 88.4
+      },
+      {
+        "group": "nativeModes",
+        "file": "tests/native-modes-series.mjs",
+        "passed": true,
+        "code": 0,
+        "seconds": 9.5
+      },
+      {
+        "group": "nativeModes",
+        "file": "tests/native-legacy-regression.mjs",
+        "passed": true,
+        "code": 0,
+        "seconds": 8.4
+      }
+    ],
+    "finishedAt": "2026-10-25T14:35:27.589Z",
+    "passed": true
+  },
+  "naturalResults": {
+    "landlord": {
+      "evidenceType": "engine-real-ai-autoplay",
+      "injectedDeathOrWinner": false,
+      "result": "loss",
+      "rounds": 7,
+      "verifiedOrigin": true,
+      "verifiedSource": true
+    },
+    "versus": {
+      "evidenceType": "engine-real-ai-autoplay",
+      "injectedDeathOrWinner": false,
+      "result": "loss",
+      "rounds": 6,
+      "verifiedOrigin": true,
+      "verifiedSource": true
+    }
+  },
+  "controlledFixture": {
+    "evidenceType": "engine-real-controlled-death-fixture",
+    "storeSeriesIntegrated": false,
+    "modeRounds": {
+      "doudizhu": 3,
+      "versus": 3
+    },
+    "lifecycle": {
+      "acquired": 1,
+      "released": 1,
+      "disposed": true,
+      "frames": 0,
+      "error": "ENGINE_TIMEOUT"
+    }
+  },
+  "eligibilityScans": {
+    "landlord": {
+      "evidenceType": "engine-loaded-eligibility-scan",
+      "total": 2563,
+      "blockedCount": 34,
+      "blocked": [
+        {
+          "generalId": "ol_chitu",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "ol_le_menghuo",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "old_lingju",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "ns_nanhua_left",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "ns_nanhua_right",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "ns_wenchou",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "ns_duangui",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "ns_liuzhang",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "jin_jsrg_simazhao",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "key_umi2",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "key_misa",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "key_jojiro",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "key_crow",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "scs_zhangrang",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "scs_zhaozhong",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "scs_sunzhang",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "scs_bilan",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "scs_xiayun",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "scs_hankui",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "scs_lisong",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "scs_duangui",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "scs_guosheng",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "scs_gaowang",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "le_shen_jiaxu",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "awaken_shinin_zhenji",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "awaken_shinin_wuguotai",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "awaken_shinin_ruiji",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "awaken_shinin_lvlingqi",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "awaken_shinin_dongwan",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "zombie_zombie",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "caiyang",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "mifuren",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "zoushi",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "sp_xuyou",
+          "reason": "native-config-disabled"
+        }
+      ],
+      "notFullSkillRegression": true
+    },
+    "versus": {
+      "evidenceType": "engine-loaded-eligibility-scan",
+      "total": 2563,
+      "blockedCount": 34,
+      "blocked": [
+        {
+          "generalId": "ol_chitu",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "ol_le_menghuo",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "old_lingju",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "ns_nanhua_left",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "ns_nanhua_right",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "ns_wenchou",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "ns_duangui",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "ns_liuzhang",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "jin_jsrg_simazhao",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "key_umi2",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "key_misa",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "key_jojiro",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "key_crow",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "scs_zhangrang",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "scs_zhaozhong",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "scs_sunzhang",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "scs_bilan",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "scs_xiayun",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "scs_hankui",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "scs_lisong",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "scs_duangui",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "scs_guosheng",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "scs_gaowang",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "le_shen_jiaxu",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "awaken_shinin_zhenji",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "awaken_shinin_wuguotai",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "awaken_shinin_ruiji",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "awaken_shinin_lvlingqi",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "awaken_shinin_dongwan",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "zombie_zombie",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "caiyang",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "mifuren",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "zoushi",
+          "reason": "native-config-disabled"
+        },
+        {
+          "generalId": "sp_xuyou",
+          "reason": "native-config-disabled"
+        }
+      ],
+      "notFullSkillRegression": true
+    }
+  },
+  "afterSuiteChecks": [
+    {
+      "command": "node tests/native-modes-browser.mjs --controls-only",
+      "passed": true
+    },
+    {
+      "command": "node tests/native-modes-series.mjs",
+      "passed": true
+    },
+    {
+      "command": "node tests/native-modes-unit.mjs",
+      "passed": true
+    }
+  ],
+  "afterSuiteChanges": [
+    "close free enemy viewpoint",
+    "visible screenshot wait and scenario label",
+    "announce ready before gameStart victory skills",
+    "own-property profile/general identity guards"
+  ],
+  "visualInspection": {
+    "file": ".local/native-modes/farmer.png",
+    "actualSeatsVisible": true,
+    "portraitsAndHandsVisible": true
+  },
+  "knownLimits": [
+    "native asset HTTP 404 warnings",
+    "not a full character skill matrix",
+    "no exact mid-round RNG replay",
+    "no wagering enabled",
+    "no official shop four-format menu or reward integration yet"
+  ],
+  "notModified": [
+    "vendor engine bytes",
+    "user saves",
+    "external candidate folders",
+    "original artwork",
+    "EXE"
+  ]
+}

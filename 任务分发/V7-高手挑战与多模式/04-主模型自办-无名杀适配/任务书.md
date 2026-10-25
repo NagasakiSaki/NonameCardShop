@@ -2,6 +2,8 @@
 
 **本包由主模型本人承担，不下发外部模型。** 可在 `deliverables/operations-v7/V7-D/` 做自己的隔离试验，再由主模型按正式接入流程修改桥接源码；禁止修改vendor。其他组不是前置条件，使用共享RoundPlan独立启动。外部A/B/C/E/F不等本包完成。
 
+阶段状态：底层实现与测试已完成，首批049c499a、修正594de611，正式卡店系列赛/挑战接线待整合。可选接管保留，详见共享资料06/07；下面任务清单保留为实施和回归依据，不要求外部重做D。
+
 ## 连续任务
 
 1. 盘点本地1.11.6 doudizhu/versus模式初始化、chooseCharacter、座位、控制、team判定、game.over、AI与子模式配置。报告文件+函数+hash，选择首版明确nativeVariant/profile，不凭网上新版本推断，不下载覆盖vendor。
