@@ -1,0 +1,84 @@
+{
+  "contract": "card-shop-v7-candidate/1",
+  "status": "frozen-for-isolated-candidates-not-live-host",
+  "baseCommit": "8e3313e9",
+  "engineVersion": "1.11.6",
+  "sourceOfTruth": "docs/collaboration/operations-v7",
+  "identities": {
+    "separateIds": ["actorId", "personId", "appearanceId", "challengerId", "stageId", "challengeId", "inviteId", "visitId", "matchId", "gameId", "roundId"],
+    "commandProof": ["worldId", "branchId", "resourceRevision"],
+    "commandEnvelope": ["requestId", "type", "payload"],
+    "resultEnvelope": "{ok:true,data,effects?} | {ok:false,error:{code,message,retryable}}"
+  },
+  "ownership": {
+    "A": ["pricePolicy", "budgetPolicy", "productPolicy", "stageCatalog", "collationPolicy"],
+    "B": ["progressionState", "invitationState", "challengerVisitIntent", "allyState", "unlockReceipts"],
+    "C": ["formatRegistry", "seriesState", "roundPlan", "rosterLockIntent"],
+    "D": ["nativeProfile", "modeCapability", "trustedNativeEvent"],
+    "E": ["dialoguePresentation", "frontendInputAndLease"],
+    "F": ["independentAudit", "acceptanceTools"]
+  },
+  "economy": {
+    "retailPriceMeaning": "suggested sealed pack retail",
+    "tiers": [
+      {"id": "entry", "maxScoreExclusive": 53, "packWholesale": 150, "packRetail": 210},
+      {"id": "standard", "maxScoreExclusive": 57, "packWholesale": 255, "packRetail": 360},
+      {"id": "expert", "maxScoreExclusive": null, "packWholesale": 360, "packRetail": 510}
+    ],
+    "packsPerBox": 24,
+    "boxDiscount": 0.95,
+    "boxRoundUpTo": 5,
+    "newRetiredProductIds": ["newjiang", "offline", "standard"],
+    "previousRetiredProductIds": ["diy", "old", "key", "collab", "sixiang", "onlyOL", "xianding"],
+    "initialUnlockedProductIds": ["yijiang"],
+    "starterGift": {"unit": "box", "quantity": 1, "productId": "yijiang", "newWorldOnly": true},
+    "fallbackPool": "unlocked-product-pools-only-frozen-at-manufacture",
+    "noSsrStarterBoxCounts": {"N": 60, "R": 42, "SR": 18, "SSR": 0},
+    "oldPhysicalItems": "preserve contents, cost, printed rarity, accepted price and identity"
+  },
+  "progression": {
+    "version": 1,
+    "firstDueDayNewWorld": 3,
+    "intervalDays": 3,
+    "firstDueDayExistingWorld": "currentDay + 1, fixed once",
+    "maxActiveStages": 1,
+    "maxProactiveOffersPerVisitDay": 1,
+    "defaultChallengeFormat": "bo3",
+    "defaultChallengeFee": 0,
+    "wagering": false,
+    "loanSource": "challenge-loan",
+    "loanAllowedPurposes": ["stage-challenge", "recruited-ally-practice"],
+    "loanCirculation": false,
+    "defaultAllySlots": 3,
+    "allyCaps": {"attractionRate": 0.3, "checkoutReductionRate": 0.4, "wholesaleDiscountRate": 0.15},
+    "unlockEvidence": "trusted complete official series win; not UI, simulated or single round"
+  },
+  "formats": [
+    {"formatId": "bo3", "engineMode": "existing-two-seat-profile", "reservePerSide": 1, "activePerSide": [1, 1], "seats": 2, "winsRequired": 2, "legacy": true},
+    {"formatId": "kof", "engineMode": "existing-two-seat-profile", "reservePerSide": 3, "activePerSide": [1, 1], "seats": 2, "legacy": true, "replacementHand": "fresh-four"},
+    {"formatId": "doudizhu-bo3", "engineMode": "doudizhu", "nativeVariant": "D-to-pin-local-standard-profile", "reservePerSide": 5, "activePerSide": [1, 2], "seats": 3, "winsRequired": 2, "rolePolicy": "seeded-first-alternate-after-decisive-round", "humanSeats": 1},
+    {"formatId": "versus2v2-bo3", "engineMode": "versus", "nativeVariant": "D-to-pin-local-2v2-profile", "reservePerSide": 8, "activePerSide": [2, 2], "seats": 4, "winsRequired": 2, "humanSeats": 1}
+  ],
+  "seriesRules": {
+    "sameSideReserveDistinctGenerals": true,
+    "crossSideSameGeneralAllowed": true,
+    "reuseGeneralAcrossRounds": true,
+    "inheritCardsAcrossRounds": false,
+    "drawChangesRoles": false,
+    "drawCancellationOfferAfter": 3,
+    "playerMatchTimeMinutesOnce": 30,
+    "npcMatchPausesWorld": false,
+    "reserveLocks": "whole series until released",
+    "humanDeathIsTeamLoss": false
+  },
+  "queries": ["progression.status", "challenges.status", "allies.list", "actors.actions", "dialogue.offer", "combat.formats", "combat.eligible", "combat.series"],
+  "commands": ["actors.interact", "challenges.respond", "combat.prepareSeries", "combat.selectRound", "combat.start", "combat.continue", "dialogue.respond", "allies.assign"],
+  "events": ["challengeVisitScheduled", "challengeInviteOffered", "challengeDeferred", "challengeAccepted", "seriesRegistered", "roundSelectionConfirmed", "officialRoundSettled", "officialSeriesSettled", "challengeCleared", "productUnlocked", "allyRecruited", "allyDutyChanged"],
+  "roundPlanRequired": ["version", "worldId", "branchId", "matchId", "gameId", "roundId", "formatId", "engineMode", "nativeVariant", "profileId", "seed", "reserveDigest", "playerTeamId", "controlledSeatId", "seats"],
+  "seatRequired": ["seatId", "teamId", "role", "controller", "generalId"],
+  "trustedResultRequired": ["gameId", "roundId", "resultId", "winningTeamId", "reserveDigest", "profileId", "originVerified", "sourceVerified", "simulated", "completed"],
+  "trustedResultPolicy": "verification fields generated by trusted bridge; never trusted from UI payload",
+  "errors": ["FEATURE_UNAVAILABLE", "NOT_ONSITE", "TOO_FAR", "ACTOR_BUSY", "TABLE_BUSY", "INVITE_STALE", "PRODUCT_LOCKED", "PRODUCT_RETIRED", "INSUFFICIENT_ROSTER", "ROSTER_LOCKED", "STALE_OPERATION", "PROFILE_MISMATCH", "RESULT_CONFLICT", "RECOVERY_REQUIRED"],
+  "dialogue": {"primaryEntry": "world actor/region/day event", "presentation": "bottom overlay in visible world", "maxChoicesPerPage": 3, "escapeForChallenge": "tomorrow", "approachPausesWorld": false, "presentingPausesWorld": true, "newStoryWriting": false},
+  "openImplementationDetail": "Native variant/profile must be measured by D; other groups use capability fixture, never guess as verified."
+}

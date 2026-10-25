@@ -1,0 +1,55 @@
+{
+  "id": "V7-A",
+  "sourceOfTruth": "docs/collaboration/operations-v7",
+  "contract": "card-shop-v7-candidate/1",
+  "baseCommit": "8e3313e9",
+  "sourceTreeSha256LF": "bcf0a04f40d5b0b7409284b095df3f2ca5b9b5885aadbac478b99befc88e8ba1",
+  "candidateDir": "deliverables/operations-v7/V7-A/",
+  "status": "ready-to-dispatch-not-implemented",
+  "files": [
+    {
+      "path": "共享资料/01-冻结玩法与默认参数.md",
+      "sha256": "2e961fe8f592c9bc98eb0d4f4b4b668c826cf180607a3d1fe40812da6b988b9e"
+    },
+    {
+      "path": "共享资料/02-共享接口与数据归属.md",
+      "sha256": "4af2fca6c4121f491802b9e4af60232752649bacbd75d0af68229260527eeb1c"
+    },
+    {
+      "path": "共享资料/03-实施顺序与整合验收.md",
+      "sha256": "402ba760214638edb12507636c157116f3f93f9238fed01215952c9902b8f52b"
+    },
+    {
+      "path": "共享资料/04-参考研究与工程风险.md",
+      "sha256": "8020de0b65e227a0e58dd4471676bf3193b8d66838e91657878eb5d37be65e8a"
+    },
+    {
+      "path": "共享资料/fixtures/协作样例.json",
+      "sha256": "80d3d93502a43ef222a29b5926df8de610a7f507546e69e0acae93e8874fa47a"
+    },
+    {
+      "path": "共享资料/交付模板.md",
+      "sha256": "e27e144e9c56c8924ef09fad87bef48d9059b2cc035b24d9ec58d7d0594db9de"
+    },
+    {
+      "path": "共享资料/任务登记.json",
+      "sha256": "d386f5fe7942f6a54065c0837eef8906af4477f1eff83130a476e424abf001cb"
+    },
+    {
+      "path": "共享资料/共享合同-v1.json",
+      "sha256": "de8d6b7ffdb57f46d7796933bcc3d22fb0f7e8dc6bbb82de4740f6f1f1fd9997"
+    },
+    {
+      "path": "共享资料/统一执行指令.md",
+      "sha256": "b52d073613a46c5a1ad663987eedf4a3636c3c049d9c3a11110ff1bf5133b0ef"
+    },
+    {
+      "path": "任务书.md",
+      "sha256": "312b4fa71ecabc176434796a9240dae3ffde606a6800551f125eedbd7e45ab66"
+    },
+    {
+      "path": "README-先读.md",
+      "sha256": "23eeeed7a4d588a723686a2a6bc8a8e02164e1d60902f799bab3a9cde246174f"
+    }
+  ]
+}

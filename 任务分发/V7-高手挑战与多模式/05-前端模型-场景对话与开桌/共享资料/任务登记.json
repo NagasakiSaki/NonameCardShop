@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-25",
+  "baseCommit": "8e3313e9",
+  "status": "documents-ready-gameplay-not-implemented",
+  "sourceOfTruth": "docs/collaboration/operations-v7",
+  "contract": "card-shop-v7-candidate/1",
+  "supersedesOverlappingScope": ["V6 pricing 100/200/300", "unrestricted initial product procurement", "external story list as primary dialogue", "two-format-only future combat scope"],
+  "preserves": ["V6 accepted code", "narrative VM and content pinning", "causal day-start saves", "original art", "vendor engine bytes", "private repository", "no EXE update"],
+  "integrationOwner": "primary agent after all candidate deliveries",
+  "tasks": [
+    {"id": "V7-A", "title": "经济与卡包", "capability": "standard-code", "folder": "01-标准模型-经济与卡包", "taskFile": "任务书/V7-A-经济与卡包.md", "status": "ready-to-dispatch", "candidateDir": "deliverables/operations-v7/V7-A/", "waitForOtherCandidates": false, "implementedInGame": false},
+    {"id": "V7-B", "title": "高手与约战", "capability": "standard-state-machine-with-primary-review", "folder": "02-标准模型-高手与约战", "taskFile": "任务书/V7-B-高手与约战.md", "status": "ready-to-dispatch", "candidateDir": "deliverables/operations-v7/V7-B/", "waitForOtherCandidates": false, "implementedInGame": false},
+    {"id": "V7-C", "title": "赛制与系列赛", "capability": "standard-code-with-rigorous-tests", "folder": "03-标准模型-赛制与系列赛", "taskFile": "任务书/V7-C-赛制与系列赛.md", "status": "ready-to-dispatch", "candidateDir": "deliverables/operations-v7/V7-C/", "waitForOtherCandidates": false, "implementedInGame": false},
+    {"id": "V7-D", "title": "无名杀适配", "capability": "high-quality-code-or-primary", "folder": "04-高质量模型-无名杀适配", "taskFile": "任务书/V7-D-无名杀适配.md", "status": "ready-to-dispatch", "candidateDir": "deliverables/operations-v7/V7-D/", "waitForOtherCandidates": false, "implementedInGame": false},
+    {"id": "V7-E", "title": "场景对话与前端", "capability": "frontend-with-browser-and-visual-review", "folder": "05-前端模型-场景对话与开桌", "taskFile": "任务书/V7-E-场景对话与前端.md", "status": "ready-to-dispatch", "candidateDir": "deliverables/operations-v7/V7-E/", "waitForOtherCandidates": false, "implementedInGame": false},
+    {"id": "V7-F", "title": "独立审计与验收", "capability": "independent-code-and-browser", "folder": "06-独立模型-审计与验收", "taskFile": "任务书/V7-F-独立审计与验收.md", "status": "ready-to-dispatch", "candidateDir": "deliverables/operations-v7/V7-F/", "waitForOtherCandidates": false, "implementedInGame": false}
+  ]
+}

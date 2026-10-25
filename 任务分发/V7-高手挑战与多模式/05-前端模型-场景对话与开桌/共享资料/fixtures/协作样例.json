@@ -1,0 +1,60 @@
+{
+  "fixtureVersion": 1,
+  "contract": "card-shop-v7-candidate/1",
+  "evidenceType": "fixture-domain",
+  "warning": "All IDs, seeds, sourceRefs, loanRefs and verification fields are test samples, not production authority or proof of a real match.",
+  "progression": {
+    "version": 1,
+    "policyVersion": "v7-stage-policy-1",
+    "revision": 4,
+    "firstDueDay": 3,
+    "activeStageId": "stage-01",
+    "unlockedProductIds": ["yijiang"],
+    "allies": [],
+    "receipts": {},
+    "stages": [{"stageId": "stage-01", "ordinal": 1, "productId": "refresh", "challengerId": "challenger-tomori", "personId": "specialist-tomori", "appearanceId": "bd-tomori", "displayName": "高松灯", "formatId": "bo3", "dueDay": 3, "status": "invited"}]
+  },
+  "invite": {
+    "inviteId": "fixture-invite-01", "visitId": "fixture-visit-day3", "challengeId": "fixture-challenge-01", "stageId": "stage-01",
+    "actorId": "specialist:tomori", "personId": "specialist-tomori", "appearanceId": "bd-tomori", "name": "高松灯", "kind": "stage-challenge", "source": "proactive", "productId": "refresh", "status": "offered", "day": 3,
+    "proof": {"worldId": "fixture-world", "branchId": "fixture-branch", "resourceRevision": 4},
+    "options": [{"optionId": "accept", "label": "现在来一局"}, {"optionId": "tomorrow", "label": "改天再战"}]
+  },
+  "dialogueOffer": {
+    "offerId": "fixture-offer-01", "source": "challenge", "actorId": "specialist:tomori", "personId": "specialist-tomori", "inviteId": "fixture-invite-01", "appearanceId": "bd-tomori", "speakerName": "高松灯", "text": "是否接受本次挑战？", "nameColor": "#C084FC", "roleLabel": "来访高手",
+    "proof": {"worldId": "fixture-world", "branchId": "fixture-branch", "resourceRevision": 4},
+    "choices": [{"optionId": "accept", "text": "现在来一局", "available": true}, {"optionId": "tomorrow", "text": "改天再战", "available": true}]
+  },
+  "capabilities": [
+    {"formatId": "bo3", "supported": true, "profileId": "fixture-two-seat", "hash": "fixture-only"},
+    {"formatId": "kof", "supported": true, "profileId": "fixture-kof", "hash": "fixture-only"},
+    {"formatId": "doudizhu-bo3", "supported": true, "profileId": "fixture-landlord", "hash": "fixture-only"},
+    {"formatId": "versus2v2-bo3", "supported": false, "reason": "协作样例：模式适配暂不可用", "profileId": null, "hash": null}
+  ],
+  "landlordFarmerPlayerPlan": {
+    "version": 1, "worldId": "fixture-world", "branchId": "fixture-branch", "matchId": "fixture-match", "gameId": "fixture-game-1", "roundId": "fixture-round-1", "formatId": "doudizhu-bo3", "engineMode": "doudizhu", "nativeVariant": "fixture-standard-not-probed", "profileId": "fixture-landlord", "seed": 24680, "reserveDigest": "fixture-reserve-digest", "playerTeamId": "mine", "controlledSeatId": "mine-main",
+    "seats": [
+      {"seatId": "enemy-landlord", "teamId": "enemy", "role": "landlord", "controller": "ai", "generalId": "re_caocao", "loanRef": "fixture-loan-1"},
+      {"seatId": "mine-main", "teamId": "mine", "role": "farmer", "controller": "human", "generalId": "guanyu", "sourceRef": "fixture-card-1"},
+      {"seatId": "mine-ally", "teamId": "mine", "role": "farmer", "controller": "ai", "generalId": "zhangfei", "sourceRef": "fixture-card-2"}
+    ]
+  },
+  "versusPlan": {
+    "version": 1, "worldId": "fixture-world", "branchId": "fixture-branch", "matchId": "fixture-match-2", "gameId": "fixture-game-v1", "roundId": "fixture-round-v1", "formatId": "versus2v2-bo3", "engineMode": "versus", "nativeVariant": "fixture-2v2-not-probed", "profileId": "fixture-versus", "seed": 13579, "reserveDigest": "fixture-reserve-digest-2", "playerTeamId": "mine", "controlledSeatId": "mine-main",
+    "seats": [
+      {"seatId": "mine-main", "teamId": "mine", "role": "teammate", "controller": "human", "generalId": "guanyu", "sourceRef": "fixture-card-1"},
+      {"seatId": "enemy-main", "teamId": "enemy", "role": "teammate", "controller": "ai", "generalId": "re_caocao", "loanRef": "fixture-loan-1"},
+      {"seatId": "mine-ally", "teamId": "mine", "role": "teammate", "controller": "ai", "generalId": "zhangfei", "sourceRef": "fixture-card-2"},
+      {"seatId": "enemy-ally", "teamId": "enemy", "role": "teammate", "controller": "ai", "generalId": "re_xiahoudun", "loanRef": "fixture-loan-2"}
+    ]
+  },
+  "trustedResultFixture": {"gameId": "fixture-game-1", "roundId": "fixture-round-1", "resultId": "fixture-result-1", "winningTeamId": "mine", "reserveDigest": "fixture-reserve-digest", "profileId": "fixture-landlord", "originVerified": true, "sourceVerified": true, "simulated": false, "completed": true},
+  "expectedFixtureOperations": [
+    {"case": "stage-lost", "expected": "no unlock, no ally, allow retry/tomorrow"},
+    {"case": "single-round-win", "expected": "update score only, no progression reward"},
+    {"case": "complete-trusted-series-win", "expected": "one stage receipt, one product unlock, one recruited ally"},
+    {"case": "repeated-result", "expected": "no duplicated score, reward, fee or clock advancement"},
+    {"case": "player-main-dead-ai-alive", "expected": "continue observing native round, no team loss yet"},
+    {"case": "unsupported-format", "expected": "disabled option with reason, old formats still playable"}
+  ]
+}
