@@ -173,15 +173,17 @@
     {
       "id": "CV6-14",
       "title": "存档身份与剧情迁移",
-      "status": "planned",
+      "status": "stage-integrated",
       "taskFile": "tasks/CV6-14-存档身份与剧情迁移.md",
       "outputDir": "deliverables/commercial-v6/CV6-14/",
       "dependsOn": [
         "CV6-11",
         "CV6-21"
       ],
-      "executor": null,
-      "acceptedCommit": null
+      "executor": "primary implementation and directed tests; not independent audit",
+      "acceptedCommit": "fbd753a4",
+      "acceptedStage": "narrative-s1-causal-save-and-pinned-content-recovery",
+      "remaining": "General card identity, engine/map migrations and migration diagnostics remain future work."
     },
     {
       "id": "CV6-15",
@@ -249,7 +251,7 @@
       "executor": "external candidate; primary integration and fixes",
       "acceptedCommit": "7b17c6ee",
       "acceptedStage": "story-bible-and-first-chapter-source-reviewed",
-      "remaining": "Later chapter dialogue and runtime content binding remain future work."
+      "remaining": "Later chapter dialogue, physical actor binding and story pacing refinement remain future work; first chapter contact presentation is integrated."
     },
     {
       "id": "CV6-20",
@@ -262,21 +264,23 @@
         "CV6-21"
       ],
       "executor": "external candidate; primary integration and fixes",
-      "acceptedCommit": "7b17c6ee",
-      "acceptedStage": "first-batch-authoring-and-fixture-preview-tested",
-      "remaining": "No real Host narrative runtime; chapters two through six not authored."
+      "acceptedCommit": "fbd753a4",
+      "acceptedStage": "first-chapter-and-three-sides-running-on-real-host",
+      "remaining": "Chapters two through six not authored; physical story NPC schedules and narrative playtest polish remain future work."
     },
     {
       "id": "CV6-21",
       "title": "剧情运行器与业务桥接",
-      "status": "planned",
+      "status": "stage-integrated",
       "taskFile": "tasks/CV6-21-剧情运行器与业务桥接.md",
       "outputDir": "deliverables/commercial-v6/CV6-21/",
       "dependsOn": [
         "CV6-19"
       ],
-      "executor": null,
-      "acceptedCommit": null
+      "executor": "primary implementation and directed tests; not independent audit",
+      "acceptedCommit": "fbd753a4",
+      "acceptedStage": "s1-host-runtime-registries-and-real-sale-loop",
+      "remaining": "Real qualification/tournament domain actions, physical story actors and actual travel service remain future work."
     },
     {
       "id": "CV6-22",
@@ -293,14 +297,16 @@
     {
       "id": "CV6-23",
       "title": "剧情校验预演与发布",
-      "status": "planned",
+      "status": "stage-integrated",
       "taskFile": "tasks/CV6-23-剧情校验预演与发布.md",
       "outputDir": "deliverables/commercial-v6/CV6-23/",
       "dependsOn": [
         "CV6-21"
       ],
-      "executor": null,
-      "acceptedCommit": null
+      "executor": "primary implementation and directed tests; not independent audit",
+      "acceptedCommit": "fbd753a4",
+      "acceptedStage": "shared-validation-hashed-pack-build-and-host-tests",
+      "remaining": "Editor preflight/simulation UI, extension build configuration and publishing/rollback management remain future work."
     },
     {
       "id": "CV6-24",
@@ -328,17 +334,21 @@
     {
       "id": "CV6-26",
       "title": "剧情演出与任务追踪界面",
-      "status": "planned",
+      "status": "stage-integrated",
       "taskFile": "tasks/CV6-26-剧情演出与任务追踪界面.md",
       "outputDir": "deliverables/commercial-v6/CV6-26/",
       "dependsOn": [
         "CV6-20",
         "CV6-21"
       ],
-      "executor": null,
-      "acceptedCommit": null
+      "executor": "primary implementation and directed tests; not independent audit",
+      "acceptedCommit": "fbd753a4",
+      "acceptedStage": "s1-portrait-dialogue-paging-pause-and-retry-ui",
+      "remaining": "History, full quest tracking, cinematics/audio and broader accessibility polish remain future work."
     }
   ],
   "lastReviewedAt": "2026-10-25",
-  "integrationReview": "docs/reviews/2026-10-25-cv6-first-deliveries.md"
+  "integrationReview": "docs/reviews/2026-10-25-cv6-first-deliveries.md",
+  "latestIntegrationReview": "docs/reviews/2026-10-25-首章剧情闭环接入.md",
+  "latestRuntimeCommit": "fbd753a4957283a40356b4a89bc6ce971e590c68"
 }

@@ -1,0 +1,81 @@
+{
+  "date": "2026-10-25",
+  "codeCommit": "fbd753a4957283a40356b4a89bc6ce971e590c68",
+  "authorship": "implementer-directed-tests; not an independent audit",
+  "content": {
+    "revision": "corner-shop-ch01-r2",
+    "hash": "678b7b40d916b9bd302c9c827d72dcc234b189833af4922b105dd8169f246179",
+    "retainedVersions": 2,
+    "chapters": 5,
+    "nodes": 60
+  },
+  "narrativeSuite": {
+    "startedAt": "2026-10-25T12:10:16.478Z",
+    "finishedAt": "2026-10-25T12:10:30.451Z",
+    "passed": true,
+    "results": [
+      {
+        "group": "narrative",
+        "file": "tests/narrative-runtime.mjs",
+        "passed": true,
+        "code": 0,
+        "seconds": 1.2
+      },
+      {
+        "group": "narrative",
+        "file": "tests/narrative-browser.mjs",
+        "passed": true,
+        "code": 0,
+        "seconds": 12.8
+      }
+    ]
+  },
+  "browser": {
+    "evidenceType": "browser-real",
+    "realSale": true,
+    "pausedDialogue": true,
+    "releasedWait": true,
+    "reload": true,
+    "dayRewind": true,
+    "viewports": 3,
+    "errors": []
+  },
+  "browserControlledFixtures": [
+    "lost response after real committed choice",
+    "imported isolated archive rebound to retained r1 with compatible IDs"
+  ],
+  "postSuiteBackendCheck": {
+    "command": "node tests/narrative-runtime.mjs",
+    "passed": true,
+    "reason": "Added distinct event-provenance keys, bounded confirmation/receipt parameters and negative player-proof assertion after the browser suite."
+  },
+  "directedRegressions": [
+    {
+      "file": "tests/shop-experience.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/customer-trash.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/day-starts.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/cv6-first-deliveries.mjs",
+      "passed": true
+    }
+  ],
+  "visualInspection": [
+    "story-line-1440x900.png",
+    "story-choices-mobile.png"
+  ],
+  "excluded": [
+    "player saves",
+    "isolated test archives",
+    "external deliveries",
+    "EXE builds",
+    "vendor engine changes"
+  ]
+}

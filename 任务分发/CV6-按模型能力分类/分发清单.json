@@ -1,7 +1,7 @@
 {
   "date": "2026-10-25",
   "sourceOfTruth": "docs/collaboration/commercial-v6",
-  "sourceTreeSha256LF": "d5678f952aafd7c197b80df2a98428697b2a8f362a033107abf27cabec1a917f",
+  "sourceTreeSha256LF": "97edae1d46cb82a1dbc17b419a20d540e1123f98e4b7e2708f73df2a6052a63a",
   "sourceFiles": [
     {
       "path": "docs/collaboration/commercial-v6/01-剧情总纲与具体线路.md",
@@ -32,6 +32,10 @@
       "sha256LF": "5bbdd88cbff86db471f5a0eb134e454a8479fc16fc5f0d8bf3810f8664f3fdef"
     },
     {
+      "path": "docs/collaboration/commercial-v6/08-首章运行合同与后续交接.md",
+      "sha256LF": "8d176f6a5830ea7d77ebc894439e8557e5ef753082b6ed3f373cb2d0af40c560"
+    },
+    {
       "path": "docs/collaboration/commercial-v6/DELIVERY模板.md",
       "sha256LF": "03fd0daacf193237898cf02817fc0fbc68bad9f4c227d781e39a8323fde77570"
     },
@@ -49,11 +53,11 @@
     },
     {
       "path": "docs/collaboration/commercial-v6/README.md",
-      "sha256LF": "8af5647a2167c8036a4488b6ef5bfc5eeca1319a73438aa25233a1f5529c5a4c"
+      "sha256LF": "39be5d2d4cc02945c91732ee8a3da19c9bfa96a1036aea45e11176887403f68e"
     },
     {
       "path": "docs/collaboration/commercial-v6/task-board.json",
-      "sha256LF": "0d17a3c9acd1c5c178b98b99bc150d063e1d856389955d2d2fd8f5732eaadc89"
+      "sha256LF": "8e3df70e05f7816b4922ab923a5a985a50196a21a0f92442a9058abe131a36a9"
     },
     {
       "path": "docs/collaboration/commercial-v6/tasks/CV6-01-成熟经营与剧情产品研究.md",
