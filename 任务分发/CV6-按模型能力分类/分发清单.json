@@ -1,0 +1,237 @@
+{
+  "date": "2026-10-25",
+  "sourceOfTruth": "docs/collaboration/commercial-v6",
+  "sourceTreeSha256LF": "bd1a1c3d68572cfe3f8aef9decb484886c84d23d99f07e5c1af6cfc4d886860b",
+  "sourceFiles": [
+    {
+      "path": "docs/collaboration/commercial-v6/01-剧情总纲与具体线路.md",
+      "sha256LF": "47be1eaffd53f77803b2e66fb0896671cc2d9dac6a0a3d3209f2f58868253c66"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/02-剧情编辑工具规格.md",
+      "sha256LF": "4ab9455153ff4686c7e166d62217cf926904c9ab41c6c68b8ad3dd7e9c8c12c9"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/03-剧情与店外世界接口.md",
+      "sha256LF": "e8cb4b96d54bf40c3e534315c78e364706e49136dc7e714f4fc14742cd16e4f7"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/04-分工排期与接入规程.md",
+      "sha256LF": "8c8ed05caf2a84268bffea2e52ba122513d1c8e8976c5508e370f8478eb3d94e"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/05-完整产品验收.md",
+      "sha256LF": "2f0e294537df3eabca7d57bca8a0672d6f02d7c86c3096d7ed979572fce5b1c1"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/06-MV5任务迁移与最新边界.md",
+      "sha256LF": "05e666244f78b14b1e838595129f173bcd3319b0be5fdc91023174397a7d58fc"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/DELIVERY模板.md",
+      "sha256LF": "03fd0daacf193237898cf02817fc0fbc68bad9f4c227d781e39a8323fde77570"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/examples/chapter01.sample.json",
+      "sha256LF": "85308e040a073e9501f70ecc7eec98e9b67b764fa2bf851c3c50eb87e45ec4f3"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/examples/README.md",
+      "sha256LF": "c8797bf18054856c3f983355536838e95063506938f1808544acb9a350057266"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/manifest模板.json",
+      "sha256LF": "70548b09a24df520b12d4c7e71e2b420ed704c284887fde9ffb571edd9f99f30"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/README.md",
+      "sha256LF": "ec85c558bf76ddbdc7de1b727d339969228fbb0169b21828ccbf9143c806b227"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/task-board.json",
+      "sha256LF": "109ba163e2e9bc7e8f719f973253b9268bee57a7e0ce9613594c384e437b94da"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/tasks/CV6-01-成熟经营与剧情产品研究.md",
+      "sha256LF": "26568f05aa6cd35960339ca4e1070a7dfc8a736b049883e6d120c5d799bcc53f"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/tasks/CV6-02-默认体验与首周实测.md",
+      "sha256LF": "7cc3959a2e845d7d8da77c7b6b9ee206c7b1dafe2c084bcbe9f5a81b474b85e9"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/tasks/CV6-03-经济仿真与调参.md",
+      "sha256LF": "594f26eeb8ff376111ce950be48dd1fef121a5156d4bf913d5c1652b191262f1"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/tasks/CV6-04-成长任务与内容配置.md",
+      "sha256LF": "acc5a04f481396a25ea3256ae633c692c458716cbd6b617eff192416e3f962c0"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/tasks/CV6-05-NPC客群与剧情角色.md",
+      "sha256LF": "3440e37517fb6144565f278c27bee00d660a1f407f62e0e3118871b784e641ff"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/tasks/CV6-06-经营赛事前端.md",
+      "sha256LF": "42e2e4eec26a35f9ba94ce2fa61579ceaaef315fc0c11c57df99b024006f25aa"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/tasks/CV6-07-赛制注册与扩展.md",
+      "sha256LF": "b4c6ed4bafde8350de0ace9e6aaef8ebc82d2c56e539083208d827f5cefbbbae"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/tasks/CV6-08-真实考核与训练.md",
+      "sha256LF": "d7c3fe4b54a38f9336f0dfdf02c6ddc08c33436bc7c4aa401a6e3d5a094facfb"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/tasks/CV6-09-赛事运营与结算.md",
+      "sha256LF": "e7abdb29da46964d444d98f9f0d37b6f4d2b45f0ea754eaa6a24ba141e8451a1"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/tasks/CV6-10-战绩市场与评分数据.md",
+      "sha256LF": "93ce9847b3dfb36a30a40db64122b15d3215199bbee755166ff2da4bca3985c2"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/tasks/CV6-11-无名杀耦合盘点.md",
+      "sha256LF": "0686d7a6c222846d167ef3a59eb31996f05ecdf4c387a5487dfabc7971c5d92e"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/tasks/CV6-12-引擎适配与能力探测.md",
+      "sha256LF": "89597fa189624f195462b37f2d508532cdd99f95043fea7b9e4484b8729ed9c5"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/tasks/CV6-13-内核更新与回滚工具.md",
+      "sha256LF": "8b6eb4635213cd3762f006c72d06b74953ce89a7084c99ffde9e00e85cfb366b"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/tasks/CV6-14-存档身份与剧情迁移.md",
+      "sha256LF": "e483dc046278f139395564e1e354f32d3e1272c98164168c5f08ea7bbd57947c"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/tasks/CV6-15-美术声音与可读性.md",
+      "sha256LF": "6a89077ed9d2fe234474cb2a5ce85b8c1d47b54b1239eb65bd090dde287d1a57"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/tasks/CV6-16-独立全项目审计.md",
+      "sha256LF": "41be8d7da1ddedf5f073465968d6899e1471d26be7a1710f5c5ad7ee3ffedc4c"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/tasks/CV6-17-沙盒集成与维护工具.md",
+      "sha256LF": "cd53edac5c8d9de07e67841be4bd90b0a7f6d556665e57f62eaaa16d0eaea843"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/tasks/CV6-18-完整发行与维护.md",
+      "sha256LF": "28f50312487c5344606597c6da4556e843dbcf3baef35ccfe52159cc0d18b9a1"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/tasks/CV6-19-主线角色与剧情总案.md",
+      "sha256LF": "cb2d8c4f00b512e974e3d910515db2da58b0c92613a2180fcbcd0a519ccf8aa9"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/tasks/CV6-20-首章台本与角色支线.md",
+      "sha256LF": "a48a95771e1199ca3ddb44cd34a0146096be38d79025ef28444e80e541e06d95"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/tasks/CV6-21-剧情运行器与业务桥接.md",
+      "sha256LF": "d73a265db3c09d797d65bed41ef4c78546c36cfa918d344cd6c8319b6659c8db"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/tasks/CV6-22-剧情编辑器.md",
+      "sha256LF": "678e626892b23e572af7d078d3c001ba5fef67edea37e76d4a76e7fa3b4b908f"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/tasks/CV6-23-剧情校验预演与发布.md",
+      "sha256LF": "3a4cc2ceba1ec278d546c3b4296e83970313ac76498c8bc6a0aad970063064c0"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/tasks/CV6-24-店外世界与地图注册.md",
+      "sha256LF": "9381ac9004ca4ca1c7dfb78a5ad61bd4f68795fc488526cb8990f08f0c009fbf"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/tasks/CV6-25-首个店外街区.md",
+      "sha256LF": "09f9b0352b525a37be7849c0d91db1d5c6b092ea4e6d2204a951c4b51dc33bec"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/tasks/CV6-26-剧情演出与任务追踪界面.md",
+      "sha256LF": "d7338e4f577623b4448edf308ed4750212f54b73511b4a34022d8d01dce0089f"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/模型能力分类.json",
+      "sha256LF": "71af85fe105ba652a1377f91a39d75c3cfd871e5da510f12faa5cc5e93efe407"
+    }
+  ],
+  "groups": [
+    {
+      "id": "fast",
+      "folder": "01-高速模型-研究写作与采样",
+      "title": "高速文本/执行模型",
+      "primaryTasks": [
+        "CV6-01",
+        "CV6-02",
+        "CV6-04",
+        "CV6-11",
+        "CV6-19",
+        "CV6-20"
+      ],
+      "implementationTasks": [],
+      "notes": "研究、写作、内容配置和固定流程采样；02需要浏览器/脚本工具，能力与智能档次分开。04只做配置/metric映射，校验工具交代码模型。"
+    },
+    {
+      "id": "standard",
+      "folder": "02-标准模型-代码前端与工具",
+      "title": "标准代码/前端模型",
+      "primaryTasks": [
+        "CV6-03",
+        "CV6-05",
+        "CV6-06",
+        "CV6-10",
+        "CV6-17",
+        "CV6-18",
+        "CV6-22",
+        "CV6-23",
+        "CV6-26"
+      ],
+      "implementationTasks": [
+        "CV6-07",
+        "CV6-08",
+        "CV6-09",
+        "CV6-12",
+        "CV6-13",
+        "CV6-14",
+        "CV6-21",
+        "CV6-24"
+      ],
+      "notes": "先按冻结接口做纯模块/完整候选/自测。高风险包只承接implementation子工序；合同裁决与独立验收由强推理角色承担。"
+    },
+    {
+      "id": "reasoning",
+      "folder": "03-强推理模型-合同风险与独立审查",
+      "title": "强推理审查模型（缺位时主模型负责小门槛）",
+      "primaryTasks": [
+        "CV6-07",
+        "CV6-08",
+        "CV6-09",
+        "CV6-12",
+        "CV6-13",
+        "CV6-14",
+        "CV6-16",
+        "CV6-21",
+        "CV6-24"
+      ],
+      "implementationTasks": [],
+      "notes": "07/08/09/12/13/14/21/24主要负责接口冻结、异常/持久边界审查和验收，不要求强模型代写整包；16是独立全项目审计。实现作者不能自称独立审查。"
+    },
+    {
+      "id": "vision",
+      "folder": "04-多模态模型-美术地图与视觉验收",
+      "title": "具备看图能力的模型",
+      "primaryTasks": [
+        "CV6-15",
+        "CV6-25"
+      ],
+      "implementationTasks": [],
+      "notes": "不必是最强推理模型，但必须能实际看截图/图源并使用素材工具；文本模型不能宣称完成视觉验收。代码接线仍由标准模型承接。"
+    }
+  ],
+  "status": "planning-only-not-assigned"
+}

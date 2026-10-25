@@ -1,0 +1,475 @@
+{
+  "date": "2026-10-25",
+  "sourceCommit": "aa7d155f4bf9f490c8ae750853d53ddfa6fa8d15",
+  "policy": "Historical instructions are archived, not current assignments. Markdown links were repaired and archive text line endings normalized to LF; original source hashes are retained. User working document remains unchanged.",
+  "files": [
+    {
+      "originalPath": "docs/collaboration/2026-10-24-修复清单与分工.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/2026-10-24-修复清单与分工.md",
+      "action": "move",
+      "originalSha256": "8845f9be8b833025e39345972f79a83e9119d27df10c465a1ad573030ebc3614",
+      "archiveSha256": "ae8999c0886d69bb25f953ce15028bd1415cbef03a245b3df5aa5d056f8171a6"
+    },
+    {
+      "originalPath": "docs/collaboration/2026-10-24-候选交付审查.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/2026-10-24-候选交付审查.md",
+      "action": "move",
+      "originalSha256": "3924b64e0e7744700659ae77d50b3c34e2d82e951e64793195ee0fba6a2688e6",
+      "archiveSha256": "3924b64e0e7744700659ae77d50b3c34e2d82e951e64793195ee0fba6a2688e6"
+    },
+    {
+      "originalPath": "docs/collaboration/2026-10-24-可玩性重构分工方案.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/2026-10-24-可玩性重构分工方案.md",
+      "action": "move",
+      "originalSha256": "eb1c9d3dc7057ff26741a1854cfa9c65aefc6a5a0b8cb4a6f7248b256be29eb1",
+      "archiveSha256": "94384e4d44ea27a9c34043708d0aaa5e5a3e86f01e64ed4b8fdc2c1c8a8cc954"
+    },
+    {
+      "originalPath": "docs/collaboration/2026-10-24-有限模型资源分工.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/2026-10-24-有限模型资源分工.md",
+      "action": "move",
+      "originalSha256": "713e70c7a922d231bc89602df9b6c7eedfe2b1521ffee56ab952f9d98a40a5cc",
+      "archiveSha256": "776dd9eef1ddf594728d3c5a2e13857b9be2983f7292c7561fc936818c584bc4"
+    },
+    {
+      "originalPath": "docs/collaboration/2026-10-24-窗口与牌桌新版分工.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/2026-10-24-窗口与牌桌新版分工.md",
+      "action": "move",
+      "originalSha256": "8ffdbca3560964e178c016bbd7c6e0376512a038bb428657c08ebe82f02086d6",
+      "archiveSha256": "8ffdbca3560964e178c016bbd7c6e0376512a038bb428657c08ebe82f02086d6"
+    },
+    {
+      "originalPath": "docs/collaboration/2026-10-24-第二轮候选复核.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/2026-10-24-第二轮候选复核.md",
+      "action": "move",
+      "originalSha256": "c6788cba23360b15847797a558f6c58f34041af3b190d5704ae43c984fc0ab74",
+      "archiveSha256": "c6788cba23360b15847797a558f6c58f34041af3b190d5704ae43c984fc0ab74"
+    },
+    {
+      "originalPath": "docs/collaboration/2026-10-24-第二轮分工与未完成任务.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/2026-10-24-第二轮分工与未完成任务.md",
+      "action": "move",
+      "originalSha256": "99345f49d29f33ca88fdf10e8ece8ff920cc8d010e184fddb129a2ec63f9617b",
+      "archiveSha256": "5d30aba511df57f3ac8fb3965d863210a83c77fbe9f08c0f420c3009079390f5"
+    },
+    {
+      "originalPath": "docs/collaboration/ART-02-正脸与摆臂修复交接.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/ART-02-正脸与摆臂修复交接.md",
+      "action": "move",
+      "originalSha256": "3c5b11f0c691d1f42aaedd79aaf7b29764ee852e153021192bfbaac4fd6dff35",
+      "archiveSha256": "3c5b11f0c691d1f42aaedd79aaf7b29764ee852e153021192bfbaac4fd6dff35"
+    },
+    {
+      "originalPath": "docs/collaboration/ART-03-原版立绘像素转换交接.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/ART-03-原版立绘像素转换交接.md",
+      "action": "move",
+      "originalSha256": "24dee0c87e0c48ee22108b73d1303238c5522ddb6a446a38709fce587eeda81b",
+      "archiveSha256": "24dee0c87e0c48ee22108b73d1303238c5522ddb6a446a38709fce587eeda81b"
+    },
+    {
+      "originalPath": "docs/collaboration/CORE2-后端与合并清单.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/CORE2-后端与合并清单.md",
+      "action": "move",
+      "originalSha256": "c207ac3d34c7f5d57a9715efe5e4b9b662945270baf9c8b6bbf9bc5c5ea59f77",
+      "archiveSha256": "c207ac3d34c7f5d57a9715efe5e4b9b662945270baf9c8b6bbf9bc5c5ea59f77"
+    },
+    {
+      "originalPath": "docs/collaboration/CORE4-权威规则与接入清单.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/CORE4-权威规则与接入清单.md",
+      "action": "move",
+      "originalSha256": "c08df04b0f05a7dc882b619e239ae3a46c8916824c43ab507a78d403db1d4b8f",
+      "archiveSha256": "d9cf8e3fd0ab0e67e135bf107bc6f3d144b9d5e964cb2b269351259d4f3cf4e5"
+    },
+    {
+      "originalPath": "docs/collaboration/FAST-01-03-验收登记.json",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/FAST-01-03-验收登记.json",
+      "action": "move",
+      "originalSha256": "d4fb49c9d6fb471a3bf75a670ff254588cf83ffd65add67f414346f75c7fb754",
+      "archiveSha256": "d4fb49c9d6fb471a3bf75a670ff254588cf83ffd65add67f414346f75c7fb754"
+    },
+    {
+      "originalPath": "docs/collaboration/FAST-01-项目盘点与审计辅助.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/FAST-01-项目盘点与审计辅助.md",
+      "action": "move",
+      "originalSha256": "d3f2767742012754680d108e3b42421ea8b792b2ac67e5468100cbe2ebebf772",
+      "archiveSha256": "d3f2767742012754680d108e3b42421ea8b792b2ac67e5468100cbe2ebebf772"
+    },
+    {
+      "originalPath": "docs/collaboration/FAST-02-人物参数与素材核对.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/FAST-02-人物参数与素材核对.md",
+      "action": "move",
+      "originalSha256": "c5f0cc40c0dbf2d9bf801947d1e0965b2da4fb882783a4fe8453d4520266abf4",
+      "archiveSha256": "c5f0cc40c0dbf2d9bf801947d1e0965b2da4fb882783a4fe8453d4520266abf4"
+    },
+    {
+      "originalPath": "docs/collaboration/FAST-03-设施状态素材.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/FAST-03-设施状态素材.md",
+      "action": "move",
+      "originalSha256": "acafcb332da9790b55a529769a07899676e477074865ae0e5fbe7eecf7d12c35",
+      "archiveSha256": "acafcb332da9790b55a529769a07899676e477074865ae0e5fbe7eecf7d12c35"
+    },
+    {
+      "originalPath": "docs/collaboration/FAST-04-性能采样与回归记录.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/FAST-04-性能采样与回归记录.md",
+      "action": "move",
+      "originalSha256": "f95e94adaab8dbfc18c3e9f8b74d210f7a0e448cb26bfa15ecf8745addec83cb",
+      "archiveSha256": "f95e94adaab8dbfc18c3e9f8b74d210f7a0e448cb26bfa15ecf8745addec83cb"
+    },
+    {
+      "originalPath": "docs/collaboration/FAST-04-验收登记.json",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/FAST-04-验收登记.json",
+      "action": "move",
+      "originalSha256": "48776d1445358fc387cc5a7a8fe188f2bf9476a9cd8cdc2f2cf3f4e89db16460",
+      "archiveSha256": "48776d1445358fc387cc5a7a8fe188f2bf9476a9cd8cdc2f2cf3f4e89db16460"
+    },
+    {
+      "originalPath": "docs/collaboration/FAST-05-玩家文案与界面盘点.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/FAST-05-玩家文案与界面盘点.md",
+      "action": "move",
+      "originalSha256": "ba7773d00878b2a65cf17f53e2692bb2f82b0a3d4fa2b1f5120ef1b69f544975",
+      "archiveSha256": "ba7773d00878b2a65cf17f53e2692bb2f82b0a3d4fa2b1f5120ef1b69f544975"
+    },
+    {
+      "originalPath": "docs/collaboration/FAST-06-器具独立窗口与分页.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/FAST-06-器具独立窗口与分页.md",
+      "action": "move",
+      "originalSha256": "9bf4f238147ac4b428c61bd4c6499e8b333fa32ef93275d57a49906ce0a30e94",
+      "archiveSha256": "9bf4f238147ac4b428c61bd4c6499e8b333fa32ef93275d57a49906ce0a30e94"
+    },
+    {
+      "originalPath": "docs/collaboration/FAST-07-牌桌与选将界面.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/FAST-07-牌桌与选将界面.md",
+      "action": "move",
+      "originalSha256": "02fbffe0c0de7e89271d47f63490f12ab49adb6e44e841d4c0012f41087d442f",
+      "archiveSha256": "02fbffe0c0de7e89271d47f63490f12ab49adb6e44e841d4c0012f41087d442f"
+    },
+    {
+      "originalPath": "docs/collaboration/FAST-08-价格与购买证据.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/FAST-08-价格与购买证据.md",
+      "action": "move",
+      "originalSha256": "df78e6b202a624b7e181bf0abd56e1b7bdd6f2b823b9598befad013fe6c0ae65",
+      "archiveSha256": "df78e6b202a624b7e181bf0abd56e1b7bdd6f2b823b9598befad013fe6c0ae65"
+    },
+    {
+      "originalPath": "docs/collaboration/FAST-09-全项目复核与定向回归.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/FAST-09-全项目复核与定向回归.md",
+      "action": "move",
+      "originalSha256": "d68fe156f27b33ddc6401c295c3de6404961f4ad56ede31b9907f6e7ba2c6f9d",
+      "archiveSha256": "d68fe156f27b33ddc6401c295c3de6404961f4ad56ede31b9907f6e7ba2c6f9d"
+    },
+    {
+      "originalPath": "docs/collaboration/HQ-AUDIT-全项目代码排查.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/HQ-AUDIT-全项目代码排查.md",
+      "action": "move",
+      "originalSha256": "a961d582b746b1db794a1490f452379ea21b8ceb140358c87ca0ba4a5b249d24",
+      "archiveSha256": "15fdb0094a9ce81d7a69cd725dd588e7147192ad2483d1865664c8589909d392"
+    },
+    {
+      "originalPath": "docs/collaboration/HQ-DEV-复杂前端与状态整合.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/HQ-DEV-复杂前端与状态整合.md",
+      "action": "move",
+      "originalSha256": "67aad135b54be3310a0f8d3e75558cc54be04bfac6b685a4eb02903b34de6480",
+      "archiveSha256": "d1fbc9e1c42aa87437b1a8f1104526af25140e23276f5a44273a9b8e8d627ecb"
+    },
+    {
+      "originalPath": "docs/collaboration/PLAY-A-人物与店面美术交接.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/PLAY-A-人物与店面美术交接.md",
+      "action": "move",
+      "originalSha256": "0b479240e17f9ce51ed655752a4544bb07e67640bb1ca21cb18b458c01185473",
+      "archiveSha256": "0b479240e17f9ce51ed655752a4544bb07e67640bb1ca21cb18b458c01185473"
+    },
+    {
+      "originalPath": "docs/collaboration/PLAY-B-卡面交易前端交接.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/PLAY-B-卡面交易前端交接.md",
+      "action": "move",
+      "originalSha256": "08046e2bf4045ec2a131935cde309abb2f35daaec0674b9557f9fe2a5c9592c5",
+      "archiveSha256": "08046e2bf4045ec2a131935cde309abb2f35daaec0674b9557f9fe2a5c9592c5"
+    },
+    {
+      "originalPath": "docs/collaboration/PLAY-C-经营反馈与前三日引导交接.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/PLAY-C-经营反馈与前三日引导交接.md",
+      "action": "move",
+      "originalSha256": "a65db53cc9a6ecd91d26fa02cace02c0845037ae909d864dddbfc3778266b744",
+      "archiveSha256": "a65db53cc9a6ecd91d26fa02cace02c0845037ae909d864dddbfc3778266b744"
+    },
+    {
+      "originalPath": "docs/collaboration/PLAY2-X-复杂模型交接.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/PLAY2-X-复杂模型交接.md",
+      "action": "move",
+      "originalSha256": "9dc83d5b857a8d3c40809f5aaf059a8460effa55c0c879f4a4eefdd0bacb7a2e",
+      "archiveSha256": "0d2e647eb9321d13de4f61f74f0b32bd6423f45112b71e9ef9be67663824588d"
+    },
+    {
+      "originalPath": "docs/collaboration/PLAY4-共享界面与接口草案.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/PLAY4-共享界面与接口草案.md",
+      "action": "move",
+      "originalSha256": "c7189a1108c256c5395cfff5e8ac31dbb1682b7b1856edd0b9c7df0f5da02bc5",
+      "archiveSha256": "c7189a1108c256c5395cfff5e8ac31dbb1682b7b1856edd0b9c7df0f5da02bc5"
+    },
+    {
+      "originalPath": "docs/collaboration/QA-01-素材与引用检查.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/QA-01-素材与引用检查.md",
+      "action": "move",
+      "originalSha256": "fc93d967a5288828057c68ec6afa294b1a5cb6b844831e6a6dbe7619e395fc9d",
+      "archiveSha256": "fc93d967a5288828057c68ec6afa294b1a5cb6b844831e6a6dbe7619e395fc9d"
+    },
+    {
+      "originalPath": "docs/collaboration/QA-02-界面体验巡检.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/QA-02-界面体验巡检.md",
+      "action": "move",
+      "originalSha256": "aee951ee2c5fd9e95345b262b25f8c618556c0ae8b8cf5bc4f34c0619d11bc8b",
+      "archiveSha256": "aee951ee2c5fd9e95345b262b25f8c618556c0ae8b8cf5bc4f34c0619d11bc8b"
+    },
+    {
+      "originalPath": "docs/collaboration/TOOL-01-人物工具封装.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/TOOL-01-人物工具封装.md",
+      "action": "move",
+      "originalSha256": "18233c55a2e6e145db07ab544124a01a0a0856c3160193c4bb24b756dbc4176c",
+      "archiveSha256": "18233c55a2e6e145db07ab544124a01a0a0856c3160193c4bb24b756dbc4176c"
+    },
+    {
+      "originalPath": "docs/collaboration/UI-01-卡面交易组件样稿.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/UI-01-卡面交易组件样稿.md",
+      "action": "move",
+      "originalSha256": "7b4b39d80792df05089acee22aa896c21f963aed26985daaf6193357f9718109",
+      "archiveSha256": "7b4b39d80792df05089acee22aa896c21f963aed26985daaf6193357f9718109"
+    },
+    {
+      "originalPath": "docs/collaboration/UX-02-经营反馈与动线设计交接.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/UX-02-经营反馈与动线设计交接.md",
+      "action": "move",
+      "originalSha256": "67b1f23d3c10583dcf6255bfbab3dd2a134916a9f91227afe3a496f2e768552c",
+      "archiveSha256": "67b1f23d3c10583dcf6255bfbab3dd2a134916a9f91227afe3a496f2e768552c"
+    },
+    {
+      "originalPath": "docs/collaboration/maturity-v5/01-成熟版玩法与参考.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/01-成熟版玩法与参考.md",
+      "action": "move",
+      "originalSha256": "8325f9d04f548ca33e6da8d99458c234b1ca1551c977dde9911fe42e8facdb8d",
+      "archiveSha256": "1ffd99e65d1d2ba2e515e49a53f4ca27503d20a2a5d5f671af89d076e558657f"
+    },
+    {
+      "originalPath": "docs/collaboration/maturity-v5/02-接口版本与内核升级设计.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/02-接口版本与内核升级设计.md",
+      "action": "move",
+      "originalSha256": "99d67c9b7a6f7ad8a8e52eca374ae5de124f5b3af6fda9cbc129582acf9080c6",
+      "archiveSha256": "99d67c9b7a6f7ad8a8e52eca374ae5de124f5b3af6fda9cbc129582acf9080c6"
+    },
+    {
+      "originalPath": "docs/collaboration/maturity-v5/03-协作边界与验收规范.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/03-协作边界与验收规范.md",
+      "action": "move",
+      "originalSha256": "07b0a35199f3288083251da5ee1e16878668110a2b1343b8df3a5509aa2a694f",
+      "archiveSha256": "07b0a35199f3288083251da5ee1e16878668110a2b1343b8df3a5509aa2a694f"
+    },
+    {
+      "originalPath": "docs/collaboration/maturity-v5/04-任务依赖与排期.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/04-任务依赖与排期.md",
+      "action": "move",
+      "originalSha256": "852fc518b394a53bf713c45bfb0c999f9c908a56605b6d91a039bb5ea09fdc41",
+      "archiveSha256": "852fc518b394a53bf713c45bfb0c999f9c908a56605b6d91a039bb5ea09fdc41"
+    },
+    {
+      "originalPath": "docs/collaboration/maturity-v5/05-验收场景矩阵.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/05-验收场景矩阵.md",
+      "action": "move",
+      "originalSha256": "3d2cce5359e9ac3b4b05275f2c24aebce11e4b8195dd9574d3419756e6cf1f7c",
+      "archiveSha256": "3d2cce5359e9ac3b4b05275f2c24aebce11e4b8195dd9574d3419756e6cf1f7c"
+    },
+    {
+      "originalPath": "docs/collaboration/maturity-v5/2026-10-25-规则增补.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/2026-10-25-规则增补.md",
+      "action": "move",
+      "originalSha256": "6fc672cd42372a1c6212d2853bc9b8bfcc5fece5c87164db5fbdc59102552151",
+      "archiveSha256": "bc70f9461bb6c3825b35a97fc60665a36ee5afd7b64d95fe3e73663518333ce5"
+    },
+    {
+      "originalPath": "docs/collaboration/maturity-v5/DELIVERY模板.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/DELIVERY模板.md",
+      "action": "move",
+      "originalSha256": "99575bd1ab92aa9d2489d0d1ed725845c8b154bf641c90f906aabd1982d33448",
+      "archiveSha256": "99575bd1ab92aa9d2489d0d1ed725845c8b154bf641c90f906aabd1982d33448"
+    },
+    {
+      "originalPath": "docs/collaboration/maturity-v5/README.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/README.md",
+      "action": "move",
+      "originalSha256": "ced35aad47f168409f4fe6e42a812168e5844562e94ca81af37d60d5b5c5bf40",
+      "archiveSha256": "748571565e1f52938889503dbd785ec5ed1ca995025c497a578f55db75700133"
+    },
+    {
+      "originalPath": "docs/collaboration/maturity-v5/manifest模板.json",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/manifest模板.json",
+      "action": "move",
+      "originalSha256": "d49b2117c63913b8f753b150c185d5a3ed451a754a8ffc4d521d1692b7420cd6",
+      "archiveSha256": "d49b2117c63913b8f753b150c185d5a3ed451a754a8ffc4d521d1692b7420cd6"
+    },
+    {
+      "originalPath": "docs/collaboration/maturity-v5/task-board.json",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/task-board.json",
+      "action": "move",
+      "originalSha256": "29a185a07ccfe2d03201a4f839fc506b8bf9d2dc07317704d11d59ec96ab7065",
+      "archiveSha256": "42f216032243ee196af1b10450d362d18edae42fe7ebfd3f6488922ca597e95d"
+    },
+    {
+      "originalPath": "docs/collaboration/maturity-v5/tasks/MV5-01-成熟经营项目研究.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/tasks/MV5-01-成熟经营项目研究.md",
+      "action": "move",
+      "originalSha256": "298de0e728b6dc2c432a1f00f1ef4f5fd65e62aae7f3011cefe62cc9283f56f0",
+      "archiveSha256": "024812a311dae37f5a9f3cc59af2efc88c9a3728672e0c7a55530e2899ada404"
+    },
+    {
+      "originalPath": "docs/collaboration/maturity-v5/tasks/MV5-02-前三日与首周实测.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/tasks/MV5-02-前三日与首周实测.md",
+      "action": "move",
+      "originalSha256": "a72ceba35706dbf531d0034bf3011cc16693512887613d33a9177af4fa65eba9",
+      "archiveSha256": "10e6f55bcba2b06d20e4ce4fc9a9b6238e30ce61c79d4ba903adc196840602b1"
+    },
+    {
+      "originalPath": "docs/collaboration/maturity-v5/tasks/MV5-03-经济仿真与调参.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/tasks/MV5-03-经济仿真与调参.md",
+      "action": "move",
+      "originalSha256": "6b2e9e58d75b41f42372d6a6949d8a88823d24e719ebaa157984d8276595ce66",
+      "archiveSha256": "bf5b1f46ac17e86fd70a10a1b1939489b2a1a0d7e4c5e668ebd9473b6fac1546"
+    },
+    {
+      "originalPath": "docs/collaboration/maturity-v5/tasks/MV5-04-成长考核与活动内容.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/tasks/MV5-04-成长考核与活动内容.md",
+      "action": "move",
+      "originalSha256": "0867cfcde3a82755bad734218b5e873e721d55f9a2ed2063a1fbdf0586ea0235",
+      "archiveSha256": "1b27735e1be25f13d2ddc273c71d01552e027a25676b4b24980ce9201d614042"
+    },
+    {
+      "originalPath": "docs/collaboration/maturity-v5/tasks/MV5-05-NPC行为与客群.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/tasks/MV5-05-NPC行为与客群.md",
+      "action": "move",
+      "originalSha256": "88d90ab0313ff18d96917ea6f49b88676391bce29229e94cf0f31eaaaf354ee0",
+      "archiveSha256": "ce4f4976d40ace245cac93195734b4236ea30fca2c32ba003bbe9e56c8dc6e73"
+    },
+    {
+      "originalPath": "docs/collaboration/maturity-v5/tasks/MV5-06-经营与赛事前端.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/tasks/MV5-06-经营与赛事前端.md",
+      "action": "move",
+      "originalSha256": "362dcf508594888ef8364c369308d3d9f815e660b568656d67a2771f84891050",
+      "archiveSha256": "9981e5b02d82e93a1831ecf2a42f146ac03c9e1cb3d3d6c4b4673230a7c781c2"
+    },
+    {
+      "originalPath": "docs/collaboration/maturity-v5/tasks/MV5-07-可扩展赛制注册表.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/tasks/MV5-07-可扩展赛制注册表.md",
+      "action": "move",
+      "originalSha256": "854b341c8a6a68bdebdbbb798a5361547f1d7e3998210245f6073ea9835f3fd3",
+      "archiveSha256": "777d3d0d39ca66c5cefa8a84cc6ac252462b83c15a750d2f3379ec29075e542a"
+    },
+    {
+      "originalPath": "docs/collaboration/maturity-v5/tasks/MV5-08-牌技考核与训练.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/tasks/MV5-08-牌技考核与训练.md",
+      "action": "move",
+      "originalSha256": "4262c32eb7e7048854e1797913a35e5bc4b5acc5fbc37e861ff4a9eb0dad1f5d",
+      "archiveSha256": "7d802df7a126d8d7f2b9005b23487449e9f8fca1d569278da67a982c3dd5edb0"
+    },
+    {
+      "originalPath": "docs/collaboration/maturity-v5/tasks/MV5-09-赛事运营与结算意图.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/tasks/MV5-09-赛事运营与结算意图.md",
+      "action": "move",
+      "originalSha256": "fb2e2901e7b18929c16733c546417641d862b0aff178675d68fcec409b568966",
+      "archiveSha256": "ebcc54549ba6261a2eb5531e7e6eb48e2698ba815750030bd8c9f562621260b0"
+    },
+    {
+      "originalPath": "docs/collaboration/maturity-v5/tasks/MV5-10-战绩市场与评分数据.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/tasks/MV5-10-战绩市场与评分数据.md",
+      "action": "move",
+      "originalSha256": "b54fede4df7a8b475fdc0d58da15b77ffa02040c3888f76a81269859a5fa17c4",
+      "archiveSha256": "d77034dfb5f99b3ef162c5f266895a88c0a4adb4349e608abea59ff43aa949f2"
+    },
+    {
+      "originalPath": "docs/collaboration/maturity-v5/tasks/MV5-11-内核耦合与上游差异清单.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/tasks/MV5-11-内核耦合与上游差异清单.md",
+      "action": "move",
+      "originalSha256": "20e2ad83bd4e715f6dcd416266dd5186de07c0ac06b7a8702d987dbf96e0a4dd",
+      "archiveSha256": "5082ff5bec7b1994682f59ef7552125a5272a351201be50e639f4faea75bdbad"
+    },
+    {
+      "originalPath": "docs/collaboration/maturity-v5/tasks/MV5-12-引擎适配与能力探测.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/tasks/MV5-12-引擎适配与能力探测.md",
+      "action": "move",
+      "originalSha256": "3b789ace98d9a763e9327687987df4a44b2476d60457e70e20cc96b44e4110d4",
+      "archiveSha256": "c11ba9247e4a93b9d1b3dacbe7dddcf81fa0414c49d52d16caff473741791879"
+    },
+    {
+      "originalPath": "docs/collaboration/maturity-v5/tasks/MV5-13-内核升级工具链.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/tasks/MV5-13-内核升级工具链.md",
+      "action": "move",
+      "originalSha256": "1d87b87be772846d64e83862725d42991317b5fd37b8a21072da41ee0a6e99af",
+      "archiveSha256": "c3b376a95f4fb15670f49085d773c978483d2061fb66c5e33152a255df4aa4e0"
+    },
+    {
+      "originalPath": "docs/collaboration/maturity-v5/tasks/MV5-14-身份映射与存档迁移.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/tasks/MV5-14-身份映射与存档迁移.md",
+      "action": "move",
+      "originalSha256": "cf9a9b266c2fcebc833ca3716ebf47e6b51a35a10734c2c72ca8ced9b91676e1",
+      "archiveSha256": "1e2d72dca47b40ad42875f553dac452829a3632c90e8d4a18846b41fc021f0fc"
+    },
+    {
+      "originalPath": "docs/collaboration/maturity-v5/tasks/MV5-15-美术可读性与反馈.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/tasks/MV5-15-美术可读性与反馈.md",
+      "action": "move",
+      "originalSha256": "c60649263ac89e8d1c72404bb743a4790300d1a9854cf302fed7691b07dca96c",
+      "archiveSha256": "83724992615f553d50ca57c601a7329b7aa1780cb3d7002b544d3bbb9a571f36"
+    },
+    {
+      "originalPath": "docs/collaboration/maturity-v5/tasks/MV5-16-独立全项目排查.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/tasks/MV5-16-独立全项目排查.md",
+      "action": "move",
+      "originalSha256": "edb732322fa52a2a2f9ae025d746b29bb2fbac79d52a4992f464e4303408283a",
+      "archiveSha256": "8c9bfdd27b0cc3a228b7efba028358e69cc371de7b571fa46e5c85cae92b88fa"
+    },
+    {
+      "originalPath": "docs/collaboration/maturity-v5/tasks/MV5-17-候选集成与维护工具.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/tasks/MV5-17-候选集成与维护工具.md",
+      "action": "move",
+      "originalSha256": "d24c570d0e5efbafef4594c985773c39a55f5a6a8b858d0b30d8ff9a174b7f2d",
+      "archiveSha256": "178b663bf6426af9070d8237c434fe75d89d121ab6366860e7f06eb0302c44f8"
+    },
+    {
+      "originalPath": "docs/collaboration/maturity-v5/tasks/MV5-18-桌面发布与维护预案.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/tasks/MV5-18-桌面发布与维护预案.md",
+      "action": "move",
+      "originalSha256": "dabc1cfe5c7706d2bb33796842077420d0df070ecccc760950293577bb82c983",
+      "archiveSha256": "6d76092a24bf7dd2bc7d1b982d354ea3f2a4e9f35232954b6bd7340a98769f3a"
+    },
+    {
+      "originalPath": "docs/协作任务分工与任务包.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/根目录旧分工/协作任务分工与任务包.md",
+      "action": "move",
+      "originalSha256": "89502e47490efc4656d2686404d3548acfcb2482a64e928fb7da9f0e043752c9",
+      "archiveSha256": "3460b2a792dd2c5dc2d85438115ea13567716fd7911f1c99329a1e4650bcf92e"
+    },
+    {
+      "originalPath": "docs/美术与前端独立开发交接文档.md",
+      "archivePath": "docs/archive/旧版分工/2026-10-25/根目录旧分工/美术与前端独立开发交接文档-已提交版本.md",
+      "action": "copy-HEAD-user-working-file-preserved",
+      "originalSha256": "14ea2c22c732f7f2202cf3f31e67756e4cc2822dc79cec34b577dbb53011f831",
+      "archiveSha256": "14ea2c22c732f7f2202cf3f31e67756e4cc2822dc79cec34b577dbb53011f831"
+    }
+  ],
+  "repairedMarkdownFiles": [
+    "README.md",
+    "docs/DEVELOPMENT.md",
+    "docs/audits/2026-10-24-FAST04性能验收与修复.md",
+    "docs/archive/旧版分工/2026-10-25/collaboration/2026-10-24-修复清单与分工.md",
+    "docs/archive/旧版分工/2026-10-25/collaboration/2026-10-24-可玩性重构分工方案.md",
+    "docs/archive/旧版分工/2026-10-25/collaboration/2026-10-24-有限模型资源分工.md",
+    "docs/archive/旧版分工/2026-10-25/collaboration/2026-10-24-第二轮分工与未完成任务.md",
+    "docs/archive/旧版分工/2026-10-25/collaboration/CORE4-权威规则与接入清单.md",
+    "docs/archive/旧版分工/2026-10-25/collaboration/HQ-AUDIT-全项目代码排查.md",
+    "docs/archive/旧版分工/2026-10-25/collaboration/HQ-DEV-复杂前端与状态整合.md",
+    "docs/archive/旧版分工/2026-10-25/collaboration/PLAY2-X-复杂模型交接.md",
+    "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/01-成熟版玩法与参考.md",
+    "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/2026-10-25-规则增补.md",
+    "docs/archive/旧版分工/2026-10-25/collaboration/maturity-v5/README.md",
+    "docs/人物精修与姓名服饰核对.md",
+    "docs/前端重建第一阶段与工具交付.md",
+    "docs/archive/旧版分工/2026-10-25/根目录旧分工/协作任务分工与任务包.md",
+    "docs/顾客访问与启动存档修复.md"
+  ]
+}

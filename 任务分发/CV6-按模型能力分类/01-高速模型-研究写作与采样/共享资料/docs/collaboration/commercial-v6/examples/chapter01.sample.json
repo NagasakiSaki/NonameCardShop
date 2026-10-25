@@ -1,0 +1,247 @@
+{
+  "documentStatus": "draft-example-not-runtime-content",
+  "schemaVersion": 0,
+  "campaignId": "corner_card_shop",
+  "contentRevision": "draft-2026-10-25",
+  "chapterId": "chapter_01",
+  "sceneId": "first_receipt",
+  "entryNodeId": "arrival",
+  "notes": [
+    "Proposed schema and semantic action/predicate IDs; not existing Host APIs.",
+    "No card, cash or qualification rewards.",
+    "CV6-21 must freeze schema and CV6-23 must validate before any import.",
+    "Named speakers require actual person/actor scheduling; this text does not spawn them."
+  ],
+  "characters": [
+    {
+      "personId": "person_lin_cheng",
+      "displayName": "林澄"
+    },
+    {
+      "personId": "person_xu_yao",
+      "displayName": "许遥"
+    },
+    {
+      "personId": "person_zhou_ye",
+      "displayName": "周野"
+    }
+  ],
+  "flags": [
+    {
+      "flagId": "visitPriority",
+      "type": "enum",
+      "values": [
+        "none",
+        "collection",
+        "practice",
+        "later"
+      ],
+      "default": "none",
+      "scope": "world"
+    }
+  ],
+  "text": {
+    "locale": "zh-CN",
+    "lines": {
+      "c01.arrival": "灯真的亮了。我还以为这块招牌只剩下照路的用处。",
+      "c01.question": "先做什么？",
+      "c01.stock": "先把货摆好。",
+      "c01.memory_option": "这家店以前是什么样？",
+      "c01.later": "今天先把店顾好，稍后再聊。",
+      "c01.shelf": "那我先不挡柜台。卖出去的第一包，记得给自己留张收据。",
+      "c01.memory": "比赛日坐不下人。后来大家各忙各的，椅子倒是一张没少。",
+      "c01.receipt": "收到第一张收据了。这笔生意，值得记下来。",
+      "c01.visitors": "你这里能打牌吗？我想知道，手里这些牌能打到哪一步。",
+      "c01.priority": "接下来先聊什么？",
+      "c01.collection_option": "先聊收藏。",
+      "c01.practice_option": "先看练习。",
+      "c01.collection": "我找的不是最贵的那张。有人记得它，就够了。",
+      "c01.practice": "别让我挑最贵的。先教我怎么把已有的牌用好。",
+      "c01.return": "先后没那么要紧。你答应了什么，明天还记得，就已经比空桌子好。",
+      "c01.effect_failed": "当前无法记录这项安排。可以稍后再谈，店铺仍能正常营业。"
+    }
+  },
+  "nodes": [
+    {
+      "nodeId": "arrival",
+      "type": "line",
+      "lineId": "c01.arrival",
+      "speakerId": "person_lin_cheng",
+      "next": "question"
+    },
+    {
+      "nodeId": "question",
+      "type": "choice",
+      "lineId": "c01.question",
+      "choices": [
+        {
+          "choiceId": "stock_first",
+          "lineId": "c01.stock",
+          "target": "shelf"
+        },
+        {
+          "choiceId": "ask_memory",
+          "lineId": "c01.memory_option",
+          "target": "memory"
+        },
+        {
+          "choiceId": "intro_later",
+          "lineId": "c01.later",
+          "target": "deferred_intro"
+        }
+      ]
+    },
+    {
+      "nodeId": "shelf",
+      "type": "line",
+      "lineId": "c01.shelf",
+      "speakerId": "person_lin_cheng",
+      "next": "wait_sale"
+    },
+    {
+      "nodeId": "memory",
+      "type": "line",
+      "lineId": "c01.memory",
+      "speakerId": "person_lin_cheng",
+      "next": "wait_sale"
+    },
+    {
+      "nodeId": "wait_sale",
+      "type": "wait",
+      "condition": {
+        "predicateId": "metric.atLeast",
+        "params": {
+          "metric": "sales",
+          "value": 1
+        },
+        "sourcePolicy": "actual-business"
+      },
+      "onSatisfied": "receipt",
+      "onDeferred": "deferred_sale",
+      "pausePolicy": "release-modal"
+    },
+    {
+      "nodeId": "receipt",
+      "type": "line",
+      "lineId": "c01.receipt",
+      "speakerId": "person_xu_yao",
+      "next": "visitors"
+    },
+    {
+      "nodeId": "visitors",
+      "type": "line",
+      "lineId": "c01.visitors",
+      "speakerId": "person_zhou_ye",
+      "next": "priority"
+    },
+    {
+      "nodeId": "priority",
+      "type": "choice",
+      "lineId": "c01.priority",
+      "choices": [
+        {
+          "choiceId": "collection_first",
+          "lineId": "c01.collection_option",
+          "target": "collection"
+        },
+        {
+          "choiceId": "practice_first",
+          "lineId": "c01.practice_option",
+          "target": "practice"
+        },
+        {
+          "choiceId": "contact_later",
+          "lineId": "c01.later",
+          "target": "save_later"
+        }
+      ]
+    },
+    {
+      "nodeId": "collection",
+      "type": "line",
+      "lineId": "c01.collection",
+      "speakerId": "person_xu_yao",
+      "next": "save_collection"
+    },
+    {
+      "nodeId": "practice",
+      "type": "line",
+      "lineId": "c01.practice",
+      "speakerId": "person_zhou_ye",
+      "next": "save_practice"
+    },
+    {
+      "nodeId": "save_collection",
+      "type": "action",
+      "effectId": "priority_collection",
+      "actionId": "narrative.setFlag",
+      "params": {
+        "flagId": "visitPriority",
+        "value": "collection"
+      },
+      "onSuccess": "return",
+      "onFailure": "effect_failed"
+    },
+    {
+      "nodeId": "save_practice",
+      "type": "action",
+      "effectId": "priority_practice",
+      "actionId": "narrative.setFlag",
+      "params": {
+        "flagId": "visitPriority",
+        "value": "practice"
+      },
+      "onSuccess": "return",
+      "onFailure": "effect_failed"
+    },
+    {
+      "nodeId": "save_later",
+      "type": "action",
+      "effectId": "priority_later",
+      "actionId": "narrative.setFlag",
+      "params": {
+        "flagId": "visitPriority",
+        "value": "later"
+      },
+      "onSuccess": "return",
+      "onFailure": "effect_failed"
+    },
+    {
+      "nodeId": "return",
+      "type": "line",
+      "lineId": "c01.return",
+      "speakerId": "person_lin_cheng",
+      "next": "complete"
+    },
+    {
+      "nodeId": "effect_failed",
+      "type": "line",
+      "lineId": "c01.effect_failed",
+      "speakerId": null,
+      "next": "deferred_choice"
+    },
+    {
+      "nodeId": "deferred_intro",
+      "type": "end",
+      "result": "deferred",
+      "resumeAt": "arrival"
+    },
+    {
+      "nodeId": "deferred_sale",
+      "type": "end",
+      "result": "deferred",
+      "resumeAt": "wait_sale"
+    },
+    {
+      "nodeId": "deferred_choice",
+      "type": "end",
+      "result": "deferred",
+      "resumeAt": "priority"
+    },
+    {
+      "nodeId": "complete",
+      "type": "end",
+      "result": "scene-completed"
+    }
+  ]
+}

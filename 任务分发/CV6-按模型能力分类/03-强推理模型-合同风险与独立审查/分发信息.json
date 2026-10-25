@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-25",
+  "group": "reasoning",
+  "role": "强推理审查模型（缺位时主模型负责小门槛）",
+  "primaryTasks": [
+    "CV6-07",
+    "CV6-08",
+    "CV6-09",
+    "CV6-12",
+    "CV6-13",
+    "CV6-14",
+    "CV6-16",
+    "CV6-21",
+    "CV6-24"
+  ],
+  "implementationTasks": [],
+  "sourceTreeSha256LF": "bd1a1c3d68572cfe3f8aef9decb484886c84d23d99f07e5c1af6cfc4d886860b",
+  "status": "not-assigned"
+}

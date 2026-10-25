@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-25",
+  "group": "fast",
+  "role": "高速文本/执行模型",
+  "primaryTasks": [
+    "CV6-01",
+    "CV6-02",
+    "CV6-04",
+    "CV6-11",
+    "CV6-19",
+    "CV6-20"
+  ],
+  "implementationTasks": [],
+  "sourceTreeSha256LF": "bd1a1c3d68572cfe3f8aef9decb484886c84d23d99f07e5c1af6cfc4d886860b",
+  "status": "not-assigned"
+}

@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-25",
+  "group": "vision",
+  "role": "具备看图能力的模型",
+  "primaryTasks": [
+    "CV6-15",
+    "CV6-25"
+  ],
+  "implementationTasks": [],
+  "sourceTreeSha256LF": "bd1a1c3d68572cfe3f8aef9decb484886c84d23d99f07e5c1af6cfc4d886860b",
+  "status": "not-assigned"
+}

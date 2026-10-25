@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "packageId": "CV6-XX",
+  "status": "candidate-only",
+  "baseCommit": null,
+  "contractRevision": null,
+  "contentSchemaVersion": null,
+  "contentRevision": null,
+  "engineProfiles": [],
+  "mapRevisions": [],
+  "dependsOn": [],
+  "inputs": [{"path": "replace/with/input", "sha256": null}],
+  "files": [{"candidate": "src/example.mjs", "target": "proposed/final/example.mjs", "kind": "source", "sha256": null}],
+  "patches": [],
+  "runCommands": [],
+  "evidence": [{"scenarioId": "N01", "type": "unverified", "result": "not-run", "path": null}],
+  "authorityEffects": [],
+  "newDependencies": [],
+  "assetSources": [],
+  "limitations": [],
+  "blockingDecisions": [],
+  "rollbackNotes": null
+}
