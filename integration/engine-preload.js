@@ -1,6 +1,7 @@
 // The vendor engine is unchanged. This file is served at its supported /preload.js hook.
 import browserReady from "/noname/init/browser.js";
 import { installCollectionDuel } from "/shop-integration/duel.js";
+import { prepareNativeRound } from "/shop-integration/modes/bootstrap.mjs";
 
 const params = new URLSearchParams(location.search);
 const embedded = params.get("packer") === "1";
@@ -9,10 +10,11 @@ const parentOrigin = params.get("parentOrigin");
 const general = params.get("general");
 const opponent = params.get("opponent");
 const collectionBattle = embedded && general && opponent;
+const nativeBattle = embedded && params.has('nativePlan');
 const backgroundBattle = collectionBattle && params.get('shopBackground') === '1';
 const notify = (type, data = {}) => {
   if (embedded && /^http:\/\/127\.0\.0\.1:\d+$/.test(parentOrigin || "")) {
-    parent.postMessage({ channel: "noname-packer", matchId, type, ...data }, parentOrigin);
+    parent.postMessage(nativeBattle?{...data,channel:'noname-shop-native',token:params.get('nativeToken'),gameId:matchId,type}:{ channel: "noname-packer", matchId, type, ...data }, parentOrigin);
   }
 };
 
@@ -39,11 +41,12 @@ async function seedConfig(prefix, values) {
 export default async function preload(context) {
   const { lib, game, ui, get, _status } = context;
   await browserReady(context);
-  lib.configprefix = collectionBattle ? (backgroundBattle?'packer_npc_match_v1_':"packer_match_v1_") : "packer_classic_v1_";
+  lib.configprefix = nativeBattle?'packer_native_round_v1_':collectionBattle ? (backgroundBattle?'packer_npc_match_v1_':"packer_match_v1_") : "packer_classic_v1_";
   if (!embedded) return;
   notify("loading", { text: "正在载入原版规则、武将和卡牌…" });
   window.addEventListener("error", (event) => { if (event.error) notify("error", { text: event.message }); });
   window.addEventListener("unhandledrejection", (event) => notify("error", { text: String(event.reason?.message || event.reason) }));
+  if(nativeBattle){try{await prepareNativeRound(context,params,notify,seedConfig);}catch(error){notify('error',{text:error.message});}return;}
   if (collectionBattle) {
     const config = {
       ...(backgroundBattle?{game_speed:'vvfast',animation:false,background_audio:false,volumn_audio:0}:{}),

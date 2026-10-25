@@ -2,6 +2,7 @@ import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {probeModeCapabilities} from './modes/capabilities.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const ENGINE_ROOT = path.resolve(HERE, "../vendor/noname");
@@ -73,6 +74,12 @@ export function createEngineServer() {
         await serveFile(req, res, path.join(HERE, "engine-preload.js"));
       } else if (route === "/shop-integration/duel.js") {
         await serveFile(req, res, path.join(HERE, "duel.js"));
+      } else if(route==='/shop-integration/modes/capabilities.json'){
+        res.setHeader('access-control-allow-origin','*');json(res,probeModeCapabilities({engineRoot:ENGINE_ROOT}));
+      } else if(route.startsWith('/shop-integration/modes/')){
+        const name=route.slice('/shop-integration/modes/'.length);
+        if(!['bootstrap.mjs','native-engine.mjs','round-plan.mjs','profiles.mjs','ally-control.mjs'].includes(name)){res.writeHead(404);res.end('not found');return;}
+        await serveFile(req,res,path.join(HERE,'modes',name));
       } else if (route === "/vue") {
         // The installed HTML contains bare module script URLs as well as its import map.
         await serveFile(req, res, localPath("node_modules/.pnpm/vue@3.5.28/node_modules/vue/dist/vue.esm-browser.js"));

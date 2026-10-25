@@ -43,6 +43,7 @@
     "story:validate": "node tools/story/validate.mjs",
     "story:build": "node tools/story/build.mjs",
     "test:narrative": "node tests/run.mjs narrative",
+    "test:native": "node tests/run.mjs nativeModes",
     "build:dir": "node dev/build.mjs dir",
     "build:exe": "node dev/build.mjs exe",
     "art:portraits:import": "node tools/character-kit/import-portraits.mjs",
