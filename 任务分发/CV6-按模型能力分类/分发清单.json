@@ -1,7 +1,7 @@
 {
   "date": "2026-10-25",
   "sourceOfTruth": "docs/collaboration/commercial-v6",
-  "sourceTreeSha256LF": "bd1a1c3d68572cfe3f8aef9decb484886c84d23d99f07e5c1af6cfc4d886860b",
+  "sourceTreeSha256LF": "3ac92a6e5510fc12779a673a990f5fa1be19959c4ba0abdc41669e7b2a5ed1d8",
   "sourceFiles": [
     {
       "path": "docs/collaboration/commercial-v6/01-剧情总纲与具体线路.md",
@@ -13,7 +13,7 @@
     },
     {
       "path": "docs/collaboration/commercial-v6/03-剧情与店外世界接口.md",
-      "sha256LF": "e8cb4b96d54bf40c3e534315c78e364706e49136dc7e714f4fc14742cd16e4f7"
+      "sha256LF": "380c54e6f1a13162cdff64c984fb766eb17eccc4565ae36d029e21f994e86454"
     },
     {
       "path": "docs/collaboration/commercial-v6/04-分工排期与接入规程.md",
@@ -26,6 +26,10 @@
     {
       "path": "docs/collaboration/commercial-v6/06-MV5任务迁移与最新边界.md",
       "sha256LF": "05e666244f78b14b1e838595129f173bcd3319b0be5fdc91023174397a7d58fc"
+    },
+    {
+      "path": "docs/collaboration/commercial-v6/07-主模型首批合同裁决.md",
+      "sha256LF": "5bbdd88cbff86db471f5a0eb134e454a8479fc16fc5f0d8bf3810f8664f3fdef"
     },
     {
       "path": "docs/collaboration/commercial-v6/DELIVERY模板.md",
@@ -45,7 +49,7 @@
     },
     {
       "path": "docs/collaboration/commercial-v6/README.md",
-      "sha256LF": "ec85c558bf76ddbdc7de1b727d339969228fbb0169b21828ccbf9143c806b227"
+      "sha256LF": "301308953a02fdcd98380e0cf17d54bd31c5cb81dd34dd140ea7665a2989eced"
     },
     {
       "path": "docs/collaboration/commercial-v6/task-board.json",
