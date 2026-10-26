@@ -11,10 +11,17 @@ export function backupPlan(){
   return {head:git(['rev-parse','HEAD']),files,bytes:files.reduce((n,f)=>n+fs.statSync(path.join(root,f)).size,0)};
 }
 const hash=async file=>{const h=crypto.createHash('sha256');for await(const chunk of fs.createReadStream(file))h.update(chunk);return h.digest('hex');};
-export async function backupStable(destination){
-  const plan=backupPlan(),target=path.resolve(destination);
-  if(target===root||target.startsWith(root+path.sep))throw Error('备份目录必须在工程外，避免递归备份。');
+export function backupDestination(destination){
+  let ancestor=path.resolve(destination);const tail=[];
+  while(!fs.existsSync(ancestor)){const parent=path.dirname(ancestor);if(parent===ancestor)throw Error('备份路径没有可访问的父目录。');tail.unshift(path.basename(ancestor));ancestor=parent;}
+  const target=path.join(fs.realpathSync(ancestor),...tail),normal=s=>process.platform==='win32'?s.toLowerCase():s;
+  const actualRoot=normal(fs.realpathSync(root)),actualTarget=normal(target);
+  if(actualTarget===actualRoot||actualTarget.startsWith(actualRoot+path.sep))throw Error('备份目录必须在工程外，避免递归备份。');
   if(fs.existsSync(target))throw Error('备份目录已存在，不覆盖已有备份。');
+  return target;
+}
+export async function backupStable(destination){
+  const target=backupDestination(destination),plan=backupPlan();
   fs.mkdirSync(target,{recursive:true});const manifest={version:1,head:plan.head,createdAt:new Date().toISOString(),privateLocalHistory:true,files:[],excluded:['ignored dependencies/caches/builds/candidate deliveries','vendor/noname/Home'],savePolicy:'Browser/Electron saves remain in their original profiles; this source snapshot does not copy or clear them.'};
   for(const file of plan.files){
     const source=path.join(root,file),copy=path.join(target,'project',file),digest=await hash(source);

@@ -216,20 +216,20 @@
       "report": "D:\\GameDev\\NonameCardShop\\test-results\\2026-10-26T17-53-44-426Z-6476"
     },
     {
-      "group": "backend",
+      "group": "structure",
       "file": "tests/project-structure.mjs",
       "passed": true,
       "code": 0,
-      "seconds": 2.5,
-      "report": "D:\\GameDev\\NonameCardShop\\test-results\\2026-10-26T17-53-44-426Z-6476"
+      "seconds": 2.6,
+      "report": "D:\\GameDev\\NonameCardShop\\test-results\\2026-10-26T18-11-27-155Z-25348"
     },
     {
-      "group": "backend",
+      "group": "structure",
       "file": "tests/catalog-cache.mjs",
       "passed": true,
       "code": 0,
       "seconds": 0.3,
-      "report": "D:\\GameDev\\NonameCardShop\\test-results\\2026-10-26T17-53-44-426Z-6476"
+      "report": "D:\\GameDev\\NonameCardShop\\test-results\\2026-10-26T18-11-27-155Z-25348"
     },
     {
       "group": "backend",
@@ -488,12 +488,12 @@
       "report": "D:\\GameDev\\NonameCardShop\\test-results\\2026-10-26T17-53-44-426Z-6476"
     },
     {
-      "group": "frontend",
+      "group": "structure",
       "file": "tests/storage-retry-browser.mjs",
       "passed": true,
       "code": 0,
       "seconds": 1.6,
-      "report": "D:\\GameDev\\NonameCardShop\\test-results\\2026-10-26T17-53-44-426Z-6476"
+      "report": "D:\\GameDev\\NonameCardShop\\test-results\\2026-10-26T18-11-27-155Z-25348"
     },
     {
       "group": "dev",
@@ -522,7 +522,7 @@
   ],
   "sourceAudit": {
     "files": 428,
-    "staticReferences": 1135,
+    "staticReferences": 1136,
     "missingImports": 0,
     "boundaryViolations": 0,
     "reviewCandidates": [
@@ -590,5 +590,11 @@
     "missingArt": 43,
     "activeThemes": 21,
     "retiredThemes": 22
+  },
+  "supplementaryStructure": {
+    "report": "D:\\GameDev\\NonameCardShop\\test-results\\2026-10-26T18-11-27-155Z-25348",
+    "passed": 3,
+    "total": 3,
+    "reason": "Canonical backup destination guard including Windows case aliases"
   }
 }
