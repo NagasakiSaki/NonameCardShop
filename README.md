@@ -87,4 +87,6 @@ npm run test:long-term
 
 结构整理与恢复说明见 [工程目录与维护边界](docs/architecture/工程目录与维护边界.md)。`npm run backup:stable` 在工程外创建带真实素材、SHA256 和 Git 历史的本机源码快照；浏览器存档需在游戏内另行导出。`npm run audit:structure` 只读检查引用、分层与缺图清单；`npm run test:all` 汇总完整当前回归并保留失败报告。旧测试规格与替代覆盖见 [归档说明](docs/archive/test-specs/README.md)。
 
+下一位维护模型使用 [全面优化接管包](docs/handoff/2026-10-27-全面优化接管包/README.md)：完整冻结规则、架构/事务边界、22 项任务、启动指令和核查快照。交接核查新增的“五张明亮场景素材未被桌面打包范围纳入”仍待修复，不能以现有 schema 校验通过代替资源闭包验收；本轮仅交付文档。
+
 [公开前的历史开发记录](docs/archive/README-公开前历史说明.md) 保留作开发过程参考；版本现状以本页、最新验收与代码为准。

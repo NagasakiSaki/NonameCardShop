@@ -1,0 +1,1088 @@
+{
+  "documentDate": "2026-10-27",
+  "timezone": "Asia/Shanghai",
+  "kind": "read-only-handoff-snapshot",
+  "implementationBaseline": {
+    "local": "07fa17bd4e0649330811ad5712b9b3b6ac20ef10",
+    "public": "38e855157fd794e805e86127e9fb2f1d1ac64d1a",
+    "tag": "stable-2026-10-27-audited",
+    "note": "Subsequent documentation-only commits do not change this implementation baseline."
+  },
+  "repository": "https://github.com/NagasakiSaki/NonameCardShop",
+  "root": "D:\\GameDev\\NonameCardShop",
+  "applicationVersion": "0.8.1",
+  "engineVersion": "1.11.6",
+  "sourceCounts": {
+    "cards": 2563,
+    "sourceThemes": 26,
+    "editionThemes": 16,
+    "editionEntries": 1381
+  },
+  "currentDefaults": {
+    "startingCash": 1200,
+    "tableFee": 10,
+    "supplierCreditLimit": 300,
+    "wageringEnabled": false,
+    "minutesPerSecond": 2,
+    "npcSimulation": true,
+    "npcSimulationSeconds": 18,
+    "maxNpcs": 12,
+    "maxArchives": 120,
+    "maxDays": 30,
+    "strengthPricing": {
+      "version": "strength-tiers-4",
+      "boxDiscount": 0.95,
+      "tiers": [
+        {
+          "id": "entry",
+          "label": "基础档",
+          "maxScore": 53,
+          "packWholesale": 150,
+          "packRetail": 210
+        },
+        {
+          "id": "standard",
+          "label": "进阶档",
+          "maxScore": 57,
+          "packWholesale": 255,
+          "packRetail": 360
+        },
+        {
+          "id": "expert",
+          "label": "旗舰档",
+          "maxScore": 10000,
+          "packWholesale": 360,
+          "packRetail": 510
+        }
+      ]
+    }
+  },
+  "scoring": {
+    "version": "ideal-two-round-1",
+    "aggregation": "arithmetic-mean-of-three",
+    "scoreCap": 200,
+    "baseHorizon": 2,
+    "scenario": {
+      "rounds": 2,
+      "initialHand": 4,
+      "normalDrawPerTurn": 2,
+      "outgoingDamageEventsPerRound": 1,
+      "outgoingDamagePerEvent": 1,
+      "incomingDamageEventsPerRound": 1,
+      "incomingDamagePerEvent": 1,
+      "opponentEquipmentAtStart": 1,
+      "equipmentReplenishment": 0,
+      "baselineHp": 4,
+      "hpToCards": 2,
+      "pointsPerCardEquivalent": 5,
+      "reliableHitBonus": 0.15,
+      "equipmentBreakBonus": 0.1,
+      "bonusCap": 0.5,
+      "perSkillCardEquivalentCap": 20
+    },
+    "profiles": {
+      "kof": {
+        "label": "KOF",
+        "enemies": 1,
+        "allies": 0,
+        "horizon": 2,
+        "incoming": 1,
+        "growth": 1
+      },
+      "landlord": {
+        "label": "斗地主·地主",
+        "enemies": 2,
+        "allies": 0,
+        "horizon": 2,
+        "incoming": 1,
+        "growth": 1
+      },
+      "farmer": {
+        "label": "斗地主·农民",
+        "enemies": 1,
+        "allies": 1,
+        "horizon": 2,
+        "incoming": 1,
+        "growth": 1
+      },
+      "versus2v2-bo3": {
+        "label": "2v2",
+        "enemies": 2,
+        "allies": 1,
+        "horizon": 2,
+        "incoming": 1,
+        "growth": 1
+      }
+    },
+    "anchors": {}
+  },
+  "longTerm": {
+    "version": "long-term-2",
+    "challenge": {
+      "version": "daily-chain-1",
+      "firstDay": 2,
+      "intervalDays": 1
+    },
+    "market": {
+      "allowedRarities": [
+        "SR",
+        "SSR"
+      ],
+      "rarityBasis": "printed"
+    },
+    "debt": {
+      "firstDay": 7,
+      "appearanceId": "bd-umiri",
+      "name": "海玲",
+      "productId": "sb",
+      "reductionRate": 0.3,
+      "minimumReduction": 500,
+      "maximumReduction": 5000,
+      "loan": {
+        "version": 1,
+        "principal": 20000,
+        "milestones": [
+          {
+            "id": "week-1",
+            "title": "让卡店站稳脚跟",
+            "dueDay": 7,
+            "amount": 5000
+          },
+          {
+            "id": "week-2",
+            "title": "建立稳定的经营收入",
+            "dueDay": 14,
+            "amount": 5000
+          },
+          {
+            "id": "week-3",
+            "title": "壮大店铺与牌友圈",
+            "dueDay": 21,
+            "amount": 5000
+          },
+          {
+            "id": "week-4",
+            "title": "还清开店借款",
+            "dueDay": 28,
+            "amount": 5000
+          }
+        ]
+      }
+    },
+    "futureSystems": {
+      "cardExchange": "planned",
+      "cardFinishes": "planned",
+      "outdoorWorld": "planned"
+    }
+  },
+  "assets": {
+    "version": "bright-anime-1",
+    "logicalTileSize": 16,
+    "tileFrameSize": 64,
+    "characters": 25,
+    "bands": [
+      "mygo",
+      "avemujica",
+      "yumemita",
+      "millsage",
+      "ikka-dumb-rock"
+    ],
+    "characterExample": {
+      "sheet": "/assets/frontend/characters/bd-anon.c32c4710da.png",
+      "portrait": "/assets/frontend/portraits/bd-anon.56c98768ed.png",
+      "avatar": "/assets/frontend/portraits/bd-anon.79cfda23ed.png",
+      "portraitSize": [
+        128,
+        224
+      ],
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "displayName": "千早愛音",
+      "role": "顾客",
+      "appearanceReference": "https://bang-dream.com/artist/mygo/chihaya-anon/",
+      "band": "mygo",
+      "portraitSource": {
+        "kind": "user-local-pack",
+        "sourceFile": "02_MyGO!!!!!_千早爱音_基础全身立绘.png",
+        "sha256": "dae884eca5905e6b191dc15258dac6d1a48b8510a2a926f499c65f9fe812d55e",
+        "method": "retouch",
+        "palette": 64
+      }
+    }
+  },
+  "confirmedNewFinding": {
+    "id": "C-01",
+    "status": "unfixed_documentation_only",
+    "manifestAssetReferences": 82,
+    "omittedAssets": [
+      {
+        "file": "assets/frontend-bright-anime/tiles/tileset.png",
+        "exists": true,
+        "included": false
+      },
+      {
+        "file": "assets/frontend-bright-anime/props/props.png",
+        "exists": true,
+        "included": false
+      },
+      {
+        "file": "assets/frontend-bright-anime/fx/glow.png",
+        "exists": true,
+        "included": false
+      },
+      {
+        "file": "assets/frontend-bright-anime/fx/shadow.png",
+        "exists": true,
+        "included": false
+      },
+      {
+        "file": "assets/frontend-bright-anime/fx/sun-shaft.png",
+        "exists": true,
+        "included": false
+      }
+    ],
+    "reproduce": "Recursively collect /assets/ strings in assets/frontend/manifest.json, then evaluate actual include/exclude globs from config/project-layout.cjs using the installed desktop minimatch.",
+    "impact": "Development source can load these files; future desktop packaging omits them."
+  },
+  "declarationDriftExamples": [
+    {
+      "file": "contracts/card-shop-host.d.ts",
+      "symbol": "MatchQueueEntry.mode",
+      "declared": "'bo3'|'kof'",
+      "runtime": "Automatic signup queue uses KOF; team formats use battle rooms."
+    },
+    {
+      "file": "contracts/operations-v7.d.ts",
+      "symbol": "DialogueOffer.kind",
+      "declared": "'talk'|'stage-challenge'",
+      "runtime": "Also debt-intro and debt-challenge; verify all actual offer DTO variants."
+    }
+  ],
+  "upstreamMissingArt": {
+    "cards": 2563,
+    "missingCharacterArt": [
+      {
+        "generalId": "pot_xiahouba",
+        "name": "势夏侯霸",
+        "themeId": "bingshi",
+        "image": "pot_xiahouba.jpg",
+        "active": true
+      },
+      {
+        "generalId": "pot_lvyi",
+        "name": "势吕壹",
+        "themeId": "bingshi",
+        "image": "pot_lvyi.jpg",
+        "active": true
+      },
+      {
+        "generalId": "pot_caoshuang",
+        "name": "势曹爽",
+        "themeId": "bingshi",
+        "image": "pot_caoshuang.jpg",
+        "active": true
+      },
+      {
+        "generalId": "pot_zhangren",
+        "name": "势张任",
+        "themeId": "bingshi",
+        "image": "pot_zhangren.jpg",
+        "active": true
+      },
+      {
+        "generalId": "pot_chenjiao",
+        "name": "势陈矫",
+        "themeId": "bingshi",
+        "image": "pot_chenjiao.jpg",
+        "active": true
+      },
+      {
+        "generalId": "clan_wuyi",
+        "name": "族吴懿",
+        "themeId": "clan",
+        "image": "clan_wuyi.jpg",
+        "active": true
+      },
+      {
+        "generalId": "clan_zhugeguo",
+        "name": "族诸葛果",
+        "themeId": "clan",
+        "image": "clan_zhugeguo.jpg",
+        "active": true
+      },
+      {
+        "generalId": "clan_zhugezhan",
+        "name": "族诸葛瞻",
+        "themeId": "clan",
+        "image": "clan_zhugezhan.jpg",
+        "active": true
+      },
+      {
+        "generalId": "dc_feiyi",
+        "name": "新杀费祎",
+        "themeId": "huicui",
+        "image": "dc_feiyi.jpg",
+        "active": true
+      },
+      {
+        "generalId": "key_umi2",
+        "name": "鹰原羽未",
+        "themeId": "key",
+        "image": "key_umi2.jpg",
+        "active": false
+      },
+      {
+        "generalId": "key_crow",
+        "name": "小空",
+        "themeId": "key",
+        "image": "key_crow.jpg",
+        "active": false
+      },
+      {
+        "generalId": "mb_dingshangwan",
+        "name": "手杀丁尚涴",
+        "themeId": "mobile",
+        "image": "mb_dingshangwan.jpg",
+        "active": true
+      },
+      {
+        "generalId": "mb_gaoxiang",
+        "name": "手杀高翔",
+        "themeId": "mobile",
+        "image": "mb_gaoxiang.jpg",
+        "active": true
+      },
+      {
+        "generalId": "mb_xiahoumao",
+        "name": "手杀夏侯楙",
+        "themeId": "mobile",
+        "image": "mb_xiahoumao.jpg",
+        "active": true
+      },
+      {
+        "generalId": "hanxuan",
+        "name": "韩玄",
+        "themeId": "mobile",
+        "image": "hanxuan.jpg",
+        "active": true
+      },
+      {
+        "generalId": "yao_yuanshu",
+        "name": "爻袁术",
+        "themeId": "newjiang",
+        "image": "yao_yuanshu.jpg",
+        "active": false
+      },
+      {
+        "generalId": "x_yao_yuanshu",
+        "name": "牢爻袁术",
+        "themeId": "old",
+        "image": "yao_yuanshu.jpg",
+        "active": false
+      },
+      {
+        "generalId": "ol_liufeng",
+        "name": "OL界刘封",
+        "themeId": "onlyOL",
+        "image": "ol_liufeng.jpg",
+        "active": false
+      },
+      {
+        "generalId": "ol_quancong",
+        "name": "OL界全琮",
+        "themeId": "onlyOL",
+        "image": "ol_quancong.jpg",
+        "active": false
+      },
+      {
+        "generalId": "ol_sunxiu",
+        "name": "OL界孙休",
+        "themeId": "onlyOL",
+        "image": "ol_sunxiu.jpg",
+        "active": false
+      },
+      {
+        "generalId": "ol_sb_zhaoyun",
+        "name": "OL谋赵云",
+        "themeId": "onlyOL",
+        "image": "ol_sb_zhaoyun.jpg",
+        "active": false
+      },
+      {
+        "generalId": "ol_sb_zhangfei",
+        "name": "OL谋张飞",
+        "themeId": "onlyOL",
+        "image": "ol_sb_zhangfei.jpg",
+        "active": false
+      },
+      {
+        "generalId": "ol_sb_jushou",
+        "name": "OL谋沮授",
+        "themeId": "onlyOL",
+        "image": "ol_sb_jushou.jpg",
+        "active": false
+      },
+      {
+        "generalId": "xin_zhangliang",
+        "name": "界张梁",
+        "themeId": "refresh",
+        "image": "xin_zhangliang.jpg",
+        "active": true
+      },
+      {
+        "generalId": "re_simalang",
+        "name": "界司马朗",
+        "themeId": "refresh",
+        "image": "re_simalang.jpg",
+        "active": true
+      },
+      {
+        "generalId": "sb_chentai",
+        "name": "谋陈泰",
+        "themeId": "sb",
+        "image": "sb_chentai.jpg",
+        "active": true
+      },
+      {
+        "generalId": "ol_fanyufeng",
+        "name": "OL樊氏",
+        "themeId": "sp",
+        "image": "ol_fanyufeng.jpg",
+        "active": true
+      },
+      {
+        "generalId": "ol_caizhenji",
+        "name": "OL蔡贞姬",
+        "themeId": "sp",
+        "image": "ol_caizhenji.jpg",
+        "active": true
+      },
+      {
+        "generalId": "ol_tw_zhangji",
+        "name": "张既",
+        "themeId": "sp",
+        "image": "ol_tw_zhangji.jpg",
+        "active": true
+      },
+      {
+        "generalId": "star_zhugejin",
+        "name": "星诸葛瑾",
+        "themeId": "sp2",
+        "image": "star_zhugejin.jpg",
+        "active": true
+      },
+      {
+        "generalId": "huan_fazheng",
+        "name": "幻法正",
+        "themeId": "tw",
+        "image": "huan_fazheng.jpg",
+        "active": true
+      },
+      {
+        "generalId": "cuizhi",
+        "name": "崔芷",
+        "themeId": "xianding",
+        "image": "cuizhi.jpg",
+        "active": false
+      },
+      {
+        "generalId": "luwenyi",
+        "name": "陆文漪",
+        "themeId": "xianding",
+        "image": "luwenyi.jpg",
+        "active": false
+      },
+      {
+        "generalId": "dc_sb_chengpu",
+        "name": "新杀谋程普",
+        "themeId": "xianding",
+        "image": "dc_sb_chengpu.jpg",
+        "active": false
+      },
+      {
+        "generalId": "liupanxi",
+        "name": "刘盼兮",
+        "themeId": "xianding",
+        "image": "liupanxi.jpg",
+        "active": false
+      },
+      {
+        "generalId": "dengwantang",
+        "name": "邓晚棠",
+        "themeId": "xianding",
+        "image": "dengwantang.jpg",
+        "active": false
+      },
+      {
+        "generalId": "dc_sb_zhonghui",
+        "name": "新杀谋钟会",
+        "themeId": "xianding",
+        "image": "dc_sb_zhonghui.jpg",
+        "active": false
+      },
+      {
+        "generalId": "dc_sb_yangfeng",
+        "name": "新杀谋杨奉",
+        "themeId": "xianding",
+        "image": "dc_sb_yangfeng.jpg",
+        "active": false
+      },
+      {
+        "generalId": "v_guanyinping",
+        "name": "威关银屏",
+        "themeId": "xianding",
+        "image": "v_guanyinping.jpg",
+        "active": false
+      },
+      {
+        "generalId": "dc_chenzhi",
+        "name": "新杀陈祗",
+        "themeId": "xianding",
+        "image": "dc_chenzhi.jpg",
+        "active": false
+      },
+      {
+        "generalId": "wu_lukang",
+        "name": "武陆抗",
+        "themeId": "xianding",
+        "image": "wu_lukang.jpg",
+        "active": false
+      },
+      {
+        "generalId": "zhangjian",
+        "name": "张臶",
+        "themeId": "xianding",
+        "image": "zhangjian.jpg",
+        "active": false
+      },
+      {
+        "generalId": "sunhe",
+        "name": "孙和",
+        "themeId": "xianding",
+        "image": "sunhe.jpg",
+        "active": false
+      }
+    ]
+  },
+  "apiInventory": {
+    "source": "modules/backend/runtime.mjs",
+    "note": "Static direct switch cases only; not an authoritative payload schema or an exhaustive inventory of delegated narrative/battle operations.",
+    "query": [
+      {
+        "name": "combat.rooms",
+        "line": 167
+      },
+      {
+        "name": "combat.room",
+        "line": 168
+      },
+      {
+        "name": "combat.formats",
+        "line": 169
+      },
+      {
+        "name": "combat.series",
+        "line": 170
+      },
+      {
+        "name": "combat.roundPlan",
+        "line": 171
+      },
+      {
+        "name": "dialogue.offer",
+        "line": 172
+      },
+      {
+        "name": "longTerm.status",
+        "line": 173
+      },
+      {
+        "name": "progression.status",
+        "line": 174
+      },
+      {
+        "name": "challenges.status",
+        "line": 174
+      },
+      {
+        "name": "allies.list",
+        "line": 174
+      },
+      {
+        "name": "narrative.available",
+        "line": 175
+      },
+      {
+        "name": "narrative.session",
+        "line": 176
+      },
+      {
+        "name": "shop.snapshot",
+        "line": 177
+      },
+      {
+        "name": "player.skins",
+        "line": 178
+      },
+      {
+        "name": "player.favorites",
+        "line": 179
+      },
+      {
+        "name": "player.starterGift",
+        "line": 180
+      },
+      {
+        "name": "room.settings",
+        "line": 181
+      },
+      {
+        "name": "combat.queue",
+        "line": 182
+      },
+      {
+        "name": "catalog.list",
+        "line": 183
+      },
+      {
+        "name": "catalog.detail",
+        "line": 184
+      },
+      {
+        "name": "inventory.list",
+        "line": 185
+      },
+      {
+        "name": "inventory.sealedSummary",
+        "line": 186
+      },
+      {
+        "name": "products.list",
+        "line": 187
+      },
+      {
+        "name": "products.contents",
+        "line": 188
+      },
+      {
+        "name": "products.quote",
+        "line": 189
+      },
+      {
+        "name": "market.quote",
+        "line": 189
+      },
+      {
+        "name": "supplier.basketQuote",
+        "line": 190
+      },
+      {
+        "name": "supplier.orders",
+        "line": 191
+      },
+      {
+        "name": "retail.list",
+        "line": 192
+      },
+      {
+        "name": "checkout.status",
+        "line": 193
+      },
+      {
+        "name": "opening.preview",
+        "line": 194
+      },
+      {
+        "name": "inventory.surplusPreview",
+        "line": 195
+      },
+      {
+        "name": "market.list",
+        "line": 196
+      },
+      {
+        "name": "cardStats.summary",
+        "line": 197
+      },
+      {
+        "name": "room.snapshot",
+        "line": 198
+      },
+      {
+        "name": "room.diagnostics",
+        "line": 199
+      },
+      {
+        "name": "combat.eligible",
+        "line": 200
+      },
+      {
+        "name": "combat.preview",
+        "line": 201
+      },
+      {
+        "name": "tasks.list",
+        "line": 202
+      },
+      {
+        "name": "ledger.live",
+        "line": 203
+      },
+      {
+        "name": "management.insights",
+        "line": 204
+      },
+      {
+        "name": "experience.guide",
+        "line": 205
+      },
+      {
+        "name": "experience.events",
+        "line": 206
+      },
+      {
+        "name": "experience.stories",
+        "line": 207
+      },
+      {
+        "name": "ledger.daily",
+        "line": 208
+      },
+      {
+        "name": "management.people",
+        "line": 209
+      },
+      {
+        "name": "management.upgrades",
+        "line": 210
+      },
+      {
+        "name": "management.orders",
+        "line": 211
+      },
+      {
+        "name": "config.list",
+        "line": 212
+      },
+      {
+        "name": "config.validate",
+        "line": 213
+      },
+      {
+        "name": "saves.list",
+        "line": 214
+      },
+      {
+        "name": "saves.days",
+        "line": 215
+      },
+      {
+        "name": "operations.get",
+        "line": 216
+      },
+      {
+        "name": "world.maps",
+        "line": 217
+      }
+    ],
+    "command": [
+      {
+        "name": "combat.room.create",
+        "line": 255
+      },
+      {
+        "name": "combat.room.prepare",
+        "line": 256
+      },
+      {
+        "name": "combat.room.cancel",
+        "line": 257
+      },
+      {
+        "name": "actors.interact",
+        "line": 258
+      },
+      {
+        "name": "challenges.offer",
+        "line": 258
+      },
+      {
+        "name": "dialogue.respond",
+        "line": 259
+      },
+      {
+        "name": "challenges.reply",
+        "line": 259
+      },
+      {
+        "name": "challenges.rematch",
+        "line": 260
+      },
+      {
+        "name": "challenges.defer",
+        "line": 261
+      },
+      {
+        "name": "allies.assign",
+        "line": 262
+      },
+      {
+        "name": "debt.repay",
+        "line": 263
+      },
+      {
+        "name": "combat.prepareSeries",
+        "line": 264
+      },
+      {
+        "name": "combat.selectRound",
+        "line": 265
+      },
+      {
+        "name": "combat.restartRound",
+        "line": 266
+      },
+      {
+        "name": "combat.abandon",
+        "line": 266
+      },
+      {
+        "name": "clock.setManualPause",
+        "line": 267
+      },
+      {
+        "name": "player.setSkin",
+        "line": 268
+      },
+      {
+        "name": "player.setFavorite",
+        "line": 269
+      },
+      {
+        "name": "room.setTableFee",
+        "line": 270
+      },
+      {
+        "name": "clock.setSpeed",
+        "line": 271
+      },
+      {
+        "name": "experience.setGuideSkipped",
+        "line": 272
+      },
+      {
+        "name": "experience.scheduleEvent",
+        "line": 273
+      },
+      {
+        "name": "business.open",
+        "line": 274
+      },
+      {
+        "name": "business.close",
+        "line": 275
+      },
+      {
+        "name": "business.nextDay",
+        "line": 281
+      },
+      {
+        "name": "supplier.placeBasketOrder",
+        "line": 293
+      },
+      {
+        "name": "supplier.placeOrder",
+        "line": 297
+      },
+      {
+        "name": "supplier.receive",
+        "line": 305
+      },
+      {
+        "name": "supplier.receiveAll",
+        "line": 306
+      },
+      {
+        "name": "boxes.unseal",
+        "line": 307
+      },
+      {
+        "name": "opening.execute",
+        "line": 308
+      },
+      {
+        "name": "inventory.setProtection",
+        "line": 309
+      },
+      {
+        "name": "inventory.discard",
+        "line": 310
+      },
+      {
+        "name": "inventory.recover",
+        "line": 311
+      },
+      {
+        "name": "retail.list",
+        "line": 312
+      },
+      {
+        "name": "retail.listAll",
+        "line": 313
+      },
+      {
+        "name": "retail.withdraw",
+        "line": 319
+      },
+      {
+        "name": "retail.setPrice",
+        "line": 320
+      },
+      {
+        "name": "market.listSurplus",
+        "line": 321
+      },
+      {
+        "name": "market.placeListing",
+        "line": 322
+      },
+      {
+        "name": "market.cancelListing",
+        "line": 323
+      },
+      {
+        "name": "market.acceptTrade",
+        "line": 324
+      },
+      {
+        "name": "room.reserve",
+        "line": 325
+      },
+      {
+        "name": "room.cancelReservation",
+        "line": 326
+      },
+      {
+        "name": "combat.joinQueue",
+        "line": 327
+      },
+      {
+        "name": "combat.leaveQueue",
+        "line": 328
+      },
+      {
+        "name": "combat.setWaitMode",
+        "line": 329
+      },
+      {
+        "name": "combat.register",
+        "line": 330
+      },
+      {
+        "name": "combat.start",
+        "line": 331
+      },
+      {
+        "name": "combat.continue",
+        "line": 331
+      },
+      {
+        "name": "combat.surrender",
+        "line": 332
+      },
+      {
+        "name": "combat.cancel",
+        "line": 333
+      },
+      {
+        "name": "room.cancelNpcMatch",
+        "line": 334
+      },
+      {
+        "name": "upgrades.purchase",
+        "line": 335
+      },
+      {
+        "name": "neighbors.act",
+        "line": 336
+      },
+      {
+        "name": "tasks.claim",
+        "line": 337
+      },
+      {
+        "name": "config.apply",
+        "line": 338
+      },
+      {
+        "name": "config.restoreDefault",
+        "line": 339
+      },
+      {
+        "name": "saves.create",
+        "line": 340
+      },
+      {
+        "name": "saves.export",
+        "line": 341
+      },
+      {
+        "name": "saves.loadDay",
+        "line": 342
+      },
+      {
+        "name": "saves.load",
+        "line": 342
+      },
+      {
+        "name": "saves.import",
+        "line": 342
+      },
+      {
+        "name": "world.changeRoom",
+        "line": 350
+      }
+    ]
+  },
+  "backupPointers": {
+    "original": "D:/GameDev/StableBackups/ORIGINAL-STABLE.txt",
+    "audited": "D:/GameDev/StableBackups/LATEST-AUDITED.txt"
+  },
+  "preservedOutsideScope": {
+    "file": "docs/美术与前端独立开发交接文档.md",
+    "sha256": "d29ac6445a12efefe559ded5dbdeaabdc2f2693b1fb370ebe146b42585407b97",
+    "note": "Pre-existing working-tree modification. Do not overwrite or include in this documentation change."
+  },
+  "verificationRecord": "docs/reviews/2026-10-27-工程彻查验证.json",
+  "notDoneInThisHandoff": [
+    "No gameplay/runtime/assets/types/build config modified",
+    "No new EXE built",
+    "No new engine downloaded",
+    "No actual player save accessed or cleared",
+    "No new audit deficiencies marked fixed"
+  ]
+}

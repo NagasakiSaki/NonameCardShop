@@ -1,0 +1,742 @@
+{
+  "version": 1,
+  "date": "2026-10-27",
+  "implementationBaseline": "07fa17bd",
+  "startOrder": [
+    "OPT-04",
+    "OPT-01",
+    "OPT-02",
+    "OPT-03"
+  ],
+  "rules": [
+    "This list is a proposed execution plan, not completed work.",
+    "Preserve current gameplay; do not treat historical examples as new authorization.",
+    "Advance independent tasks while recording specific external blockers.",
+    "Do not spawn or message other agents without user authorization.",
+    "Use isolated saves and preserve unrelated working-tree changes."
+  ],
+  "tasks": [
+    {
+      "id": "OPT-01",
+      "priority": "P0",
+      "phase": "A",
+      "title": "修复正式明亮素材打包闭包",
+      "status": "not-started",
+      "implementationScope": "authorized-technical-optimization-after-user-starts-handoff",
+      "dependencies": [
+        "OPT-04"
+      ],
+      "files": [
+        "config/project-layout.cjs",
+        "desktop/electron-builder.cjs",
+        "assets/frontend/manifest.json",
+        "tests/project-structure.mjs"
+      ],
+      "acceptance": [
+        "五个已存在的明亮素材被实际 runtime filter 纳入",
+        "递归校验正式 manifest 中的资产引用而非只检查手写目录",
+        "实际构建配置加载/合并通过；无需生成 EXE"
+      ],
+      "boundaries": [
+        "只调整必要运行范围，不把整个开发目录混入包",
+        "不通过复制/删除/改假路径掩盖遗漏"
+      ],
+      "delivery": [
+        "evidence",
+        "scoped-diff-and-rollback",
+        "relevant-validation",
+        "compatibility-and-uncovered-scope"
+      ]
+    },
+    {
+      "id": "OPT-02",
+      "priority": "P0",
+      "phase": "A",
+      "title": "校准现行 Host、队列、对话和选将契约",
+      "status": "not-started",
+      "implementationScope": "authorized-technical-optimization-after-user-starts-handoff",
+      "dependencies": [
+        "OPT-04"
+      ],
+      "files": [
+        "contracts/card-shop-host.d.ts",
+        "contracts/operations-v7.d.ts",
+        "contracts/native-round.d.ts",
+        "modules/backend/runtime.mjs",
+        "frontend/combat/round-select.mjs"
+      ],
+      "acceptance": [
+        "逐条登记实际 DTO 与声明差异",
+        "移除正式队列类型中不再成立的单将 BO3 能力声明，保留必要历史类型边界",
+        "债主/挑战对话、身份分、印刷与评分字段有准确说明和有效样本检查"
+      ],
+      "boundaries": [
+        "修声明不能复活旧玩法",
+        "不改变原命令信任边界或静默改持久字段"
+      ],
+      "delivery": [
+        "evidence",
+        "scoped-diff-and-rollback",
+        "relevant-validation",
+        "compatibility-and-uncovered-scope"
+      ]
+    },
+    {
+      "id": "OPT-03",
+      "priority": "P0",
+      "phase": "A",
+      "title": "建立当前架构与历史说明的明确入口",
+      "status": "not-started",
+      "implementationScope": "authorized-technical-optimization-after-user-starts-handoff",
+      "dependencies": [
+        "OPT-04",
+        "OPT-02"
+      ],
+      "files": [
+        "README.md",
+        "docs/architecture",
+        "docs/archive/test-specs/README.md"
+      ],
+      "acceptance": [
+        "明确已接入的三模式和场景对话",
+        "旧文档有日期、历史范围和现行链接",
+        "移除当前指导中对旧分页、旧角色规格和标准包的误导"
+      ],
+      "boundaries": [
+        "保留历史证据，不重写过去验证结果"
+      ],
+      "delivery": [
+        "evidence",
+        "scoped-diff-and-rollback",
+        "relevant-validation",
+        "compatibility-and-uncovered-scope"
+      ]
+    },
+    {
+      "id": "OPT-04",
+      "priority": "P0",
+      "phase": "A",
+      "title": "核对基线、任务外改动和可恢复快照",
+      "status": "not-started",
+      "implementationScope": "authorized-technical-optimization-after-user-starts-handoff",
+      "dependencies": [],
+      "files": [
+        "AGENTS.md",
+        "dev/backup.mjs",
+        "docs/reviews/2026-10-27-稳定备份与工程彻查.md"
+      ],
+      "acceptance": [
+        "记录实际 HEAD、稳定标签、工作树和已有修改",
+        "确认工程外快照及 SHA256/Git bundle；新目录恢复演练隔离运行",
+        "建立新的执行台账和阶段回滚点"
+      ],
+      "boundaries": [
+        "不覆盖原独立文档、候选交付或玩家档",
+        "恢复测试不改变正式端口/用户目录"
+      ],
+      "delivery": [
+        "evidence",
+        "scoped-diff-and-rollback",
+        "relevant-validation",
+        "compatibility-and-uncovered-scope"
+      ]
+    },
+    {
+      "id": "OPT-05",
+      "priority": "P1",
+      "phase": "B",
+      "title": "缺图和原生 404 分类与可信来源补全",
+      "status": "not-started",
+      "implementationScope": "authorized-technical-optimization-after-user-starts-handoff",
+      "dependencies": [
+        "OPT-01",
+        "OPT-04"
+      ],
+      "files": [
+        "docs/reviews/2026-10-27-缺失卡图清单.json",
+        "modules/backend/catalog.mjs",
+        "integration/engine-server.mjs",
+        "tools/audit/project.mjs"
+      ],
+      "acceptance": [
+        "43 项按具体武将版本登记来源和处理结果",
+        "自然对局缺失 URL 去重，区分阻断与可选资源",
+        "确认过来源的才补；未确认的保留占位并解释"
+      ],
+      "boundaries": [
+        "不冒用别将、不删卡消错、不改变 vendor 基线来伪造完整性"
+      ],
+      "delivery": [
+        "evidence",
+        "scoped-diff-and-rollback",
+        "relevant-validation",
+        "compatibility-and-uncovered-scope"
+      ]
+    },
+    {
+      "id": "OPT-06",
+      "priority": "P1",
+      "phase": "B",
+      "title": "完善加载、结果未知和技术中断体验",
+      "status": "not-started",
+      "implementationScope": "authorized-technical-optimization-after-user-starts-handoff",
+      "dependencies": [
+        "OPT-02",
+        "OPT-04"
+      ],
+      "files": [
+        "frontend-next/services/operations.mjs",
+        "frontend/combat/v7-room.mjs",
+        "integration/host-battle.mjs",
+        "integration/modes/mount.mjs"
+      ],
+      "acceptance": [
+        "丢失响应沿用原操作号恢复，订单/拆包/上架不重复",
+        "引擎超时/不兼容与真实失败分开",
+        "取消/释放卡锁/费用和玩家提示明确并有证据"
+      ],
+      "boundaries": [
+        "不伪造比赛结果",
+        "不吞异常把按钮改成假成功"
+      ],
+      "delivery": [
+        "evidence",
+        "scoped-diff-and-rollback",
+        "relevant-validation",
+        "compatibility-and-uncovered-scope"
+      ]
+    },
+    {
+      "id": "OPT-07",
+      "priority": "P1",
+      "phase": "B",
+      "title": "收束窗口、对话、导航和异步生命周期",
+      "status": "not-started",
+      "implementationScope": "authorized-technical-optimization-after-user-starts-handoff",
+      "dependencies": [
+        "OPT-02",
+        "OPT-04"
+      ],
+      "files": [
+        "frontend/ui/window-manager.mjs",
+        "frontend/v7-dialogue.mjs",
+        "frontend/app-shell.mjs",
+        "frontend-next/screens"
+      ],
+      "acceptance": [
+        "重复打开关闭、加载中销毁、切档和迟到回复不泄漏",
+        "仅顶层窗口可交互，返回保留草稿/滚动",
+        "主动对话打断导航有明确取消或安全恢复行为"
+      ],
+      "boundaries": [
+        "每个模块只释放自己的租约",
+        "不在旧分支或失效目标上自动提交交易"
+      ],
+      "delivery": [
+        "evidence",
+        "scoped-diff-and-rollback",
+        "relevant-validation",
+        "compatibility-and-uncovered-scope"
+      ]
+    },
+    {
+      "id": "OPT-08",
+      "priority": "P1",
+      "phase": "B",
+      "title": "存档故障、原子性与并发恢复",
+      "status": "not-started",
+      "implementationScope": "authorized-technical-optimization-after-user-starts-handoff",
+      "dependencies": [
+        "OPT-04"
+      ],
+      "files": [
+        "modules/backend/storage.mjs",
+        "modules/backend/indexed-db.mjs",
+        "modules/backend/profiles.mjs",
+        "modules/backend/runtime.mjs"
+      ],
+      "acceptance": [
+        "打开失败、阻塞晚到、打开时销毁、多标签冲突有明确结果",
+        "写失败和损坏导入不覆盖健康世界",
+        "日初回退同步恢复库存、钱包、收据、随机结果和剧情依赖"
+      ],
+      "boundaries": [
+        "仅隔离档",
+        "不清空整个 origin 或合并两类债务"
+      ],
+      "delivery": [
+        "evidence",
+        "scoped-diff-and-rollback",
+        "relevant-validation",
+        "compatibility-and-uncovered-scope"
+      ]
+    },
+    {
+      "id": "OPT-09",
+      "priority": "P1",
+      "phase": "B",
+      "title": "三模式与原生桥关键边界回归",
+      "status": "not-started",
+      "implementationScope": "authorized-technical-optimization-after-user-starts-handoff",
+      "dependencies": [
+        "OPT-02",
+        "OPT-04"
+      ],
+      "files": [
+        "modules/combat-formats",
+        "modules/backend/operations-v7.mjs",
+        "modules/backend/battle-rooms.mjs",
+        "integration/modes"
+      ],
+      "acceptance": [
+        "斗地主换边、2v2主将死亡/队友存活、KOF新将摸四张成立",
+        "阵容池公开和锁定、接管边界、重复/冲突赛果与中断正确",
+        "玩家整场一次三十分钟、真实通关和费用按来源结算"
+      ],
+      "boundaries": [
+        "不恢复单将 BO3",
+        "不将受控夹具称自然对局或全技能认证"
+      ],
+      "delivery": [
+        "evidence",
+        "scoped-diff-and-rollback",
+        "relevant-validation",
+        "compatibility-and-uncovered-scope"
+      ]
+    },
+    {
+      "id": "OPT-10",
+      "priority": "P1",
+      "phase": "B",
+      "title": "NPC 完整营业和比赛闭环",
+      "status": "not-started",
+      "implementationScope": "authorized-technical-optimization-after-user-starts-handoff",
+      "dependencies": [
+        "OPT-04"
+      ],
+      "files": [
+        "modules/backend/visits.mjs",
+        "modules/backend/trading.mjs",
+        "modules/backend/trash.mjs",
+        "modules/backend/npc-tables.mjs",
+        "modules/backend/customer-demand.mjs"
+      ],
+      "acceptance": [
+        "普通顾客进出、收银、拆包、弃牌/拾牌和离桌能完成",
+        "钱包/预算/预留桌费和卡归属守恒",
+        "关店、跨日、存读档后无永久队列或重复副本"
+      ],
+      "boundaries": [
+        "保留剧情债主/高手例外",
+        "NPC 模拟不暂停或跳三十分钟"
+      ],
+      "delivery": [
+        "evidence",
+        "scoped-diff-and-rollback",
+        "relevant-validation",
+        "compatibility-and-uncovered-scope"
+      ]
+    },
+    {
+      "id": "OPT-11",
+      "priority": "P1",
+      "phase": "B",
+      "title": "交易与选将易用性及适配",
+      "status": "not-started",
+      "implementationScope": "authorized-technical-optimization-after-user-starts-handoff",
+      "dependencies": [
+        "OPT-02",
+        "OPT-04"
+      ],
+      "files": [
+        "frontend-next/components/stations",
+        "frontend-next/components/workspace",
+        "frontend/combat/pack-selector.mjs",
+        "frontend-next/screens/card-detail.mjs"
+      ],
+      "acceptance": [
+        "跨包选择、模式降序、确认可达和选后不跳顶",
+        "卡面右键/触摸详情、xN、原图和技能/源码可用",
+        "长短屏、窄屏、搜索焦点和底层窗口无覆盖"
+      ],
+      "boundaries": [
+        "保留用户要求的滚动",
+        "不在展示层自行判断实物可交易或参赛"
+      ],
+      "delivery": [
+        "evidence",
+        "scoped-diff-and-rollback",
+        "relevant-validation",
+        "compatibility-and-uncovered-scope"
+      ]
+    },
+    {
+      "id": "OPT-12",
+      "priority": "P2",
+      "phase": "C",
+      "title": "建立可复现性能和长期运行样本",
+      "status": "not-started",
+      "implementationScope": "authorized-technical-optimization-after-user-starts-handoff",
+      "dependencies": [
+        "OPT-04"
+      ],
+      "files": [
+        "dev/perf-trade.mjs",
+        "modules/backend/catalog-cache.mjs",
+        "frontend/world",
+        "tests"
+      ],
+      "acceptance": [
+        "普通与压力场景区分，记录运行时/视口/卡量/人数/素材版本",
+        "记录启动、查询、首屏、输入长任务、监听器和写盘",
+        "保留前后对照，不把隔离初始化当全页/FPS"
+      ],
+      "boundaries": [
+        "不操作实际玩家数据",
+        "不先选框架或缓存方案再补理由"
+      ],
+      "delivery": [
+        "evidence",
+        "scoped-diff-and-rollback",
+        "relevant-validation",
+        "compatibility-and-uncovered-scope"
+      ]
+    },
+    {
+      "id": "OPT-13",
+      "priority": "P2",
+      "phase": "C",
+      "title": "按样本优化查询和前端绘制",
+      "status": "not-started",
+      "implementationScope": "authorized-technical-optimization-after-user-starts-handoff",
+      "dependencies": [
+        "OPT-11",
+        "OPT-12"
+      ],
+      "files": [
+        "frontend-next/screens/workspace.mjs",
+        "frontend-next/components/workspace",
+        "frontend/world/actor-view.mjs",
+        "frontend/world/lighting-view.mjs",
+        "modules/backend/views.mjs"
+      ],
+      "acceptance": [
+        "改善已测热点且输出前后样本",
+        "筛选/连续滚动/选择/定价/焦点不串卡",
+        "缓存有归属、容量、失效和销毁策略"
+      ],
+      "boundaries": [
+        "不靠延后扣款、跳过存储或校验提速",
+        "虚拟化不改变连续滚动体验"
+      ],
+      "delivery": [
+        "evidence",
+        "scoped-diff-and-rollback",
+        "relevant-validation",
+        "compatibility-and-uncovered-scope"
+      ]
+    },
+    {
+      "id": "OPT-14",
+      "priority": "P2",
+      "phase": "C",
+      "title": "有边界地拆分大模块",
+      "status": "not-started",
+      "implementationScope": "authorized-technical-optimization-after-user-starts-handoff",
+      "dependencies": [
+        "OPT-02",
+        "OPT-06",
+        "OPT-07",
+        "OPT-08"
+      ],
+      "files": [
+        "modules/backend/runtime.mjs",
+        "frontend/app-shell.mjs",
+        "modules/backend/world.mjs"
+      ],
+      "acceptance": [
+        "先交依赖图和切分方案，再按可回滚单元实施",
+        "原 facade、单事务、通知顺序和保存语义保持",
+        "无前后端倒置依赖和第二套经济/存储"
+      ],
+      "boundaries": [
+        "不为行数漂亮一次重写所有模块",
+        "不把 reducer 变成嵌套异步 Host 调用"
+      ],
+      "delivery": [
+        "evidence",
+        "scoped-diff-and-rollback",
+        "relevant-validation",
+        "compatibility-and-uncovered-scope"
+      ]
+    },
+    {
+      "id": "OPT-15",
+      "priority": "P2",
+      "phase": "C",
+      "title": "理清策略配置和版本失效来源",
+      "status": "not-started",
+      "implementationScope": "authorized-technical-optimization-after-user-starts-handoff",
+      "dependencies": [
+        "OPT-02",
+        "OPT-04"
+      ],
+      "files": [
+        "data/backend-rules.json",
+        "data/strength-modes.json",
+        "data/print-editions.json",
+        "data/v7/economy-policy.json",
+        "modules/backend/v7-policy.mjs",
+        "modules/backend/supply-pricing.mjs"
+      ],
+      "acceptance": [
+        "明确现行、历史读取与兼容默认来源",
+        "版本/fingerprint/配置编辑/缓存失效关系可追溯",
+        "旧订单封装和印刷不被评分或配置重建改写"
+      ],
+      "boundaries": [
+        "不更改冻结价格、出率或三模式平均公式",
+        "显式用户配置不被初始化静默覆盖"
+      ],
+      "delivery": [
+        "evidence",
+        "scoped-diff-and-rollback",
+        "relevant-validation",
+        "compatibility-and-uncovered-scope"
+      ]
+    },
+    {
+      "id": "OPT-16",
+      "priority": "P2",
+      "phase": "C",
+      "title": "素材流水线可复现与跨机器操作",
+      "status": "not-started",
+      "implementationScope": "authorized-technical-optimization-after-user-starts-handoff",
+      "dependencies": [
+        "OPT-01",
+        "OPT-04"
+      ],
+      "files": [
+        "tools/character-kit",
+        "tools/portrait-kit",
+        "tools/frontend-art-bright",
+        "data/character-portraits.json",
+        "assets/frontend/manifest.json"
+      ],
+      "acceptance": [
+        "源图只读，输入路径可配置，依赖和参数有记录",
+        "同版输出 hash 可验证，精修覆盖不被全量重建洗掉",
+        "25人、方向帧、逻辑16/图像64及立绘/头像规格一致"
+      ],
+      "boundaries": [
+        "不要求模型必须会直接画图",
+        "不重新引入通用角色或擅自换设计风格"
+      ],
+      "delivery": [
+        "evidence",
+        "scoped-diff-and-rollback",
+        "relevant-validation",
+        "compatibility-and-uncovered-scope"
+      ]
+    },
+    {
+      "id": "OPT-17",
+      "priority": "P2",
+      "phase": "C",
+      "title": "上游升级兼容管线与报告原型",
+      "status": "not-started",
+      "implementationScope": "authorized-technical-optimization-after-user-starts-handoff",
+      "dependencies": [
+        "OPT-02",
+        "OPT-09"
+      ],
+      "files": [
+        "integration/modes/profiles.mjs",
+        "integration/modes/capabilities.mjs",
+        "tools/import-engine.mjs",
+        "tools/verify-engine.mjs",
+        "data/engine-manifest.json"
+      ],
+      "acceptance": [
+        "独立暂存、新旧差异和能力报告",
+        "版本/hash/profile需审查，资格与自然/受控证据分开",
+        "旧 cardKey/技能/印刷/存档依赖影响单列"
+      ],
+      "boundaries": [
+        "不自动下载切换内核",
+        "不自动信任新 hash 或把玩家真实局换成模拟"
+      ],
+      "delivery": [
+        "evidence",
+        "scoped-diff-and-rollback",
+        "relevant-validation",
+        "compatibility-and-uncovered-scope"
+      ]
+    },
+    {
+      "id": "OPT-18",
+      "priority": "P2",
+      "phase": "C",
+      "title": "测试目录、标签和成本治理",
+      "status": "not-started",
+      "implementationScope": "authorized-technical-optimization-after-user-starts-handoff",
+      "dependencies": [
+        "OPT-02",
+        "OPT-04"
+      ],
+      "files": [
+        "tests/groups.mjs",
+        "tests/run.mjs",
+        "docs/archive/test-specs/README.md"
+      ],
+      "acceptance": [
+        "每个当前任务能定位到有效检查；默认去重",
+        "过时规格有理由和替代覆盖，不粉饰失败",
+        "阶段只跑必要范围，完整/复跑/模拟/原生来源可追溯"
+      ],
+      "boundaries": [
+        "不以降低断言或删除失败项制造通过",
+        "不反复跑通过长链路消耗时间"
+      ],
+      "delivery": [
+        "evidence",
+        "scoped-diff-and-rollback",
+        "relevant-validation",
+        "compatibility-and-uncovered-scope"
+      ]
+    },
+    {
+      "id": "OPT-19",
+      "priority": "P3",
+      "phase": "D",
+      "title": "长线经营与打牌考核设计",
+      "status": "not-started",
+      "implementationScope": "planning-only-unless-user-authorizes-feature",
+      "dependencies": [
+        "OPT-09",
+        "OPT-10",
+        "OPT-12"
+      ],
+      "files": [
+        "docs/proposals",
+        "modules/progression",
+        "modules/backend/experience.mjs"
+      ],
+      "acceptance": [
+        "交付可讨论的日常/阶段/长期目标和成长反馈方案",
+        "经营与打牌相互产生可理解价值",
+        "设计平衡实验、风险与配置入口"
+      ],
+      "boundaries": [
+        "默认只设计，不重设当前债务/奖励/难度/经济"
+      ],
+      "delivery": [
+        "evidence",
+        "scoped-diff-and-rollback",
+        "relevant-validation",
+        "compatibility-and-uncovered-scope"
+      ]
+    },
+    {
+      "id": "OPT-20",
+      "priority": "P3",
+      "phase": "D",
+      "title": "剧情编辑和预演工具方案",
+      "status": "not-started",
+      "implementationScope": "planning-only-unless-user-authorizes-feature",
+      "dependencies": [
+        "OPT-02",
+        "OPT-07",
+        "OPT-08"
+      ],
+      "files": [
+        "tools/story",
+        "modules/narrative",
+        "content/story",
+        "data/story"
+      ],
+      "acceptance": [
+        "源编辑、schema校验、预演、修订编译与隔离试玩闭环设计",
+        "真实业务条件和效果回执可解释",
+        "旧 hash/旧会话恢复政策明确"
+      ],
+      "boundaries": [
+        "不写整套新剧情",
+        "不编辑已发布包或玩家档冒充工具完成"
+      ],
+      "delivery": [
+        "evidence",
+        "scoped-diff-and-rollback",
+        "relevant-validation",
+        "compatibility-and-uncovered-scope"
+      ]
+    },
+    {
+      "id": "OPT-21",
+      "priority": "P3",
+      "phase": "D",
+      "title": "新赛制与户外世界扩展接口",
+      "status": "not-started",
+      "implementationScope": "planning-only-unless-user-authorizes-feature",
+      "dependencies": [
+        "OPT-02",
+        "OPT-09",
+        "OPT-17"
+      ],
+      "files": [
+        "modules/combat-formats",
+        "modules/narrative",
+        "modules/backend/navigation.mjs",
+        "contracts"
+      ],
+      "acceptance": [
+        "声明赛制/旅行能力、输入输出和保存语义",
+        "离店经营、时间、进入离开钩子及无能力降级有设计",
+        "提供最小接口样例和迁移考虑"
+      ],
+      "boundaries": [
+        "不以空地图/按钮或直接传坐标宣称实装",
+        "不擅自加入第四种正式模式"
+      ],
+      "delivery": [
+        "evidence",
+        "scoped-diff-and-rollback",
+        "relevant-validation",
+        "compatibility-and-uncovered-scope"
+      ]
+    },
+    {
+      "id": "OPT-22",
+      "priority": "P3",
+      "phase": "D",
+      "title": "工艺、炒卡和商业发布准备",
+      "status": "not-started",
+      "implementationScope": "planning-only-unless-user-authorizes-feature",
+      "dependencies": [
+        "OPT-15",
+        "OPT-16"
+      ],
+      "files": [
+        "modules/backend/card-finishes.mjs",
+        "docs/proposals",
+        "THIRD_PARTY_NOTICES.md",
+        "config/project-layout.cjs"
+      ],
+      "acceptance": [
+        "区分战力、发行、工艺与市场价格身份",
+        "设计事件/接口和防套利、存档、透明信息要求",
+        "整理素材来源、许可状态和真实发布验收清单"
+      ],
+      "boundaries": [
+        "默认仅方案，不开放下注、付费发行或交易所",
+        "代码 GPL 不被当成所有素材可商用证明"
+      ],
+      "delivery": [
+        "evidence",
+        "scoped-diff-and-rollback",
+        "relevant-validation",
+        "compatibility-and-uncovered-scope"
+      ]
+    }
+  ]
+}
