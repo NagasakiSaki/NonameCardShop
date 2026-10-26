@@ -9,6 +9,7 @@
 /vendor/noname/Home/
 # Machine state, private saves, test results and caches.
 /.workbuddy-ai/
+/.workbuddy/
 /.local/
 /test-results/
 /playwright-report/

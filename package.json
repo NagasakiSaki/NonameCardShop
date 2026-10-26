@@ -20,6 +20,7 @@
     "setup": "node dev/setup.mjs",
     "doctor": "node dev/doctor.mjs",
     "publish:private": "node dev/publish-private.mjs",
+    "publish:public": "node dev/publish.mjs --public",
     "dev": "node --watch --watch-preserve-output dev/launch.mjs",
     "dev:open": "node --watch --watch-preserve-output dev/launch.mjs --open",
     "dev:desktop": "node dev/desktop.mjs",

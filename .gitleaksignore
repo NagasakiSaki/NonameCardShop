@@ -1,0 +1,9 @@
+# Reviewed false positives in the filtered publication history only.
+# Quest reward keys, Key-pack skill identifiers and noname serialization TYPE_KEY constants.
+# Exact commit/path/rule/line fingerprints; do not replace with path-wide exclusions.
+3427b95795c5384e417aa16dde12931a5ab0d7b9:data/skills/key.json:generic-api-key:1
+3427b95795c5384e417aa16dde12931a5ab0d7b9:vendor/noname/noname/get/index.js:generic-api-key:18
+3427b95795c5384e417aa16dde12931a5ab0d7b9:vendor/noname/src/noname/get/index.js:generic-api-key:17
+37662eb4bdac58b39e6affdd993af684e93fdfe0:docs/proposals/progression-v6/quests.json:generic-api-key:111
+37662eb4bdac58b39e6affdd993af684e93fdfe0:docs/proposals/progression-v6/quests.json:generic-api-key:160
+37662eb4bdac58b39e6affdd993af684e93fdfe0:docs/proposals/progression-v6/quests.json:generic-api-key:57
