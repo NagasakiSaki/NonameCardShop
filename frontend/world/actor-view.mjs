@@ -41,7 +41,7 @@ export class ActorView {
       seen.add(actor.actorId);
       let entry = this.sprites.get(actor.actorId);
       if (!entry) {
-        const shadow = this.scene.add.image(actor.x, actor.y, "shadow").setDepth(actor.y - 1).setAlpha(0.55);
+        const shadow = this.scene.add.image(actor.x, actor.y, "shadow").setDisplaySize(21,8).setDepth(actor.y - 1).setAlpha(0.38);
         const sprite = this.scene.add.sprite(actor.x, actor.y, "char-" + appearance, 1);
         const meta=this.scene.characterMeta[appearance];
         sprite.setOrigin(meta.anchorPx[0]/meta.frameWidth,meta.anchorPx[1]/meta.frameHeight).setScale(meta.displayScale||1);
@@ -52,8 +52,8 @@ export class ActorView {
           entry.label = this.scene.add.text(actor.x, actor.y - 34, actor.label || '', {
             fontFamily: '"Microsoft YaHei", sans-serif',
             fontSize: "7px",resolution:4,align:'center',lineSpacing:1,
-            color: "#f6e6b8",
-            backgroundColor: "rgba(20,15,26,0.72)",
+            color: "#594431",
+            backgroundColor: "rgba(255,250,237,0.94)",
             padding: { left: 3, right: 3, top: 1, bottom: 1 },
           }).setOrigin(0.5, 1).setDepth(9000).setAlpha(.96);
         }
@@ -68,7 +68,7 @@ export class ActorView {
       const role=actor.actorId===playerActorId?'店主':actor.customerCategory||(parts[1]||meta.role)+(actor.scavenger?' / 拾牌客':'');
       const playerTag=actor.actorId===playerActorId?'店长（你）':null;
       const text=playerTag?playerTag+(actor.label&&actor.label!==playerTag?'\n'+actor.label:''):parts[0]+'\n'+role+(actor.label?'\n'+actor.label:'');
-      if(entry.label){if(entry.label.text!==text)entry.label.setText(text);entry.label.setColor(actor.nameColor||'#f6e6b8');}
+      if(entry.label){if(entry.label.text!==text)entry.label.setText(text);entry.label.setColor(actor.nameColor||(actor.actorId===playerActorId?'#a84b58':'#594431'));}
       entry.headHeight=meta.anchorPx[1]*(meta.displayScale||1)+5;
       const anim = (actor.moving ? "walk-" : "idle-") + appearance + "-" + (DIRECTIONS[actor.direction] == null ? "down" : actor.direction);
       if (entry.sprite.anims.currentAnim?.key !== anim) entry.sprite.play(anim, true);

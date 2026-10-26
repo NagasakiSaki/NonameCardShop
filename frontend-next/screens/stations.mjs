@@ -80,7 +80,7 @@ export function openStation(app,kind,options={}){
       receiveLegacy:async()=>{const result=await commit({requestId:newRequestId('old-order'),type:'supplier.receiveAll',payload:{}});notify(result.ok?'旧订单已入库，没有再次扣款。':result.error.message,result.ok?'success':'error');return result;},
     };
     try{
-      const [next,art]=await Promise.all([refresh(),fetch('/assets/frontend-next/products/manifest.json').then(r=>{if(!r.ok)throw Error('包装图读取失败');return r.json();})]);if(!active())return;
+      const [next,art]=await Promise.all([refresh(),fetch('/assets/frontend-bright-anime/products/manifest.json').then(r=>{if(!r.ok)throw Error('包装图读取失败');return r.json();})]);if(!active())return;
       if(kind==='opening'&&!saved&&view.sealed.some(g=>g.kind==='box'&&g.available)&&!view.sealed.some(g=>g.kind==='pack'&&g.available))draft.mode='box';
       if(kind==='opening'&&options.productId){const group=view.sealed.find(g=>g.productId===options.productId&&(!options.kind||g.kind===options.kind));if(group){draft.mode=group.kind==='box'?'box':'pack';draft.productId=group.groupId;}}
       controller=config.mount({root,view:next,actions,draft,layout:{pageSizes:{wide:4,mid:4,narrow:2}},format:app.formatMoney,assets:{productImage:(id,unit)=>art.products[id]?.[unit]||art.products.standard?.[unit]},notify});

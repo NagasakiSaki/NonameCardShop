@@ -16,6 +16,8 @@
     "art:contact-sheet": "node tools/character-kit/cli.mjs contact-sheet",
     "art:audit": "node tools/character-kit/audit.mjs",
     "art:products": "node tools/frontend-art/product-art.mjs",
+    "art:bright": "node tools/frontend-art-bright/build.mjs",
+    "art:bright:install": "node tools/frontend-art-bright/install.mjs",
     "start": "node server.mjs",
     "setup": "node dev/setup.mjs",
     "doctor": "node dev/doctor.mjs",

@@ -11,7 +11,7 @@ const branch=app=>`${app.snapshot().worldId}:${app.snapshot().branchId}`;
 export async function openTradeWorkspace(app,options={}){
   const existing=app.windows.stack.find(item=>item.id==='trade-workspace')?.handle;
   if(existing){existing.focus();existing.chooseTradeSection?.(options);return existing;}
-  return app.windows.open({id:'trade-workspace',title:'卡店交易台',subtitle:'采购 · 仓库 · 开包 · 收藏与市场',width:'window--wide',pauseReason:'卡店交易',render:async ctx=>{
+  return app.windows.open({id:'trade-workspace',title:'卡店交易台',subtitle:'我的收藏 · 单卡买卖',width:'window--wide',pauseReason:'卡店交易',render:async ctx=>{
     ctx.handle.tradeDispose?.();clear(ctx.body);fitPanel(ctx);let disposed=false,controller=null,loading=null,currentView=null;
     const root=el('div',{class:'pbc-root','data-live-trade':'true',style:{minWidth:'0'}}),message=el('div',{role:'status','aria-live':'polite'}),stations=el('nav',{class:'surface-actions',style:{display:'flex',gap:'8px',flexWrap:'wrap',margin:'0 0 12px'},'aria-label':'前往交易设施'});
     for(const [label,id,panel,scope]of [['进货 / 收货柜台','store.counter','supplier',{}],['零售货架','store.retail','supplier',{purchaseTab:'retail'}],['拆包工作台','store.opening','opening',{}],['二级市场','store.secondaryMarket','market',{}]])stations.append(el('button',{class:'btn btn--sm',text:label,onclick:()=>app.goToInteraction(id,panel,scope)}));

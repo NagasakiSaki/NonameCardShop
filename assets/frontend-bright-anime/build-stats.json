@@ -1,0 +1,478 @@
+{
+  "artScale": 4,
+  "propCell": 384,
+  "propCount": 76,
+  "atlas": {
+    "width": 3072,
+    "height": 3840,
+    "bytes": 397197,
+    "decodedMB": 45
+  },
+  "tileset": {
+    "width": 512,
+    "height": 192,
+    "bytes": 7876
+  },
+  "totalBytes": 1417192,
+  "totalMB": 1.35,
+  "elapsedMs": 1902,
+  "legacyLoaded": true,
+  "perProp": [
+    {
+      "name": "counter_retail",
+      "native": "384×192",
+      "opaque": 54569,
+      "colors": 341
+    },
+    {
+      "name": "counter_service",
+      "native": "384×192",
+      "opaque": 51603,
+      "colors": 154
+    },
+    {
+      "name": "shelf",
+      "native": "256×224",
+      "opaque": 56322,
+      "colors": 658
+    },
+    {
+      "name": "display_packs",
+      "native": "256×192",
+      "opaque": 47112,
+      "colors": 260
+    },
+    {
+      "name": "display_boxes",
+      "native": "256×192",
+      "opaque": 47112,
+      "colors": 354
+    },
+    {
+      "name": "trash",
+      "native": "96×128",
+      "opaque": 10239,
+      "colors": 21
+    },
+    {
+      "name": "table",
+      "native": "256×192",
+      "opaque": 30025,
+      "colors": 133
+    },
+    {
+      "name": "chair",
+      "native": "80×96",
+      "opaque": 5727,
+      "colors": 56
+    },
+    {
+      "name": "lamp",
+      "native": "64×160",
+      "opaque": 2161,
+      "colors": 20
+    },
+    {
+      "name": "sign",
+      "native": "256×80",
+      "opaque": 16248,
+      "colors": 34
+    },
+    {
+      "name": "plant",
+      "native": "96×160",
+      "opaque": 5700,
+      "colors": 17
+    },
+    {
+      "name": "rug",
+      "native": "384×256",
+      "opaque": 95972,
+      "colors": 10
+    },
+    {
+      "name": "register",
+      "native": "96×96",
+      "opaque": 7046,
+      "colors": 15
+    },
+    {
+      "name": "case_stack",
+      "native": "128×128",
+      "opaque": 12212,
+      "colors": 158
+    },
+    {
+      "name": "door_mat",
+      "native": "128×96",
+      "opaque": 11404,
+      "colors": 18
+    },
+    {
+      "name": "kiosk",
+      "native": "320×256",
+      "opaque": 76384,
+      "colors": 342
+    },
+    {
+      "name": "bench",
+      "native": "256×128",
+      "opaque": 21457,
+      "colors": 110
+    },
+    {
+      "name": "board",
+      "native": "160×192",
+      "opaque": 27616,
+      "colors": 77
+    },
+    {
+      "name": "poster",
+      "native": "128×160",
+      "opaque": 19344,
+      "colors": 39
+    },
+    {
+      "name": "sofa",
+      "native": "384×160",
+      "opaque": 58728,
+      "colors": 58
+    },
+    {
+      "name": "tea",
+      "native": "128×128",
+      "opaque": 8261,
+      "colors": 114
+    },
+    {
+      "name": "trophy",
+      "native": "96×128",
+      "opaque": 4492,
+      "colors": 8
+    },
+    {
+      "name": "clock",
+      "native": "96×96",
+      "opaque": 6805,
+      "colors": 8
+    },
+    {
+      "name": "speaker",
+      "native": "96×160",
+      "opaque": 13808,
+      "colors": 39
+    },
+    {
+      "name": "pa_counter_procure",
+      "native": "384×192",
+      "opaque": 55694,
+      "colors": 155
+    },
+    {
+      "name": "pa_counter_cashier",
+      "native": "384×192",
+      "opaque": 53188,
+      "colors": 151
+    },
+    {
+      "name": "pa_counter_market",
+      "native": "320×192",
+      "opaque": 54435,
+      "colors": 177
+    },
+    {
+      "name": "pa_counter_opening",
+      "native": "320×192",
+      "opaque": 39136,
+      "colors": 269
+    },
+    {
+      "name": "pa_shelf_empty",
+      "native": "256×224",
+      "opaque": 56322,
+      "colors": 75
+    },
+    {
+      "name": "pa_shelf_low",
+      "native": "256×224",
+      "opaque": 56322,
+      "colors": 336
+    },
+    {
+      "name": "pa_shelf_full",
+      "native": "256×224",
+      "opaque": 56322,
+      "colors": 658
+    },
+    {
+      "name": "pa_display_packs",
+      "native": "256×192",
+      "opaque": 47112,
+      "colors": 260
+    },
+    {
+      "name": "pa_display_boxes",
+      "native": "256×192",
+      "opaque": 47112,
+      "colors": 354
+    },
+    {
+      "name": "pa_trash",
+      "native": "96×128",
+      "opaque": 10239,
+      "colors": 21
+    },
+    {
+      "name": "pa_table_idle",
+      "native": "256×192",
+      "opaque": 30025,
+      "colors": 133
+    },
+    {
+      "name": "pa_table_reserved",
+      "native": "256×192",
+      "opaque": 30025,
+      "colors": 143
+    },
+    {
+      "name": "pa_table_sim",
+      "native": "256×192",
+      "opaque": 30025,
+      "colors": 153
+    },
+    {
+      "name": "pa_table_end",
+      "native": "256×192",
+      "opaque": 30025,
+      "colors": 137
+    },
+    {
+      "name": "pa_cabinet_collect",
+      "native": "192×256",
+      "opaque": 47128,
+      "colors": 117
+    },
+    {
+      "name": "pa_box_rack",
+      "native": "192×192",
+      "opaque": 33510,
+      "colors": 230
+    },
+    {
+      "name": "pa_wall_display",
+      "native": "384×128",
+      "opaque": 16285,
+      "colors": 46
+    },
+    {
+      "name": "pa_lamp_hang",
+      "native": "128×192",
+      "opaque": 4071,
+      "colors": 15
+    },
+    {
+      "name": "pa_rug_round",
+      "native": "384×192",
+      "opaque": 56069,
+      "colors": 10
+    },
+    {
+      "name": "pa_shelf_upgrade_before",
+      "native": "192×192",
+      "opaque": 13653,
+      "colors": 191
+    },
+    {
+      "name": "pa_shelf_lv0_empty",
+      "native": "256×224",
+      "opaque": 56322,
+      "colors": 75
+    },
+    {
+      "name": "pa_shelf_lv0_low",
+      "native": "256×224",
+      "opaque": 56322,
+      "colors": 336
+    },
+    {
+      "name": "pa_shelf_lv0_full",
+      "native": "256×224",
+      "opaque": 56322,
+      "colors": 658
+    },
+    {
+      "name": "pa_shelf_lv1_empty",
+      "native": "256×224",
+      "opaque": 56322,
+      "colors": 77
+    },
+    {
+      "name": "pa_shelf_lv1_low",
+      "native": "256×224",
+      "opaque": 56322,
+      "colors": 365
+    },
+    {
+      "name": "pa_shelf_lv1_full",
+      "native": "256×224",
+      "opaque": 56322,
+      "colors": 610
+    },
+    {
+      "name": "pa_shelf_lv2_empty",
+      "native": "256×224",
+      "opaque": 56322,
+      "colors": 79
+    },
+    {
+      "name": "pa_shelf_lv2_low",
+      "native": "256×224",
+      "opaque": 56322,
+      "colors": 375
+    },
+    {
+      "name": "pa_shelf_lv2_full",
+      "native": "256×224",
+      "opaque": 56322,
+      "colors": 686
+    },
+    {
+      "name": "pa_shelf_lv3_empty",
+      "native": "256×224",
+      "opaque": 56322,
+      "colors": 93
+    },
+    {
+      "name": "pa_shelf_lv3_low",
+      "native": "256×224",
+      "opaque": 56322,
+      "colors": 390
+    },
+    {
+      "name": "pa_shelf_lv3_full",
+      "native": "256×224",
+      "opaque": 56322,
+      "colors": 674
+    },
+    {
+      "name": "pa_showcase_lv0_unbought",
+      "native": "192×256",
+      "opaque": 47128,
+      "colors": 78
+    },
+    {
+      "name": "pa_showcase_lv1_bought",
+      "native": "192×256",
+      "opaque": 47128,
+      "colors": 117
+    },
+    {
+      "name": "pa_table_lv0_idle",
+      "native": "256×192",
+      "opaque": 30025,
+      "colors": 133
+    },
+    {
+      "name": "pa_table_lv0_reserved",
+      "native": "256×192",
+      "opaque": 30025,
+      "colors": 143
+    },
+    {
+      "name": "pa_table_lv0_sim",
+      "native": "256×192",
+      "opaque": 30025,
+      "colors": 153
+    },
+    {
+      "name": "pa_table_lv0_end",
+      "native": "256×192",
+      "opaque": 30025,
+      "colors": 137
+    },
+    {
+      "name": "pa_table_lv1_idle",
+      "native": "256×192",
+      "opaque": 30025,
+      "colors": 143
+    },
+    {
+      "name": "pa_table_lv1_reserved",
+      "native": "256×192",
+      "opaque": 30025,
+      "colors": 153
+    },
+    {
+      "name": "pa_table_lv1_sim",
+      "native": "256×192",
+      "opaque": 30025,
+      "colors": 161
+    },
+    {
+      "name": "pa_table_lv1_end",
+      "native": "256×192",
+      "opaque": 30025,
+      "colors": 147
+    },
+    {
+      "name": "pa_table_lv2_idle",
+      "native": "256×192",
+      "opaque": 30025,
+      "colors": 150
+    },
+    {
+      "name": "pa_table_lv2_reserved",
+      "native": "256×192",
+      "opaque": 30025,
+      "colors": 160
+    },
+    {
+      "name": "pa_table_lv2_sim",
+      "native": "256×192",
+      "opaque": 30025,
+      "colors": 168
+    },
+    {
+      "name": "pa_table_lv2_end",
+      "native": "256×192",
+      "opaque": 30025,
+      "colors": 152
+    },
+    {
+      "name": "pa_counter_cashier_unhired",
+      "native": "384×192",
+      "opaque": 55134,
+      "colors": 158
+    },
+    {
+      "name": "pa_counter_cashier_onduty",
+      "native": "384×192",
+      "opaque": 52660,
+      "colors": 160
+    },
+    {
+      "name": "pa_counter_cashier_resting",
+      "native": "384×192",
+      "opaque": 52880,
+      "colors": 142
+    },
+    {
+      "name": "pa_counter_stocker_unhired",
+      "native": "384×192",
+      "opaque": 55134,
+      "colors": 157
+    },
+    {
+      "name": "pa_counter_stocker_onduty",
+      "native": "384×192",
+      "opaque": 54084,
+      "colors": 221
+    },
+    {
+      "name": "pa_counter_stocker_resting",
+      "native": "384×192",
+      "opaque": 52880,
+      "colors": 141
+    }
+  ]
+}

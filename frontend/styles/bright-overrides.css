@@ -1,0 +1,333 @@
+/* bright-overrides.css — 明亮主题对正式样式表的定点覆盖（候选）。
+ *
+ * 用法：在 frontend/index.html 里放在 tokens.css / layout.css / components.css 之后：
+ *   <link rel="stylesheet" href="./styles/tokens.css" />        ← 换成候选 tokens.css
+ *   <link rel="stylesheet" href="./styles/layout.css" />
+ *   <link rel="stylesheet" href="./styles/components.css" />
+ *   <link rel="stylesheet" href="./styles/bright-overrides.css" />  ← 新增
+ *
+ * 正式 layout.css / components.css 里有一批写死的深色值（rgba(24,19,32,…)、#0c0a12、
+ * 白色半透明描边等），只改 :root 变量不足以变亮，所以这里逐个替换。
+ * 不改任何业务类名与 DOM 结构，只改观感。
+ */
+
+/* ---------------- 页面底色 ---------------- */
+html,
+body {
+  background:
+    radial-gradient(120% 90% at 15% 0%, #fffdf8 0%, #fdf4e4 42%, #f6e7cd 100%) fixed;
+  color: var(--paper);
+  font-size: var(--text-md);
+  line-height: var(--leading-tight);
+}
+
+/* 世界画面里才用像素采样，DOM 文本与立绘不套 pixelated */
+.stage__canvas canvas {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* ---------------- HUD ---------------- */
+.hud {
+  background: linear-gradient(180deg, #fffdf8, #fbf1dd);
+  border-bottom: 1px solid var(--line-strong);
+  box-shadow: 0 2px 10px rgba(150, 112, 66, 0.1);
+  color: var(--paper);
+}
+.hud__mark {
+  background:
+    linear-gradient(90deg, var(--accent-gold) 0 6px, transparent 6px 12px, var(--accent-gold) 12px 18px) top left / 100% 4px no-repeat,
+    linear-gradient(180deg, #f0a8ae 0 100%);
+  border: 1px solid #b0424c;
+  border-radius: 3px;
+}
+.hud__title { color: var(--ink); letter-spacing: 0.5px; }
+.hud__day { color: var(--accent-vermilion-deep); }
+.hud__time { color: var(--paper-2); }
+.hud__phase { color: var(--paper-dim); }
+.wallet__amount { color: #a8761f; }
+.wallet__debt { color: var(--accent-vermilion-deep); }
+
+/* ---------------- 舞台框 ---------------- */
+.stage__frame {
+  background:
+    repeating-linear-gradient(45deg, rgba(180, 140, 90, 0.06) 0 8px, transparent 8px 16px),
+    #f3e6cd;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-panel);
+}
+
+/* ---------------- 手账侧栏 ---------------- */
+.notebook {
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  box-shadow: var(--shadow-panel);
+}
+.notebook__toggle {
+  background: linear-gradient(180deg, #fffdf8, #f8ecd6);
+  border-bottom: 1px solid var(--line);
+  color: var(--paper-2);
+}
+.notebook__toggle:hover { color: var(--accent-vermilion-deep); }
+
+/* ---------------- 按钮 ---------------- */
+.btn {
+  border: 1px solid var(--line-strong);
+  background: linear-gradient(180deg, #fffdf8, #f7ecd8);
+  color: var(--paper);
+  border-radius: var(--radius-sm);
+  min-height: 32px;
+  padding: 6px 14px;
+  font-size: var(--text-sm);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset;
+}
+.btn:hover:not(:disabled) {
+  border-color: var(--accent-vermilion);
+  background: linear-gradient(180deg, #fff8f2, #fbe9dd);
+  color: var(--accent-vermilion-deep);
+}
+.btn:active:not(:disabled) { transform: translateY(1px); }
+.btn:focus-visible { outline: 2px solid var(--accent-vermilion); outline-offset: 2px; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn--primary {
+  background: linear-gradient(180deg, #e8797f, #cf5560);
+  border-color: #b0424c;
+  color: #fffaf6;
+  font-weight: 700;
+  box-shadow: 0 2px 0 #a83a44, 0 1px 0 rgba(255, 255, 255, 0.35) inset;
+}
+.btn--primary:hover:not(:disabled) {
+  background: linear-gradient(180deg, #f0868c, #d85f6a);
+  color: #fff;
+}
+.btn--danger {
+  border-color: #d99a9e;
+  color: #a4444a;
+  background: linear-gradient(180deg, #fff8f7, #fbe9e9);
+}
+.btn--danger:hover:not(:disabled) { border-color: #b0424c; background: #fdeaea; }
+.btn--ghost {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--paper-2);
+}
+.btn--sm { min-height: 26px; padding: 3px 10px; font-size: var(--text-xs); }
+
+/* ---------------- 标签 / 徽记 ---------------- */
+.badge {
+  border: 1px solid var(--line-strong);
+  color: var(--paper-2);
+  background: #fdf3e2;
+  font-size: var(--text-xs);
+}
+.badge--mock { border-color: #d9a94f; color: #8a5f14; background: #fdf0d2; }
+.badge--warn { border-color: #d99a9e; color: #a4444a; background: #fdeaea; }
+.badge--ok { border-color: #9dc9b1; color: #3f8161; background: #eef7f1; }
+
+/* 稀有度：浅底上重新取值，只用于短标签 */
+.rarity--N { color: #8a7a68; }
+.rarity--R { color: #3d78a8; }
+.rarity--SR { color: #7b5fa6; }
+.rarity--SSR { color: #a8761f; }
+
+.muted { color: var(--paper-dim); }
+
+/* ---------------- 窗口 ---------------- */
+.window {
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-pop);
+  backdrop-filter: none;
+}
+.window__head {
+  background: linear-gradient(180deg, #fffdf8, #fbf0da);
+  border-bottom: 1px solid var(--line);
+  padding: var(--step-3) var(--step-5);
+}
+.window__title { color: var(--ink); font-size: var(--text-lg); letter-spacing: 0.3px; }
+.window__sub { color: var(--paper-dim); }
+.window__body { padding: var(--step-5); gap: var(--step-4); }
+.window__foot {
+  background: #fdf5e6;
+  border-top: 1px solid var(--line);
+  padding: var(--step-3) var(--step-5);
+}
+
+/* ---------------- 分页 / 分区 ---------------- */
+.tab {
+  color: var(--paper-dim);
+  border-bottom-color: var(--line);
+}
+.tab[aria-selected="true"] {
+  color: var(--accent-vermilion-deep);
+  border-color: var(--line-strong);
+  border-bottom-color: transparent;
+  background: #fdf1e4;
+}
+.section__title { color: var(--ink-soft); }
+.section__title::after { background: var(--line); }
+
+/* ---------------- 数据呈现 ---------------- */
+.stat-row { border-bottom: 1px dashed var(--line); }
+.stat-row__label { color: var(--paper-dim); }
+.stat-row__value { color: var(--ink); }
+
+.data-table th,
+.data-table td { border-bottom: 1px solid var(--line); }
+.data-table th { background: #fbf0da; color: var(--paper-2); }
+.data-table tbody tr:hover td { background: #fdf6ea; }
+
+.card-tile {
+  border: 1px solid var(--line);
+  background: #fffdf8;
+  color: inherit;
+}
+.card-tile:hover { border-color: var(--accent-vermilion); background: #fff8f0; }
+.card-tile__img { background: #f2e6cf; }
+.card-tile__meta { color: var(--paper-dim); }
+
+.chip {
+  background: #f6ebd6;
+  color: var(--paper-2);
+  border: 1px solid transparent;
+}
+.chip--lock { background: #fbe6e6; color: #a4444a; border-color: #e8bfc0; }
+.chip--list { background: #e9f0f8; color: #3d6a94; border-color: #c6d8e8; }
+.chip--protect { background: #fdf0d2; color: #8a5f14; border-color: #ecd39b; }
+.chip--ok { background: #eaf5ee; color: #3f8161; border-color: #bfdccb; }
+
+/* ---------------- 空 / 载入 / 失败 ---------------- */
+.state {
+  border: 1px dashed var(--line-strong);
+  color: var(--paper-dim);
+  background: #fffdf8;
+}
+.state--error { border-color: #d99a9e; color: #a4444a; background: #fdf5f5; }
+.state__title { color: var(--ink-soft); }
+.spinner {
+  border: 2px solid var(--line);
+  border-top-color: var(--accent-vermilion);
+}
+
+/* ---------------- 表单 ---------------- */
+.field__label { color: var(--paper-dim); }
+.input,
+.select {
+  background: #fffdf8;
+  border: 1px solid var(--line-strong);
+  color: var(--ink);
+  border-radius: var(--radius-sm);
+  min-height: 34px;
+}
+.input:focus,
+.select:focus {
+  outline: 2px solid rgba(217, 94, 104, 0.45);
+  outline-offset: 1px;
+  border-color: var(--accent-vermilion);
+}
+
+/* ---------------- 舞台内提示 ---------------- */
+.interaction-hint {
+  background: rgba(255, 253, 247, 0.96);
+  border: 1px solid var(--line-strong);
+  color: var(--ink);
+  box-shadow: 0 6px 18px rgba(140, 100, 56, 0.18);
+}
+.interaction-hint kbd {
+  border: 1px solid var(--line-strong);
+  background: #fbf0da;
+  color: var(--ink-soft);
+  font-family: var(--font-ui);
+}
+.paused-banner {
+  background: #fdf0d2;
+  border: 1px solid #e0bd7a;
+  color: #8a5f14;
+}
+
+.world-label {
+  color: var(--ink);
+  background: rgba(255, 253, 247, 0.94);
+  border: 1px solid var(--line-strong);
+  font-family: var(--font-ui);
+}
+
+/* ---------------- 提示条 ---------------- */
+.toast {
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
+  box-shadow: var(--shadow-pop);
+  color: var(--paper);
+}
+.toast--error { border-color: #d99a9e; }
+.toast--ok { border-color: #9dc9b1; }
+.toast__title { color: var(--ink); }
+.toast__body { color: var(--paper-dim); }
+
+/* ---------------- 手账内容 ---------------- */
+.note-card {
+  border: 1px solid var(--line);
+  background: #fffdf8;
+}
+.note-card__title { color: var(--accent-vermilion-deep); }
+.progress { background: #f0e2c8; }
+.progress__bar { background: linear-gradient(90deg, var(--accent-mint), var(--accent-gold)); }
+
+/* ---------------- 开包动画 ---------------- */
+.reveal-card {
+  border: 1px solid var(--line);
+  background: #fffdf8;
+}
+.reveal-card--new { box-shadow: 0 0 0 2px rgba(207, 160, 67, 0.7) inset; }
+.reveal-card img { border-radius: 6px; }
+
+/* ---------------- 战斗挂载区 ---------------- */
+.battle-mount {
+  border: 2px dashed var(--line-strong);
+  background: #f8eeda;
+  color: var(--paper-dim);
+}
+
+/* ---------------- 触屏方向键 ---------------- */
+.touchpad button {
+  border: 1px solid var(--line-strong);
+  background: rgba(255, 253, 247, 0.92);
+  color: var(--ink);
+  box-shadow: 0 2px 8px rgba(140, 100, 56, 0.14);
+}
+.touchpad button:active { background: #fdf0d2; }
+
+/* ---------------- 启动页 ---------------- */
+.boot {
+  background: radial-gradient(90% 90% at 50% 18%, #fffdf8, #f7e9d0 62%, #eeddbc 100%);
+}
+.boot__card {
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
+  box-shadow: var(--shadow-pop);
+}
+.boot__logo { color: var(--accent-vermilion-deep); }
+.boot__hint { color: var(--paper-2); }
+.boot__error { color: #a4444a; }
+
+/* ---------------- 实时流水（显眼但不遮挡） ---------------- */
+.live-ledger {
+  background: rgba(255, 252, 244, 0.96);
+  border: 1px solid var(--line-strong);
+  color: var(--ink);
+  box-shadow: 0 4px 18px rgba(140, 100, 56, 0.16);
+}
+.live-ledger > strong { color: var(--accent-vermilion-deep); }
+.live-ledger__row { border-top: 1px solid var(--line); }
+.live-ledger .is-income > b { color: #2f7d5c; }
+.live-ledger .is-expense > b { color: #b0424c; }
+
+.live-ledger-ticker {
+  border: 1px solid var(--line-strong);
+  background: rgba(255, 252, 244, 0.97);
+  color: var(--ink);
+  box-shadow: 0 4px 18px rgba(140, 100, 56, 0.16);
+}

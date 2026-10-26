@@ -1,28 +1,56 @@
+/* tokens-bright.css — 明亮二次元卡店主题令牌（候选）。
+ *
+ * 合并方式：直接替换正式 frontend/styles/tokens.css 的 :root 变量块即可，
+ * 变量名与正式文件一一对应，业务代码不需要改。
+ *
+ * 原则：
+ *  - 奶油白/浅原木是界面主体，浅木只做边条与家具；
+ *  - 朱红只用于主操作与确认，金色只用于收入/稀有/奖励；
+ *  - 默认固定明亮，不跟随系统深色模式自动变暗；
+ *  - 夜晚只改世界光照，不改菜单底色。
+ */
 :root {
-  /* 色板与 assets/frontend/manifest.json 的 palette 同源，改这里要同步素材 */
-  --ink: #20182a;
-  --ink-soft: #3a2d47;
-  --night: #1d2340;
-  --paper: #f3ead7;
-  --paper-2: #e8dfc8;
-  --paper-dim: #c3b294;
-  --wood: #9a6f4a;
-  --wood-dark: #74502f;
-  --gold: #e8b64a;
+  /* —— 底色与面 —— */
+  --ink: #453226;
+  --ink-soft: #5d4634;
+  --night: #6f8fc4;          /* 仅世界夜色使用，不再是面板底色 */
+  --paper: #463c33;          /* 正文墨色（变量名沿用正式文件，语义=正文） */
+  --paper-2: #5f5348;        /* 次级正文 */
+  --paper-dim: #8a7a68;      /* 三级文字，仍保证可读 */
+  --wood: #d8b184;
+  --wood-dark: #b08a5c;
+  --gold: #cfa043;
   --gold-shade: #b3862a;
-  --red: #c2503c;
-  --green: #4a7654;
-  --blue: #3d5c96;
-  --teal: #3d7a78;
-  --purple: #6a4988;
-  --surface: rgba(24, 19, 32, 0.92);
-  --surface-2: rgba(26, 20, 36, 0.985);
-  --line: rgba(232, 182, 74, 0.28);
-  --line-strong: rgba(232, 182, 74, 0.6);
+  --red: #c94f5a;
+  --green: #4e8b6b;
+  --blue: #4a7fb0;
+  --teal: #3f8f86;
+  --purple: #7b5fa6;
 
+  /* —— 面板：浅底，不透明，不再用 rgba 黑紫 —— */
+  --surface: #fffaf0;
+  --surface-2: #fffdf8;
+  --surface-3: #fbf2e0;
+  --surface-sunken: #f4e8d2;
+  --line: #e6d5b8;
+  --line-strong: #d3b98f;
+
+  /* —— 强调（只用于边框/角标/短标签，不铺面）—— */
+  --accent-vermilion: #d95e68;
+  --accent-vermilion-deep: #b0424c;
+  --accent-gold: #efc070;
+  --accent-gold-deep: #cfa043;
+  --accent-mint: #7ec3a9;
+  --accent-mint-deep: #54987e;
+  --accent-sky: #8bbde4;
+  --accent-sky-deep: #5f97c5;
+  --accent-lilac: #b39ed8;
+
+  /* —— 字体 —— */
   --font-ui: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", sans-serif;
-  --font-pixel: "Zpix", "Fusion Pixel 12px", "Microsoft YaHei", monospace;
+  --font-pixel: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", sans-serif; /* 中文不再强行像素字体 */
 
+  /* —— 4/8 间距体系 —— */
   --step-1: 4px;
   --step-2: 8px;
   --step-3: 12px;
@@ -30,16 +58,33 @@
   --step-5: 24px;
   --step-6: 32px;
 
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
+  /* —— 圆角 —— */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
 
-  --shadow-panel: 0 18px 48px rgba(0, 0, 0, 0.5), 0 2px 0 rgba(255, 255, 255, 0.06) inset;
-  --text-sm: 12px;
-  --text-md: 14px;
-  --text-lg: 16px;
-  --text-xl: 20px;
-  --text-2xl: 26px;
+  /* —— 阴影：暖色轻投影，不用纯黑大阴影 —— */
+  --shadow-panel: 0 10px 28px rgba(120, 86, 46, 0.16), 0 2px 0 rgba(255, 255, 255, 0.9) inset;
+  --shadow-pop: 0 16px 44px rgba(120, 86, 46, 0.22);
+
+  /* —— 字号 —— */
+  --text-xs: 11px;
+  --text-sm: 13px;
+  --text-md: 15px;
+  --text-lg: 17px;
+  --text-xl: 21px;
+  --text-2xl: 28px;
+
+  /* —— 行高（技能正文按 1.75 走）—— */
+  --leading-tight: 1.35;
+  --leading-body: 1.75;
+}
+
+/* 明亮主题固定，不跟随系统深色模式 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: light;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

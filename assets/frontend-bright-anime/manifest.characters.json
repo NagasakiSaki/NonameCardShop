@@ -1,0 +1,916 @@
+{
+  "note": "特殊人物模型（LPC 64×64）在新画风下的适配结果。帧尺寸/锚点/动画列与正式 manifest 完全一致，合并只需替换 sheet URL。",
+  "count": 26,
+  "characters": [
+    {
+      "id": "owner",
+      "displayName": "店长",
+      "role": "店主",
+      "band": null,
+      "source": "/assets/frontend/characters/owner.3437effd37.png",
+      "sheet": "/assets/frontend-bright-anime/characters/owner.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "regrade": "对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影"
+    },
+    {
+      "id": "bd-tomori",
+      "displayName": "高松燈",
+      "role": "顾客",
+      "band": "mygo",
+      "source": "/assets/frontend/characters/bd-tomori.41ae9f88ef.png",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-tomori.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "regrade": "对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影"
+    },
+    {
+      "id": "bd-anon",
+      "displayName": "千早愛音",
+      "role": "顾客",
+      "band": "mygo",
+      "source": "/assets/frontend/characters/bd-anon.c32c4710da.png",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-anon.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "regrade": "对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影"
+    },
+    {
+      "id": "bd-rana",
+      "displayName": "要楽奈",
+      "role": "顾客",
+      "band": "mygo",
+      "source": "/assets/frontend/characters/bd-rana.37dffee9ba.png",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-rana.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "regrade": "对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影"
+    },
+    {
+      "id": "bd-soyo",
+      "displayName": "長崎そよ",
+      "role": "顾客",
+      "band": "mygo",
+      "source": "/assets/frontend/characters/bd-soyo.9c52830f6e.png",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-soyo.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "regrade": "对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影"
+    },
+    {
+      "id": "bd-taki",
+      "displayName": "椎名立希",
+      "role": "顾客",
+      "band": "mygo",
+      "source": "/assets/frontend/characters/bd-taki.0c12852460.png",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-taki.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "regrade": "对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影"
+    },
+    {
+      "id": "bd-uika",
+      "displayName": "三角初華",
+      "role": "顾客",
+      "band": "avemujica",
+      "source": "/assets/frontend/characters/bd-uika.e04c7618f8.png",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-uika.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "regrade": "对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影"
+    },
+    {
+      "id": "bd-mutsumi",
+      "displayName": "若葉睦",
+      "role": "顾客",
+      "band": "avemujica",
+      "source": "/assets/frontend/characters/bd-mutsumi.228b53245b.png",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-mutsumi.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "regrade": "对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影"
+    },
+    {
+      "id": "bd-umiri",
+      "displayName": "八幡海鈴",
+      "role": "顾客",
+      "band": "avemujica",
+      "source": "/assets/frontend/characters/bd-umiri.80b698ccf0.png",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-umiri.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "regrade": "对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影"
+    },
+    {
+      "id": "bd-nyamu",
+      "displayName": "祐天寺にゃむ",
+      "role": "顾客",
+      "band": "avemujica",
+      "source": "/assets/frontend/characters/bd-nyamu.ffdd89a7d4.png",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-nyamu.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "regrade": "对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影"
+    },
+    {
+      "id": "bd-sakiko",
+      "displayName": "豊川祥子",
+      "role": "顾客",
+      "band": "avemujica",
+      "source": "/assets/frontend/characters/bd-sakiko.213fce0606.png",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-sakiko.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "regrade": "对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影"
+    },
+    {
+      "id": "bd-arale",
+      "displayName": "仲町あられ",
+      "role": "顾客",
+      "band": "yumemita",
+      "source": "/assets/frontend/characters/bd-arale.96c48d7257.png",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-arale.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "regrade": "对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影"
+    },
+    {
+      "id": "bd-nonoka",
+      "displayName": "宮永ののか",
+      "role": "顾客",
+      "band": "yumemita",
+      "source": "/assets/frontend/characters/bd-nonoka.64edd19fb6.png",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-nonoka.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "regrade": "对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影"
+    },
+    {
+      "id": "bd-ritsu",
+      "displayName": "峰月律",
+      "role": "顾客",
+      "band": "yumemita",
+      "source": "/assets/frontend/characters/bd-ritsu.03ef4966fc.png",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-ritsu.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "regrade": "对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影"
+    },
+    {
+      "id": "bd-miyako",
+      "displayName": "藤都子",
+      "role": "顾客",
+      "band": "yumemita",
+      "source": "/assets/frontend/characters/bd-miyako.4e39ed25be.png",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-miyako.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "regrade": "对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影"
+    },
+    {
+      "id": "bd-yuno",
+      "displayName": "千石ユノ",
+      "role": "顾客",
+      "band": "yumemita",
+      "source": "/assets/frontend/characters/bd-yuno.a7c15461f8.png",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-yuno.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "regrade": "对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影"
+    },
+    {
+      "id": "bd-nagi",
+      "displayName": "琴平凪",
+      "role": "顾客",
+      "band": "millsage",
+      "source": "/assets/frontend/characters/bd-nagi.524af3d8c3.png",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-nagi.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "regrade": "对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影"
+    },
+    {
+      "id": "bd-mahoro",
+      "displayName": "浜崎まほろ",
+      "role": "顾客",
+      "band": "millsage",
+      "source": "/assets/frontend/characters/bd-mahoro.22ed565fbe.png",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-mahoro.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "regrade": "对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影"
+    },
+    {
+      "id": "bd-hotaru",
+      "displayName": "汐見蛍",
+      "role": "顾客",
+      "band": "millsage",
+      "source": "/assets/frontend/characters/bd-hotaru.082c2c60af.png",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-hotaru.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "regrade": "对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影"
+    },
+    {
+      "id": "bd-houka",
+      "displayName": "和泉朋花",
+      "role": "顾客",
+      "band": "millsage",
+      "source": "/assets/frontend/characters/bd-houka.4d45944cd7.png",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-houka.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "regrade": "对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影"
+    },
+    {
+      "id": "bd-natsume",
+      "displayName": "伊沢なつめ",
+      "role": "顾客",
+      "band": "millsage",
+      "source": "/assets/frontend/characters/bd-natsume.1a8e498436.png",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-natsume.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "regrade": "对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影"
+    },
+    {
+      "id": "bd-raika",
+      "displayName": "須賀蕾叶",
+      "role": "顾客",
+      "band": "ikka-dumb-rock",
+      "source": "/assets/frontend/characters/bd-raika.8f735904c6.png",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-raika.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "regrade": "对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影"
+    },
+    {
+      "id": "bd-miku",
+      "displayName": "馬橋心玖",
+      "role": "顾客",
+      "band": "ikka-dumb-rock",
+      "source": "/assets/frontend/characters/bd-miku.e9ba035ca6.png",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-miku.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "regrade": "对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影"
+    },
+    {
+      "id": "bd-yomogi",
+      "displayName": "矢倉蓬咲",
+      "role": "顾客",
+      "band": "ikka-dumb-rock",
+      "source": "/assets/frontend/characters/bd-yomogi.e3704d44f5.png",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-yomogi.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "regrade": "对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影"
+    },
+    {
+      "id": "bd-chieri",
+      "displayName": "梅里ちえり",
+      "role": "顾客",
+      "band": "ikka-dumb-rock",
+      "source": "/assets/frontend/characters/bd-chieri.c700ddc3b3.png",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-chieri.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "regrade": "对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影"
+    },
+    {
+      "id": "bd-shizuku",
+      "displayName": "四宮寧月",
+      "role": "顾客",
+      "band": "ikka-dumb-rock",
+      "source": "/assets/frontend/characters/bd-shizuku.693d5cd8d0.png",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-shizuku.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 8,
+      "displayScale": 1,
+      "anchorPx": [
+        32,
+        61
+      ],
+      "directions": {
+        "up": 0,
+        "left": 1,
+        "down": 2,
+        "right": 3
+      },
+      "idleColumn": 0,
+      "walkColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frameRate": 9,
+      "regrade": "对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影"
+    }
+  ]
+}

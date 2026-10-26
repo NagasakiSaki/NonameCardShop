@@ -11,7 +11,7 @@ export async function createSurface(ctx){
   function dispose(){if(disposed)return;disposed=true;for(const fn of cleanups)fn();cleanups.clear();}
   ctx.handle.tradeDispose=dispose;ctx.onCleanup(dispose);
   const css=await styles();if(ctx.handle.closed||!host.isConnected){dispose();return {active:()=>false};}
-  root.append(el('style',{text:css}),el('style',{text:`
+  root.append(el('style',{text:css}),el('link',{rel:'stylesheet',href:'/frontend/styles/bright-panels.css'}),el('style',{text:`
     :host{display:block;min-width:0;padding:16px;background:var(--bg);font:14px "Microsoft YaHei",system-ui,sans-serif;color:var(--ink)}
     .workspace{grid-template-columns:minmax(0,1fr) 280px;gap:16px}.catalog{max-height:calc(100dvh - 230px)}
     .toolbar{margin-bottom:12px}.card-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.detail-panel,.basket{max-height:calc(100dvh - 260px)}

@@ -1,0 +1,59 @@
+/* Formal integration of bright-anime-1. Also loaded inside the card-detail ShadowRoot.
+   Presentation only: retain all window leases, rosters, scroll keys and native iframe controls. */
+:root {color-scheme:light;--paper-dim:#786854;--text-sm:13px;--text-md:15px}
+:host {color-scheme:light!important;--bg:#fffdf8!important;--panel:#fff9ee!important;--panel-high:#f8edda!important;--line:#dfcbae!important;--ink:#463c33!important;--muted:#756451!important;--green:#397556!important;--gold:#99691f!important;color:#463c33!important;background:#fffdf8!important}
+.start-menu {background:radial-gradient(ellipse at 20% 0,#fffdf7,#f5e5c9 80%)!important;color:#463c33}
+.start-menu :is(.start-menu__eyebrow,.start-menu__intro,.start-menu__empty){color:#78634d}
+.start-menu__profile{background:#fffdf8;border-color:#d8bd94;box-shadow:0 8px 28px #99764a12}
+.start-menu input{background:#fffaf0;border-color:#d8bd94;color:#463c33}
+.facility-window,.window{color:#463c33}
+.facility-window :is(.pbc-root,.f6-root){
+ --pbc-bg:#fffdf8!important;--pbc-panel:#fff9ef!important;--pbc-panel-2:#f9edda!important;--pbc-line:#dfcbae!important;--pbc-ink:#463c33!important;--pbc-muted:#756451!important;--pbc-gold:#99691f!important;--pbc-green:#397556!important;--pbc-red:#a13e4d!important;--pbc-blue:#3d7297!important;
+ --f6-bg:#fffdf8!important;--f6-panel:#fff9ef!important;--f6-panel-2:#f9edda!important;--f6-line:#dfcbae!important;--f6-ink:#463c33!important;--f6-muted:#756451!important;--f6-gold:#99691f!important;--f6-green:#397556!important;--f6-red:#a13e4d!important;
+ color:#463c33!important;background:#fffdf8!important;font-size:15px;
+}
+.pc-root{--pc-bg:#fffdf8!important;--pc-panel:#fff9ef!important;--pc-panel-high:#f7ecd9!important;--pc-line:#dfcbae!important;--pc-ink:#463c33!important;--pc-muted:#756451!important;--pc-green:#397556!important;--pc-gold:#99691f!important;--pc-red:#a13e4d!important;--pc-amber:#99691f!important;--pc-blue:#3d7297!important;--pc-violet:#7b5098!important;--pc-teal:#357a70!important}
+.pc-root :is(.pc-card--accent,.pc-pending,.pc-dev,.pc-pause--paused,.pc-chip,.pc-btn,.pc-cust,.pc-detail,.pc-reg){background:#fff5e5!important;border-color:#dfcbae!important}
+.pc-root .pc-btn--primary{background:#bf5866!important;color:#fffdf8!important;border-color:#aa4755!important}
+.pc-root .pc-table :is(th,td){border-color:#dfcbae!important}
+.facility-window :is(.window__foot,.f6-foot,.fast07-picker__foot),.v7-room>.window__foot{background:#fff7e9!important;border-color:#dfcbae!important;color:#463c33!important}
+.facility-window :is(.f6-foot,.window__foot) .btn,.v7-choice-bar>button{min-height:42px}
+.facility-window :is(.f6-artframe,.pbc-art,.pbc-detail__art,.pt-art){background:#f3e9d8!important;border-color:#e2cfb0!important}
+.facility-window :is(.f6-note,.f6-muted,.pbc-muted,.pc-muted),.album-card small{color:#756451!important}
+.facility-window :is(.f6-tile,.f6-receipt,.f6-summary,.pbc-card,.pbc-card-tile,.pbc-detail,.pbc-tabs,.pbc-empty,.pc-card,.pt-tile){background:#fffdf8!important;border-color:#dfcbae!important;color:#463c33!important}
+.facility-window :is(.pbc-card-tile.is-selected,.f6-tile.is-selected){background:#fff0e9!important;border-color:#c65c68!important;box-shadow:0 0 0 1px #c65c6833!important}
+.facility-window :is(.f6-select,.f6-search,input,select,textarea){background:#fffdf8!important;color:#463c33!important;border-color:#d6bc96!important;accent-color:#bd5363}
+.facility-window :is(.pbc-btn,.f6-pager button,.pbc-seg button){background:#fff8eb!important;color:#624b34!important;border-color:#d8bd95!important}
+.facility-window :is(.pbc-btn--primary,.pbc-seg button.is-on){background:#c95e6c!important;color:#fffdf8!important;border-color:#af4756!important}
+.facility-window :is(.f6-product-detail,.product-album){color:#463c33}
+.facility-window .album-card{background:#fff9ee!important;color:#463c33!important;border-color:#dfcbae!important;transition:border-color .12s,box-shadow .12s}
+.facility-window .album-card:hover{border-color:#bc5b68!important;box-shadow:0 3px 10px #a2704a18}
+.facility-window .album-rates{color:#463c33}.facility-window .album-rates :is(th,td){border-color:#dfcbae!important}
+.facility-window :is(.album-rates thead,.pbc-table th){background:#f8ecd7!important}
+.facility-window :is(.v7-format-card,.v7-roster-card,.v7-room-summary){background:#fff9ef!important;color:#463c33!important;border-color:#d9bd97!important}
+.facility-window :is(.v7-format-card.is-selected,.v7-roster-card.is-selected){background:#ffede5!important;border-color:#bc5363!important}
+.facility-window .v7-roster-card__fav{color:#aa6d24}.facility-window .v7-roster-card__preview{background:#fff4e5;color:#71513a;border:1px solid #e1c9a6;border-radius:6px}
+.facility-window .v7-actions select{background:#fffdf8!important;color:#463c33!important;border-color:#d7bb92!important}
+.facility-window .v7-room-list{border-color:#d9bd97}.facility-window .v7-roster-card__art{background:#f5ecdd}
+.facility-window .v7-choice-bar>button{background:#bf5866!important;color:#fff!important;border-color:#aa4755!important}
+.facility-window .fast07-root{--fast07-bg:#fffdf8!important;--fast07-panel:#fff8ec!important;--fast07-panel-high:#f9edda!important;--fast07-line:#dfcbae!important;--fast07-text:#463c33!important;--fast07-text-muted:#756451!important;--fast07-accent:#a76a2d!important;color:#463c33!important}
+.facility-window .fast07-root{--fast07-surface:#fff9ef!important;--fast07-card:#fff5e5!important;--fast07-card-hover:#ffeedb!important;--fast07-card-selected:#ffede5!important;--fast07-border:#d9bd97!important;--fast07-border-subtle:#e6d5b8!important;--fast07-accent-hover:#bb5866!important;--fast07-info:#3d7297!important;--fast07-success:#397556!important}
+.facility-window :is(.fast07-card-tile,.fast07-selected-bar,.fast07-slot-card,.fast07-skill-panel,.fast07-lobby__left-col,.fast07-lobby__right-col){background:#fffaf0!important;color:#463c33!important;border-color:#dfcbae!important}
+.facility-window .fast07-card-tile.is-selected{background:#ffede5!important;border-color:#bc5363!important}
+.v7-dialogue{background:linear-gradient(160deg,#fffdf8,#fff2df)!important;color:#463c33!important;border-color:#d0aa76!important;box-shadow:0 12px 36px #8c613b33!important}
+.v7-dialogue :is(button,.v7-dialogue-choice){background:#fffaf0!important;color:#624b34!important;border-color:#d8bd95!important}
+.v7-dialogue :is(.v7-dialogue-text,.v7-dialogue-name,.v7-dialogue-speaker,.v7-dialogue-body){color:#463c33!important}
+.v7-dialogue :is(.v7-dialogue-role,.v7-dialogue-hint,.v7-dialogue-pager){color:#78634d!important}
+.v7-dialogue :is(.v7-dialogue__text,.v7-dialogue__name,.v7-dialogue__body){color:#463c33!important}
+.v7-dialogue :is(.v7-dialogue__role,.v7-dialogue__page-indicator,.v7-dialogue__pager){color:#78634d!important}
+/* Shadow DOM has its own palette; internal inline page styles must not leave dark islands. */
+:host :is(.surface-card,.detail-source,.hero-art,.copy-card,.state,.field input,.field select,.field textarea,.card-tile,.surface-message){background:#fffaf0!important;color:#463c33!important;border-color:#dfcbae!important}
+:host :is(.detail-source-status,.detail-meta,.muted,.detail-foot p){color:#756451!important}
+:host .button{background:#fff4e4!important;color:#624b34!important;border-color:#d8bd95!important;min-height:36px}
+:host .button--primary{background:#bf5866!important;color:#fff!important}
+:host .card-tile.is-selected{background:#ffede5!important;border-color:#bc5363!important}
+:host .detail-table :is(td,th){border-color:#dfcbae!important}
+.live-ledger__row.is-income{color:#377653}.live-ledger__row.is-expense{color:#a44854}
+.window :is(.note-card,.state){background:#fffaf0;border-color:#dfcbae;color:#463c33}
+.window__sub,.small.muted{color:#756451}
+@media(max-width:700px){.window :is(button,input,select){min-height:40px}.window__foot button,.v7-dialogue button{min-height:44px}.facility-window :is(.pbc-btn,.btn){padding:7px 10px}.v7-choice-bar>span{min-width:120px}}

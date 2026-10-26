@@ -1,5 +1,5 @@
 /** Additive Host operations. requestId uses letters, digits, underscores and hyphens only. */
-export type CombatFormatId='bo3'|'kof'|'doudizhu-bo3'|'versus2v2-bo3';
+export type CombatFormatId='kof'|'doudizhu-bo3'|'versus2v2-bo3';
 export interface WorldProof {worldId:string;branchId:string;resourceRevision?:number}
 export interface DialogueOffer {
   offerId:string;actorId:string;kind:'talk'|'stage-challenge';proof:WorldProof;

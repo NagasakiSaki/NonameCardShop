@@ -1,0 +1,100 @@
+{
+  "artVersion": "bright-anime-1",
+  "products": {
+    "refresh": {
+      "pack": "/assets/frontend-bright-anime/products/pack-sky.png",
+      "box": "/assets/frontend-bright-anime/products/box-sky.png",
+      "artThemeId": "sky"
+    },
+    "yijiang": {
+      "pack": "/assets/frontend-bright-anime/products/pack-mint.png",
+      "box": "/assets/frontend-bright-anime/products/box-mint.png",
+      "artThemeId": "mint"
+    },
+    "shenhua": {
+      "pack": "/assets/frontend-bright-anime/products/pack-lilac.png",
+      "box": "/assets/frontend-bright-anime/products/box-lilac.png",
+      "artThemeId": "lilac"
+    },
+    "standard": {
+      "pack": "/assets/frontend-bright-anime/products/pack-butter.png",
+      "box": "/assets/frontend-bright-anime/products/box-butter.png",
+      "artThemeId": "butter"
+    },
+    "extra": {
+      "pack": "/assets/frontend-bright-anime/products/pack-rose.png",
+      "box": "/assets/frontend-bright-anime/products/box-rose.png",
+      "artThemeId": "rose"
+    },
+    "sp": {
+      "pack": "/assets/frontend-bright-anime/products/pack-coral.png",
+      "box": "/assets/frontend-bright-anime/products/box-coral.png",
+      "artThemeId": "coral"
+    },
+    "sp2": {
+      "pack": "/assets/frontend-bright-anime/products/pack-sky.png",
+      "box": "/assets/frontend-bright-anime/products/box-sky.png",
+      "artThemeId": "sky"
+    },
+    "newjiang": {
+      "pack": "/assets/frontend-bright-anime/products/pack-mint.png",
+      "box": "/assets/frontend-bright-anime/products/box-mint.png",
+      "artThemeId": "mint"
+    },
+    "mobile": {
+      "pack": "/assets/frontend-bright-anime/products/pack-coral.png",
+      "box": "/assets/frontend-bright-anime/products/box-coral.png",
+      "artThemeId": "coral"
+    },
+    "tw": {
+      "pack": "/assets/frontend-bright-anime/products/pack-slate.png",
+      "box": "/assets/frontend-bright-anime/products/box-slate.png",
+      "artThemeId": "slate"
+    },
+    "huicui": {
+      "pack": "/assets/frontend-bright-anime/products/pack-lilac.png",
+      "box": "/assets/frontend-bright-anime/products/box-lilac.png",
+      "artThemeId": "lilac"
+    },
+    "sb": {
+      "pack": "/assets/frontend-bright-anime/products/pack-rose.png",
+      "box": "/assets/frontend-bright-anime/products/box-rose.png",
+      "artThemeId": "rose"
+    },
+    "shiji": {
+      "pack": "/assets/frontend-bright-anime/products/pack-butter.png",
+      "box": "/assets/frontend-bright-anime/products/box-butter.png",
+      "artThemeId": "butter"
+    },
+    "clan": {
+      "pack": "/assets/frontend-bright-anime/products/pack-mint.png",
+      "box": "/assets/frontend-bright-anime/products/box-mint.png",
+      "artThemeId": "mint"
+    },
+    "bingshi": {
+      "pack": "/assets/frontend-bright-anime/products/pack-slate.png",
+      "box": "/assets/frontend-bright-anime/products/box-slate.png",
+      "artThemeId": "slate"
+    },
+    "yingbian": {
+      "pack": "/assets/frontend-bright-anime/products/pack-sky.png",
+      "box": "/assets/frontend-bright-anime/products/box-sky.png",
+      "artThemeId": "sky"
+    },
+    "offline": {
+      "pack": "/assets/frontend-bright-anime/products/pack-butter.png",
+      "box": "/assets/frontend-bright-anime/products/box-butter.png",
+      "artThemeId": "butter"
+    },
+    "jsrg": {
+      "pack": "/assets/frontend-bright-anime/products/pack-rose.png",
+      "box": "/assets/frontend-bright-anime/products/box-rose.png",
+      "artThemeId": "rose"
+    },
+    "sxrm": {
+      "pack": "/assets/frontend-bright-anime/products/pack-lilac.png",
+      "box": "/assets/frontend-bright-anime/products/box-lilac.png",
+      "artThemeId": "lilac"
+    }
+  }
+}

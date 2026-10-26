@@ -23,7 +23,7 @@ export function applyPrefs() {
   const prefs = readPrefs();
   const root = document.documentElement;
   const scale = prefs.fontScale || "md";
-  const sizes = { sm: { sm: "11px", md: "13px", lg: "15px" }, md: { sm: "12px", md: "14px", lg: "16px" }, lg: { sm: "14px", md: "16px", lg: "18px" } };
+  const sizes = { sm: { sm: "12px", md: "14px", lg: "16px" }, md: { sm: "13px", md: "15px", lg: "17px" }, lg: { sm: "14px", md: "17px", lg: "19px" } };
   const chosen = sizes[scale] || sizes.md;
   root.style.setProperty("--text-sm", chosen.sm);
   root.style.setProperty("--text-md", chosen.md);

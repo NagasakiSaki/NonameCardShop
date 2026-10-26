@@ -1,0 +1,2441 @@
+{
+  "note": "候选素材清单片段。合并方式：把 assets/frontend-bright-anime/** 复制到 assets/frontend-bright-anime/，再把下面的 props/tileset 覆盖到 assets/frontend/manifest.json 的对应字段。",
+  "artVersion": "bright-anime-1",
+  "tileSize": 16,
+  "tileset": {
+    "image": "/assets/frontend-bright-anime/tiles/tileset.png",
+    "tileSize": 16,
+    "frameSize": 64,
+    "columns": 8,
+    "rows": 3,
+    "tiles": [
+      "floor_wood_a",
+      "floor_wood_b",
+      "floor_tile",
+      "floor_carpet",
+      "wall_top",
+      "wall_base",
+      "wall_window",
+      "wall_door",
+      "wall_shadow",
+      "floor_rug_edge",
+      "floor_stone",
+      "floor_stone_b",
+      "wall_door_side",
+      "corner_nw",
+      "corner_ne",
+      "corner_sw",
+      "corner_se"
+    ]
+  },
+  "props": {
+    "image": "/assets/frontend-bright-anime/props/props.png",
+    "cellSize": 384,
+    "artScale": 4,
+    "columns": 8,
+    "rows": 10,
+    "list": [
+      {
+        "prop": "counter_retail",
+        "cell": 0,
+        "x": 0,
+        "y": 0,
+        "w": 384,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 96,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            24,
+            96,
+            24
+          ]
+        ],
+        "stand": null,
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": null
+      },
+      {
+        "prop": "counter_service",
+        "cell": 1,
+        "x": 384,
+        "y": 0,
+        "w": 384,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 96,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            24,
+            96,
+            24
+          ]
+        ],
+        "stand": null,
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": null
+      },
+      {
+        "prop": "shelf",
+        "cell": 2,
+        "x": 768,
+        "y": 0,
+        "w": 256,
+        "h": 224,
+        "footY": 56,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 56,
+        "blocks": [
+          [
+            0,
+            40,
+            64,
+            16
+          ]
+        ],
+        "stand": null,
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": null
+      },
+      {
+        "prop": "display_packs",
+        "cell": 3,
+        "x": 1152,
+        "y": 0,
+        "w": 256,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            28,
+            64,
+            20
+          ]
+        ],
+        "stand": null,
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": null
+      },
+      {
+        "prop": "display_boxes",
+        "cell": 4,
+        "x": 1536,
+        "y": 0,
+        "w": 256,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            28,
+            64,
+            20
+          ]
+        ],
+        "stand": null,
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": null
+      },
+      {
+        "prop": "trash",
+        "cell": 5,
+        "x": 1920,
+        "y": 0,
+        "w": 96,
+        "h": 128,
+        "footY": 32,
+        "occludes": true,
+        "worldW": 24,
+        "worldH": 32,
+        "blocks": [
+          [
+            4,
+            12,
+            16,
+            20
+          ]
+        ],
+        "stand": null,
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": null
+      },
+      {
+        "prop": "table",
+        "cell": 6,
+        "x": 2304,
+        "y": 0,
+        "w": 256,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            16,
+            64,
+            32
+          ]
+        ],
+        "stand": null,
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": null
+      },
+      {
+        "prop": "chair",
+        "cell": 7,
+        "x": 2688,
+        "y": 0,
+        "w": 80,
+        "h": 96,
+        "footY": 24,
+        "occludes": true,
+        "worldW": 20,
+        "worldH": 24,
+        "blocks": [
+          [
+            4,
+            12,
+            12,
+            12
+          ]
+        ],
+        "stand": null,
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": null
+      },
+      {
+        "prop": "lamp",
+        "cell": 8,
+        "x": 0,
+        "y": 384,
+        "w": 64,
+        "h": 160,
+        "footY": 40,
+        "occludes": false,
+        "worldW": 16,
+        "worldH": 40,
+        "blocks": [],
+        "stand": null,
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": null
+      },
+      {
+        "prop": "sign",
+        "cell": 9,
+        "x": 384,
+        "y": 384,
+        "w": 256,
+        "h": 80,
+        "footY": 20,
+        "occludes": false,
+        "worldW": 64,
+        "worldH": 20,
+        "blocks": [],
+        "stand": null,
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": null
+      },
+      {
+        "prop": "plant",
+        "cell": 10,
+        "x": 768,
+        "y": 384,
+        "w": 96,
+        "h": 160,
+        "footY": 40,
+        "occludes": true,
+        "worldW": 24,
+        "worldH": 40,
+        "blocks": [
+          [
+            4,
+            28,
+            16,
+            12
+          ]
+        ],
+        "stand": null,
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": null
+      },
+      {
+        "prop": "rug",
+        "cell": 11,
+        "x": 1152,
+        "y": 384,
+        "w": 384,
+        "h": 256,
+        "footY": 64,
+        "occludes": false,
+        "worldW": 96,
+        "worldH": 64,
+        "blocks": [],
+        "stand": null,
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": null
+      },
+      {
+        "prop": "register",
+        "cell": 12,
+        "x": 1536,
+        "y": 384,
+        "w": 96,
+        "h": 96,
+        "footY": 24,
+        "occludes": false,
+        "worldW": 24,
+        "worldH": 24,
+        "blocks": [],
+        "stand": null,
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": null
+      },
+      {
+        "prop": "case_stack",
+        "cell": 13,
+        "x": 1920,
+        "y": 384,
+        "w": 128,
+        "h": 128,
+        "footY": 32,
+        "occludes": true,
+        "worldW": 32,
+        "worldH": 32,
+        "blocks": [
+          [
+            0,
+            16,
+            32,
+            16
+          ]
+        ],
+        "stand": null,
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": null
+      },
+      {
+        "prop": "door_mat",
+        "cell": 14,
+        "x": 2304,
+        "y": 384,
+        "w": 128,
+        "h": 96,
+        "footY": 24,
+        "occludes": false,
+        "worldW": 32,
+        "worldH": 24,
+        "blocks": [],
+        "stand": null,
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": null
+      },
+      {
+        "prop": "kiosk",
+        "cell": 15,
+        "x": 2688,
+        "y": 384,
+        "w": 320,
+        "h": 256,
+        "footY": 64,
+        "occludes": true,
+        "worldW": 80,
+        "worldH": 64,
+        "blocks": [
+          [
+            0,
+            44,
+            80,
+            20
+          ]
+        ],
+        "stand": null,
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": null
+      },
+      {
+        "prop": "bench",
+        "cell": 16,
+        "x": 0,
+        "y": 768,
+        "w": 256,
+        "h": 128,
+        "footY": 32,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 32,
+        "blocks": [
+          [
+            0,
+            16,
+            64,
+            16
+          ]
+        ],
+        "stand": null,
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": null
+      },
+      {
+        "prop": "board",
+        "cell": 17,
+        "x": 384,
+        "y": 768,
+        "w": 160,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 40,
+        "worldH": 48,
+        "blocks": [
+          [
+            4,
+            40,
+            32,
+            8
+          ]
+        ],
+        "stand": null,
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": null
+      },
+      {
+        "prop": "poster",
+        "cell": 18,
+        "x": 768,
+        "y": 768,
+        "w": 128,
+        "h": 160,
+        "footY": 40,
+        "occludes": false,
+        "worldW": 32,
+        "worldH": 40,
+        "blocks": [],
+        "stand": null,
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": null
+      },
+      {
+        "prop": "sofa",
+        "cell": 19,
+        "x": 1152,
+        "y": 768,
+        "w": 384,
+        "h": 160,
+        "footY": 40,
+        "occludes": true,
+        "worldW": 96,
+        "worldH": 40,
+        "blocks": [
+          [
+            0,
+            16,
+            96,
+            24
+          ]
+        ],
+        "stand": null,
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": null
+      },
+      {
+        "prop": "tea",
+        "cell": 20,
+        "x": 1536,
+        "y": 768,
+        "w": 128,
+        "h": 128,
+        "footY": 32,
+        "occludes": true,
+        "worldW": 32,
+        "worldH": 32,
+        "blocks": [
+          [
+            0,
+            16,
+            32,
+            16
+          ]
+        ],
+        "stand": null,
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": null
+      },
+      {
+        "prop": "trophy",
+        "cell": 21,
+        "x": 1920,
+        "y": 768,
+        "w": 96,
+        "h": 128,
+        "footY": 32,
+        "occludes": true,
+        "worldW": 24,
+        "worldH": 32,
+        "blocks": [
+          [
+            4,
+            24,
+            16,
+            8
+          ]
+        ],
+        "stand": null,
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": null
+      },
+      {
+        "prop": "clock",
+        "cell": 22,
+        "x": 2304,
+        "y": 768,
+        "w": 96,
+        "h": 96,
+        "footY": 24,
+        "occludes": false,
+        "worldW": 24,
+        "worldH": 24,
+        "blocks": [],
+        "stand": null,
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": null
+      },
+      {
+        "prop": "speaker",
+        "cell": 23,
+        "x": 2688,
+        "y": 768,
+        "w": 96,
+        "h": 160,
+        "footY": 40,
+        "occludes": true,
+        "worldW": 24,
+        "worldH": 40,
+        "blocks": [
+          [
+            0,
+            24,
+            24,
+            16
+          ]
+        ],
+        "stand": null,
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": null
+      },
+      {
+        "prop": "pa_counter_procure",
+        "cell": 24,
+        "x": 0,
+        "y": 1152,
+        "w": 384,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 96,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            26,
+            96,
+            22
+          ]
+        ],
+        "stand": [
+          48,
+          56
+        ],
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": "采购/收货柜台"
+      },
+      {
+        "prop": "pa_counter_cashier",
+        "cell": 25,
+        "x": 384,
+        "y": 1152,
+        "w": 384,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 96,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            26,
+            96,
+            22
+          ]
+        ],
+        "stand": [
+          48,
+          56
+        ],
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": "NPC 收银台"
+      },
+      {
+        "prop": "pa_counter_market",
+        "cell": 26,
+        "x": 768,
+        "y": 1152,
+        "w": 320,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 80,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            26,
+            80,
+            22
+          ]
+        ],
+        "stand": [
+          40,
+          56
+        ],
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": "单卡二级市场柜台"
+      },
+      {
+        "prop": "pa_counter_opening",
+        "cell": 27,
+        "x": 1152,
+        "y": 1152,
+        "w": 320,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 80,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            26,
+            80,
+            22
+          ]
+        ],
+        "stand": [
+          40,
+          56
+        ],
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": "拆包工作台"
+      },
+      {
+        "prop": "pa_shelf_empty",
+        "cell": 28,
+        "x": 1536,
+        "y": 1152,
+        "w": 256,
+        "h": 224,
+        "footY": 56,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 56,
+        "blocks": [
+          [
+            0,
+            40,
+            64,
+            16
+          ]
+        ],
+        "stand": [
+          32,
+          62
+        ],
+        "depth": "y",
+        "family": "shelf",
+        "state": "empty",
+        "level": null,
+        "label": "货架·empty"
+      },
+      {
+        "prop": "pa_shelf_low",
+        "cell": 29,
+        "x": 1920,
+        "y": 1152,
+        "w": 256,
+        "h": 224,
+        "footY": 56,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 56,
+        "blocks": [
+          [
+            0,
+            40,
+            64,
+            16
+          ]
+        ],
+        "stand": [
+          32,
+          62
+        ],
+        "depth": "y",
+        "family": "shelf",
+        "state": "low",
+        "level": null,
+        "label": "货架·low"
+      },
+      {
+        "prop": "pa_shelf_full",
+        "cell": 30,
+        "x": 2304,
+        "y": 1152,
+        "w": 256,
+        "h": 224,
+        "footY": 56,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 56,
+        "blocks": [
+          [
+            0,
+            40,
+            64,
+            16
+          ]
+        ],
+        "stand": [
+          32,
+          62
+        ],
+        "depth": "y",
+        "family": "shelf",
+        "state": "full",
+        "level": null,
+        "label": "货架·full"
+      },
+      {
+        "prop": "pa_display_packs",
+        "cell": 31,
+        "x": 2688,
+        "y": 1152,
+        "w": 256,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            28,
+            64,
+            20
+          ]
+        ],
+        "stand": [
+          32,
+          54
+        ],
+        "depth": "y",
+        "family": "display",
+        "state": "packs",
+        "level": null,
+        "label": "卡包陈列柜"
+      },
+      {
+        "prop": "pa_display_boxes",
+        "cell": 32,
+        "x": 0,
+        "y": 1536,
+        "w": 256,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            28,
+            64,
+            20
+          ]
+        ],
+        "stand": [
+          32,
+          54
+        ],
+        "depth": "y",
+        "family": "display",
+        "state": "boxes",
+        "level": null,
+        "label": "卡盒陈列柜"
+      },
+      {
+        "prop": "pa_trash",
+        "cell": 33,
+        "x": 384,
+        "y": 1536,
+        "w": 96,
+        "h": 128,
+        "footY": 32,
+        "occludes": true,
+        "worldW": 24,
+        "worldH": 32,
+        "blocks": [
+          [
+            4,
+            12,
+            16,
+            20
+          ]
+        ],
+        "stand": [
+          12,
+          40
+        ],
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": "共享垃圾桶"
+      },
+      {
+        "prop": "pa_table_idle",
+        "cell": 34,
+        "x": 768,
+        "y": 1536,
+        "w": 256,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            16,
+            64,
+            32
+          ]
+        ],
+        "stand": [
+          32,
+          58
+        ],
+        "depth": "y",
+        "family": "table",
+        "state": "idle",
+        "level": null,
+        "label": "牌桌·idle"
+      },
+      {
+        "prop": "pa_table_reserved",
+        "cell": 35,
+        "x": 1152,
+        "y": 1536,
+        "w": 256,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            16,
+            64,
+            32
+          ]
+        ],
+        "stand": [
+          32,
+          58
+        ],
+        "depth": "y",
+        "family": "table",
+        "state": "reserved",
+        "level": null,
+        "label": "牌桌·reserved"
+      },
+      {
+        "prop": "pa_table_sim",
+        "cell": 36,
+        "x": 1536,
+        "y": 1536,
+        "w": 256,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            16,
+            64,
+            32
+          ]
+        ],
+        "stand": [
+          32,
+          58
+        ],
+        "depth": "y",
+        "family": "table",
+        "state": "sim",
+        "level": null,
+        "label": "牌桌·sim"
+      },
+      {
+        "prop": "pa_table_end",
+        "cell": 37,
+        "x": 1920,
+        "y": 1536,
+        "w": 256,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            16,
+            64,
+            32
+          ]
+        ],
+        "stand": [
+          32,
+          58
+        ],
+        "depth": "y",
+        "family": "table",
+        "state": "end",
+        "level": null,
+        "label": "牌桌·end"
+      },
+      {
+        "prop": "pa_cabinet_collect",
+        "cell": 38,
+        "x": 2304,
+        "y": 1536,
+        "w": 192,
+        "h": 256,
+        "footY": 64,
+        "occludes": true,
+        "worldW": 48,
+        "worldH": 64,
+        "blocks": [
+          [
+            2,
+            48,
+            44,
+            16
+          ]
+        ],
+        "stand": [
+          24,
+          70
+        ],
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": "收藏展示柜"
+      },
+      {
+        "prop": "pa_box_rack",
+        "cell": 39,
+        "x": 2688,
+        "y": 1536,
+        "w": 192,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 48,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            32,
+            48,
+            16
+          ]
+        ],
+        "stand": [
+          24,
+          54
+        ],
+        "depth": "y",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": "整盒箱架"
+      },
+      {
+        "prop": "pa_wall_display",
+        "cell": 40,
+        "x": 0,
+        "y": 1920,
+        "w": 384,
+        "h": 128,
+        "footY": 32,
+        "occludes": false,
+        "worldW": 96,
+        "worldH": 32,
+        "blocks": [],
+        "stand": [
+          48,
+          40
+        ],
+        "depth": "wall",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": "墙面陈列轨"
+      },
+      {
+        "prop": "pa_lamp_hang",
+        "cell": 41,
+        "x": 384,
+        "y": 1920,
+        "w": 128,
+        "h": 192,
+        "footY": 48,
+        "occludes": false,
+        "worldW": 32,
+        "worldH": 48,
+        "blocks": [],
+        "stand": [
+          16,
+          56
+        ],
+        "depth": "wall",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": "吊灯"
+      },
+      {
+        "prop": "pa_rug_round",
+        "cell": 42,
+        "x": 768,
+        "y": 1920,
+        "w": 384,
+        "h": 192,
+        "footY": 48,
+        "occludes": false,
+        "worldW": 96,
+        "worldH": 48,
+        "blocks": [],
+        "stand": [
+          48,
+          56
+        ],
+        "depth": "flat",
+        "family": null,
+        "state": null,
+        "level": null,
+        "label": "圆毯"
+      },
+      {
+        "prop": "pa_shelf_upgrade_before",
+        "cell": 43,
+        "x": 1152,
+        "y": 1920,
+        "w": 192,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 48,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            32,
+            48,
+            16
+          ]
+        ],
+        "stand": [
+          24,
+          54
+        ],
+        "depth": "y",
+        "family": "upgrade",
+        "state": "before",
+        "level": null,
+        "label": "货架升级前"
+      },
+      {
+        "prop": "pa_shelf_lv0_empty",
+        "cell": 44,
+        "x": 1536,
+        "y": 1920,
+        "w": 256,
+        "h": 224,
+        "footY": 56,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 56,
+        "blocks": [
+          [
+            0,
+            40,
+            64,
+            16
+          ]
+        ],
+        "stand": [
+          32,
+          62
+        ],
+        "depth": "y",
+        "family": "shelf",
+        "state": "empty",
+        "level": 0,
+        "label": "货架·Lv0 原木 · empty"
+      },
+      {
+        "prop": "pa_shelf_lv0_low",
+        "cell": 45,
+        "x": 1920,
+        "y": 1920,
+        "w": 256,
+        "h": 224,
+        "footY": 56,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 56,
+        "blocks": [
+          [
+            0,
+            40,
+            64,
+            16
+          ]
+        ],
+        "stand": [
+          32,
+          62
+        ],
+        "depth": "y",
+        "family": "shelf",
+        "state": "low",
+        "level": 0,
+        "label": "货架·Lv0 原木 · low"
+      },
+      {
+        "prop": "pa_shelf_lv0_full",
+        "cell": 46,
+        "x": 2304,
+        "y": 1920,
+        "w": 256,
+        "h": 224,
+        "footY": 56,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 56,
+        "blocks": [
+          [
+            0,
+            40,
+            64,
+            16
+          ]
+        ],
+        "stand": [
+          32,
+          62
+        ],
+        "depth": "y",
+        "family": "shelf",
+        "state": "full",
+        "level": 0,
+        "label": "货架·Lv0 原木 · full"
+      },
+      {
+        "prop": "pa_shelf_lv1_empty",
+        "cell": 47,
+        "x": 2688,
+        "y": 1920,
+        "w": 256,
+        "h": 224,
+        "footY": 56,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 56,
+        "blocks": [
+          [
+            0,
+            40,
+            64,
+            16
+          ]
+        ],
+        "stand": [
+          32,
+          62
+        ],
+        "depth": "y",
+        "family": "shelf",
+        "state": "empty",
+        "level": 1,
+        "label": "货架·Lv1 青铜 · empty"
+      },
+      {
+        "prop": "pa_shelf_lv1_low",
+        "cell": 48,
+        "x": 0,
+        "y": 2304,
+        "w": 256,
+        "h": 224,
+        "footY": 56,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 56,
+        "blocks": [
+          [
+            0,
+            40,
+            64,
+            16
+          ]
+        ],
+        "stand": [
+          32,
+          62
+        ],
+        "depth": "y",
+        "family": "shelf",
+        "state": "low",
+        "level": 1,
+        "label": "货架·Lv1 青铜 · low"
+      },
+      {
+        "prop": "pa_shelf_lv1_full",
+        "cell": 49,
+        "x": 384,
+        "y": 2304,
+        "w": 256,
+        "h": 224,
+        "footY": 56,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 56,
+        "blocks": [
+          [
+            0,
+            40,
+            64,
+            16
+          ]
+        ],
+        "stand": [
+          32,
+          62
+        ],
+        "depth": "y",
+        "family": "shelf",
+        "state": "full",
+        "level": 1,
+        "label": "货架·Lv1 青铜 · full"
+      },
+      {
+        "prop": "pa_shelf_lv2_empty",
+        "cell": 50,
+        "x": 768,
+        "y": 2304,
+        "w": 256,
+        "h": 224,
+        "footY": 56,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 56,
+        "blocks": [
+          [
+            0,
+            40,
+            64,
+            16
+          ]
+        ],
+        "stand": [
+          32,
+          62
+        ],
+        "depth": "y",
+        "family": "shelf",
+        "state": "empty",
+        "level": 2,
+        "label": "货架·Lv2 红木 · empty"
+      },
+      {
+        "prop": "pa_shelf_lv2_low",
+        "cell": 51,
+        "x": 1152,
+        "y": 2304,
+        "w": 256,
+        "h": 224,
+        "footY": 56,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 56,
+        "blocks": [
+          [
+            0,
+            40,
+            64,
+            16
+          ]
+        ],
+        "stand": [
+          32,
+          62
+        ],
+        "depth": "y",
+        "family": "shelf",
+        "state": "low",
+        "level": 2,
+        "label": "货架·Lv2 红木 · low"
+      },
+      {
+        "prop": "pa_shelf_lv2_full",
+        "cell": 52,
+        "x": 1536,
+        "y": 2304,
+        "w": 256,
+        "h": 224,
+        "footY": 56,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 56,
+        "blocks": [
+          [
+            0,
+            40,
+            64,
+            16
+          ]
+        ],
+        "stand": [
+          32,
+          62
+        ],
+        "depth": "y",
+        "family": "shelf",
+        "state": "full",
+        "level": 2,
+        "label": "货架·Lv2 红木 · full"
+      },
+      {
+        "prop": "pa_shelf_lv3_empty",
+        "cell": 53,
+        "x": 1920,
+        "y": 2304,
+        "w": 256,
+        "h": 224,
+        "footY": 56,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 56,
+        "blocks": [
+          [
+            0,
+            40,
+            64,
+            16
+          ]
+        ],
+        "stand": [
+          32,
+          62
+        ],
+        "depth": "y",
+        "family": "shelf",
+        "state": "empty",
+        "level": 3,
+        "label": "货架·Lv3 鎏金 · empty"
+      },
+      {
+        "prop": "pa_shelf_lv3_low",
+        "cell": 54,
+        "x": 2304,
+        "y": 2304,
+        "w": 256,
+        "h": 224,
+        "footY": 56,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 56,
+        "blocks": [
+          [
+            0,
+            40,
+            64,
+            16
+          ]
+        ],
+        "stand": [
+          32,
+          62
+        ],
+        "depth": "y",
+        "family": "shelf",
+        "state": "low",
+        "level": 3,
+        "label": "货架·Lv3 鎏金 · low"
+      },
+      {
+        "prop": "pa_shelf_lv3_full",
+        "cell": 55,
+        "x": 2688,
+        "y": 2304,
+        "w": 256,
+        "h": 224,
+        "footY": 56,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 56,
+        "blocks": [
+          [
+            0,
+            40,
+            64,
+            16
+          ]
+        ],
+        "stand": [
+          32,
+          62
+        ],
+        "depth": "y",
+        "family": "shelf",
+        "state": "full",
+        "level": 3,
+        "label": "货架·Lv3 鎏金 · full"
+      },
+      {
+        "prop": "pa_showcase_lv0_unbought",
+        "cell": 56,
+        "x": 0,
+        "y": 2688,
+        "w": 192,
+        "h": 256,
+        "footY": 64,
+        "occludes": true,
+        "worldW": 48,
+        "worldH": 64,
+        "blocks": [
+          [
+            2,
+            48,
+            44,
+            16
+          ]
+        ],
+        "stand": [
+          24,
+          70
+        ],
+        "depth": "y",
+        "family": "showcase",
+        "state": "unbought",
+        "level": 0,
+        "label": "展示柜·未购预留位"
+      },
+      {
+        "prop": "pa_showcase_lv1_bought",
+        "cell": 57,
+        "x": 384,
+        "y": 2688,
+        "w": 192,
+        "h": 256,
+        "footY": 64,
+        "occludes": true,
+        "worldW": 48,
+        "worldH": 64,
+        "blocks": [
+          [
+            2,
+            48,
+            44,
+            16
+          ]
+        ],
+        "stand": [
+          24,
+          70
+        ],
+        "depth": "y",
+        "family": "showcase",
+        "state": "bought",
+        "level": 1,
+        "label": "珍藏展示柜·已购"
+      },
+      {
+        "prop": "pa_table_lv0_idle",
+        "cell": 58,
+        "x": 768,
+        "y": 2688,
+        "w": 256,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            16,
+            64,
+            32
+          ]
+        ],
+        "stand": [
+          32,
+          58
+        ],
+        "depth": "y",
+        "family": "table",
+        "state": "idle",
+        "level": 0,
+        "label": "牌桌·Lv0 · idle"
+      },
+      {
+        "prop": "pa_table_lv0_reserved",
+        "cell": 59,
+        "x": 1152,
+        "y": 2688,
+        "w": 256,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            16,
+            64,
+            32
+          ]
+        ],
+        "stand": [
+          32,
+          58
+        ],
+        "depth": "y",
+        "family": "table",
+        "state": "reserved",
+        "level": 0,
+        "label": "牌桌·Lv0 · reserved"
+      },
+      {
+        "prop": "pa_table_lv0_sim",
+        "cell": 60,
+        "x": 1536,
+        "y": 2688,
+        "w": 256,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            16,
+            64,
+            32
+          ]
+        ],
+        "stand": [
+          32,
+          58
+        ],
+        "depth": "y",
+        "family": "table",
+        "state": "sim",
+        "level": 0,
+        "label": "牌桌·Lv0 · sim"
+      },
+      {
+        "prop": "pa_table_lv0_end",
+        "cell": 61,
+        "x": 1920,
+        "y": 2688,
+        "w": 256,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            16,
+            64,
+            32
+          ]
+        ],
+        "stand": [
+          32,
+          58
+        ],
+        "depth": "y",
+        "family": "table",
+        "state": "end",
+        "level": 0,
+        "label": "牌桌·Lv0 · end"
+      },
+      {
+        "prop": "pa_table_lv1_idle",
+        "cell": 62,
+        "x": 2304,
+        "y": 2688,
+        "w": 256,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            16,
+            64,
+            32
+          ]
+        ],
+        "stand": [
+          32,
+          58
+        ],
+        "depth": "y",
+        "family": "table",
+        "state": "idle",
+        "level": 1,
+        "label": "牌桌·Lv1 · idle"
+      },
+      {
+        "prop": "pa_table_lv1_reserved",
+        "cell": 63,
+        "x": 2688,
+        "y": 2688,
+        "w": 256,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            16,
+            64,
+            32
+          ]
+        ],
+        "stand": [
+          32,
+          58
+        ],
+        "depth": "y",
+        "family": "table",
+        "state": "reserved",
+        "level": 1,
+        "label": "牌桌·Lv1 · reserved"
+      },
+      {
+        "prop": "pa_table_lv1_sim",
+        "cell": 64,
+        "x": 0,
+        "y": 3072,
+        "w": 256,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            16,
+            64,
+            32
+          ]
+        ],
+        "stand": [
+          32,
+          58
+        ],
+        "depth": "y",
+        "family": "table",
+        "state": "sim",
+        "level": 1,
+        "label": "牌桌·Lv1 · sim"
+      },
+      {
+        "prop": "pa_table_lv1_end",
+        "cell": 65,
+        "x": 384,
+        "y": 3072,
+        "w": 256,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            16,
+            64,
+            32
+          ]
+        ],
+        "stand": [
+          32,
+          58
+        ],
+        "depth": "y",
+        "family": "table",
+        "state": "end",
+        "level": 1,
+        "label": "牌桌·Lv1 · end"
+      },
+      {
+        "prop": "pa_table_lv2_idle",
+        "cell": 66,
+        "x": 768,
+        "y": 3072,
+        "w": 256,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            16,
+            64,
+            32
+          ]
+        ],
+        "stand": [
+          32,
+          58
+        ],
+        "depth": "y",
+        "family": "table",
+        "state": "idle",
+        "level": 2,
+        "label": "牌桌·Lv2 · idle"
+      },
+      {
+        "prop": "pa_table_lv2_reserved",
+        "cell": 67,
+        "x": 1152,
+        "y": 3072,
+        "w": 256,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            16,
+            64,
+            32
+          ]
+        ],
+        "stand": [
+          32,
+          58
+        ],
+        "depth": "y",
+        "family": "table",
+        "state": "reserved",
+        "level": 2,
+        "label": "牌桌·Lv2 · reserved"
+      },
+      {
+        "prop": "pa_table_lv2_sim",
+        "cell": 68,
+        "x": 1536,
+        "y": 3072,
+        "w": 256,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            16,
+            64,
+            32
+          ]
+        ],
+        "stand": [
+          32,
+          58
+        ],
+        "depth": "y",
+        "family": "table",
+        "state": "sim",
+        "level": 2,
+        "label": "牌桌·Lv2 · sim"
+      },
+      {
+        "prop": "pa_table_lv2_end",
+        "cell": 69,
+        "x": 1920,
+        "y": 3072,
+        "w": 256,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 64,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            16,
+            64,
+            32
+          ]
+        ],
+        "stand": [
+          32,
+          58
+        ],
+        "depth": "y",
+        "family": "table",
+        "state": "end",
+        "level": 2,
+        "label": "牌桌·Lv2 · end"
+      },
+      {
+        "prop": "pa_counter_cashier_unhired",
+        "cell": 70,
+        "x": 2304,
+        "y": 3072,
+        "w": 384,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 96,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            26,
+            96,
+            22
+          ]
+        ],
+        "stand": [
+          48,
+          56
+        ],
+        "depth": "y",
+        "family": "cashier",
+        "state": "unhired",
+        "level": 0,
+        "label": "收银台 · unhired"
+      },
+      {
+        "prop": "pa_counter_cashier_onduty",
+        "cell": 71,
+        "x": 2688,
+        "y": 3072,
+        "w": 384,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 96,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            26,
+            96,
+            22
+          ]
+        ],
+        "stand": [
+          48,
+          56
+        ],
+        "depth": "y",
+        "family": "cashier",
+        "state": "onduty",
+        "level": 1,
+        "label": "收银台 · onduty"
+      },
+      {
+        "prop": "pa_counter_cashier_resting",
+        "cell": 72,
+        "x": 0,
+        "y": 3456,
+        "w": 384,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 96,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            26,
+            96,
+            22
+          ]
+        ],
+        "stand": [
+          48,
+          56
+        ],
+        "depth": "y",
+        "family": "cashier",
+        "state": "resting",
+        "level": 1,
+        "label": "收银台 · resting"
+      },
+      {
+        "prop": "pa_counter_stocker_unhired",
+        "cell": 73,
+        "x": 384,
+        "y": 3456,
+        "w": 384,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 96,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            26,
+            96,
+            22
+          ]
+        ],
+        "stand": [
+          48,
+          56
+        ],
+        "depth": "y",
+        "family": "stocker",
+        "state": "unhired",
+        "level": 0,
+        "label": "补货台 · unhired"
+      },
+      {
+        "prop": "pa_counter_stocker_onduty",
+        "cell": 74,
+        "x": 768,
+        "y": 3456,
+        "w": 384,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 96,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            26,
+            96,
+            22
+          ]
+        ],
+        "stand": [
+          48,
+          56
+        ],
+        "depth": "y",
+        "family": "stocker",
+        "state": "onduty",
+        "level": 1,
+        "label": "补货台 · onduty"
+      },
+      {
+        "prop": "pa_counter_stocker_resting",
+        "cell": 75,
+        "x": 1152,
+        "y": 3456,
+        "w": 384,
+        "h": 192,
+        "footY": 48,
+        "occludes": true,
+        "worldW": 96,
+        "worldH": 48,
+        "blocks": [
+          [
+            0,
+            26,
+            96,
+            22
+          ]
+        ],
+        "stand": [
+          48,
+          56
+        ],
+        "depth": "y",
+        "family": "stocker",
+        "state": "resting",
+        "level": 1,
+        "label": "补货台 · resting"
+      }
+    ]
+  },
+  "products": [
+    {
+      "theme": "rose",
+      "pack": "/assets/frontend-bright-anime/products/pack-rose.png",
+      "box": "/assets/frontend-bright-anime/products/box-rose.png",
+      "packSize": [
+        360,
+        600
+      ],
+      "boxSize": [
+        560,
+        380
+      ]
+    },
+    {
+      "theme": "sky",
+      "pack": "/assets/frontend-bright-anime/products/pack-sky.png",
+      "box": "/assets/frontend-bright-anime/products/box-sky.png",
+      "packSize": [
+        360,
+        600
+      ],
+      "boxSize": [
+        560,
+        380
+      ]
+    },
+    {
+      "theme": "mint",
+      "pack": "/assets/frontend-bright-anime/products/pack-mint.png",
+      "box": "/assets/frontend-bright-anime/products/box-mint.png",
+      "packSize": [
+        360,
+        600
+      ],
+      "boxSize": [
+        560,
+        380
+      ]
+    },
+    {
+      "theme": "butter",
+      "pack": "/assets/frontend-bright-anime/products/pack-butter.png",
+      "box": "/assets/frontend-bright-anime/products/box-butter.png",
+      "packSize": [
+        360,
+        600
+      ],
+      "boxSize": [
+        560,
+        380
+      ]
+    },
+    {
+      "theme": "lilac",
+      "pack": "/assets/frontend-bright-anime/products/pack-lilac.png",
+      "box": "/assets/frontend-bright-anime/products/box-lilac.png",
+      "packSize": [
+        360,
+        600
+      ],
+      "boxSize": [
+        560,
+        380
+      ]
+    },
+    {
+      "theme": "slate",
+      "pack": "/assets/frontend-bright-anime/products/pack-slate.png",
+      "box": "/assets/frontend-bright-anime/products/box-slate.png",
+      "packSize": [
+        360,
+        600
+      ],
+      "boxSize": [
+        560,
+        380
+      ]
+    },
+    {
+      "theme": "coral",
+      "pack": "/assets/frontend-bright-anime/products/pack-coral.png",
+      "box": "/assets/frontend-bright-anime/products/box-coral.png",
+      "packSize": [
+        360,
+        600
+      ],
+      "boxSize": [
+        560,
+        380
+      ]
+    }
+  ],
+  "characters": [
+    {
+      "id": "owner",
+      "displayName": "店长",
+      "sheet": "/assets/frontend-bright-anime/characters/owner.png"
+    },
+    {
+      "id": "bd-tomori",
+      "displayName": "高松燈",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-tomori.png"
+    },
+    {
+      "id": "bd-anon",
+      "displayName": "千早愛音",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-anon.png"
+    },
+    {
+      "id": "bd-rana",
+      "displayName": "要楽奈",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-rana.png"
+    },
+    {
+      "id": "bd-soyo",
+      "displayName": "長崎そよ",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-soyo.png"
+    },
+    {
+      "id": "bd-taki",
+      "displayName": "椎名立希",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-taki.png"
+    },
+    {
+      "id": "bd-uika",
+      "displayName": "三角初華",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-uika.png"
+    },
+    {
+      "id": "bd-mutsumi",
+      "displayName": "若葉睦",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-mutsumi.png"
+    },
+    {
+      "id": "bd-umiri",
+      "displayName": "八幡海鈴",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-umiri.png"
+    },
+    {
+      "id": "bd-nyamu",
+      "displayName": "祐天寺にゃむ",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-nyamu.png"
+    },
+    {
+      "id": "bd-sakiko",
+      "displayName": "豊川祥子",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-sakiko.png"
+    },
+    {
+      "id": "bd-arale",
+      "displayName": "仲町あられ",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-arale.png"
+    },
+    {
+      "id": "bd-nonoka",
+      "displayName": "宮永ののか",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-nonoka.png"
+    },
+    {
+      "id": "bd-ritsu",
+      "displayName": "峰月律",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-ritsu.png"
+    },
+    {
+      "id": "bd-miyako",
+      "displayName": "藤都子",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-miyako.png"
+    },
+    {
+      "id": "bd-yuno",
+      "displayName": "千石ユノ",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-yuno.png"
+    },
+    {
+      "id": "bd-nagi",
+      "displayName": "琴平凪",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-nagi.png"
+    },
+    {
+      "id": "bd-mahoro",
+      "displayName": "浜崎まほろ",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-mahoro.png"
+    },
+    {
+      "id": "bd-hotaru",
+      "displayName": "汐見蛍",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-hotaru.png"
+    },
+    {
+      "id": "bd-houka",
+      "displayName": "和泉朋花",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-houka.png"
+    },
+    {
+      "id": "bd-natsume",
+      "displayName": "伊沢なつめ",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-natsume.png"
+    },
+    {
+      "id": "bd-raika",
+      "displayName": "須賀蕾叶",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-raika.png"
+    },
+    {
+      "id": "bd-miku",
+      "displayName": "馬橋心玖",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-miku.png"
+    },
+    {
+      "id": "bd-yomogi",
+      "displayName": "矢倉蓬咲",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-yomogi.png"
+    },
+    {
+      "id": "bd-chieri",
+      "displayName": "梅里ちえり",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-chieri.png"
+    },
+    {
+      "id": "bd-shizuku",
+      "displayName": "四宮寧月",
+      "sheet": "/assets/frontend-bright-anime/characters/bd-shizuku.png"
+    }
+  ],
+  "palette": {
+    "ink": "#453226",
+    "inkSoft": "#5d4634",
+    "inkLight": "#7d6450",
+    "inkLine": "#4a3728",
+    "floorOakLight": "#e9cd9c",
+    "floorOak": "#dcb884",
+    "floorOakMid": "#cda66e",
+    "floorOakDark": "#b68b52",
+    "floorOakSeam": "#9c7242",
+    "floorOakSheen": "#fff1d8",
+    "floorStoneLight": "#dccfb6",
+    "floorStone": "#cdbfa3",
+    "floorStoneMid": "#bcac8f",
+    "floorStoneSeam": "#a5957a",
+    "floorMintLight": "#ddf2e5",
+    "floorMint": "#c3e4d1",
+    "floorMintMid": "#a8d2bb",
+    "floorMintSeam": "#8bbc9f",
+    "floorTatami": "#e9dfae",
+    "floorTatamiSeam": "#c9bc84",
+    "wallCream": "#fdf6e8",
+    "wallCreamShade": "#f4e6cd",
+    "wallCreamDeep": "#e6d2b0",
+    "wallPaper": "#fcf2df",
+    "wallPaperLine": "#eeddc0",
+    "wainscot": "#d8b184",
+    "wainscotLight": "#eac99d",
+    "wainscotShade": "#bb8d5d",
+    "wainscotSeam": "#986b41",
+    "skirting": "#c49f6c",
+    "wallShadow": "#d3bc98",
+    "woodPale": "#f2dcb4",
+    "woodLight": "#e3bd86",
+    "wood": "#d0a367",
+    "woodMid": "#b9884e",
+    "woodDark": "#96683a",
+    "woodDeep": "#744c29",
+    "woodGrain": "#a67d4e",
+    "woodHighlight": "#fbeed4",
+    "cream": "#fffdf7",
+    "paper": "#fbf2e0",
+    "paperShade": "#efdfc2",
+    "paperLine": "#dfcba6",
+    "clothMint": "#8ecfb4",
+    "clothMintDeep": "#63ab8d",
+    "clothSky": "#9ec9e8",
+    "clothSkyDeep": "#71a4cd",
+    "clothRose": "#f0a8ae",
+    "clothRoseDeep": "#d47f88",
+    "clothLilac": "#c3aee2",
+    "clothLilacDeep": "#9d85c6",
+    "clothButter": "#f6dc98",
+    "clothButterDeep": "#dfb95f",
+    "clothSlate": "#9cadbb",
+    "clothSlateDeep": "#77899a",
+    "vermilion": "#d95e68",
+    "vermilionDeep": "#b0424c",
+    "vermilionLight": "#f08d95",
+    "gold": "#efc070",
+    "goldDeep": "#cfa043",
+    "goldLight": "#fbe3a8",
+    "mint": "#7ec3a9",
+    "mintDeep": "#54987e",
+    "mintLight": "#c0e6d7",
+    "sky": "#8bbde4",
+    "skyDeep": "#5f97c5",
+    "skyLight": "#cbe2f5",
+    "lilac": "#b39ed8",
+    "lilacDeep": "#8b73b6",
+    "leaf": "#6fae7e",
+    "leafDeep": "#4e8b60",
+    "leafLight": "#a3d3a6",
+    "metal": "#c8d0d8",
+    "metalLight": "#eef2f6",
+    "metalMid": "#a9b3be",
+    "metalDeep": "#7f8a97",
+    "glass": "#cfeaf0",
+    "glassMid": "#a8d6e0",
+    "glassDeep": "#7cb9c8",
+    "glassSheen": "#f4fdff",
+    "foil": "#f7f2e6",
+    "foilSheen": "#ffffff",
+    "velvet": "#e2aaad",
+    "velvetDeep": "#c6858a",
+    "okGreen": "#5da57f",
+    "okGreenDeep": "#3f8161",
+    "warnAmber": "#dda245",
+    "warnAmberDeep": "#b67f28",
+    "stopRose": "#d05f64",
+    "stopRoseDeep": "#a4444a",
+    "infoSky": "#5f9ac6",
+    "vipPurple": "#8f72bd",
+    "vipPurpleDeep": "#6f5599",
+    "amber": "#e9a447",
+    "amberDeep": "#c8812f",
+    "amberLight": "#ffd68a",
+    "lanternRed": "#d2563f",
+    "lanternRedDeep": "#a63c2b",
+    "deepShadow": "#4a2f1c",
+    "deepShadowSoft": "#6b4630",
+    "sunWarm": "#ffe6b0",
+    "sunCool": "#dfeeff",
+    "lampWarm": "#ffd88a",
+    "lampCore": "#fff4d2",
+    "duskOrange": "#ffb877",
+    "nightBlue": "#6f8fc4",
+    "nightDeep": "#3a4a72"
+  },
+  "fx": {
+    "lampGlow": "/assets/frontend-bright-anime/fx/glow.png",
+    "shadow": "/assets/frontend-bright-anime/fx/shadow.png",
+    "sunShaft": "/assets/frontend-bright-anime/fx/sun-shaft.png"
+  }
+}

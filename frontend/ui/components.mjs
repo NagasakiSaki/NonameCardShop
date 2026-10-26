@@ -128,6 +128,9 @@ export function toast(kind, title, body, ttl = 4200) {
     body ? el("p", { class: "toast__body", text: body }) : null,
   ]);
   container.append(node);
+  // Feedback must not grow into a column that hides trading controls.
+  while(container.children.length>2)container.firstElementChild.remove();
+  node.addEventListener('click',()=>node.remove());
   setTimeout(() => node.remove(), ttl);
 }
 
