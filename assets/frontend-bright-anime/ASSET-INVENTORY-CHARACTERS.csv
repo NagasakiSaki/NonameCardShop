@@ -1,5 +1,4 @@
 原ID,显示名,角色,乐队,旧路径,新路径,帧宽,帧高,列数,显示缩放,锚点,适配方式,完成状态
-owner,店长,店主,,/assets/frontend/characters/owner.3437effd37.png,/assets/frontend-bright-anime/characters/owner.png,64,64,8,1,32×61,对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影,candidate-complete
 bd-tomori,高松燈,顾客,mygo,/assets/frontend/characters/bd-tomori.41ae9f88ef.png,/assets/frontend-bright-anime/characters/bd-tomori.png,64,64,8,1,32×61,对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影,candidate-complete
 bd-anon,千早愛音,顾客,mygo,/assets/frontend/characters/bd-anon.c32c4710da.png,/assets/frontend-bright-anime/characters/bd-anon.png,64,64,8,1,32×61,对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影,candidate-complete
 bd-rana,要楽奈,顾客,mygo,/assets/frontend/characters/bd-rana.37dffee9ba.png,/assets/frontend-bright-anime/characters/bd-rana.png,64,64,8,1,32×61,对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影,candidate-complete

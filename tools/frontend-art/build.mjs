@@ -29,7 +29,7 @@ export function buildAll() {
   const charset = {};
 
   for (const spec of CHARACTERS) {
-    if(spec.id==='owner')continue; // Installed from the approved LPC sheet below.
+    if(!spec.id.startsWith('bd-'))continue; // Only the approved 25-person band pack ships.
     const sheet = writePng(path.join("characters", spec.id + ".png"), drawActorSheet(spec));
     const portrait = writePng(path.join("portraits", spec.id + ".png"), drawPortrait(spec));
     written.push(sheet, portrait);

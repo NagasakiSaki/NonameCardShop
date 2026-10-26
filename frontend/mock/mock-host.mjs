@@ -1,6 +1,7 @@
 // frontend/mock/mock-host.mjs — 与正式 Host 同形的演示实现（固定种子、内存态、不外写正式存档）。
 import { loadCardLibrary } from "./fixtures/cards.mjs";
 import { resolveFixture } from "./fixtures/fixtures.mjs";
+import {BAND_APPEARANCES} from '../../data/band-appearances.mjs';
 
 const CONTRACT = "card-shop-ui/1.0";
 
@@ -245,9 +246,9 @@ export async function createMockHost({ fixture = "store-day" } = {}) {
       { personId: "staff.2", name: "老赵", role: "收银", wage: 1800, hired: false, mood: "—", note: "可减少排队" },
     ],
     neighbors: [
-      { personId: "neighbor.1", name: "隔壁面馆老板", relation: 42, portrait: "regular", dialog: "最近卡包涨价了？给我留两包。", pending: { kind: "application", day: clock.day, cardName: "界关羽", quantity: 1, offer: 4200, note: "收卡申请：想补齐同一势力", accepted: false } },
-      { personId: "neighbor.2", name: "卡片社社长", relation: 66, portrait: "collector", dialog: "周六想借你的场地办小型赛。", pending: { kind: "booking", day: 6, fee: 8000, accepted: false } },
-      { personId: "neighbor.3", name: "常来点卡的高中生", relation: 31, portrait: "rookie", dialog: "这张重复的能卖我吗？我攒了三个月的零花钱。", pending: { kind: "application", day: clock.day, cardName: "界徐盛", quantity: 2, offer: 2600, note: "收卡申请：预算有限，可议价", accepted: false } },
+      { personId: "neighbor.1", name: "隔壁面馆老板", relation: 42, portrait: "bd-soyo", dialog: "最近卡包涨价了？给我留两包。", pending: { kind: "application", day: clock.day, cardName: "界关羽", quantity: 1, offer: 4200, note: "收卡申请：想补齐同一势力", accepted: false } },
+      { personId: "neighbor.2", name: "卡片社社长", relation: 66, portrait: "bd-anon", dialog: "周六想借你的场地办小型赛。", pending: { kind: "booking", day: 6, fee: 8000, accepted: false } },
+      { personId: "neighbor.3", name: "常来点卡的高中生", relation: 31, portrait: "bd-tomori", dialog: "这张重复的能卖我吗？我攒了三个月的零花钱。", pending: { kind: "application", day: clock.day, cardName: "界徐盛", quantity: 2, offer: 2600, note: "收卡申请：预算有限，可议价", accepted: false } },
     ],
   };
 
@@ -274,14 +275,14 @@ export async function createMockHost({ fixture = "store-day" } = {}) {
   }
 
   // ---- 角色与移动 ----
-  const appearances = ["owner", "rookie", "collector", "competitor", "passerby", "regular", "bigspender"];
+  const appearances = BAND_APPEARANCES.map(c=>c.id);
   const actors = new Map();
   const ownedActorId = "actor:owner";
   const startMap = config.scene || "store";
   const start = maps[startMap].spawn || { x: 232, y: 264, tile: { x: 14, y: 16 } };
   actors.set(ownedActorId, {
     actorId: ownedActorId,
-    appearanceId: "owner",
+    appearanceId: "bd-anon",
     roomId: startMap,
     x: start.x,
     y: start.y,
@@ -296,11 +297,11 @@ export async function createMockHost({ fixture = "store-day" } = {}) {
   });
 
   const npcSpawnTiles = [
-    { x: 7, y: 9, activity: "浏览货架", look: "rookie" },
-    { x: 10, y: 6, activity: "挑选卡包", look: "collector" },
-    { x: 23, y: 8, activity: "看单卡", look: "competitor" },
-    { x: 17, y: 12, activity: "排开包队", look: "regular" },
-    { x: 12, y: 15, activity: "闲逛", look: "passerby" },
+    { x: 7, y: 9, activity: "浏览货架", look: "bd-tomori" },
+    { x: 10, y: 6, activity: "挑选卡包", look: "bd-anon" },
+    { x: 23, y: 8, activity: "看单卡", look: "bd-taki" },
+    { x: 17, y: 12, activity: "排开包队", look: "bd-soyo" },
+    { x: 12, y: 15, activity: "闲逛", look: "bd-yuno" },
   ];
   for (let i = 0; i < (config.npcCount || 0); i += 1) {
     const spot = npcSpawnTiles[i % npcSpawnTiles.length];
@@ -326,8 +327,8 @@ export async function createMockHost({ fixture = "store-day" } = {}) {
 
   // 对战房的两名 NPC：一名入座、一名旁观
   const battleSeats = [
-    { x: 9, y: 5, activity: "入座 · 1 号桌", look: "competitor", label: "竞技玩家 · 小林" },
-    { x: 21, y: 12, activity: "旁观 · 2 号桌", look: "collector", label: "收藏家 · 陈先生" },
+    { x: 9, y: 5, activity: "入座 · 1 号桌", look: "bd-taki", label: "竞技玩家 · 小林" },
+    { x: 21, y: 12, activity: "旁观 · 2 号桌", look: "bd-anon", label: "收藏家 · 陈先生" },
   ];
   if (typeof window !== "undefined") {
     battleSeats.forEach((spot, index) => {
@@ -962,7 +963,7 @@ export async function createMockHost({ fixture = "store-day" } = {}) {
         },
         opponent: {
           name: table.opponentName || ["竞技玩家 · 小林", "收藏家 · 陈先生"][Math.floor(rng() * 2)],
-          appearanceId: table.opponentLook || "competitor",
+          appearanceId: table.opponentLook || "bd-taki",
           raritySummary: { N: 0, R: 1, SR: 2, SSR: noStake ? 0 : 1 },
           record: "12 胜 5 负",
         },

@@ -11,6 +11,7 @@ groups.roomsAndStrength.push('tests/three-formats.mjs');groups.operationsV7.push
 groups.dev.push('tests/service-health.mjs');groups.roomsAndStrength.push('tests/service-health.mjs');
 groups.roomsAndStrength.push('tests/scroll-and-album-browser.mjs');
 groups.frontend.push('tests/bright-frontend-browser.mjs');
+groups.frontend.push('tests/band-only-appearances.mjs');
 groups.nativeModes=['tests/native-modes-unit.mjs','tests/native-modes-browser.mjs','tests/native-modes-series.mjs','tests/native-legacy-regression.mjs'];
 groups.audit=['tests/backend-edge-cases.mjs','tests/battle-lifecycle.mjs','tests/storage-archives-browser.mjs'];groups.backend.push('tests/customer-identity.mjs','tests/customer-trash.mjs','tests/distribution-skins.mjs',...groups.audit);groups.frontend.push('tests/character-art.mjs','tests/customer-trash-browser.mjs','tests/frontend-movement.mjs','tests/frontend-skins.mjs','tests/frontend/assets.mjs');
 groups.dev.push('tests/character-kit/cli.mjs');groups.frontend.push('tests/frontend-next/card-trade.mjs');

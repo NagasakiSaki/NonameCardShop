@@ -1,42 +1,7 @@
 {
   "note": "特殊人物模型（LPC 64×64）在新画风下的适配结果。帧尺寸/锚点/动画列与正式 manifest 完全一致，合并只需替换 sheet URL。",
-  "count": 26,
+  "count": 25,
   "characters": [
-    {
-      "id": "owner",
-      "displayName": "店长",
-      "role": "店主",
-      "band": null,
-      "source": "/assets/frontend/characters/owner.3437effd37.png",
-      "sheet": "/assets/frontend-bright-anime/characters/owner.png",
-      "frameWidth": 64,
-      "frameHeight": 64,
-      "columns": 8,
-      "displayScale": 1,
-      "anchorPx": [
-        32,
-        61
-      ],
-      "directions": {
-        "up": 0,
-        "left": 1,
-        "down": 2,
-        "right": 3
-      },
-      "idleColumn": 0,
-      "walkColumns": [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7
-      ],
-      "frameRate": 9,
-      "regrade": "对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影"
-    },
     {
       "id": "bd-tomori",
       "displayName": "高松燈",

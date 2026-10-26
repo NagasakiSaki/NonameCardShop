@@ -18,7 +18,7 @@ import {tickNpcTables,backgroundState} from './npc-tables.mjs';
 import {voidNpcMatch} from './matches.mjs';
 import {inventoryView,cardDetailView,ledgerView,retailView,marketView,archiveMeta,sealedInventoryView,dayArchiveViews} from './views.mjs';
 import {DEFAULT_DISTRIBUTION,productEnabled} from './distribution.mjs';
-import {PLAYER_SKINS} from './appearances.mjs';
+import {PLAYER_SKINS,normaliseWorldAppearances} from './appearances.mjs';
 import {migrateCustomerIdentity} from './customer-identity.mjs';
 import {basketQuote,placeBasketOrder} from './basket.mjs';
 import {deliverImmediately} from './fulfillment.mjs';
@@ -73,11 +73,12 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
     initialiseDailyTasks(world);
     migrateVisits(world);
     migrateCustomerIdentity(world);
-    const aliases={novice:'rookie',competitive:'competitor',casual:'passerby',premium:'bigspender'},occupied=new Set();
+    normaliseWorldAppearances(world);
+    const occupied=new Set();
     for(const actor of [world.player,...world.npcs.filter(onSite)]){
       const oldName=/^顾客\s*(\d+)$/.exec(actor.name||'');if(oldName){const names=customerBehavior(world).names;actor.name=names[(Number(oldName[1])-1)%names.length];}
       const navigationChanged=actor.navVersion!==navigation.get(actor.roomId)?.navVersion;
-      actor.appearanceId=aliases[actor.appearanceId]||actor.appearanceId;const map=navigation.get(actor.roomId);if(!map)continue;
+      const map=navigation.get(actor.roomId);if(!map)continue;
       const key=(x,y)=>`${actor.roomId}:${Math.floor(x/16)}:${Math.floor(y/16)}`;
       if(!canStand(map,actor.x,actor.y)||occupied.has(key(actor.x,actor.y))){const points=[];for(let y=0;y<map.height;y++)for(let x=0;x<map.width;x++){const p={x:x*16+8,y:y*16+8};if(canStand(map,p.x,p.y)&&!occupied.has(key(p.x,p.y)))points.push(p);}points.sort((a,b)=>Math.hypot(a.x-actor.x,a.y-actor.y)-Math.hypot(b.x-actor.x,b.y-actor.y));if(points[0])Object.assign(actor,points[0]);}
       occupied.add(key(actor.x,actor.y));actor.navVersion=map.navVersion;

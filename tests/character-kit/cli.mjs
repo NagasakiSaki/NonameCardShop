@@ -13,7 +13,7 @@ function run(args,code=0){const p=spawnSync(process.execPath,[cli,...args,'--jso
 function input(name,value){const file=path.join(temp,name+'.json');fs.writeFileSync(file,JSON.stringify(value));return file;}
 try{
   assert.ok(run(['--help']).help.includes('validate'));assert.equal(run(['--version']).version,'1.0.0');
-  const parts=run(['list-parts']);assert.equal(parts.templates.length,28);assert.ok(parts.parts.length>30);assert.ok(parts.parts.every(p=>p.width>0&&p.height>0&&p.license));
+  const parts=run(['list-parts']);assert.equal(parts.templates.length,25);assert.ok(parts.parts.length>30);assert.ok(parts.parts.every(p=>p.width>0&&p.height>0&&p.license));
   for(const [name,value]of Object.entries({single:PRESETS[0],array:PRESETS,wrapped:{presets:PRESETS},web:{version:3,portrait:PRESETS[3]}}))assert.ok(run(['validate','--config',input(name,value)]).valid);
   const bad={...PRESETS[0],hair:['#nothex','#123456','#abcdef'],base:'missing-head'};
   const badResult=run(['validate','--config',input('bad',bad)],1);assert.ok(badResult.errors.some(e=>e.path==='/hair'&&e.code==='PALETTE'));assert.ok(badResult.errors.some(e=>e.path==='/base'&&e.code==='MISSING_PART'));
@@ -28,10 +28,10 @@ try{
   assert.equal(run(['contact-sheet','--out',temp,'--overwrite'],2).error.code,'OUTPUT_UNOWNED');
   const alias=path.join(temp,'assets-alias');fs.symlinkSync(path.join(ROOT,'assets'),alias,'junction');
   assert.equal(run(['contact-sheet','--out',path.join(alias,'forbidden-art-output')],2).error.code,'OUTPUT_PATH');
-  const out=path.join(temp,'sheet'),sheet=run(['contact-sheet','--out',out]);assert.equal(sheet.characters,28);assert.equal(sheet.groups,6);assert.equal(sheet.files.length,8);assert.ok(sheet.files.every(f=>fs.existsSync(f)));
+  const out=path.join(temp,'sheet'),sheet=run(['contact-sheet','--out',out]);assert.equal(sheet.characters,25);assert.equal(sheet.groups,5);assert.equal(sheet.files.length,7);assert.ok(sheet.files.every(f=>fs.existsSync(f)));
   const png=fs.readFileSync(path.join(out,'mygo-standing.png'));assert.equal(png.readUInt32BE(16),680);assert.equal(png.readUInt32BE(20),240);
   fs.writeFileSync(path.join(out,'keep.txt'),'existing unrelated file');run(['contact-sheet','--out',out,'--overwrite']);assert.equal(fs.readFileSync(path.join(out,'keep.txt'),'utf8'),'existing unrelated file');assert.equal(hash(),before);
-  console.log(`PASS character-kit: ${assertions} CLI cases; 28 templates; structured errors; complete grouped sheets; output boundary/overwrite protection; production manifest unchanged.`);
+  console.log(`PASS character-kit: ${assertions} CLI cases; 25 templates; structured errors; complete grouped sheets; output boundary/overwrite protection; production manifest unchanged.`);
 }finally{
   if(!temp.startsWith(local+path.sep))throw new Error('Unexpected cleanup path');fs.rmSync(temp,{recursive:true,force:true});
 }

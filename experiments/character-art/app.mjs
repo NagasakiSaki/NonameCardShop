@@ -35,8 +35,8 @@ function label(text,x,y){ctx.font='8px "Microsoft YaHei",sans-serif';ctx.textAli
 async function start(){
   for(const p of PRESETS){portraits.set(p.id,await renderPortrait(p));sheets.set(p.id,await renderWalkSheet(p));}
   for(const p of PRESETS){const b=document.createElement('button');b.className='roster-card';b.dataset.id=p.id;b.append(avatarCanvas(portraits.get(p.id)));const span=document.createElement('span'),strong=document.createElement('strong'),small=document.createElement('small');strong.textContent=p.name;small.textContent=BANDS.find(v=>v.id===p.band)?.name||'基础外观';span.append(strong,small);b.append(span);b.addEventListener('click',()=>select(p.id));$('#walk-roster').append(b);}filterRoster();
-  showPortrait('#keeper-portrait',portraits.get('keeper'));
-  for(const [target,id,state]of [['#checkout-face','collector','正在挑选卡盒'],['#market-face','regular','正在查看寄售']]){const el=$(target),span=document.createElement('span'),strong=document.createElement('strong'),small=document.createElement('small');strong.textContent=byId.get(id).name.split(' · ')[1];small.textContent=state;span.append(strong,small);el.append(cloneCanvas(portraits.get(id)),span);}
+  showPortrait('#keeper-portrait',portraits.get('bd-anon'));
+  for(const [target,id,state]of [['#checkout-face','bd-tomori','正在挑选卡盒'],['#market-face','bd-soyo','正在查看寄售']]){const el=$(target),span=document.createElement('span'),strong=document.createElement('strong'),small=document.createElement('small');strong.textContent=byId.get(id).name.split(' · ')[1];small.textContent=state;span.append(strong,small);el.append(cloneCanvas(portraits.get(id)),span);}
   updateFields();await refreshCurrent();
   const manifest=await fetch('/assets/frontend/manifest.json').then(r=>r.json()),map=await fetch(manifest.maps.store).then(r=>r.json()),tiles=await loadImage(manifest.tileset.image),props=await loadImage(manifest.props.image),back=document.createElement('canvas');back.width=480;back.height=320;const bg=back.getContext('2d');bg.imageSmoothingEnabled=false;
   const tf=manifest.tileset.frameSize||16;

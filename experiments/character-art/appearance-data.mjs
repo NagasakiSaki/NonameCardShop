@@ -1,11 +1,7 @@
 // Native pixel data and shader math shared by the browser plug-in and batch exporter.
 import {BAND_APPEARANCES} from '../../data/band-appearances.mjs';
-export const BASE_PRESETS=[
-  {id:'keeper',name:'店长 · 栗棕短发',role:'店长',base:'female01',front:'female01',back:'short01',clothes:'female02',eyes:'female01',mouth:'neutral02',hair:['#d4aa77','#785568','#43384c'],cloth:['#8ebba5','#4e8078','#345362'],iris:['#97c1a2','#4b7a78','#294858'],walkHair:'hair'},
-  {id:'collector',name:'收藏客 · 银紫长发',role:'收藏客',base:'female03',front:'female02',back:'long01',clothes:'female01',eyes:'female02',mouth:'neutral02',hair:['#e5e0f3','#9596ba','#56516f'],cloth:['#ae9bc9','#676080','#3d3c58'],iris:['#c4b0e4','#7c6aab','#45445e'],walkHair:'hair-silver'},
-  {id:'regular',name:'常客 · 粉色发髻',role:'常客',base:'female07',front:'female04',back:'pigtails01',clothes:'female07',eyes:'female01',mouth:'neutral02',hair:['#ffc5d1','#c777a3','#754f79'],cloth:['#d68f9f','#98637e','#5c425e'],iris:['#a5c8db','#618aa5','#3a516f'],walkHair:'hair-pink'}
-];
-export const PRESETS=[...BASE_PRESETS,...BAND_APPEARANCES];
+export const BASE_PRESETS=[];
+export const PRESETS=[...BAND_APPEARANCES];
 const rgb=hex=>hex.replace('#','').match(/../g).map(n=>parseInt(n,16)/255);
 const ramps={skin:['#ffe4d0','#c79288','#795c7d'],cream:['#fff1d5','#c6ae99','#796f83']};
 export function colorize(d,colors){

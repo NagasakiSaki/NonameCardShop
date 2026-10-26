@@ -37,7 +37,7 @@ export class ActorView {
   sync(actors, { playerActorId } = {}) {
     const seen = new Set();
     for (const actor of actors) {
-      const appearance=this.scene.textures.exists('char-'+actor.appearanceId)?actor.appearanceId:'passerby';
+      const appearance=this.scene.textures.exists('char-'+actor.appearanceId)?actor.appearanceId:'bd-anon';
       seen.add(actor.actorId);
       let entry = this.sprites.get(actor.actorId);
       if (!entry) {

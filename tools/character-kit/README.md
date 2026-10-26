@@ -13,7 +13,7 @@ node tools/character-kit/cli.mjs contact-sheet --out .local/character-kit/review
 node tools/character-kit/audit.mjs --out .local/collaboration/QA-01/new-review --json
 ```
 
-`list-parts` 返回实际存在的 PNG 部件（路径、尺寸、许可）、28 套模板的完整配置、规格和署名入口。复制模板配置后编辑，不猜文件名。`validate` 接受人物对象、非空数组、`{presets:[...]}`、网页导出的 `{portrait:{...}}`；生成清单中的 portrait PNG 路径不能作为人物配置。字段补全用 [config.schema.json](config.schema.json)；文件存在性、ID 重复、costume 注册等额外约束由 CLI 核对。允许原工具的附加元数据，不把它们伪装成已冻结的 v2 契约。
+`list-parts` 返回实际存在的 PNG 部件（路径、尺寸、许可）、25 套邦邦模板的完整配置、规格和署名入口。复制模板配置后编辑，不猜文件名。`validate` 接受人物对象、非空数组、`{presets:[...]}`、网页导出的 `{portrait:{...}}`；生成清单中的 portrait PNG 路径不能作为人物配置。字段补全用 [config.schema.json](config.schema.json)；文件存在性、ID 重复、costume 注册等额外约束由 CLI 核对。允许原工具的附加元数据，不把它们伪装成已冻结的 v2 契约。
 
 行走精修使用可选 `walkCostume`，与立绘的 `costume` 分开；四人覆盖参数在 `data/walk-refinement.mjs`，绘制器在 `experiments/character-art/walk-refinement.mjs`。`ref-college`、`ref-bluedress`、`ref-gothic` 是新增行走版型，其余已注册版型也可用于精修路径。`sleevePalette` 为可选的三色袖子调色板。修改行走时保留原 `costume`，避免误改完整立绘；正式用户图源立绘继续走登记覆盖。
 
@@ -23,7 +23,7 @@ node tools/character-kit/audit.mjs --out .local/collaboration/QA-01/new-review -
 
 `--json` 的 stdout 始终只有一个 JSON 对象，包含 ok、command 等；不输出进度杂项。退出码：0 成功/帮助、1 配置校验失败、2 参数/文件/导出错误。工具内部不联网、不安装依赖、无 API 密钥。
 
-图册输出六组 PNG（五团＋基础）、带姓名次序的 index.html 和机器可读标记；署名以工程 `experiments/character-art/CREDITS.md` 为准。原生立绘 128×224、列表头像 96×96、行走单帧 64×64；头像素材许可不等于原角色设计授权。
+图册输出五组 PNG（五团）、带姓名次序的 index.html 和机器可读标记；署名以工程 `experiments/character-art/CREDITS.md` 为准。原生立绘 128×224、列表头像 96×96、行走单帧 64×64；头像素材许可不等于原角色设计授权。
 
 校验后沿用现有绘制/安装流程，不由本工具自动执行：
 

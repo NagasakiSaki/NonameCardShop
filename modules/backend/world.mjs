@@ -1,4 +1,5 @@
 import {validateRooms,activeRoom} from './room-state.mjs';
+import {DEFAULT_PLAYER_APPEARANCE} from './appearances.mjs';
 import {validateV7} from './v7-policy.mjs';
 import {id, clone, serial, need} from './common.mjs';
 import {initialiseExperience,recordExperienceEvent,validateExperience,experienceSnapshot,FEEDBACK_REASONS} from './experience.mjs';
@@ -7,7 +8,7 @@ import {validateNarrative,recordNarrativeEvent,narrativeSummary} from '../narrat
 export function createWorld(rules){
   const world={schemaVersion:2,customerVisitVersion:1,worldId:id('world'),branchId:id('branch'),revision:0,serial:0,seed:Math.floor(Math.random()*4294967296),rules:clone(rules),
     clock:{day:1,minute:480,phase:'preparing',speed:1,manualPaused:false},wallet:{available:rules.startingCash,debt:0,escrowLiability:0},
-    player:{actorId:'actor:owner',appearanceId:'owner',roomId:'store',x:240,y:272,direction:'down',moving:false,activity:'idle',navVersion:null,favoriteCardKeys:[]},
+    player:{actorId:'actor:owner',appearanceId:DEFAULT_PLAYER_APPEARANCE,roomId:'store',x:240,y:272,direction:'down',moving:false,activity:'idle',navVersion:null,favoriteCardKeys:[]},
     storeSettings:{tableFee:null,feeRevision:0},
     matchQueue:[],
     products:[],items:{},orders:[],listings:[],npcs:[],circulation:{},stats:{},matches:[],tables:[{tableId:'battleRoom.table.01',matchId:null},{tableId:'battleRoom.table.02',matchId:null}],

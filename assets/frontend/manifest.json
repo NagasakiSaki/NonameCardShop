@@ -71,243 +71,6 @@
     "warmLamp": "#ffd27a"
   },
   "characters": {
-    "rookie": {
-      "sheet": "/assets/frontend/characters/rookie.png",
-      "portrait": "/assets/frontend/portraits/rookie.png",
-      "frameWidth": 96,
-      "frameHeight": 128,
-      "displayScale": 0.38,
-      "anchorPx": [
-        48,
-        120
-      ],
-      "directions": {
-        "down": 0,
-        "left": 1,
-        "right": 2,
-        "up": 3
-      },
-      "idleColumn": 1,
-      "walkColumns": [
-        0,
-        1,
-        2,
-        1
-      ],
-      "displayName": "新手顾客",
-      "role": "新手玩家",
-      "traits": [
-        "猫耳发束",
-        "星形发夹",
-        "入门盒"
-      ],
-      "appearanceReference": "户山香澄：猫耳感发束、棕发与星形饰物",
-      "skinTone": "fair"
-    },
-    "collector": {
-      "sheet": "/assets/frontend/characters/collector.png",
-      "portrait": "/assets/frontend/portraits/collector.png",
-      "frameWidth": 96,
-      "frameHeight": 128,
-      "displayScale": 0.38,
-      "anchorPx": [
-        48,
-        120
-      ],
-      "directions": {
-        "down": 0,
-        "left": 1,
-        "right": 2,
-        "up": 3
-      },
-      "idleColumn": 1,
-      "walkColumns": [
-        0,
-        1,
-        2,
-        1
-      ],
-      "displayName": "收藏顾客",
-      "role": "收藏家",
-      "traits": [
-        "银紫长发",
-        "紫色蝴蝶结",
-        "收藏册"
-      ],
-      "appearanceReference": "凑友希那：银紫长发与深紫服装",
-      "skinTone": "fair"
-    },
-    "competitor": {
-      "sheet": "/assets/frontend/characters/competitor.png",
-      "portrait": "/assets/frontend/portraits/competitor.png",
-      "frameWidth": 96,
-      "frameHeight": 128,
-      "displayScale": 0.38,
-      "anchorPx": [
-        48,
-        120
-      ],
-      "directions": {
-        "down": 0,
-        "left": 1,
-        "right": 2,
-        "up": 3
-      },
-      "idleColumn": 1,
-      "walkColumns": [
-        0,
-        1,
-        2,
-        1
-      ],
-      "displayName": "竞技顾客",
-      "role": "竞技玩家",
-      "traits": [
-        "红色挑染",
-        "格纹裙摆",
-        "竞技牌盒"
-      ],
-      "appearanceReference": "美竹兰：深色短发、红色挑染",
-      "skinTone": "fair"
-    },
-    "passerby": {
-      "sheet": "/assets/frontend/characters/passerby.png",
-      "portrait": "/assets/frontend/portraits/passerby.png",
-      "frameWidth": 96,
-      "frameHeight": 128,
-      "displayScale": 0.38,
-      "anchorPx": [
-        48,
-        120
-      ],
-      "directions": {
-        "down": 0,
-        "left": 1,
-        "right": 2,
-        "up": 3
-      },
-      "idleColumn": 1,
-      "walkColumns": [
-        0,
-        1,
-        2,
-        1
-      ],
-      "displayName": "休闲顾客",
-      "role": "休闲玩家",
-      "traits": [
-        "灰绿短发",
-        "宽松连帽衫",
-        "斜挎包"
-      ],
-      "appearanceReference": "青叶摩卡：灰绿短发、宽松外套",
-      "skinTone": "fair"
-    },
-    "regular": {
-      "sheet": "/assets/frontend/characters/regular.png",
-      "portrait": "/assets/frontend/portraits/regular.png",
-      "frameWidth": 96,
-      "frameHeight": 128,
-      "displayScale": 0.38,
-      "anchorPx": [
-        48,
-        120
-      ],
-      "directions": {
-        "down": 0,
-        "left": 1,
-        "right": 2,
-        "up": 3
-      },
-      "idleColumn": 1,
-      "walkColumns": [
-        0,
-        1,
-        2,
-        1
-      ],
-      "displayName": "常来顾客",
-      "role": "熟客",
-      "traits": [
-        "粉色双马尾",
-        "白色针织衫",
-        "粉色蝴蝶结"
-      ],
-      "appearanceReference": "丸山彩：粉色双马尾与粉白配色",
-      "skinTone": "fair"
-    },
-    "bigspender": {
-      "sheet": "/assets/frontend/characters/bigspender.png",
-      "portrait": "/assets/frontend/portraits/bigspender.png",
-      "frameWidth": 96,
-      "frameHeight": 128,
-      "displayScale": 0.38,
-      "anchorPx": [
-        48,
-        120
-      ],
-      "directions": {
-        "down": 0,
-        "left": 1,
-        "right": 2,
-        "up": 3
-      },
-      "idleColumn": 1,
-      "walkColumns": [
-        0,
-        1,
-        2,
-        1
-      ],
-      "displayName": "高预算顾客",
-      "role": "大客户",
-      "traits": [
-        "金色长发",
-        "红色披肩",
-        "金扣收藏箱"
-      ],
-      "appearanceReference": "弦卷心：金色长发与鲜明红金配色",
-      "skinTone": "fair"
-    },
-    "owner": {
-      "sheet": "/assets/frontend/characters/owner.3437effd37.png",
-      "portrait": "/assets/frontend/portraits/owner.0cd78218fd.png",
-      "avatar": "/assets/frontend/portraits/owner.0cd78218fd.png",
-      "portraitSize": [
-        96,
-        96
-      ],
-      "frameWidth": 64,
-      "frameHeight": 64,
-      "columns": 8,
-      "displayScale": 1,
-      "anchorPx": [
-        32,
-        61
-      ],
-      "directions": {
-        "up": 0,
-        "left": 1,
-        "down": 2,
-        "right": 3
-      },
-      "idleColumn": 0,
-      "walkColumns": [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7
-      ],
-      "frameRate": 9,
-      "displayName": "店长",
-      "role": "店主",
-      "appearanceReference": null,
-      "band": null
-    },
     "bd-tomori": {
       "sheet": "/assets/frontend/characters/bd-tomori.41ae9f88ef.png",
       "portrait": "/assets/frontend/portraits/bd-tomori.11fe94c1b6.png",
@@ -1460,7 +1223,6 @@
     }
   },
   "characterOrder": [
-    "owner",
     "bd-tomori",
     "bd-anon",
     "bd-rana",
@@ -1485,13 +1247,7 @@
     "bd-miku",
     "bd-yomogi",
     "bd-chieri",
-    "bd-shizuku",
-    "rookie",
-    "collector",
-    "competitor",
-    "passerby",
-    "regular",
-    "bigspender"
+    "bd-shizuku"
   ],
   "tileset": {
     "image": "/assets/frontend-bright-anime/tiles/tileset.png",
@@ -2311,5 +2067,6 @@
       ]
     }
   },
-  "characterCredits": "/experiments/character-art/CREDITS.md"
+  "characterCredits": "/experiments/character-art/CREDITS.md",
+  "characterPoolVersion": "bangdream-only-1"
 }

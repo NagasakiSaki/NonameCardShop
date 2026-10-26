@@ -1,5 +1,6 @@
 import nativeEligibility from '../../data/v7/native-eligibility.json' with {type:'json'};
 import {leaveQueue} from './match-queue.mjs';
+import {normaliseAppearance} from './appearances.mjs';
 // Authoritative V7 orchestration. Pure candidate reducers run only inside the Host transaction.
 import {clone,need,serial,random} from './common.mjs';
 import {isV7,unlockedProducts} from './v7-policy.mjs';
@@ -48,7 +49,7 @@ export function tickV7(w,catalog,navigation,seconds=0){
     const plan=unwrap(B.planChallengerVisit(p,w.clock.day,{...context(w),storeOpen:true,phase:w.clock.phase}));
     if(plan.shouldVisit){
       let n=w.npcs.find(n=>n.actorId===plan.actorId);const stage=activeStage(w);
-      if(!n){n={actorId:plan.actorId,name:stage.displayName,appearanceId:stage.appearanceId,wallet:{available:0},specialist:true,personId:stage.personId,presence:'offsite',roomId:'store',x:240,y:272,direction:'up',moving:false};w.npcs.push(n);}
+      if(!n){n={actorId:plan.actorId,name:stage.displayName,appearanceId:normaliseAppearance(stage.appearanceId),wallet:{available:0},specialist:true,personId:stage.personId,presence:'offsite',roomId:'store',x:240,y:272,direction:'up',moving:false};w.npcs.push(n);}
       if(!onSite(n)&&!n.currentMatchId){arriveCustomer(w,n,navigation.get('store'));n.customerCategory='来访高手';n.nameColor='#C084FC';n.label='寻找店长';}
     }
   }
