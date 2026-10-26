@@ -13,6 +13,7 @@ const json=p=>JSON.parse(fs.readFileSync(p,'utf8')),source=json('data/cards.json
 assert.deepEqual(listFormatIds(),['kof','doudizhu-bo3','versus2v2-bo3']);assert.equal(getFormat('bo3'),null);
 let r=await createRuntime({source,rules,repository:memoryRepository(),modeCapabilities}),seq=0;await r.connect({contractVersion:CONTRACT,clientId:'three-formats'});
 const c=async(type,payload={})=>{const v=await r.command({requestId:'three-formats-'+ ++seq,type,payload});assert(v.ok,JSON.stringify(v));return v.data;};
+const intro=(await r.query('dialogue.offer')).data;await c('dialogue.respond',{offerId:intro.offerId,optionId:'begin',proof:intro.proof});
 for(let day=1;day<3;day++){await c('business.open');await c('business.close');await c('business.nextDay');}await c('business.open');await r.advance(.1);
 let offer=(await r.query('dialogue.offer')).data;await c('dialogue.respond',{offerId:offer.offerId,optionId:'accept',proof:offer.proof});const base=r.inspect();await r.disconnect();
 const refs=[];for(const [i,id]of ['caocao','liubei','sunquan','ganning','zhaoyun','machao','diaochan','huatuo'].entries()){const card=catalog.byId.get(id),ref='three-player-'+i;refs.push(ref);base.world.items[ref]={inventoryRef:ref,kind:'card',cardKey:card.cardKey,printedRarity:card.currentRarity,ownerId:'player',location:'collection',lock:null,protected:false,cost:0};}

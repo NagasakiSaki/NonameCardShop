@@ -10,6 +10,7 @@ const json=p=>JSON.parse(fs.readFileSync(p,'utf8')),source=json('data/cards.json
 assert.equal(manifest.props.list.length,76);assert.equal(manifest.props.cellSize,384);assert.equal(manifest.props.artScale,4);assert.equal(manifest.tileset.frameSize,64);
 assert(lightingForMinute(600).dark<=.02);assert(lightingForMinute(1260).dark<=.60);assert.deepEqual(lightingForMinute(-180),lightingForMinute(1260));
 const runtime=await createRuntime({source,rules,repository:memoryRepository()}),base=structuredClone(runtime.inspect().world);
+base.longTerm.loan.intro.status='acknowledged';base.dialogueOffer=null;for(const n of base.npcs.filter(n=>n.debtCollector)){n.presence='offsite';n.trip=null;}
 base.clock.phase='open';base.clock.minute=600;base.clock.manualPaused=true;base.wallet.available=50000;
 const map=json('assets/frontend/maps/store.json'),counter=map.interactions.find(i=>i.id==='store.counter');Object.assign(base.player,{roomId:'store',...(counter.stand||counter.anchor)});
 for(const [i,id]of ['caocao','liubei','sunquan'].entries()){const card=catalog.byId.get(id);base.items['bright-card-'+i]={inventoryRef:'bright-card-'+i,kind:'card',cardKey:card.cardKey,ownerId:'player',printedRarity:card.currentRarity,location:'collection',lock:null,protected:false,cost:100};}

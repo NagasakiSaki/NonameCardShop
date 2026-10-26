@@ -1,5 +1,6 @@
 import * as Rooms from './battle-rooms.mjs';
 import * as Debt from './debt-challenge.mjs';
+import {loanBalance,repayLoan} from './campaign-loan.mjs';
 import {productContents} from './product-catalog.mjs';
 import {reconcileMarket} from './market-policy.mjs';
 import {reconcileManagementMarket} from './management.mjs';
@@ -53,7 +54,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
     }
     for(const item of Object.values(world.items))if(item.ownerId==='player'&&item.location==='retail'&&['pack','box'].includes(item.kind)&&!productEnabled(world.rules,item.productId))item.location='stock';
   }
-  if(!record){const world=createWorld(rules);initialiseRooms(world);initialiseRating(world,rules);initialiseV7(world,rules,{fresh:true});if(narrative.contentAvailable)narrative.initialise(world,true);initialiseManagement(world,managementConfig);ensureRegulars(world);world.products=publishProducts(catalog,world.rules,1,world.prices,world);grantStarterGift(world);record={schemaVersion:2,revision:0,world,archives:[],requests:{},legacyResetDone:false};record.archives.push(archive(world,'start'));await repository.commit(record,null);}
+  if(!record){const world=createWorld(rules);initialiseRooms(world);initialiseRating(world,rules);initialiseV7(world,rules,{fresh:true});if(narrative.contentAvailable)narrative.initialise(world,true);initialiseManagement(world,managementConfig);ensureRegulars(world);world.products=publishProducts(catalog,world.rules,1,world.prices,world);grantStarterGift(world);Debt.initialiseLongTerm(world);record={schemaVersion:2,revision:0,world,archives:[],requests:{},legacyResetDone:false};record.archives.push(archive(world,'start'));await repository.commit(record,null);}
   upgradeDistribution(record.world);initialiseManagement(record.world,managementConfig);ensureRegulars(record.world);record.world.player.actorId='actor:owner';
   validateWorld(record.world);validateRules(record.world.rules);catalog=buildCatalog(source,record.world.rules);
   for(const m of record.world.matches)if(m.status==='running'&&!m.simulated){
@@ -64,6 +65,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
   let connected=false,clientId,sessionId,seq=0,queue=Promise.resolve(),disconnected=false,lastInputSeq=-1,movement=null;
   function normaliseActors(world){
     Debt.initialiseLongTerm(world);
+    Debt.ensureLoanIntro(world);
     initialiseRooms(world);if(initialiseRating(world,rules))world.products=publishProducts(buildCatalog(source,world.rules),world.rules,world.clock.day,world.prices,world);
     if(initialiseV7(world,rules))world.products=publishProducts(buildCatalog(source,world.rules),world.rules,world.clock.day,world.prices,world);
     if(narrative.contentAvailable||world.narrative)narrative.initialise(world,false);
@@ -133,7 +135,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
       const oldIds=new Set(w().log.map(e=>e.eventId)),events=next.world.log.filter(e=>!oldIds.has(e.eventId));
       const names={packSaleCompleted:'顾客购买卡包/盒',secondaryTradeCompleted:'二级市场成交',npcSimulationSettled:'NPC 离桌付费',officialMatchSettled:'比赛结算',debtChallengeCleared:'牌局减免欠款'};
       const lines=events.filter(e=>names[e.type]).map(e=>`${names[e.type]}${e.names?' · '+e.names.join(' / '):''}${e.amount?' '+e.amount+' 币':''}`);
-      recordWalletChange(next.world,w().wallet,{operation,...(lines.length?{label:lines.join('；')}:{})});
+      recordWalletChange(next.world,w().wallet,{operation,campaignDebtDelta:loanBalance(next.world)-loanBalance(w()),...(lines.length?{label:lines.join('；')}:{})});
     }
     grantTaskRewards(next.world,(before,detail)=>recordWalletChange(next.world,before,detail));
     if(!['saves.load','saves.loadDay','saves.import'].includes(operation)){
@@ -256,6 +258,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
       case 'challenges.rematch':return V7.afterChallengeLoss(world,p,navigation,{rematch:true});
       case 'challenges.defer':return V7.afterChallengeLoss(world,p,navigation);
       case 'allies.assign':return V7.assignV7(world,catalog,p);
+      case 'debt.repay':{V7.checkProof(world,p.proof);const result=repayLoan(world,p);note(world,'campaignLoanRepaid',result);return result;}
       case 'combat.prepareSeries':return V7.prepareV7(world,catalog,p,navigation,modeCapabilities);
       case 'combat.selectRound':return V7.selectV7(world,p);
       case 'combat.restartRound':case 'combat.abandon':return V7.lifecycleV7(world,catalog,input.type,p);

@@ -10,7 +10,7 @@ export const DEFAULT_ALLY_SLOTS = 3;
 export function createProgressionState(options = {}) {
   const epoch = options.epoch ?? 1;
   const firstDueDay = options.firstDueDay ?? 2;
-  const intervalDays = options.intervalDays ?? 2;
+  const intervalDays = options.intervalDays ?? 1;
   const unlockedProductIds = options.unlockedProductIds ? [...options.unlockedProductIds] : ['yijiang'];
 
   // Deep clone default stages and set their initial dueDays based on schedule
@@ -81,7 +81,7 @@ export function initialiseProgression(world, config = {}) {
   const state = createProgressionState({
     epoch: world.epoch || world.worldId || 1,
     firstDueDay,
-    intervalDays: 2,
+    intervalDays: 1,
     unlockedProductIds: world.unlockedProductIds || ['yijiang']
   });
 
@@ -256,7 +256,7 @@ export function reduceProgression(state, event, context = {}) {
       newState.currentInvite = null;
       newState.activeStageId = null;
       const nextStage=newState.stages.find(s=>s.status!=='cleared');
-      if(nextStage)nextStage.dueDay=Math.max(nextStage.dueDay,(event.day||context.day)+(newState.intervalDays||2));
+      if(nextStage)nextStage.dueDay=(event.day||context.day)+(newState.intervalDays||1);
       if (newState.currentVisit) {
         newState.currentVisit.status = 'completed';
       }

@@ -292,6 +292,7 @@ export async function startApp({ host, connection, mode, fixture }) {
       else if(action==='warehouse')app.openPanel('warehouse');
       else if(action==='more')app.openPanel('more');
       else if(action==='allies')app.openPanel('allies');
+      else if(action==='goals')app.openPanel('allies',{tab:'future'});
       else if(action==='story')app.openPanel('story');
       else if (action === "tasks") app.openPanel("tasks", {});
       else if (action === "report") app.openPanel("report", {});

@@ -96,7 +96,7 @@ export async function openCombat(app,options={}){
           root.append(button(mounted?'返回牌局':'载入牌局',()=>mounted?(root.hidden=true,battle.hidden=false):mountRound()));
           if(!mounted&&!mounting)message.textContent='牌局已准备好，点击载入继续。';
         }else if(series.phase==='interrupted')root.append(el('p',{text:(series.interrupt?.reason?series.interrupt.reason+'。':'')+'当前小局中断。重开会重新发牌，已完成的小局比分保留。'}),button('重开当前小局',async()=>{const r=await submit('combat.restartRound',{matchId:series.matchId});if(r?.ok){series=r.data;selected=[];paint();}}),button('放弃系列赛',async()=>{const r=await submit('combat.abandon',{matchId:series.matchId});if(r?.ok){series=r.data;paint();}}));
-        else root.append(el('p',{text:series.officialResult?.result==='win'?series.challengeKind==='stage-challenge'?'挑战成功：新主题已解锁，伙伴已加入！':series.challengeKind==='debt-challenge'?`账务挑战通过，减免 ${series.debtRelief||0} 币欠款。店外探索资格已记录，地图尚在筹备。`:'你赢下了这场比赛。':series.officialResult?.result==='loss'?'本次未获胜。高手挑战可以再次交谈重试或改天再战。':'比赛已取消。'}),button('返回牌桌',()=>{series=null;room=null;step='format';selected=[];paint();}));
+        else root.append(el('p',{text:series.officialResult?.result==='win'?series.challengeKind==='stage-challenge'?'挑战成功：新主题已解锁，伙伴已加入！':series.challengeKind==='debt-challenge'?`获胜！本期抵扣 ${series.debtRelief||0} 币借款。请在经营目标中查看剩余还款，完成首期约定后再开启下一阶段。`:'你赢下了这场比赛。':series.officialResult?.result==='loss'?'本次未获胜。高手挑战可以再次交谈重试或改天再战。':'比赛已取消。'}),button('返回牌桌',()=>{series=null;room=null;step='format';selected=[];paint();}));
       }
       if(series?.phase==='finished'&&['stage-challenge','debt-challenge'].includes(series.challengeKind)&&series.officialResult?.result==='loss'){
         const lostMatch=series.matchId;

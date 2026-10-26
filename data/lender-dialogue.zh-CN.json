@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "intro": "我是{creditor}。这家店的装修与开业筹备，借款共 {principal} 游戏币。第 {firstDueDay} 天先还 {firstAmount}，往后的分期约定都记在经营目标里。平时的营业收入由你安排，不会自动扣走。\n要是经营遇到困难，也可以和我打牌，赢了能抵一部分当期还款。先让这家店热闹起来吧。",
+  "stage": "{title}：约定第 {dueDay} 天交 {amount}。已还 {paid}，打牌抵扣 {relieved}，本期还差 {remaining}。总借款余额 {outstanding}。",
+  "battleOffer": "赢下本次整场牌局，可以抵扣 {reduction}。",
+  "battleUsed": "本期牌局减免已用过，剩余部分靠经营收入偿还。",
+  "funded": "本期约定已完成，我们来核对一下吧。",
+  "paidOff": "开店借款已经全部还清了。接下来，好好经营你自己的卡店吧。",
+  "beginLabel": "记住约定，开始经营"
+}

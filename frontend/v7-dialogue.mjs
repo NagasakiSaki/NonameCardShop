@@ -42,6 +42,7 @@ export function installWorldDialogue(app,{stopMovement}){
       const data=result.data;await close();
       if(data?.gift)app.toast('success','高手赠礼',data.gift.name+' ×1 已放入仓库，明天继续切磋。');
       if(data?.openCombat)app.goToInteraction('battleRoom.service','combat',{opponentId:data.opponentId});
+      else if(data?.openGoals)app.openPanel('allies',{tab:'future'});
       else if(data?.openAllies)app.openPanel('allies');
       else if(current.source==='narrative'&&data?.status==='presenting')await show(storyOffer(data));
     }finally{busy=false;}

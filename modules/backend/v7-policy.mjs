@@ -21,10 +21,10 @@ export function initialiseV7(w,defaults,{fresh=false}={}){
     w.operationsVersion=1;
   }
   if(!w.progression)w.progression=createProgressionState({epoch:w.worldId,firstDueDay:fresh?longTermPolicy.challenge.firstDay:w.clock.day+1,intervalDays:longTermPolicy.challenge.intervalDays});
-  if(w.progression.version===1&&!w.progression.disabled&&w.progression.cadenceVersion!==longTermPolicy.version){
-    const p=w.progression,first=longTermPolicy.challenge.firstDay,interval=longTermPolicy.challenge.intervalDays,lastCleared=Math.max(0,...p.stages.map(s=>s.clearedAtDay||0));
-    p.firstDueDay=first;p.intervalDays=interval;p.cadenceVersion=longTermPolicy.version;
-    for(const [index,stage]of p.stages.entries())if(stage.status!=='cleared'&&!(stage.stageId===p.activeStageId&&p.currentVisit?.status==='onsite'))stage.dueDay=Math.max(first+index*interval,lastCleared?lastCleared+interval:0,p.deferrals[stage.stageId]?.deferredToDay||0);
+  if(w.progression.version===1&&!w.progression.disabled&&w.progression.cadenceVersion!==longTermPolicy.challenge.version){
+    const p=w.progression,first=longTermPolicy.challenge.firstDay,interval=longTermPolicy.challenge.intervalDays,lastCleared=Math.max(0,...p.stages.map(s=>s.clearedAtDay||0)),nextIndex=p.stages.findIndex(s=>s.status!=='cleared');
+    p.firstDueDay=first;p.intervalDays=interval;p.cadenceVersion=longTermPolicy.challenge.version;
+    for(const [index,stage]of p.stages.entries())if(stage.status!=='cleared'&&!(stage.stageId===p.activeStageId&&p.currentVisit?.status==='onsite'))stage.dueDay=Math.max(first+index*interval,lastCleared?lastCleared+(index-nextIndex+1)*interval:0,p.deferrals[stage.stageId]?.deferredToDay||0);
   }
   for(const i of Object.values(w.items))if(['box','pack'].includes(i.kind)&&i.location==='retail'&&V7_RETIRED.includes(i.productId))i.location='stock';
   return changed;

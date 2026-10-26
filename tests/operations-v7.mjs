@@ -13,7 +13,7 @@ import {planCollation} from '../modules/economy-v7/collation-policy.mjs';
 const json=p=>JSON.parse(fs.readFileSync(p,'utf8')),source=json('data/cards.json'),rules=json('data/backend-rules.json');
 const catalog=buildCatalog(source,rules),capabilities=probeModeCapabilities({engineRoot:'vendor/noname'}).items;
 let counter=0;
-const make=async initial=>{const r=await createRuntime({source,rules,repository:memoryRepository(initial),modeCapabilities:capabilities});await r.connect({contractVersion:CONTRACT,clientId:'v7-test'});return r;};
+const make=async initial=>{const r=await createRuntime({source,rules,repository:memoryRepository(initial),modeCapabilities:capabilities});await r.connect({contractVersion:CONTRACT,clientId:'v7-test'});const intro=await r.query('dialogue.offer');if(intro.data?.kind==='debt-intro'){const v=await r.command({requestId:'test-intro-'+ ++counter,type:'dialogue.respond',payload:{offerId:intro.data.offerId,optionId:'begin',proof:intro.data.proof}});assert(v.ok,JSON.stringify(v));}return r;};
 const command=async(r,type,payload={})=>{const v=await r.command({requestId:`v7-test-${++counter}`,type,payload});assert.equal(v.ok,true,`${type}: ${JSON.stringify(v.error)}`);return v.data;};
 const query=async(r,name,payload={})=>{const v=await r.query(name,payload);assert.equal(v.ok,true,`${name}: ${JSON.stringify(v.error)}`);return v.data;};
 let r=await make();let w=r.inspect().world;

@@ -12,6 +12,7 @@ const r=await createRuntime({source,rules,repository:memoryRepository()});let se
 await r.connect({contractVersion:CONTRACT,clientId:'format-fixture'});
 const command=async(type,payload={})=>{const result=await r.command({requestId:'format-fixture-'+ ++seq,type,payload});assert(result.ok,JSON.stringify(result));return result.data;};
 try{
+  const intro=(await r.query('dialogue.offer')).data;await command('dialogue.respond',{offerId:intro.offerId,optionId:'begin',proof:intro.proof});
   for(let day=1;day<3;day++){await command('business.open');await command('business.close');await command('business.nextDay');}
   await command('business.open');await r.advance(.1);
   const offer=await r.query('dialogue.offer');assert(offer.data);await command('dialogue.respond',{offerId:offer.data.offerId,optionId:'accept',proof:offer.data.proof});

@@ -121,7 +121,7 @@ export function dialogueView(w){
   const d=w.dialogueOffer;if(!d)return null;
   const n=w.npcs.find(n=>n.actorId===d.actorId);if(!n||!onSite(n))return null;
   if(d.kind==='stage-challenge'&&!w.progression?.currentInvite)return null;
-  if(d.kind===Debt.DEBT_KIND)return {...clone(d),proof:proof(w),speakerName:n.name,portrait:n.appearanceId,nameColor:n.nameColor,...Debt.debtDialogue(w)};
+  if([Debt.DEBT_KIND,Debt.INTRO_KIND].includes(d.kind))return {...clone(d),proof:proof(w),speakerName:n.name,portrait:n.appearanceId,nameColor:n.nameColor,...(d.kind===Debt.INTRO_KIND?Debt.introDialogue(w):Debt.debtDialogue(w))};
   return {...clone(d),proof:proof(w),speakerName:n.name,portrait:n.appearanceId,nameColor:n.nameColor,roleLabel:n.allyId?'经营伙伴':n.specialist?'来访高手':n.customerCategory||'顾客',
     text:d.kind==='stage-challenge'?`想和你切磋一下，三将接力、斗地主换边或双人对决都可以。赢下整场后，可解锁「${activeStage(w)?.productName||'新主题'}」供货，我也会留在店里帮忙。`:n.allyId?'今天需要我做些什么？':'想一起打牌吗？可以在牌桌选择赛制。',
     choices:d.kind==='stage-challenge'?[{optionId:w.progression.lastDefeat?.stageId===activeStage(w)?.stageId?'rematch':'accept',text:w.progression.lastDefeat?.stageId===activeStage(w)?.stageId?'再战一局（重新选将）':'现在来一局'},{optionId:'tomorrow',text:'明日再战'}]:[{optionId:'challenge',text:'约一场牌局'},{optionId:'allies',text:n.allyId?'安排工作':'看看经营伙伴',available:!!n.allyId},{optionId:'close',text:'下次再聊'}]};
@@ -143,6 +143,7 @@ export function respondV7(w,p,navigation){
   need(ready(w),'FEATURE_UNAVAILABLE','当前挑战数据版本暂不支持，原记录已保留。');
   checkProof(w,p.proof);const d=w.dialogueOffer;need(d&&d.offerId===p.offerId,'INVITE_STALE','对话已结束，请重新交谈。');
   const n=actorForInteraction(w,d.actorId,navigation),response=p.optionId||p.response;
+  if(d.kind===Debt.INTRO_KIND)return Debt.respondIntro(w,n,response,navigation);
   if(d.kind===Debt.DEBT_KIND)return Debt.respondDebt(w,n,response,navigation);
   if(d.kind==='stage-challenge'){
     need(['accept','rematch','tomorrow','close','escape'].includes(response),'INVALID_INPUT','无效的挑战选项。');
@@ -172,7 +173,7 @@ export function prepareV7(w,catalog,p,navigation,capabilities,{roomPlan=null}={}
   checkProof(w,p.proof);need(w.clock.phase==='open','SHOP_CLOSED','请在营业中约战。');
   need(!w.matches.some(m=>!m.background&&m.status!=='finished'),'MATCH_ACTIVE','请先完成或取消当前比赛。');
   const format=C.getFormat(p.formatId||'kof');need(format,'INVALID_INPUT','没有这个赛制。');
-  const debt=Debt.acceptedDebt(w,p.opponentId),active=debt||(ready(w)?w.progression.activeChallenge:null),stage=debt?Debt.debtStage():activeStage(w),challengeKind=debt?Debt.DEBT_KIND:'stage-challenge';
+  const debt=Debt.acceptedDebt(w,p.opponentId),active=debt||(ready(w)?w.progression.activeChallenge:null),stage=debt?Debt.debtStage(w):activeStage(w),challengeKind=debt?Debt.DEBT_KIND:'stage-challenge';
   const isChallenge=active?.status==='accepted'&&(!p.opponentId||p.opponentId===active.actorId);
   let fee=roomPlan?roomPlan.tableFee:isChallenge?0:managementEffects(w).tableFee;
   const npc=p.opponentId?w.npcs.find(n=>n.actorId===p.opponentId):isChallenge?w.npcs.find(n=>n.actorId===active.actorId):w.npcs.find(n=>onSite(n)&&!n.specialist&&!n.currentMatchId&&opponentOptions(w,catalog,n,format.formatId,capabilities).length>=format.reservePerSide&&n.wallet.available-(n.wallet.reserved||0)>=fee);
@@ -235,7 +236,7 @@ export function planRoomOpponent(w,catalog,{formatId='kof',opponentId=null,seed}
   const cached=challenge?active.roomOpponentPlans?.[formatId]:null;
   if(cached)enemy=clone(cached.enemy);
   else if(challenge||practice){
-    const stage=challenge?(debt?Debt.debtStage():activeStage(w)):w.progression.stages.find(s=>s.challengerId===npc.allyId&&s.status==='cleared');
+    const stage=challenge?(debt?Debt.debtStage(w):activeStage(w)):w.progression.stages.find(s=>s.challengerId===npc.allyId&&s.status==='cleared');
     const roster=unwrap(B.buildChallengeLoanRoster({stage,formatId,catalog:{cards:catalog.cards.filter(c=>!w.rules.compatibilityBlocks[c.generalId]&&!nativeBlocks(formatId,capabilities)[c.generalId])},seed}));
     need(roster.actualFormat===formatId,'INSUFFICIENT_ROSTER','对手主题没有足够兼容武将组成这个备战池。');
     enemy=roster.loanCards.map(l=>{const c=catalog.byId.get(l.generalId);return {...l,purpose:practice?'recruited-ally-practice':challengeKind,name:c.name,cardKey:c.cardKey,imageUrl:c.imageUrl,rarity:c.currentRarity};});

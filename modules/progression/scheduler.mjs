@@ -1,9 +1,9 @@
 import { reduceProgression } from './state.mjs';
 
 /**
- * Plans the configurable challenger visit scheduling (default: every two days).
+ * Plans the configurable challenger visit scheduling (default: the day after the previous victory).
  * Follows the frozen rules:
- * - New game: 2, 4, 6, 8, ... 30
+ * - No losses: 2, 3, 4, 5, ... 16. A postponed fight delays every later challenger.
  * - Only 1 active stage at any time. Later stages wait in stageQueue.
  * - Same day never spawns multiple specialists.
  * - Clearing a stage today does NOT dispatch the next specialist on the same day (earliest next day).

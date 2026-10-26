@@ -51,7 +51,8 @@ export function createHud({ mount, currency, onAction, getSnapshot, demo=false,s
 
     clear(walletNode);
     const walletParts = [el("span", { class: "wallet__amount", text: formatMoney(snapshot.wallet.available, currency) })];
-    if (snapshot.wallet.debt > 0) walletParts.push(el("span", { class: "wallet__debt", text: "欠款 " + formatShort(snapshot.wallet.debt, currency) }));
+    if (snapshot.wallet.debt > 0) walletParts.push(el("span", { class: "wallet__debt", text: "进货欠款 " + formatShort(snapshot.wallet.debt, currency) }));
+    if(snapshot.campaign?.currentGoal){const g=snapshot.campaign.currentGoal;walletParts.push(el('button',{class:'btn btn--sm',text:`第 ${g.dueDay} 天目标 · 还差 ${formatShort(g.remaining,currency)}`,title:'海玲的开店借款与阶段目标',onclick:()=>onAction('goals')}));}
     if (snapshot.wallet.escrowLiability > 0) walletParts.push(el("span", { class: "badge", text: "托管 " + formatShort(snapshot.wallet.escrowLiability, currency) }));
     walletNode.append(...walletParts);
     const daily=snapshot.daily;
@@ -59,13 +60,13 @@ export function createHud({ mount, currency, onAction, getSnapshot, demo=false,s
     const entries=snapshot.cashJournal||[];
     const branch=snapshot.worldId+':'+snapshot.branchId;if(ledgerBranch!==branch){ledgerBranch=branch;lastEntryId=null;ticker.hidden=true;}
     if(lastEntryId&&entries[0]?.entryId!==lastEntryId){
-      ticker.replaceChildren(...entries.slice(0,Math.max(1,entries.findIndex(e=>e.entryId===lastEntryId))).slice(0,3).map(e=>el('div',{text:e.label+' · 现金 '+(e.amount>=0?'+':'')+e.amount+' 币'+(e.debtDelta?' · 欠款'+(e.debtDelta>0?'+':'')+e.debtDelta:'')})));
+      ticker.replaceChildren(...entries.slice(0,Math.max(1,entries.findIndex(e=>e.entryId===lastEntryId))).slice(0,3).map(e=>el('div',{text:e.label+' · 现金 '+(e.amount>=0?'+':'')+e.amount+' 币'+(e.debtDelta?' · 进货欠款'+(e.debtDelta>0?'+':'')+e.debtDelta:'')+(e.campaignDebtDelta?' · 开店借款'+(e.campaignDebtDelta>0?'+':'')+e.campaignDebtDelta:'')})));
       ticker.hidden=false;clearTimeout(tickerTimer);tickerTimer=setTimeout(()=>{ticker.hidden=true;},7000);
     }
     lastEntryId=entries[0]?.entryId||'empty';
     ledgerNode.replaceChildren(el('strong',{text:'实时收支流水'}),...entries.slice(0,4).map(e=>el('div',{class:'live-ledger__row '+(e.amount<0?'is-expense':'is-income')},[
       el('span',{text:`第${e.day}天 ${Math.floor(e.minute/60).toString().padStart(2,'0')}:${Math.floor(e.minute%60).toString().padStart(2,'0')} · ${e.label}`}),
-      el('b',{text:(e.amount>0?'+':'')+e.amount.toLocaleString('zh-CN')+' 币'+(e.debtDelta?' · 欠款'+(e.debtDelta>0?'+':'')+e.debtDelta:'')})
+      el('b',{text:(e.amount>0?'+':'')+e.amount.toLocaleString('zh-CN')+' 币'+(e.debtDelta?' · 进货欠款'+(e.debtDelta>0?'+':'')+e.debtDelta:'')+(e.campaignDebtDelta?' · 开店借款'+(e.campaignDebtDelta>0?'+':'')+e.campaignDebtDelta:'')})
     ])),...(!entries.length?[el('p',{class:'muted',text:'进货、销售、桌费与任务奖励将实时显示。'})]:[]));
 
     const paused = document.getElementById("paused-banner");

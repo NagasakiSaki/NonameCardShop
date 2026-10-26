@@ -13,7 +13,7 @@ import {printingMeta,physicalGroupKey,exchangeAssetKey} from '../modules/backend
 const json=p=>JSON.parse(fs.readFileSync(p,'utf8')),source=json('data/cards.json'),rules=json('data/backend-rules.json'),managementConfig=json('data/backend-management.json');
 const catalog=buildCatalog(source,rules),capabilities=probeModeCapabilities({engineRoot:'vendor/noname'}).items;
 let serial=0;
-const make=async initial=>{const r=await createRuntime({source,rules,managementConfig,repository:memoryRepository(initial),modeCapabilities:capabilities});await r.connect({contractVersion:CONTRACT,clientId:'long-term-test'});return r;};
+const make=async initial=>{const r=await createRuntime({source,rules,managementConfig,repository:memoryRepository(initial),modeCapabilities:capabilities});await r.connect({contractVersion:CONTRACT,clientId:'long-term-test'});const intro=await r.query('dialogue.offer');if(intro.data?.kind==='debt-intro'){const ack=await r.command({requestId:'intro-'+ ++serial,type:'dialogue.respond',payload:{offerId:intro.data.offerId,optionId:'begin',proof:intro.data.proof}});assert(ack.ok,JSON.stringify(ack));}return r;};
 const command=async(r,type,payload={},id)=>{const v=await r.command({requestId:id||`long-term-${++serial}`,type,payload});assert(v.ok,`${type}: ${JSON.stringify(v.error)}`);return v.data;};
 const query=async(r,name,p={})=>{const v=await r.query(name,p);assert(v.ok,JSON.stringify(v.error));return v.data;};
 const next=async r=>{await command(r,'business.close');await command(r,'business.nextDay');await command(r,'business.open');};
@@ -28,7 +28,7 @@ const finish=async(r,series,result)=>{
  await r.trustedEngineEvent(series.matchId,{type:'ready',matchId:game});return r.trustedEngineEvent(series.matchId,{type:'result',matchId:game,result});
 };
 let r=await make();
-assert.deepEqual(r.inspect().world.progression.stages.slice(0,3).map(s=>s.dueDay),[2,4,6]);
+assert.deepEqual(r.inspect().world.progression.stages.slice(0,3).map(s=>s.dueDay),[2,3,4]);
 let p=await query(r,'opening.preview',{includeBoxes:true});let opened=await r.command({requestId:'open-gift',type:'opening.execute',previewId:p.previewId,payload:{}});assert(opened.ok);
 await command(r,'business.open');await next(r);await r.advance(.1);
 let offer=await query(r,'dialogue.offer');assert.equal(offer.speakerName,'高松灯');
@@ -46,30 +46,31 @@ assert.equal(await query(r,'dialogue.offer'),null);assert.equal(r.inspect().worl
 let refused=await r.command({requestId:'defer-again',type:'challenges.rematch',payload:{matchId:s.matchId}});assert.equal(refused.error.code,'CHALLENGE_DEFERRED');
 await next(r);await r.advance(.1);offer=await query(r,'dialogue.offer');assert(offer);
 await command(r,'dialogue.respond',{offerId:offer.offerId,optionId:'accept',proof:offer.proof});s=await prepare(r,r.inspect().world.progression.activeChallenge.actorId);await finish(r,s,'win');
-let w=r.inspect().world;assert.equal(w.progression.allies.length,1);assert(w.progression.stages[1].dueDay>=5);assert.equal(w.progression.intervalDays,2);
-console.log('PASS loss/rematch fresh room, single consolation gift, deferred same-day blocked, next-day return, two-day cadence and recruit');
+let w=r.inspect().world;assert.equal(w.progression.allies.length,1);assert(w.progression.stages[1].dueDay===4);assert.equal(w.progression.intervalDays,1);
+console.log('PASS loss/rematch fresh room, single consolation gift, deferred same-day blocked, next-day return, daily chained cadence and recruit');
 
-// Day 7 uses a separate challenge, without clearing or recruiting the regular specialist.
-let saved=r.inspect();await r.disconnect();saved.world.clock={...saved.world.clock,day:6,phase:'open'};saved.world.wallet.debt=10000;r=await make(saved);await r.advance(.1);assert(!r.inspect().world.npcs.some(n=>n.debtCollector));await next(r);await r.advance(.1);
-w=r.inspect().world;const creditor=w.npcs.find(n=>n.debtCollector);assert(creditor);let d=await query(r,'longTerm.status');assert.equal(d.debt.potentialReduction,3000);
-// Another visitor's dialogue may be first; direct interaction requires finishing it.
-offer=await query(r,'dialogue.offer');if(offer&&offer.kind!=='debt-challenge')await command(r,'dialogue.respond',{offerId:offer.offerId,optionId:'tomorrow',proof:offer.proof});
-await command(r,'actors.interact',{actorId:creditor.actorId});offer=await query(r,'dialogue.offer');assert.equal(offer.kind,'debt-challenge');
-await command(r,'dialogue.respond',{offerId:offer.offerId,optionId:'accept',proof:offer.proof});s=await prepare(r,creditor.actorId);assert.equal(s.challengeKind,'debt-challenge');
-await command(r,'combat.surrender',{matchId:s.matchId});assert.equal(r.inspect().world.wallet.debt,10000);assert.equal((await query(r,'longTerm.status')).outdoor.status,'locked');
-result=await command(r,'challenges.rematch',{matchId:s.matchId});s=await prepare(r,result.opponentId);const money=r.inspect().world.wallet.available;
+// Day-seven milestones use a separate story obligation, never supplier credit.
+let saved=r.inspect();await r.disconnect();saved.world.clock={...saved.world.clock,day:6,phase:'open'};saved.world.wallet.debt=10000;saved.world.wallet.available=25000;r=await make(saved);await r.advance(.1);assert(!r.inspect().world.npcs.some(n=>n.debtCollector&&n.presence!=='offsite'));await next(r);await r.advance(.1);
+w=r.inspect().world;const creditor=w.npcs.find(n=>n.debtCollector);assert.equal(creditor.name,'海玲');let d=await query(r,'longTerm.status');assert.equal(d.loan.principal,20000);assert.equal(d.loan.currentGoal.amount,5000);assert.equal(d.debt.potentialReduction,1500);
+async function talkCreditor(){const offered=await query(r,'dialogue.offer');if(offered&&offered.kind!=='debt-challenge')await command(r,'dialogue.respond',{offerId:offered.offerId,optionId:'tomorrow',proof:offered.proof});await command(r,'actors.interact',{actorId:'specialist:creditor'});return query(r,'dialogue.offer');}
+offer=await talkCreditor();await command(r,'dialogue.respond',{offerId:offer.offerId,optionId:'accept',proof:offer.proof});s=await prepare(r,creditor.actorId);assert.equal(s.challengeKind,'debt-challenge');
+const supplierBefore=r.inspect().world.wallet.debt;await command(r,'combat.surrender',{matchId:s.matchId});assert.equal(r.inspect().world.wallet.debt,supplierBefore);assert.equal((await query(r,'longTerm.status')).loan.relieved,0);
+result=await command(r,'challenges.rematch',{matchId:s.matchId});s=await prepare(r,result.opponentId);const money=r.inspect().world.wallet.available,supplier=r.inspect().world.wallet.debt;
 const cleared=r.inspect().world.progression.stages.filter(s=>s.status==='cleared').length;
-await finish(r,s,'win');w=r.inspect().world;assert.equal(w.wallet.debt,7000);assert.equal(w.wallet.available,money);assert.equal(w.longTerm.outdoor.status,'unlocked-planned');assert.equal(w.progression.stages.filter(s=>s.status==='cleared').length,cleared);assert.equal(Object.keys(w.longTerm.debtChallenge.receipts).length,1);
-assert(w.cashJournal.at(-1).label.includes('减免欠款'));assert.equal(w.cashJournal.at(-1).debtDelta,-3000);
-const oldWorld=JSON.stringify(w);await query(r,'longTerm.status');assert.equal(JSON.stringify(r.inspect().world),oldWorld);
-console.log('PASS day-seven creditor, surrender gives no reward, verified win reduces debt once without cash or stage unlock');
-
-// Deferred creditor does not re-enter on the same day; cleared accounts need no manufactured debt.
-saved=r.inspect();await r.disconnect();delete saved.world.longTerm;saved.world.wallet.debt=1000;saved.world.clock.day=7;saved.world.npcs=saved.world.npcs.filter(n=>!n.debtCollector);r=await make(saved);await r.advance(.1);
-offer=await query(r,'dialogue.offer');if(offer&&offer.kind!=='debt-challenge')await command(r,'dialogue.respond',{offerId:offer.offerId,optionId:'tomorrow',proof:offer.proof});await command(r,'actors.interact',{actorId:'specialist:creditor'});offer=await query(r,'dialogue.offer');await command(r,'dialogue.respond',{offerId:offer.offerId,optionId:'tomorrow',proof:offer.proof});await r.advance(.1);assert.equal((await query(r,'longTerm.status')).debt.nextVisitDay,8);assert.equal(await query(r,'dialogue.offer'),null);
-saved=r.inspect();await r.disconnect();saved.world.wallet.debt=0;saved.world.clock.day=8;r=await make(saved);await r.advance(.1);offer=await query(r,'dialogue.offer');if(offer&&offer.kind!=='debt-challenge')await command(r,'dialogue.respond',{offerId:offer.offerId,optionId:'tomorrow',proof:offer.proof});await command(r,'actors.interact',{actorId:'specialist:creditor'});offer=await query(r,'dialogue.offer');await command(r,'dialogue.respond',{offerId:offer.offerId,optionId:'settled',proof:offer.proof});assert.equal(r.inspect().world.wallet.debt,0);assert.equal(r.inspect().world.longTerm.outdoor.status,'unlocked-planned');
-w=r.inspect().world;await r.disconnect();
-console.log('PASS creditor postponement and debt-free account review');
+await finish(r,s,'win');w=r.inspect().world;assert.equal(w.wallet.debt,supplier);assert.equal(w.wallet.available,money);assert.equal(w.longTerm.loan.relieved,1500);assert.equal((await query(r,'longTerm.status')).loan.currentGoal.remaining,3500);assert.equal(w.longTerm.outdoor.status,'locked');assert.equal(w.progression.stages.filter(s=>s.status==='cleared').length,cleared);assert.equal(Object.keys(w.longTerm.debtChallenge.receipts).length,1);
+assert.equal(w.cashJournal.at(-1).campaignDebtDelta,-1500);assert.equal(w.cashJournal.at(-1).debtDelta,0);
+offer=await talkCreditor();assert(!offer.choices.some(c=>['accept','rematch'].includes(c.optionId)),'one battle discount per phase');
+let refusedGoal=await r.command({requestId:'premature-review',type:'dialogue.respond',payload:{offerId:offer.offerId,optionId:'settled',proof:offer.proof}});assert.equal(refusedGoal.error.code,'GOAL_INCOMPLETE');
+const payment={milestoneId:'week-1',amount:1500};await command(r,'debt.repay',payment,'phase-payment-1');const paidOnce=r.inspect();await command(r,'debt.repay',payment,'phase-payment-1');assert.deepEqual(r.inspect(),paidOnce);
+assert.equal((await query(r,'longTerm.status')).loan.currentGoal.remaining,2000);assert.equal(r.inspect().world.wallet.available,money-1500);assert.equal(r.inspect().world.wallet.debt,supplier);
+let bad=await r.command({requestId:'overpayment',type:'debt.repay',payload:{milestoneId:'week-1',amount:2001}});assert.equal(bad.error.code,'INVALID_INPUT');
+await command(r,'debt.repay',{milestoneId:'week-1',amount:2000});await command(r,'dialogue.respond',{offerId:offer.offerId,optionId:'settled',proof:offer.proof});
+d=await query(r,'longTerm.status');assert.equal(d.loan.currentGoal.id,'week-2');assert.equal(d.loan.outstanding,15000);assert.equal(d.debt.nextVisitDay,14);assert.equal(d.outdoor.status,'unlocked-planned');assert.equal(d.loan.completedCount,1);
+console.log('PASS phase-one target: trusted win credits 1500 once, partial/idempotent cash repayment, supplier credit isolated, full target required before outdoor gate');
+// A later collection is a real second phase, with persistent postponement and whole-world rollback.
+saved=r.inspect();await r.disconnect();saved.world.clock.day=14;r=await make(saved);await r.advance(.1);offer=await talkCreditor();await command(r,'dialogue.respond',{offerId:offer.offerId,optionId:'tomorrow',proof:offer.proof});await r.advance(.1);assert.equal((await query(r,'longTerm.status')).debt.nextVisitDay,15);assert.equal(await query(r,'dialogue.offer'),null);
+const backup=await command(r,'saves.create');const balanceBefore=r.inspect().world.wallet.available;await command(r,'debt.repay',{milestoneId:'week-2',amount:500},'rollback-payment');await command(r,'saves.load',{archiveId:backup.archiveId});assert.equal((await query(r,'longTerm.status')).loan.currentGoal.remaining,5000);assert.equal(r.inspect().world.wallet.available,balanceBefore);bad=await r.command({requestId:'rollback-payment',type:'debt.repay',payload:{milestoneId:'week-2',amount:500}});assert.equal(bad.error.code,'STALE_OPERATION');
+w=r.inspect().world;await r.disconnect();console.log('PASS recurring phase, next-day deferral, exact backup rollback and stale-branch repayment rejection');
 
 // Public transactions and restored old low-rarity listings cannot bypass market policy.
 w.wallet.available=1000000;w.clock.day=20;const sample=rarity=>catalog.cards.find(c=>c.currentRarity===rarity);

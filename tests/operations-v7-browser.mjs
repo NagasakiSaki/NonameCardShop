@@ -8,7 +8,7 @@ import {buildCatalog} from '../modules/backend/catalog.mjs';
 const out=process.env.CARD_SHOP_TEST_RESULTS||'.local/operations-v7';fs.mkdirSync(out,{recursive:true});
 const json=p=>JSON.parse(fs.readFileSync(p,'utf8')),source=json('data/cards.json'),rules=json('data/backend-rules.json');
 const r=await createRuntime({source,rules,repository:memoryRepository()}),fixture=r.inspect().world,catalog=buildCatalog(source,rules);
-fixture.clock.manualPaused=true;
+fixture.clock.manualPaused=true;fixture.longTerm.loan.intro.status='acknowledged';fixture.dialogueOffer=null;for(const n of fixture.npcs.filter(n=>n.debtCollector)){n.presence='offsite';n.trip=null;}
 fixture.npcs.push({actorId:'fixture-rival',name:'陈远',appearanceId:'competitor',presence:'onsite',roomId:'store',x:240,y:248,wallet:{available:50000},direction:'down',moving:false,activity:'idle'});
 const generals=['caocao','liubei','sunquan','ganning','zhaoyun','machao','diaochan','huatuo'];
 for(const [i,id]of generals.entries())for(const ownerId of ['player','fixture-rival']){const c=catalog.byId.get(id),ref=`ui-${ownerId}-${i}`;fixture.items[ref]={inventoryRef:ref,ownerId,kind:'card',cardKey:c.cardKey,printedRarity:c.currentRarity,productId:c.pack,location:'collection',cost:0,lock:null,protected:false};fixture.circulation[c.cardKey]={firstDay:1,source:'fixture'};}
@@ -93,6 +93,6 @@ try{
   await page.screenshot({path:out+'/challenger-dialogue.png'});
   await page.keyboard.press('Escape');await page.locator('[data-v7-dialogue]').waitFor({state:'hidden'});
   assert.equal((await q('progression.status')).currentStage.dueDay,4);
-  await page.setViewportSize({width:390,height:720});await page.evaluate(()=>__cardShopApp.openPanel('allies'));await page.getByRole('dialog',{name:'经营伙伴',exact:true}).waitFor();await page.screenshot({path:out+'/allies-mobile.png'});
+  await page.setViewportSize({width:390,height:720});await page.evaluate(()=>__cardShopApp.openPanel('allies'));await page.getByRole('dialog',{name:'高手伙伴与挑战',exact:true}).waitFor();await page.screenshot({path:out+'/allies-mobile.png'});
   assert.deepEqual(errors,[]);console.log('PASS physical challenger, portrait, pause lease, Esc postponement, mobile page; no page errors');
 }finally{await browser?.close();await server.close();}

@@ -1,7 +1,16 @@
 {
-  "version": "long-term-1",
-  "challenge": {"firstDay": 2, "intervalDays": 2},
+  "version": "long-term-2",
+  "challenge": {"version":"daily-chain-1","firstDay": 2, "intervalDays": 1},
   "market": {"allowedRarities": ["SR", "SSR"], "rarityBasis": "printed"},
-  "debt": {"firstDay": 7, "appearanceId": "bd-umiri", "name": "海铃 · 账务专员", "productId": "sb", "reductionRate": 0.3, "minimumReduction": 500, "maximumReduction": 5000},
+  "debt": {
+    "firstDay": 7, "appearanceId": "bd-umiri", "name": "海玲", "productId": "sb",
+    "reductionRate": 0.3, "minimumReduction": 500, "maximumReduction": 5000,
+    "loan": {"version":1,"principal":20000,"milestones":[
+      {"id":"week-1","title":"让卡店站稳脚跟","dueDay":7,"amount":5000},
+      {"id":"week-2","title":"建立稳定的经营收入","dueDay":14,"amount":5000},
+      {"id":"week-3","title":"壮大店铺与牌友圈","dueDay":21,"amount":5000},
+      {"id":"week-4","title":"还清开店借款","dueDay":28,"amount":5000}
+    ]}
+  },
   "futureSystems": {"cardExchange": "planned", "cardFinishes": "planned", "outdoorWorld": "planned"}
 }
