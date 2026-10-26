@@ -47,6 +47,8 @@
 
 /* ---------- 面板 / 窗口 ---------- */
 .window {
+  position: relative;
+  isolation: isolate;
   backdrop-filter: blur(3px);
   width: min(920px, 94vw);
   max-height: min(86vh, 900px);

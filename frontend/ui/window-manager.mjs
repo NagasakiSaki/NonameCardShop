@@ -8,7 +8,15 @@ export function createWindowManager({ host, mount, onChange, onInspectCard } = {
   let seq = 0;
 
   function notify() {
-    for(const [index,item]of stack.entries())item.handle.element.inert=index!==stack.length-1;
+    for(const [index,item]of stack.entries()){
+      const element=item.handle.element,covered=index!==stack.length-1;
+      if(covered&&!element.hidden)item.scrollState.hold();
+      const wasCovered=element.hidden;
+      element.hidden=covered;element.inert=covered;
+      element.setAttribute('aria-hidden',String(covered));
+      element.style.zIndex=String(index+1);
+      if(!covered&&wasCovered)item.scrollState.resume();
+    }
     if (typeof onChange === "function") onChange(stack.map((item) => item.id));
   }
 
@@ -126,7 +134,7 @@ export function createWindowManager({ host, mount, onChange, onInspectCard } = {
         } catch (error) {
           console.error("[window] 渲染失败", error);
           body.append(el("p", { class: "small", style: { color: "#f0a08a" }, text: "窗口渲染失败：" + error.message }));
-        }finally{scrollState.resume();}
+        }finally{if(!element.hidden)scrollState.resume();}
         };rendering=rendering.then(run,run);return rendering;
       },
     };
@@ -141,6 +149,7 @@ export function createWindowManager({ host, mount, onChange, onInspectCard } = {
       }
       cleanups.clear();
       element.remove();
+      notify();
       const releaseLease = lease
         ? host.pause.release(lease.leaseId).catch((error) => {
             toast("error", "暂停令牌释放失败", "经营世界由 Host 保持暂停：" + (error?.message || error));
@@ -157,7 +166,7 @@ export function createWindowManager({ host, mount, onChange, onInspectCard } = {
       if (event.target === element) handle.focus();
     });
 
-    stack.push({ id: key, handle, title: title || key });
+    stack.push({ id: key, handle, scrollState, title: title || key });
     mount.append(element);
     notify();
 
