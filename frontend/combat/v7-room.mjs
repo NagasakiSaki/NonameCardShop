@@ -67,9 +67,10 @@ export async function openCombat(app,options={}){
         if(rooms.ok){const lobby=el('div',{class:'v7-room-list','data-room-list':'true'});root.append(el('div',{class:'v7-actions'},[el('h3',{text:'店内房间'}),button('刷新房间',async()=>{const r=await ctx.query('combat.rooms');if(active()&&r.ok){rooms.data=r.data;paint();}})]),lobby);for(const r of rooms.data.items)lobby.append(el('div',{class:'v7-actions'},[el('span',{text:(r.background?'顾客对局':'你的房间')+' · '+(r.formatLabel||r.formatId)+' · '+r.opponentName}),button('查看备战池',()=>openRoomPools(app,r))]));if(!rooms.data.items.length)lobby.append(el('p',{class:'small',text:'暂无房间。选择模式并创建，或使用原等待报名。'}));}
         if(app.snapshot().clock.phase!=='open')root.append(el('p',{text:'开门营业后即可约战，现在可以先查看赛制和调整桌费。'}));
         root.append(el('p',{class:'small',text:'创建房间后先公开对手的固定备战池，再确认你的武将。普通约战由对手付桌费，高手挑战免费。'}));const picker=el('div');root.append(picker);
-        renderFormatPicker({mount:picker,options:formats,selectedId:formatId,onSelect:id=>{formatId=id;paint();}});
+        renderFormatPicker({mount:picker,options:formats,selectedId:formatId,onSelect:id=>{formatId=id;if(id!=='bo3'&&opponentId===challenges.data?.activeChallenge?.actorId){opponentId=null;message.textContent='已切换为普通约战；高手挑战使用 BO3。';}paint();}});
         const select=el('select',{'aria-label':'约战对手'}),actors=app.actors().filter(n=>!['actor:owner','player'].includes(n.actorId)&&!n.currentMatchId&&!n.currentRoomId&&(!n.specialist||n.allyId||challenges.ok&&n.actorId===challenges.data.activeChallenge?.actorId));
-        select.append(el('option',{value:'',text:'自动寻找持卡足够的对手'}));for(const n of actors)select.append(el('option',{value:n.actorId,text:n.name+(n.specialist?' · 高手':'')}));select.value=opponentId||'';select.onchange=()=>{opponentId=select.value||null;};
+        select.append(el('option',{value:'',text:'自动寻找持卡足够的对手'}));for(const n of actors)select.append(el('option',{value:n.actorId,text:n.name+(n.specialist?' · 高手':'')}));select.value=opponentId||'';select.onchange=()=>{opponentId=select.value||null;message.textContent='';if(opponentId===challenges.data?.activeChallenge?.actorId&&challenges.data?.activeChallenge?.status==='accepted')formatId='bo3';paint();};
+        if(opponentId&&opponentId===challenges.data?.activeChallenge?.actorId&&challenges.data?.activeChallenge?.status==='accepted')root.append(el('p',{class:'small',text:'本次为高手挑战，使用 BO3；选择其他模式可进行普通约战。'}));
         root.append(el('div',{class:'v7-actions'},[select,button('创建房间并选将',loadReserve,app.snapshot().clock.phase!=='open')]));
         root.append(el('div',{class:'v7-actions'},[button('开桌费与等待报名',()=>{ctx.handle.close();openLegacy(app,options);}),button('经营伙伴',()=>{ctx.handle.close();app.openPanel('allies');})]));
       }else if(step==='reserve'){
@@ -112,7 +113,7 @@ export async function openCombat(app,options={}){
     const off=app.host.subscribe(event=>{if(event.type==='battleStatusChanged'&&active())void reload();if(event.type==='worldReset')ctx.handle.close();});
     ctx.onCleanup(()=>{disposed=true;clearInterval(poll);off();void stopBattle();});
     const listed=await ctx.query('combat.formats');if(!active())return;if(!listed.ok){error(listed);return;}formats=formatOptions(listed.data);
-    const challenges=await ctx.query('challenges.status');if(!room&&challenges.ok&&challenges.data.activeChallenge?.status==='accepted'&&(!options.opponentId||options.opponentId===challenges.data.activeChallenge.actorId)){formatId=challenges.data.activeChallenge.formatId;opponentId=challenges.data.activeChallenge.actorId;formats=formats.filter(f=>f.formatId===formatId);}
+    const challenges=await ctx.query('challenges.status');if(!room&&challenges.ok&&challenges.data.activeChallenge?.status==='accepted'&&options.opponentId===challenges.data.activeChallenge.actorId){formatId=challenges.data.activeChallenge.formatId;opponentId=challenges.data.activeChallenge.actorId;}
     if(step==='reserve')await loadReserve();else paint();
   }});
 }

@@ -186,7 +186,9 @@ export function prepareV7(w,catalog,p,navigation,capabilities,{roomPlan=null}={}
 export function planRoomOpponent(w,catalog,{formatId='bo3',opponentId=null,seed},capabilities){
   const f=C.getFormat(formatId);need(f,'INVALID_INPUT','没有这个赛制。');unwrap(C.assertFormatAvailable(formatId,capabilities));
   const active=ready(w)?w.progression.activeChallenge:null;
-  const challenge=active?.status==='accepted'&&(!opponentId||opponentId===active.actorId);
+  // Ordinary table matchmaking must not be hijacked by an outstanding challenge.
+  // Challenge rooms are entered explicitly through the NPC/dialogue or rival picker.
+  const challenge=active?.status==='accepted'&&opponentId===active.actorId;
   need(!challenge||formatId==='bo3','INVALID_INPUT','当前阶段高手挑战使用 BO3。');
   if(challenge)opponentId=active.actorId;
   const fee=challenge?0:managementEffects(w).tableFee;
