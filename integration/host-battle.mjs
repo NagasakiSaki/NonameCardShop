@@ -25,7 +25,7 @@ export function createBattleMount(runtime,{fetch=globalThis.fetch,document=globa
     }
     need(match?.status==='running','INVALID_STATE','请先调用 combat.start / combat.continue。');
     startedGame=match.gameId;check();
-    if(match.series&&!['bo3','kof'].includes(match.mode)){
+    if(match.series&&match.mode!=='kof'){
       const planned=await runtime.query('combat.roundPlan',{matchId});check();need(planned.ok,planned.error?.code,planned.error?.message);
       // Native handles own their paired time lease and validate the full identity/token/plan.
       nativeHandle=await mountNativeRound({container,plan:planned.data,signal,onEvent:async message=>{

@@ -6,14 +6,12 @@ import { el } from "../world/dom-helpers.mjs";
 // - 保留开台费调整与等待时自由移动（窗口可关、移动不锁）。
 
 const FORMAT_LABELS = {
-  "bo3": "BO3 单将",
-  "kof": "KOF 三将",
-  "doudizhu-bo3": "斗地主 BO3",
+  "kof": "1v1 三将接力",
+  "doudizhu-bo3": "斗地主换边 BO3",
   "versus2v2-bo3": "2v2 BO3",
 };
 
 const SERIES_NOTES = {
-  "bo3": "双方各 1 将上场，先 2 胜。",
   "kof": "双方各备战 3 将，阵亡换将，新将摸 4 张不继承。",
   "doudizhu-bo3": "地主 1 人对农民 2 人；每个有胜负的小局后换地主阵营；先 2 胜。",
   "versus2v2-bo3": "每方 2 人共 4 座；不混入 KOF 换将；先 2 胜。",
@@ -72,6 +70,6 @@ export function renderFormatPicker({ mount, options, selectedId, onSelect }) {
   mount.append(grid);
   const unavailable = options.filter((option) => !option.available);
   if (unavailable.length) {
-    mount.append(el("p", { class: "small muted", text: "不可用模式保留按钮与原因，正式能力接入后自动开放；旧 BO3/KOF 不受影响。" }));
+    mount.append(el("p", { class: "small muted", text: "不可用模式显示原因；修复引擎能力后即可开放，三将接力仍可使用。" }));
   }
 }

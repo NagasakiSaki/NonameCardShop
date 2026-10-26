@@ -14,8 +14,8 @@ export function mountRosterPicker({
   injectStyles(root);
 
   // 1. 初始化草稿与状态
-  const initialMode = draft.mode || view.mode || 'kof';
-  const initialSlots = initialMode === 'kof' ? 3 : 1;
+  const initialMode = 'kof';
+  const initialSlots = 3;
   const initialRefs = Array.isArray(draft.selectedRefs)
     ? [...draft.selectedRefs]
     : Array.isArray(view.initialSelectedRefs)
@@ -143,14 +143,9 @@ export function mountRosterPicker({
             class: `${prefix}-filter-btn` + (state.mode === 'kof' ? ' is-active' : ''),
             type: 'button',
             text: 'KOF 三将接力',
-            onclick: () => switchMode('kof'),
+            disabled: true,
           }),
-          el('button', {
-            class: `${prefix}-filter-btn` + (state.mode === 'bo3' ? ' is-active' : ''),
-            type: 'button',
-            text: 'BO3 单将决斗',
-            onclick: () => switchMode('bo3'),
-          }),
+
         ]),
 
         // 搜索框
@@ -215,24 +210,6 @@ export function mountRosterPicker({
     }
   }
 
-  function switchMode(newMode) {
-    if (state.mode === newMode) return;
-    state.mode = newMode;
-    state.slots = newMode === 'kof' ? 3 : 1;
-
-    if (newMode === 'bo3' && state.selectedRefs.length > 1) {
-      state.selectedRefs = state.selectedRefs.slice(0, 1);
-      state.modeNotice = '已切换为 BO3 单将赛制，保留 1 号首发武将，多余武将已移出草稿。';
-    } else if (newMode === 'kof') {
-      state.modeNotice = '已切换为 KOF 三将接力赛制，请选满 3 位不同武将。';
-    } else {
-      state.modeNotice = null;
-    }
-
-    renderAll();
-  }
-
-  // 渲染有序已选阵容栏
   function renderSelectedBar() {
     clear(selectedBarNode);
 

@@ -24,20 +24,20 @@ try{
   await page.goto(server.origin+'/?profile=legacy');await page.waitForFunction(()=>window.__cardShopReady===true);
   await c('saves.import',{content:JSON.stringify(archive)});await page.waitForTimeout(250);await c('business.open');
   await page.evaluate(()=>__cardShopApp.openPanel('combat',{opponentId:'fixture-rival'}));await room().locator('[data-format-id]').first().waitFor();
-  assert.equal(await room().locator('[data-format-id]').count(),4);await page.screenshot({path:out+'/table-formats.png'});await close();
+  assert.equal(await room().locator('[data-format-id]').count(),3);await page.screenshot({path:out+'/table-formats.png'});await close();
   // Walk through the real world route to the service desk while the world runs.
   await c('clock.setManualPause',{paused:false});await page.evaluate(()=>__cardShopApp.goToInteraction('battleRoom.service','combat',{opponentId:'fixture-rival'}));
   await room().locator('[data-format-id]').first().waitFor({timeout:45000});
-  for(const formatId of ['versus2v2-bo3','doudizhu-bo3']){
+  for(const formatId of ['kof','versus2v2-bo3','doudizhu-bo3']){
     if(!await room().count())await page.evaluate(()=>__cardShopApp.openPanel('combat',{opponentId:'fixture-rival'}));
     await room().locator(`[data-format-id="${formatId}"]`).click();await room().getByRole('button',{name:'创建房间并选将',exact:true}).click();
-    const count=formatId==='doudizhu-bo3'?5:8;
+    const count={kof:3,'doudizhu-bo3':5,'versus2v2-bo3':8}[formatId],winsRequired=formatId==='kof'?1:2;
     await room().locator('[data-combat-room]').waitFor();
     const frozenPool=await q('combat.rooms');assert.equal(frozenPool.active.pools.enemy.length,count);
     await room().getByRole('button',{name:'查看对方备战池',exact:true}).click();
     const poolWindow=page.getByRole('dialog',{name:'房间备战池',exact:true});await poolWindow.locator('[data-room-pools] .v7-roster-card').first().waitFor();assert.equal(await poolWindow.locator('[data-room-pools] .v7-roster-card').count(),count);
     assert(await poolWindow.getByText(`固定名单 · ${count} 名武将`,{exact:true}).count());
-    await poolWindow.getByRole('button',{name:'卡面与技能',exact:true}).first().click();const detail=page.getByRole('dialog',{name:'卡牌详情',exact:true});await detail.getByText('四模式等权平均',{exact:true}).waitFor();for(const label of ['BO3 评分','KOF 评分','斗地主 评分','2v2 评分'])assert(await detail.getByText(label,{exact:true}).count());await detail.getByRole('button',{name:'关闭 (Esc)',exact:true}).click();
+    await poolWindow.getByRole('button',{name:'卡面与技能',exact:true}).first().click();const detail=page.getByRole('dialog',{name:'卡牌详情',exact:true});await detail.getByText('三模式等权平均',{exact:true}).waitFor();for(const label of ['1v1 三将接力 评分','斗地主 评分','2v2 评分'])assert(await detail.getByText(label,{exact:true}).count());await detail.getByRole('button',{name:'关闭 (Esc)',exact:true}).click();
     await page.screenshot({path:out+'/'+formatId+'-opponent-pool.png',animations:'disabled'});await poolWindow.getByRole('button',{name:'关闭 (Esc)',exact:true}).click();
     if(formatId==='versus2v2-bo3'){
       await page.setViewportSize({width:640,height:800});await room().getByRole('button',{name:'查看对方备战池',exact:true}).click();await poolWindow.locator('[data-room-pools] .v7-roster-card').first().waitFor();assert.equal(await poolWindow.locator('.v7-roster-card').count(),4);await poolWindow.getByRole('button',{name:'下一页',exact:true}).click();assert.equal(await poolWindow.locator('.v7-roster-card').count(),4);assert(await poolWindow.getByText('2/2',{exact:true}).count());await poolWindow.getByRole('button',{name:'关闭 (Esc)',exact:true}).click();await page.setViewportSize({width:1440,height:900});
@@ -48,14 +48,14 @@ try{
     await room().getByRole('button',{name:'确认整场备战',exact:true}).click();
     await page.waitForTimeout(200);const error=await room().locator('.v7-message').textContent();assert.equal(error,'',error);await room().getByRole('button',{name:'确认本局选将',exact:true}).waitFor();
     const records=[];
-    for(let round=0;round<2;round++){
+    for(let round=0;round<winsRequired;round++){
       const series=await q('combat.series'),picks=series.round.seatSkeleton.filter(s=>s.teamId==='mine').length;
-      for(let i=0;i<picks;i++)await room().locator(`[data-roster-key="ui-player-${i}"]`).click();
+      if(formatId!=='kof')for(let i=0;i<picks;i++)await room().locator(`[data-roster-key="ui-player-${i}"]`).click();
       await room().getByRole('button',{name:'确认本局选将',exact:true}).click();await room().getByRole('button',{name:'开始本局',exact:true}).click();
       await until(async()=>(await q('combat.series'))?.phase==='live');
       const frame=page.frames().find(f=>f.url().startsWith(server.engineOrigin+'/'));if(!frame)console.log('MISSING FRAME',formatId,round,page.frames().map(f=>f.url()),await room().locator('.v7-message').textContent(),JSON.stringify(await q('combat.series')));assert(frame);
-      const state=await frame.evaluate(async()=>{const {game,lib,_status}=await import('/noname.js');return {mode:lib.config.mode,variant:_status.mode,seats:game.shopNative.snapshot()};});
-      assert.equal(state.mode,formatId==='doudizhu-bo3'?'doudizhu':'versus');assert.equal(state.seats.length,formatId==='doudizhu-bo3'?3:4);
+      const state=await frame.evaluate(async()=>{const {game,lib,_status}=await import('/noname.js');return {mode:lib.config.mode,variant:_status.mode,seats:game.shopNative?game.shopNative.snapshot():game.shopDuel.teams.map(t=>({side:t.side,index:t.index}))};});
+      if(formatId!=='kof')assert.equal(state.mode,formatId==='doudizhu-bo3'?'doudizhu':'versus');assert.equal(state.seats.length,formatId==='kof'?2:formatId==='doudizhu-bo3'?3:4);
       const minute=(await q('shop.snapshot')).clock.minute;await page.waitForTimeout(150);assert.equal((await q('shop.snapshot')).clock.minute,minute);
       if(formatId==='versus2v2-bo3'&&round===0){
         await room().getByRole('button',{name:'接管队友',exact:true}).click();
@@ -69,14 +69,19 @@ try{
         console.log('PASS actual Host takeover and release via UI buttons');
       }
       // Controlled engine-death fixture: tests real Host/C/D settlement, not difficulty or balance.
-      await frame.evaluate(async()=>{const {game,lib,ui,_status}=await import('/noname.js');lib.config.game_speed='vvfast';lib.config.duration=10;const event=game.createEvent('v7StoreIntegrationDeathFixture',false);event.forceDie=true;event.setContent(async()=>{for(const b of game.shopNative.bindings.filter(b=>b.seat.teamId!=='mine'))if(b.player.isAlive())await b.player.die();});if(!_status.auto)ui.click.auto('forced');game.resume();});
+      if(formatId==='kof'){
+        for(let death=0;death<3;death++){
+          await frame.evaluate(async()=>{const {game,lib,ui,_status}=await import('/noname.js');lib.config.game_speed='vvfast';lib.config.duration=10;const event=game.createEvent('storeKofDeathFixture',false);event.forceDie=true;event.setContent(async()=>{await game.shopDuel.teams[1].player.die();});if(!_status.auto)ui.click.auto('forced');game.resume();});
+          if(death<2)await until(()=>frame.evaluate(async index=>{const {game}=await import('/noname.js');return game.shopDuel.teams[1].index>index;},death),25000);
+        }
+      }else await frame.evaluate(async()=>{const {game,lib,ui,_status}=await import('/noname.js');lib.config.game_speed='vvfast';lib.config.duration=10;const event=game.createEvent('v7StoreIntegrationDeathFixture',false);event.forceDie=true;event.setContent(async()=>{for(const b of game.shopNative.bindings.filter(b=>b.seat.teamId!=='mine'))if(b.player.isAlive())await b.player.die();});if(!_status.auto)ui.click.auto('forced');game.resume();});
       try{await until(async()=>['selecting','finished'].includes((await q('combat.series',{matchId:series.matchId}))?.phase),30000);}catch(e){console.log('SETTLEMENT TIMEOUT',formatId,round,JSON.stringify(await q('combat.series')),await room().locator('.v7-message').textContent(),await frame.evaluate(async()=>{const {game,_status}=await import('/noname.js');return {over:_status.over,paused:_status.paused,paused2:_status.paused2,auto:_status.auto,event:_status.event?.name,players:game.players.map(p=>[p.name,p.hp]),dead:game.dead.map(p=>p.name)};}).catch(e=>e.message));throw e;}
       records.push(await q('combat.series',{matchId:series.matchId}));
     }
-    assert.equal(records[1].score.mine,2);assert.equal(records[1].phase,'finished');await until(async()=>await page.locator('.v7-battle iframe').count()===0);
+    assert.equal(records.at(-1).score.mine,winsRequired);assert.equal(records.at(-1).phase,'finished');await until(async()=>await page.locator('.v7-battle iframe').count()===0);
     fs.writeFileSync(out+'/'+formatId+'-store-series.json',JSON.stringify({evidenceType:'real-store-host-controlled-engine-death-fixture',records},null,2));
     await room().getByRole('button',{name:'返回牌桌',exact:true}).click();
-    console.log('PASS real store UI → reserve → round → native engine → series 2:0',formatId);
+    console.log('PASS real store UI → reserve → round → engine → complete win',formatId);
   }
   await close();
   // A stage visit uses the actual navigation and the bottom overlay; no fake frontend offer.

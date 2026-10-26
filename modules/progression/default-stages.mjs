@@ -14,7 +14,7 @@ export const DEFAULT_STAGES = [
     displayName: "高松灯",
     nameColor: "#C084FC",
     roleLabel: "来访高手",
-    defaultFormatId: "bo3",
+    defaultFormatId: "kof",
     defaultAllyDuty: "attraction",
     allyRate: 0.10,
     dialogueGreeting: "我是高松灯。听说你这家卡牌店收集了许多武将，可否与我切磋一局？"
@@ -31,7 +31,7 @@ export const DEFAULT_STAGES = [
     displayName: "千早爱音",
     nameColor: "#C084FC",
     roleLabel: "来访高手",
-    defaultFormatId: "bo3",
+    defaultFormatId: "kof",
     defaultAllyDuty: "checkout",
     allyRate: 0.20,
     dialogueGreeting: "哈喽！我是千早爱音～听说战胜我能解锁新卡包，要不要来过两招？"
@@ -48,7 +48,7 @@ export const DEFAULT_STAGES = [
     displayName: "要乐奈",
     nameColor: "#C084FC",
     roleLabel: "来访高手",
-    defaultFormatId: "bo3",
+    defaultFormatId: "kof",
     defaultAllyDuty: "wholesale",
     allyRate: 0.05,
     dialogueGreeting: "来打牌。赢了给你好吃的……不对，新卡包。"
@@ -65,7 +65,7 @@ export const DEFAULT_STAGES = [
     displayName: "长崎素世",
     nameColor: "#C084FC",
     roleLabel: "来访高手",
-    defaultFormatId: "bo3",
+    defaultFormatId: "kof",
     defaultAllyDuty: "attraction",
     allyRate: 0.10,
     dialogueGreeting: "你好，我是长崎素世。如果有时间的话，可以请教一局吗？"
@@ -82,7 +82,7 @@ export const DEFAULT_STAGES = [
     displayName: "椎名立希",
     nameColor: "#C084FC",
     roleLabel: "来访高手",
-    defaultFormatId: "bo3",
+    defaultFormatId: "kof",
     defaultAllyDuty: "checkout",
     allyRate: 0.20,
     dialogueGreeting: "我是椎名立希。少说废话，直接在牌桌上见真章吧。"
@@ -99,7 +99,7 @@ export const DEFAULT_STAGES = [
     displayName: "三角初华",
     nameColor: "#C084FC",
     roleLabel: "来访高手",
-    defaultFormatId: "bo3",
+    defaultFormatId: "kof",
     defaultAllyDuty: "wholesale",
     allyRate: 0.05,
     dialogueGreeting: "你好呀，我是三角初华。星光指引我来到这里，愿意与我进行一场对决吗？"
@@ -116,7 +116,7 @@ export const DEFAULT_STAGES = [
     displayName: "若叶睦",
     nameColor: "#C084FC",
     roleLabel: "来访高手",
-    defaultFormatId: "bo3",
+    defaultFormatId: "kof",
     defaultAllyDuty: "attraction",
     allyRate: 0.10,
     dialogueGreeting: "……请和我切磋一局。"
@@ -133,7 +133,7 @@ export const DEFAULT_STAGES = [
     displayName: "八幡海铃",
     nameColor: "#C084FC",
     roleLabel: "来访高手",
-    defaultFormatId: "bo3",
+    defaultFormatId: "kof",
     defaultAllyDuty: "checkout",
     allyRate: 0.20,
     dialogueGreeting: "八幡海铃。按约定前来挑战，随时可以开始。"
@@ -150,7 +150,7 @@ export const DEFAULT_STAGES = [
     displayName: "祐天寺若麦",
     nameColor: "#C084FC",
     roleLabel: "来访高手",
-    defaultFormatId: "bo3",
+    defaultFormatId: "kof",
     defaultAllyDuty: "wholesale",
     allyRate: 0.05,
     dialogueGreeting: "喵梦参上！店长，快来跟我对决，粉丝们可都看着呢！"
@@ -167,7 +167,7 @@ export const DEFAULT_STAGES = [
     displayName: "丰川祥子",
     nameColor: "#C084FC",
     roleLabel: "来访高手",
-    defaultFormatId: "bo3",
+    defaultFormatId: "kof",
     defaultAllyDuty: "attraction",
     allyRate: 0.10,
     dialogueGreeting: "我是丰川祥子。只有真正有实力的店长，才配拥有神话的力量。"
@@ -184,7 +184,7 @@ export const DEFAULT_STAGES = [
     displayName: "峰月律",
     nameColor: "#C084FC",
     roleLabel: "来访高手",
-    defaultFormatId: "bo3",
+    defaultFormatId: "kof",
     defaultAllyDuty: "checkout",
     allyRate: 0.20,
     dialogueGreeting: "峰月律。战术推演已就绪，请多指教。"
@@ -201,7 +201,7 @@ export const DEFAULT_STAGES = [
     displayName: "藤都子",
     nameColor: "#C084FC",
     roleLabel: "来访高手",
-    defaultFormatId: "bo3",
+    defaultFormatId: "kof",
     defaultAllyDuty: "wholesale",
     allyRate: 0.05,
     dialogueGreeting: "幽玄的心境，唯有在激烈的牌局中显现。来战吧。"
@@ -218,7 +218,7 @@ export const DEFAULT_STAGES = [
     displayName: "千石由乃",
     nameColor: "#C084FC",
     roleLabel: "来访高手",
-    defaultFormatId: "bo3",
+    defaultFormatId: "kof",
     defaultAllyDuty: "attraction",
     allyRate: 0.10,
     dialogueGreeting: "千石由乃前来挑战！看看门阀士族之威吧！"
@@ -235,7 +235,7 @@ export const DEFAULT_STAGES = [
     displayName: "琴平凪",
     nameColor: "#C084FC",
     roleLabel: "来访高手",
-    defaultFormatId: "bo3",
+    defaultFormatId: "kof",
     defaultAllyDuty: "checkout",
     allyRate: 0.20,
     dialogueGreeting: "兵者，势也。我是琴平凪，想领教一下店长的排兵布阵。"
@@ -252,7 +252,7 @@ export const DEFAULT_STAGES = [
     displayName: "汐见萤",
     nameColor: "#C084FC",
     roleLabel: "来访高手",
-    defaultFormatId: "bo3",
+    defaultFormatId: "kof",
     defaultAllyDuty: "wholesale",
     allyRate: 0.05,
     dialogueGreeting: "汐见萤。终于来到终局关卡……让我们完成这场宿命的对决。"

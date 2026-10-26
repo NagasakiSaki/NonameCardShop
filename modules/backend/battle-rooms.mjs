@@ -39,7 +39,7 @@ export function queryRooms(w,catalog,p={}){
 export function createRoom(w,catalog,p,navigation,capabilities){
   const state=ensure(w);need(w.clock.phase==='open','SHOP_CLOSED','请在营业中创建对战房间。');need(!activeRoom(w)&&!w.matches.some(m=>!m.background&&m.status!=='finished'),'MATCH_ACTIVE','你已有房间或比赛，请先返回完成或取消。');
   leaveQueue(w,'player','created-room');
-  const formatId=p.formatId||'bo3',allowed=assertFormatAvailable(formatId,capabilities);need(allowed.ok,allowed.error?.code,allowed.error?.message);
+  const formatId=p.formatId||'kof',allowed=assertFormatAvailable(formatId,capabilities);need(allowed.ok,allowed.error?.code,allowed.error?.message);
   const table=p.tableId?w.tables.find(t=>t.tableId===p.tableId):w.tables.find(t=>!t.matchId&&!t.reservation||!t.matchId&&t.reservation==='player');need(table&&!table.matchId&&(!table.reservation||table.reservation==='player'),'TABLE_BUSY','没有空闲牌桌。');near(w,table.tableId,navigation);
   state.items=state.items.filter(r=>!['finished','cancelled'].includes(r.status)||r.createdDay>=w.clock.day-30).slice(-98);
   const r={roomId:serial(w,'room'),worldId:w.worldId,branchId:w.branchId,formatId,tableId:table.tableId,createdDay:w.clock.day,expiresAt:Math.min(w.clock.day*1440+1200,stamp(w)+(w.rules.roomWaitMinutes||180)),revision:1,status:'waiting-opponent',tableFee:0,requestedOpponentId:p.opponentId||null,seed:Math.floor(random(w)*4294967296)};

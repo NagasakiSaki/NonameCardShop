@@ -43,7 +43,7 @@
     "story:validate": "node tools/story/validate.mjs",
     "story:build": "node tools/story/build.mjs",
     "test:narrative": "node tests/run.mjs narrative",
-    "strength:report": "node tools/build-four-mode-report.mjs",
+    "strength:report": "node tools/build-mode-strength-report.mjs",
     "test:rooms": "node tests/run.mjs roomsAndStrength",
     "test:v7": "node tests/run.mjs operationsV7",
     "test:native": "node tests/run.mjs nativeModes",

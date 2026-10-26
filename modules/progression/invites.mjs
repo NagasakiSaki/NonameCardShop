@@ -92,7 +92,7 @@ export function offerInvite(state, input, context = {}) {
     source,
     kind,
     productId: activeStage.productId,
-    formatId: activeStage.defaultFormatId || 'bo3',
+    formatId: activeStage.defaultFormatId || 'kof',
     fee: 0,
     status: 'offered',
     day: currentDay,

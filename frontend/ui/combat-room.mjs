@@ -68,7 +68,7 @@ export async function openCombat(app, options = {}) {
         el("p", { class: "small muted", text: room.note }),
       ]));
       for(const match of (room.matches||[]).filter(m=>m.background&&m.error).slice(-3))body.append(el('p',{class:'note-card',text:'最近 NPC 对局技术中断（不计正常战绩）：'+match.error}));
-      for(const match of (room.matches||[]).filter(m=>m.simulated&&m.status==='finished'&&m.result!=='cancelled').slice(-3).reverse())body.append(el('p',{class:'note-card',text:`NPC 模拟比赛已结束 · ${match.mode.toUpperCase()} · ${match.mode==='bo3'?match.wins+':'+match.losses:'三将接力'} · 已离桌，桌费 ${app.formatMoney(match.simulation.feePaid)} 已结算`}));
+      for(const match of (room.matches||[]).filter(m=>m.simulated&&m.status==='finished'&&m.result!=='cancelled').slice(-3).reverse())body.append(el('p',{class:'note-card',text:`NPC 模拟比赛已结束 · ${match.mode.toUpperCase()} · 三将接力 · 已离桌，桌费 ${app.formatMoney(match.simulation.feePaid)} 已结算`}));
       if(active){renderBattle(active);return;}
       const queued=await ctx.query('combat.queue');
       if(queued.ok&&queued.data.player){body.append(el('p',{class:'note-card',text:'已在等待对手。可以关闭这里，回店内自由行动。'}),el('button',{class:'btn',text:'返回店内',onclick:()=>ctx.handle.close()}));return;}
@@ -92,7 +92,7 @@ export async function openCombat(app, options = {}) {
               class: "select",
               value:state.mode,
               onchange: (event) => { state.mode = event.target.value; state.picked = []; state.preview = null; ctx.refresh(); },
-            }, [el("option", { value: "kof", text: "KOF 三将",selected:state.mode==='kof' }), el("option", { value: "bo3", text: "BO3 单将",selected:state.mode==='bo3' })]),
+            }, [el("option", { value: "kof", text: "KOF 三将",selected:state.mode==='kof' })]),
           ]),
           el("label", { class: "field" }, [
             el("span", { class: "field__label", text: "赌注" }),
@@ -107,7 +107,7 @@ export async function openCombat(app, options = {}) {
 
       // 出阵次序：KOF 三个位置固定，顺序就是先手位 → 中坚 → 收尾
       const slotStrip = el("div", { style: { display: "flex", gap: "6px", flexWrap: "wrap" } });
-      const modeLabel = state.mode === "kof" ? "KOF" : "BO3";
+      const modeLabel = "三将接力";
       for (let index = 0; index < slots; index += 1) {
         const ref = state.picked[index];
         const pickedCard = ref ? eligibleItems.find((item) => item.inventoryRef === ref) : null;
@@ -277,7 +277,7 @@ export async function openCombat(app, options = {}) {
             onclick: () => { app.navigateScene("store"); ctx.handle.close(); },
           }),
         ]),
-        el("p", { class: "small muted", text: match?`${match.mode==='kof'?'KOF':'BO3'} ${match.wins}:${match.losses}。关闭窗口会中断当前小局，重开时重新发牌；整场结束前店内时间保持暂停。`:'确认参赛后即可开始牌局。' }),
+        el("p", { class: "small muted", text: match?`三将接力 ${match.wins}:${match.losses}。关闭窗口会中断当前小局，重开时重新发牌；整场结束前店内时间保持暂停。`:'确认参赛后即可开始牌局。' }),
       ]));
       if(match?.error)body.append(el('p',{class:'note-card',text:match.error}));
 

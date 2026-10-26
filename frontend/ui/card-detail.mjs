@@ -114,10 +114,10 @@ export async function openCardDetail(app, options = {}) {
         el("h4", { class: "section__title", text: "战绩与样本" }),
         el("table", { class: "data-table" }, [
           el("thead", {}, [el("tr", {}, [el("th", { text: "模式" }), el("th", { class: "num", text: "场次" }), el("th", { class: "num", text: "胜" }), el("th", { class: "num", text: "负" }), el("th", { class: "num", text: "平" })])]),
-          el("tbody", {}, ["kof", "bo3"].map((mode) => {
+          el("tbody", {}, RATED_FORMATS.map((mode) => {
             const row = stats[mode] || { sessions: 0, wins: 0, losses: 0, draws: 0 };
             return el("tr", {}, [
-              el("td", { text: mode === "kof" ? "KOF" : "BO3" }),
+              el("td", { text: MODE_LABELS[mode] }),
               el("td", { class: "num", text: String(row.sessions) }),
               el("td", { class: "num", text: String(row.wins) }),
               el("td", { class: "num", text: String(row.losses) }),

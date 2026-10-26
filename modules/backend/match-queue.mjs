@@ -24,7 +24,7 @@ export function joinQueue(w,catalog,p,ownerId='player'){
   need(w.clock.phase==='open','SHOP_CLOSED','请在营业时等待对手。');
   need(!(w.matchQueue||[]).some(q=>q.ownerId===ownerId),'ALREADY_QUEUED','已经在等待对手。');
   need(!w.matches.some(m=>m.status!=='finished'&&[m.mineOwnerId||'player',m.enemyOwnerId||m.opponentId].includes(ownerId)),'MATCH_ACTIVE','请先结束当前比赛。');
-  const slots=p.mode==='kof'?3:p.mode==='bo3'?1:0;need(slots,'INVALID_INPUT','请选择 KOF 或 BO3。');
+  const slots=p.mode==='kof'?3:0;need(slots,'INVALID_INPUT','等候报名使用三将接力；斗地主和双人对决请创建对应房间。');
   need(Array.isArray(p.inventoryRefs)&&p.inventoryRefs.length===slots&&p.inventoryRefs.every(r=>typeof r==='string'),'INVALID_INPUT','请选择完整参赛阵容。');
   const options=eligible(w,catalog,ownerId),team=p.inventoryRefs.map(ref=>options.find(c=>c.inventoryRef===ref&&c.eligible));
   need(team.every(Boolean)&&new Set(team.map(c=>c.generalId)).size===slots,'NOT_ELIGIBLE','请选择足够的不同可用武将。');
@@ -51,7 +51,7 @@ export function tickMatchQueue(w,catalog,navigation,{schedule=true}={}){
   const player=playerQueue(w),event=w.experience?.events.find(e=>e.day===w.clock.day&&e.status==='scheduled');
   if(schedule&&(w.rules.npcAutoBattles!==false||player))for(const npc of w.npcs){
     if(npc.currentRoomId||npc.specialist||npc.allyId||npc.playerInviteUntil||!onSite(npc)||npc.currentMatchId||npc.currentQueueId||npc.trip||npc.activity!=='idle'||(npc.nextMatchAt||0)>stamp(w)||event&&!event.actorIds.includes(npc.actorId)||npc.wallet.available-(npc.wallet.reserved||0)<managementEffects(w).tableFee)continue;
-    const options=eligible(w,catalog,npc.actorId).filter(c=>c.eligible),unique=options.filter((c,i)=>options.findIndex(other=>other.generalId===c.generalId)===i),mode=player?.mode||'bo3',n=mode==='kof'?3:1;
+    const options=eligible(w,catalog,npc.actorId).filter(c=>c.eligible),unique=options.filter((c,i)=>options.findIndex(other=>other.generalId===c.generalId)===i),mode=player?.mode||'kof',n=3;
     if(unique.length>=n)joinQueue(w,catalog,{mode,inventoryRefs:unique.slice(0,n).map(c=>c.inventoryRef)},npc.actorId);
   }
   // Keep the current serial matchmaking policy. Only player matches claim business time.

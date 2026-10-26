@@ -51,7 +51,7 @@ export function normalizeQuery(name, result) {
       data.neighbors = Array.isArray(data.neighbors) ? data.neighbors : [];
     }
     if (name === "combat.eligible") {
-      data.slots = Number(data.slots) || (data.mode === "bo3" ? 1 : 3);
+      data.slots = Number(data.slots) || ({kof:3,'doudizhu-bo3':5,'versus2v2-bo3':8}[data.mode] || 0);
     }
   } else if (name === "room.snapshot") {
     data = { ...data, tables: Array.isArray(data && data.tables) ? data.tables : [], service: (data && data.service) || { fee: 0 } };
@@ -61,7 +61,7 @@ export function normalizeQuery(name, result) {
       skills: Array.isArray(data.skills) ? data.skills : [],
       holdings: data.holdings || { owned: 0, available: 0, protected: 0, listed: 0 },
       marketEligibility: data.marketEligibility || { eligible: false, reasons: [] },
-      stats: data.stats || { kof: {}, bo3: {}, sampleSufficient: false, note: "实战样本不足" },
+      stats: data.stats || { kof: {}, 'doudizhu-bo3': {}, 'versus2v2-bo3': {}, sampleSufficient: false, note: "实战样本不足" },
     };
   }
   return { ...result, data };

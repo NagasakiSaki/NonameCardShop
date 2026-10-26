@@ -1,17 +1,9 @@
 {
-  "version": "resource-four-mode-2",
-  "aggregation": "arithmetic-mean-of-four",
+  "version": "resource-three-mode-3",
+  "aggregation": "arithmetic-mean-of-three",
   "scoreCap": 200,
   "baseHorizon": 4,
   "profiles": {
-    "bo3": {
-      "label": "BO3",
-      "enemies": 1,
-      "allies": 0,
-      "horizon": 4,
-      "incoming": 1,
-      "growth": 1
-    },
     "kof": {
       "label": "KOF",
       "enemies": 1,
@@ -98,12 +90,6 @@
     "xunyu": {
       "notes": "单挑不把驱虎的两条互斥伤害分支相加；可以选择不发动。节命按实际补牌缺口估算，农民/2v2可补队友，仍只计一次实际增加的手牌。",
       "roles": {
-        "bo3": {
-          "cards": 1.1,
-          "damage": 0,
-          "quality": 0,
-          "cost": 0.1
-        },
         "kof": {
           "cards": 1,
           "damage": 0,

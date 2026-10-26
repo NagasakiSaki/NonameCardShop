@@ -1,19 +1,19 @@
 /**
- * Four-format registry.
+ * Three-format registry.
  *
  * formatId      经营赛制 (business-facing format, persisted in series state)
  * engineMode    noname 原生模式 (doudizhu / versus / existing two-seat profile)
  * nativeVariant 本地子规则 (must be pinned by group D's probe, never guessed here)
  * profileId     引擎能力 profile (comes from D's capability report)
  *
- * Legacy bo3/kof never regress: they are already shipped in the current build, so
+ * The shipped KOF engine remains available: they are already shipped in the current build, so
  * a missing probe must not disable them. New formats are unavailable until D
  * reports a supported capability with a pinned profile.
  */
 import {ok, err, isPlainObject, isNonEmptyString} from './errors.mjs';
 
 export const FORMAT_VERSION = 1;
-export const DEFAULT_FORMAT_ID = 'bo3';
+export const DEFAULT_FORMAT_ID = 'kof';
 
 /**
  * `availability`:
@@ -27,27 +27,8 @@ export const DEFAULT_FORMAT_ID = 'bo3';
  */
 export const FORMAT_DEFINITIONS = Object.freeze([
   Object.freeze({
-    formatId: 'bo3',
-    label: 'BO3 对决',
-    engineMode: 'existing-two-seat-profile',
-    nativeVariant: null,
-    legacy: true,
-    availability: 'legacy-live',
-    reservePerSide: 1,
-    activePerSide: Object.freeze([1, 1]),
-    seats: 2,
-    winsRequired: 2,
-    humanSeats: 1,
-    rolePlan: Object.freeze({duelist: 1}),
-    drawPolicy: 'replay',
-    rolePolicy: 'fixed',
-    replacementHand: null,
-    handPolicy: Object.freeze({initialHand: 4, firstDrawPenalty: 1, replacement: null}),
-    inheritAcrossRounds: false
-  }),
-  Object.freeze({
     formatId: 'kof',
-    label: 'KOF 车轮战',
+    label: '1v1 三将接力',
     engineMode: 'existing-two-seat-profile',
     nativeVariant: null,
     legacy: true,
@@ -72,7 +53,7 @@ export const FORMAT_DEFINITIONS = Object.freeze([
   }),
   Object.freeze({
     formatId: 'doudizhu-bo3',
-    label: '斗地主 BO3',
+    label: '斗地主换边 BO3',
     engineMode: 'doudizhu',
     nativeVariant: null,
     legacy: false,
@@ -121,7 +102,7 @@ export function listFormatIds() {
 }
 
 /** Legacy `mode` strings used by the shipped backend/queue match records. */
-export const LEGACY_MODE_TO_FORMAT = Object.freeze({bo3: 'bo3', kof: 'kof'});
+export const LEGACY_MODE_TO_FORMAT = Object.freeze({kof: 'kof'});
 
 export function fromLegacyMode(mode) {
   return LEGACY_MODE_TO_FORMAT[mode] || null;

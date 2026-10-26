@@ -12,7 +12,7 @@ export function openRoomPools(app,room,{side='enemy'}={}){
       const cards=room.pools[current].map(c=>({...c,modeScore:c.modeScores?.[room.formatId],quantity:{owned:1,available:1},favorite:false}));
       if(!cards.length){body.replaceChildren(el('p',{text:current==='mine'?'你的备战池尚未确认。':'对手尚未入房。'}));return;}
       renderRosterGrid({mount:body,items:cards,selected:[],max:cards.length,page,readOnly:true,pageSize:innerWidth<700||innerHeight<760?4:8,caption:'本房间固定备战池 · 卡面与技能均可查看',onToggle:item=>{if(item.__page!=null){page=item.__page;paint();}},onToggleFavorite:()=>{},onPreview:item=>app.openPanel('cardDetail',{cardKey:item.cardKey})});
-      body.append(el('p',{class:'small',text:'整场从该池逐局选将；借用卡不属于店铺库存。全局分为四种模式等权平均。'}));
+      body.append(el('p',{class:'small',text:'整场从该池逐局选将；借用卡不属于店铺库存。全局分为三种模式等权平均。'}));
     }
     paint();
   }});

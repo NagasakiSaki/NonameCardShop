@@ -21,7 +21,7 @@ assert.equal(score({carry:5,burst:5}),50,'no obsolete hand-inheritance or unexpl
 assert.equal(resourcePower({...card({}),hp:5},rules.scoring).score,55,'one extra HP amortizes over four turns');
 assert.ok(c.byId.get('clan_xunshuang').globalScore>c.byId.get('liubei').globalScore);
 assert.equal(c.byId.get('clan_xunshuang').reviewStatus,'calibrated');
-assert.equal(c.byId.get('liubei').power.provenance,'four-mode-rules-estimate');
+assert.equal(c.byId.get('liubei').power.provenance,'three-mode-rules-estimate');
 assert.ok(c.cards.every(x=>Number.isFinite(x.globalScore)&&x.power.modeScores&&x.power.modeScores['versus2v2-bo3']>=0));
 const legacyRules=structuredClone(rules);delete legacyRules.scoring.method;legacyRules.modeWeights={bo3:.5,kof:.5};const legacyCatalog=buildCatalog(source,legacyRules);
 assert.equal(legacyCatalog.byId.get('liubei').power.modelVersion,undefined,'saved legacy scoring remains readable without opting into the new model');

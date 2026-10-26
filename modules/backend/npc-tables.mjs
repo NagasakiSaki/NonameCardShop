@@ -49,7 +49,7 @@ export function tickNpcTables(w,catalog,navigation,seconds,{schedule=true,routes
   const table=w.tables.find(t=>!t.matchId&&!t.reservation);if(!table){for(const npc of w.npcs.filter(n=>onSite(n)&&n.activity==='idle'&&!n.currentRoomId&&!n.currentMatchId&&eligible(w,catalog,n.actorId).some(i=>i.eligible)))customerFeedback(w,npc,'table-full');return;}
   const fee=managementEffects(w).tableFee;
   const event=w.experience?.events.find(e=>e.day===w.clock.day&&e.status==='scheduled');
-  const npcs=w.npcs.filter(n=>onSite(n)&&!n.trip&&!n.currentMatchId&&n.activity==='idle'&&n.wallet.available>=fee&&(n.nextMatchAt||0)<=stamp&&(!event||event.actorIds.includes(n.actorId))&&eligible(w,catalog,n.actorId).some(i=>i.eligible)).slice(0,2);
+  const npcs=w.npcs.filter(n=>onSite(n)&&!n.trip&&!n.currentRoomId&&!n.currentMatchId&&n.activity==='idle'&&n.wallet.available>=fee&&(n.nextMatchAt||0)<=stamp&&(!event||event.actorIds.includes(n.actorId))&&new Set(eligible(w,catalog,n.actorId).filter(i=>i.eligible).map(i=>i.generalId)).size>=3).slice(0,2);
   if(npcs.length<2)return;
   let routes;
   try{routes=npcs.map((npc,index)=>routeToTable(npc,index,table,navigation));}

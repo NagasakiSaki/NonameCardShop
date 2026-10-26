@@ -14,7 +14,7 @@
       "appearanceId": "bd-tomori",
       "displayName": "初始供货",
       "dueDay": 0,
-      "formatId": "bo3",
+      "formatId": "kof",
       "tierId": "entry",
       "unlockedInitially": true,
       "description": "唯一初始供货主题，开局自动解锁并赠送1盒。"
@@ -29,7 +29,7 @@
       "appearanceId": "bd-tomori",
       "displayName": "高松灯",
       "dueDay": 3,
-      "formatId": "bo3",
+      "formatId": "kof",
       "tierId": "standard",
       "unlockedInitially": false,
       "description": "第1阶段挑战高手，获胜解锁界限突破卡包供货与招募高松灯。"
@@ -44,7 +44,7 @@
       "appearanceId": "bd-anon",
       "displayName": "千早爱音",
       "dueDay": 6,
-      "formatId": "bo3",
+      "formatId": "kof",
       "tierId": "standard",
       "unlockedInitially": false,
       "description": "第2阶段挑战高手，获胜解锁璀璨星河卡包供货与招募千早爱音。"
@@ -59,7 +59,7 @@
       "appearanceId": "bd-rana",
       "displayName": "要乐奈",
       "dueDay": 9,
-      "formatId": "bo3",
+      "formatId": "kof",
       "tierId": "standard",
       "unlockedInitially": false,
       "description": "第3阶段挑战高手，获胜解锁外服武将卡包供货与招募要乐奈。"
@@ -74,7 +74,7 @@
       "appearanceId": "bd-soyo",
       "displayName": "长崎素世",
       "dueDay": 12,
-      "formatId": "bo3",
+      "formatId": "kof",
       "tierId": "standard",
       "unlockedInitially": false,
       "description": "第4阶段挑战高手，获胜解锁移动版卡包供货与招募长崎素世。"
@@ -89,7 +89,7 @@
       "appearanceId": "bd-taki",
       "displayName": "椎名立希",
       "dueDay": 15,
-      "formatId": "bo3",
+      "formatId": "kof",
       "tierId": "standard",
       "unlockedInitially": false,
       "description": "第5阶段挑战高手，获胜解锁群英荟萃卡包供货与招募椎名立希。"
@@ -104,7 +104,7 @@
       "appearanceId": "bd-uika",
       "displayName": "三角初华",
       "dueDay": 18,
-      "formatId": "bo3",
+      "formatId": "kof",
       "tierId": "standard",
       "unlockedInitially": false,
       "description": "第6阶段挑战高手，获胜解锁系列专属卡包供货与招募三角初华。"
@@ -119,7 +119,7 @@
       "appearanceId": "bd-mutsumi",
       "displayName": "若叶睦",
       "dueDay": 21,
-      "formatId": "bo3",
+      "formatId": "kof",
       "tierId": "standard",
       "unlockedInitially": false,
       "description": "第7阶段挑战高手，获胜解锁谋攻篇卡包供货与招募若叶睦。"
@@ -134,7 +134,7 @@
       "appearanceId": "bd-umiri",
       "displayName": "八幡海铃",
       "dueDay": 24,
-      "formatId": "bo3",
+      "formatId": "kof",
       "tierId": "standard",
       "unlockedInitially": false,
       "description": "第8阶段挑战高手，获胜解锁江山如故卡包供货与招募八幡海铃。"
@@ -149,7 +149,7 @@
       "appearanceId": "bd-nyamu",
       "displayName": "祐天寺若麦",
       "dueDay": 27,
-      "formatId": "bo3",
+      "formatId": "kof",
       "tierId": "standard",
       "unlockedInitially": false,
       "description": "第9阶段挑战高手，获胜解锁始计篇卡包供货与招募祐天寺若麦。"
@@ -164,7 +164,7 @@
       "appearanceId": "bd-sakiko",
       "displayName": "丰川祥子",
       "dueDay": 30,
-      "formatId": "bo3",
+      "formatId": "kof",
       "tierId": "standard",
       "unlockedInitially": false,
       "description": "第10阶段挑战高手，获胜解锁神话再临卡包供货与招募丰川祥子。"
@@ -179,7 +179,7 @@
       "appearanceId": "bd-ritsu",
       "displayName": "峰月律",
       "dueDay": 33,
-      "formatId": "bo3",
+      "formatId": "kof",
       "tierId": "standard",
       "unlockedInitially": false,
       "description": "第11阶段挑战高手，获胜解锁文德武备卡包供货与招募峰月律。"
@@ -194,7 +194,7 @@
       "appearanceId": "bd-miyako",
       "displayName": "藤都子",
       "dueDay": 36,
-      "formatId": "bo3",
+      "formatId": "kof",
       "tierId": "standard",
       "unlockedInitially": false,
       "description": "第12阶段挑战高手，获胜解锁蚀心入魔卡包供货与招募藤都子。"
@@ -209,7 +209,7 @@
       "appearanceId": "bd-yuno",
       "displayName": "千石由乃",
       "dueDay": 39,
-      "formatId": "bo3",
+      "formatId": "kof",
       "tierId": "standard",
       "unlockedInitially": false,
       "description": "第13阶段挑战高手，获胜解锁门阀士族卡包供货与招募千石由乃。"
@@ -224,7 +224,7 @@
       "appearanceId": "bd-nagi",
       "displayName": "琴平凪",
       "dueDay": 42,
-      "formatId": "bo3",
+      "formatId": "kof",
       "tierId": "expert",
       "unlockedInitially": false,
       "description": "第14阶段挑战高手，获胜解锁兵势篇卡包供货与招募琴平凪。"
@@ -239,7 +239,7 @@
       "appearanceId": "bd-hotaru",
       "displayName": "汐见萤",
       "dueDay": 45,
-      "formatId": "bo3",
+      "formatId": "kof",
       "tierId": "expert",
       "unlockedInitially": false,
       "description": "第15阶段挑战高手，获胜解锁经典神将卡包供货与招募汐见萤。"

@@ -1,4 +1,4 @@
-import {RATED_FORMATS,FOUR_MODE_VERSION} from './strength-modes.mjs';
+import {RATED_FORMATS} from './strength-modes.mjs';
 import {clone,need,integer,serial,sum,credit,debit,clamp,random,page} from './common.mjs';
 import {openPacket,unsealBox,makeSealed} from './products.mjs';
 import {note,enterCirculation} from './world.mjs';
@@ -29,11 +29,11 @@ export function updatePrices(w,catalog){
   for(const i of Object.values(w.items))if(i.location==='market')supplies.set(i.cardKey,(supplies.get(i.cardKey)||0)+1);
   for(const e of w.log)if(e.type==='secondaryTradeCompleted'&&e.day>=w.clock.day-3)trades.set(e.cardKey,(trades.get(e.cardKey)||0)+1);
   for(const c of catalog.cards){
-    const formats=w.rules.scoring?.method===FOUR_MODE_VERSION?RATED_FORMATS:['bo3','kof'];
+    const formats=RATED_FORMATS;
     const modes=formats.map(mode=>{const s=w.stats[`${c.cardKey}|${mode}`]||{wins:0,losses:0,draws:0};const n=s.wins+s.losses+s.draws;return clamp(1+2*n/(n+40)*((s.wins+.5*s.draws+10)/(n+20)-.5),.7,1.4);});
     const supplied=supplies.get(c.cardKey)||0;
     const demand=1+Math.min(.15,(trades.get(c.cardKey)||0)/(10+supplied*5));
-    const performance=formats.length===4?modes.reduce((a,b)=>a+b,0)/4:modes[0]*.65+modes[1]*.35;
+    const performance=modes.reduce((a,b)=>a+b,0)/formats.length;
     const target=Math.round(c.issuanceValue*performance*demand),previous=w.prices[c.cardKey]||c.issuanceValue;
     w.prices[c.cardKey]=Math.max(1,Math.round(clamp(target,previous*(1-w.rules.priceDailyLimit),previous*(1+w.rules.priceDailyLimit))));
   }

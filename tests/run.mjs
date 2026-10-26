@@ -7,6 +7,7 @@ const groups={unit:['tools/test-business.cjs','tools/test-modules.cjs','tools/te
 groups.roomsAndStrength=['tests/rooms-and-strength.mjs','tests/resource-balance.mjs','tests/backend-views.mjs','tests/operations-v7.mjs','tests/operations-v7-mount.mjs','tests/operations-v7-browser.mjs','tests/day-starts.mjs','tests/customer-visits.mjs','tests/native-modes-unit.mjs','tests/backend.mjs'];
 groups.operationsV7=['tests/operations-v7.mjs','tests/operations-v7-mount.mjs','tests/operations-v7-browser.mjs','tests/day-starts.mjs','tests/customer-visits.mjs','tests/native-modes-unit.mjs','tests/backend.mjs'];
 groups.roomsAndStrength.push('tests/room-format-selection-browser.mjs');groups.operationsV7.push('tests/room-format-selection-browser.mjs');
+groups.roomsAndStrength.push('tests/three-formats.mjs');groups.operationsV7.push('tests/three-formats.mjs');
 groups.nativeModes=['tests/native-modes-unit.mjs','tests/native-modes-browser.mjs','tests/native-modes-series.mjs','tests/native-legacy-regression.mjs'];
 groups.audit=['tests/backend-edge-cases.mjs','tests/battle-lifecycle.mjs','tests/storage-archives-browser.mjs'];groups.backend.push('tests/customer-identity.mjs','tests/customer-trash.mjs','tests/distribution-skins.mjs',...groups.audit);groups.frontend.push('tests/character-art.mjs','tests/customer-trash-browser.mjs','tests/frontend-movement.mjs','tests/frontend-skins.mjs','tests/frontend/assets.mjs');
 groups.dev.push('tests/character-kit/cli.mjs');groups.frontend.push('tests/frontend-next/card-trade.mjs');

@@ -1,7 +1,7 @@
 {
   "operationsV7": true,
   "version": 1,
-  "ratingVersion": "global-four-mode-4",
+  "ratingVersion": "global-three-mode-5",
   "distribution": {
     "version": "tcg-slots-3",
     "excludedPacks": [
@@ -44,10 +44,9 @@
     "SSR": 78
   },
   "modeWeights": {
-    "bo3": 0.25,
-    "kof": 0.25,
-    "doudizhu-bo3": 0.25,
-    "versus2v2-bo3": 0.25
+    "kof": 0.3333333333333333,
+    "doudizhu-bo3": 0.3333333333333333,
+    "versus2v2-bo3": 0.3333333333333333
   },
   "scoring": {
     "baseline": 50,
@@ -65,7 +64,7 @@
       "burst": 0,
       "carry": 0
     },
-    "method": "resource-four-mode-2"
+    "method": "resource-three-mode-3"
   },
   "rarityWeights": {
     "N": 1,

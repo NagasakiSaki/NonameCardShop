@@ -29,7 +29,7 @@ export function mountTableLobby({
 
   const state = {
     selectedTableId: initialTableId,
-    mode: draft.mode || view.mode || 'kof',
+    mode: 'kof',
     confirmedLineup: draft.confirmedLineup || view.confirmedLineup || { mode: 'kof', inventoryRefs: [], cards: [] },
     feeDraft: view.tableFeeConfig?.currentFee ?? 10,
     feeSaveFeedback: null,
@@ -49,7 +49,7 @@ export function mountTableLobby({
     headerNode.append(
       el('h3', { class: `${prefix}-lobby__title` }, [
         el('span', { text: '⚔ 牌桌对战大厅' }),
-        chip(state.mode === 'kof' ? '当前赛制：KOF 三将接力' : '当前赛制：BO3 单将决斗', 'info'),
+        chip('等候报名：1v1 三将接力', 'info'),
       ]),
       el('div', { class: `${prefix}-lobby__wallet` }, [
         el('span', { text: '可用资金：' }),
@@ -74,7 +74,7 @@ export function mountTableLobby({
             class: `${prefix}-table-card` + (isSelected ? ' is-selected' : ''),
             onclick: () => {
               state.selectedTableId = table.tableId;
-              state.mode = table.mode || state.mode;
+              state.mode = 'kof';
               renderAll();
             },
           },
@@ -112,7 +112,7 @@ export function mountTableLobby({
         el('div', { class: `${prefix}-stat-list` }, [
           el('div', { class: `${prefix}-stat-row` }, [
             el('span', { class: `${prefix}-stat-label`, text: '对战规则' }),
-            el('span', { class: `${prefix}-stat-val`, text: curTable.mode === 'kof' ? 'KOF 三将轮替接力赛' : 'BO3 单将三局两胜' }),
+            el('span', { class: `${prefix}-stat-val`, text: ({'kof':'1v1 三将接力','doudizhu-bo3':'斗地主换边 BO3','versus2v2-bo3':'2v2 BO3'}[curTable.mode]||'尚未开桌') }),
           ]),
           el('div', { class: `${prefix}-stat-row` }, [
             el('span', { class: `${prefix}-stat-label`, text: '每人桌费' }),
@@ -147,14 +147,14 @@ export function mountTableLobby({
     clear(rightColNode);
 
     const curTable = getSelectedTable();
-    const requiredSlots = state.mode === 'kof' ? 3 : 1;
+    const requiredSlots = 3;
     const lineupCards = state.confirmedLineup.cards || [];
     const isLineupFull = lineupCards.length === requiredSlots;
 
     // 1. 我的阵容摘要 (My Lineup Summary)
     const lineupPanel = el('div', { class: `${prefix}-panel` }, [
       el('div', { class: `${prefix}-panel__head` }, [
-        el('span', { text: `我的参赛阵容 (${state.mode === 'kof' ? 'KOF 3将' : 'BO3 单将'})` }),
+        el('span', { text: `我的参赛阵容 (三将接力 · 3 将)` }),
         button('选择武将 / 调整阵容', () => {
           if (typeof actions.openRosterPicker === 'function') {
             actions.openRosterPicker({

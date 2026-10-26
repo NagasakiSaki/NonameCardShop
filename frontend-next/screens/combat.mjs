@@ -41,7 +41,7 @@ export async function openCombat(app,options={}){
     async function refresh(){
       const [room,settings,queue]=await Promise.all([ctx.query('room.snapshot'),ctx.query('room.settings'),ctx.query('combat.queue')]);if(!active())return;
       if(!room.ok||!settings.ok||!queue.ok){message.textContent=room.error?.message||settings.error?.message||queue.error?.message;return;}
-      const result={tables:room.data.tables.filter(t=>!options.tableId||t.tableId===options.tableId).map(t=>({...t,mode:['bo3','kof'].includes(t.mode)?t.mode:null})),balance:app.snapshot().wallet.available,mode:saved.mode||'kof',queue:queue.data.player?{...queue.data.player,status:'waiting'}:{status:'none'},tableFeeConfig:{currentFee:settings.data.amount,minFee:settings.data.min,maxFee:settings.data.max,step:1,presets:[0,3,5,10,20],note:'顾客每人支付此桌费；已接受的费用保持原值。店长参赛免费。'}};
+      const result={tables:room.data.tables.filter(t=>!options.tableId||t.tableId===options.tableId).map(t=>({...t,mode:['kof','doudizhu-bo3','versus2v2-bo3'].includes(t.mode)?t.mode:null})),balance:app.snapshot().wallet.available,mode:'kof',queue:queue.data.player?{...queue.data.player,status:'waiting'}:{status:'none'},tableFeeConfig:{currentFee:settings.data.amount,minFee:settings.data.min,maxFee:settings.data.max,step:1,presets:[0,3,5,10,20],note:'顾客每人支付此桌费；已接受的费用保持原值。店长参赛免费。'}};
       controller?.update(result);return result;
     }
     const view=await refresh();if(!view||!active())return;

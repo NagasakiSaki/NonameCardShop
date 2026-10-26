@@ -28,7 +28,7 @@ export function cardDetailView(w,catalog,card,stats){
     price:referencePrice(w,catalog,card.cardKey),referencePrice:{amount:referencePrice(w,catalog,card.cardKey)},circulation:w.circulation[card.cardKey]||null,
     marketEligibility:{eligible:available.length>0,reasons:available.length?[]:[{code:'NO_AVAILABLE_COPY',message:'没有可出售的未锁定收藏副本。'}]},
     combatEligibility:{eligible:available.length>0,reasons:available.length?[]:[{code:'NO_AVAILABLE_COPY',message:'没有可参赛的未锁定收藏副本。'}]},
-    stats:Object.fromEntries([...stats.map(s=>[s.mode,{...s,sessions:s.games}]),['sampleSufficient',stats.some(s=>s.games>=20)],['note','四模式分别记录整场队伍战绩；仅计实际出场武将。含 NPC 模拟对局，模拟场次单独标记。']]),skillSourceAvailable:true};
+    stats:Object.fromEntries([...stats.map(s=>[s.mode,{...s,sessions:s.games}]),['sampleSufficient',stats.some(s=>s.games>=20)],['note','三模式分别记录整场队伍战绩；仅计实际出场武将。含 NPC 模拟对局，模拟场次单独标记。']]),skillSourceAvailable:true};
 }
 export function ledgerView(w,catalog,report){
   const daily=report||w.daily,day=report?.day||w.clock.day;

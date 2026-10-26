@@ -1,4 +1,5 @@
 import { reduceProgression } from './state.mjs';
+import {getFormat} from '../combat-formats/registry.mjs';
 
 /**
  * Settles an official series result strictly from trusted C/D evidence.
@@ -154,7 +155,8 @@ export function settleChallenge(state, verifiedSeriesResult, context = {}) {
   // 9. Winning outcome: must be complete victory (e.g. 2 wins)
   const playerWins = verifiedSeriesResult.playerWins;
   const winsRequired = verifiedSeriesResult.winsRequired;
-  if (!Number.isSafeInteger(playerWins)||winsRequired!==2||playerWins < winsRequired) {
+  const format=getFormat(verifiedSeriesResult.formatId);
+  if (!format||state.activeChallenge.formatId!==format.formatId||!Number.isSafeInteger(playerWins)||winsRequired!==format.winsRequired||playerWins < winsRequired) {
     return {
       ok: false,
       error: {

@@ -34,18 +34,18 @@ try{
   await page.goto(server.origin+'/?profile=legacy');await page.waitForFunction(()=>window.__cardShopReady===true);
   await c('saves.import',{content:JSON.stringify(archive)});await page.evaluate(()=>__cardShopApp.windows.closeAll());
   await page.evaluate(()=>__cardShopApp.openPanel('combat'));await room().locator('[data-format-id]').first().waitFor();
-  assert.equal(await room().locator('[data-format-id]').count(),4,'accepted challenge must not hide normal table formats');
+  assert.equal(await room().locator('[data-format-id]').count(),3,'accepted challenge must not hide normal table formats');
   assert.equal(await room().getByLabel('约战对手').inputValue(),'','ordinary table must not silently select the challenger');
-  for(const [formatId,count]of [['bo3',1],['kof',3],['doudizhu-bo3',5],['versus2v2-bo3',8]]){
+  for(const [formatId,count]of [['kof',3],['doudizhu-bo3',5],['versus2v2-bo3',8]]){
     await room().locator(`[data-format-id="${formatId}"]`).click();assert(await room().locator(`[data-format-id="${formatId}"].is-selected`).count());
     await room().getByRole('button',{name:'创建房间并选将',exact:true}).click();await room().locator('[data-combat-room]').waitFor();
     const active=(await q('combat.rooms')).active;assert.equal(active.formatId,formatId);assert.equal(active.opponentId,'format-rival');assert.equal(active.kind,'friendly');assert.equal(active.pools.enemy.length,count);
-    await room().getByRole('button',{name:'取消房间 / 更换模式',exact:true}).click();await room().locator('[data-format-id]').first().waitFor();assert.equal(await room().locator('[data-format-id]').count(),4);
+    await room().getByRole('button',{name:'取消房间 / 更换模式',exact:true}).click();await room().locator('[data-format-id]').first().waitFor();assert.equal(await room().locator('[data-format-id]').count(),3);
   }
   await page.evaluate(()=>__cardShopApp.windows.closeAll());await page.evaluate(opponentId=>__cardShopApp.openPanel('combat',{opponentId}),challenger);await room().locator('[data-format-id]').first().waitFor();
-  assert.equal(await room().locator('[data-format-id]').count(),4);assert.equal(await room().getByLabel('约战对手').inputValue(),challenger);assert(await room().locator('[data-format-id="bo3"].is-selected').count());
-  await room().locator('[data-format-id="versus2v2-bo3"]').click();assert.equal(await room().getByLabel('约战对手').inputValue(),'');
-  await room().getByLabel('约战对手').selectOption(challenger);assert(await room().locator('[data-format-id="bo3"].is-selected').count());
-  await room().getByRole('button',{name:'创建房间并选将',exact:true}).click();await room().locator('[data-combat-room]').waitFor();const challengeRoom=(await q('combat.rooms')).active;assert.equal(challengeRoom.kind,'stage-challenge');assert.equal(challengeRoom.formatId,'bo3');
-  assert.deepEqual(errors,[]);console.log('PASS accepted challenge does not hide or hijack four ordinary table formats; explicit challenge stays BO3, switch/cancel restores all formats');
+  assert.equal(await room().locator('[data-format-id]').count(),3);assert.equal(await room().getByLabel('约战对手').inputValue(),challenger);assert(await room().locator('[data-format-id="kof"].is-selected').count());
+  await room().locator('[data-format-id="versus2v2-bo3"]').click();assert.equal(await room().getByLabel('约战对手').inputValue(),challenger);
+  await room().getByLabel('约战对手').selectOption(challenger);assert(await room().locator('[data-format-id="versus2v2-bo3"].is-selected').count());
+  await room().getByRole('button',{name:'创建房间并选将',exact:true}).click();await room().locator('[data-combat-room]').waitFor();const challengeRoom=(await q('combat.rooms')).active;assert.equal(challengeRoom.kind,'stage-challenge');assert.equal(challengeRoom.formatId,'versus2v2-bo3');
+  assert.deepEqual(errors,[]);console.log('PASS accepted challenge does not hide or hijack three ordinary table formats; challenge supports the selected format, switch/cancel restores all formats');
 }finally{await browser?.close();await server.close();}

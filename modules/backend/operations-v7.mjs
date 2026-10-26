@@ -92,7 +92,7 @@ export function dialogueView(w){
   const n=w.npcs.find(n=>n.actorId===d.actorId);if(!n||!onSite(n))return null;
   if(d.kind==='stage-challenge'&&!w.progression?.currentInvite)return null;
   return {...clone(d),proof:proof(w),speakerName:n.name,portrait:n.appearanceId,nameColor:n.nameColor,roleLabel:n.allyId?'经营伙伴':n.specialist?'来访高手':n.customerCategory||'顾客',
-    text:d.kind==='stage-challenge'?`想和你进行一场 BO3 切磋。赢下整场后，可解锁「${activeStage(w)?.productName||'新主题'}」供货，我也会留在店里帮忙。`:n.allyId?'今天需要我做些什么？':'想一起打牌吗？可以在牌桌选择赛制。',
+    text:d.kind==='stage-challenge'?`想和你切磋一下，三将接力、斗地主换边或双人对决都可以。赢下整场后，可解锁「${activeStage(w)?.productName||'新主题'}」供货，我也会留在店里帮忙。`:n.allyId?'今天需要我做些什么？':'想一起打牌吗？可以在牌桌选择赛制。',
     choices:d.kind==='stage-challenge'?[{optionId:'accept',text:'现在来一局'},{optionId:'tomorrow',text:'改天再战'}]:[{optionId:'challenge',text:'约一场牌局'},{optionId:'allies',text:n.allyId?'安排工作':'看看经营伙伴',available:!!n.allyId},{optionId:'close',text:'下次再聊'}]};
 }
 export function interactV7(w,p,navigation){
@@ -136,10 +136,9 @@ export function seriesView(w,matchId){
 export function prepareV7(w,catalog,p,navigation,capabilities,{roomPlan=null}={}){
   checkProof(w,p.proof);need(w.clock.phase==='open','SHOP_CLOSED','请在营业中约战。');
   need(!w.matches.some(m=>!m.background&&m.status!=='finished'),'MATCH_ACTIVE','请先完成或取消当前比赛。');
-  const format=C.getFormat(p.formatId||'bo3');need(format,'INVALID_INPUT','没有这个赛制。');
+  const format=C.getFormat(p.formatId||'kof');need(format,'INVALID_INPUT','没有这个赛制。');
   const active=ready(w)?w.progression.activeChallenge:null,stage=activeStage(w);
   const isChallenge=active?.status==='accepted'&&(!p.opponentId||p.opponentId===active.actorId);
-  need(!isChallenge||format.formatId==='bo3','INVALID_INPUT','当前阶段高手挑战采用 BO3；其他赛制可与普通顾客约战。');
   let fee=roomPlan?roomPlan.tableFee:isChallenge?0:managementEffects(w).tableFee;
   const npc=p.opponentId?w.npcs.find(n=>n.actorId===p.opponentId):isChallenge?w.npcs.find(n=>n.actorId===active.actorId):w.npcs.find(n=>onSite(n)&&!n.specialist&&!n.currentMatchId&&opponentOptions(w,catalog,n,format.formatId,capabilities).length>=format.reservePerSide&&n.wallet.available-(n.wallet.reserved||0)>=fee);
   need(npc&&onSite(npc)&&!npc.currentMatchId,'NOT_FOUND','暂时没有持卡足够且空闲的在店对手。');
@@ -178,18 +177,17 @@ export function prepareV7(w,catalog,p,navigation,capabilities,{roomPlan=null}={}
   for(const c of [...mine,...enemy])if(c.inventoryRef)w.items[c.inventoryRef].lock=m.series.lock.lockId;
   m.series=unwrap(C.acknowledgeLocks(m.series,{lockId:m.series.lock.lockId,state:'held'})).series;m.series=unwrap(C.acknowledgeFee(m.series,{receiptId:matchId+':fee-held'})).series;
   table.matchId=matchId;table.reservation=null;w.matches.push(m);
-  if(isChallenge){active.matchId=matchId;active.loanRoster=clone(enemy);}
+  if(isChallenge){active.matchId=matchId;active.formatId=format.formatId;active.loanRoster=clone(enemy);}
   note(w,'matchRegistered',{matchId,mode:m.mode,serviceHeld:fee});return seriesView(w,matchId);
 }
 
 /** Freeze the rival's complete pool BEFORE the player's reserve is submitted. No UI-selected enemy refs. */
-export function planRoomOpponent(w,catalog,{formatId='bo3',opponentId=null,seed},capabilities){
+export function planRoomOpponent(w,catalog,{formatId='kof',opponentId=null,seed},capabilities){
   const f=C.getFormat(formatId);need(f,'INVALID_INPUT','没有这个赛制。');unwrap(C.assertFormatAvailable(formatId,capabilities));
   const active=ready(w)?w.progression.activeChallenge:null;
   // Ordinary table matchmaking must not be hijacked by an outstanding challenge.
   // Challenge rooms are entered explicitly through the NPC/dialogue or rival picker.
   const challenge=active?.status==='accepted'&&opponentId===active.actorId;
-  need(!challenge||formatId==='bo3','INVALID_INPUT','当前阶段高手挑战使用 BO3。');
   if(challenge)opponentId=active.actorId;
   const fee=challenge?0:managementEffects(w).tableFee;
   const canJoin=n=>onSite(n)&&!n.currentMatchId&&!n.currentRoomId&&(!n.specialist||n.allyId||challenge&&n.actorId===opponentId);
@@ -199,7 +197,8 @@ export function planRoomOpponent(w,catalog,{formatId='bo3',opponentId=null,seed}
   const practice=!!npc.allyId,tableFee=challenge||practice?0:fee,kind=challenge?'stage-challenge':practice?'ally-practice':'friendly';
   need(npc.wallet.available-(npc.wallet.reserved||0)>=tableFee,'INSUFFICIENT_FUNDS','对手支付不起本房间桌费。');
   let enemy;
-  if(challenge&&active.roomOpponentPlan?.formatId===formatId)enemy=clone(active.roomOpponentPlan.enemy);
+  const cached=challenge?active.roomOpponentPlans?.[formatId]:null;
+  if(cached)enemy=clone(cached.enemy);
   else if(challenge||practice){
     const stage=challenge?activeStage(w):w.progression.stages.find(s=>s.challengerId===npc.allyId&&s.status==='cleared');
     const roster=unwrap(B.buildChallengeLoanRoster({stage,formatId,catalog:{cards:catalog.cards.filter(c=>!w.rules.compatibilityBlocks[c.generalId]&&!nativeBlocks(formatId,capabilities)[c.generalId])},seed}));
@@ -207,8 +206,8 @@ export function planRoomOpponent(w,catalog,{formatId='bo3',opponentId=null,seed}
     enemy=roster.loanCards.map(l=>{const c=catalog.byId.get(l.generalId);return {...l,purpose:practice?'recruited-ally-practice':'stage-challenge',name:c.name,cardKey:c.cardKey,imageUrl:c.imageUrl,rarity:c.currentRarity};});
   }else enemy=unique(eligibleV7(w,catalog,npc.actorId,formatId,capabilities).filter(c=>c.eligible)).sort((a,b)=>(catalog.byKey.get(b.cardKey)?.power.modeScores?.[formatId]??catalog.byKey.get(b.cardKey)?.globalScore)-(catalog.byKey.get(a.cardKey)?.power.modeScores?.[formatId]??catalog.byKey.get(a.cardKey)?.globalScore)).slice(0,f.reservePerSide);
   need(enemy.length===f.reservePerSide,'INSUFFICIENT_ROSTER',`对手需要 ${f.reservePerSide} 名不同武将，目前只有 ${enemy.length} 名可用。`);
-  const plan={formatId,challengeId:challenge?active.challengeId:null,actorId:npc.actorId,tableFee,kind,enemy,seed:challenge&&active.roomOpponentPlan?active.roomOpponentPlan.seed:seed};
-  if(challenge&&!active.roomOpponentPlan)active.roomOpponentPlan=clone(plan);
+  const plan={formatId,challengeId:challenge?active.challengeId:null,actorId:npc.actorId,tableFee,kind,enemy,seed:cached?cached.seed:seed};
+  if(challenge){active.roomOpponentPlans??={};active.roomOpponentPlans[formatId]??=clone(plan);}
   return plan;
 }
 function update(w,m,result){m.series=unwrap(result).series;const s=m.series;m.wins=s.score.mine;m.losses=s.score.enemy;m.bout=s.round.index;m.gameId=s.round.gameId;m.status=s.phase==='live'||s.phase==='mounting'?'running':s.phase==='interrupted'?'interrupted':s.rounds.length?'awaitingNext':'prepared';return s;}
@@ -225,7 +224,7 @@ function finishSeries(w,catalog,m,{trusted=false}={}){
   if(s.challengeKind==='stage-challenge'){
     if(trusted&&r.complete&&r.result==='win'&&r.winVerified){
       const before=new Set(w.progression.allies.map(a=>a.allyId));
-      unwrap(B.settleChallenge(w.progression,{completed:true,simulated:false,originVerified:true,sourceVerified:true,challengeId:s.challengeId,stageId:s.stageId,productId:activeStage(w)?.productId,resultId:s.seriesId+':final',matchId:m.matchId,winningTeamId:'mine',playerWins:s.score.mine,winsRequired:2},context(w)));
+      unwrap(B.settleChallenge(w.progression,{completed:true,simulated:false,originVerified:true,sourceVerified:true,challengeId:s.challengeId,stageId:s.stageId,productId:activeStage(w)?.productId,resultId:s.seriesId+':final',matchId:m.matchId,formatId:m.mode,winningTeamId:'mine',playerWins:s.score.mine,winsRequired:C.getFormat(m.mode).winsRequired},context(w)));
       const n=w.npcs.find(n=>n.actorId===m.opponentId),ally=w.progression.allies.find(a=>!before.has(a.allyId));
       if(n&&ally){n.allyId=ally.allyId;n.customerCategory='经营伙伴';n.label='已成为伙伴';if(w.progression.allies.filter(a=>a.onDuty).length<3)unwrap(B.assignAllyDuty(w.progression,{allyId:ally.allyId,dutyId:ally.defaultDuty},context(w)));}
       refreshProducts(w,catalog);note(w,'challengeCleared',{stageId:s.stageId,productId:w.progression.stages.find(x=>x.stageId===s.stageId)?.productId});
@@ -258,6 +257,7 @@ export function trustedV7(w,catalog,matchId,message){
 }
 
 function nativeBlocks(formatId,capabilities){const rule=nativeEligibility.formats[formatId];return rule&&(capabilities?.items||capabilities||[]).some(p=>p.formatId===formatId&&p.profileId===rule.profileId)?rule.blocked:{};}
-export function eligibleV7(w,catalog,ownerId='player',formatId='bo3',capabilities=[]){
+export function eligibleV7(w,catalog,ownerId='player',formatId='kof',capabilities=[]){
+  need(C.getFormat(formatId),'INVALID_INPUT','请选择三将接力、斗地主换边或双人对决。');
   const blocks=nativeBlocks(formatId,capabilities);return eligible(w,catalog,ownerId).map(c=>{if(!blocks[c.generalId])return c;const disabledReasons=[...c.disabledReasons,{code:'NATIVE_GENERAL_UNAVAILABLE',message:blocks[c.generalId]}];return {...c,eligible:false,disabledReasons};});
 }

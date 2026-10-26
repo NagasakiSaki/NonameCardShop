@@ -39,14 +39,14 @@ await command(r,'dialogue.respond',{offerId:offer.offerId,optionId:'tomorrow',pr
 assert.equal(r.inspect().world.progression.stages[0].dueDay,4);
 await command(r,'business.close');await command(r,'business.nextDay');await command(r,'business.open');await r.advance(.1);
 offer=await query(r,'dialogue.offer');assert(offer);await command(r,'dialogue.respond',{offerId:offer.offerId,optionId:'accept',proof:offer.proof});
-const card=(await query(r,'combat.eligible')).items.find(c=>c.eligible),opponent=r.inspect().world.progression.activeChallenge.actorId;
-let room=await command(r,'combat.room.create',{formatId:'bo3',opponentId:opponent});assert.equal(room.pools.enemy.length,1);assert.equal(room.pools.enemy[0].loan,true);assert.equal(room.tableFee,0);
+const challengeCards=(await query(r,'combat.eligible')).items.filter(c=>c.eligible).filter((c,i,a)=>a.findIndex(x=>x.generalId===c.generalId)===i).slice(0,3),card=challengeCards[0],opponent=r.inspect().world.progression.activeChallenge.actorId;
+let room=await command(r,'combat.room.create',{formatId:'kof',opponentId:opponent});assert.equal(room.pools.enemy.length,3);assert.equal(room.pools.enemy[0].loan,true);assert.equal(room.tableFee,0);
 const disclosed=room.pools.enemy.map(c=>c.generalId);await command(r,'combat.room.cancel',{roomId:room.roomId,proof:room.proof});
-room=await command(r,'combat.room.create',{formatId:'bo3',opponentId:opponent});assert.deepEqual(room.pools.enemy.map(c=>c.generalId),disclosed,'recreating a challenger room must not reroll its disclosed pool');
-room=await command(r,'combat.room.prepare',{roomId:room.roomId,reserveRefs:[card.inventoryRef],proof:room.proof});let series=room.series;
+room=await command(r,'combat.room.create',{formatId:'kof',opponentId:opponent});assert.deepEqual(room.pools.enemy.map(c=>c.generalId),disclosed,'recreating a challenger room must not reroll its disclosed pool');
+room=await command(r,'combat.room.prepare',{roomId:room.roomId,reserveRefs:challengeCards.map(c=>c.inventoryRef),proof:room.proof});let series=room.series;
 const m0=r.inspect().world.matches.at(-1);assert(m0.enemy[0].loanRef);assert(!r.inspect().world.items[m0.enemy[0].loanRef]);
 const minute=r.inspect().world.clock.minute,marketBefore=JSON.stringify(r.inspect().world.circulation);
-for(let round=0;round<2;round++){
+for(let round=0;round<1;round++){
   await command(r,'combat.selectRound',{matchId:series.matchId,roundId:series.round.roundId,selections:[{seatId:'mine-main',inventoryRef:card.inventoryRef}]});
   await command(r,'combat.start',{matchId:series.matchId});const game=r.inspect().world.matches.at(-1).gameId;
   await r.trustedEngineEvent(series.matchId,{type:'ready',matchId:game});await r.advance(.5);assert.equal(r.inspect().world.clock.minute,minute);

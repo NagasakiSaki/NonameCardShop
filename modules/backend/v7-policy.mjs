@@ -43,7 +43,7 @@ export function validateV7(w){
   for(const m of w.matches||[])if(m.series){
     const s=m.series;need(Number.isSafeInteger(s.seriesVersion)&&s.seriesVersion>0,'INVALID_SAVE','系列赛版本不合法。');
     if(s.seriesVersion!==1)continue;
-    need(s.worldId===w.worldId&&(s.branchId===w.branchId||m.status==='finished'&&(w.branchLineage||[]).includes(s.branchId))&&s.matchId===m.matchId&&['bo3','kof','doudizhu-bo3','versus2v2-bo3'].includes(s.formatId)&&['selecting','confirmed','mounting','live','interrupted','finished','cancelled'].includes(s.phase),'INVALID_SAVE','系列赛身份或阶段不合法。');
+    need(s.worldId===w.worldId&&(s.branchId===w.branchId||m.status==='finished'&&(w.branchLineage||[]).includes(s.branchId))&&s.matchId===m.matchId&&['kof','doudizhu-bo3','versus2v2-bo3'].includes(s.formatId)&&['selecting','confirmed','mounting','live','interrupted','finished','cancelled'].includes(s.phase),'INVALID_SAVE','系列赛身份或阶段不合法。');
     need(s.score&&['mine','enemy','draws'].every(k=>Number.isSafeInteger(s.score[k])&&s.score[k]>=0)&&Array.isArray(s.rounds)&&s.rounds.length<=500&&Number.isSafeInteger(s.revision)&&s.revision>=1&&s.round&&Array.isArray(s.round.seatSkeleton)&&s.round.seatSkeleton.length>=2&&s.round.seatSkeleton.length<=4,'INVALID_SAVE','系列赛比分或席位不完整。');
     need(s.reserve?.sides&&['mine','enemy'].every(side=>Array.isArray(s.reserve.sides[side]?.entries)&&s.reserve.sides[side].entries.length>=1&&s.reserve.sides[side].entries.length<=8&&s.reserve.sides[side].entries.every(e=>typeof e.generalId==='string'&&typeof e.reserveRef==='string')),'INVALID_SAVE','备战池不完整。');
   }

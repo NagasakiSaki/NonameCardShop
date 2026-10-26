@@ -2,7 +2,6 @@
  * Roster counts per format
  */
 export const FORMAT_RESERVE_COUNTS = {
-  bo3: 1,
   kof: 3,
   'doudizhu-bo3': 5,
   'versus2v2-bo3': 8
@@ -12,7 +11,7 @@ export const FORMAT_RESERVE_COUNTS = {
  * Builds a deterministic challenge loan roster strictly from the target product's card pool.
  * Does NOT create physical inventory items, does NOT circulate in market, does NOT allow ordinary NPCs.
  */
-export function buildChallengeLoanRoster({ stage, formatId = 'bo3', catalog, seed = 12345 }) {
+export function buildChallengeLoanRoster({ stage, formatId = 'kof', catalog, seed = 12345 }) {
   if (!stage || !stage.productId) {
     return {
       ok: false,
@@ -27,7 +26,8 @@ export function buildChallengeLoanRoster({ stage, formatId = 'bo3', catalog, see
     };
   }
 
-  const requestedFormat = formatId in FORMAT_RESERVE_COUNTS ? formatId : 'bo3';
+  if(!Object.hasOwn(FORMAT_RESERVE_COUNTS,formatId))return {ok:false,error:{code:'INVALID_INPUT',message:'请选择三将接力、斗地主换边或双人对决。'}};
+  const requestedFormat = formatId;
   const targetProductId = stage.productId;
 
   // Filter cards strictly belonging to the target product/pack
@@ -48,20 +48,16 @@ export function buildChallengeLoanRoster({ stage, formatId = 'bo3', catalog, see
   let actualFormat = requestedFormat;
   let fallbackReason = null;
 
-  // If pool count is insufficient for requested format, fall back to bo3 (reserve = 1)
+  // A small theme cannot silently turn the selected format into another game.
   if (uniqueGenerals.length < requestedReserve) {
-    if (uniqueGenerals.length < FORMAT_RESERVE_COUNTS.bo3) {
       return {
         ok: false,
         error: {
           code: 'INSUFFICIENT_ROSTER',
-          message: `主题 ${targetProductId} 仅有 ${uniqueGenerals.length} 名武将，连基础 BO3 都无法满足。`,
+          message: `主题 ${targetProductId} 仅有 ${uniqueGenerals.length} 名兼容武将，所选赛制需要 ${requestedReserve} 名，请更换赛制。`,
           retryable: false
         }
       };
-    }
-    actualFormat = 'bo3';
-    fallbackReason = `INSUFFICIENT_POOL: 主题 ${targetProductId} 仅有 ${uniqueGenerals.length} 名武将，不足以支持 ${requestedFormat} (需 ${requestedReserve})，回退到 bo3 (需 1)。`;
   }
 
   const neededCount = FORMAT_RESERVE_COUNTS[actualFormat];
