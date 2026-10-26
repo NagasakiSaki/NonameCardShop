@@ -63,7 +63,7 @@
 
 启动菜单通过 `modules/backend/profiles.mjs` 的 `profileRegistry` 管理本地卡店目录：list/create/get/rename/days/remove/close。它不连接 Host，不推进时间。`createHost({profileId})` 选择独立世界数据库；省略参数维持 legacy 兼容。旧 `noname-card-shop-world-v2` 原地保留并显示“原有卡店”，新 profile 使用独立数据库；不得用清空整个 origin 实现新建/删除。删除操作只清理选定档案库，用户须在菜单确认。
 
-- 玩家 actorId='actor:owner'，库存 ownerId='player'；两者不同。外观使用 owner/rookie/collector/competitor/passerby/regular/bigspender。
+- 玩家 actorId='actor:owner'，库存 ownerId='player'；两者不同。外观仅使用 data/band-appearances.mjs 登记的25个 bd-* ID；新档默认 bd-anon。owner 等旧通用外观已移除，加载时只迁移外观引用，不改变店主身份、资金和持卡。
 - 查询 `player.skins` 返回 `{current,items:[{appearanceId,name,selected}]}`；命令 `player.setSkin({appearanceId})` 免费修改店长外观，非法 ID 原子拒绝。外观随世界存档恢复，身份、资金和持卡不变。
 - world.input 的 inputSeq 单调递增，仅为移动意图；不能通过 roomId 让角色瞬移。跨房先到出口，command `world.changeRoom({anchorId})`，确认权威 actorsUpdated 后换场景。
 - combat.register 返回顶层 matchId 及 match 兼容对象；battle.mount 只接已登记玩家比赛。玩家/后台引擎配置隔离，dispose 可重复调用并返回清理 Promise。
