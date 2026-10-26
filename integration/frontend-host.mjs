@@ -6,6 +6,7 @@ import {profileDatabase,profileRegistry} from '../modules/backend/profiles.mjs';
 import {loadNarrativeContent,storyContentHashes} from './story-content.mjs';
 import {loadStoryPack} from '../modules/narrative/content.mjs';
 import {createRegistry} from '../modules/narrative/registry.mjs';
+import {discoverModeCapabilities} from './mode-discovery.mjs';
 
 async function json(url){const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw new Error(`无法读取 ${url}：${r.status}`);return r.json();}
 
@@ -21,8 +22,7 @@ export async function createHost({profileId='legacy',storyExtensions={}}={}){
   const storyPacks=[];
   for(const raw of content.packs){try{storyPacks.push(await loadStoryPack(raw,{registry:createRegistry(storyExtensions)}));}catch{content.diagnostics.push('一份剧情内容校验失败，未加载该版本。');}}
   const cachedRepository={...repository,async read(){if(firstRead!==undefined){const value=firstRead;firstRead=undefined;return value;}return repository.read();}};
-  let modeCapabilities=[];
-  try{const engine=await json('/api/runtime');if(engine.ready)modeCapabilities=(await json(new URL('/shop-integration/modes/capabilities.json',engine.engineOrigin))).items||[];}catch{}
+  const modeCapabilities=await discoverModeCapabilities(json);
   const runtime=await createRuntime({source,rules,modeCapabilities,repository:cachedRepository,maps,managementConfig,backgroundAvailable:true,storyPacks,storyExtensions,storyDiagnostics:content.diagnostics,storyActiveHashes:content.activeHashes});
   const knownStoryHashes=new Set(storyPacks.map(p=>p.contentHash));
   async function prepareStoryRestore(input){
