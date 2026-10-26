@@ -36,6 +36,8 @@ groups.backend.push('tests/customer-demand.mjs');
 groups.narrative=['tests/narrative-runtime.mjs','tests/narrative-browser.mjs'];
 groups.backend.push('tests/narrative-runtime.mjs');groups.frontend.push('tests/narrative-browser.mjs');
 groups.backend.push(...groups.core4.slice(0,-1));groups.frontend.push('tests/core4-ui.mjs');groups.ui.push('tests/core4-ui.mjs');
+groups.longTerm=['tests/long-term-operations.mjs','tests/long-term-browser.mjs'];
+groups.backend.push(groups.longTerm[0]);groups.frontend.push(groups.longTerm[1]);
 const selection=process.argv[2]||'all';if(selection!=='all'&&!groups[selection])throw new Error(`未知测试组：${selection}`);
 const output=path.join(root,'test-results',new Date().toISOString().replace(/[:.]/g,'-')+`-${process.pid}`);fs.mkdirSync(output,{recursive:true});
 const results=[],summary={selection,output,startedAt:new Date().toISOString(),results};let runtime;

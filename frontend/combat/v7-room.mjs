@@ -70,7 +70,7 @@ export async function openCombat(app,options={}){
         if(app.snapshot().clock.phase!=='open')root.append(el('p',{text:'开门营业后即可约战，现在可以先查看赛制和调整桌费。'}));
         root.append(el('p',{class:'small',text:'创建房间后先公开对手的固定备战池，再确认你的武将。普通约战由对手付桌费，高手挑战免费。'}));const picker=el('div');root.append(picker);
         renderFormatPicker({mount:picker,options:formats,selectedId:formatId,onSelect:id=>{formatId=id;paint();}});
-        const select=el('select',{'aria-label':'约战对手'}),actors=app.actors().filter(n=>!['actor:owner','player'].includes(n.actorId)&&!n.currentMatchId&&!n.currentRoomId&&(!n.specialist||n.allyId||challenges.ok&&n.actorId===challenges.data.activeChallenge?.actorId));
+        const select=el('select',{'aria-label':'约战对手'}),actors=app.actors().filter(n=>!['actor:owner','player'].includes(n.actorId)&&!n.currentMatchId&&!n.currentRoomId&&(!n.specialist||n.allyId||challenges.ok&&n.actorId===challenges.data.activeChallenge?.actorId||longTerm.ok&&longTerm.data.debt?.status==='accepted'&&n.actorId===longTerm.data.debt.actorId));
         select.append(el('option',{value:'',text:'自动寻找持卡足够的对手'}));for(const n of actors)select.append(el('option',{value:n.actorId,text:n.name+(n.specialist?' · 高手':'')}));select.value=opponentId||'';select.onchange=()=>{opponentId=select.value||null;message.textContent='';paint();};
         if(opponentId&&opponentId===challenges.data?.activeChallenge?.actorId&&challenges.data?.activeChallenge?.status==='accepted')root.append(el('p',{class:'small',text:'本次为高手挑战，可自由选择三种赛制；赢下整场即可解锁供货。'}));
         root.append(el('div',{class:'v7-actions'},[select,button('创建房间并选将',loadReserve,app.snapshot().clock.phase!=='open')]));
@@ -96,7 +96,11 @@ export async function openCombat(app,options={}){
           root.append(button(mounted?'返回牌局':'载入牌局',()=>mounted?(root.hidden=true,battle.hidden=false):mountRound()));
           if(!mounted&&!mounting)message.textContent='牌局已准备好，点击载入继续。';
         }else if(series.phase==='interrupted')root.append(el('p',{text:(series.interrupt?.reason?series.interrupt.reason+'。':'')+'当前小局中断。重开会重新发牌，已完成的小局比分保留。'}),button('重开当前小局',async()=>{const r=await submit('combat.restartRound',{matchId:series.matchId});if(r?.ok){series=r.data;selected=[];paint();}}),button('放弃系列赛',async()=>{const r=await submit('combat.abandon',{matchId:series.matchId});if(r?.ok){series=r.data;paint();}}));
-        else root.append(el('p',{text:series.officialResult?.result==='win'?series.challengeKind==='stage-challenge'?'挑战成功：新主题已解锁，伙伴已加入！':'你赢下了这场比赛。':series.officialResult?.result==='loss'?'本次未获胜。高手挑战可以再次交谈重试或改天再战。':'比赛已取消。'}),button('返回牌桌',()=>{series=null;room=null;step='format';selected=[];paint();}));
+        else root.append(el('p',{text:series.officialResult?.result==='win'?series.challengeKind==='stage-challenge'?'挑战成功：新主题已解锁，伙伴已加入！':series.challengeKind==='debt-challenge'?`账务挑战通过，减免 ${series.debtRelief||0} 币欠款。店外探索资格已记录，地图尚在筹备。`:'你赢下了这场比赛。':series.officialResult?.result==='loss'?'本次未获胜。高手挑战可以再次交谈重试或改天再战。':'比赛已取消。'}),button('返回牌桌',()=>{series=null;room=null;step='format';selected=[];paint();}));
+      }
+      if(series?.phase==='finished'&&['stage-challenge','debt-challenge'].includes(series.challengeKind)&&series.officialResult?.result==='loss'){
+        const lostMatch=series.matchId;
+        choiceBar.append(button('再战一局（重新选将）',async()=>{const r=await submit('challenges.rematch',{matchId:lostMatch});if(r?.ok){opponentId=r.data.opponentId;series=null;room=null;selected=[];step='format';paint();}}),button('明日再战',async()=>{const r=await submit('challenges.defer',{matchId:lostMatch});if(r?.ok){if(r.data.gift)app.toast('success','高手赠礼',r.data.gift.name+' ×1 已放入仓库');ctx.handle.close();}}));
       }
       if(series&&['live','mounting','confirmed'].includes(series.phase))root.append(button('整场认输',async()=>{const r=await submit('combat.surrender',{matchId:series.matchId});if(r?.ok){await stopBattle();series=r.data;paint();}}));
       if(series?.cancellationOffer?.available)root.append(button('取消连续平局的比赛',async()=>{const r=await submit('combat.cancel',{matchId:series.matchId,reason:'draw-cancellation'});if(r?.ok){await stopBattle();series=r.data;paint();}}));
@@ -118,17 +122,9 @@ export async function openCombat(app,options={}){
     const off=app.host.subscribe(event=>{if(event.type==='battleStatusChanged'&&active())void reload();if(event.type==='worldReset')ctx.handle.close();});
     ctx.onCleanup(()=>{disposed=true;clearInterval(poll);off();void stopBattle();});
     const listed=await ctx.query('combat.formats');if(!active())return;if(!listed.ok){error(listed);return;}formats=formatOptions(listed.data);
-    const challenges=await ctx.query('challenges.status');if(!room&&challenges.ok&&challenges.data.activeChallenge?.status==='accepted'&&options.opponentId===challenges.data.activeChallenge.actorId){formatId=challenges.data.activeChallenge.formatId;opponentId=challenges.data.activeChallenge.actorId;}
+    const [challenges,longTerm]=await Promise.all([ctx.query('challenges.status'),ctx.query('longTerm.status')]);if(!active())return;if(!room&&challenges.ok&&challenges.data.activeChallenge?.status==='accepted'&&options.opponentId===challenges.data.activeChallenge.actorId){formatId=challenges.data.activeChallenge.formatId;opponentId=challenges.data.activeChallenge.actorId;}
     if(step==='reserve')await loadReserve();else paint();
   }});
 }
 
-export function openAllies(app){ensureV7Styles();return app.windows.open({id:'allies-v7',title:'经营伙伴',pauseReason:'安排伙伴工作',render:async ctx=>{
-  let disposed=false;ctx.onCleanup(()=>{disposed=true;});
-  const result=await ctx.query('allies.list');if(disposed)return;if(!result.ok){ctx.body.append(el('p',{text:result.error.message}));return;}
-  const view=result.data;ctx.body.append(el('p',{text:`当前值班 ${view.slots.used}/${view.slots.max} · 引客 +${Math.round(view.effects.attractionRate*100)}% · 收银用时 −${Math.round(view.effects.checkoutReductionRate*100)}% · 进货优惠 ${Math.round(view.effects.wholesaleDiscountRate*100)}%`}));
-  if(!view.allies.length)ctx.body.append(el('p',{text:'第 3 天起会有高手来访。赢下整场挑战后，她会成为经营伙伴。'}));
-  for(const ally of view.allies){const select=el('select',{'aria-label':ally.name+'工作'});for(const [value,text]of [['','休息'],['attraction','招呼顾客'],['checkout','协助收银'],['wholesale','联系供货']])select.append(el('option',{value,text}));select.value=ally.onDuty?ally.assignedDuty||ally.defaultDuty:'';
-    select.onchange=async()=>{select.disabled=true;const r=await ctx.submit({requestId:newRequestId('ally-duty'),type:'allies.assign',payload:{allyId:ally.allyId,dutyId:select.value||null}});if(!disposed){if(!r.ok)app.toast('error','安排未完成',r.error.message);await ctx.handle.refresh();}};
-    ctx.body.append(el('div',{class:'v7-actions'},[el('img',{src:app.manifest.characters[ally.appearanceId]?.portrait,alt:ally.name,style:{width:'52px',height:'72px',objectFit:'contain'}}),el('strong',{text:ally.name}),select]));}
-}});}
+export {openAllies} from '../ui/partners.mjs';

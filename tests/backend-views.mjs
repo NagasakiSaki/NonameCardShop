@@ -19,9 +19,10 @@ const groups=inventoryView(world,catalog,{limit:200});assert.ok(groups.items.som
 const sample=Object.values(world.items)[0];sample.protected=true;
 const c=catalog.byKey.get(sample.cardKey),stats=['bo3','kof'].map(mode=>({mode,games:3,wins:2,losses:1,draws:0}));
 const detail=cardDetailView(world,catalog,c,stats);assert.ok(detail.holdings.owned>0);assert.equal(detail.stats.bo3.sessions,3);assert.equal(detail.referencePrice.amount,detail.price);assert.equal(detail.copies.find(i=>i.inventoryRef===sample.inventoryRef).available,false);
-const sale=Object.values(world.items).find(i=>i.kind==='card'&&!i.protected);placeListing(world,catalog,sale,80);
+const low=Object.values(world.items).find(i=>i.kind==='card'&&['N','R'].includes(i.printedRarity));assert.throws(()=>placeListing(world,catalog,low,80),e=>e.code==='MARKET_RARITY');
+const sale=Object.values(world.items).find(i=>i.kind==='card'&&!i.protected&&['SR','SSR'].includes(i.printedRarity));placeListing(world,catalog,sale,80);
 assert.equal(marketView(world,catalog,{tab:'mine'}).total,1);assert.equal(marketView(world,catalog,{tab:'buy'}).total,0);assert.equal(inventoryView(world,catalog,{filter:'listed'}).items[0].available,0);
-const printed=sale.printedRarity;sale.printedRarity=catalog.byKey.get(sale.cardKey).currentRarity==='SSR'?'N':'SSR';
+const printed=sale.printedRarity;sale.printedRarity=catalog.byKey.get(sale.cardKey).currentRarity==='SSR'?'SR':'SSR';
 assert.equal(marketView(world,catalog,{tab:'mine',rarity:sale.printedRarity}).total,1,'listing filters must use the actual print, even after global grading changes');sale.printedRarity=printed;
 world.daily={goods:100,service:10,sealedSales:60,cogs:40,purchases:300,operating:35,wages:5,matchNet:0};const ledger=ledgerView(world,catalog);assert.equal(ledger.revenue.secondarySales,40);assert.equal(ledger.netProfit,35);assert.equal(ledger.cost.procurement,300);
 const pack=makeSealed(world,product,'pack',120);pack.location='retail';assert.equal(retailView(world).used,1);

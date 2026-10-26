@@ -7,3 +7,9 @@
 
 .v7-room-summary{display:flex;gap:10px;flex-wrap:wrap;align-items:center;border:1px solid #806491;border-radius:8px;padding:10px;margin-bottom:10px;background:#382c42}.v7-room-summary>p{flex-basis:100%;margin:0}.opponent-pool .v7-roster-card__fav{display:none}.opponent-pool .v7-roster-card{cursor:default}.v7-room-list{border-bottom:1px solid #75627c;margin-bottom:8px}
 .facility-window.v7-room>.window__body{overflow:auto;display:block}.v7-room .v7-roster-card__art{height:150px;min-height:150px}.v7-choice-bar{display:flex;gap:12px;align-items:center;justify-content:space-between;width:100%;flex-wrap:wrap}.v7-choice-bar:empty{display:none}.v7-choice-bar>span{flex:1;min-width:160px}.v7-choice-bar>button{min-height:42px;flex-shrink:0;border-color:#efc773;background:#5c482e}.facility-window.v7-room:has(.v7-battle:not([hidden]))>.window__body{display:flex;overflow:hidden}.v7-room:has(.v7-battle:not([hidden])) .v7-combat-body:not([hidden]){flex:none;max-height:35dvh;overflow:auto}.v7-room>.window__foot{background:#292132;z-index:4}
+/* Companion roster shares the paper-and-wood panel palette. */
+.partner-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:16px}
+.partner-card{display:flex;gap:18px;padding:16px;background:var(--surface,#fff9ee);border:1px solid #d9c49c;border-radius:12px;align-items:center}
+.partner-card img{width:100px;height:170px;object-fit:contain;flex-shrink:0}
+.partner-card h3{margin:0 0 8px}.partner-card select{max-width:100%;padding:8px}
+.partner-stage{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:14px 6px;border-bottom:1px solid #dcc9a6}

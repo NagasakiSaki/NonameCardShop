@@ -32,8 +32,8 @@ export const SERIES_PHASES = Object.freeze([
   'cancelled'
 ]);
 
-const CHALLENGE_KINDS = Object.freeze(['stage-challenge', 'ally-practice', 'npc-wager', 'friendly', 'background-npc']);
-const FREE_KINDS = Object.freeze(['stage-challenge', 'ally-practice']);
+const CHALLENGE_KINDS = Object.freeze(['stage-challenge', 'debt-challenge', 'ally-practice', 'npc-wager', 'friendly', 'background-npc']);
+const FREE_KINDS = Object.freeze(['stage-challenge', 'debt-challenge', 'ally-practice']);
 
 const other = side => (side === 'mine' ? 'enemy' : 'mine');
 

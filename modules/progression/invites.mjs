@@ -70,6 +70,9 @@ export function offerInvite(state, input, context = {}) {
     };
   }
 
+  const deferredTo=state.deferrals[activeStage.stageId]?.deferredToDay||0;
+  if(currentDay<Math.max(activeStage.dueDay,deferredTo))return {ok:false,error:{code:'CHALLENGE_DEFERRED',message:`已约好第 ${Math.max(activeStage.dueDay,deferredTo)} 天再战。`,retryable:false}};
+
   // Create unique IDs
   const seedPart = Math.floor((context.seed || 12345) % 1000000);
   const inviteId = `invite-${activeStage.stageId}-d${currentDay}-${seedPart}`;

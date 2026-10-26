@@ -1,4 +1,6 @@
 import {RATED_FORMATS} from './strength-modes.mjs';
+import {printingMeta,physicalGroupKey} from './card-finishes.mjs';
+import {marketEligible,MARKET_RARITIES} from './market-policy.mjs';
 import {clone,need,integer,serial,sum,credit,debit,clamp,random,page} from './common.mjs';
 import {openPacket,unsealBox,makeSealed} from './products.mjs';
 import {note,enterCirculation} from './world.mjs';
@@ -41,7 +43,7 @@ export function updatePrices(w,catalog){
 export function inventoryList(w,catalog,p={}){
   const rows=(p.location==='trash'?trashItems(w):owned(w)).filter(i=>(!p.location||i.location===p.location)&&(!p.kind||i.kind===p.kind)).map(i=>{
     const card=i.kind==='card'?catalog.byKey.get(i.cardKey):null;
-    return {inventoryRef:i.inventoryRef,kind:i.kind,cardKey:i.cardKey,productId:i.productId,printVersion:i.printVersion||i.productVersion,printedRarity:i.printedRarity,
+    return {inventoryRef:i.inventoryRef,kind:i.kind,cardKey:i.cardKey,productId:i.productId,printVersion:i.printVersion||i.productVersion,printedRarity:i.printedRarity,...(i.kind==='card'?printingMeta(i):{}),
       name:card?.name||i.productId,imageUrl:card?.imageUrl,referencePrice:card?{amount:referencePrice(w,catalog,i.cardKey)}:undefined,globalScore:card?.globalScore,currentRarity:card?.currentRarity,location:i.location,owned:1,available:free(i)&&!['market','retail'].includes(i.location)?1:0,protected:i.protected?1:0,locked:i.lock?1:0,listed:i.location==='market'||i.location==='retail'?1:0,
       cost:i.cost,eligible:!!w.circulation[i.cardKey],discardedBy:i.trash?.discardedBy??(i.location==='trash'?i.ownerId:undefined),discardedByName:i.trash?.discardedBy==='player'?'店长':w.npcs.find(n=>n.actorId===i.trash?.discardedBy)?.name,discardedDay:i.trash?.day,disabledReasons:!free(i)?[{code:'ITEM_LOCKED',message:'该实物有收藏保护或正在交易/参赛。'}]:[]};
   }).filter(i=>(!p.search||`${i.name} ${i.cardKey}`.includes(p.search))&&(!p.rarity||i.printedRarity===p.rarity));
@@ -67,10 +69,11 @@ export function executeOpening(w,preview,catalog){
 }
 export function surplusPreview(w,catalog,p={}){
   const groups=new Map();
-  for(const item of owned(w).filter(i=>i.kind==='card'&&!['trash','market'].includes(i.location))){const k=p.mergePrints?item.cardKey:`${item.cardKey}|${item.printVersion}|${item.printedRarity}`;if(!groups.has(k))groups.set(k,[]);groups.get(k).push(item);}
+  for(const item of owned(w).filter(i=>i.kind==='card'&&!['trash','market'].includes(i.location)&&marketEligible(catalog,i))){const k=physicalGroupKey(item,p);if(!groups.has(k))groups.set(k,[]);groups.get(k).push(item);}
   const refs=[],rows=[];
   for(const cards of groups.values()){
-    if(p.rarity&&catalog.byKey.get(cards[0].cardKey)?.currentRarity!==p.rarity)continue;
+    if(!marketEligible(catalog,cards[0]))continue;
+    if(p.rarity&&cards[0].printedRarity!==p.rarity)continue;
     const fixed=cards.filter(i=>!free(i)),movable=cards.filter(free).sort((a,b)=>b.cost-a.cost||a.inventoryRef.localeCompare(b.inventoryRef));
     const selected=movable.slice(fixed.length?0:1);refs.push(...selected.map(i=>i.inventoryRef));
     rows.push({cardKey:cards[0].cardKey,owned:cards.length,retained:cards.length-selected.length,quantity:selected.length});
@@ -78,6 +81,7 @@ export function surplusPreview(w,catalog,p={}){
   const items=refs.map(r=>w.items[r]);return {kind:'surplus',refs,rows,fingerprint:fingerprint(items),sourceFingerprint:fingerprint(owned(w).filter(i=>i.kind==='card'&&!['trash','market'].includes(i.location))),quantity:refs.length,keep:1,newListings:refs.length,alreadyListed:owned(w).filter(i=>i.location==='market').length,lockedExcluded:owned(w).filter(i=>i.kind==='card'&&!free(i)).length,estimatedFee:0,estimatedAmount:sum(items.map(i=>referencePrice(w,catalog,i.cardKey))),feeAmount:0};
 }
 export function placeListing(w,catalog,item,unitAmount){
+  need(marketEligible(catalog,item),'MARKET_RARITY','二级市场只交易 SR / SSR 印刷卡；N / R 仍可收藏、对战或丢弃。');
   need(item.kind==='card'&&item.location==='collection'&&free(item),'ITEM_LOCKED','仅可上架未保护、未占用的收藏单卡。');integer(unitAmount,1,1000000);
   const listing={listingId:serial(w,'listing'),inventoryRef:item.inventoryRef,ownerId:item.ownerId,cardKey:item.cardKey,unitAmount,status:'active',day:w.clock.day};
   item.location='market';item.lock=listing.listingId;w.listings.push(listing);enterCirculation(w,item.cardKey,'marketListingAccepted',listing.listingId);note(w,'marketListingAccepted',{listingId:listing.listingId,cardKey:item.cardKey});return listing;
@@ -91,9 +95,10 @@ export function listSurplus(w,catalog,preview,p){
 export function settleTrade(w,listing,buyerId){
   need(listing?.status==='active'&&listing.ownerId!==buyerId,'OUT_OF_STOCK','该挂单不可购买。');
   const item=w.items[listing.inventoryRef];need(item?.lock===listing.listingId,'OUT_OF_STOCK','挂单实物已变化。');
+  need(MARKET_RARITIES.includes(item.printedRarity),'MARKET_RARITY','二级市场只交易 SR 和 SSR。');
   const buyer=buyerId==='player'?null:w.npcs.find(n=>n.actorId===buyerId);if(buyer)need(listing.unitAmount<=customerBudget(w,buyer),'INSUFFICIENT_FUNDS','本次购买预算不足。');
   debit(wallet(w,buyerId),listing.unitAmount);if(buyer?.visit)buyer.visit.budgetSpent=(buyer.visit.budgetSpent||0)+listing.unitAmount;
-  const fee=listing.ownerId==='player'?0:Math.floor(listing.unitAmount*w.rules.marketFee);
+  const fee=listing.ownerId==='player'?0:Math.floor(listing.unitAmount*managementEffects(w).marketFee);
   if(listing.ownerId==='player'){income(w,listing.unitAmount);w.daily.goods+=listing.unitAmount;w.daily.cogs+=item.cost;w.lifetime.marketSales++;}
   else {credit(wallet(w,listing.ownerId),listing.unitAmount-fee);income(w,fee);w.daily.service+=fee;}
   if(buyerId==='player')w.daily.purchases+=listing.unitAmount;
@@ -119,7 +124,7 @@ export function purchaseRetail(w,npc,item,{deferOpening=false}={}){
   if(!deferOpening)openCustomerPurchase(w,null,npc,item.inventoryRef);
   return item.inventoryRef;
 }
-function acceptableListing(w,catalog,npc,l){return l.status==='active'&&l.ownerId!==npc.actorId&&l.unitAmount<=customerBudget(w,npc)&&l.unitAmount<=referencePrice(w,catalog,l.cardKey)*(w.rules.npcSinglePriceCeiling??1.4);}
+function acceptableListing(w,catalog,npc,l){return l.status==='active'&&marketEligible(catalog,w.items[l.inventoryRef])&&l.ownerId!==npc.actorId&&l.unitAmount<=customerBudget(w,npc)&&l.unitAmount<=referencePrice(w,catalog,l.cardKey)*(w.rules.npcSinglePriceCeiling??1.4)*managementEffects(w).singlePriceCeilingMultiplier;}
 function acceptableRetail(w,npc,i){const suggested=i.suggestedRetail??i.cost/(1-w.rules.retailMargin);return productEnabled(w.rules,i.productId)&&['pack','box'].includes(i.kind)&&i.location==='retail'&&free(i)&&i.retailPrice<=customerBudget(w,npc)&&i.retailPrice<=suggested*(w.rules.npcSealedPriceCeiling??1.4);}
 export function customerFeedback(w,npc,reason,extra={}){
   if(!Object.hasOwn(FEEDBACK_REASONS,reason)||!npc.visit||npc.visit.issues?.includes(reason))return;
@@ -140,7 +145,7 @@ export function customerDecision(w,catalog,npc){
   return {reason,intent:{kind:'shopping',label:FEEDBACK_REASONS[reason]}};
 }
 function consignSurplus(w,catalog,npc){
-  const cards=owned(w,npc.actorId).filter(i=>i.kind==='card'&&i.location==='collection'&&free(i));
+  const cards=owned(w,npc.actorId).filter(i=>i.kind==='card'&&i.location==='collection'&&free(i)&&marketEligible(catalog,i));
   if(cards.length>customerBehavior(w).minimumKeptCards&&w.listings.filter(l=>l.ownerId===npc.actorId&&l.status==='active').length<2){const item=[...cards].sort((a,b)=>referencePrice(w,catalog,a.cardKey)-referencePrice(w,catalog,b.cardKey))[0];placeListing(w,catalog,item,referencePrice(w,catalog,item.cardKey));}
 }
 function customerPurchase(w,catalog,npc,{deferOpening=false}={}){
@@ -237,7 +242,7 @@ export function tickEconomy(w,catalog,{map=null,seconds=0}={}){
   const invited=w.experience?.events.find(e=>e.day===w.clock.day&&e.status==='scheduled')?.actorIds||[];
   const visitors=w.npcs.filter(n=>!n.specialist&&!n.allyId&&!n.currentRoomId&&!onSite(n)&&!n.currentMatchId&&(n.nextVisitAt||0)<=w.clock.day*1440+w.clock.minute).sort((a,b)=>Number(invited.includes(b.actorId))-Number(invited.includes(a.actorId))||(a.lastVisit?.leftAt||0)-(b.lastVisit?.leftAt||0));
   if(visitors.length&&(invited.includes(visitors[0].actorId)||w.npcs.filter(n=>!n.specialist&&!n.allyId).length>=w.rules.maxNpcs||random(w)<.5))npc=visitors[0];
-  else {if(w.npcs.filter(n=>!n.specialist&&!n.allyId).length>=w.rules.maxNpcs)return;const i=w.npcs.length,actorId=serial(w,'npc'),purse=isV7(w)?initialCustomerWallet(w,actorId):null,scavenger=purse?purse.scavenger:random(w)<customerBehavior(w).scavengerChance,initialWallet=purse?purse.available:Math.round((scavenger?customerBehavior(w).poorInitialWallet:w.rules.npcInitialWallet)*effects.newCustomerWalletMultiplier);npc={actorId,name:customerBehavior(w).names[i%customerBehavior(w).names.length],appearanceId:customerAppearance(i),appearancePackVersion:1,wallet:purse||{available:initialWallet},roomId:'store',x:240,y:272,direction:'up',moving:false,activity:'shopping',scavenger};w.npcs.push(npc);note(w,'npcArrived',{actorId:npc.actorId,externalFunds:initialWallet});}
+  else {if(w.npcs.filter(n=>!n.specialist&&!n.allyId).length>=w.rules.maxNpcs)return;const i=w.npcs.length,actorId=serial(w,'npc'),purse=isV7(w)?initialCustomerWallet(w,actorId):null,scavenger=purse?purse.scavenger:random(w)<customerBehavior(w).scavengerChance,initialWallet=purse?Math.round(purse.available*effects.newCustomerWalletMultiplier):Math.round((scavenger?customerBehavior(w).poorInitialWallet:w.rules.npcInitialWallet)*effects.newCustomerWalletMultiplier);npc={actorId,name:customerBehavior(w).names[i%customerBehavior(w).names.length],appearanceId:customerAppearance(i),appearancePackVersion:1,wallet:purse?{...purse,available:initialWallet}:{available:initialWallet},roomId:'store',x:240,y:272,direction:'up',moving:false,activity:'shopping',scavenger};w.npcs.push(npc);note(w,'npcArrived',{actorId:npc.actorId,externalFunds:initialWallet});}
   const decision=customerDecision(w,catalog,npc);arriveCustomer(w,npc,map,invited.includes(npc.actorId)?{kind:'event',label:'参加新手交流会'}:decision.intent);
   if(invited.includes(npc.actorId)){lingerCustomer(w,npc,behavior.maxVisitSeconds);npc.label='等交流会牌友';return;}
   if(!npc.specialist&&!npc.allyId&&canScavenge(w,npc)&&trashItems(w).length){npc.visit.intent={kind:'scavenge',label:'找可回收的卡牌'};const anchor=map?.anchors['store.trash'];if(anchor){const route=customerTarget(w,map,anchor,npc);if(route){npc.trip={stage:'scavenge',...route,waitSeconds:customerBehavior(w).searchSeconds};npc.activity='scavenging';npc.label='去翻垃圾桶';return;}}if(!map){scavenge(w,catalog,npc);departCustomer(w,npc);return;}}

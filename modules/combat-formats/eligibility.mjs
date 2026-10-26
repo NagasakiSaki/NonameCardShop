@@ -111,7 +111,7 @@ function validateSide({side, entries, format, eligibility, seriesLockId, warning
         return err('NOT_ELIGIBLE', '借用武将不得进入市场流通。', {details: {side, index, loanRef: loanId, kind: 'loan-circulation'}});
       }
       const purpose = loan.purpose;
-      const allowed = eligibility?.loanAllowedPurposes || ['stage-challenge', 'recruited-ally-practice'];
+      const allowed = eligibility?.loanAllowedPurposes || ['stage-challenge', 'debt-challenge', 'recruited-ally-practice'];
       if (purpose && !allowed.includes(purpose)) {
         return err('NOT_ELIGIBLE', `借用用途 ${purpose} 不允许用于本场系列赛。`, {
           details: {side, index, loanRef: loanId, kind: 'loan-purpose', purpose}

@@ -24,13 +24,14 @@ try{
     ]);
     const [source,rules]=await Promise.all(['/data/cards.json','/data/backend-rules.json'].map(url=>fetch(url).then(r=>r.json())));
     rules.startingCash=50000;window.__marketFee=rules.marketFee;const catalog=buildCatalog(source,rules),world=createWorld(rules);world.clock.phase='open';world.clock.minute=540;
+    const marketCards=catalog.activeCards.filter(c=>['SR','SSR'].includes(c.currentRarity));
     world.npcs.push({actorId:'test-npc',name:'Alex',appearanceId:'novice',wallet:{available:50000},roomId:'store',x:240,y:240,direction:'down',moving:false,activity:'idle'});
     for(let i=0;i<72;i++){
-      const c=catalog.activeCards[i%32],ref='test-card-'+i;
+      const c=marketCards[i%32],ref='test-card-'+i;
       world.items[ref]={inventoryRef:ref,ownerId:'player',kind:'card',cardKey:c.cardKey,printedRarity:c.currentRarity,printVersion:'test-v1',location:'collection',cost:10,protected:i===0,lock:null};
     }
     for(let i=0;i<4;i++){
-      const c=catalog.activeCards[40+i],ref='test-npc-card-'+i;
+      const c=marketCards[40+i],ref='test-npc-card-'+i;
       world.items[ref]={inventoryRef:ref,ownerId:'test-npc',kind:'card',cardKey:c.cardKey,printedRarity:c.currentRarity,printVersion:'test-v1',location:'collection',cost:10,protected:false,lock:null};
       placeListing(world,catalog,world.items[ref],50+i);
     }

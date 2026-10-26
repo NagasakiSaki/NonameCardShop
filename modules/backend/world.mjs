@@ -39,6 +39,10 @@ export function validateWorld(world){
   for(const value of Object.values(world.lifetime))need(Number.isSafeInteger(value)&&value>=0,'INVALID_SAVE','累计进度不合法。');
   for(const value of Object.values(world.stats))need(value&&['wins','losses','draws'].every(k=>Number.isSafeInteger(value[k])&&value[k]>=0),'INVALID_SAVE','战绩统计不合法。');
   if(!Number.isSafeInteger(world.wallet.debt)||world.wallet.debt<0)throw new Error('欠款数据不合法。');
+  if(world.longTerm){
+    const l=world.longTerm;need(Number.isSafeInteger(l.version)&&l.version>0&&JSON.stringify(l).length<262144,'INVALID_SAVE','长线进度格式不正确。');
+    if(l.version===1){const d=l.debtChallenge;need(d&&d.actorId==='specialist:creditor'&&['pending','onsite','accepted','lost','deferred','resolved'].includes(d.status)&&Number.isSafeInteger(d.nextVisitDay)&&d.nextVisitDay>=1&&Number.isSafeInteger(d.attempt)&&d.attempt>=0&&d.receipts&&typeof d.receipts==='object'&&!Array.isArray(d.receipts)&&['locked','unlocked-planned'].includes(l.outdoor?.status),'INVALID_SAVE','账务或户外资格记录不正确。');}
+  }
   const owners=new Set(['player',...world.npcs.map(n=>n.actorId)]);
   for(const n of world.npcs)if(!Number.isSafeInteger(n.wallet?.available)||n.wallet.available<0)throw new Error('NPC 余额不合法。');
   for(const n of world.npcs)need(n.wallet.reserved===undefined||Number.isSafeInteger(n.wallet.reserved)&&n.wallet.reserved>=0&&n.wallet.reserved<=n.wallet.available,'INVALID_SAVE','NPC 预留桌费不合法。');
@@ -56,6 +60,7 @@ export function validateWorld(world){
     const publicTrash=i?.ownerId==='public:trash'&&i.kind==='card'&&i.location==='trash'&&!i.lock&&!i.protected&&owners.has(i.trash?.discardedBy);
     if(i?.inventoryRef!==ref||!(owners.has(i.ownerId)||publicTrash)||!['pack','box','card'].includes(i.kind)||!Number.isSafeInteger(i.cost)||i.cost<0)throw new Error('库存实物或成本数据不合法。');
     if(i.kind==='card'&&(!i.cardKey||!['N','R','SR','SSR'].includes(i.printedRarity)))throw new Error('印刷卡数据不完整。');
+    if(i.kind==='card')for(const key of ['finishId','artVariantId','editionId','serialNumber'])need(i[key]===undefined||typeof i[key]==='string'&&i[key].length>0&&i[key].length<=128,'INVALID_SAVE','卡片工艺或版本标识不正确。');
     if(i.kind==='pack'&&(!Array.isArray(i.cards)||i.cards.length!==5)||i.kind==='box'&&(!Array.isArray(i.packets)||i.packets.length!==24||i.packets.some(p=>p.length!==5)))throw new Error('密封商品内容不完整。');
   }
   const escrow=world.matches.filter(m=>m.status!=='finished').reduce((n,m)=>n+m.stake*2+m.serviceHeld,0)+(world.management?.requests||[]).reduce((n,r)=>n+(r.fundsHeld||0),0);

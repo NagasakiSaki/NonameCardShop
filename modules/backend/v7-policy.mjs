@@ -3,6 +3,8 @@ import {need,clone} from './common.mjs';
 import {createProgressionState} from '../progression/state.mjs';
 import {deriveAllyEffects} from '../progression/allies.mjs';
 import {determineBuyerClass,budgetForVisit,generateInitialWallet,dailyBudgetSupplement} from '../economy-v7/budget.mjs';
+import longTermPolicy from '../../data/long-term-policy.json' with {type:'json'};
+import {managementEffects} from './management.mjs';
 export const V7_RETIRED=['diy','old','key','collab','sixiang','onlyOL','xianding','newjiang','offline','standard'];
 export const isV7=w=>w?.rules?.operationsV7===true;
 export const unlockedProducts=w=>w?.progression?.version===1&&!w.progression.disabled?w.progression.unlockedProductIds:['yijiang'];
@@ -18,7 +20,12 @@ export function initialiseV7(w,defaults,{fresh=false}={}){
     w.rules.starterGift={enabled:true,unit:'box',quantity:1,productId:'yijiang'};
     w.operationsVersion=1;
   }
-  if(!w.progression)w.progression=createProgressionState({epoch:w.worldId,firstDueDay:fresh?3:w.clock.day+1});
+  if(!w.progression)w.progression=createProgressionState({epoch:w.worldId,firstDueDay:fresh?longTermPolicy.challenge.firstDay:w.clock.day+1,intervalDays:longTermPolicy.challenge.intervalDays});
+  if(w.progression.version===1&&!w.progression.disabled&&w.progression.cadenceVersion!==longTermPolicy.version){
+    const p=w.progression,first=longTermPolicy.challenge.firstDay,interval=longTermPolicy.challenge.intervalDays,lastCleared=Math.max(0,...p.stages.map(s=>s.clearedAtDay||0));
+    p.firstDueDay=first;p.intervalDays=interval;p.cadenceVersion=longTermPolicy.version;
+    for(const [index,stage]of p.stages.entries())if(stage.status!=='cleared'&&!(stage.stageId===p.activeStageId&&p.currentVisit?.status==='onsite'))stage.dueDay=Math.max(first+index*interval,lastCleared?lastCleared+interval:0,p.deferrals[stage.stageId]?.deferredToDay||0);
+  }
   for(const i of Object.values(w.items))if(['box','pack'].includes(i.kind)&&i.location==='retail'&&V7_RETIRED.includes(i.productId))i.location='stock';
   return changed;
 }
@@ -33,7 +40,7 @@ export function customerBudget(w,npc){
   const value=budgetForVisit({buyerClass:customerClass(npc),wallet:npc.wallet,visitSeed:npc.visit?.visitId||`${npc.actorId}:${w.clock.day}`});
   return Math.max(0,Math.min(value.availableWallet,(npc.visit?.budgetAmount??value.visitBudget)-(npc.visit?.budgetSpent||0)));
 }
-export function initialiseVisitBudget(w,npc){if(isV7(w)&&npc.visit){npc.visit.budgetAmount=budgetForVisit({buyerClass:customerClass(npc),wallet:npc.wallet,visitSeed:npc.visit.visitId}).visitBudget;npc.visit.budgetSpent=0;}}
+export function initialiseVisitBudget(w,npc){if(isV7(w)&&npc.visit){const value=budgetForVisit({buyerClass:customerClass(npc),wallet:npc.wallet,visitSeed:npc.visit.visitId});npc.visit.budgetAmount=Math.min(value.availableWallet,Math.round(value.visitBudget*managementEffects(w).visitBudgetMultiplier));npc.visit.budgetSpent=0;}}
 export function initialCustomerWallet(w,actorId){return generateInitialWallet(actorId);}
 export function replenishCustomer(w,npc){
   if(!isV7(w)||npc.specialist||npc.allyId)return null;

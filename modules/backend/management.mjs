@@ -4,6 +4,7 @@ import {note} from './world.mjs';
 import {productEnabled} from './distribution.mjs';
 import {onSite} from './visits.mjs';
 import {normaliseAppearance} from './appearances.mjs';
+import {marketEligible} from './market-policy.mjs';
 import {allyEffects} from './v7-policy.mjs';
 
 export function validateManagement(c){
@@ -12,12 +13,15 @@ export function validateManagement(c){
   need(c.baseShelfCapacity>0&&c.boxShelfUnits>0&&c.restockIntervalMinutes>0&&c.orderDurationDays>0,'INVALID_CONFIG','容量与周期必须大于零。');
   need(Number.isFinite(c.baseCheckoutSeconds)&&c.baseCheckoutSeconds>0&&Number.isFinite(c.cashierCheckoutSeconds)&&c.cashierCheckoutSeconds>0,'INVALID_CONFIG','结账等待时间不正确。');
   for(const list of [c.upgrades,c.regulars])need(new Set(list.map(x=>x.id)).size===list.length&&list.every(x=>/^[a-z][a-z0-9_-]*$/.test(x.id)&&!['constructor','prototype'].includes(x.id)),'INVALID_CONFIG','内容 ID 不合法或重复。');
-  for(const u of c.upgrades){need(['shelf','showcase','table','cashier','stocker'].includes(u.effect)&&Array.isArray(u.costs)&&u.costs.length>=1&&u.costs.length<=10,'INVALID_CONFIG','设施效果或等级不合法。');u.costs.forEach(n=>integer(n,1));integer(u.minDay,1,365);integer(u.dailyCost,0);need(Number.isFinite(u.amount)&&u.amount>=0&&u.amount<=100,'INVALID_CONFIG','设施效果数值不合法。');}
+  for(const u of c.upgrades){need(['shelf','showcase','table','cashier','stocker','market','marketing'].includes(u.effect)&&Array.isArray(u.costs)&&u.costs.length>=1&&u.costs.length<=10,'INVALID_CONFIG','设施效果或等级不合法。');u.costs.forEach(n=>integer(n,1));if(u.daysPerLevel!==undefined)integer(u.daysPerLevel,0,30);integer(u.minDay,1,365);integer(u.dailyCost,0);need(Number.isFinite(u.amount)&&u.amount>=0&&u.amount<=100,'INVALID_CONFIG','设施效果数值不合法。');}
   for(const r of c.regulars){integer(r.initialWallet,1);need(Array.isArray(r.dialogue)&&r.dialogue.length>0&&r.dialogue.every(t=>typeof t==='string')&&Number.isFinite(r.orderRate)&&r.orderRate>0&&Number.isFinite(r.offerRate)&&r.offerRate>0,'INVALID_CONFIG','街坊预算、报价或台词不正确。');}
   return c;
 }
 export function initialiseManagement(w,config){
   if(!w.management&&config){validateManagement(config);w.management={version:1,config:clone(config),levels:{},onDuty:{},relationships:{},talkedDays:{},requests:[],generatedDays:{},nextRestockAt:w.clock.day*1440+w.clock.minute+config.restockIntervalMinutes,restocked:0};}
+  if(w.management&&config?.facilityDepthVersion==='long-term-1'&&w.management.config.facilityDepthVersion!=='long-term-1'&&!w.configOverrides?.['backend-management']){
+    w.management.config={...w.management.config,upgrades:clone(config.upgrades),facilityDepthVersion:config.facilityDepthVersion};w.management.nextRestockAt=Math.min(w.management.nextRestockAt,w.clock.day*1440+w.clock.minute+config.restockIntervalMinutes);
+  }
   if(w.management)validateManagement(w.management.config);
 }
 export function configureManagement(w,config){
@@ -27,18 +31,20 @@ export function configureManagement(w,config){
   m.config=clone(config);ensureRegulars(w);note(w,'managementConfigChanged');return {note:'参数已应用，已报价订单金额与到期日保持不变。'};
 }
 export function managementEffects(w){
-  const m=w.management,c=m?.config;
-  const partners=allyEffects(w);
-  const level=effect=>c?sum(c.upgrades.filter(u=>u.effect===effect).map(u=>(m.levels[u.id]||0)*(u.dailyCost&&m.onDuty[u.id]===false?0:u.amount))):0;
-  return {shelfCapacity:Math.floor((c?.baseShelfCapacity??36)+level('shelf')),boxShelfUnits:c?.boxShelfUnits??4,tableFee:w.storeSettings?.tableFee??Math.round(w.rules.tableFee+level('table')),
-    checkoutSeconds:Math.max(.2,(level('cashier')?c.cashierCheckoutSeconds:c?.baseCheckoutSeconds??1)*(1-partners.checkoutReductionRate)),concurrentCustomers:Math.floor((c?.baseConcurrentCustomers??3)+level('cashier')),attractionRate:partners.attractionRate,
-    newCustomerWalletMultiplier:1+level('showcase'),stocker:level('stocker')>0,wages:c?sum(c.upgrades.map(u=>(m.levels[u.id]||0)*u.dailyCost)):0};
+ const m=w.management,c=m?.config,partners=allyEffects(w);
+ const level=effect=>c?sum(c.upgrades.filter(u=>u.effect===effect).map(u=>(m.levels[u.id]||0)*(u.dailyCost&&m.onDuty[u.id]===false?0:u.amount))):0;
+ const stockerLevel=level('stocker'),cashierLevel=c?c.upgrades.filter(u=>u.effect==='cashier').reduce((n,u)=>n+(u.dailyCost&&m.onDuty[u.id]===false?0:m.levels[u.id]||0),0):0;
+ return {shelfCapacity:Math.floor((c?.baseShelfCapacity??36)+level('shelf')),boxShelfUnits:c?.boxShelfUnits??4,tableFee:w.storeSettings?.tableFee??Math.round(w.rules.tableFee+level('table')),suggestedTableFee:Math.round(w.rules.tableFee+level('table')),
+ checkoutSeconds:Math.max(.12,(cashierLevel?c.cashierCheckoutSeconds/(1+.35*(cashierLevel-1)):c?.baseCheckoutSeconds??1)*(1-partners.checkoutReductionRate)),concurrentCustomers:Math.min(w.rules.maxNpcs,Math.floor((c?.baseConcurrentCustomers??3)+level('cashier'))),attractionRate:Math.min(1.5,partners.attractionRate+level('marketing')),
+ newCustomerWalletMultiplier:1+level('showcase'),visitBudgetMultiplier:1+level('showcase'),stocker:stockerLevel>0,restockIntervalMinutes:Math.max(5,(c?.restockIntervalMinutes??30)/(1+.35*Math.max(0,stockerLevel-1))),restockTargetPerProduct:(c?.restockTargetPerProduct??3)+Math.max(0,stockerLevel-1)*2,
+ marketFee:w.rules.marketFee,singlePriceCeilingMultiplier:1+level('market'),wages:c?sum(c.upgrades.map(u=>(m.levels[u.id]||0)*u.dailyCost)):0};
 }
+export function upgradeBenefits(effect,e){return {shelf:`货架 ${e.shelfCapacity} 位`,showcase:`新客资金/消费预算 +${Math.round((e.newCustomerWalletMultiplier-1)*100)}%`,table:`建议桌费 ${e.suggestedTableFee}`,cashier:`结账 ${e.checkoutSeconds.toFixed(2)} 秒 / 同时购物 ${e.concurrentCustomers} 人`,stocker:`每 ${e.restockIntervalMinutes.toFixed(1)} 分钟补货 / 每主题目标 ${e.restockTargetPerProduct} 件`,marketing:`到店吸引力 +${Math.round(e.attractionRate*100)}%`,market:`单卡可接受溢价上限 ×${e.singlePriceCeilingMultiplier.toFixed(2)}（仍受预算与需求约束）`}[effect]||'';}
 export function shelfUsed(w){const e=managementEffects(w);return sum(owned(w).filter(i=>i.location==='retail').map(i=>i.kind==='box'?e.boxShelfUnits:1));}
-export function upgradesView(w){const m=w.management;if(!m)return {items:[],available:false};return {available:true,capacity:managementEffects(w),items:m.config.upgrades.map(u=>{const level=m.levels[u.id]||0;return {upgradeId:u.id,name:u.name,description:u.description,level,maxLevel:u.costs.length,nextCost:u.costs[level]??0,dailyCost:u.dailyCost,effect:u.description,unlocked:w.clock.day>=u.minDay&&level<u.costs.length,unlockHint:level>=u.costs.length?'已升满':`第 ${u.minDay} 天解锁`};})};}
+export function upgradesView(w){const m=w.management;if(!m)return {items:[],available:false};return {available:true,capacity:managementEffects(w),items:m.config.upgrades.map(u=>{const level=m.levels[u.id]||0;return {upgradeId:u.id,name:u.name,description:u.description,level,maxLevel:u.costs.length,nextCost:u.costs[level]??0,dailyCost:u.dailyCost,currentDailyCost:level*u.dailyCost,nextDailyCost:(level+1)*u.dailyCost,effect:u.description,currentBenefits:upgradeBenefits(u.effect,managementEffects(w)),nextBenefits:level<u.costs.length?upgradeBenefits(u.effect,managementEffects({...w,management:{...m,levels:{...m.levels,[u.id]:level+1}}})):null,unlocked:w.clock.day>=u.minDay+level*(u.daysPerLevel||0)&&level<u.costs.length,unlockHint:level>=u.costs.length?'已升满':`第 ${u.minDay+level*(u.daysPerLevel||0)} 天可升下一级`};})};}
 export function purchaseUpgrade(w,upgradeId){
   const m=w.management,u=m?.config.upgrades.find(u=>u.id===upgradeId);need(u,'NOT_FOUND','设施或员工不存在。');const level=m.levels[u.id]||0;
-  need(w.clock.phase!=='closed'&&w.clock.day>=u.minDay&&level<u.costs.length,'NOT_READY','未到解锁日期、已经升满或今天已结算。');
+  need(w.clock.phase!=='closed'&&w.clock.day>=u.minDay+level*(u.daysPerLevel||0)&&level<u.costs.length,'NOT_READY','未到解锁日期、已经升满或今天已结算。');
   debit(w.wallet,u.costs[level]);m.levels[u.id]=level+1;if(u.dailyCost)m.onDuty[u.id]=true;
   w.daily.investment=(w.daily.investment||0)+u.costs[level];note(w,'upgradePurchased',{upgradeId:u.id,level:level+1,amount:u.costs[level]});return {upgradeId:u.id,level:level+1,spent:u.costs[level]};
 }
@@ -50,24 +56,30 @@ function refundRequest(w,request){
   if(request.fundsHeld){const npc=w.npcs.find(n=>n.actorId===request.actorId);credit(npc.wallet,request.fundsHeld);w.wallet.escrowLiability-=request.fundsHeld;request.fundsHeld=0;}
   if(request.inventoryRef&&w.items[request.inventoryRef]?.lock===request.orderId)w.items[request.inventoryRef].lock=null;
 }
+export function reconcileManagementMarket(w,catalog){
+  for(const request of w.management?.requests||[])if(['offered','accepted'].includes(request.status)&&!marketEligible(catalog,request.inventoryRef?w.items[request.inventoryRef]:request)){
+    refundRequest(w,request);request.status='cancelled';request.cancelReason='market-rarity-policy';
+  }
+}
 export function tickManagement(w,catalog){
   const m=w.management;if(!m)return;ensureRegulars(w);
+  reconcileManagementMarket(w,catalog);
   for(const request of m.requests)if(['offered','accepted'].includes(request.status)&&w.clock.day>request.expiresDay){refundRequest(w,request);request.status='expired';note(w,'neighborOrderExpired',{orderId:request.orderId});}
   if(w.clock.phase!=='open')return;
   for(const regular of m.config.regulars){
     const npc=w.npcs.find(n=>n.regularId===regular.id),generationKey=`${w.clock.day}:${regular.id}`;
     if(m.generatedDays[generationKey]||m.requests.some(o=>o.personId===regular.id&&['offered','accepted'].includes(o.status)))continue;
-    const options=catalog.cards.filter(c=>w.circulation[c.cardKey]&&!owned(w,npc.actorId).some(i=>i.cardKey===c.cardKey));
+    const options=catalog.cards.filter(c=>marketEligible(catalog,c)&&w.circulation[c.cardKey]&&!owned(w,npc.actorId).some(i=>i.cardKey===c.cardKey));
     const preferred=options.filter(c=>c.group===regular.preferredGroup),pool=preferred.length?preferred:options;
     if(pool.length){const card=pool[Math.floor(random(w)*pool.length)],amount=Math.max(1,Math.round(referencePrice(w,catalog,card.cardKey)*regular.orderRate));if(amount<=npc.wallet.available){m.requests.push({orderId:serial(w,'neighbor-order'),kind:'purchase',personId:regular.id,actorId:npc.actorId,cardKey:card.cardKey,quantity:1,amount,status:'offered',day:w.clock.day,expiresDay:w.clock.day+m.config.orderDurationDays-1,fundsHeld:0});m.generatedDays[generationKey]=true;continue;}}
-    const card=owned(w,npc.actorId).find(i=>i.kind==='card'&&free(i));
+    const card=owned(w,npc.actorId).find(i=>i.kind==='card'&&free(i)&&marketEligible(catalog,i));
     if(card){const orderId=serial(w,'neighbor-offer');card.lock=orderId;m.requests.push({orderId,kind:'offer',personId:regular.id,actorId:npc.actorId,inventoryRef:card.inventoryRef,cardKey:card.cardKey,quantity:1,amount:Math.max(1,Math.round(referencePrice(w,catalog,card.cardKey)*regular.offerRate)),status:'offered',day:w.clock.day,expiresDay:w.clock.day+m.config.orderDurationDays-1,fundsHeld:0});enterCirculation(w,card.cardKey,'neighborMarketOffer',orderId);m.generatedDays[generationKey]=true;}
   }
   const e=managementEffects(w),stamp=w.clock.day*1440+w.clock.minute;
   if(e.stocker&&stamp>=m.nextRestockAt){
-    m.nextRestockAt=stamp+m.config.restockIntervalMinutes;
+    m.nextRestockAt=stamp+e.restockIntervalMinutes;
     for(const productId of new Set(owned(w).filter(i=>i.kind==='pack'&&i.location==='stock'&&productEnabled(w.rules,i.productId)).map(i=>i.productId))){
-      const stock=owned(w).filter(i=>i.kind==='pack'&&i.productId===productId&&i.location==='stock'&&free(i));let target=m.config.restockTargetPerProduct-owned(w).filter(i=>i.kind==='pack'&&i.productId===productId&&i.location==='retail').length;
+      const stock=owned(w).filter(i=>i.kind==='pack'&&i.productId===productId&&i.location==='stock'&&free(i));let target=e.restockTargetPerProduct-owned(w).filter(i=>i.kind==='pack'&&i.productId===productId&&i.location==='retail').length;
       for(const item of stock.slice(m.config.warehouseReservePerProduct)){if(target<=0||shelfUsed(w)>=e.shelfCapacity)break;item.location='retail';target--;m.restocked++;note(w,'employeeRestocked',{inventoryRef:item.inventoryRef});}
     }
   }
@@ -76,7 +88,7 @@ export function peopleView(w,catalog){
   const m=w.management;
   const customers=w.npcs.filter(onSite).map(({wallet,trip,...npc})=>({...clone(npc),budget:wallet.available,ownedCards:owned(w,npc.actorId).filter(i=>i.kind==='card').length}));
   if(!m)return {items:[],neighbors:[],customers};
-  return {items:m.config.upgrades.filter(u=>u.dailyCost>0).map(u=>({personId:`staff:${u.id}`,name:u.name,role:u.id==='cashier'?'收银':'补货',wage:u.dailyCost,hired:(m.levels[u.id]||0)>0,mood:m.onDuty[u.id]===false?'休息':'当班',note:u.description})),neighbors:m.config.regulars.map(r=>{const relation=m.relationships[r.id]||0;const request=m.requests.find(o=>o.personId===r.id&&['offered','accepted'].includes(o.status));return {personId:r.id,name:r.name,relation,portrait:normaliseAppearance(r.appearanceId),dialog:r.dialogue[Math.min(r.dialogue.length-1,Math.floor(relation/10))],pending:request?{...clone(request),cardName:catalog?.byKey.get(request.cardKey)?.name,offer:request.amount,note:`第 ${request.expiresDay} 天结束前有效；${request.status==='accepted'?'资金已托管':'尚未接单'}`} :null};}),customers};
+  return {items:m.config.upgrades.filter(u=>u.dailyCost>0).map(u=>({personId:`staff:${u.id}`,name:u.name,role:u.id==='cashier'?'收银':'补货',wage:(m.levels[u.id]||0)*u.dailyCost,hired:(m.levels[u.id]||0)>0,mood:m.onDuty[u.id]===false?'休息':'当班',note:u.description})),neighbors:m.config.regulars.map(r=>{const relation=m.relationships[r.id]||0;const request=m.requests.find(o=>o.personId===r.id&&['offered','accepted'].includes(o.status));return {personId:r.id,name:r.name,relation,portrait:normaliseAppearance(r.appearanceId),dialog:r.dialogue[Math.min(r.dialogue.length-1,Math.floor(relation/10))],pending:request?{...clone(request),cardName:catalog?.byKey.get(request.cardKey)?.name,offer:request.amount,note:`第 ${request.expiresDay} 天结束前有效；${request.status==='accepted'?'资金已托管':'尚未接单'}`} :null};}),customers};
 }
 export function neighborAct(w,catalog,p){
   const m=w.management;need(m,'FEATURE_UNAVAILABLE','街坊扩展尚未加载。');
@@ -87,11 +99,13 @@ export function neighborAct(w,catalog,p){
   const request=m.requests.find(o=>o.personId===regular.id&&(!p.orderId||o.orderId===p.orderId)&&['offered','accepted'].includes(o.status));need(request&&w.clock.day<=request.expiresDay,'NOT_FOUND','没有有效待办。');
   const npc=w.npcs.find(n=>n.actorId===request.actorId);
   if(p.action==='decline'){refundRequest(w,request);request.status='declined';return {note:'已取消；未消费的托管资金和实物锁定已退回。'};}
+  need(marketEligible(catalog,request.inventoryRef?w.items[request.inventoryRef]:request),'MARKET_RARITY','二级市场只交易 SR 和 SSR。');
   if(p.action==='accept'){
     need(request.kind==='purchase'&&request.status==='offered','INVALID_STATE','该待办不能接单；收卡报价需明确使用 buy。');debit(npc.wallet,request.amount);request.fundsHeld=request.amount;w.wallet.escrowLiability+=request.amount;request.status='accepted';note(w,'neighborOrderAccepted',{orderId:request.orderId});return {orderId:request.orderId,note:'买家已预付托管，请在期限内到二级市场交付。'};
   }
   if(p.action==='deliver'){
     need(request.kind==='purchase'&&request.status==='accepted','INVALID_STATE','请先接受这笔预约。');const card=owned(w).find(i=>i.kind==='card'&&i.cardKey===request.cardKey&&i.location==='collection'&&free(i)&&(!p.inventoryRef||p.inventoryRef===i.inventoryRef));need(card,'OUT_OF_STOCK','没有符合要求的可售副本。');
+    need(marketEligible(catalog,card),'MARKET_RARITY','请交付 SR 或 SSR 的印刷副本。');
     const cost=card.cost;card.ownerId=npc.actorId;card.cost=request.amount;w.wallet.escrowLiability-=request.fundsHeld;request.fundsHeld=0;income(w,request.amount);w.daily.goods+=request.amount;w.daily.cogs+=cost;w.lifetime.marketSales++;request.status='completed';relation(m.config.completionRelationship);enterCirculation(w,card.cardKey,'neighborMarketSale',request.orderId);note(w,'secondaryTradeCompleted',{orderId:request.orderId,cardKey:card.cardKey,buyerId:npc.actorId,amount:request.amount,source:'neighbor-order'});return {note:'已交卡收款，托管只结算一次。',amount:request.amount};
   }
   if(p.action==='buy'){

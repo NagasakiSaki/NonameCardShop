@@ -1,5 +1,8 @@
 import * as Rooms from './battle-rooms.mjs';
+import * as Debt from './debt-challenge.mjs';
 import {productContents} from './product-catalog.mjs';
+import {reconcileMarket} from './market-policy.mjs';
+import {reconcileManagementMarket} from './management.mjs';
 import {initialiseRooms,activeRoom} from './room-state.mjs';
 import {initialiseRating,RATED_FORMATS,MODE_LABELS} from './strength-modes.mjs';
 import * as V7 from './operations-v7.mjs';
@@ -60,6 +63,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
   const listeners=new Set(),pauses=new Map(),quotes=new Map(),previews=new Map(),engineProgress=new Map();
   let connected=false,clientId,sessionId,seq=0,queue=Promise.resolve(),disconnected=false,lastInputSeq=-1,movement=null;
   function normaliseActors(world){
+    Debt.initialiseLongTerm(world);
     initialiseRooms(world);if(initialiseRating(world,rules))world.products=publishProducts(buildCatalog(source,world.rules),world.rules,world.clock.day,world.prices,world);
     if(initialiseV7(world,rules))world.products=publishProducts(buildCatalog(source,world.rules),world.rules,world.clock.day,world.prices,world);
     if(narrative.contentAvailable||world.narrative)narrative.initialise(world,false);
@@ -74,6 +78,8 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
     migrateVisits(world);
     migrateCustomerIdentity(world);
     normaliseWorldAppearances(world);
+    reconcileMarket(world,catalog);
+    reconcileManagementMarket(world,catalog);
     const occupied=new Set();
     for(const actor of [world.player,...world.npcs.filter(onSite)]){
       const oldName=/^顾客\s*(\d+)$/.exec(actor.name||'');if(oldName){const names=customerBehavior(world).names;actor.name=names[(Number(oldName[1])-1)%names.length];}
@@ -125,7 +131,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
     next.revision=record.revision+1;next.world.revision=next.revision;
     if(!['saves.load','saves.loadDay','saves.import'].includes(operation)){
       const oldIds=new Set(w().log.map(e=>e.eventId)),events=next.world.log.filter(e=>!oldIds.has(e.eventId));
-      const names={packSaleCompleted:'顾客购买卡包/盒',secondaryTradeCompleted:'二级市场成交',npcSimulationSettled:'NPC 离桌付费',officialMatchSettled:'比赛结算'};
+      const names={packSaleCompleted:'顾客购买卡包/盒',secondaryTradeCompleted:'二级市场成交',npcSimulationSettled:'NPC 离桌付费',officialMatchSettled:'比赛结算',debtChallengeCleared:'牌局减免欠款'};
       const lines=events.filter(e=>names[e.type]).map(e=>`${names[e.type]}${e.names?' · '+e.names.join(' / '):''}${e.amount?' '+e.amount+' 币':''}`);
       recordWalletChange(next.world,w().wallet,{operation,...(lines.length?{label:lines.join('；')}:{})});
     }
@@ -160,6 +166,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
         case 'combat.series':data=V7.seriesView(w(),p.matchId);break;
         case 'combat.roundPlan':{const m=matchById(w(),p.matchId);need(m.series,'INVALID_STATE','该比赛没有原生计划。');const r=buildRoundPlan(m.series);need(r.ok,r.error?.code,r.error?.message);data=r.data.plan;break;}
         case 'dialogue.offer':data=V7.dialogueView(w());break;
+        case 'longTerm.status':data=Debt.longTermView(w());break;
         case 'progression.status':case 'challenges.status':case 'allies.list':data=V7.progressionQuery(w(),name);break;
         case 'narrative.available':data=narrative.available(w());break;
         case 'narrative.session':data=narrative.view(w(),p.sessionId);break;
@@ -246,6 +253,8 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
       case 'combat.room.cancel':return Rooms.cancelRoom(world,catalog,p);
       case 'actors.interact':case 'challenges.offer':return V7.interactV7(world,p,navigation);
       case 'dialogue.respond':case 'challenges.reply':return V7.respondV7(world,p,navigation);
+      case 'challenges.rematch':return V7.afterChallengeLoss(world,p,navigation,{rematch:true});
+      case 'challenges.defer':return V7.afterChallengeLoss(world,p,navigation);
       case 'allies.assign':return V7.assignV7(world,catalog,p);
       case 'combat.prepareSeries':return V7.prepareV7(world,catalog,p,navigation,modeCapabilities);
       case 'combat.selectRound':return V7.selectV7(world,p);
@@ -261,7 +270,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
       case 'business.close':{
         need(['open','closing'].includes(world.clock.phase),'INVALID_STATE','今天已关闭或尚未开门。');need(!world.matches.some(m=>m.status!=='finished'),'MATCH_ACTIVE','请先完成或取消未结束的牌局。');
         for(const entry of [...(world.matchQueue||[])])leaveQueue(world,entry.ownerId,'business-closed');
-        Rooms.tickRooms(world,catalog,modeCapabilities,{close:true});finishCustomerVisits(world,catalog);V7.endV7Day(world);
+        Rooms.tickRooms(world,catalog,modeCapabilities,{close:true});finishCustomerVisits(world,catalog);V7.endV7Day(world);Debt.endDebtDay(world);
         const wages=managementEffects(world).wages,cost=world.rules.operatingCost+wages,paid=Math.min(cost,world.wallet.available);world.wallet.available-=paid;world.wallet.debt+=cost-paid;world.daily.operating=cost;world.daily.wages=wages;world.clock.phase='closed';note(world,'businessClosed');const ledger=ledgerView(world,catalog);world.reports.push({day:world.clock.day,...clone(world.daily),walletAtClose:clone(world.wallet),unsoldValuationAtClose:ledger.unsoldValuation});saveArchive(next,'close');return {report:clone(world.daily)};
       }
       case 'business.nextDay':{
@@ -357,6 +366,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
     if(world.clock.phase==='open'&&world.clock.minute>=1200){world.clock.phase='closing';note(world,'shopClosing');}
     if(clockRunning||world.clock.phase==='closing')tickEconomy(world,catalog,{map:navigation.get('store'),seconds});
     V7.tickV7(world,catalog,navigation,seconds);
+    Debt.tickDebt(world,navigation,seconds);
     tickNpcTables(world,catalog,navigation,seconds,{schedule:false});
     Rooms.tickRooms(world,catalog,modeCapabilities);
     tickMatchQueue(world,catalog,navigation,{schedule:world.rules.npcSimulation!==false||backgroundAvailable});

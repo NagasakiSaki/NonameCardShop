@@ -47,7 +47,7 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
     function normalize(row) {
       if (state.tab === 'collection') {
         return {
-          id: JSON.stringify([row.cardKey, row.printVersion, row.printedRarity, row.location]),
+          id: JSON.stringify([row.cardKey, row.printVersion, row.printedRarity, row.finishId, row.artVariantId, row.editionId, row.serialNumber, row.location]),
           cardKey: row.cardKey, name: row.name, artUrl: row.imageUrl,
           printed: row.printedRarity, current: row.currentRarity,
           owned: row.owned, available: row.available, protected: row.protected || 0,
@@ -90,7 +90,7 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
       if (q) rows = rows.filter(r => r.name.toLowerCase().includes(q.toLowerCase()));
       if (state.rarity) rows = rows.filter(r => (state.tab === 'bids' || state.tab === 'history' ? r.current : r.printed) === state.rarity);
       if (state.tab === 'collection') {
-        if (state.statusFilter === 'sellable') rows = rows.filter(r => r.available > 0);
+        if (state.statusFilter === 'sellable') rows = rows.filter(r => r.available > 0&&['SR','SSR'].includes(r.printed));
         if (state.statusFilter === 'protected') rows = rows.filter(r => r.protected > 0);
         if (state.statusFilter === 'listed') rows = rows.filter(r => r.listed > 0);
         const sorters = {
@@ -201,7 +201,7 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
         }),
         el('select', { class: 'pbc-input', 'aria-label': rarityFilterLabel, onchange: e => { state.rarity = e.target.value; paintGrid(); } }, [
           el('option', { value: '', text: rarityFilterLabel }),
-          ...RARITIES.map(r => el('option', { value: r, selected: state.rarity === r, text: r })),
+          ...(state.tab==='collection'||state.tab==='history'?RARITIES:['SSR','SR']).map(r => el('option', { value: r, selected: state.rarity === r, text: r })),
         ]),
       ]);
       if (state.tab === 'collection') {
@@ -353,8 +353,8 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
               const amount = listingAmount(input.value);
               run({ type: 'market.placeListing', payload: { inventoryRef: chosenRef, amount } }, 'placeListing', { inventoryRef: chosenRef, amount }, () => '已挂单 ' + row.name + ' ×1，售价 ' + money(amount) + '；成交前不产生收入。');
             } catch (error) { notify(error.message, 'error'); }
-          }, { primary: true, disabled: !chosenRef || state.busy || state.op.pending || !atMarket() }),
-          muted('成交后才计入收入。'),
+          }, { primary: true, disabled: !['SR','SSR'].includes(row.printed) || !chosenRef || state.busy || state.op.pending || !atMarket() }),
+          muted(['SR','SSR'].includes(row.printed)?'成交后才计入收入。':'N / R 不进入二级市场，仍可收藏、对战或丢弃。'),
         );
       } else if (state.tab === 'buy') {
         if (state.quote && state.quote.listingId === row.raw.listingId) {

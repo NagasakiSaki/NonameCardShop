@@ -13,7 +13,9 @@ const npc=(actorId,purchaseChannel)=>({actorId,purchaseChannel,name:actorId,wall
 const buyer=npc('sealed-buyer','sealed'),collector=npc('single-buyer','single'),seller=npc('seller','single');w.npcs=[buyer,collector,seller];
 const sell=makeSealed(w,product,'pack',product.prices.pack.wholesale);sell.location='retail';
 const cards=openPacket(w,makeSealed(w,product,'pack',0,seller.actorId));
-const card=cards[0],listing=placeListing(w,catalog,card,catalog.byKey.get(card.cardKey).issuanceValue);
+const high=catalog.cards.find(c=>c.pack===product.productId&&c.currentRarity==='SR');
+const card={...cards[0],cardKey:high.cardKey,printedRarity:high.currentRarity};w.items[card.inventoryRef]=card;
+const listing=placeListing(w,catalog,card,catalog.byKey.get(card.cardKey).issuanceValue);
 const before=JSON.stringify(w);
 for(let i=0;i<5;i++){
  assert.equal(customerDecision(w,catalog,buyer).item.inventoryRef,sell.inventoryRef,'sealed preference survives active market listings');
@@ -27,6 +29,7 @@ const sellerCash=seller.wallet.available;settleTrade(w,listing,collector.actorId
 buyer.wallet.available=0;assert.equal(customerDecision(w,catalog,buyer).reason,'out-of-stock');
 const expensive=makeSealed(w,product,'pack',product.prices.pack.wholesale);expensive.location='retail';expensive.retailPrice=1000000;
 assert.equal(customerDecision(w,catalog,buyer).reason,'budget');buyer.wallet.available=2000000;
+buyer.visit={visitId:'price-ceiling-check',enteredAt:1980,elapsedSeconds:0,idleSeconds:0,budgetAmount:2000000,budgetSpent:0};
 assert.equal(customerDecision(w,catalog,buyer).reason,'price','preference cannot bypass price ceilings');
 assert.equal(preferredPurchaseChannel({actorId:'x',regularId:'collector'}),'single');
 assert.equal(preferredPurchaseChannel({actorId:'x',scavenger:true}),'single');

@@ -1,27 +1,204 @@
 {
-  "version":1,
-  "baseShelfCapacity":36,
-  "boxShelfUnits":4,
-  "restockIntervalMinutes":30,
-  "restockTargetPerProduct":3,
-  "warehouseReservePerProduct":1,
-  "baseCheckoutSeconds":1,
-  "cashierCheckoutSeconds":0.45,
-  "baseConcurrentCustomers":3,
-  "orderDurationDays":2,
-  "maxRelationship":100,
-  "dialogueRelationship":1,
-  "completionRelationship":5,
-  "upgrades":[
-    {"id":"shelf","name":"加宽陈列架","description":"每级增加 12 个密封商品位。","costs":[300,650,1000],"effect":"shelf","amount":12,"minDay":1,"dailyCost":0},
-    {"id":"showcase","name":"珍藏展示柜","description":"吸引预算更高的新顾客，新客初始购物资金增加 20%。","costs":[450],"effect":"showcase","amount":0.2,"minDay":2,"dailyCost":0},
-    {"id":"table","name":"牌桌服务升级","description":"每级提高每位 NPC 的开桌服务费 2 游戏币；不凭空增加地图桌位。","costs":[500,900],"effect":"table","amount":2,"minDay":3,"dailyCost":0},
-    {"id":"cashier","name":"雇用收银员","description":"缩短结账等待，并增加两位同时购物的名额；每日工资 35。","costs":[350],"effect":"cashier","amount":2,"minDay":2,"dailyCost":35},
-    {"id":"stocker","name":"雇用补货员","description":"营业时每 30 游戏分钟自动补货，每种商品保留一包；每日工资 50。","costs":[500],"effect":"stocker","amount":1,"minDay":3,"dailyCost":50}
+  "version": 1,
+  "baseShelfCapacity": 36,
+  "boxShelfUnits": 4,
+  "restockIntervalMinutes": 30,
+  "restockTargetPerProduct": 3,
+  "warehouseReservePerProduct": 1,
+  "baseCheckoutSeconds": 1,
+  "cashierCheckoutSeconds": 0.45,
+  "baseConcurrentCustomers": 3,
+  "orderDurationDays": 2,
+  "maxRelationship": 100,
+  "dialogueRelationship": 1,
+  "completionRelationship": 5,
+  "upgrades": [
+    {
+      "id": "shelf",
+      "name": "加宽陈列架",
+      "description": "每级增加18个密封商品位，持续扩张至10级。",
+      "costs": [
+        300,
+        650,
+        1000,
+        1900,
+        3400,
+        6000,
+        10500,
+        18000,
+        30000,
+        50000
+      ],
+      "effect": "shelf",
+      "amount": 18,
+      "minDay": 1,
+      "dailyCost": 0,
+      "daysPerLevel": 2
+    },
+    {
+      "id": "showcase",
+      "name": "珍藏展示柜",
+      "description": "每级提高新顾客资金及单次消费预算25%，吸引更大的采购。",
+      "costs": [
+        450,
+        1000,
+        2200,
+        4500,
+        9000,
+        18000,
+        34000,
+        60000
+      ],
+      "effect": "showcase",
+      "amount": 0.25,
+      "minDay": 2,
+      "dailyCost": 0,
+      "daysPerLevel": 2
+    },
+    {
+      "id": "table",
+      "name": "牌桌服务升级",
+      "description": "每级建议桌费增加4游戏币，保留店主自定价格。",
+      "costs": [
+        500,
+        900,
+        1800,
+        3500,
+        6500,
+        12000,
+        22000,
+        40000
+      ],
+      "effect": "table",
+      "amount": 4,
+      "minDay": 3,
+      "dailyCost": 0,
+      "daysPerLevel": 2
+    },
+    {
+      "id": "cashier",
+      "name": "雇用收银员",
+      "description": "每级增加2个同时购物名额，并进一步加快结账；每日每级工资35。",
+      "costs": [
+        350,
+        800,
+        1700,
+        3300,
+        6000,
+        10000,
+        16000,
+        26000
+      ],
+      "effect": "cashier",
+      "amount": 2,
+      "minDay": 2,
+      "dailyCost": 35,
+      "daysPerLevel": 2
+    },
+    {
+      "id": "stocker",
+      "name": "雇用补货员",
+      "description": "越高级补货越快、每主题补得越多；每日每级工资50。",
+      "costs": [
+        500,
+        1100,
+        2300,
+        4200,
+        7500,
+        13000,
+        22000,
+        36000
+      ],
+      "effect": "stocker",
+      "amount": 1,
+      "minDay": 3,
+      "dailyCost": 50,
+      "daysPerLevel": 2
+    },
+    {
+      "id": "marketing",
+      "name": "店铺宣传与装饰",
+      "description": "每级增加12%到店吸引力，让顾客更频繁来访。",
+      "costs": [
+        600,
+        1400,
+        2800,
+        5200,
+        9500,
+        16000,
+        27000,
+        44000
+      ],
+      "effect": "marketing",
+      "amount": 0.12,
+      "minDay": 4,
+      "daysPerLevel": 2,
+      "dailyCost": 0
+    },
+    {
+      "id": "market",
+      "name": "二级市场经纪柜",
+      "description": "每级提高8%顾客可接受的单卡溢价上限；实际成交仍受预算与需求约束。",
+      "costs": [
+        700,
+        1600,
+        3200,
+        6000,
+        11000,
+        19000,
+        32000,
+        52000
+      ],
+      "effect": "market",
+      "amount": 0.08,
+      "minDay": 4,
+      "daysPerLevel": 2,
+      "dailyCost": 0
+    }
   ],
-  "regulars":[
-    {"id":"student","name":"Yuki Sato · 学生玩家","appearanceId":"bd-tomori","initialWallet":400,"preferredGroup":"shu","orderRate":1.1,"offerRate":0.6,"dialogue":["想找些好上手的武将。","帮我留意蜀势力的卡吧。","准备好阵容，我也想来打牌。"]},
-    {"id":"collector","name":"Alex Rivera · 收藏家","appearanceId":"bd-anon","initialWallet":1500,"preferredGroup":"wei","orderRate":1.2,"offerRate":0.65,"dialogue":["我带着收藏清单来了。","最近有魏势力的好卡吗？","卡到了就通知我，不必着急。"]},
-    {"id":"duelist","name":"Amara Okafor · 对战爱好者","appearanceId":"bd-rana","initialWallet":800,"preferredGroup":"wu","orderRate":1.15,"offerRate":0.6,"dialogue":["组好将就去对战房吧。","先看看市场上能补什么卡。","低稀有度也可能打赢，得看配合。"]}
-  ]
+  "regulars": [
+    {
+      "id": "student",
+      "name": "Yuki Sato · 学生玩家",
+      "appearanceId": "bd-tomori",
+      "initialWallet": 400,
+      "preferredGroup": "shu",
+      "orderRate": 1.1,
+      "offerRate": 0.6,
+      "dialogue": [
+        "想找些好上手的武将。",
+        "帮我留意蜀势力的卡吧。",
+        "准备好阵容，我也想来打牌。"
+      ]
+    },
+    {
+      "id": "collector",
+      "name": "Alex Rivera · 收藏家",
+      "appearanceId": "bd-anon",
+      "initialWallet": 1500,
+      "preferredGroup": "wei",
+      "orderRate": 1.2,
+      "offerRate": 0.65,
+      "dialogue": [
+        "我带着收藏清单来了。",
+        "最近有魏势力的好卡吗？",
+        "卡到了就通知我，不必着急。"
+      ]
+    },
+    {
+      "id": "duelist",
+      "name": "Amara Okafor · 对战爱好者",
+      "appearanceId": "bd-rana",
+      "initialWallet": 800,
+      "preferredGroup": "wu",
+      "orderRate": 1.15,
+      "offerRate": 0.6,
+      "dialogue": [
+        "组好将就去对战房吧。",
+        "先看看市场上能补什么卡。",
+        "低稀有度也可能打赢，得看配合。"
+      ]
+    }
+  ],
+  "facilityDepthVersion": "long-term-1"
 }

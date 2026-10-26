@@ -9,8 +9,8 @@ export const DEFAULT_ALLY_SLOTS = 3;
  */
 export function createProgressionState(options = {}) {
   const epoch = options.epoch ?? 1;
-  const firstDueDay = options.firstDueDay ?? 3;
-  const intervalDays = options.intervalDays ?? 3;
+  const firstDueDay = options.firstDueDay ?? 2;
+  const intervalDays = options.intervalDays ?? 2;
   const unlockedProductIds = options.unlockedProductIds ? [...options.unlockedProductIds] : ['yijiang'];
 
   // Deep clone default stages and set their initial dueDays based on schedule
@@ -72,7 +72,7 @@ export function initialiseProgression(world, config = {}) {
   const currentDay = world.clock?.day || world.day || 1;
   const isLegacyWorld = currentDay > 1;
 
-  let firstDueDay = 3;
+  let firstDueDay = 2;
   if (isLegacyWorld) {
     // Legacy save: first stage is scheduled for currentDay + 1, subsequent every 3 days
     firstDueDay = currentDay + 1;
@@ -81,7 +81,7 @@ export function initialiseProgression(world, config = {}) {
   const state = createProgressionState({
     epoch: world.epoch || world.worldId || 1,
     firstDueDay,
-    intervalDays: 3,
+    intervalDays: 2,
     unlockedProductIds: world.unlockedProductIds || ['yijiang']
   });
 
@@ -205,6 +205,9 @@ export function reduceProgression(state, event, context = {}) {
         deferralCount: ((newState.deferrals[stageId]?.deferralCount) || 0) + 1
       };
       newState.currentInvite = null;
+      newState.activeChallenge = null;
+      newState.dailyVisitStatus.proactiveOfferGiven = true;
+      newState.dailyVisitStatus.lastVisitDay = context.day ?? event.returnDay-1;
       if (newState.currentVisit) {
         newState.currentVisit.status = 'departed';
       }
@@ -252,6 +255,8 @@ export function reduceProgression(state, event, context = {}) {
       newState.activeChallenge = null;
       newState.currentInvite = null;
       newState.activeStageId = null;
+      const nextStage=newState.stages.find(s=>s.status!=='cleared');
+      if(nextStage)nextStage.dueDay=Math.max(nextStage.dueDay,(event.day||context.day)+(newState.intervalDays||2));
       if (newState.currentVisit) {
         newState.currentVisit.status = 'completed';
       }

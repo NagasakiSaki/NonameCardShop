@@ -30,7 +30,7 @@ export function mount({root,view,actions,assets={}}){
    if(tileMessage[n.personId])text.push(`操作反馈：${tileMessage[n.personId]}`);
    return tile(n.name,text,buttons,assets.portrait?.(n.portrait));
   }
-  if(tab==='upgrades')for(const u of v.upgrades.items)grid.append(tile(`${u.name} · Lv ${u.level}/${u.maxLevel}`,[u.effect,`下一档 ${u.level>=u.maxLevel?'已满级':money(u.nextCost)}`,u.unlockHint||'',u.dailyCost?`每日合同工资 ${money(u.dailyCost)}`:'无每日工资'],[button('购买下一档',()=>act('upgrade',{upgradeId:u.upgradeId}),!u.unlocked||v.snapshot.wallet.available<u.nextCost)]));
+  if(tab==='upgrades')for(const u of v.upgrades.items)grid.append(tile(`${u.name} · Lv ${u.level}/${u.maxLevel}`,[u.effect,u.currentBenefits?`当前：${u.currentBenefits}`:"",u.nextBenefits?`升级后：${u.nextBenefits}`:"",`下一档 ${u.level>=u.maxLevel?'已满级':money(u.nextCost)}`,u.unlockHint||'',u.dailyCost?`每级日薪 ${money(u.dailyCost)} · 当前每日 ${money(u.currentDailyCost)} · 升级后每日 ${money(u.nextDailyCost)}`:'无每日工资'],[button('购买下一档',()=>act('upgrade',{upgradeId:u.upgradeId}),!u.unlocked||v.snapshot.wallet.available<u.nextCost)]));
   if(tab==='people'){
    for(const s of v.people.items){const u=v.upgrades.items.find(u=>u.upgradeId===s.personId.replace('staff:',''));grid.append(tile(s.name,[`${s.role} · ${s.hired?s.mood:'未雇佣'}`,`每日合同工资 ${money(s.wage)}；休息日仍支付。`,s.note],[button(s.hired?(s.mood==='休息'?'安排当班':'安排休息'):'雇佣',()=>act('neighbor',{personId:s.personId,action:s.hired?'schedule':'hire',...(s.hired?{onDuty:s.mood==='休息'}:{})}),!s.hired&&(!u?.unlocked||v.snapshot.wallet.available<u.nextCost))]));}
    for(const n of v.people.neighbors)grid.append(neighbor(n));

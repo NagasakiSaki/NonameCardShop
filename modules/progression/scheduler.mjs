@@ -1,9 +1,9 @@
 import { reduceProgression } from './state.mjs';
 
 /**
- * Plans the 3-day challenger visit scheduling.
+ * Plans the configurable challenger visit scheduling (default: every two days).
  * Follows the frozen rules:
- * - New game: 3, 6, 9, 12, ... 45
+ * - New game: 2, 4, 6, 8, ... 30
  * - Only 1 active stage at any time. Later stages wait in stageQueue.
  * - Same day never spawns multiple specialists.
  * - Clearing a stage today does NOT dispatch the next specialist on the same day (earliest next day).
@@ -105,6 +105,9 @@ export function planChallengerVisit(state, currentDay, context = {}) {
       effects: []
     };
   }
+
+  const deferredTo=state.deferrals[activeStage.stageId]?.deferredToDay||0;
+  if(currentDay<deferredTo)return {ok:true,data:{shouldVisit:false,reason:'DEFERRED_TO_FUTURE_DAY',dueDay:deferredTo},effects:[]};
 
   // Check if proactive offer was already given today
   if (state.dailyVisitStatus.proactiveOfferGiven && state.dailyVisitStatus.lastVisitDay === currentDay) {

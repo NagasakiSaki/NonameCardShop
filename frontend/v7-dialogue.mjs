@@ -40,6 +40,7 @@ export function installWorldDialogue(app,{stopMovement}){
       if(disposed||identity()!==branch){await close();return;}
       if(!result.ok){app.toast('error','对话未完成',result.error.message);if(result.error.code!=='RESULT_UNKNOWN')await close();return;}
       const data=result.data;await close();
+      if(data?.gift)app.toast('success','高手赠礼',data.gift.name+' ×1 已放入仓库，明天继续切磋。');
       if(data?.openCombat)app.goToInteraction('battleRoom.service','combat',{opponentId:data.opponentId});
       else if(data?.openAllies)app.openPanel('allies');
       else if(current.source==='narrative'&&data?.status==='presenting')await show(storyOffer(data));

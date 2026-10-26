@@ -42,6 +42,8 @@ export function createWorldSceneClass(){return class WorldScene extends Phaser.S
       for(const p of map.props){const meta=propIndex.get(p.prop);if(!meta)continue;
         const image=this.add.image(p.x+o.x,p.y+o.y,'props',meta.cell).setOrigin(0,0).setScale(1/(m.props.artScale||1));
         image.setDepth(p.prop.includes('rug')||p.prop==='door_mat'?-800:p.y+o.y+p.footY);image.shopProp={...p,mapId:map.mapId,tableId:p.family==='table'?'battleRoom.'+map.tables[map.props.filter(v=>v.family==='table').indexOf(p)]?.id:null};this.propSprites.push(image);
+        const upgrade=p.family==='shelf'?'shelf':p.family==='table'?'table':p.prop==='pa_cabinet_collect'?'showcase':p.prop==='pa_counter_cashier'?'cashier':p.prop==='pa_counter_procure'?'stocker':null;
+        if(upgrade){image.upgradeKey=upgrade;image.levelBadge=this.add.text(p.x+o.x+3,p.y+o.y+3,'',{fontFamily:'Microsoft YaHei, sans-serif',fontSize:'7px',fontStyle:'bold',color:'#fff6dc',backgroundColor:'#846044',resolution:4,padding:{x:2,y:1}}).setDepth(6999).setVisible(false);}
       }
       for(const s of map.signs||[]){this.add.text(s.x+o.x,s.y+o.y,s.text,{fontFamily:'Microsoft YaHei, sans-serif',fontSize:s.brand?'7px':'8px',fontStyle:'bold',color:s.brand?'#89613b':'#594431',resolution:4,backgroundColor:s.brand?undefined:'#fff5df',padding:{x:3,y:2}}).setOrigin(.5,1).setDepth(s.brand?200:7000);}
       this.lights.push(new LightingView(this,map));
@@ -65,6 +67,7 @@ export function createWorldSceneClass(){return class WorldScene extends Phaser.S
         if(p.prop==='pa_counter_cashier')target='pa_counter_cashier_'+(view.staff?.cashier||'unhired');
         if(p.prop==='pa_counter_procure')target='pa_counter_stocker_'+(view.staff?.stocker||'unhired');
         const frame=this.propIndex.get(target);if(frame&&image.frame.name!==frame.cell)image.setFrame(frame.cell);
+        if(image.levelBadge){const level=view.upgrades?.[image.upgradeKey]||0;image.levelBadge.setText('Lv.'+level).setVisible(level>0);}
       }
     }
     const player=CONTEXT.getActors().find(a=>a.actorId===this.playerActorId);
