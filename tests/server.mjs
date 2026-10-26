@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import net from 'node:net';
+import fs from 'node:fs';
 import {startShopServer} from '../server.mjs';
 const runtime=await startShopServer({port:0,enginePort:0});
 try{
@@ -7,6 +8,11 @@ try{
   const html=await fetch(runtime.origin).then(r=>r.text());assert.ok(!html.includes('__CARD_SHOP_DEV__'));
   for(const file of ['/.git/config','/.local/desktop-dev/desktop.log','/desktop/main.cjs','/node_modules/noname/index.js','/tests/helpers.cjs','/dev/fixtures.json','/%2egit/config'])assert.equal((await fetch(runtime.origin+file)).status,404,file);
   assert.equal((await fetch(runtime.engineOrigin+'/noname/entry.js')).status,200);
+  const file=fs.readFileSync(new URL('../frontend/index.html',import.meta.url));
+  const head=await fetch(runtime.origin+'/frontend/index.html',{method:'HEAD'});assert.equal(head.status,200);assert.equal(Number(head.headers.get('content-length')),file.length);assert.equal((await head.text()).length,0);
+  const range=await fetch(runtime.origin+'/frontend/index.html',{headers:{Range:'bytes=0-9'}});assert.equal(range.status,206);assert.equal(await range.text(),file.subarray(0,10).toString());
+  assert.equal((await fetch(runtime.origin+'/frontend/index.html',{headers:{Range:'bytes=99999999-'}})).status,416);
+  assert.equal((await fetch(runtime.origin+'/frontend/index.html',{method:'POST'})).status,405);
   for(const file of ['/Home/UserData/Preferences','/home/UserData/Preferences','/readFile?fileName=Home/UserData/Preferences','/getFileList?dir=Home/UserData'])assert.equal((await fetch(runtime.engineOrigin+file)).status,403,file);
   assert.equal((await fetch(runtime.origin+'/vendor/noname/Home/UserData/Preferences')).status,404);
   await assert.rejects(startShopServer({port:Number(new URL(runtime.origin).port),enginePort:0}),{code:'EADDRINUSE'});

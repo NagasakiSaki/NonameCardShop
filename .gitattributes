@@ -2,7 +2,6 @@
 *.cmd text eol=crlf
 # Preserve upstream bytes exactly for engine SHA-256 validation.
 vendor/** -text
-tools/_chars/** -text
 data/skills/** -text
 *.png filter=lfs diff=lfs merge=lfs -text
 *.jpg filter=lfs diff=lfs merge=lfs -text

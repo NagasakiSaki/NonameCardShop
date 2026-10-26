@@ -11,9 +11,9 @@ const source=JSON.parse(fs.readFileSync(new URL('../data/cards.json',import.meta
 const rules={...JSON.parse(fs.readFileSync(new URL('../data/backend-rules.json',import.meta.url))),startingCash:50000};
 const catalog=buildCatalog(source,rules),products=publishProducts(catalog,rules,1);
 assert.equal(catalog.cards.length,2563);
-const changed=buildCatalog(source,{...rules,scoring:{...rules.scoring,weights:{...rules.scoring.weights,damage:32}}});
-const damageCard=catalog.cards.find(c=>c.power.vector.damage>0.5);
-assert.ok(changed.byKey.get(damageCard.cardKey).globalScore>damageCard.globalScore);
+const changed=buildCatalog(source,{...rules,scoring:{...rules.scoring,baseline:rules.scoring.baseline+5}});
+const damageCard=catalog.byId.get('caocao');
+assert.equal(changed.byKey.get(damageCard.cardKey).globalScore,damageCard.globalScore+5);
 assert.notEqual(changed.cards[0].ratingVersion,catalog.cards[0].ratingVersion);
 for(const p of products.filter(p=>p.availability==='available')){
   const world=createWorld(rules),cards=manufactureBox(world,p).flat();

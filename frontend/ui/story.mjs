@@ -57,7 +57,7 @@ export function openStory(app,{presenters={}}={}){
         const chars=Array.from([active.text,active.confirmation?.message].filter(Boolean).join('\n\n')),chunk=innerWidth<600||innerHeight<700?80:180;
         const chunks=Array.from({length:Math.max(1,Math.ceil(chars.length/chunk))},(_,i)=>chars.slice(i*chunk,(i+1)*chunk).join(''));
         textPage=Math.min(textPage,chunks.length-1);
-        const art=active.speaker?.appearanceId&&app.manifest.characters[active.speaker.appearanceId];
+        const art=active.speaker&&(app.manifest.characters[active.speaker.appearanceId]||app.manifest.characters['bd-anon']);
         const portrait=art?el('img',{class:'story-portrait',src:art.portrait,alt:active.speaker.name}):el('div');
         const content=el('div',{},[el('strong',{text:active.speaker?.name||'街角故事'}),el('p',{class:'story-text',text:chunks[textPage]})]);
         ctx.body.append(el('div',{class:'story-layout'},[portrait,content]));

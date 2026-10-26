@@ -4,37 +4,15 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createEngineServer, ENGINE_ROOT } from "./integration/engine-server.mjs";
 
+import {serveFile} from './integration/http-files.mjs';
+
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const IMG_DIR = fs.existsSync(path.join(ENGINE_ROOT, "image/character")) ? path.join(ENGINE_ROOT, "image/character") : path.join(ROOT, "assets/character");
-
-const MIME = {
-  ".html": "text/html; charset=utf-8",
-  ".js": "text/javascript; charset=utf-8",
-  ".mjs": "text/javascript; charset=utf-8",
-  ".css": "text/css; charset=utf-8",
-  ".json": "application/json; charset=utf-8",
-  ".jpg": "image/jpeg",
-  ".jpeg": "image/jpeg",
-  ".png": "image/png",
-  ".webp": "image/webp",
-  ".svg": "image/svg+xml",
-};
-
-function send(res, file, type) {
-  fs.readFile(file, (err, buf) => {
-    if (err) {
-      res.writeHead(404, { "content-type": "text/plain; charset=utf-8" });
-      res.end("not found");
-      return;
-    }
-    res.writeHead(200, { "content-type": type || "application/octet-stream", "cache-control": "no-cache" });
-    res.end(buf);
-  });
-}
 
 export async function startShopServer({port=Number(process.env.PORT||5174),enginePort=Number(process.env.ENGINE_PORT||port+1),interceptRequest=null}={}) {
 const engineServer = createEngineServer();
 const server = http.createServer((req, res) => {
+  if(!['GET','HEAD'].includes(req.method)){res.writeHead(405,{'allow':'GET, HEAD'});res.end('method not allowed');return;}
   if(interceptRequest?.(req,res))return;
   let url;
   try { url = decodeURIComponent((req.url || "/").split("?")[0]); }
@@ -48,7 +26,7 @@ const server = http.createServer((req, res) => {
   if (url.startsWith("/img/")) {
     const name = path.basename(url);
     const file = path.join(IMG_DIR, name);
-    if (fs.existsSync(file)) return send(res, file, MIME[path.extname(file).toLowerCase()]);
+    if (fs.existsSync(file)) return void serveFile(req,res,file).catch(()=>res.destroy());
     res.writeHead(404, { "content-type": "text/plain" });
     return res.end("no image");
   }
@@ -63,7 +41,7 @@ const server = http.createServer((req, res) => {
   if(relative.split('/').some(part=>part.startsWith('.'))||/^(desktop|node_modules|test-results|dev|tests)(\/|$)/.test(relative)||/^vendor\/noname\/Home(?:\/|$)/i.test(relative)){
     res.writeHead(404);return res.end('not found');
   }
-  send(res, file, MIME[path.extname(file).toLowerCase()]);
+  void serveFile(req,res,file).catch(()=>res.destroy());
 });
 
 const listen=(s,p)=>new Promise((resolve,reject)=>{const failed=e=>{s.removeListener('listening',ready);reject(e);};const ready=()=>{s.removeListener('error',failed);resolve();};s.once('error',failed);s.once('listening',ready);s.listen(p,'127.0.0.1');});

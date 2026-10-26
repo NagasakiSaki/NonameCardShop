@@ -13,6 +13,8 @@
 /.local/
 /test-results/
 /playwright-report/
+# External model candidates remain local until explicitly integrated.
+/deliverables/
 /.env
 /.env.*
 !.env.example

@@ -55,7 +55,11 @@
     "art:portraits:import": "node tools/character-kit/import-portraits.mjs",
     "art:portraits:build": "python tools/portrait-kit/build.py",
     "test:long-term": "node tests/run.mjs longTerm",
-    "test:ideal-yield": "node tests/run.mjs idealYield"
+    "test:ideal-yield": "node tests/run.mjs idealYield",
+    "backup:stable": "node dev/backup.mjs",
+    "audit:structure": "node tools/audit/project.mjs",
+    "test:structure": "node tests/run.mjs structure",
+    "test:all": "node tests/run.mjs all --keep-going"
   },
   "dependencies": {
     "noname": "file:tools/adapters/noname",

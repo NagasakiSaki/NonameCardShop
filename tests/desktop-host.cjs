@@ -8,6 +8,7 @@ const packaged=process.env.CARD_SHOP_TEST_PACKAGED==='1';
  const app=await _electron.launch({executablePath:path.join(root,packaged?'desktop/dist/win-unpacked/NonameCardShop.exe':'desktop/node_modules/electron/dist/electron.exe'),args:packaged?[]:[path.join(root,'desktop')],env,timeout:60000});let origin;
  try{
   const page=await app.firstWindow();origin=new URL(page.url()).origin;await page.locator('#start-menu').waitFor();await page.getByRole('textbox',{name:'新存档名称',exact:true}).fill('桌面审计隔离档');await page.getByRole('button',{name:'新建存档并开始',exact:true}).click();await page.waitForFunction(()=>window.__cardShopReady===true);
+  const {finishOpeningDialogue}=await import('./fixtures/opening-dialogue.mjs');await finishOpeningDialogue(page);
   await app.evaluate(({dialog},file)=>{globalThis.__auditDialogs=[];dialog.showSaveDialog=async()=>({canceled:false,filePath:file});dialog.showOpenDialog=async()=>({canceled:false,filePaths:[file]});dialog.showMessageBox=async(...args)=>{__auditDialogs.push(args.at(-1));return {response:1};};},exportFile);
   const click=label=>app.evaluate(async({Menu},label)=>{const item=Menu.getApplicationMenu().items.find(i=>i.label==='存档').submenu.items.find(i=>i.label===label);await item.click();},label);
   const until=async fn=>{const end=Date.now()+10000;while(!await fn()){const errors=await app.evaluate(()=>__auditDialogs.filter(d=>d.type==='error'));if(errors.length)throw Error(JSON.stringify(errors));if(Date.now()>end)throw Error('native menu action timed out');await new Promise(r=>setTimeout(r,60));}};

@@ -66,6 +66,7 @@ npm run test:long-term
 | `integration/` | Host 与原生无名杀模式接入 |
 | `vendor/` | 已登记的上游引擎与库，保留原始声明 |
 | `contracts/`、`data/`、`content/` | 接口、规则、注册与内容 |
+| `config/` | 桌面运行范围等跨层维护配置 |
 | `tools/`、`tests/`、`docs/` | 素材工具、测试、维护与设计文档 |
 
 欢迎报告可复现的问题和提交 PR。请注明存档类型、操作步骤、模式、截图与日志，移除私密信息；优先在独立测试档验证。资金/库存/存档只通过后端事务改变，真实胜负只通过引擎桥确认。
@@ -83,5 +84,7 @@ npm run test:long-term
 维护者使用过滤发布副本导出历史，排除上游浏览器用户缓存。当前公开仓库更新使用 `npm run publish:public`；命令会核对目标可见性。`npm run publish:private` 仍只允许私有目标，防止误用。
 
 本地存档、环境变量、测试产物、AI 工具工作目录和未经接入的候选文件不属于自动发布内容，不要直接全量打包本机目录上传。
+
+结构整理与恢复说明见 [工程目录与维护边界](docs/architecture/工程目录与维护边界.md)。`npm run backup:stable` 在工程外创建带真实素材、SHA256 和 Git 历史的本机源码快照；浏览器存档需在游戏内另行导出。`npm run audit:structure` 只读检查引用、分层与缺图清单；`npm run test:all` 汇总完整当前回归并保留失败报告。旧测试规格与替代覆盖见 [归档说明](docs/archive/test-specs/README.md)。
 
 [公开前的历史开发记录](docs/archive/README-公开前历史说明.md) 保留作开发过程参考；版本现状以本页、最新验收与代码为准。

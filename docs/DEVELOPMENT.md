@@ -2,11 +2,13 @@
 
 2026-10-24 技术路线已确认：继续 Phaser + HTML/CSS + JavaScript 规则，沿用现有无名杀与桌面接入。新增功能按 [Phaser 长期维护与优化约定](Phaser长期维护与优化约定.md) 和 [V6 最新总分工](collaboration/commercial-v6/README.md) 推进；其中待建工具和性能基线不视为已实现。
 
-项目根目录为 `D:\GameDev\NonameCardShop`。所有工具按自身位置解析路径，整个目录可以再次搬迁。已关联 GitHub 私有仓库 [NagasakiSaki/NonameCardShop](https://github.com/NagasakiSaki/NonameCardShop)，素材通过 Git LFS 管理。个人进度、依赖、构建产物和上游安装目录中的 Home 用户缓存不上传。
+项目根目录为 `D:\GameDev\NonameCardShop`。所有工具按自身位置解析路径，整个目录可以再次搬迁。GitHub 仓库 [NagasakiSaki/NonameCardShop](https://github.com/NagasakiSaki/NonameCardShop) 已公开，素材通过 Git LFS 管理。个人进度、依赖、构建产物和上游安装目录中的 Home 用户缓存不上传。
 
 2026-10-23：默认入口已改为新版前端与正式 Host，集成说明见 [FRONTEND-INTEGRATION.md](FRONTEND-INTEGRATION.md)。旧页面保留在 `/legacy.html`，安装版没有更新。
 
 ## 日常入口
+
+2026-10-27 目录边界、稳定备份、完整回归及历史测试替代关系见 [工程目录与维护边界](architecture/工程目录与维护边界.md)。当前 `tests/groups.mjs` 是唯一分组清单，`npm run test:all` 会完整汇总，`npm run test:structure` 检查源码和构建边界；跨目录修改先 `npm run backup:stable`，不操作正式玩家存档。
 
 | 操作 | 双击文件 | 命令 |
 | --- | --- | --- |

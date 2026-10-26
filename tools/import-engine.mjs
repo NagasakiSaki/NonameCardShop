@@ -4,7 +4,8 @@ import path from "node:path";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const SOURCE = process.env.NONAME_APP || "D:/无名杀_三国杀/noname_new/resources/app";
+if(!process.env.NONAME_APP)throw Error('请显式设置 NONAME_APP 为待导入的无名杀目录；不会猜测或覆盖当前上游版本。');
+const SOURCE = path.resolve(process.env.NONAME_APP);
 const TARGET = path.join(ROOT, "vendor/noname");
 const verifyOnly = process.argv.includes("--verify");
 const manifest = [];
@@ -16,6 +17,7 @@ const hash = async (file) => {
 async function walk(folder) {
   for (const entry of await fs.promises.readdir(path.join(SOURCE, folder), { withFileTypes: true })) {
     const relative = path.join(folder, entry.name);
+    if(/^Home(?:[\\/]|$)/i.test(relative))continue;
     if (entry.isDirectory()) await walk(relative);
     else if (entry.isFile()) {
       const dest = path.join(TARGET, relative);

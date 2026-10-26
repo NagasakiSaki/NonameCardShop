@@ -9,7 +9,7 @@ import {buildCatalog} from '../modules/backend/catalog.mjs';
 import {publishProducts,makeSealed} from '../modules/backend/products.mjs';
 const source=JSON.parse(fs.readFileSync(new URL('../data/cards.json',import.meta.url))),rules=JSON.parse(fs.readFileSync(new URL('../data/backend-rules.json',import.meta.url)));
 const world=createWorld(rules),catalog=buildCatalog(source,rules);world.products=publishProducts(catalog,rules,1);
-const product=world.products.find(p=>p.productId==='standard'),first=makeSealed(world,product,'pack',100),second=makeSealed(world,product,'pack',100),protectedPack=makeSealed(world,product,'pack',100),box=makeSealed(world,product,'box',2400);protectedPack.protected=true;
+const product=world.products.find(p=>p.productId==='yijiang'),first=makeSealed(world,product,'pack',100),second=makeSealed(world,product,'pack',100),protectedPack=makeSealed(world,product,'pack',100),box=makeSealed(world,product,'box',2400);protectedPack.protected=true;
 const host=await createRuntime({source,rules,repository:memoryRepository({schemaVersion:2,revision:0,world,archives:[],requests:{},legacyResetDone:true})});
 await host.connect({contractVersion:'card-shop-ui/1.0',clientId:'opening-ui-test'});
 const server=await startShopServer({port:0,enginePort:0});let browser;let loseReply=true;

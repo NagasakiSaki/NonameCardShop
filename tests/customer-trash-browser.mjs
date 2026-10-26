@@ -1,3 +1,4 @@
+import {finishOpeningDialogue} from './fixtures/opening-dialogue.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -24,21 +25,21 @@ try{
     const repo=browserRepository();await repo.commit({schemaVersion:2,revision:0,world:w,archives:[],requests:{},legacyResetDone:true},null);await repo.close();
     return {keys:cards.map(c=>c.cardKey),quantity:5};
   });
-  await page.goto(server.origin+'/frontend/index.html?profile=legacy');await page.waitForFunction(()=>window.__cardShopReady===true);
+  await page.goto(server.origin+'/frontend/index.html?profile=legacy');await page.waitForFunction(()=>window.__cardShopReady===true);await finishOpeningDialogue(page);
   const query=(name,p={})=>page.evaluate(async({name,p})=>(await __cardShopApp.host.query(name,p)).data,{name,p});
   async function waitForCount(location,count){const started=Date.now();while(Date.now()-started<20000){if((await query('inventory.list',{kind:'card',location})).total===count)return;await page.waitForTimeout(100);}throw Error(`inventory ${location} did not reach ${count}`);}
   await page.waitForFunction(()=>__cardShopApp.snapshot().actors.find(n=>n.actorId==='buyer')?.activity==='opening');
   assert.equal((await query('inventory.list',{location:'trash'})).total,0);
-  const startSnapshot=await query('shop.snapshot');assert.equal(startSnapshot.actors.find(n=>n.actorId==='buyer').label,'拆卡包');
+  const startSnapshot=await query('shop.snapshot');assert.ok(['拆卡包','前往拆包台'].includes(startSnapshot.actors.find(n=>n.actorId==='buyer').label));
   await page.waitForFunction(()=>__cardShopApp.snapshot().actors.find(n=>n.actorId==='buyer')?.activity==='discarding',null,{timeout:15000});
   await waitForCount('trash',2);
   await page.evaluate(()=>__cardShopApp.goToInteraction('store.trash'));await page.waitForFunction(()=>__cardShopApp.windows.depth>0);
-  try{await page.getByRole('button',{name:'捡回这张',exact:true}).first().waitFor({timeout:5000});}catch(error){console.error(await page.evaluate(()=>({text:document.body.innerText,snapshot:__cardShopApp.snapshot()})));await page.screenshot({path:path.join(output,'failure.png')});throw error;}assert.match(await page.locator('.card-tile').first().innerText(),/拆包顾客 丢弃/);
+  try{await page.getByRole('button',{name:'捡回一张',exact:true}).first().waitFor({timeout:5000});}catch(error){console.error(await page.evaluate(()=>({text:document.body.innerText,snapshot:__cardShopApp.snapshot()})));await page.screenshot({path:path.join(output,'failure.png')});throw error;}assert.match(await page.locator('.facility-window').innerText(),/弃牌来源：拆包顾客/);
   const minute=(await query('shop.snapshot')).clock.minute;await page.waitForTimeout(1000);assert.equal((await query('shop.snapshot')).clock.minute,minute,'trash interaction pauses customers and clock');
-  await page.getByRole('button',{name:'捡回这张',exact:true}).first().click();await waitForCount('trash',1);
+  await page.getByRole('button',{name:'捡回一张',exact:true}).first().click();await waitForCount('trash',1);
   assert.equal((await query('inventory.list',{kind:'card',location:'collection'})).total,1);
   await page.screenshot({path:path.join(output,'shared-trash.png')});
-  await page.getByRole('button',{name:'关闭',exact:true}).click();
+  await page.keyboard.press('Escape');
   await waitForCount('trash',0);
   const people=(await query('management.people')).customers;assert.equal(people.find(n=>n.actorId==='poor').ownedCards,1);assert.equal(people.find(n=>n.actorId==='ordinary').ownedCards,0);
   const mine=(await query('inventory.list',{kind:'card',location:'collection'})).items[0];assert.equal(mine.eligible,true);assert.ok(fixture.keys.includes(mine.cardKey));

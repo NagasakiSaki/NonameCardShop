@@ -9,6 +9,8 @@ import {basketQuote,placeBasketOrder} from '../modules/backend/basket.mjs';
 
 const source=JSON.parse(fs.readFileSync(new URL('../data/cards.json',import.meta.url)));
 const rules={...JSON.parse(fs.readFileSync(new URL('../data/backend-rules.json',import.meta.url))),startingCash:1000000};
+// Reusable transaction unit: progression/unlock gates are covered by operations-v7.
+rules.operationsV7=false;
 const products=publishProducts(buildCatalog(source,rules),rules,1).filter(p=>p.availability==='available'&&!rules.distribution.excludedPacks.includes(p.productId));
 const [a,b]=products;
 let sequence=0;

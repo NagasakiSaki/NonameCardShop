@@ -59,7 +59,7 @@ try{
   v=result.data;while(v.nodeType==='line')v=await api.c('narrative.advance',v.proof);
   assert.equal(v.status,'completed');assert.equal(h.inspect().world.narrative.flags.corner_card_shop.visitPriority,'collection');
   const archived=await api.c('saves.create');const saved=h.inspect().world.narrative;
-  await api.c('saves.load',{archiveId:archived.archiveId});assert.deepEqual(h.inspect().world.narrative,saved,'story state and receipts survive branch change');
+  await api.c('saves.load',{archiveId:archived.archiveId});const loadedStory=h.inspect().world.narrative;assert.ok(loadedStory.eventSequence>=saved.eventSequence);assert.deepEqual({...loadedStory,eventSequence:0},{...saved,eventSequence:0},'story state and receipts survive branch change; the restoration event cursor may advance');
   assert.equal((await h.command({requestId:'late-story-message',type:'narrative.choose',payload:{...oldProof,choiceId:'c01_opt_practice'}})).error.code,'STALE_OPERATION');
   await api.c('saves.loadDay',{archiveId:firstDay.archiveId||firstDay.id});
   const restored=h.inspect().world;assert.equal(restored.clock.minute,480);assert.equal(Object.keys(restored.narrative.completed).length,0);assert.equal(Object.keys(restored.narrative.receipts).length,0);

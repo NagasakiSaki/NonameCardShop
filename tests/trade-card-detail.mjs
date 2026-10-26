@@ -19,7 +19,7 @@ try{
     const [source,rules]=await Promise.all(['/data/cards.json','/data/backend-rules.json'].map(url=>fetch(url).then(r=>r.json())));
     const catalog=buildCatalog(source,rules),world=createWorld(rules),card=catalog.activeCards.find(c=>c.skills.length>0);world.clock.phase='open';world.clock.minute=540;
     for(let i=0;i<3;i++)world.items['detail-card-'+i]={inventoryRef:'detail-card-'+i,ownerId:'player',kind:'card',cardKey:card.cardKey,printedRarity:i===0?'SSR':'N',printVersion:'test-v1',location:'collection',cost:10,protected:false,lock:i===2?'test-match-lock':null};
-    world.stats[card.cardKey+'|bo3']={wins:12,losses:3,draws:1};world.stats[card.cardKey+'|kof']={wins:2,losses:4,draws:0};
+    world.stats[card.cardKey+'|doudizhu-bo3']={wins:12,losses:3,draws:1};world.stats[card.cardKey+'|kof']={wins:2,losses:4,draws:0};
     const raw=await createRuntime({source,rules,repository:memoryRepository({schemaVersion:2,revision:0,world,archives:[],requests:{},legacyResetDone:true})});
     const connection=await raw.connect({contractVersion:'card-shop-ui/1.0',clientId:'detail-workspace-test'});let snapshot=connection.initialSnapshot;
     raw.subscribe(event=>{if(event.type==='snapshotUpdated'||event.type==='worldReset')snapshot=event.data;});
@@ -58,7 +58,7 @@ try{
   assert.equal((await query('shop.snapshot')).clock.pauseReasons.length,2,'nested detail must keep both pause leases');
   assert.equal(await active().locator('.detail-skill img').count(),0);assert.equal(await page.evaluate(()=>window.__detailXss),undefined);
   assert.match(await active().locator('.detail-skill').first().innerText(),/<img src=x/,'skill text must be displayed literally');
-  assert.deepEqual(await active().locator('[data-mode="bo3"] td').allTextContents(),['16','12','3','1']);
+  assert.deepEqual(await active().locator('[data-mode="doudizhu-bo3"] td').allTextContents(),['16','12','3','1']);
   assert.deepEqual(await active().locator('[data-mode="kof"] td').allTextContents(),['6','2','4','0']);
   const hero=await active().locator('.hero-art').boundingBox();assert.ok(hero.width>=300&&hero.height>=400);
   await active().getByRole('button',{name:'查看技能源码',exact:true}).click();await active().getByRole('button',{name:'重试加载技能源码',exact:true}).waitFor();

@@ -1,3 +1,4 @@
+import {finishOpeningDialogue} from './fixtures/opening-dialogue.mjs';
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import {chromium} from 'playwright';
@@ -19,7 +20,7 @@ try{
     await page.screenshot({path:out+'/'+label+'.png'});
     assert.ok(sizes.every(s=>s.sh<=s.h+2&&s.sw<=s.w+2),label+': '+JSON.stringify(sizes));assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),label+' page width');
   }
-  await page.goto(server.origin+'/?profile=legacy');await page.waitForFunction(()=>window.__cardShopReady===true);
+  await page.goto(server.origin+'/?profile=legacy');await page.waitForFunction(()=>window.__cardShopReady===true);await finishOpeningDialogue(page);
   assert.equal((await q('player.starterGift')).quantity,1);
   await go('store.counter','supplier');await page.locator('[data-purchase-root] .f6-tile').first().waitFor();
   const product=(await q('products.list',{limit:200})).items.find(p=>p.availability==='available');assert.ok(product.prices.pack.wholesale<=210);
@@ -44,7 +45,7 @@ try{
       const cardKey='noname-1.11.6:'+id,ref='ui-'+owner+'-'+id;w.items[ref]={inventoryRef:ref,kind:'card',ownerId:owner,cardKey,printedRarity:'R',printVersion:'ui-test',location:'collection',cost:1,protected:false,lock:null};if(owner!=='player')w.circulation[cardKey]={day:w.clock.day,source:'isolated-ui-fixture'};
     }
     for(const n of w.npcs)if(n.actorId!==npc.actorId)n.nextMatchAt=10000;
-    await c('saves.import',{content:JSON.stringify(archive)});await page.reload();await page.waitForFunction(()=>window.__cardShopReady===true);
+    await c('saves.import',{content:JSON.stringify(archive)});await page.reload();await page.waitForFunction(()=>window.__cardShopReady===true);await finishOpeningDialogue(page);
   }
   async function selectTeam(mode,waitingOnly=false){
     await go('battleRoom.service','combat');await page.getByRole('button',{name:'选择武将 / 调整阵容',exact:true}).click();await page.locator('[data-card-ref]').first().waitFor();

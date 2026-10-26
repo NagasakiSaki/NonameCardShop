@@ -17,7 +17,7 @@ export function initialiseV7(w,defaults,{fresh=false}={}){
     w.rules.distribution??={};w.rules.distribution.excludedPacks??=[];
     w.rules.distribution.excludedPacks=[...new Set([...w.rules.distribution.excludedPacks,...V7_RETIRED])];
     w.rules.strengthPricing=defaults?.strengthPricing?.version==='strength-tiers-4'?clone(defaults.strengthPricing):{version:'strength-tiers-4',boxDiscount:.95,tiers:[{id:'entry',label:'基础档',maxScore:53,packWholesale:150,packRetail:210},{id:'standard',label:'进阶档',maxScore:57,packWholesale:255,packRetail:360},{id:'expert',label:'旗舰档',maxScore:10000,packWholesale:360,packRetail:510}]};
-    w.rules.starterGift={enabled:true,unit:'box',quantity:1,productId:'yijiang'};
+    w.rules.starterGift=clone(defaults?.starterGift??{enabled:true,unit:'box',quantity:1,productId:'yijiang'});
     w.operationsVersion=1;
   }
   if(!w.progression)w.progression=createProgressionState({epoch:w.worldId,firstDueDay:fresh?longTermPolicy.challenge.firstDay:w.clock.day+1,intervalDays:longTermPolicy.challenge.intervalDays});

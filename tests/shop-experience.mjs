@@ -30,7 +30,8 @@ assert.deepEqual(view.visits.unconvertedReasons,[{code:'budget',label:'预算不
 const copy=structuredClone(w);experienceInsights(w,catalog);experienceGuide(w);experienceStories(w,catalog);assert.deepEqual(w,copy,'queries are pure');
 w.log=[];assert.equal(experienceInsights(w,catalog).visits.departed,3,'statistics survive bounded-log eviction');
 const overpriced=makeSealed(w,product,'pack',product.prices.pack.wholesale);overpriced.location='retail';overpriced.retailPrice=100000;
-assert.equal(customerDecision(w,catalog,w.npcs[0]).reason,'budget');w.npcs[0].wallet.available=200000;assert.equal(customerDecision(w,catalog,w.npcs[0]).reason,'price');
+w.npcs[0].wallet.available=0;assert.equal(customerDecision(w,catalog,w.npcs[0]).reason,'budget');
+w.npcs[0].wallet.available=200000;w.npcs[0].visit={elapsedSeconds:0,idleSeconds:0,budgetAmount:200000,budgetSpent:0};assert.equal(customerDecision(w,catalog,w.npcs[0]).reason,'price');
 validateWorld(w);
 
 // Three-day guidance remains optional; real orders/listing/rewards feed it, and rewind restores it.
@@ -59,8 +60,8 @@ const old=await createRuntime({source,rules,repository:memoryRepository(record(l
 // Real seeded simulation, reserved fees, invitation routing, one settlement, provenance and day-start rewind.
 const arena=createWorld({...rules,npcIntervalMinutes:2,npcMatchIntervalMinutes:10});arena.clock.day=3;arena.clock.minute=480;arena.products=publishProducts(catalog,arena.rules,3);arena.npcs=[npc('甲'),npc('乙')];
 for(const [index,n]of arena.npcs.entries()){
-  const card=catalog.activeCards[index],ref='event-card-'+index;arena.items[ref]={inventoryRef:ref,ownerId:'player',kind:'card',location:'collection',cardKey:card.cardKey,printedRarity:card.currentRarity,printVersion:'fixture',cost:20,protected:false,lock:null};
-  discardCard(arena,arena.items[ref],'player');pickTrashCard(arena,arena.items[ref],n.actorId);enterCirculation(arena,card.cardKey,'fixture',ref);
+  for(let j=0;j<3;j++){const card=catalog.activeCards[j],ref='event-card-'+index+'-'+j;arena.items[ref]={inventoryRef:ref,ownerId:'player',kind:'card',location:'collection',cardKey:card.cardKey,printedRarity:card.currentRarity,printVersion:'fixture',cost:20,protected:false,lock:null};
+  discardCard(arena,arena.items[ref],'player');pickTrashCard(arena,arena.items[ref],n.actorId);enterCirculation(arena,card.cardKey,'fixture',ref);}
 }
 const eventHost=await createRuntime({source,rules:arena.rules,repository:memoryRepository(record(arena))});await eventHost.connect({contractVersion:'card-shop-ui/1.0',clientId:'event'});const eventApi=client(eventHost);
 const rewind=await eventApi.command('saves.create');assert.ok((await eventApi.query('experience.events')).available);

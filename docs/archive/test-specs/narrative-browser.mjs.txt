@@ -1,3 +1,4 @@
+import {finishOpeningDialogue} from './fixtures/opening-dialogue.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert/strict';
@@ -20,10 +21,10 @@ try{
     const state=await panel().evaluate(e=>({body:e.querySelector('.window__body').scrollHeight<=e.querySelector('.window__body').clientHeight+2,inside:e.getBoundingClientRect().right<=innerWidth+1&&e.getBoundingClientRect().bottom<=innerHeight+1}));
     assert(state.body&&state.inside,JSON.stringify({name,state}));
   }
-  await page.goto(server.origin+'/?profile=legacy');await page.waitForFunction(()=>window.__cardShopReady===true);
+  await page.goto(server.origin+'/?profile=legacy');await page.waitForFunction(()=>window.__cardShopReady===true);await finishOpeningDialogue(page);
   const firstDay=(await q('saves.days')).items[0];
   assert((await q('narrative.available')).enabled);
-  await page.locator('[data-action="story"]').click();await panel().getByRole('button',{name:'序章《灯亮之前》',exact:true}).click();
+  await page.evaluate(()=>__cardShopApp.openPanel('story'));await panel().getByRole('button',{name:'序章《灯亮之前》',exact:true}).click();
   await panel().getByText('林澄',{exact:true}).waitFor();
   const paused=(await q('shop.snapshot')).clock.minute;await page.waitForTimeout(350);assert.equal((await q('shop.snapshot')).clock.minute,paused);
   assert.equal(await panel().locator('.story-portrait').evaluate(i=>i.complete&&i.naturalWidth>0),true);
@@ -44,7 +45,7 @@ try{
   await go('store.retail',{purchaseTab:'retail'});await c('retail.listAll',{inventoryRefs:packs.inventoryRefs});await close();
   await page.locator('[data-action="business"]').click();
   await until(async()=>(await session()).status==='presenting');assert((await q('checkout.status')).transactions.length>0);
-  await page.locator('[data-action="story"]').click();
+  await page.evaluate(()=>__cardShopApp.openPanel('story'));
   while((await session()).nodeType==='line')await next();
   assert.equal((await session()).proof.nodeId,'c01_priority');
   await page.evaluate(()=>{const host=__cardShopApp.host,original=host.command.bind(host);let once=false;host.command=async input=>{const result=await original(input);if(!once&&input.type==='narrative.choose'){once=true;throw Error('controlled lost response');}return result;};});
@@ -59,10 +60,10 @@ try{
   }
   assert.equal((await session()).status,'completed');await fit('completed-mobile');
   await close();await page.setViewportSize({width:1440,height:900});
-  const save=await c('saves.create');await page.reload();await page.waitForFunction(()=>window.__cardShopReady===true);assert.equal((await session()).status,'completed');
+  const save=await c('saves.create');await page.reload();await page.waitForFunction(()=>window.__cardShopReady===true);await finishOpeningDialogue(page);assert.equal((await session()).status,'completed');
   // Loading while the old dialogue is still open must not let its close callback
   // defer the restored session just because it has the same stable session ID.
-  await page.locator('[data-action="story"]').click();
+  await page.evaluate(()=>__cardShopApp.openPanel('story'));
   await panel().getByRole('button',{name:/^林澄支线/}).click();
   const activeSave=await c('saves.create'),oldSession=(await session()).proof.sessionId;
   await c('saves.load',{archiveId:activeSave.archiveId});await until(async()=>await panel().count()===0);await page.waitForTimeout(150);

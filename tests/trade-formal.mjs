@@ -1,3 +1,4 @@
+import {finishOpeningDialogue} from './fixtures/opening-dialogue.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {chromium} from 'playwright';
@@ -18,17 +19,17 @@ try{
     rules.startingCash=500000;rules.deliveryMinutes=1;rules.minutesPerSecond=10;rules.npcAutoBattles=false;
     const w=createWorld(rules),catalog=buildCatalog(source,rules);w.clock.phase='open';w.clock.minute=540;w.nextNpcMinute=100000;w.products=publishProducts(catalog,rules,1);
     const stand=map.interactions.find(i=>i.id==='store.counter').stand;w.player.x=stand.x;w.player.y=stand.y;
-    const protectedPack=makeSealed(w,w.products.find(p=>p.productId==='standard'),'pack',100);protectedPack.protected=true;
-    const c=catalog.byId.get('caocao');for(let i=0;i<3;i++)w.items['test-copy-'+i]={inventoryRef:'test-copy-'+i,ownerId:'player',kind:'card',cardKey:c.cardKey,printedRarity:c.currentRarity,printVersion:'formal-test',location:'collection',cost:20,protected:false,lock:null};
+    const protectedPack=makeSealed(w,w.products.find(p=>p.productId==='yijiang'),'pack',100);protectedPack.protected=true;
+    const c=catalog.byId.get('caocao');for(let i=0;i<3;i++)w.items['test-copy-'+i]={inventoryRef:'test-copy-'+i,ownerId:'player',kind:'card',cardKey:c.cardKey,printedRarity:'SR',printVersion:'formal-test',location:'collection',cost:20,protected:false,lock:null};
     const repo=browserRepository();await repo.commit({schemaVersion:2,revision:0,world:w,archives:[],requests:{},legacyResetDone:true},null);await repo.close();
   });
   // Prior formal UI remains an explicit rollback path; the new default is covered by playability-integration.
-  await page.goto(server.origin+'/?tradeUI=previous&profile=legacy');await page.waitForFunction(()=>window.__cardShopReady===true);
+  await page.goto(server.origin+'/?tradeUI=previous&profile=legacy');await page.waitForFunction(()=>window.__cardShopReady===true);await finishOpeningDialogue(page);
   await page.evaluate(()=>__cardShopApp.openPanel('supplier',{tab:'order'}));await page.locator('[data-trade-workspace]').waitFor();await page.locator('.product-tile').first().waitFor();
-  assert.equal(await page.locator('.product-tile').count(),19);
-  const box=page.locator('.product-tile').filter({has:page.getByRole('button',{name:'标准 · 密封盒 商品信息',exact:true})});await box.getByRole('button',{name:'＋ 加入购物篮',exact:true}).click();
-  await button('独立散包').click();const pack=page.locator('.product-tile').filter({has:page.getByRole('button',{name:'标准 · 散包 商品信息',exact:true})});await pack.getByRole('button',{name:'＋ 加入购物篮',exact:true}).click();
-  await page.getByRole('spinbutton',{name:'standard pack 采购数量',exact:true}).fill('2');await page.getByRole('spinbutton',{name:'standard pack 采购数量',exact:true}).press('Tab');
+  assert.equal(await page.locator('.product-tile').count(),16);
+  const box=page.locator('.product-tile').filter({has:page.getByRole('button',{name:'一将成名 · 密封盒 商品信息',exact:true})});await box.getByRole('button',{name:'＋ 加入购物篮',exact:true}).click();
+  await button('独立散包').click();const pack=page.locator('.product-tile').filter({has:page.getByRole('button',{name:'一将成名 · 散包 商品信息',exact:true})});await pack.getByRole('button',{name:'＋ 加入购物篮',exact:true}).click();
+  await page.getByRole('spinbutton',{name:'yijiang pack 采购数量',exact:true}).fill('2');await page.getByRole('spinbutton',{name:'yijiang pack 采购数量',exact:true}).press('Tab');
   await button('获取整篮报价').click();await page.locator('[data-basket-quote]').waitFor();assert.equal((await query('supplier.orders')).total,0,'quoting must not create an order');
   await page.screenshot({path:output+'/real-supplier.png',animations:'disabled'});
   await page.evaluate(()=>{const submit=__cardShopApp.host.command;let lose=true;__cardShopApp.host.command=async request=>{const r=await submit(request);if(lose&&request.type==='supplier.placeBasketOrder'&&r.ok){lose=false;throw Error('测试：订单已经入账，客户端未收到响应');}return r;};});
@@ -52,7 +53,7 @@ try{
   await page.setViewportSize({width:1440,height:950});await page.evaluate(()=>__cardShopApp.openPanel('supplier',{tab:'order'}));await page.locator('.product-tile').first().waitFor();
   const archive=await command('saves.create');await pack.getByRole('button',{name:'＋ 加入购物篮',exact:true}).click();await button('获取整篮报价').click();await page.locator('[data-basket-quote]').waitFor();
   const oldBranch=(await query('shop.snapshot')).branchId;await command('saves.load',{archiveId:archive.archiveId});await page.waitForFunction(()=>__cardShopApp.windows.depth===0);assert.notEqual((await query('shop.snapshot')).branchId,oldBranch);
-  await page.evaluate(()=>__cardShopApp.openPanel('supplier',{tab:'order'}));await page.locator('.product-tile').first().waitFor();assert.equal(await page.locator('[data-basket-quote]').count(),0);assert.equal(await page.getByRole('spinbutton',{name:'standard pack 采购数量',exact:true}).inputValue(),'1');assert.equal((await query('supplier.orders')).total,2);await close();
+  await page.evaluate(()=>__cardShopApp.openPanel('supplier',{tab:'order'}));await page.locator('.product-tile').first().waitFor();assert.equal(await page.locator('[data-basket-quote]').count(),0);assert.equal(await page.getByRole('spinbutton',{name:'yijiang pack 采购数量',exact:true}).inputValue(),'1');assert.equal((await query('supplier.orders')).total,2);await close();
   assert.deepEqual(errors,[]);assert.deepEqual(bad,[]);await page.evaluate(()=>__cardShopApp.host.disconnect());
-  console.log('PASS formal trading: actual root Host, 19 themes, mixed atomic purchase, lost-response original-ID retry, paused world, instant receipt, protected stock, exact opening, full skill code, nested pause, Shadow DOM typing, real surplus listings, narrow layout and archive branch/quote invalidation.');
+  console.log('PASS formal trading: actual root Host, 16 themes, mixed atomic purchase, lost-response original-ID retry, paused world, instant receipt, protected stock, exact opening, full skill code, nested pause, Shadow DOM typing, real surplus listings, narrow layout and archive branch/quote invalidation.');
 }catch(e){try{const p=browser.contexts()[0].pages()[0];await p.screenshot({path:output+'/failure.png'});console.error('Failure state',JSON.stringify(await p.evaluate(async()=>({orders:await __cardShopApp.host.query('supplier.orders'),snapshot:__cardShopApp.snapshot(),draft:__cardShopApp.tradeDrafts?.get('supply')})),null,2));}catch{}throw e;}finally{await browser?.close();await server.close();}

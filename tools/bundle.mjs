@@ -4,9 +4,10 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { parse } from "./vendor/acorn.mjs";
+import {nonameRoot,characterRoot,coreSkillFile,sourceLabel} from './lib/noname-source.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const APP = process.env.NONAME_APP || "D:/无名杀_三国杀/noname_new/resources/app";
+const APP = nonameRoot;
 const read = (file) => fs.readFileSync(file, "utf8");
 const writeJSON = (file, value) => {
   fs.mkdirSync(path.dirname(file), { recursive: true });
@@ -23,7 +24,7 @@ globalThis.localStorage = { getItem: () => null, setItem() {} };
 const { captured } = await import("noname");
 const modules = [];
 for (const pack of data.packs) {
-  const file = `tools/_chars/${pack.id}.js`;
+  const file = sourceLabel(path.join(characterRoot,`${pack.id}.js`));
   const before = captured.length;
   await import(pathToFileURL(path.join(ROOT, file)).href);
   const pkg = captured.splice(before).find((item) => item.type === "character" && item.data);
@@ -32,10 +33,7 @@ for (const pack of data.packs) {
 }
 
 // Preserve core skills too; references such as inherit/group may cross packages.
-const coreFile = "tools/_core/skill.js";
-fs.mkdirSync(path.join(ROOT, "tools/_core"), { recursive: true });
-const installedCore = path.join(APP, "noname/library/skill.js");
-if (fs.existsSync(installedCore)) fs.copyFileSync(installedCore, path.join(ROOT, coreFile));
+const coreFile = sourceLabel(coreSkillFile);
 if (fs.existsSync(path.join(ROOT, coreFile))) modules.push({ id: "core", file: coreFile, data: {} });
 const installedLicense = path.join(APP, "LICENSE");
 if (fs.existsSync(installedLicense)) fs.copyFileSync(installedLicense, path.join(ROOT, "NONAME-LICENSE"));

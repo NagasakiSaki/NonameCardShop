@@ -2,6 +2,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+import {projectRoot,nonameRoot,characterRoot} from './lib/noname-source.mjs';
 
 globalThis.window = globalThis;
 globalThis.document = {
@@ -11,9 +12,9 @@ globalThis.document = {
 };
 globalThis.localStorage = { getItem: () => null, setItem() {} };
 
-const APP = "D:/无名杀_三国杀/noname_new/resources/app";
-const CHARS_DIR = path.resolve("tools/_chars");
-const OUT = path.resolve("data/cards.json");
+const APP = nonameRoot;
+const CHARS_DIR = characterRoot;
+const OUT = path.join(projectRoot,"data/cards.json");
 
 // ---------- 卡包谱系（分类设计） ----------
 const LINEAGES = [

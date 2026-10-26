@@ -10,7 +10,8 @@ import * as V7 from './operations-v7.mjs';
 import {getFormat,buildRoundPlan} from '../combat-formats/index.mjs';
 import {initialiseV7,isV7,assertSupply,replenishCustomer} from './v7-policy.mjs';
 import {CONTRACT,RARITIES,clone,id,need,fail,integer,errorDTO,page,serial,debit,credit,sum} from './common.mjs';
-import {validateRules,buildCatalog,cardSummary,catalogList} from './catalog.mjs';
+import {validateRules,cardSummary,catalogList} from './catalog.mjs';
+import {createCatalogProvider} from './catalog-cache.mjs';
 import {publishProducts,productDTO,unsealBox} from './products.mjs';
 import {createWorld,validateWorld,snapshot,note} from './world.mjs';
 import {owned,free,playerItem,referencePrice,updatePrices,inventoryList,openingPreview,executeOpening,surplusPreview,listSurplus,placeListing,settleTrade,receiveOrder,tickEconomy,finishCustomerVisits,income,wallet} from './trading.mjs';
@@ -42,21 +43,22 @@ import {createRegistry} from '../narrative/registry.mjs';
 
 export async function createRuntime({source,rules,repository,maps=[],managementConfig=null,backgroundAvailable=false,now=()=>Date.now(),storyPacks=[],storyExtensions={},storyDiagnostics=[],storyActiveHashes=null,modeCapabilities=[]}){
   validateRules(rules);
+  const catalogFor=createCatalogProvider(source);
   const verifiedPacks=await Promise.all(storyPacks.map(p=>loadStoryPack(p,{registry:createRegistry(storyExtensions)})));
   const narrative=createNarrativeRuntime({packs:verifiedPacks,extensions:storyExtensions,diagnostics:storyDiagnostics,currentHashes:storyActiveHashes});
   const navigation=new Map(maps.map(m=>[m.mapId,validateMap(m)]));
-  let catalog=buildCatalog(source,rules),record=await repository.read();
+  let catalog=catalogFor(rules),record=await repository.read();
   function upgradeDistribution(world){
     if(!world.rules.distribution||world.products.some(p=>p.collationVersion!==DEFAULT_DISTRIBUTION.version)){
       world.rules.distribution??=clone(rules.distribution||DEFAULT_DISTRIBUTION);
-      world.products=publishProducts(buildCatalog(source,world.rules),world.rules,world.clock.day,world.prices,world);
+      world.products=publishProducts(catalogFor(world.rules),world.rules,world.clock.day,world.prices,world);
       note(world,'distributionUpgraded',{version:DEFAULT_DISTRIBUTION.version,legacyContentsPreserved:true});
     }
     for(const item of Object.values(world.items))if(item.ownerId==='player'&&item.location==='retail'&&['pack','box'].includes(item.kind)&&!productEnabled(world.rules,item.productId))item.location='stock';
   }
   if(!record){const world=createWorld(rules);initialiseRooms(world);initialiseRating(world,rules);initialiseV7(world,rules,{fresh:true});if(narrative.contentAvailable)narrative.initialise(world,true);initialiseManagement(world,managementConfig);ensureRegulars(world);world.products=publishProducts(catalog,world.rules,1,world.prices,world);grantStarterGift(world);Debt.initialiseLongTerm(world);record={schemaVersion:2,revision:0,world,archives:[],requests:{},legacyResetDone:false};record.archives.push(archive(world,'start'));await repository.commit(record,null);}
   upgradeDistribution(record.world);initialiseManagement(record.world,managementConfig);ensureRegulars(record.world);record.world.player.actorId='actor:owner';
-  validateWorld(record.world);validateRules(record.world.rules);catalog=buildCatalog(source,record.world.rules);
+  validateWorld(record.world);validateRules(record.world.rules);catalog=catalogFor(record.world.rules);
   for(const m of record.world.matches)if(m.status==='running'&&!m.simulated){
     if(m.background&&(record.world.pendingEngineEvents||[]).some(e=>e.matchId===m.matchId&&e.message.matchId===m.gameId))m.needsRestartAfterEvents=true;
     else m.status='interrupted';
@@ -66,15 +68,15 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
   function normaliseActors(world){
     Debt.initialiseLongTerm(world);
     Debt.ensureLoanIntro(world);
-    initialiseRooms(world);if(initialiseRating(world,rules))world.products=publishProducts(buildCatalog(source,world.rules),world.rules,world.clock.day,world.prices,world);
-    if(initialiseV7(world,rules))world.products=publishProducts(buildCatalog(source,world.rules),world.rules,world.clock.day,world.prices,world);
+    initialiseRooms(world);if(initialiseRating(world,rules))world.products=publishProducts(catalogFor(world.rules),world.rules,world.clock.day,world.prices,world);
+    if(initialiseV7(world,rules))world.products=publishProducts(catalogFor(world.rules),world.rules,world.clock.day,world.prices,world);
     if(narrative.contentAvailable||world.narrative)narrative.initialise(world,false);
     initialiseExperience(world);
     if(world.gameplayRevision!==2){
       world.rules.npcSimulation=rules.npcSimulation!==false;world.rules.npcSimulationSeconds=rules.npcSimulationSeconds||18;
       world.rules.strengthPricing??=clone(DEFAULT_STRENGTH_PRICING);
       for(const m of world.matches)if(world.rules.npcSimulation!==false&&m.background&&!m.simulated&&m.status!=='finished')voidNpcMatch(world,m.matchId,'切换到 NPC 模拟对局，旧后台桌已取消并释放。');
-      world.products=publishProducts(buildCatalog(source,world.rules),world.rules,world.clock.day,world.prices,world);world.gameplayRevision=2;
+      world.products=publishProducts(catalogFor(world.rules),world.rules,world.clock.day,world.prices,world);world.gameplayRevision=2;
     }
     initialiseDailyTasks(world);
     migrateVisits(world);
@@ -97,7 +99,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
       }
     }
   }
-  normaliseActors(record.world);V7.restoreV7(record.world);Rooms.tickRooms(record.world,buildCatalog(source,record.world.rules),modeCapabilities,{restore:true});catalog=buildCatalog(source,record.world.rules);
+  normaliseActors(record.world);V7.restoreV7(record.world);Rooms.tickRooms(record.world,catalogFor(record.world.rules),modeCapabilities,{restore:true});catalog=catalogFor(record.world.rules);
   for(const operation of Object.values(record.requests)){operation.worldId??=record.world.worldId;operation.branchId??=record.world.branchId;}
   const serially=fn=>{const result=queue.then(fn);queue=result.catch(()=>{});return result;};
   const reasons=()=>[...[...pauses.values()].map(p=>({code:p.ownerId,label:p.reason})),...(activeTimeMatch(record.world)?[{code:'match-time',label:'店长对局中'}]:[])];
@@ -112,7 +114,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
   function archive(world,slot){
     const saved=clone(world);
     for(const event of saved.pendingEngineEvents||[]){const m=saved.matches.find(m=>m.matchId===event.matchId);if(m?.status==='running'&&m.gameId===event.message.matchId)engineMessage(saved,event.matchId,event.message);}
-    applyMatchTime(saved,buildCatalog(source,saved.rules),navigation);
+    applyMatchTime(saved,catalogFor(saved.rules),navigation);
     saved.pendingEngineEvents=[];let restarted=false;
     for(const m of saved.matches){delete m.needsRestartAfterEvents;if(m.background&&!m.simulated&&m.status==='running'){m.status='interrupted';restarted=true;}}
     return {id:id('archive'),format:'noname-shop-world-save',version:2,worldId:world.worldId,branchId:world.branchId,day:saved.clock.day,minute:saved.clock.minute,slot,createdAt:now(),...(restarted?{recoveryNote:'读取后 NPC 当前小局重开，已完成小局、费用和比分保留。'}:{}),world:saved};
@@ -142,7 +144,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
       const before=clone(next.world.wallet);narrative.observe(next.world);
       recordWalletChange(next.world,before,{operation:'narrative',label:'故事进展'});
     }
-    validateWorld(next.world);const rulesChanged=JSON.stringify(next.world.rules)!==JSON.stringify(w().rules);await repository.commit(next,record.revision);record=next;if(rulesChanged)catalog=buildCatalog(source,w().rules);publish();
+    validateWorld(next.world);const rulesChanged=JSON.stringify(next.world.rules)!==JSON.stringify(w().rules);await repository.commit(next,record.revision);record=next;if(rulesChanged)catalog=catalogFor(w().rules);publish();
     if(narrativeRevision!==w().narrative?.revision)emit('narrativeUpdated',narrative.view(w()));
   }
   function token(map,value){const tokenId=id('token');map.set(tokenId,{...clone(value),worldId:w().worldId,branchId:w().branchId,day:w().clock.day});return tokenId;}
@@ -283,9 +285,9 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
         initialiseExperience(world);
         initialiseDailyTasks(world);
         for(const n of world.npcs){if(isV7(world)){const result=replenishCustomer(world,n);if(result?.supplementedAmount)note(world,'npcDailyIncome',{actorId:n.actorId,externalFunds:result.supplementedAmount});}else{credit(n.wallet,world.rules.npcDailyIncome);note(world,'npcDailyIncome',{actorId:n.actorId,externalFunds:world.rules.npcDailyIncome});}}
-        updatePrices(world,buildCatalog(source,world.rules));world.products=publishProducts(buildCatalog(source,world.rules),world.rules,world.clock.day,world.prices,world);world.nextNpcMinute=540;
+        updatePrices(world,catalogFor(world.rules));world.products=publishProducts(catalogFor(world.rules),world.rules,world.clock.day,world.prices,world);world.nextNpcMinute=540;
         for(const o of world.orders)if(o.status==='pending'&&o.dueAt<=world.clock.day*1440+480)o.status='arrived';
-        if(world.management){world.management.nextRestockAt=world.clock.day*1440+480+world.management.config.restockIntervalMinutes;tickManagement(world,buildCatalog(source,world.rules));}
+        if(world.management){world.management.nextRestockAt=world.clock.day*1440+480+world.management.config.restockIntervalMinutes;tickManagement(world,catalogFor(world.rules));}
         saveArchive(next,'start');return {};
       }
       case 'supplier.placeBasketOrder':{
@@ -343,7 +345,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
         if(input.type==='saves.loadDay')need(a?.slot==='start'&&a.minute===480&&a.world?.clock.minute===480&&a.world?.clock.phase==='preparing','NOT_DAY_START','请选择对应日期的日初档；即时备份不能冒充当天开始。');
         need(a?.format==='noname-shop-world-save'&&a.version===2,'INVALID_SAVE','档案格式不支持。');validateWorld(a.world);validateRules(a.world.rules);
         for(const i of Object.values(a.world.items))need(['pack','box','card'].includes(i.kind)&&Number.isSafeInteger(i.cost)&&i.cost>=0&&(!i.cardKey||catalog.byKey.has(i.cardKey)),'INVALID_SAVE','库存数据不完整。');
-        saveArchive(next,'before-load');next.world=clone(a.world);upgradeDistribution(next.world);initialiseManagement(next.world,managementConfig);ensureRegulars(next.world);next.world.player.actorId='actor:owner';normaliseActors(next.world);next.world.branchLineage=[next.world.branchId,...(next.world.branchLineage||[])].slice(0,120);next.world.branchId=id('branch');V7.restoreV7(next.world);Rooms.tickRooms(next.world,buildCatalog(source,next.world.rules),modeCapabilities,{restore:true});next.world.pendingEngineEvents=[];for(const m of next.world.matches)if(m.status==='running'&&!m.simulated)m.status='interrupted';if(input.type==='saves.loadDay')saveArchive(next,'start');return {worldId:next.world.worldId,branchId:next.world.branchId};
+        saveArchive(next,'before-load');next.world=clone(a.world);upgradeDistribution(next.world);initialiseManagement(next.world,managementConfig);ensureRegulars(next.world);next.world.player.actorId='actor:owner';normaliseActors(next.world);next.world.branchLineage=[next.world.branchId,...(next.world.branchLineage||[])].slice(0,120);next.world.branchId=id('branch');V7.restoreV7(next.world);Rooms.tickRooms(next.world,catalogFor(next.world.rules),modeCapabilities,{restore:true});next.world.pendingEngineEvents=[];for(const m of next.world.matches)if(m.status==='running'&&!m.simulated)m.status='interrupted';if(input.type==='saves.loadDay')saveArchive(next,'start');return {worldId:next.world.worldId,branchId:next.world.branchId};
       }
       case 'world.changeRoom':{
         const map=navigation.get(world.player.roomId),door=map?.anchors[p.anchorId];need(door?.targetRoom&&door?.targetAnchor,'NOT_FOUND','房间出口不存在。');need(Math.hypot(world.player.x-door.x,world.player.y-door.y)<=(door.radius||24),'NOT_IN_RANGE','请先走到门口。');const nextMap=navigation.get(door.targetRoom);let anchor=door.targetSpawn||nextMap?.anchors[door.targetAnchor];

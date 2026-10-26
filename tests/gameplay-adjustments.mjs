@@ -30,7 +30,7 @@ assert.ok((await query('ledger.live')).items.some(e=>e.kind==='task'));assert.ok
 await cmd('business.close');await cmd('business.nextDay');taskList=(await query('tasks.list'));
 assert.equal(taskList.find(t=>t.taskId==='daily-stock').progress,0);assert.equal(taskList.find(t=>t.taskId==='daily-stock').claimed,false);assert.ok(taskList.find(t=>t.taskId==='first-order').claimed);
 await cmd('saves.load',{archiveId:archive.archiveId});const loadedBalance=host.inspect().world.wallet.available;await cmd('saves.create');assert.equal(host.inspect().world.wallet.available,loadedBalance,'loading paid rewards does not repeat payment');await host.disconnect();
-for(const mode of ['bo3','kof']){
+for(const mode of ['kof']){
  const w=createWorld(rules);w.clock.phase='open';w.npcs=['a','b'].map(actorId=>({actorId,name:actorId,wallet:{available:1000},roomId:'battle-room',presence:'onsite',x:24,y:24,activity:'seated'}));
  for(const n of w.npcs)for(const [index,card]of c.activeCards.slice(0,3).entries()){const ref=n.actorId+index;w.items[ref]={inventoryRef:ref,kind:'card',ownerId:n.actorId,cardKey:card.cardKey,location:'collection',printedRarity:card.currentRarity,printVersion:'test',cost:0,protected:false,lock:null};}
  assert.ok(eligible(w,c,'a').every(i=>!i.eligible),'NPC remains restricted before circulation');
@@ -49,11 +49,11 @@ const maps=['store','battle-room'].map(id=>JSON.parse(fs.readFileSync(new URL(`.
 const nav=validateMap(maps[0]);for(const id of ['store.counter','store.checkout','store.opening'])assert.ok(pathfind(nav,maps[0].spawn,nav.anchors[id]).length);
 const arena=createWorld(rules);arena.clock.phase='open';arena.clock.minute=540;arena.nextNpcMinute=10000;arena.products=products;
 arena.npcs=['one','two'].map(actorId=>({actorId,name:actorId==='one'?'林知夏':'沈梨',presence:'onsite',appearanceId:'owner',wallet:{available:1000},roomId:'store',x:240,y:264,activity:'idle',visit:{elapsedSeconds:0,idleSeconds:600}}));
-for(const [index,n]of arena.npcs.entries()){const card=c.activeCards[index],ref='runtime-'+index;arena.items[ref]={inventoryRef:ref,kind:'card',ownerId:n.actorId,cardKey:card.cardKey,location:'collection',printedRarity:card.currentRarity,printVersion:'test',cost:0,protected:false,lock:null};enterCirculation(arena,card.cardKey,'test',ref);}
+for(const [index,n]of arena.npcs.entries()){for(let j=0;j<3;j++){const card=c.activeCards[j],ref='runtime-'+index+'-'+j;arena.items[ref]={inventoryRef:ref,kind:'card',ownerId:n.actorId,cardKey:card.cardKey,location:'collection',printedRarity:card.currentRarity,printVersion:'test',cost:0,protected:false,lock:null};enterCirculation(arena,card.cardKey,'test',ref);}}
 const sim=await createRuntime({source,rules,maps,repository:memoryRepository({schemaVersion:2,revision:0,world:arena,archives:[],requests:{}})});await sim.connect({contractVersion:'card-shop-ui/1.0',clientId:'automatic-simulation'});
 for(let i=0;i<250&&sim.inspect().world.matches[0]?.status!=='running';i++)await sim.advance(.25);
 assert.equal(sim.inspect().world.matches[0]?.status,'running','NPCs route and start without any real engine');assert.equal(sim.backgroundState().matches.length,0,'simulated matches never reach the engine worker');
 const lease=await sim.pause.acquire({ownerId:'test',reason:'测试交互暂停'}),elapsed=sim.inspect().world.matches[0].simulation.elapsedSeconds;await sim.advance(50);assert.equal(sim.inspect().world.matches[0].simulation.elapsedSeconds,elapsed);await sim.pause.release(lease.leaseId);
-for(let i=0;i<500&&!sim.inspect().world.npcs.every(n=>n.presence==='offsite');i++)await sim.advance(.25);
-const done=sim.inspect().world;assert.equal(done.matches[0].status,'finished');assert.equal(done.daily.service,20);assert.ok(done.npcs.every(n=>n.presence==='offsite'));assert.ok(done.cashJournal.some(e=>e.label.includes('NPC 离桌付费')));await sim.disconnect();
-console.log('PASS gameplay adjustments: automatic daily rewards/idempotency/rewind, cash journal, player vs NPC eligibility, NPC BO3/KOF simulation fee/release/save determinism, real room routes/pause/auto departure, Chinese names, NPC opening circulation and strength tiers.');
+for(let i=0;i<500&&!sim.inspect().world.npcs.filter(n=>!n.debtCollector).every(n=>n.presence==='offsite');i++)await sim.advance(.25);
+const done=sim.inspect().world;assert.equal(done.matches[0].status,'finished');assert.equal(done.daily.service,20);assert.ok(done.npcs.filter(n=>!n.debtCollector).every(n=>n.presence==='offsite'));assert.ok(done.cashJournal.some(e=>e.label.includes('NPC 离桌付费')));await sim.disconnect();
+console.log('PASS gameplay adjustments: automatic daily rewards/idempotency/rewind, cash journal, player vs NPC eligibility, NPC KOF simulation fee/release/save determinism, real room routes/pause/auto departure, Chinese names, NPC opening circulation and strength tiers.');

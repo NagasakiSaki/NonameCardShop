@@ -1,3 +1,4 @@
+import {finishOpeningDialogue} from './fixtures/opening-dialogue.mjs';
 import fs from 'node:fs';import assert from 'node:assert/strict';import {chromium} from 'playwright';import {startShopServer} from '../server.mjs';
 const server=await startShopServer({port:0,enginePort:0}),browser=await chromium.launch();
 try{
@@ -12,7 +13,7 @@ try{
  await page.locator('#character').selectOption('bd-tomori');await page.locator('#old').check();await page.screenshot({path:'.local/new-portrait-source/formal-preview.png',fullPage:true});
  await page.setViewportSize({width:406,height:1000});for(const zoom of ['1','2','4']){await page.locator('#zoom').selectOption(zoom);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true,'preview must not overflow at '+zoom+'x');}
  await page.locator('#zoom').selectOption('1');await page.screenshot({path:'.local/new-portrait-source/formal-preview-406.png',fullPage:true});
- await page.goto(server.origin+'/?profile=legacy');await page.waitForFunction(()=>window.__cardShopReady===true);await page.getByRole('button',{name:'设置',exact:true}).click();
+ await page.goto(server.origin+'/?profile=legacy');await page.waitForFunction(()=>window.__cardShopReady===true);await finishOpeningDialogue(page);await page.evaluate(()=>__cardShopApp.openPanel('settings'));
  const path=registry.characters['bd-tomori'].avatar.url;
  await page.waitForFunction(p=>[...document.images].some(im=>im.src.endsWith(p)&&im.naturalWidth===96),path);
  await page.screenshot({path:'.local/new-portrait-source/game-settings.png',fullPage:true});

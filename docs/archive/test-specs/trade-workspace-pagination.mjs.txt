@@ -1,3 +1,4 @@
+import {finishOpeningDialogue} from './fixtures/opening-dialogue.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {chromium} from 'playwright';
@@ -13,7 +14,7 @@ try{
   const close=()=>page.evaluate(()=>__cardShopApp.windows.closeAll());
   const tiles=page.locator('[data-collection-root] [data-card-grid] [data-card]');
   const next=page.getByRole('button',{name:'下一页',exact:true});
-  await page.goto(server.origin+'/?profile=legacy');await page.waitForFunction(()=>window.__cardShopReady===true);
+  await page.goto(server.origin+'/?profile=legacy');await page.waitForFunction(()=>window.__cardShopReady===true);await finishOpeningDialogue(page);
   const cards=[];let cursor=0;
   while(cards.length<1000){const p=await query('catalog.list',{limit:200,cursor});cards.push(...p.items);if(!p.nextCursor)break;cursor=Number(p.nextCursor);}
   assert.equal(cards.length,1000);
@@ -22,7 +23,7 @@ try{
     const c=cards[i],ref='pagination:card:'+i;
     archive.world.items[ref]={inventoryRef:ref,kind:'card',cardKey:c.cardKey,printedRarity:c.currentRarity,printVersion:product.productVersion,source:'synthetic',productId:product.productId,ownerId:'player',location:'collection',protected:false,lock:null,cost:0};
   }
-  await command('saves.import',{content:JSON.stringify(archive)});await page.reload();await page.waitForFunction(()=>window.__cardShopReady===true);
+  await command('saves.import',{content:JSON.stringify(archive)});await page.reload();await page.waitForFunction(()=>window.__cardShopReady===true);await finishOpeningDialogue(page);
   await page.evaluate(()=>__cardShopApp.goToInteraction('store.secondaryMarket','market',{tab:'collection'}));
   await tiles.first().waitFor();await page.waitForFunction(()=>__cardShopApp.isNearInteraction('store.secondaryMarket'));
   assert.equal(await tiles.count(),8);

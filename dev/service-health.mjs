@@ -4,7 +4,7 @@ import crypto from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 import {root} from './process.mjs';
 
-const SERVER_SOURCES=['server.mjs','dev/runtime.mjs','dev/launch.mjs','dev/service-health.mjs','integration/engine-server.mjs','integration/modes/profiles.mjs','integration/modes/capabilities.mjs'];
+const SERVER_SOURCES=['server.mjs','dev/runtime.mjs','dev/launch.mjs','dev/service-health.mjs','integration/engine-server.mjs','integration/http-files.mjs','integration/modes/profiles.mjs','integration/modes/capabilities.mjs'];
 export function serviceFingerprint(folder=root){const hash=crypto.createHash('sha256');for(const name of SERVER_SOURCES){hash.update(name);hash.update(fs.readFileSync(path.join(folder,name)));}return hash.digest('hex');}
 export async function inspectService({origin='http://127.0.0.1:5190',engineOrigin='http://127.0.0.1:5191',fingerprint=serviceFingerprint(),timeoutMs=1000}={}){
   const json=async url=>{const r=await fetch(url,{signal:AbortSignal.timeout(timeoutMs),cache:'no-store'});if(!r.ok)return null;try{return await r.json();}catch{return null;}};

@@ -1,29 +1,63 @@
 {
-  "name":"noname-card-shop",
-  "productName":"无名卡店",
-  "version":"0.8.1",
-  "description":"像素卡店经营与三国杀武将接力对战",
-  "main":"main.cjs",
-  "author":"Noname Card Shop contributors",
-  "license":"GPL-3.0-only",
-  "private":true,
-  "scripts":{"start":"electron .","prepack":"node prepare-build.cjs","pack":"electron-builder --win dir --x64 --publish never","predist":"node prepare-build.cjs","dist":"electron-builder --win nsis --x64 --publish never"},
-  "devDependencies":{"electron":"45.0.0","electron-builder":"26.15.3"},
-  "build":{
-    "appId":"org.noname.cardshop",
-    "productName":"无名卡店",
-    "executableName":"NonameCardShop",
-    "directories":{"output":"dist","buildResources":"build"},
-    "files":["main.cjs","save-bridge.cjs","package.json","build/icon.ico"],
-    "extraResources":[
-      {"from":"..","to":"game","filter":["*.html","*.js","*.mjs","*.css","*.md","*.cmd","package.json","package-lock.json","NONAME-LICENSE","frontend/**/*","frontend-next/**/*","assets/frontend/**/*","assets/frontend-next/**/*","assets/shop/**/*","data/**/*","modules/**/*","integration/**/*","docs/**/*","tools/**/*","dev/**/*","tests/**/*","vendor/**/*","!data/balance-build.log","!vendor/noname/Home/**/*"]},
-      {"from":"../node_modules/noname","to":"game/node_modules/noname","filter":["**/*"]},
-      {"from":"../node_modules/dedent","to":"game/node_modules/dedent","filter":["**/*"]},
-      {"from":"build/desktop-source","to":"desktop-source","filter":["**/*"]}
+  "name": "noname-card-shop",
+  "productName": "无名卡店",
+  "version": "0.8.1",
+  "description": "像素卡店经营与三国杀武将接力对战",
+  "main": "main.cjs",
+  "author": "Noname Card Shop contributors",
+  "license": "GPL-3.0-only",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "prepack": "node prepare-build.cjs",
+    "pack": "electron-builder --win dir --x64 --publish never",
+    "predist": "node prepare-build.cjs",
+    "dist": "electron-builder --win nsis --x64 --publish never"
+  },
+  "devDependencies": {
+    "electron": "45.0.0",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "org.noname.cardshop",
+    "productName": "无名卡店",
+    "executableName": "NonameCardShop",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.cjs",
+      "save-bridge.cjs",
+      "package.json",
+      "build/icon.ico"
     ],
-    "asar":true,
-    "compression":"normal",
-    "win":{"target":["nsis"],"icon":"build/icon.ico","signAndEditExecutable":true,"requestedExecutionLevel":"asInvoker","artifactName":"NonameCardShop-${version}-Setup-${arch}.${ext}"},
-    "nsis":{"oneClick":false,"perMachine":false,"allowToChangeInstallationDirectory":true,"createDesktopShortcut":true,"createStartMenuShortcut":true,"shortcutName":"无名卡店","deleteAppDataOnUninstall":false,"runAfterFinish":false,"installerLanguages":["zh_CN","en_US"],"language":"2052"}
+    "asar": true,
+    "compression": "normal",
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "build/icon.ico",
+      "signAndEditExecutable": true,
+      "requestedExecutionLevel": "asInvoker",
+      "artifactName": "NonameCardShop-${version}-Setup-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "无名卡店",
+      "deleteAppDataOnUninstall": false,
+      "runAfterFinish": false,
+      "installerLanguages": [
+        "zh_CN",
+        "en_US"
+      ],
+      "language": "2052"
+    },
+    "extends": "./electron-builder.cjs"
   }
 }

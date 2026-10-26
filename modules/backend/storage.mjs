@@ -1,4 +1,5 @@
 import {clone, fail} from './common.mjs';
+import {databaseConnection} from './indexed-db.mjs';
 
 export function memoryRepository(initial=null){
   let record=clone(initial);
@@ -10,18 +11,9 @@ export function memoryRepository(initial=null){
 }
 
 export function browserRepository(indexedDB=globalThis.indexedDB,databaseName='noname-card-shop-world-v2'){
-  let opening,archiveIds=new Set();
-  function open(){
-    if(!opening)opening=new Promise((resolve,reject)=>{
-      if(!indexedDB)return reject(new Error('当前环境不支持新版存档所需的 IndexedDB。'));
-      const request=indexedDB.open(databaseName,1);
-      request.onupgradeneeded=()=>request.result.createObjectStore('worlds');
-      request.onerror=()=>reject(request.error);
-      request.onblocked=()=>reject(new Error('存档库被另一页面占用，请关闭旧页面。'));
-      request.onsuccess=()=>{request.result.onversionchange=()=>{request.result.close();opening=null;};resolve(request.result);};
-    });
-    return opening;
-  }
+  let archiveIds=new Set();
+  const connection=databaseConnection(indexedDB,databaseName,db=>db.createObjectStore('worlds'));
+  const open=()=>connection.open();
   return {
     async read(){const db=await open();return new Promise((resolve,reject)=>{
       const tx=db.transaction('worlds'),store=tx.objectStore('worlds'),r=store.get('active');let value=null,missing=false;
@@ -47,7 +39,7 @@ export function browserRepository(indexedDB=globalThis.indexedDB,databaseName='n
         tx.onerror=()=>{};
       });
     },
-    async close(){if(opening)(await opening).close();opening=null;}
+    close:()=>connection.close()
   };
 }
 

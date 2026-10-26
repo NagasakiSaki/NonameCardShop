@@ -17,13 +17,15 @@ export async function createHost({profileId='legacy',storyExtensions={}}={}){
   // These files belong to the frontend team. Absence is a capability, not a fake map.
   for(const name of ['store','battle-room']){const response=await fetch(`/assets/frontend/maps/${name}.json`);if(response.ok)maps.push(await response.json());else if(response.status!==404)throw new Error(`无法加载导航：${name}`);}
   const repository=browserRepository(globalThis.indexedDB,profileDatabase(profileId));
+  let runtime;
+  try{
   let firstRead=await repository.read();
   const content=await loadNarrativeContent(json,{savedState:firstRead?.world?.narrative,savedStates:(firstRead?.archives||[]).map(a=>a.world?.narrative)});
   const storyPacks=[];
   for(const raw of content.packs){try{storyPacks.push(await loadStoryPack(raw,{registry:createRegistry(storyExtensions)}));}catch{content.diagnostics.push('一份剧情内容校验失败，未加载该版本。');}}
   const cachedRepository={...repository,async read(){if(firstRead!==undefined){const value=firstRead;firstRead=undefined;return value;}return repository.read();}};
   const modeCapabilities=await discoverModeCapabilities(json);
-  const runtime=await createRuntime({source,rules,modeCapabilities,repository:cachedRepository,maps,managementConfig,backgroundAvailable:true,storyPacks,storyExtensions,storyDiagnostics:content.diagnostics,storyActiveHashes:content.activeHashes});
+  runtime=await createRuntime({source,rules,modeCapabilities,repository:cachedRepository,maps,managementConfig,backgroundAvailable:true,storyPacks,storyExtensions,storyDiagnostics:content.diagnostics,storyActiveHashes:content.activeHashes});
   const knownStoryHashes=new Set(storyPacks.map(p=>p.contentHash));
   async function prepareStoryRestore(input){
     if(!['saves.load','saves.loadDay','saves.import'].includes(input?.type))return;
@@ -51,4 +53,9 @@ export async function createHost({profileId='legacy',storyExtensions={}}={}){
     disconnect(){return disconnectPromise??=(async()=>{clearInterval(timer);timer=null;document.removeEventListener('visibilitychange',onVisibility);await mount.disposeAll();await npcEngine.dispose();await runtime.disconnect();})();}
   };
   return host;
+  }catch(error){
+    try{await runtime?.disconnect();}catch{}
+    try{await repository.close();}catch{}
+    throw error;
+  }
 }

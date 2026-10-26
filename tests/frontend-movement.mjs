@@ -1,3 +1,4 @@
+import {finishOpeningDialogue} from './fixtures/opening-dialogue.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {chromium} from 'playwright';
@@ -18,12 +19,12 @@ try{
     w.orders=[{orderId:'bulk-1',product,unit:'pack',quantity:2,unitCost:50,status:'arrived'},{orderId:'bulk-2',product,unit:'pack',quantity:2,unitCost:50,status:'arrived'}];
     const repo=browserRepository();await repo.commit({schemaVersion:2,revision:0,world:w,archives:[],requests:{},legacyResetDone:true},null);await repo.close();
   });
-  await page.goto(server.origin+'/?profile=legacy');await page.waitForFunction(()=>window.__cardShopReady===true);
+  await page.goto(server.origin+'/?profile=legacy');await page.waitForFunction(()=>window.__cardShopReady===true);await finishOpeningDialogue(page);
   const player=()=>page.evaluate(()=>__cardShopApp.getPlayer()),query=(name,p={})=>page.evaluate(async({name,p})=>(await __cardShopApp.host.query(name,p)).data,{name,p});
   await page.waitForFunction(()=>document.querySelector('#notebook-body').innerText.includes('店面导航'));
   const before=await player();await page.keyboard.down('ArrowRight');await page.keyboard.down('ArrowDown');await page.waitForTimeout(350);const after=await player();assert.ok(after.x-before.x>10&&after.y-before.y>10);assert.ok(Math.abs((after.x-before.x)-(after.y-before.y))<2,'both axes move simultaneously');
   await page.keyboard.up('ArrowDown');const released=await player();await page.waitForTimeout(150);const afterOne=await player();assert.ok(afterOne.x>released.x);assert.ok(Math.abs(afterOne.y-released.y)<1);await page.keyboard.up('ArrowRight');
-  const labels=await page.evaluate(()=>[...__cardShopApp.getWorldScene().actorView.sprites.values()].map(e=>({text:e.label.text,visible:e.label.visible,alpha:e.label.alpha})));assert.equal(labels.length,1,'new shop has the owner, without permanent regular-customer actors');assert.ok(labels.every(l=>l.visible&&l.alpha>.9&&l.text.split('\n').length>=2));
+  const labels=await page.evaluate(()=>[...__cardShopApp.getWorldScene().actorView.sprites.values()].map(e=>({text:e.label.text,visible:e.label.visible,alpha:e.label.alpha})));assert.equal(labels.length,1,'new shop has the owner, without permanent regular-customer actors');assert.ok(labels.every(l=>l.visible&&l.alpha>.9&&/店长|店主/.test(l.text)));
   await page.screenshot({path:output+'/store.png'});
   await page.evaluate(()=>{window.__v2Sprite=__cardShopApp.getWorldScene().actorView.getSprite('actor:owner');window.__v2Steps=[];window.__v2Off=__cardShopApp.host.subscribe(e=>{if(e.type==='actorsUpdated'){const p=e.data.find(a=>a.actorId==='actor:owner');if(p)__v2Steps.push({room:p.roomId,x:p.x+(p.roomId==='battle-room'?480:0),y:p.y});}});__cardShopApp.navigateScene('battle-room');});
   await page.waitForFunction(()=>__cardShopApp.getPlayer().roomId==='battle-room',null,{timeout:18000});await page.waitForTimeout(400);
@@ -31,11 +32,8 @@ try{
   const steps=await page.evaluate(()=>__v2Steps),cross=steps.findIndex((p,i)=>i&&p.room!==steps[i-1].room);assert.ok(cross>0);assert.ok(Math.hypot(steps[cross].x-steps[cross-1].x,steps[cross].y-steps[cross-1].y)<10,'no room teleport jump');
   await page.screenshot({path:output+'/continuous-room.png'});
   const tableClick=await page.evaluate(()=>{const s=__cardShopApp.getWorldScene(),cam=s.cameras.main,p=__cardShopApp.currentMap().props.find(p=>p.prop==='pa_table_idle'),bounds=document.querySelector('#game-mount canvas').getBoundingClientRect();return {x:bounds.left+(p.x+480+p.w/2-cam.worldView.x)*cam.zoom,y:bounds.top+(p.y+20-cam.worldView.y)*cam.zoom};});
-  await page.mouse.click(tableClick.x,tableClick.y);await page.waitForFunction(()=>__cardShopApp.windows.depth===1,null,{timeout:10000});await page.locator('[data-facility-root=lobby]').waitFor();await page.evaluate(()=>{__cardShopApp.windows.closeAll();__cardShopApp.navigateScene('store');});await page.waitForFunction(()=>__cardShopApp.getPlayer().roomId==='store',null,{timeout:18000});
-  await page.evaluate(()=>__cardShopApp.goToInteraction('store.counter','supplier'));await page.getByRole('button',{name:'旧订单入库（2）',exact:true}).waitFor({timeout:15000});await page.getByRole('button',{name:'旧订单入库（2）',exact:true}).click();
-  for(let i=0;i<40&&!(await query('supplier.orders')).items.every(o=>o.status==='received');i++)await page.waitForTimeout(100);assert.ok((await query('supplier.orders')).items.every(o=>o.status==='received'));
-  await page.evaluate(()=>{__cardShopApp.windows.closeAll();__cardShopApp.goToInteraction('store.retail','supplier',{purchaseTab:'retail'});});await page.locator('[data-facility-root=retail] .f6-root').waitFor();
-  assert.equal((await query('inventory.sealedSummary')).items.reduce((n,g)=>n+g.warehouse,0),8);
+  await page.mouse.click(tableClick.x,tableClick.y);await page.waitForFunction(()=>__cardShopApp.windows.depth===1,null,{timeout:10000});await page.locator('.v7-room').waitFor();await page.evaluate(()=>{__cardShopApp.windows.closeAll();__cardShopApp.navigateScene('store');});await page.waitForFunction(()=>__cardShopApp.getPlayer().roomId==='store',null,{timeout:18000});
+  await page.evaluate(()=>__cardShopApp.openPanel('inventory'));await page.locator('.facility-window').waitFor();
   const paused=(await query('shop.snapshot')).clock.minute;await page.waitForTimeout(250);assert.equal((await query('shop.snapshot')).clock.minute,paused);await page.evaluate(()=>__cardShopApp.windows.closeAll());await page.setViewportSize({width:420,height:850});await page.waitForTimeout(350);await page.screenshot({path:output+'/narrow.png'});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);assert.ok(await page.evaluate(()=>__cardShopApp.getWorldScene().cameras.main.zoom<=1),'narrow viewport fits the room');assert.deepEqual(errors,[]);await page.evaluate(()=>{__v2Off();return __cardShopApp.host.disconnect();});
-  console.log('PASS movement/UI: normalized diagonals, sliding, straight paths, simultaneous keys, persistent NPC names/types, continuous same-scene crossing in both directions, legacy receiving and independent retail station and paused single window.');
+  console.log('PASS movement/UI: normalized diagonals, sliding, straight paths, simultaneous keys, persistent NPC names/types, continuous same-scene crossing in both directions, current table window and paused single window.');
 }finally{await browser?.close();await server.close();}

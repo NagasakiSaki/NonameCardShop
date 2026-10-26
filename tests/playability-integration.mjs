@@ -1,3 +1,4 @@
+import {finishOpeningDialogue} from './fixtures/opening-dialogue.mjs';
 import fs from 'node:fs';import assert from 'node:assert/strict';import {chromium} from 'playwright';import {startShopServer} from '../server.mjs';
 const out=process.env.CARD_SHOP_TEST_RESULTS||'.local/playability-integration';fs.mkdirSync(out,{recursive:true});
 const server=await startShopServer({port:0,enginePort:0}),browser=await chromium.launch();
@@ -7,8 +8,8 @@ try{
  const command=(type,payload={})=>page.evaluate(async({type,payload})=>{const r=await __cardShopApp.command({requestId:'integration-'+crypto.randomUUID(),type,payload});if(!r.ok)throw Error(JSON.stringify(r));return r.data;},{type,payload});
  const close=async()=>{await page.evaluate(()=>__cardShopApp.windows.closeAll());await page.waitForFunction(()=>!__cardShopApp.snapshot().clock.pauseReasons.length);};
  const until=async predicate=>{const deadline=Date.now()+15000;while(!await predicate()){if(Date.now()>deadline)throw Error('等待实际业务状态超时。');await new Promise(r=>setTimeout(r,80));}};
- const go=async(id,panel,scope={})=>{await page.evaluate(({id,panel,scope})=>__cardShopApp.goToInteraction(id,panel,scope),{id,panel,scope});await page.locator('.facility-window').last().waitFor();await page.waitForFunction(id=>__cardShopApp.isNearInteraction(id),id);};
- await page.goto(server.origin+'/?profile=legacy');await page.waitForFunction(()=>window.__cardShopReady===true);
+ const go=async(id,panel,scope={})=>{await finishOpeningDialogue(page);await page.evaluate(({id,panel,scope})=>__cardShopApp.goToInteraction(id,panel,scope),{id,panel,scope});await page.locator('.facility-window').last().waitFor();await page.waitForFunction(id=>__cardShopApp.isNearInteraction(id),id);};
+ await page.goto(server.origin+'/?profile=legacy');await page.waitForFunction(()=>window.__cardShopReady===true);await finishOpeningDialogue(page);
  const dayStart=(await query('saves.days')).items[0];
  await go('store.counter','supplier');
  assert.equal(await page.locator('[data-collection-root]:visible').count(),0);
@@ -18,12 +19,12 @@ try{
  const minute=(await query('shop.snapshot')).clock.minute;await page.waitForTimeout(250);assert.equal((await query('shop.snapshot')).clock.minute,minute,'interaction freezes world time');
  assert.equal((await query('inventory.sealedSummary')).items.reduce((n,x)=>n+x.warehouse,0),4,'three purchased packs plus the gift box');
  await page.screenshot({path:out+'/trade.png'});await close();
- await go('store.opening','opening');await page.getByRole('button',{name:'开一包',exact:true}).click();await page.getByRole('button',{name:'确认开包',exact:true}).click();
- await until(async()=>(await query('inventory.list',{kind:'card'})).total===5);
+ await go('store.opening','opening');await page.getByRole('button',{name:'开一盒',exact:true}).click();await page.getByRole('button',{name:'确认开包',exact:true}).click();
+ await until(async()=>(await query('inventory.list',{kind:'card'})).total===120);
  await close();await go('store.opening','opening');await page.locator('[data-opening-result]').waitFor();assert.match(await page.locator('[data-opening-result]').innerText(),/已写入收藏/);
- await close();await go('store.secondaryMarket','market',{tab:'collection'});await page.locator('[data-collection-root] [data-card]').first().click();
+ await close();await go('store.secondaryMarket','market',{tab:'collection'});const sale=(await query('inventory.list',{kind:'card',limit:200})).items.find(c=>['SR','SSR'].includes(c.printedRarity)&&c.available);assert.ok(sale);const saleTiles=page.locator('[data-collection-root] [data-card]');const saleIndex=await saleTiles.evaluateAll((nodes,key)=>nodes.findIndex(n=>JSON.parse(n.dataset.card)[0]===key),sale.cardKey);assert.ok(saleIndex>=0);await saleTiles.nth(saleIndex).click();
  await page.getByRole('button',{name:'确认单卡上架',exact:true}).click();await until(async()=>(await query('market.list',{tab:'mine'})).total===1);
- assert.equal((await query('inventory.list',{kind:'card'})).total,5,'listing does not duplicate/destroy cards');await close();
+ assert.equal((await query('inventory.list',{kind:'card'})).total,120,'listing does not duplicate/destroy cards');await close();
  for(const kind of ['report','guide','customers']){
    await page.evaluate(kind=>__cardShopApp.openPanel(kind),kind);await page.locator('[data-live-management] .pc-root').waitFor();
    assert.doesNotMatch(await page.locator('[data-live-management]').innerText(),/演示回调成功|字段需求见 integration|C[123] 候选组件/);

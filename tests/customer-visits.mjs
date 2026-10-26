@@ -12,15 +12,16 @@ const read=name=>JSON.parse(fs.readFileSync(new URL('../'+name,import.meta.url))
 const source=read('data/cards.json'),rules=read('data/backend-rules.json'),managementConfig=read('data/backend-management.json');rules.npcAutoBattles=false;
 const map=validateMap({mapId:'store',navVersion:'visit-test',tileSize:16,width:10,height:10,walkable:Array(10).fill('1111111111'),anchors:{'store.entry':{x:24,y:136},'store.counter':{x:72,y:24},'store.trash':{x:136,y:24},'store.secondaryMarket':{x:72,y:72}}});
 const host=await createRuntime({source,rules,managementConfig,maps:[map],repository:memoryRepository()});await host.connect({contractVersion:'card-shop-ui/1.0',clientId:'visits'});
+const intro=(await host.query('dialogue.offer')).data;if(intro?.choices?.some(c=>c.optionId==='begin')){const r=await host.command({requestId:'visits-intro',type:'dialogue.respond',payload:{offerId:intro.offerId,optionId:'begin',proof:intro.proof}});assert.ok(r.ok);}
 const query=async name=>(await host.query(name)).data,command=async(type,payload={})=>{const r=await host.command({requestId:'visits-'+crypto.randomUUID(),type,payload});assert.equal(r.ok,true,JSON.stringify(r));return r.data;};
-assert.equal((await query('shop.snapshot')).actors.length,1);assert.equal(host.inspect().world.npcs.length,3,'regular profiles still exist, without initial store actors');
-const pause=await host.pause.acquire({ownerId:'test',reason:'paused'});await host.advance(1);assert.equal((await query('shop.snapshot')).actors.length,1);await host.pause.release(pause.leaseId);
-await command('business.open');await host.advance(0);const afterArrival=host.inspect().world,visitor=afterArrival.npcs.find(onSite);assert.ok(visitor);assert.equal((await query('shop.snapshot')).actors.length,2);
+assert.equal((await query('shop.snapshot')).actors.filter(n=>!n.debtCollector).length,1);assert.equal(host.inspect().world.npcs.filter(n=>n.regularId).length,3,'regular profiles still exist, without initial store actors');
+const pause=await host.pause.acquire({ownerId:'test',reason:'paused'});await host.advance(1);assert.equal((await query('shop.snapshot')).actors.filter(n=>!n.debtCollector).length,1);await host.pause.release(pause.leaseId);
+await command('business.open');await host.advance(0);const afterArrival=host.inspect().world,visitor=afterArrival.npcs.find(n=>!n.debtCollector&&onSite(n));assert.ok(visitor);assert.equal((await query('shop.snapshot')).actors.filter(n=>!n.debtCollector).length,2);
 const archive=await command('saves.create');let events=[];const off=host.subscribe(e=>{if(e.type==='actorsUpdated')events=e.data;});
 for(let i=0;i<100&&host.inspect().world.npcs.find(n=>n.actorId===visitor.actorId).presence!=='offsite';i++)await host.advance(.25);
 assert.equal(host.inspect().world.npcs.find(n=>n.actorId===visitor.actorId).presence,'offsite');assert.ok(!events.some(n=>n.actorId===visitor.actorId));
 await command('saves.load',{archiveId:archive.archiveId});assert.ok((await query('shop.snapshot')).actors.some(n=>n.actorId===visitor.actorId),'archive restores the visit, not a duplicate identity');
-await command('business.close');assert.equal((await query('shop.snapshot')).actors.length,1);assert.ok(host.inspect().world.npcs.every(n=>!onSite(n)));off();await host.disconnect();
+await command('business.close');assert.equal((await query('shop.snapshot')).actors.filter(n=>!n.debtCollector).length,1);assert.ok(host.inspect().world.npcs.filter(n=>!n.debtCollector).every(n=>!onSite(n)));off();await host.disconnect();
 
 const catalog=buildCatalog(source,rules),w=createWorld(rules);w.clock.phase='open';w.clock.minute=540;w.nextNpcMinute=10000;w.products=publishProducts(catalog,rules,1);
 const npc=id=>({actorId:id,name:id,appearanceId:'owner',wallet:{available:999},roomId:'store',x:24,y:136,activity:'idle',scavenger:false,presence:'offsite'});w.npcs=[npc('a'),npc('b')];

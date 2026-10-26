@@ -1,0 +1,14 @@
+[extend]
+useDefault = true
+
+# Reviewed upstream skill identifiers, not credentials. Source code entries were
+# compared with stable b16b8958 and are unchanged. Do not exclude the whole JSON.
+# https://github.com/gitleaks/gitleaks#configuration
+[[rules]]
+id = "generic-api-key"
+  [[rules.allowlists]]
+  description = "Two exact Key-pack skill IDs in serialized skill source"
+  condition = "AND"
+  regexTarget = "secret"
+  paths = ['''^data/skills/key\.json$''']
+  regexes = ['''^(shiorimiyuki_tingxian1|kotomi_chuanxiang2)$''']

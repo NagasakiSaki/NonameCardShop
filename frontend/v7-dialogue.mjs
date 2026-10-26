@@ -47,7 +47,7 @@ export function installWorldDialogue(app,{stopMovement}){
       else if(current.source==='narrative'&&data?.status==='presenting')await show(storyOffer(data));
     }finally{busy=false;}
   }
-  const storyOffer=s=>({source:'narrative',offerId:s.proof.sessionId+':'+s.proof.nodeId,proof:s.proof,nodeType:s.nodeType,confirmation:s.confirmation,speakerName:s.speaker?.name||'街角故事',appearanceId:s.speaker?.appearanceId,text:[s.text,s.confirmation?.message].filter(Boolean).join('\n'),choices:s.nodeType==='choice'?s.choices.map(c=>({...c,optionId:c.choiceId})):[{optionId:'advance',text:s.confirmation?'确认':'继续'}]});
+  const storyOffer=s=>({source:'narrative',offerId:s.proof.sessionId+':'+s.proof.nodeId,proof:s.proof,nodeType:s.nodeType,confirmation:s.confirmation,speakerName:s.speaker?.name||'街角故事',appearanceId:app.manifest.characters[s.speaker?.appearanceId]?s.speaker.appearanceId:'bd-anon',text:[s.text,s.confirmation?.message].filter(Boolean).join('\n'),choices:s.nodeType==='choice'?s.choices.map(c=>({...c,optionId:c.choiceId})):[{optionId:'advance',text:s.confirmation?'确认':'继续'}]});
   async function poll(){
     if(disposed||reading||opening||busy)return;
     if(offer){if(offer.proof.worldId!==app.snapshot().worldId||offer.proof.branchId!==app.snapshot().branchId)await close();return;}
