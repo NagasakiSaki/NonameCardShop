@@ -6,6 +6,7 @@ import { createFormatter } from '../workspace/format.mjs';
 import { callAction, describeError } from '../workspace/ops.mjs';
 import { injectF6Styles } from './styles.mjs';
 import { paginate, pagerBar, createCapacity, pageSizeFor } from './common.mjs';
+import {productAlbum} from './product-album.mjs';
 
 const KINDS = [['all', '全部'], ['pack', '散包'], ['box', '卡盒']];
 
@@ -106,9 +107,10 @@ export function mountWarehouse({ root, view, actions, draft = {}, layout, assets
 
   function paintGrid() {
     const list = visibleGroups();
-    const size = Number.isSafeInteger(layout?.pageSize) ? layout.pageSize : pageSizeFor(capacity.tier, layout?.pageSizes);
+    const size = 1;
     const { rows, page, total } = paginate(list, state.page, size);
     state.page = page;
+    state.selectedKey=rows[0]?.groupId||null;
     const grid = el('div', { class: 'f6-grid', 'data-warehouse-grid': 'true' });
     if (!total) {
       grid.append(emptyState(
@@ -131,7 +133,7 @@ export function mountWarehouse({ root, view, actions, draft = {}, layout, assets
       role: 'button', tabindex: '0', 'aria-pressed': String(isSelected),
       'data-stock': g.groupId,
       onclick: () => select(g.groupId),
-      onkeydown: e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(g.groupId); } },
+      onkeydown: e => { if (e.target===e.currentTarget&&(e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); select(g.groupId); } },
     }, [
       el('div', { class: 'f6-tile__head' }, [
         art,
@@ -152,13 +154,13 @@ export function mountWarehouse({ root, view, actions, draft = {}, layout, assets
       ]) : null,
       g.available === 0 ? muted('没有可用件：被保护、占用或已在架。', 'f6-note') : null,
     ]);
-    return tile;
+    tile.classList.add('f6-product-detail');tile.append(productAlbum(g.productId,actions,g));return tile;
   }
 
   function paintFoot() {
     const group = selected();
     const list = visibleGroups();
-    const size = Number.isSafeInteger(layout?.pageSize) ? layout.pageSize : pageSizeFor(capacity.tier, layout?.pageSizes);
+    const size = 1;
     const { page, pages, total } = paginate(list, state.page, size);
     foot.replaceChildren(
       pagerBar({ page, pages, total, unit: '组库存', onPage: next => { state.page = next; paint(); } }),

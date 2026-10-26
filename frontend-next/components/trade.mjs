@@ -8,7 +8,7 @@ export function art(url,name,className=''){
 }
 export function rarity(value){return el('span',{class:'rarity rarity--'+value,text:value});}
 export function CardTile(card,{selected=false,onSelect,format=money,selling=false,metaText,metadataLabel}={}){
-  return el('button',{class:'card-tile'+(selected?' is-selected':''),'aria-pressed':selected?'true':'false','data-card':card.id,'aria-label':card.name+' '+card.rarity+' 查看详情',onclick:()=>onSelect?.(card.id)},[
+  return el('button',{class:'card-tile'+(selected?' is-selected':''),'aria-pressed':selected?'true':'false','data-card':card.id,'data-card-key':card.cardKey,'aria-label':card.name+' '+card.rarity+' 查看详情',onclick:()=>onSelect?.(card.id)},[
     el('div',{class:'card-tile__image'},[art(card.artUrl,card.name,'card-art'),rarity(card.rarity),el('span',{class:'owned',text:'×'+card.ownedCount})]),
     el('div',{class:'card-tile__line'},[el('strong',{text:card.name}),el('span',{class:'price',text:Number.isSafeInteger(card.price)?format(card.price):'—'})]),
     el('div',{class:'card-tile__meta'},[el('span',{text:metadataLabel??card.faction??'单卡'}),el('span',{text:metaText??(selling?'可上架 '+card.availableCount+' 张':'在售 '+card.marketStock+' 张')})])

@@ -81,6 +81,7 @@ export async function startApp({ host, connection, mode, fixture }) {
   const windows = createWindowManager({
     host,
     mount: document.getElementById("windows"),
+    onInspectCard:cardKey=>app.openPanel('cardDetail',{cardKey}),
     onChange: (stack) => {
       document.body.classList.toggle("has-window", stack.length > 0);
       if (stack.length) movement.releaseAll();

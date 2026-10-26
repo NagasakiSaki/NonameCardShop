@@ -1,4 +1,5 @@
 import * as Rooms from './battle-rooms.mjs';
+import {productContents} from './product-catalog.mjs';
 import {initialiseRooms,activeRoom} from './room-state.mjs';
 import {initialiseRating,RATED_FORMATS,MODE_LABELS} from './strength-modes.mjs';
 import * as V7 from './operations-v7.mjs';
@@ -172,6 +173,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
         case 'inventory.list':data=p.grouped?inventoryView(w(),catalog,p):inventoryList(w(),catalog,p);break;
         case 'inventory.sealedSummary':data=sealedInventoryView(w());break;
         case 'products.list':data=page(w().products.filter(x=>productEnabled(w().rules,x.productId)&&(!p.themeId||x.themeId===p.themeId)).map(productDTO),p);break;
+        case 'products.contents':data=productContents(w(),catalog,p);break;
         case 'products.quote':case 'market.quote':data=quote(p);break;
         case 'supplier.basketQuote':{const value=basketQuote(w(),p);data={...value,quoteId:token(quotes,value)};break;}
         case 'supplier.orders':data=page(w().orders.filter(o=>!p.status||o.status===p.status).map(({product,...o})=>({...clone(o),themeName:product.name,productVersion:product.productVersion,total:o.cost,product:productDTO(product)})),p);break;

@@ -45,7 +45,7 @@ export function retailView(w){
   const groups=new Map(),e=managementEffects(w);
   for(const item of owned(w).filter(i=>['pack','box'].includes(i.kind)&&['stock','retail'].includes(i.location)&&productEnabled(w.rules,i.productId))){
     const key=`${item.productId}|${item.productVersion}|${item.kind}`;
-    if(!groups.has(key))groups.set(key,{shelfId:key,productId:item.productId,label:w.products.find(p=>p.productId===item.productId)?.name||item.productId,productVersion:item.productVersion,kind:item.kind==='box'?'sealed-box':'sealed-pack',stock:0,warehouse:0,capacity:e.shelfCapacity,unitAmount:item.retailPrice,inventoryRefs:[],stockRefs:[]});
+    if(!groups.has(key))groups.set(key,{shelfId:key,productId:item.productId,label:w.products.find(p=>p.productId===item.productId)?.name||item.productId,productVersion:item.productVersion,spec:clone(item.spec||{}),kind:item.kind==='box'?'sealed-box':'sealed-pack',stock:0,warehouse:0,capacity:e.shelfCapacity,unitAmount:item.retailPrice,inventoryRefs:[],stockRefs:[]});
     const row=groups.get(key);if(item.location==='retail'){if(row.stock===0)row.unitAmount=item.retailPrice;row.stock++;if(free(item))row.inventoryRefs.push(item.inventoryRef);}else if(free(item)){row.warehouse++;row.stockRefs.push(item.inventoryRef);}
   }
   return {shelves:[...groups.values()],capacity:e.shelfCapacity,used:shelfUsed(w),note:`全店共 ${e.shelfCapacity} 商品位，已用 ${shelfUsed(w)}；每盒占 ${e.boxShelfUnits} 位。不同实物可有不同标价，当前显示首件标价。`};

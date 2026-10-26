@@ -7,6 +7,7 @@ import { createFormatter } from '../workspace/format.mjs';
 import { createOperationState, callAction, describeError } from '../workspace/ops.mjs';
 import { injectF6Styles } from './styles.mjs';
 import { paginate, pagerBar, createCapacity, pageSizeFor, pendingNotice, unwrapOperationResult } from './common.mjs';
+import {productAlbum} from './product-album.mjs';
 
 const MODES = [
   ['pack', '开一包', '选主题与包数，逐包计入一次结果。'],
@@ -133,7 +134,7 @@ export function mountOpening({ root, view, actions, draft = {}, layout, assets, 
   // 选择网格分页：结果阶段与“全部打开”没有分页列表；其余按当前档位收敛页号。
   function computeChoosePaging() {
     if (state.result || state.mode === 'all') return null;
-    const size = Number.isSafeInteger(layout?.pageSize) ? layout.pageSize : pageSizeFor(capacity.tier, layout?.pageSizes);
+    const size = 1;
     const list = (state.mode === 'box' ? boxes() : packs()).filter(g => g.available > 0);
     const paged = paginate(list, state.page, size);
     state.page = paged.page;
@@ -184,6 +185,7 @@ export function mountOpening({ root, view, actions, draft = {}, layout, assets, 
 
   // 库存选择网格：分页选择真实组，选择按 groupId 保持，翻页/搜索不串行。
   function scopeGrid(paging) {
+    state.productId=paging.rows[0]?.groupId||null;
     const grid = el('div', { class: 'f6-grid', 'data-scope-grid': 'true' });
     for (const g of paging.rows) grid.append(scopeTile(g));
     return grid;
@@ -200,7 +202,7 @@ export function mountOpening({ root, view, actions, draft = {}, layout, assets, 
       role: 'button', tabindex: '0', 'aria-pressed': String(isSelected),
       'data-stock': g.groupId,
       onclick: () => { state.productId = g.groupId; paint(); },
-      onkeydown: e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); state.productId = g.groupId; paint(); } },
+      onkeydown: e => { if (e.target===e.currentTarget&&(e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); state.productId = g.groupId; paint(); } },
     }, [
       el('div', { class: 'f6-tile__head' }, [
         artFrame,
@@ -219,14 +221,13 @@ export function mountOpening({ root, view, actions, draft = {}, layout, assets, 
           : stepper({ value: state.quantity, min: 1, max: g.available, label: '开包数量', onChange: q => { state.quantity = q; paint(); } }),
       ]) : null,
     ]);
-    return tile;
+    tile.classList.add('f6-product-detail');tile.append(productAlbum(g.productId,actions,g));return tile;
   }
 
   function paintResult(pending) {
     const result = state.result;
     const results = result.results || [];
-    const size = Number.isSafeInteger(layout?.resultPageSize) ? layout.resultPageSize
-      : pageSizeFor(capacity.tier, { wide: 8, mid: 8, narrow: 4, ...(layout?.resultPageSizes || {}) });
+    const size = Number.MAX_SAFE_INTEGER;
     const { rows, page, pages, total } = paginate(results, state.page, size);
     state.page = page;
     const rarity = result.byRarity || countRarity(results);
@@ -250,7 +251,7 @@ export function mountOpening({ root, view, actions, draft = {}, layout, assets, 
   function resultFrame(row) {
     const copies = Number.isSafeInteger(row.copies) && row.copies > 1 ? row.copies : 1;
     const frameArt = art(row.imageUrl || null, row.name || row.cardKey);
-    const frame = el('figure', { class: 'f6-frame', 'data-result-card': row.cardKey, style: 'margin:0' }, [
+    const frame = el('figure', { class: 'f6-frame', 'data-result-card': row.cardKey, 'data-card-key':row.cardKey, style: 'margin:0' }, [
       el('div', { class: 'f6-frame__badges' }, [rarityChip(row.printedRarity)]),
       copies > 1 ? el('span', { class: 'f6-frame__copies', text: '×' + copies }) : null,
       frameArt,
@@ -272,8 +273,7 @@ export function mountOpening({ root, view, actions, draft = {}, layout, assets, 
   function paintFoot() {
     if (state.result) {
       const results = state.result.results || [];
-      const size = Number.isSafeInteger(layout?.resultPageSize) ? layout.resultPageSize
-        : pageSizeFor(capacity.tier, { wide: 8, mid: 8, narrow: 4, ...(layout?.resultPageSizes || {}) });
+      const size = Number.MAX_SAFE_INTEGER;
       const { page, pages, total } = paginate(results, state.page, size);
       foot.replaceChildren(
         pagerBar({ page, pages, total, unit: '种卡面', onPage: next => { state.page = next; paint(); } }),

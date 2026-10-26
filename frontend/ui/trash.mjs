@@ -28,7 +28,7 @@ export async function openTrash(app) {
           return;
         }
         for (const row of result.data.items) {
-          list.append(el("div", { class: "card-tile" }, [
+          list.append(el("div", { class: "card-tile",'data-card-key':row.cardKey }, [
             imgWithFallback(row.imageUrl, row.name, "card-tile__img"),
             el("div", { class: "card-tile__body" }, [
               el("span", { class: "card-tile__name", text: row.name }),

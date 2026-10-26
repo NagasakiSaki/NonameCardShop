@@ -66,7 +66,7 @@ export function openCardDetail(app,options={}){
           skillsSection()
         ]);
         surface.workspace.append(el('div',{class:'detail-layout'},[
-          el('div',{class:'detail-image-column'},[art(card.imageUrl,card.name,'hero-art'),el('p',{class:'detail-meta',text:'原始卡图 · 等比完整显示'}),
+          el('div',{class:'detail-image-column','data-card-key':card.cardKey},[art(card.imageUrl,card.name,'hero-art'),el('p',{class:'detail-meta',text:'原始卡图 · 等比完整显示'}),
             el('div',{class:'detail-badges'},[el('span',{class:'chip',text:'持有 ×'+(holdings.owned??0)}),el('span',{class:'chip',text:'可用 '+(holdings.available??0)})])]),title
         ]));
         const eligibility=el('section',{class:'surface-card'},[el('h3',{text:'流通与准入'}),el('p',{class:'detail-meta',text:card.circulation?'该卡种已进入市场流通。':'该卡种尚未登记流通；私下开包不自动成为市场牌。'})]);

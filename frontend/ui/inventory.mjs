@@ -128,7 +128,7 @@ export async function openInventory(app) {
           if (row.locked > 0) chips.push(el("span", { class: "chip chip--lock", text: "锁定 " + row.locked }));
           if (row.owned > 1) chips.push(el("span", { class: "chip", text: "×" + row.owned }));
           const tile = el("button", {
-            class: "card-tile", type: "button",
+            class: "card-tile", type: "button", 'data-card-key':row.cardKey,
             onclick: () => app.openPanel("cardDetail", { cardKey: row.cardKey }),
           }, [
             imgWithFallback(row.imageUrl, row.name, "card-tile__img"),

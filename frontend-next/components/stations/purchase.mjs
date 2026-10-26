@@ -7,6 +7,7 @@ import { createFormatter } from '../workspace/format.mjs';
 import { createOperationState, callAction, describeError } from '../workspace/ops.mjs';
 import { injectF6Styles } from './styles.mjs';
 import { paginate, pagerBar, createCapacity, pageSizeFor, pendingNotice, unwrapOperationResult } from './common.mjs';
+import {productAlbum} from './product-album.mjs';
 
 const UNITS = [['pack', '散包'], ['box', '密封卡盒']];
 const MAX_PER_LINE = 20;
@@ -41,7 +42,7 @@ export function mountPurchase({ root, view, actions, draft = {}, layout, assets,
 
   function visibleProducts() {
     const q = state.search.trim();
-    return (view.products || []).filter(p => (p.unit ? p.unit === state.unit : true) && (!q || String(p.themeName || p.name || '').includes(q)));
+    return (view.products || []).filter(p => (p.unit ? p.unit === state.unit : true) && (!q || String(p.themeName || p.name || '').includes(q))).sort((a,b)=>Number(b.availability==='available')-Number(a.availability==='available'));
   }
 
   function changeQuantity(key, qty, label) {
@@ -138,7 +139,7 @@ export function mountPurchase({ root, view, actions, draft = {}, layout, assets,
       el('div', { class: 'f6-receipt__title', text: '已入库' }),
       r.fulfillment && r.fulfillment !== 'received' ? errorText('本次返回 fulfillment=' + r.fulfillment + '，尚未直接入库（当前正式接口为 pending 订单，属已知差异）。') : null,
       muted(view.demoNotice ? '以下为拟定回执（演示输入，正式后端待接）。' : '以下为本次采购的实际入库结果。', 'f6-note'),
-      ...paginate(r.lines,state.receiptPage||0,4).rows.map(line => el('div', { class: 'pbc-line' }, [
+      ...paginate(r.lines,state.receiptPage||0,Number.MAX_SAFE_INTEGER).rows.map(line => el('div', { class: 'pbc-line' }, [
         el('span', { text: (line.themeName || line.productId) + ' · ' + (line.unit === 'box' ? '密封卡盒' : '散包') + ' ×' + line.quantity }),
         el('strong', { text: Array.isArray(line.inventoryRefs) ? '入库 ' + line.inventoryRefs.length + ' 件' : '—' }),
       ])),
@@ -165,7 +166,7 @@ export function mountPurchase({ root, view, actions, draft = {}, layout, assets,
     }
     const lines = el('div', { class: 'f6-basket__lines' });
     let estimate = entries.reduce((total,[key,qty])=>{const [id,unit]=key.split('|');return total+(priceOf((view.products||[]).find(p=>p.productId===id),unit)||0)*qty;},0);
-    const paging=paginate(entries,state.basketPage,4);state.basketPage=paging.page;
+    const paging=paginate(entries,state.basketPage,Number.MAX_SAFE_INTEGER);state.basketPage=paging.page;
     for (const [key, qty] of paging.rows) {
       const [productId, unit] = key.split('|');
       const product = (view.products || []).find(p => p.productId === productId);
@@ -188,7 +189,7 @@ export function mountPurchase({ root, view, actions, draft = {}, layout, assets,
 
   function paintCatalog() {
     const toolbar = el('div', { class: 'f6-scope__row' }, [
-      segmented(UNITS, state.unit, id => { state.unit = id; state.page = 0; paintAll(); }, '商品单位'),
+      segmented(UNITS, state.unit, id => { state.unit = id; paintAll(); }, '商品单位'),
       el('input', {
         class: 'f6-select', type: 'search', value: state.search, placeholder: '搜索主题…',
         'aria-label': '搜索供货主题', style: 'flex:1;min-width:140px;max-width:280px',
@@ -210,7 +211,7 @@ export function mountPurchase({ root, view, actions, draft = {}, layout, assets,
   }
 
   function currentPaging() {
-    const size = Number.isSafeInteger(layout?.pageSize) ? layout.pageSize : pageSizeFor(capacity.tier, layout?.pageSizes);
+    const size = 1;
     return paginate(visibleProducts(), state.page, size);
   }
 
@@ -262,13 +263,13 @@ export function mountPurchase({ root, view, actions, draft = {}, layout, assets,
         unavailable ? el('span', { class: 'f6-note', text: '不可购买' }) : null,
       ]),
     ]);
-    return tile;
+    tile.classList.add('f6-product-detail');tile.append(productAlbum(p.productId,actions));return tile;
   }
 
   function paintFoot() {
     if (state.receipt) {
       foot.replaceChildren(
-        pagerBar({...paginate(state.receipt.lines,state.receiptPage||0,4),unit:'行',onPage:next=>{state.receiptPage=next;paintAll();}}),
+        pagerBar({...paginate(state.receipt.lines,state.receiptPage||0,Number.MAX_SAFE_INTEGER),unit:'行',onPage:next=>{state.receiptPage=next;paintAll();}}),
         el('span', { class: 'f6-foot__total' }, ['本次采购已完成入库；可去仓库或拆包台，或继续下一单']),
         el('span', { class: 'f6-foot__spacer' }),
       );
@@ -284,7 +285,7 @@ export function mountPurchase({ root, view, actions, draft = {}, layout, assets,
       const price = priceOf((view.products || []).find(p => p.productId === productId), unit);
       if (Number.isSafeInteger(price)) estimate += price * qty;
     }
-    const { page, pages, total } = state.showBasket?paginate(basketEntries(),state.basketPage,4):currentPaging();
+    const { page, pages, total } = state.showBasket?paginate(basketEntries(),state.basketPage,Number.MAX_SAFE_INTEGER):currentPaging();
     foot.replaceChildren(
       pagerBar({ page, pages, total, unit: state.showBasket?'行':'个商品', onPage: next => { if(state.showBasket)state.basketPage=next;else state.page = next; paintAll(); } }),
       button(state.showBasket?'返回商品':'购物篮（'+count+'件）',()=>{state.showBasket=!state.showBasket;paintAll();},{small:true}),

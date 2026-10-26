@@ -28,7 +28,7 @@ export async function openCardDetail(app, options = {}) {
       const card = result.data;
 
       const head = el("div", { class: "grid-2" }, [
-        el("div", { style: { display: "grid", gap: "8px", justifyItems: "start" } }, [
+        el("div", { 'data-card-key':card.cardKey, style: { display: "grid", gap: "8px", justifyItems: "start" } }, [
           imgWithFallback(card.imageUrl, card.name, "card-tile__img"),
           el("p", { class: "small muted", text: "卡图为原武将图，只读引用；与场景像素角色是两种表现。" }),
         ]),

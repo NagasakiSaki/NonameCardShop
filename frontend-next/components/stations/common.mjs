@@ -12,8 +12,9 @@ export function paginate(rows, page, size) {
 // ── 分页条：首页/上一页/页码/下一页/末页/跳页；按钮名固定，验收脚本按名字可达 ──
 export function pagerBar({ page, pages, total, unit = '条', onPage }) {
   const bar = el('nav', { class: 'f6-pager', 'aria-label': '分页' }, [
-    el('span', { class: 'f6-pager__info', 'data-pager-total': String(total), text: '共 ' + total + ' ' + unit + ' · 第 ' + (page + 1) + ' / ' + pages + ' 页' }),
+    el('span', { class: 'f6-pager__info', 'data-pager-total': String(total), text: '共 ' + total + ' ' + unit + (pages>1?' · 第 ' + (page + 1) + ' / ' + pages + ' 页':'') }),
   ]);
+  if(pages<=1)return bar;
   const go = next => { if (next !== page && next >= 0 && next <= pages - 1) onPage(next); };
   bar.append(
     button('首页', () => go(0), { small: true, disabled: page === 0 }),

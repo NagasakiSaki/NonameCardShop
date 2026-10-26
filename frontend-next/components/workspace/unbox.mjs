@@ -242,7 +242,7 @@ export function mountUnbox({ root, view, actions, assets, format, notify, draft 
       const done = state.resultMode !== 'animating';
       const stage = el('div', { class: 'pbc-reveal__stage', 'data-opening-cards': 'true' });
       results.slice(0, revealedCount).forEach(card => {
-        const frame = el('figure', { class: 'pbc-reveal__card', style: 'position:relative;margin:0;width:92px' }, [art(card.imageUrl, card.name)]);
+        const frame = el('figure', { class: 'pbc-reveal__card', 'data-card-key':card.cardKey, style: 'position:relative;margin:0;width:92px' }, [art(card.imageUrl, card.name)]);
         frame.querySelector('.pbc-art').style.cssText = 'width:92px;height:128px';
         frame.append(el('span', { style: 'position:absolute;left:4px;bottom:4px' }, [rarityChip(card.printedRarity)]));
         if (card.isNew) frame.append(el('span', { class: 'pbc-chip pbc-chip--gold', style: 'position:absolute;right:2px;top:2px', text: '新收录' }));

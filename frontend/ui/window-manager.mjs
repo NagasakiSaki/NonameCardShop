@@ -1,8 +1,9 @@
 // frontend/ui/window-manager.mjs — 统一窗口管理：嵌套、Esc 关闭最上层、暂停令牌成对申请/释放。
 import { el, clear, toast } from "./components.mjs";
 import { normalizeQuery } from "../host/normalize.mjs";
+import {retainWindowScroll} from './scroll-state.mjs';
 
-export function createWindowManager({ host, mount, onChange } = {}) {
+export function createWindowManager({ host, mount, onChange, onInspectCard } = {}) {
   const stack = [];
   let seq = 0;
 
@@ -50,6 +51,12 @@ export function createWindowManager({ host, mount, onChange } = {}) {
       body,
       foot,
     ]);
+    element.addEventListener('contextmenu',event=>{
+      if(!onInspectCard)return;
+      const card=event.composedPath().find(node=>node instanceof Element&&node.hasAttribute('data-card-key'));
+      const cardKey=card?.getAttribute('data-card-key');if(!cardKey)return;
+      event.preventDefault();event.stopPropagation();onInspectCard(cardKey);
+    },true);
 
     const handle = {
       id: key,
@@ -86,6 +93,7 @@ export function createWindowManager({ host, mount, onChange } = {}) {
       }
     }
 
+    body.dataset.scrollKey='window-body';const scrollState=retainWindowScroll(element);cleanups.add(scrollState);
     const renderContext = {
       host,
       currency,
@@ -111,13 +119,14 @@ export function createWindowManager({ host, mount, onChange } = {}) {
       },
       refresh() {
         const run=async()=>{if(closed)return;
+        scrollState.hold();
         clear(body);
         try {
           await render(renderContext);
         } catch (error) {
           console.error("[window] 渲染失败", error);
           body.append(el("p", { class: "small", style: { color: "#f0a08a" }, text: "窗口渲染失败：" + error.message }));
-        }
+        }finally{scrollState.resume();}
         };rendering=rendering.then(run,run);return rendering;
       },
     };

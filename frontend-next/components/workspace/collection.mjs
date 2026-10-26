@@ -33,7 +33,7 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
       ...draft, op:createOperationState(draft.operation),busy:false,
     };
     let disposed = false;
-    const pageSize=()=>root.clientWidth<=600?4:8;
+    const pageSize=()=>Number.MAX_SAFE_INTEGER;
     const body = el('div', { class: 'pbc-body', 'data-collection-root': 'true' });
     root.replaceChildren(body);
     injectStyles(root);
@@ -225,7 +225,7 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
       const page = pageRows(rows);
       const pages = Math.max(1, Math.ceil(rows.length / pageSize()));
       const label = el('div', { class: 'pbc-catalog__label' }, [
-        el('span', { text: '共 ' + rows.length + ' 条 · 本页 ' + page.length + ' 条 · ' + tabCaption() }),
+        el('span', { text: '共 ' + rows.length + ' 条 · ' + tabCaption() }),
         state.tab === 'collection' ? chip('印刷稀有度与全局强度分开显示') : null,
       ]);
       const grid = el('div', { class: 'pbc-card-grid', 'data-card-grid': 'true' });
@@ -274,7 +274,7 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
       if (row.owned != null) img.append(el('span', { class: 'pbc-owned', text: '×' + row.owned }));
       return el('button', {
         class: 'pbc-card-tile' + (row.id === state.selected ? ' is-selected' : ''),
-        type: 'button', 'data-card': row.id, 'aria-pressed': String(row.id === state.selected),
+        type: 'button', 'data-card': row.id, 'data-card-key':row.cardKey, 'aria-pressed': String(row.id === state.selected),
         'aria-label': row.name + ' 查看详情',
         onclick: () => select(row),
       }, [
@@ -293,7 +293,7 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
 
     function paintDetail() {
       const row = selectedRow();
-      const panel = el('aside', { class: 'pbc-detail', 'aria-label': '选中卡牌与交易确认','data-detail-page':state.detailPage });
+      const panel = el('aside', { class: 'pbc-detail', 'data-card-key':row?.cardKey, 'aria-label': '选中卡牌与交易确认','data-detail-page':state.detailPage });
       if (!row) {
         panel.append(emptyState('点选一张卡', '卡面、持有量与交易操作会显示在这里。'));
         return panel;
@@ -301,10 +301,9 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
       panel.append(segmented([['overview','卡面'],['trade','买卖'],['skills','技能']],state.detailPage,page=>{state.detailPage=page;if(page==='skills'&&!state.detail)loadDetail(row.cardKey);else paint();},'卡牌信息'));
       if(state.detailPage==='skills'){
         panel.append(el('h3',{text:row.name}));
-        const pages=(state.detail?.skills||[]).flatMap(skill=>{const text=skill.description||'暂无技能说明。';return Array.from({length:Math.max(1,Math.ceil(text.length/180))},(_,i)=>({title:skill.name||skill.id,text:text.slice(i*180,(i+1)*180)}));});
-        state.detailSegment=Math.max(0,Math.min(state.detailSegment,pages.length-1));
+        const skills=state.detail?.skills||[];
         if(state.detailLoading)panel.append(muted('正在读取技能…'));
-        else if(pages.length){const part=pages[state.detailSegment];panel.append(el('h4',{text:part.title}),el('p',{text:part.text}),el('div',{class:'pbc-actions'},[button('上一段',()=>{state.detailSegment--;paint();},{small:true,disabled:state.detailSegment===0}),el('span',{text:(state.detailSegment+1)+' / '+pages.length}),button('下一段',()=>{state.detailSegment++;paint();},{small:true,disabled:state.detailSegment+1>=pages.length})]));}
+        else if(skills.length)for(const skill of skills)panel.append(el('h4',{text:skill.name||skill.id}),el('p',{text:skill.description||'暂无技能说明。'}));
         else panel.append(muted('暂无技能说明。'));
         panel.append(button('更多资料与技能源码',()=>callAction(actions,'openCardDetail',{cardKey:row.cardKey}),{small:true}));
         return panel;

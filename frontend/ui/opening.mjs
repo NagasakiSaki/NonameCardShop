@@ -194,7 +194,7 @@ export async function openOpening(app) {
           if (!filtered.length) {
             stageNode.append(stateView({ kind: "empty", title: "这一批没有 SR 及以上", body: "切换到“逐张展示”看全部结果。" }));
           }
-          stageNode.append(el("div", { class: "reveal-grid" }, filtered.map((card) => el("div", { class: "reveal-card" + (card.isNew ? " reveal-card--new" : "") }, [
+          stageNode.append(el("div", { class: "reveal-grid" }, filtered.map((card) => el("div", { class: "reveal-card" + (card.isNew ? " reveal-card--new" : ""), 'data-card-key':card.cardKey }, [
             imgWithFallback(card.imageUrl, card.name, ""),
             el("span", { class: "small", text: card.name }),
             el("span", { class: "rarity rarity--" + card.rarity, text: card.rarity }),

@@ -57,10 +57,7 @@ export function mountRosterPicker({
 
   // 响应式每页容量计算：以可用宽度为基准，避免溢出与纵向滚条
   function getPageSize() {
-    const width = root.clientWidth || window.innerWidth || 1280;
-    if (width <= 480) return 4;   // 极窄立屏 2x2
-    if (width <= 1024) return 6;  // 平板/紧凑 3x2
-    return 8;                     // 标准桌面 4x2
+    return Number.MAX_SAFE_INTEGER;
   }
 
   // 3. 筛选与稳定排序流水线（收藏置顶）
@@ -330,7 +327,7 @@ export function mountRosterPicker({
         const tile = el(
           'div',
           {
-            role:'button',tabindex:0,'data-card-ref':item.inventoryRef,'aria-pressed':String(isSelected),
+            role:'button',tabindex:0,'data-card-ref':item.inventoryRef,'data-card-key':item.cardKey,'aria-pressed':String(isSelected),
             onkeydown:event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();event.currentTarget.click();}},
             class:
               `${prefix}-card-tile` +
@@ -401,7 +398,7 @@ export function mountRosterPicker({
     }
 
     // 分页器栏
-    paginationNode.append(
+    if(totalPages>1)paginationNode.append(
       el('div', { class: `${prefix}-pagination__info` }, [
         el('span', { text: `第 ${state.page + 1} / ${totalPages} 页` }),
         el('span', { style: { marginLeft: '8px', opacity: 0.7 }, text: `(候选 ${filtered.length} 张)` }),
@@ -458,9 +455,7 @@ export function mountRosterPicker({
     if (state.skillLoading) {
       skillPanelNode.append(el('p', { style: { color: 'var(--fast07-accent)', fontSize: '12px' }, text: '正在调取武将技能全文…' }));
     } else if (skills && skills.length > 0) {
-      const pages=skills.flatMap(sk=>{const text=String(sk.text||'');return Array.from({length:Math.max(1,Math.ceil(text.length/120))},(_,i)=>({title:sk.title,text:text.slice(i*120,(i+1)*120)}));});
-      state.skillPage=Math.min(state.skillPage,Math.max(0,pages.length-1));
-      for (const sk of pages.slice(state.skillPage,state.skillPage+1)) {
+      for (const sk of skills) {
         skillPanelNode.append(
           el('div', { class: `${prefix}-skill-item` }, [
             el('span', { class: `${prefix}-skill-item__title`, text: `【${sk.title}】` }),
@@ -468,7 +463,6 @@ export function mountRosterPicker({
           ])
         );
       }
-      if(pages.length>1)skillPanelNode.append(el('div',{class:prefix+'-pagination'},[button('上一段技能',()=>{state.skillPage--;renderSkillPanel();},{small:true,disabled:state.skillPage===0}),el('span',{text:(state.skillPage+1)+' / '+pages.length}),button('下一段技能',()=>{state.skillPage++;renderSkillPanel();},{small:true,disabled:state.skillPage+1>=pages.length})]));
     } else {
       skillPanelNode.append(
         el('div', { style: { padding: '8px', color: 'var(--fast07-text-muted)', fontSize: '12px' }, text: '暂未检索到技能描述文本，以卡面正式效果为准。' })

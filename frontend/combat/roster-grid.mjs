@@ -5,7 +5,7 @@ import { el } from "../world/dom-helpers.mjs";
 // - 卡面/技能预览按需打开，不整窗重弹；
 // - challenge-loan 借用将显眼标识“借用 · 不可上架/转让”，且永不出现在玩家可选池。
 
-export const ROSTER_PAGE_SIZE = 8;
+export const ROSTER_PAGE_SIZE = Number.MAX_SAFE_INTEGER;
 
 export function toggleSelection(selectedKeys, key, { max = Infinity, itemsByKey = null } = {}) {
   const next = selectedKeys.filter((existing) => existing !== key);
@@ -56,7 +56,7 @@ export function renderRosterGrid({ mount, items, selected, max, page = 0, favori
       class: "v7-roster-card" + (isSelected ? " is-selected" : "") + (unavailable ? " is-off" : "") + (item.loan ? " is-loan" : ""),
       type: "button",
       role:"button",tabindex:0,"aria-disabled":unavailable && !isSelected,
-      dataset: { rosterKey: item.key },
+      dataset: { rosterKey: item.key, cardKey:item.cardKey },
       onclick: (event) => {
         if (event.target.closest("[data-role=fav]")) return;
         if(readOnly)onPreview?.(item);else if(!unavailable||isSelected)onToggle(item);

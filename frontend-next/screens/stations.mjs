@@ -27,7 +27,7 @@ export function openStation(app,kind,options={}){
     if(op.operation&&`${op.operation.worldId}:${op.operation.branchId}`!==branch)op.operation.status='stale';
     const root=el('div',{'data-facility-root':kind}),message=el('div',{role:'status'});ctx.body.append(message,root);
     const notify=(text,type)=>{if(active()){message.textContent=text;message.style.color=type==='error'?'#efb9a9':'';}};
-    let view;
+    let view;const albumCache=new Map();
     async function refresh(){
       const [products,sealed,gift,retail,checkout,orders]=await Promise.all([queryAll(ctx,'products.list'),ctx.query('inventory.sealedSummary'),ctx.query('player.starterGift'),ctx.query('retail.list'),ctx.query('checkout.status'),queryAll(ctx,'supplier.orders')]);if(!active())return;
       const snapshot=app.snapshot();view={worldId:snapshot.worldId,branchId:snapshot.branchId,clock:snapshot.clock,wallet:snapshot.wallet,products,sealed:unwrap(sealed).items,retail:unwrap(retail),checkout:unwrap(checkout),legacyArrived:orders.filter(o=>o.status==='arrived').length,legacyPending:orders.filter(o=>o.status==='pending').length,pending:['unknown','submitting'].includes(op.operation?.status),atStation:{counter:app.isNearInteraction('store.counter'),opening:app.isNearInteraction('store.opening'),retail:app.isNearInteraction('store.retail')},newcomerGift:gift.ok&&gift.data?.status==='granted'?{title:'开店赠礼',note:gift.data.name+' · '+gift.data.quantity+(gift.data.unit==='box'?'盒':'包')+'，已放入仓库'}:null};controller?.update(view);return view;
@@ -49,6 +49,8 @@ export function openStation(app,kind,options={}){
       return result.ok?{...result,data:receipt(result.data)}:result;
     }
     const actions={
+      loadProduct({productId}){const version=view?.products.find(p=>p.productId===productId)?.productVersion||'',key=productId+':'+version;if(!albumCache.has(key))albumCache.set(key,ctx.query('products.contents',{productId}).then(result=>{if(!result.ok)albumCache.delete(key);return result;}));return albumCache.get(key);},
+      inspectCard:({cardKey})=>app.openPanel('cardDetail',{cardKey}),
       async purchase({lines,requestId}){
         const quote=await ctx.query('supplier.basketQuote',{lines});if(!quote.ok||!active())return quote.ok?fail('STALE_OPERATION','窗口已关闭。'):quote;
         const changed=quote.data.lines.some(line=>view.products.find(p=>p.productId===line.productId)?.prices?.[line.unit]?.wholesale!==line.unitAmount);
