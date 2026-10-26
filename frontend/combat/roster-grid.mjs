@@ -39,9 +39,9 @@ export function playableItems(items) {
  * items: [{key,name,rarity,skillSummary,quantity:{owned,available,locked,listed},eligible,reasons[],loan,favorite}]
  * 状态变化只重绘网格与计数，不重建整个窗口（选择状态由调用方持有）。
  */
-export function renderRosterGrid({ mount, items, selected, max, page = 0, favorites, onToggle, onPreview, onToggleFavorite, pageSize = ROSTER_PAGE_SIZE, caption, readOnly = false }) {
+export function renderRosterGrid({ mount, items, selected, max, page = 0, favorites, onToggle, onPreview, onToggleFavorite, pageSize = ROSTER_PAGE_SIZE, caption, readOnly = false,sortByScore=false }) {
   mount.replaceChildren();
-  const sorted = favoriteSort(items, favorites);
+  const sorted = sortByScore?items.slice().sort((a,b)=>(b.modeScore??-Infinity)-(a.modeScore??-Infinity)||String(a.name).localeCompare(String(b.name),'zh')):favoriteSort(items, favorites);
   const { items: pageItems, page: safePage, pages } = pageOf(sorted, page, pageSize);
   const countRow = el("div", { class: "v7-roster__count" }, [
     el("strong", { text: readOnly ? `固定名单 · ${items.length} 名武将` : `已选 ${selected.length}/${max}` }),
@@ -70,7 +70,7 @@ export function renderRosterGrid({ mount, items, selected, max, page = 0, favori
           type: "button",
           "data-role": "fav",
           text: (item.favorite || (favorites && favorites.has(item.key)) ? "★" : "☆"),
-          title: "收藏置顶",
+          title: "收藏武将",
           onclick: (event) => { event.stopPropagation(); onToggleFavorite(item); },
         }),
       ]),

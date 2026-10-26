@@ -11,7 +11,8 @@ for(const c of catalog.cards){const m=c.power.modeScores;assert.equal(c.globalSc
 assert(catalog.byId.get('liubei').power.modeScores['versus2v2-bo3']>catalog.byId.get('liubei').power.modeScores.kof);
 assert(catalog.byId.get('diaochan').power.modeScores['versus2v2-bo3']>catalog.byId.get('diaochan').power.modeScores.kof);
 const blank=v=>({id:'fixture',hp:4,skills:[],power:{vector:v,confidence:.5}}),base=modePower(blank({}),rules.scoring);
-assert(RATED_FORMATS.every(m=>base.modeScores[m]===50));assert(modePower(blank({cards:1}),rules.scoring).score>base.score);assert(modePower(blank({cost:1}),rules.scoring).score<base.score);assert.equal(modePower(blank({carry:10,burst:10}),rules.scoring).score,base.score);
+const skill=description=>({...blank({}),skills:[{id:'fixture-skill',description}]});
+assert(RATED_FORMATS.every(m=>base.modeScores[m]===50));assert(modePower(skill('结束阶段，你摸一张牌。'),rules.scoring).score>base.score);assert(modePower(skill('锁定技，结束阶段，你弃置一张牌。'),rules.scoring).score<base.score);assert.equal(modePower(blank({cards:999,carry:10,burst:10}),rules.scoring).score,base.score,'obsolete vectors do not leak into the two-round estimator');
 assert.throws(()=>validateRules({...rules,modeWeights:{bo3:1,kof:0,'doudizhu-bo3':0,'versus2v2-bo3':0}}));
 console.log('PASS 2563 generals: exact three-mode mean, role mean, team anchors, costs, no inherited-hand bonus, strict pricing weights');
 let r=await createRuntime({source,rules,repository:memoryRepository(),modeCapabilities:caps});let seq=0;
@@ -42,4 +43,4 @@ const stale=await r.command({requestId:'stale-room-cancel',type:'combat.room.can
 await c('business.close');assert.equal(r.inspect().world.combatRooms.items.at(-1).status,'cancelled');assert(r.inspect().world.tables.every(t=>!t.reservation));
 console.log('PASS waiting room auto join, branch proof, backup/load consistency; waiting room allows business clock, closing releases room; old series API remains compatible');
 saved=r.inspect();saved.world.rules.scoring.method='resource-yield-1';saved.world.rules.modeWeights={bo3:.5,kof:.5};delete saved.world.ratingRulesVersion;
-const manufactured=JSON.stringify(saved.world.items);await r.disconnect();r=await createRuntime({source,rules,repository:memoryRepository(saved),modeCapabilities:caps});await connect();assert.equal(r.inspect().world.rules.scoring.method,'resource-three-mode-3');assert.equal(JSON.stringify(r.inspect().world.items),manufactured,'rating migration must preserve old printed cards, manufactured contents and cost');console.log('PASS legacy rating migrates without rewriting existing physical goods');await r.disconnect();
+const manufactured=JSON.stringify(saved.world.items);await r.disconnect();r=await createRuntime({source,rules,repository:memoryRepository(saved),modeCapabilities:caps});await connect();assert.equal(r.inspect().world.rules.scoring.method,'ideal-two-round-1');assert.equal(JSON.stringify(r.inspect().world.items),manufactured,'rating migration must preserve old printed cards, manufactured contents and cost');console.log('PASS legacy rating migrates without rewriting existing physical goods');await r.disconnect();

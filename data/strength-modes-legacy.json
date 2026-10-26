@@ -1,0 +1,282 @@
+{
+  "version": "resource-three-mode-3",
+  "aggregation": "arithmetic-mean-of-three",
+  "scoreCap": 200,
+  "baseHorizon": 4,
+  "profiles": {
+    "kof": {
+      "label": "KOF",
+      "enemies": 1,
+      "allies": 0,
+      "horizon": 3,
+      "incoming": 1,
+      "growth": 0.75
+    },
+    "landlord": {
+      "label": "斗地主·地主",
+      "enemies": 2,
+      "allies": 0,
+      "horizon": 3,
+      "incoming": 1.4,
+      "growth": 0.8
+    },
+    "farmer": {
+      "label": "斗地主·农民",
+      "enemies": 1,
+      "allies": 1,
+      "horizon": 4,
+      "incoming": 0.85,
+      "growth": 1
+    },
+    "versus2v2-bo3": {
+      "label": "2v2",
+      "enemies": 2,
+      "allies": 1,
+      "horizon": 4,
+      "incoming": 1.2,
+      "growth": 1
+    }
+  },
+  "anchors": {
+    "liubei": {
+      "notes": "仁德给队友是团队内转移，不算净摸牌；计牌质调配与给出第二张后的有效自疗。无队友时可不发动，主公技不预设同势力响应。",
+      "roles": {
+        "farmer": {
+          "quality": 0.8,
+          "heal": 0.35
+        },
+        "versus2v2-bo3": {
+          "quality": 0.9,
+          "heal": 0.4
+        }
+      }
+    },
+    "guojia": {
+      "notes": "遗计按有效受伤机会估净牌收益；有队友时分牌只增加牌质，不把转移再当一次摸牌。",
+      "roles": {
+        "landlord": {
+          "cards": 1.65
+        },
+        "farmer": {
+          "cards": 1.2,
+          "quality": 0.35
+        },
+        "versus2v2-bo3": {
+          "cards": 1.5,
+          "quality": 0.4
+        }
+      }
+    },
+    "diaochan": {
+      "notes": "闭月稳定一牌；离间在单挑无法凑齐两名其他男性。多人局按男性、出杀与成本的条件概率计有限额外收益，不假设必然打中。",
+      "roles": {
+        "landlord": {
+          "cards": 1,
+          "damage": 0.35,
+          "cost": 0.35
+        },
+        "farmer": {
+          "cards": 1,
+          "damage": 0.15,
+          "cost": 0.25
+        },
+        "versus2v2-bo3": {
+          "cards": 1,
+          "damage": 0.45,
+          "cost": 0.4
+        }
+      }
+    },
+    "xunyu": {
+      "notes": "单挑不把驱虎的两条互斥伤害分支相加；可以选择不发动。节命按实际补牌缺口估算，农民/2v2可补队友，仍只计一次实际增加的手牌。",
+      "roles": {
+        "kof": {
+          "cards": 1,
+          "damage": 0,
+          "quality": 0,
+          "cost": 0.1
+        },
+        "landlord": {
+          "cards": 1.3,
+          "damage": 0.35,
+          "cost": 0.25
+        },
+        "farmer": {
+          "cards": 1.65,
+          "damage": 0.2,
+          "quality": 0.25,
+          "cost": 0.2
+        },
+        "versus2v2-bo3": {
+          "cards": 1.8,
+          "damage": 0.4,
+          "quality": 0.3,
+          "cost": 0.25
+        }
+      }
+    },
+    "huatuo": {
+      "notes": "青囊/急救均消耗实牌；有队友时有更多有效治疗与救援机会，但不能把每张红牌当免费桃，不能同时重复计同一份防伤与回血。",
+      "roles": {
+        "landlord": {
+          "heal": 0.7,
+          "quality": 0.45,
+          "cost": 0.4
+        },
+        "farmer": {
+          "heal": 0.9,
+          "quality": 0.5,
+          "cost": 0.5
+        },
+        "versus2v2-bo3": {
+          "heal": 1,
+          "quality": 0.55,
+          "cost": 0.55
+        }
+      }
+    },
+    "sunshangxiang": {
+      "notes": "结姻计有效双方治疗，扣两张手牌；团队中给队友治疗有价值，无队友不能默认给敌方治疗也能获得同样团队收益。",
+      "roles": {
+        "farmer": {
+          "heal": 0.7,
+          "cost": 0.7,
+          "quality": 0.2
+        },
+        "versus2v2-bo3": {
+          "heal": 0.8,
+          "cost": 0.8,
+          "quality": 0.25
+        }
+      }
+    },
+    "lumeng": {
+      "notes": "克己不是免费摸牌，只是留存本会弃掉的牌；KOF换将不继承手牌，按较短存活窗口降低蓄牌收益。",
+      "roles": {
+        "kof": {
+          "quality": 0.45,
+          "cards": 0,
+          "carry": 0
+        },
+        "landlord": {
+          "quality": 0.5,
+          "cards": 0,
+          "carry": 0
+        }
+      }
+    },
+    "clan_xunshuang": {
+      "notes": "回合末补至至多5按实际缺口计净牌，不把每次触发都算摸5；三四人局有更多补牌与判定成长机会，但蹈节成本也增加；KOF按短窗口折减成长。",
+      "roles": {
+        "kof": {
+          "cards": 2.8,
+          "control": 0.45,
+          "cost": 0.3,
+          "hpLoss": 0.15
+        },
+        "landlord": {
+          "cards": 4.2,
+          "control": 0.6,
+          "cost": 0.4,
+          "hpLoss": 0.2
+        },
+        "farmer": {
+          "cards": 4.1,
+          "control": 0.4,
+          "quality": 0.2,
+          "cost": 0.35,
+          "hpLoss": 0.15
+        },
+        "versus2v2-bo3": {
+          "cards": 4.8,
+          "control": 0.5,
+          "quality": 0.25,
+          "cost": 0.45,
+          "hpLoss": 0.2
+        }
+      }
+    },
+    "clan_xunshu": {
+      "notes": "八龙摸至角色数，分别按2/3/4人局补牌缺口估算，仍要求体力变化、锦囊唯一最多等条件；神君只算有效转化牌质，扣蹈节成本。",
+      "roles": {
+        "landlord": {
+          "cards": 1.15,
+          "quality": 1.25,
+          "cost": 0.45,
+          "hpLoss": 0.15
+        },
+        "farmer": {
+          "cards": 1.1,
+          "quality": 1.3,
+          "cost": 0.4,
+          "hpLoss": 0.1
+        },
+        "versus2v2-bo3": {
+          "cards": 1.65,
+          "quality": 1.4,
+          "cost": 0.5,
+          "hpLoss": 0.15
+        }
+      }
+    },
+    "clan_xunchen": {
+      "notes": "每轮三类各首次的总次数不随人数翻倍；多名敌人提高可选目标资源与条件满足率，队友调配只算牌质，不重复计交牌和回收。",
+      "roles": {
+        "landlord": {
+          "cards": 3.1,
+          "cost": 0.65,
+          "heal": 0.15,
+          "control": 0.15
+        },
+        "farmer": {
+          "cards": 2.8,
+          "cost": 0.5,
+          "heal": 0.15,
+          "control": 0.15,
+          "quality": 0.25
+        },
+        "versus2v2-bo3": {
+          "cards": 3.2,
+          "cost": 0.55,
+          "heal": 0.15,
+          "control": 0.15,
+          "quality": 0.35
+        }
+      }
+    },
+    "clan_xunyu": {
+      "notes": "定安双方摸牌按阵营净增益计算：给敌方不算我方牌差，给队友只记一次实际增加；每回合每角色限次，扣蹈节与给牌成本，不机械按四人乘四。",
+      "roles": {
+        "landlord": {
+          "cards": 1.6,
+          "damage": 0.5,
+          "heal": 0.2,
+          "cost": 0.5,
+          "hpLoss": 0.15
+        },
+        "farmer": {
+          "cards": 2.05,
+          "damage": 0.35,
+          "heal": 0.25,
+          "cost": 0.4,
+          "hpLoss": 0.1
+        },
+        "versus2v2-bo3": {
+          "cards": 2.6,
+          "damage": 0.5,
+          "heal": 0.25,
+          "cost": 0.5,
+          "hpLoss": 0.1
+        }
+      }
+    }
+  },
+  "assumptions": [
+    "评分是相对于同模式同身份的4血白板武将的理论资源增益，不是实测胜率。",
+    "保留原模型的1血约2牌作为可编辑估值假设，按各模式行动窗口摊销；不是官方换算公式。",
+    "斗地主先平均地主和农民，四模式再各占四分之一；不按某种模式出场率或最高分定价。",
+    "KOF换将新摸4张，无手牌/装备继承加分；同一份开局、限定技、成长收益不能重复计分。",
+    "普通单目标技能不会仅因人数增加而翻倍；只有明确的多人范围/其他回合触发才按有界暴露量调整。",
+    "给队友的牌是团队内转移，净牌差为0；牌质调配另计。主公技不预设总有同势力队友。"
+  ]
+}

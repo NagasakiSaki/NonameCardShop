@@ -13,4 +13,7 @@
 .partner-card img{width:100px;height:170px;object-fit:contain;flex-shrink:0}
 .partner-card h3{margin:0 0 8px}.partner-card select{max-width:100%;padding:8px}
 .loan-payment-field{width:180px;max-width:45vw;min-height:40px;padding:8px;border:1px solid #c6a777;border-radius:6px;background:#fffaf0;color:#594431;font-size:16px;box-sizing:border-box}
+.v7-pack-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:12px 0}.v7-pack-card{min-height:95px;white-space:pre-line;text-align:left;padding:16px;border:1px solid #cfb184;border-radius:10px;background:linear-gradient(135deg,#fff8e9,#f2dfb9);color:#65452e;font-size:16px;line-height:1.8;cursor:pointer}.v7-pack-card:hover{border-color:#ae594c;background:#fff3dc}.v7-picked-tray{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}.v7-picked-tray:empty{display:none}
+.v7-pack-breadcrumb{position:sticky;top:0;z-index:5;background:#fff9ed;padding:8px 0;border-bottom:1px solid #dfcba8}
+.v7-pack-card{display:flex;align-items:center;gap:14px}.v7-pack-card img{width:54px;height:80px;object-fit:contain;flex:none}
 .partner-stage{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:14px 6px;border-bottom:1px solid #dcc9a6}

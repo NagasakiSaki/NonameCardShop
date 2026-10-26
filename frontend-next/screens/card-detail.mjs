@@ -61,10 +61,15 @@ export function openCardDetail(app,options={}){
           el('div',{class:'detail-badges'},[el('span',{text:'印刷：'+(card.printedRarity||'未持有')}),rarity(card.currentRarity),el('span',{class:'muted',text:'当前全局强度分级'})]),
           el('p',{class:'detail-meta',text:[card.title,card.faction,card.pack,'技能版本 '+(card.skillVersion||'—')].filter(Boolean).join(' · ')}),
           el('section',{class:'surface-card','aria-label':'评分与参考价格'},[el('h3',{text:'全局评分与参考行情'}),line('全局综合分',card.globalScore),...(card.power?.modeScores?RATED_FORMATS.map(mode=>line(MODE_LABELS[mode]+' 评分',card.power.modeAvailability?.[mode]===false?'不可出场（计0分）':card.power.modeScores[mode])):[]),...(card.power?.roles?[line('斗地主身份分','地主 '+card.power.roles.landlord.score+' / 农民 '+card.power.roles.farmer.score),line('定价标准','三模式等权平均')]:[]),line('评分状态',review),line('评分置信度（模型估计）',confidence),line('当前参考价',app.formatMoney(card.referencePrice?.amount)),
-            card.power?.modelVersion?el('p',{class:'detail-meta',text:'收益论估算：每己方回合 '+card.power.netCardEquivalent+' 等效牌；'+card.power.notes}):null,
+            card.power?.modelVersion?el('p',{class:'detail-meta',text:'收益论估算：'+(card.power.unit||'每己方回合等效牌收益')+' '+card.power.netCardEquivalent+'；'+card.power.notes}):null,
             el('p',{class:'detail-meta',text:'评分版本 '+(card.ratingVersion||'—')+'。强度评分与模型置信度不等于实战胜率；印刷稀有度保留在各实物副本上。'})]),
           skillsSection()
         ]);
+        if(card.power?.scenario){
+          const table=el('table',{class:'detail-table'},[el('thead',{},[el('tr',{},['场景','分数','两轮牌差','两轮血差','强中加分','拆装备加分'].map(text=>el('th',{text})))])]);
+          table.append(el('tbody',{},[['kof','KOF'],['landlord','地主'],['farmer','农民'],['versus2v2-bo3','2v2']].map(([key,name])=>{const r=card.power.roles[key];return el('tr',{},[name,r.score,r.cardDifference,r.hpDifference,r.contributions.reliable,r.contributions.equipment].map(text=>el('td',{text:String(text)})));})));
+          title.append(el('details',{class:'surface-card'},[el('summary',{text:'查看两回合收益明细'}),el('p',{class:'detail-meta',text:'每轮己方一次1点伤害、回合外受一次1点伤害；1血=2牌。牌差、血差均为相对同场景四血白板的技能增量；初始体力差计入血差。'}),el('div',{style:{overflowX:'auto'}},[table]),el('p',{class:'detail-meta',text:'强中与拆装备列为额外分，已含在总分内；不再重复算基础伤害或弃牌。'}),el('h4',{text:'KOF 逐技能计算与待复核项'}),el('ul',{class:'detail-meta'},(card.power.roles.kof.components||[]).map(c=>el('li',{text:(card.skills.find(s=>s.id===c.id)?.name||c.id)+'：'+(c.notes||[]).join('；')+((c.flags||[]).length?'【待复核：'+c.flags.join('；')+'】':'')})))]));
+        }
         surface.workspace.append(el('div',{class:'detail-layout'},[
           el('div',{class:'detail-image-column','data-card-key':card.cardKey},[art(card.imageUrl,card.name,'hero-art'),el('p',{class:'detail-meta',text:'原始卡图 · 等比完整显示'}),
             el('div',{class:'detail-badges'},[el('span',{class:'chip',text:'持有 ×'+(holdings.owned??0)}),el('span',{class:'chip',text:'可用 '+(holdings.available??0)})])]),title

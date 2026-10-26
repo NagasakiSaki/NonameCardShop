@@ -54,7 +54,8 @@
     "build:exe": "node dev/build.mjs exe",
     "art:portraits:import": "node tools/character-kit/import-portraits.mjs",
     "art:portraits:build": "python tools/portrait-kit/build.py",
-    "test:long-term": "node tests/run.mjs longTerm"
+    "test:long-term": "node tests/run.mjs longTerm",
+    "test:ideal-yield": "node tests/run.mjs idealYield"
   },
   "dependencies": {
     "noname": "file:tools/adapters/noname",

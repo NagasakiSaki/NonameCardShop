@@ -1,170 +1,18 @@
-/**
- * V7 Collation Policy Module
- *
- * Implements box recipe and card collation rules:
- * - 24 packs * 5 cards = 120 cards per box
- * - Minimum 1 R guaranteed in every single pack (advanced slot)
- * - Strict fallback pool isolation: fallback pools only draw from unlockedProductIds!
- * - Entry / Starter Box when SSR pool is absent:
- *   - Fixed box counts: 60N / 42R / 18SR / 0SSR
- *   - Guaranteed advanced slot: 6R / 18SR / 0SSR (24 cards total)
- *   - Remainder base slot: 60N / 36R / 0SR / 0SSR (96 cards total)
- *   - Retains 1 R+ guarantee per pack and exact box counts
- *   - Does NOT fake SR as SSR or secretly pull SSR from locked themes
- * - Standard Box when SSR pool is present:
- *   - Fixed box counts: 60N / 42R / 15SR / 3SSR
- * - Once manufactured, box contents are frozen; old boxes are never re-rolled upon new unlocks.
- */
-
-import defaultPolicy from '../../data/v7/economy-policy.json' with { type: 'json' };
-
-export const RARITIES = Object.freeze(['N', 'R', 'SR', 'SSR']);
-
-/**
- * Plans collation for a product theme given the currently unlocked themes.
- *
- * Signature matches shared contract:
- * planCollation({ productId, unlockedProductIds, catalog, policy })
- */
-export function planCollation({
-  productId,
-  unlockedProductIds = ['yijiang'],
-  catalog,
-  policy = defaultPolicy
-}) {
-  if (!productId || typeof productId !== 'string') {
-    return {
-      ok: false,
-      error: { code: 'INVALID_PRODUCT_ID', message: '必须指定有效的产品ID。', retryable: false }
-    };
-  }
-
-  if (!catalog || !Array.isArray(catalog.cards)) {
-    return {
-      ok: false,
-      error: { code: 'INVALID_CATALOG', message: '必须提供有效的卡牌目录。', retryable: false }
-    };
-  }
-
-  // 1. Local theme cards
-  const themeCards = catalog.cards.filter(c => c.pack === productId);
-  const localPools = Object.fromEntries(
-    RARITIES.map(r => [r, themeCards.filter(c => c.currentRarity === r).map(c => c.cardKey)])
-  );
-  const poolSummary = Object.fromEntries(RARITIES.map(r => [r, localPools[r].length]));
-
-  // 2. Fallback pools: STRICTLY from unlockedProductIds only!
-  const safeUnlocked = Array.isArray(unlockedProductIds) && unlockedProductIds.length > 0
-    ? unlockedProductIds
-    : ['yijiang'];
-
-  const unlockedCards = catalog.cards.filter(c => safeUnlocked.includes(c.pack));
-  const fallbackPools = Object.fromEntries(
-    RARITIES.map(r => [r, unlockedCards.filter(c => c.currentRarity === r).map(c => c.cardKey)])
-  );
-
-  // 3. Determine if SSR is available
-  const hasThemeSsr = localPools.SSR.length > 0;
-  const hasUnlockedSsr = fallbackPools.SSR.length > 0;
-  const hasSsr = hasThemeSsr || hasUnlockedSsr;
-
-  // 4. Select collation recipe
-  let boxCounts;
-  let guaranteed;
-  let remainder;
-  let isStarterNoSsr;
-  let guarantees;
-
-  if (!hasSsr) {
-    // Starter Box with No SSR (yijiang entry rule)
-    boxCounts = { N: 60, R: 42, SR: 18, SSR: 0 };
-    guaranteed = { N: 0, R: 6, SR: 18, SSR: 0 };
-    remainder = { N: 60, R: 36, SR: 0, SSR: 0 };
-    isStarterNoSsr = true;
-    guarantees = [
-      '每包 4 张 N/R 基础槽 + 1 张 R/SR 进阶槽（入门无SSR特供版）',
-      '整盒固定 60N / 42R / 18SR / 0SSR；散包无累计大保底'
-    ];
-  } else {
-    // Standard Box with SSR
-    boxCounts = { N: 60, R: 42, SR: 15, SSR: 3 };
-    guaranteed = { N: 0, R: 6, SR: 15, SSR: 3 };
-    remainder = { N: 60, R: 36, SR: 0, SSR: 0 };
-    isStarterNoSsr = false;
-    guarantees = [
-      '每包 4 张 N/R 基础槽 + 1 张 R/SR/SSR 进阶槽',
-      '整盒固定 60N / 42R / 15SR / 3SSR；散包无累计大保底'
-    ];
-  }
-
-  // 5. Construct final pools & note substitutions
-  const pools = {};
-  const substitutions = [];
-
-  for (const r of RARITIES) {
-    if (localPools[r].length > 0) {
-      pools[r] = [...localPools[r]];
-    } else if (boxCounts[r] > 0) {
-      // Need cards for this rarity, pull from unlocked fallback pool
-      pools[r] = [...fallbackPools[r]];
-      substitutions.push(r);
-    } else {
-      // Not needed (e.g. SSR in starter box)
-      pools[r] = [];
-    }
-  }
-
-  const substitutionSummary = substitutions.length > 0
-    ? `${substitutions.join('/')} 缺档，使用已解锁主题同档补位。`
-    : null;
-
-  // 6. Pack slot probability distributions
-  // 4 remainder slots + 1 guaranteed slot
-  const remainderSlotWeights = Object.fromEntries(RARITIES.map(r => [r, remainder[r] / 96]));
-  const guaranteedSlotWeights = Object.fromEntries(RARITIES.map(r => [r, guaranteed[r] / 24]));
-  const packSlots = [
-    remainderSlotWeights,
-    remainderSlotWeights,
-    remainderSlotWeights,
-    remainderSlotWeights,
-    guaranteedSlotWeights
-  ];
-
-  // Conservation check
-  const totalCards = boxCounts.N + boxCounts.R + boxCounts.SR + boxCounts.SSR;
-  if (totalCards !== 120) {
-    throw new Error(`COLLATION_ERROR: Total box cards must be 120, got ${totalCards}`);
-  }
-
-  const productVersion = `${productId}-v7-${isStarterNoSsr ? 'starter' : 'standard'}-u${[...safeUnlocked].sort().join('_')}`;
-
-  return {
-    ok: true,
-    data: {
-      productId,
-      productVersion,
-      collationVersion: policy.collation.version,
-      cardsPerPack: 5,
-      packsPerBox: 24,
-      cardsPerBox: 120,
-      isStarterNoSsr,
-      poolSummary,
-      boxCounts,
-      guaranteed,
-      remainder,
-      pools,
-      substitutions,
-      substitutionSummary,
-      guarantees,
-      packSlots,
-      unlockedProductIdsUsed: [...safeUnlocked]
-    }
-  };
+// Edition recipes and print grades are independent of combat scores and unlock order.
+import defaultEditions from '../../data/print-editions.json' with {type:'json'};
+export const RARITIES=Object.freeze(['N','R','SR','SSR']);
+export function planCollation({productId,catalog,editions=defaultEditions}){
+ if(!productId||typeof productId!=='string')return {ok:false,error:{code:'INVALID_PRODUCT_ID',message:'必须指定有效的产品ID。'}};
+ if(!catalog||!Array.isArray(catalog.cards))return {ok:false,error:{code:'INVALID_CATALOG',message:'必须提供有效卡牌目录。'}};
+ const edition=editions.products[productId],recipe=editions.recipes[edition?.recipeId];
+ if(!edition||!recipe)return {ok:false,error:{code:'PRINT_EDITION_MISSING',message:'此主题尚未登记固定发行配方。'}};
+ const {boxCounts,guaranteed,remainder}=structuredClone(recipe),pools=Object.fromEntries(RARITIES.map(r=>[r,catalog.cards.filter(c=>c.pack===productId&&edition.rarities[c.generalId||c.id]===r).map(c=>c.cardKey)]));
+ if(RARITIES.some(r=>[boxCounts[r],guaranteed[r],remainder[r]].some(n=>!Number.isSafeInteger(n)||n<0)||boxCounts[r]!==guaranteed[r]+remainder[r])||guaranteed.N!==0||Object.values(boxCounts).reduce((a,b)=>a+b,0)!==120||Object.values(guaranteed).reduce((a,b)=>a+b,0)!==24||Object.values(remainder).reduce((a,b)=>a+b,0)!==96)throw Error('固定发行配方数量不守恒。');
+ const poolSummary=Object.fromEntries(RARITIES.map(r=>[r,pools[r].length])),isStarterNoSsr=boxCounts.SSR===0;
+ const packSlots=[...Array.from({length:4},()=>Object.fromEntries(RARITIES.map(r=>[r,remainder[r]/96]))),Object.fromEntries(RARITIES.map(r=>[r,guaranteed[r]/24]))];
+ return {ok:true,data:{productId,productVersion:edition.printVersion,printVersion:edition.printVersion,editionVersion:editions.version,collationVersion:editions.version,cardsPerPack:5,packsPerBox:24,cardsPerBox:120,isStarterNoSsr,poolSummary,boxCounts,guaranteed,remainder,pools,substitutions:[],substitutionSummary:null,guarantees:['散包固定槽位出率，每包至少1张R或以上；不累计大保底','整盒固定 '+RARITIES.map(r=>boxCounts[r]+r).join(' / ')+'；评分与解锁不改变本发行版配比'],packSlots,unlockedProductIdsUsed:[]}};
 }
 
-/**
- * Deterministic pseudo-random helper.
- */
 function nextUnit(state) {
   state.seed = (Math.imul(state.seed, 1664525) + 1013904223) >>> 0;
   return state.seed / 4294967296;

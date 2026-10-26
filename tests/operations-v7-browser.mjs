@@ -30,7 +30,7 @@ try{
   await room().locator('[data-format-id]').first().waitFor({timeout:45000});
   for(const formatId of ['kof','versus2v2-bo3','doudizhu-bo3']){
     if(!await room().count())await page.evaluate(()=>__cardShopApp.openPanel('combat',{opponentId:'fixture-rival'}));
-    await room().locator(`[data-format-id="${formatId}"]`).click();await room().getByRole('button',{name:'创建房间并选将',exact:true}).click();
+    await room().locator(`[data-format-id="${formatId}"]`).click();await room().getByRole('button',{name:'创建房间并选将',exact:true}).click();await room().locator('[data-roster-pack="*"]').click();
     const count={kof:3,'doudizhu-bo3':5,'versus2v2-bo3':8}[formatId],winsRequired=formatId==='kof'?1:2;
     await room().locator('[data-combat-room]').waitFor();
     const frozenPool=await q('combat.rooms');assert.equal(frozenPool.active.pools.enemy.length,count);
@@ -50,7 +50,7 @@ try{
     const records=[];
     for(let round=0;round<winsRequired;round++){
       const series=await q('combat.series'),picks=series.round.seatSkeleton.filter(s=>s.teamId==='mine').length;
-      if(formatId!=='kof')for(let i=0;i<picks;i++)await room().locator(`[data-roster-key="ui-player-${i}"]`).click();
+      if(formatId!=='kof')await room().locator('[data-roster-pack="*"]').click();if(formatId!=='kof')for(let i=0;i<picks;i++)await room().locator(`[data-roster-key="ui-player-${i}"]`).click();
       await room().getByRole('button',{name:'确认本局选将',exact:true}).click();await room().getByRole('button',{name:'开始本局',exact:true}).click();
       await until(async()=>(await q('combat.series'))?.phase==='live');
       const frame=page.frames().find(f=>f.url().startsWith(server.engineOrigin+'/'));if(!frame)console.log('MISSING FRAME',formatId,round,page.frames().map(f=>f.url()),await room().locator('.v7-message').textContent(),JSON.stringify(await q('combat.series')));assert(frame);

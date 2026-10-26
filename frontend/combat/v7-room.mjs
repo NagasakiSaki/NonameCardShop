@@ -2,7 +2,7 @@ import {openRoomPools} from './room-pools.mjs';
 import {el,newRequestId} from '../ui/components.mjs';
 import {fitPanel} from '../../frontend-next/services/panel-shell.mjs';
 import {openCombat as openLegacy} from '../../frontend-next/screens/combat.mjs';
-import {renderRosterGrid} from './roster-grid.mjs';
+import {renderPackSelector,scoreFor} from './pack-selector.mjs';
 import {formatOptions,renderFormatPicker} from './format-picker.mjs';
 import {buildSelectRoundIntent,roundSelectionRequirement} from './round-select.mjs';
 import {seriesBanner,takeoverControlInfo,sideSwapNote} from './series-panel.mjs';
@@ -17,6 +17,7 @@ export async function openCombat(app,options={}){
   if(room?.background)return openRoomPools(app,room);if(room?.legacy&&!room.series)return openLegacy(app,options);
   if(queue.ok&&queue.data.playerMatch&&!existing.data)return openLegacy(app,options);
   let series=room?.series||(existing.ok?existing.data:null),formatId=room?.formatId||'kof',selected=[],page=0,items=[],formats=[],opponentId=room?.opponentId||options.opponentId||null,step=series?'series':room?'reserve':'format',pending=null;
+  const pickerStates={reserve:{pack:null,scroll:{}},round:{pack:null,scroll:{}}};let roundPickerId=null;
   return app.windows.open({id:'combat-v7',title:'对战房间',pauseReason:'准备牌局',width:'window--wide',render:async ctx=>{
     fitPanel(ctx);ctx.element.classList.add('v7-room');let disposed=false,busy=false,mounted=null,mountedGame=null,mounting=false,refreshing=false,menuOpen=false;
     const branch=idOf(app),active=()=>!disposed&&!ctx.handle.closed&&idOf(app)===branch;
@@ -42,15 +43,14 @@ export async function openCombat(app,options={}){
       catch(e){message.textContent=e.message;root.hidden=false;await reload();}finally{mounting=false;}
     }
     const preview=item=>app.openPanel('cardDetail',{cardKey:item.cardKey});
-    async function favorite(item){const favorite=!item.favorite,r=await submit('player.setFavorite',{cardKey:item.cardKey,favorite});if(r?.ok){for(const c of items)if(c.cardKey===item.cardKey)c.favorite=favorite;paint();}}
-    function grid(pool,max,onConfirm,label){
+    async function favorite(item){const favorite=!item.favorite,r=await submit('player.setFavorite',{cardKey:item.cardKey,favorite});if(r?.ok){for(const c of items)if(c.cardKey===item.cardKey)c.favorite=favorite;for(const c of series?.reserveItems||[])if(c.cardKey===item.cardKey)c.favorite=favorite;paint();}}
+    function grid(pool,max,onConfirm,label,scope='reserve'){
       const gridMount=el('div');root.append(gridMount);
-      const favorites=new Set(pool.filter(c=>c.favorite).map(c=>c.key));
-      function draw(){renderRosterGrid({mount:gridMount,items:pool,selected,max,page,favorites,onToggle:item=>{
-        if(item.__page!=null){page=item.__page;draw();return;}
+      const state=pickerStates[scope];
+      function draw(){const scroll=ctx.body.scrollTop;renderPackSelector({mount:gridMount,items:pool,selected,max,state,onNavigate:id=>{state.scroll[state.pack??'home']=ctx.body.scrollTop;state.pack=id;draw();ctx.body.scrollTop=state.scroll[id??'home']||0;},onToggle:item=>{
         const found=selected.indexOf(item.key);if(found>=0)selected.splice(found,1);else if(selected.length<max&&!selected.some(ref=>pool.find(c=>c.key===ref)?.generalId===item.generalId))selected.push(item.key);else message.textContent='请先取消已选武将；同一阵营不能重复武将。';
-        draw();confirm.disabled=selected.length!==max||!!room&&!room.readiness.enemy;
-      },onPreview:preview,onToggleFavorite:favorite});}
+        draw();updateSummary();confirm.disabled=selected.length!==max||!!room&&!room.readiness.enemy;
+      },onPreview:preview,onToggleFavorite:favorite});ctx.body.scrollTop=scroll;}
       const summary=el('span',{class:'small','aria-live':'polite'}),confirm=button(label,async()=>{confirm.disabled=true;try{await onConfirm();}finally{if(active()&&confirm.isConnected)confirm.disabled=selected.length!==max||!!room&&!room.readiness.enemy;}},selected.length!==max||!!room&&!room.readiness.enemy);
       const updateSummary=()=>summary.textContent=`已选 ${selected.length}/${max}：`+(selected.map(ref=>pool.find(c=>c.key===ref)?.name||ref).join(' → ')||'请点击卡面选择');
       choiceBar.append(summary,confirm);updateSummary();draw();gridMount.addEventListener('click',updateSummary);gridMount.addEventListener('keydown',updateSummary);
@@ -59,10 +59,10 @@ export async function openCombat(app,options={}){
       if(app.connection.capabilities?.battleRooms&&!room){const created=await submit('combat.room.create',{formatId,opponentId,tableId:options.tableId});if(!created?.ok)return;room=created.data;}
       const result=await ctx.query('combat.eligible',{formatId});if(!active())return;
       if(!result.ok){error(result);return;}const groups=new Map();for(const c of result.data.items){if(!groups.has(c.generalId))groups.set(c.generalId,[]);groups.get(c.generalId).push(c);}
-      items=[...groups.values()].map(copies=>{const c=copies.find(c=>c.eligible)||copies[0];return {...c,key:c.inventoryRef,modeScore:c.modeScores?.[formatId],reasons:c.disabledReasons,quantity:{owned:copies.length,available:copies.filter(c=>c.eligible).length,locked:copies.filter(c=>c.disabledReasons.some(r=>r.code==='ITEM_LOCKED')).length}};});step='reserve';selected=[];page=0;paint();
+      items=[...groups.values()].map(copies=>{const c=copies.find(c=>c.eligible)||copies[0];return {...c,key:c.inventoryRef,modeScore:c.modeScores?.[formatId],reasons:c.disabledReasons,quantity:{owned:copies.length,available:copies.filter(c=>c.eligible).length,locked:copies.filter(c=>c.disabledReasons.some(r=>r.code==='ITEM_LOCKED')).length}};});step='reserve';selected=[];page=0;pickerStates.reserve.pack=null;pickerStates.reserve.scroll={};paint();
     }
     function paint(){
-      if(!active())return;root.hidden=false;root.replaceChildren();choiceBar.replaceChildren();
+      if(!active())return;const savedScroll=ctx.body.scrollTop;root.hidden=false;root.replaceChildren();choiceBar.replaceChildren();
       if(series?.unsupported){root.append(el('p',{text:series.message}));return;}
       if(pending){root.append(button('核对上次操作',async()=>{const r=await ctx.query('operations.get',{requestId:pending.requestId});if(!active())return;if(r.ok&&r.data.status==='succeeded'){pending=null;await reload();}else if(r.ok&&r.data.status==='failed'){pending=null;error(r.data.result);}else message.textContent='结果尚未确认，请保留本页并稍后核对。';}));}
       if(step==='format'){
@@ -83,10 +83,10 @@ export async function openCombat(app,options={}){
         roomHeader();const banner=seriesBanner(series),role=sideSwapNote({...series,roles:series.round.roles});
         root.append(el('h3',{text:`${series.opponentName||'牌友'} · ${banner.scoreLabel} · ${banner.phaseLabel}`}),role?el('p',{text:role}):el('span'));
         if(series.phase==='selecting'){
-          const requirement=roundSelectionRequirement(series),pool=series.reserveItems.map(c=>({...c,key:c.inventoryRef,modeScore:c.modeScores?.[series.formatId],eligible:true,reasons:[],quantity:{owned:1,available:1}}));
+          const requirement=roundSelectionRequirement(series);if(roundPickerId!==series.round.roundId){roundPickerId=series.round.roundId;pickerStates.round.pack=null;pickerStates.round.scroll={};}const pool=series.reserveItems.map(c=>({...c,key:c.inventoryRef,modeScore:scoreFor(c,series.formatId,requirement.myRole),eligible:true,reasons:[],quantity:{owned:1,available:1}}));
           if(series.formatId==='kof'){for(let i=1;i<pool.length;i++){pool[i].eligible=false;pool[i].reasons=[{message:'接力顺序已按备战选择顺序确定'}];}if(!selected.length)selected.push(pool[0].key);root.append(el('p',{text:'KOF 接力顺序：'+pool.map(c=>c.name).join(' → ')}));}
           root.append(el('p',{class:'small',text:`选择本局上场的 ${requirement.picks} 名武将：第一个是你操作的主将${requirement.picks>1?'，第二个是 AI 队友':''}。`}));
-          grid(pool,requirement.picks,async()=>{const intent=buildSelectRoundIntent({seriesView:series,selection:selected});const r=await submit(intent.type,intent.payload);if(r?.ok){series=r.data;selected=[];page=0;paint();}},'确认本局选将');
+          grid(pool,requirement.picks,async()=>{const intent=buildSelectRoundIntent({seriesView:series,selection:selected});const r=await submit(intent.type,intent.payload);if(r?.ok){series=r.data;selected=[];page=0;paint();}},'确认本局选将','round');
           root.append(button(series.round.index===1?'取消准备':'整场认输',async()=>{const r=await submit(series.round.index===1?'combat.cancel':'combat.surrender',{matchId:series.matchId});if(r?.ok){series=r.data;paint();}}));
         }else if(series.phase==='confirmed'){
           const names=(series.round.seats||[]).filter(s=>s.teamId==='mine').map(s=>(s.controller==='human'?'主将（你）':'AI 队友')+'：'+(series.reserveItems.find(c=>c.generalId===s.generalId)?.name||s.generalId)).join('；');
@@ -104,7 +104,7 @@ export async function openCombat(app,options={}){
       }
       if(series&&['live','mounting','confirmed'].includes(series.phase))root.append(button('整场认输',async()=>{const r=await submit('combat.surrender',{matchId:series.matchId});if(r?.ok){await stopBattle();series=r.data;paint();}}));
       if(series?.cancellationOffer?.available)root.append(button('取消连续平局的比赛',async()=>{const r=await submit('combat.cancel',{matchId:series.matchId,reason:'draw-cancellation'});if(r?.ok){await stopBattle();series=r.data;paint();}}));
-      paintControls();if(mounted&&!menuOpen)root.hidden=true;
+      ctx.body.scrollTop=savedScroll;paintControls();if(mounted&&!menuOpen)root.hidden=true;
     }
     function roomHeader(){if(!room)return;const end=room.expiresAt%1440,until=Number.isFinite(end)?String(Math.floor(end/60)).padStart(2,'0')+':'+String(Math.floor(end%60)).padStart(2,'0'):null;const header=el('div',{class:'v7-room-summary','data-combat-room':room.roomId},[el('strong',{text:(room.roomLabel||'房间')+' · '+room.formatLabel+' · '+room.opponentName}),el('span',{class:'small',text:'我方'+(room.readiness.mine?'已确认':'待确认')+' · 对手'+(room.readiness.enemy?'已准备':'等待入房')+' · 备战池 '+room.pools.enemy.length+'/'+room.capacity+' · 桌费 '+app.formatMoney(room.tableFee)+(room.kind!=='friendly'?'（免费）':'（对手整场一次）')}),button('查看对方备战池',()=>openRoomPools(app,room),!room.pools.enemy.length)]);if(!room.readiness.enemy)header.append(el('p',{text:room.waitReason||'等待持卡足够且空闲的顾客入房；可以收起窗口继续经营。'}));if(until&&!room.matchId)header.append(el('span',{class:'small',text:'待开局房间保留至 '+until+'，或打烊时关闭'}));root.append(header);}
     function paintControls(){

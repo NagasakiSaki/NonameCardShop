@@ -11,7 +11,7 @@ export function openRoomPools(app,room,{side='enemy'}={}){
       tabs.replaceChildren();for(const [key,name]of [['mine','我方'],['enemy',room.opponentName||'对手']])tabs.append(el('button',{class:'btn btn--sm'+(current===key?' btn--primary':''),text:`${name}备战池 (${room.pools[key].length})`,onclick:()=>{current=key;page=0;paint();}}));
       const cards=room.pools[current].map(c=>({...c,modeScore:c.modeScores?.[room.formatId],quantity:{owned:1,available:1},favorite:false}));
       if(!cards.length){body.replaceChildren(el('p',{text:current==='mine'?'你的备战池尚未确认。':'对手尚未入房。'}));return;}
-      renderRosterGrid({mount:body,items:cards,selected:[],max:cards.length,page,readOnly:true,caption:'本房间固定备战池 · 卡面与技能均可查看',onToggle:item=>{if(item.__page!=null){page=item.__page;paint();}},onToggleFavorite:()=>{},onPreview:item=>app.openPanel('cardDetail',{cardKey:item.cardKey})});
+      renderRosterGrid({mount:body,items:cards,selected:[],max:cards.length,page,readOnly:true,sortByScore:true,caption:'本房间固定备战池 · 卡面与技能均可查看',onToggle:item=>{if(item.__page!=null){page=item.__page;paint();}},onToggleFavorite:()=>{},onPreview:item=>app.openPanel('cardDetail',{cardKey:item.cardKey})});
       body.append(el('p',{class:'small',text:'整场从该池逐局选将；借用卡不属于店铺库存。全局分为三种模式等权平均。'}));
     }
     paint();

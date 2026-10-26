@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "skills": {
+    "jianxiong": {"perRound":{"cards":1},"notes":"每轮受一次实体杀伤害，奸雄获得该牌一张；被动受伤不重复扣成本。"},
+    "yiji": {"perRound":{"cards":2},"notes":"每轮受1点伤害后获得两张牌；分给队友是团队内转移，不再叠加收益。"},
+    "tiandu": {"perRound":{},"notes":"场景没有额外判定，不能凭空为天妒增加一次摸牌。"},
+    "guicai": {"perRound":{},"notes":"没有预设判定目标；不凭空计改判收益或成本。"},
+    "yingzi": {"perRound":{"cards":1},"notes":"两个己方摸牌阶段各额外摸一张。"},
+    "biyue": {"perRound":{"cards":1},"notes":"两个己方结束阶段各摸一张。"},
+    "luoyi": {"perRound":{"damage":1,"cost":1},"notes":"每轮已假定命中一次，裸衣增伤1，扣少摸1张；不再按旧命中率折扣。"},
+    "tieji": {"perRound":{"reliable":0.5},"notes":"标准铁骑红色判定按1/2；基础伤害已包含，不重复加伤害。"},
+    "liegong": {"perRound":{"reliable":1},"notes":"理想条件满足烈弓手牌数条件；仅增加少量强中奖励，不把已命中的伤害再算一次。"},
+    "wushuang": {"perRound":{"reliable":1},"notes":"双闪/双杀限制计小额强中价值，不把一次伤害变成两次。"},
+    "mashu": {"perRound":{},"notes":"场景已假定每轮能造成一次伤害，距离修正不另赠伤害。"},
+    "paoxiao": {"perRound":{},"notes":"固定每轮一次基础输出，不预设更多杀和额外命中；多刀上限列为模型局限。"},
+    "qixi": {"perRound":{"cards":1,"cost":1,"equipment":1},"notes":"黑牌换过河拆桥：自己少一张、敌人少一张，净牌差0；装备额外价值只计初始的一件装备。"},
+    "zhiheng": {"perRound":{},"notes":"弃牌再摸等量牌，净牌差0；牌质价值不冒充摸牌数。"},
+    "hujia": {"perRound":{},"notes":"无预设同势力响应，主公技不赠送免费资源。"},
+    "jijiang": {"perRound":{},"notes":"无预设同势力响应，且基础输出已计入。"},
+    "kongcheng": {"perRound":{},"notes":"初始四张手牌且每轮正常摸牌，不预设达成空城。"},
+    "luoshen": {"perRound":{"cards":1},"notes":"黑红各半的连续判定，停止前获得黑牌的期望为1；不把理想条件误当无限黑。"},
+    "qingguo": {"perRound":{},"notes":"本场景每轮受到一次伤害，不能同时假定同一次伤害被闪避；转化本身不创造牌差。"},
+    "longdan": {"perRound":{},"notes":"杀闪转换消耗一张牌，不生成额外牌或额外攻击事件。"},
+    "wusheng": {"perRound":{},"notes":"红牌当杀不增加牌数；基础每轮一次伤害已计入。"},
+    "jijiu": {"perRound":{},"notes":"场景不预设额外濒死救人事件；牌张转化不直接当免费回复。"}
+  }
+}

@@ -1,7 +1,7 @@
 {
   "operationsV7": true,
   "version": 1,
-  "ratingVersion": "global-three-mode-5",
+  "ratingVersion": "global-ideal-two-round-1",
   "distribution": {
     "version": "tcg-slots-3",
     "excludedPacks": [
@@ -50,7 +50,7 @@
   },
   "scoring": {
     "baseline": 50,
-    "hpPoint": 5,
+    "hpPoint": 10,
     "hpCap": 6,
     "weights": {
       "cards": 10,
@@ -64,7 +64,7 @@
       "burst": 0,
       "carry": 0
     },
-    "method": "resource-three-mode-3"
+    "method": "ideal-two-round-1"
   },
   "rarityWeights": {
     "N": 1,

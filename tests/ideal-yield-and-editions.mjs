@@ -1,0 +1,45 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {idealRolePower} from '../modules/backend/ideal-yield.mjs';
+import {buildCatalog} from '../modules/backend/catalog.mjs';
+import {planCollation} from '../modules/economy-v7/collation-policy.mjs';
+import {publishProducts,makeSealed} from '../modules/backend/products.mjs';
+import {createWorld} from '../modules/backend/world.mjs';
+import {createRuntime} from '../modules/backend/runtime.mjs';
+import {memoryRepository} from '../modules/backend/storage.mjs';
+import {scoreSort,scoreFor,rosterPacks} from '../frontend/combat/pack-selector.mjs';
+import {marketEligible} from '../modules/backend/market-policy.mjs';
+const j=p=>JSON.parse(fs.readFileSync(p,'utf8')),source=j('data/cards.json'),rules=j('data/backend-rules.json'),editions=j('data/print-editions.json'),catalog=buildCatalog(source,rules);
+const card=(description,hp=4,id='fixture')=>({id,hp,skills:description?[{id:'fixture-skill',description}]:[]});
+const evaluate=(description,hp=4)=>idealRolePower(card(description,hp),'kof',rules.scoring);
+assert.equal(evaluate('').score,50);assert.equal(evaluate('',3).score,40);
+assert.equal(evaluate('结束阶段，你可以摸一张牌。').score,60);
+assert.equal(evaluate('结束阶段，你可以摸一张牌。',3).score,50,'two extra cards offset one less initial HP');
+assert.equal(evaluate('当你受到1点伤害后，你摸两张牌。').score,70,'baseline incoming damage is not charged twice');
+assert.equal(evaluate('当你造成1点伤害后，你摸一张牌。').score,60,'the baseline outgoing trigger is not an extra damage reward');
+assert.equal(evaluate('出牌阶段，你可以失去一点体力，然后摸两张牌。').score,50);
+assert.equal(evaluate('出牌阶段，你可以弃置一张牌，弃置其一张牌。').score,50);
+assert.equal(evaluate('限定技，出牌阶段，你可以摸两张牌。').score,60,'once per game is not twice per window');
+const protectedDraw=idealRolePower({id:'protected-draw',hp:4,skills:[{id:'guard',description:'当你受到伤害时，防止此伤害。'},{id:'yiji',description:'当你受到伤害后摸两张牌。'}]},'kof',rules.scoring);assert.equal(protectedDraw.cardDifference,0,'prevented damage cannot trigger the same injury reward');assert.equal(protectedDraw.score,70);
+const choice=evaluate('出牌阶段，选择一项：①你摸两张牌；②你摸三张牌。');assert.equal(choice.score,80,'mutually exclusive choices take one branch, never five cards');
+const hit=evaluate('当你使用【杀】时，此【杀】不能被响应。');assert(hit.score>50&&hit.score<=52.5);assert.equal(hit.vector.damage,0);
+const qixi=idealRolePower(catalog.byId.get('ganning'),'kof',rules.scoring);assert.equal(qixi.cardDifference,0);assert.equal(qixi.vector.equipment,1);assert.equal(qixi.score,50.5);
+assert.equal(catalog.byId.get('zhuran').power.roles.kof.score,50.5,'incremental X costs and branches cannot become free damage');assert.equal(catalog.byId.get('madai').power.roles.kof.vector.guard,0,'preventing your outgoing damage is not self protection');assert(evaluate('你弃置X张牌，然后摸三张牌。').flags.some(f=>f.includes('成本')));
+const zhangliao=catalog.byId.get('zhangliao');assert.equal(zhangliao.power.roles.kof.score,50);assert.equal(zhangliao.power.roles.landlord.score,70);assert.equal(zhangliao.power.roles.farmer.score,50);assert.equal(zhangliao.power.roles['versus2v2-bo3'].score,70);assert.equal(zhangliao.globalScore,60);
+assert(catalog.cards.every(c=>Number.isFinite(c.globalScore)&&c.power.method.includes('两回合')));
+console.log('PASS two-round blood/card differences, shared baseline, explicit costs, one-shot skills, exclusive branches, small capped bonuses and role-specific scoring');
+
+for(const pack of catalog.packs){
+ const one=planCollation({productId:pack.id,catalog,unlockedProductIds:['yijiang']});assert(one.ok);
+ const altered={...catalog,cards:catalog.cards.map(c=>({...c,currentRarity:'SSR',globalScore:199}))};
+ const two=planCollation({productId:pack.id,catalog:altered,unlockedProductIds:catalog.packs.map(p=>p.id)});assert.deepEqual(one,two,'scores/unlocks cannot change edition '+pack.id);
+ const world=createWorld(rules);world.seed=1234;const product=publishProducts(catalog,rules,1).find(p=>p.productId===pack.id),box=makeSealed(world,product,'box',0);
+ assert.deepEqual(Object.fromEntries(['N','R','SR','SSR'].map(r=>[r,box.packets.flat().filter(c=>c.printedRarity===r).length])),product.boxCounts);
+ assert(box.packets.every(p=>p.some(c=>c.printedRarity!=='N')));assert(box.packets.flat().every(c=>catalog.byKey.get(c.cardKey).pack===pack.id));assert(box.packets.flat().every(c=>c.printVersion===editions.products[pack.id].printVersion));
+ const next=publishProducts(altered,rules,2).find(p=>p.productId===pack.id);assert.equal(product.printVersion,next.printVersion);
+}
+const before=createWorld(rules);before.products=publishProducts(catalog,rules,1);makeSealed(before,before.products[0],'box',100);const manufactured=JSON.stringify(before.items);before.rules.scoring.method='resource-three-mode-3';before.ratingRulesVersion='resource-three-mode-3';const runtime=await createRuntime({source,rules,repository:memoryRepository({schemaVersion:2,revision:0,world:before,archives:[],requests:{}})});await runtime.connect({contractVersion:'card-shop-ui/1.0',clientId:'ideal-migration'});assert.equal(runtime.inspect().world.rules.scoring.method,'ideal-two-round-1');assert.equal(JSON.stringify(runtime.inspect().world.items),manufactured);await runtime.disconnect();
+console.log('PASS all 16 frozen editions, exact box quotas, pack guarantee, theme-only pools, stable printing identity and old physical inventory migration');
+const promoted=catalog.cards.find(c=>c.issuanceRarity==='N'&&c.currentRarity==='SSR');assert(promoted);assert.equal(marketEligible(catalog,promoted),false,'new strength cannot turn an N edition into a market SSR');assert.equal(marketEligible(catalog,{cardKey:promoted.cardKey,printedRarity:'SR'}),true,'legacy physical SR remains sellable');
+const rows=[{key:'a',name:'a',themeId:'one',modeScore:20,favorite:true},{key:'b',name:'b',themeId:'one',modeScore:80},{key:'c',name:'c',themeId:'two',modeScore:50}];assert.deepEqual(scoreSort(rows).map(c=>c.key),['b','c','a']);assert.equal(rosterPacks(rows).length,2);assert.equal(scoreFor({modeScores:{'doudizhu-bo3':60},roleScores:{landlord:70,farmer:50}},'doudizhu-bo3','farmer'),50);
+console.log('PASS package grouping, strict descending scores over favorites and landlord/farmer role resolution');
