@@ -1,3 +1,4 @@
+import {MODE_LABELS,RATED_FORMATS} from '../../modules/backend/strength-modes.mjs';
 // frontend/ui/card-detail.mjs — 卡牌详情：印刷稀有度与当前全局分级并列、技能延迟加载源码、持仓与准入原因。
 import { el, clear, stateView, errorView, imgWithFallback, busyButton, newRequestId } from "./components.mjs";
 
@@ -49,7 +50,7 @@ export async function openCardDetail(app, options = {}) {
           el("p", { class: "small muted", text: "分数不是胜率；" + (card.stats && !card.stats.sampleSufficient ? "实战样本不足，仅作参考。" : "样本已记录。") }),
         ]),
       ]);
-      body.append(head);
+      body.append(head);if(card.modeScores)body.append(el('div',{class:'section'},RATED_FORMATS.map(mode=>el('p',{text:MODE_LABELS[mode]+'：'+card.modeScores[mode]}))));
 
       // 技能
       const skillSection = el("div", { class: "section" }, [el("h4", { class: "section__title", text: "技能" })]);

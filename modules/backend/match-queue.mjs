@@ -50,7 +50,7 @@ export function tickMatchQueue(w,catalog,navigation,{schedule=true}={}){
   if(w.clock.phase!=='open')return;
   const player=playerQueue(w),event=w.experience?.events.find(e=>e.day===w.clock.day&&e.status==='scheduled');
   if(schedule&&(w.rules.npcAutoBattles!==false||player))for(const npc of w.npcs){
-    if(npc.specialist||npc.allyId||npc.playerInviteUntil||!onSite(npc)||npc.currentMatchId||npc.currentQueueId||npc.trip||npc.activity!=='idle'||(npc.nextMatchAt||0)>stamp(w)||event&&!event.actorIds.includes(npc.actorId)||npc.wallet.available-(npc.wallet.reserved||0)<managementEffects(w).tableFee)continue;
+    if(npc.currentRoomId||npc.specialist||npc.allyId||npc.playerInviteUntil||!onSite(npc)||npc.currentMatchId||npc.currentQueueId||npc.trip||npc.activity!=='idle'||(npc.nextMatchAt||0)>stamp(w)||event&&!event.actorIds.includes(npc.actorId)||npc.wallet.available-(npc.wallet.reserved||0)<managementEffects(w).tableFee)continue;
     const options=eligible(w,catalog,npc.actorId).filter(c=>c.eligible),unique=options.filter((c,i)=>options.findIndex(other=>other.generalId===c.generalId)===i),mode=player?.mode||'bo3',n=mode==='kof'?3:1;
     if(unique.length>=n)joinQueue(w,catalog,{mode,inventoryRefs:unique.slice(0,n).map(c=>c.inventoryRef)},npc.actorId);
   }

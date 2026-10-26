@@ -1,3 +1,4 @@
+import {MODE_LABELS,RATED_FORMATS} from '../../modules/backend/strength-modes.mjs';
 import {el,art,rarity} from '../components/trade.mjs';
 import {createSurface} from '../services/surface.mjs';
 import {draftFor} from '../services/views.mjs';
@@ -5,7 +6,7 @@ import {performOperation,recoverOperation,retryOperation} from '../services/oper
 
 const button=(text,onclick,props={})=>el('button',{class:'button',type:'button',text,onclick,...props});
 const line=(name,value)=>el('div',{class:'surface-row'},[el('span',{class:'muted',text:name}),el('strong',{text:String(value??'—')})]);
-const REVIEW={calibrated:'已校准',estimated:'初估，待更多样本','needs-review':'待复核'};
+const REVIEW={calibrated:'规则校准估算',estimated:'初估，待更多样本','needs-review':'待复核'};
 const LOCATION={collection:'收藏',market:'二级市场挂单',trash:'垃圾桶'};
 const unresolved=draft=>['submitting','unknown'].includes(draft.operation?.status);
 
@@ -59,7 +60,7 @@ export function openCardDetail(app,options={}){
           el('span',{class:'eyebrow',text:'CARD ARCHIVE'}),el('h2',{text:card.name}),
           el('div',{class:'detail-badges'},[el('span',{text:'印刷：'+(card.printedRarity||'未持有')}),rarity(card.currentRarity),el('span',{class:'muted',text:'当前全局强度分级'})]),
           el('p',{class:'detail-meta',text:[card.title,card.faction,card.pack,'技能版本 '+(card.skillVersion||'—')].filter(Boolean).join(' · ')}),
-          el('section',{class:'surface-card','aria-label':'评分与参考价格'},[el('h3',{text:'全局评分与参考行情'}),line('全局综合分',card.globalScore),line('评分状态',review),line('评分置信度（模型估计）',confidence),line('当前参考价',app.formatMoney(card.referencePrice?.amount)),
+          el('section',{class:'surface-card','aria-label':'评分与参考价格'},[el('h3',{text:'全局评分与参考行情'}),line('全局综合分',card.globalScore),...(card.power?.modeScores?RATED_FORMATS.map(mode=>line(MODE_LABELS[mode]+' 评分',card.power.modeAvailability?.[mode]===false?'不可出场（计0分）':card.power.modeScores[mode])):[]),...(card.power?.roles?[line('斗地主身份分','地主 '+card.power.roles.landlord.score+' / 农民 '+card.power.roles.farmer.score),line('定价标准','四模式等权平均')]:[]),line('评分状态',review),line('评分置信度（模型估计）',confidence),line('当前参考价',app.formatMoney(card.referencePrice?.amount)),
             card.power?.modelVersion?el('p',{class:'detail-meta',text:'收益论估算：每己方回合 '+card.power.netCardEquivalent+' 等效牌；'+card.power.notes}):null,
             el('p',{class:'detail-meta',text:'评分版本 '+(card.ratingVersion||'—')+'。强度评分与模型置信度不等于实战胜率；印刷稀有度保留在各实物副本上。'})]),
           skillsSection()
@@ -95,8 +96,8 @@ export function openCardDetail(app,options={}){
         const stats=card.stats||{};
         return el('section',{class:'surface-card','aria-label':'实际对战战绩'},[el('h3',{text:'实战场次与胜负'}),el('table',{class:'detail-table'},[
           el('thead',{},[el('tr',{},['模式','场次','胜','负','平'].map(text=>el('th',{scope:'col',text})))]),
-          el('tbody',{},['bo3','kof'].map(mode=>{const value=stats[mode]||{};return el('tr',{'data-mode':mode},[
-            el('th',{scope:'row',text:mode.toUpperCase()}),...[value.sessions??value.games??0,value.wins??0,value.losses??0,value.draws??0].map(text=>el('td',{text}))
+          el('tbody',{},RATED_FORMATS.map(mode=>{const value=stats[mode]||{};return el('tr',{'data-mode':mode},[
+            el('th',{scope:'row',text:MODE_LABELS[mode]}),...[value.sessions??value.games??0,value.wins??0,value.losses??0,value.draws??0].map(text=>el('td',{text}))
           ]);}))
         ]),el('p',{class:'detail-meta',text:stats.note||'仅记录真实牌局结果。'}),el('p',{class:'detail-meta',text:stats.sampleSufficient?'已有可用实战样本；不同模式分别记录。':'实战样本不足，暂不把当前胜率当作稳定强度。'})]);
       }

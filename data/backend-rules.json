@@ -1,7 +1,7 @@
 {
   "operationsV7": true,
   "version": 1,
-  "ratingVersion": "global-resource-3",
+  "ratingVersion": "global-four-mode-4",
   "distribution": {
     "version": "tcg-slots-3",
     "excludedPacks": [
@@ -11,7 +11,10 @@
       "collab",
       "sixiang",
       "onlyOL",
-      "xianding"
+      "xianding",
+      "newjiang",
+      "offline",
+      "standard"
     ],
     "baseCounts": {
       "N": 60,
@@ -41,8 +44,10 @@
     "SSR": 78
   },
   "modeWeights": {
-    "bo3": 0.5,
-    "kof": 0.5
+    "bo3": 0.25,
+    "kof": 0.25,
+    "doudizhu-bo3": 0.25,
+    "versus2v2-bo3": 0.25
   },
   "scoring": {
     "baseline": 50,
@@ -60,7 +65,7 @@
       "burst": 0,
       "carry": 0
     },
-    "method": "resource-yield-1"
+    "method": "resource-four-mode-2"
   },
   "rarityWeights": {
     "N": 1,
@@ -186,5 +191,6 @@
         "packRetail": 510
       }
     ]
-  }
+  },
+  "roomWaitMinutes": 180
 }

@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+import {buildCatalog} from '../modules/backend/catalog.mjs';
+import {publishProducts} from '../modules/backend/products.mjs';
+import {RATED_FORMATS,FOUR_MODE_VERSION} from '../modules/backend/strength-modes.mjs';
+const json=p=>JSON.parse(fs.readFileSync(p,'utf8')),source=json('data/cards.json'),rules=json('data/backend-rules.json'),catalog=buildCatalog(source,rules);
+const legacy=structuredClone(rules);legacy.scoring.method='resource-yield-1';legacy.modeWeights={bo3:.5,kof:.5};const old=buildCatalog(source,legacy);
+const world={progression:{version:1,unlockedProductIds:catalog.packs.map(p=>p.id),allies:[]}},products=publishProducts(catalog,rules,1,{},world);
+const rows=catalog.cards.map(c=>({generalId:c.generalId,name:c.name,pack:c.pack,globalScore:c.globalScore,modeScores:c.power.modeScores,landlord:c.power.roles.landlord.score,farmer:c.power.roles.farmer.score,currentRarity:c.currentRarity,previousScore:old.byId.get(c.generalId).globalScore,previousRarity:old.byId.get(c.generalId).currentRarity,confidence:c.power.confidence,provenance:c.power.provenance}));
+const report={version:1,modelVersion:FOUR_MODE_VERSION,ratingVersion:catalog.cards[0].ratingVersion,method:'theoretical resource estimate; not measured win rates',formula:'mean(bo3,kof,mean(landlord,farmer),versus2v2)',formats:RATED_FORMATS,total:rows.length,rarities:Object.fromEntries(['N','R','SR','SSR'].map(r=>[r,rows.filter(c=>c.currentRarity===r).length])),changedRarity:rows.filter(c=>c.currentRarity!==c.previousRarity).length,products:products.map(p=>({productId:p.productId,name:p.name,averageStrength:p.averageStrength,tier:p.priceTier.id,prices:p.prices,rarities:Object.fromEntries(['N','R','SR','SSR'].map(r=>[r,catalog.cards.filter(c=>c.pack===p.productId&&c.currentRarity===r).length]))})),cards:rows};
+fs.writeFileSync('data/four-mode-strength-report.json',JSON.stringify(report,null,2)+'\n');
+console.log(JSON.stringify({total:report.total,rarities:report.rarities,changedRarity:report.changedRarity,products:report.products.map(p=>[p.name,p.averageStrength,p.prices.pack.retail])},null,2));

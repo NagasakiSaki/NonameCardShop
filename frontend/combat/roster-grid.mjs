@@ -39,12 +39,12 @@ export function playableItems(items) {
  * items: [{key,name,rarity,skillSummary,quantity:{owned,available,locked,listed},eligible,reasons[],loan,favorite}]
  * 状态变化只重绘网格与计数，不重建整个窗口（选择状态由调用方持有）。
  */
-export function renderRosterGrid({ mount, items, selected, max, page = 0, favorites, onToggle, onPreview, onToggleFavorite, pageSize = ROSTER_PAGE_SIZE, caption }) {
+export function renderRosterGrid({ mount, items, selected, max, page = 0, favorites, onToggle, onPreview, onToggleFavorite, pageSize = ROSTER_PAGE_SIZE, caption, readOnly = false }) {
   mount.replaceChildren();
   const sorted = favoriteSort(items, favorites);
   const { items: pageItems, page: safePage, pages } = pageOf(sorted, page, pageSize);
   const countRow = el("div", { class: "v7-roster__count" }, [
-    el("strong", { text: `已选 ${selected.length}/${max}` }),
+    el("strong", { text: readOnly ? `固定名单 · ${items.length} 名武将` : `已选 ${selected.length}/${max}` }),
     el("span", { class: "small muted", text: caption || "跨页选择自动保留；先选的排在前。" }),
   ]);
   const grid = el("div", { class: "v7-roster-grid", dataset: { v7RosterGrid: "true" } });
@@ -59,7 +59,7 @@ export function renderRosterGrid({ mount, items, selected, max, page = 0, favori
       dataset: { rosterKey: item.key },
       onclick: (event) => {
         if (event.target.closest("[data-role=fav]")) return;
-        if(!unavailable||isSelected)onToggle(item);
+        if(readOnly)onPreview?.(item);else if(!unavailable||isSelected)onToggle(item);
       },
     }, [
       item.imageUrl?el("img",{class:"v7-roster-card__art",src:item.imageUrl,alt:item.name,loading:"lazy"}):null,
@@ -79,12 +79,13 @@ export function renderRosterGrid({ mount, items, selected, max, page = 0, favori
         item.loan ? el("span", { class: "chip chip--warn", text: "借用 · 不可上架" }) : null,
         isSelected ? el("span", { class: "chip chip--protect", text: "已选" }) : null,
       ]),
-      el("div", { class: "v7-roster-card__qty small muted", text: `持有${quantity.owned ?? "—"} 可用${quantity.available ?? "—"} 锁${quantity.locked ?? 0} 在架${quantity.listed ?? 0}` }),
+      readOnly ? null : el("div", { class: "v7-roster-card__qty small muted", text: `持有${quantity.owned ?? "—"} 可用${quantity.available ?? "—"} 锁${quantity.locked ?? 0} 在架${quantity.listed ?? 0}` }),
+      Number.isFinite(item.modeScore)?el('span',{class:'small',text:'本模式 '+item.modeScore.toFixed(1)+' · 全局均分 '+Number(item.globalScore).toFixed(1)}):null,
       item.skillSummary ? el("span", { class: "v7-roster-card__skill small", text: item.skillSummary }) : null,
       unavailable && item.reasons?.length ? el("span", { class: "small", style: { color: "#f0a08a" }, text: item.reasons[0].message }) : null,
     ]);
     card.append(el("button",{class:"btn v7-roster-card__preview",text:"卡面与技能",onclick:event=>{event.stopPropagation();onPreview?.(item);}}));
-    card.addEventListener("keydown",event=>{if(event.target===card&&["Enter"," "].includes(event.key)){event.preventDefault();if(!unavailable||isSelected)onToggle(item);}});
+    card.addEventListener("keydown",event=>{if(event.target===card&&["Enter"," "].includes(event.key)){event.preventDefault();if(readOnly)onPreview?.(item);else if(!unavailable||isSelected)onToggle(item);}});
     card.addEventListener("contextmenu", (event) => { event.preventDefault(); onPreview && onPreview(item); });
     grid.append(card);
   }

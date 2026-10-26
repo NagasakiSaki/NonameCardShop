@@ -7,7 +7,7 @@ import {initialiseVisitBudget} from './v7-policy.mjs';
 export const onSite=npc=>npc.presence!=='offsite';
 const stamp=w=>w.clock.day*1440+w.clock.minute;
 export function departCustomer(w,npc,reason='visit-complete'){
-  if(npc.currentMatchId)return false;
+  if(npc.currentMatchId||npc.currentRoomId)return false;
   const wasPresent=onSite(npc);npc.presence='offsite';npc.trip=null;npc.activity='away';npc.label='';npc.moving=false;npc.returnAfterMatch=false;
   npc.nextVisitAt=stamp(w)+Math.max(1,w.rules.npcIntervalMinutes);npc.lastVisit=npc.visit?{...npc.visit,leftAt:stamp(w),reason}:null;delete npc.visit;
   if(wasPresent)note(w,'npcDeparted',{actorId:npc.actorId,reason});return true;

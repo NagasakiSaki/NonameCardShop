@@ -7,7 +7,7 @@ import {openingPreview,executeOpening,inventoryList,placeListing} from '../modul
 import {inventoryView,cardDetailView,ledgerView,retailView,marketView} from '../modules/backend/views.mjs';
 const data=n=>JSON.parse(fs.readFileSync(new URL(`../data/${n}.json`,import.meta.url)));
 const rules=data('backend-rules'),catalog=buildCatalog(data('cards'),rules),world=createWorld(rules);world.products=publishProducts(catalog,rules,1);
-const product=world.products.find(p=>p.productId==='standard'),box=makeSealed(world,product,'box',5001);
+const product=world.products.find(p=>p.productId==='yijiang'),box=makeSealed(world,product,'box',5001);
 const sealedContents=box.packets.flat().map(c=>JSON.stringify(c));
 const partial=openingPreview(world,{includeBoxes:true,quantity:3});assert.equal(partial.packs,3);assert.equal(partial.cards,15);
 const opened=executeOpening(world,partial,catalog);assert.equal(opened.opening.results.length,15);assert.equal(opened.opening.results[0].name,catalog.byKey.get(opened.cards[0].cardKey).name);

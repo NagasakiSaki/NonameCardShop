@@ -20,12 +20,13 @@ export function mountQueueStatus(app){
   }
   function render(){
     if(disposed)return;
-    const snapshot=app.snapshot(),q=snapshot.matchmaking?.player,m=snapshot.matchmaking?.match,op=operation.operation;
+    const snapshot=app.snapshot(),q=snapshot.matchmaking?.player,m=snapshot.matchmaking?.match,r=snapshot.matchmaking?.room,op=operation.operation;
     if(op&&(op.worldId!==snapshot.worldId||op.branchId!==snapshot.branchId))op.status='stale';
-    const unknown=['unknown','submitting'].includes(op?.status),next=JSON.stringify([q?.queueId,q?.waitMode,m?.matchId,m?.status,unknown,busy,app.windows.depth]);
-    root.hidden=app.windows.depth>0||!q&&!m&&!unknown;
+    const unknown=['unknown','submitting'].includes(op?.status),next=JSON.stringify([q?.queueId,q?.waitMode,m?.matchId,m?.status,r?.roomId,r?.status,r?.opponentName,unknown,busy,app.windows.depth]);
+    root.hidden=app.windows.depth>0||!q&&!m&&!r&&!unknown;
     if(next===signature)return;signature=next;banner.replaceChildren();banner.hidden=!unknown;
     if(unknown){waitingBar.update({status:'none'});banner.append(el('span',{text:'正在确认上次操作'}),el('button',{class:'btn btn--sm',text:'查看结果',disabled:busy,onclick:()=>run(null,{},true)}),el('button',{class:'btn btn--sm',text:'原操作重试',disabled:busy,onclick:()=>run(null,{},true,true)}));return;}
+    if(r&&!m){waitingBar.update({status:'none'});banner.hidden=false;banner.append(el('span',{text:'对战房间 · '+r.opponentName+' · '+(r.status==='waiting-opponent'?'等待对手':'等待选将')}),el('button',{class:'btn btn--sm',text:'返回房间',onclick:()=>app.goToInteraction(r.tableId||'battleRoom.service','combat',{roomId:r.roomId,tableId:r.tableId})}));return;}
     waitingBar.update({status:q?'waiting':m?m.status==='prepared'?'opponent_ready':m.status==='interrupted'?'error':'playing':'none',tableId:q?.tableId||m?.tableId,tableLabel:'店内牌桌',mode:q?.mode||m?.mode,lineup:q?.lineup||m?.lineup||[],autoMove:q?.waitMode==='wander'});
     for(const button of barRoot.querySelectorAll('button'))button.disabled=busy;
   }

@@ -11,7 +11,7 @@ export function eligible(w,catalog,ownerId='player'){
     if(!free(i))reasons.push({code:'ITEM_LOCKED',message:'副本受保护或被交易/其他比赛占用。'});
     if(i.location!=='collection')reasons.push({code:'NOT_IN_COLLECTION',message:'参赛副本必须在收藏中；请先捡回垃圾桶里的卡。'});
     const blocked=w.rules.compatibilityBlocks[c?.generalId];if(blocked)reasons.push({code:'SKILL_INCOMPATIBLE',message:blocked});
-    return {inventoryRef:i.inventoryRef,cardKey:i.cardKey,generalId:c?.generalId,name:c?.name,imageUrl:c?.imageUrl,rarity:c?.currentRarity,favorite:ownerId==='player'&&(w.player.favoriteCardKeys||[]).includes(i.cardKey),eligible:!reasons.length,disabledReasons:reasons,reviewStatus:c?.reviewStatus};
+    return {inventoryRef:i.inventoryRef,cardKey:i.cardKey,generalId:c?.generalId,name:c?.name,imageUrl:c?.imageUrl,rarity:c?.currentRarity,globalScore:c?.globalScore,modeScores:c?.power.modeScores,favorite:ownerId==='player'&&(w.player.favoriteCardKeys||[]).includes(i.cardKey),eligible:!reasons.length,disabledReasons:reasons,reviewStatus:c?.reviewStatus};
   }).sort((a,b)=>Number(b.favorite)-Number(a.favorite));
 }
 export function combatPreview(w,catalog,p,{tableFee=managementEffects(w).tableFee}={}){

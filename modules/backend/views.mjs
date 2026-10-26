@@ -1,3 +1,4 @@
+import {RATED_FORMATS} from './strength-modes.mjs';
 import {clone,page,sum} from './common.mjs';
 import {cardSummary} from './catalog.mjs';
 import {owned,free,referencePrice} from './trading.mjs';
@@ -27,7 +28,7 @@ export function cardDetailView(w,catalog,card,stats){
     price:referencePrice(w,catalog,card.cardKey),referencePrice:{amount:referencePrice(w,catalog,card.cardKey)},circulation:w.circulation[card.cardKey]||null,
     marketEligibility:{eligible:available.length>0,reasons:available.length?[]:[{code:'NO_AVAILABLE_COPY',message:'没有可出售的未锁定收藏副本。'}]},
     combatEligibility:{eligible:available.length>0,reasons:available.length?[]:[{code:'NO_AVAILABLE_COPY',message:'没有可参赛的未锁定收藏副本。'}]},
-    stats:Object.fromEntries([...stats.map(s=>[s.mode,{...s,sessions:s.games}]),['sampleSufficient',stats.some(s=>s.games>=20)],['note','BO3 记整场；KOF 记实际上场武将的队伍胜率。含 NPC 模拟对局，模拟场次单独标记。']]),skillSourceAvailable:true};
+    stats:Object.fromEntries([...stats.map(s=>[s.mode,{...s,sessions:s.games}]),['sampleSufficient',stats.some(s=>s.games>=20)],['note','四模式分别记录整场队伍战绩；仅计实际出场武将。含 NPC 模拟对局，模拟场次单独标记。']]),skillSourceAvailable:true};
 }
 export function ledgerView(w,catalog,report){
   const daily=report||w.daily,day=report?.day||w.clock.day;
@@ -56,7 +57,7 @@ export function marketView(w,catalog,p){
     const h=holdings.get(item.cardKey);h.owned++;h.available+=item.location==='collection'&&free(item)?1:0;h.listed+=item.location==='market'?1:0;h.protected+=item.protected?1:0;h.locked+=item.lock?1:0;
   }
   const matches=(key,printed)=>{const c=catalog.byKey.get(key);return (!p.search||c.name.includes(p.search))&&(!p.rarity||(printed||c.currentRarity)===p.rarity);};
-  const fields=key=>{const c=catalog.byKey.get(key),sessions=sum(['bo3','kof'].map(mode=>{const s=w.stats[`${key}|${mode}`];return s?s.wins+s.losses+s.draws:0;}));return {...cardSummary(c),holdings:clone(holdings.get(key)||{owned:0,available:0,listed:0,protected:0,locked:0}),rarity:c.currentRarity,referencePrice:referencePrice(w,catalog,key),priceBreakdown:{globalScore:c.globalScore,sessions,note:'参考行情按日更新；实际成交以挂单报价为准。'},priceComponents:{powerBase:c.issuanceValue,current:referencePrice(w,catalog,key),note:'参考行情按日更新；实际成交以挂单报价为准。'}};};
+  const fields=key=>{const c=catalog.byKey.get(key),sessions=sum(RATED_FORMATS.map(mode=>{const s=w.stats[`${key}|${mode}`];return s?s.wins+s.losses+s.draws:0;}));return {...cardSummary(c),holdings:clone(holdings.get(key)||{owned:0,available:0,listed:0,protected:0,locked:0}),rarity:c.currentRarity,referencePrice:referencePrice(w,catalog,key),priceBreakdown:{globalScore:c.globalScore,sessions,note:'参考行情按日更新；实际成交以挂单报价为准。'},priceComponents:{powerBase:c.issuanceValue,current:referencePrice(w,catalog,key),note:'参考行情按日更新；实际成交以挂单报价为准。'}};};
   if(p.tab==='history')return {...page(w.log.filter(e=>e.type==='secondaryTradeCompleted'&&matches(e.cardKey)).reverse().map(e=>({...fields(e.cardKey),...clone(e),at:e.minute,quantity:1,unitAmount:e.amount,direction:e.buyerId==='player'?'buy':'sell'})),p),note:'当前存档保留的最近真实成交记录。'};
   if(p.tab==='bids')return page((w.management?.requests||[]).filter(r=>r.kind==='purchase'&&['offered','accepted'].includes(r.status)&&matches(r.cardKey)).map(r=>({...fields(r.cardKey),...clone(r),bidId:r.orderId,buyer:w.npcs.find(n=>n.actorId===r.actorId)?.name,unitAmount:r.amount})),p);
   return page(w.listings.filter(l=>(p.status?l.status===p.status:l.status==='active')&&(!p.ownerId||l.ownerId===p.ownerId)&&(!p.tab||p.tab!=='mine'||l.ownerId==='player')&&(!p.tab||p.tab!=='buy'||l.ownerId!=='player')&&matches(l.cardKey,w.items[l.inventoryRef]?.printedRarity)).map(l=>({...fields(l.cardKey),...clone(l),quantity:1,rarity:w.items[l.inventoryRef]?.printedRarity,sellerType:l.ownerId==='player'?'shop':'npc',sellerName:l.ownerId==='player'?'本店':w.npcs.find(n=>n.actorId===l.ownerId)?.name})),p);

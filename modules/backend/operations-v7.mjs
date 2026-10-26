@@ -23,7 +23,7 @@ const unique=items=>items.filter((v,i,a)=>a.findIndex(c=>c.generalId===v.general
 export function checkProof(w,p){if(!p)return;need(p.worldId===w.worldId&&p.branchId===w.branchId,'STALE_OPERATION','世界已切换，请重新打开窗口。');}
 export function actorForInteraction(w,actorId,navigation,{near=true}={}){
   const n=w.npcs.find(n=>n.actorId===actorId);need(n&&onSite(n),'NOT_ONSITE','对方已离店。');
-  need(!n.currentMatchId,'ACTOR_BUSY','对方正在对局。');
+  need(!n.currentMatchId&&!n.currentRoomId,'ACTOR_BUSY','对方正在对局。');
   if(near&&navigation.size)need(n.roomId===w.player.roomId&&Math.hypot(n.x-w.player.x,n.y-w.player.y)<=60,'NOT_IN_RANGE','请先走到对方身旁。');
   return n;
 }
@@ -52,7 +52,7 @@ export function tickV7(w,catalog,navigation,seconds=0){
       if(!onSite(n)&&!n.currentMatchId){arriveCustomer(w,n,navigation.get('store'));n.customerCategory='来访高手';n.nameColor='#C084FC';n.label='寻找店长';}
     }
   }
-  for(const n of w.npcs.filter(n=>n.specialist&&onSite(n)&&!n.currentMatchId)){
+  for(const n of w.npcs.filter(n=>n.specialist&&onSite(n)&&!n.currentRoomId&&!n.currentMatchId)){
     const map=navigation.get(n.roomId);
     if(n.trip?.stage==='specialist-leave'){
       if(map)moveActor(map,n,n.trip,seconds);if(!map||!n.trip.path.length)departCustomer(w,n,'specialist-visit-ended');continue;
@@ -133,14 +133,14 @@ export function seriesView(w,matchId){
   const m=matchId?w.matches.find(m=>m.matchId===matchId):w.matches.find(m=>m.series&&m.status!=='finished');
   if(!m?.series)return null;if(m.series.seriesVersion!==1)return {matchId:m.matchId,unsupported:true,phase:'unsupported',message:'这场系列赛的数据来自较新版本，原记录已保留，请用兼容版本继续或读取较早日档。'};return {...C.seriesView(m.series),playerTeamId:'mine',reserveItems:clone(m.mine),opponentName:w.npcs.find(n=>n.actorId===m.opponentId)?.name,control:clone(m.nativeStatus||null)};
 }
-export function prepareV7(w,catalog,p,navigation,capabilities){
+export function prepareV7(w,catalog,p,navigation,capabilities,{roomPlan=null}={}){
   checkProof(w,p.proof);need(w.clock.phase==='open','SHOP_CLOSED','请在营业中约战。');
   need(!w.matches.some(m=>!m.background&&m.status!=='finished'),'MATCH_ACTIVE','请先完成或取消当前比赛。');
   const format=C.getFormat(p.formatId||'bo3');need(format,'INVALID_INPUT','没有这个赛制。');
   const active=ready(w)?w.progression.activeChallenge:null,stage=activeStage(w);
   const isChallenge=active?.status==='accepted'&&(!p.opponentId||p.opponentId===active.actorId);
   need(!isChallenge||format.formatId==='bo3','INVALID_INPUT','当前阶段高手挑战采用 BO3；其他赛制可与普通顾客约战。');
-  let fee=isChallenge?0:managementEffects(w).tableFee;
+  let fee=roomPlan?roomPlan.tableFee:isChallenge?0:managementEffects(w).tableFee;
   const npc=p.opponentId?w.npcs.find(n=>n.actorId===p.opponentId):isChallenge?w.npcs.find(n=>n.actorId===active.actorId):w.npcs.find(n=>onSite(n)&&!n.specialist&&!n.currentMatchId&&opponentOptions(w,catalog,n,format.formatId,capabilities).length>=format.reservePerSide&&n.wallet.available-(n.wallet.reserved||0)>=fee);
   need(npc&&onSite(npc)&&!npc.currentMatchId,'NOT_FOUND','暂时没有持卡足够且空闲的在店对手。');
   const isPractice=!!npc.allyId;if(isPractice)fee=0;
@@ -151,8 +151,16 @@ export function prepareV7(w,catalog,p,navigation,capabilities){
   const mineOptions=eligibleV7(w,catalog,'player',format.formatId,capabilities),refs=p.reserveRefs||p.inventoryRefs||[];
   need(Array.isArray(refs)&&refs.every(r=>typeof r==='string'),'INVALID_INPUT','备战名单格式不正确。');
   const mine=refs.map(ref=>mineOptions.find(c=>c.inventoryRef===ref));need(mine.every(c=>c?.eligible),'NOT_ELIGIBLE','备战名单包含不可用的卡牌。');
-  const matchId=serial(w,'match'),seed=Math.floor(random(w)*4294967296);let enemy,loans={};
-  if(isChallenge||isPractice){
+  const matchId=serial(w,'match'),seed=roomPlan?.seed??Math.floor(random(w)*4294967296);let enemy,loans={};
+  if(roomPlan){
+    need(roomPlan.actorId===npc.actorId&&roomPlan.formatId===format.formatId&&roomPlan.kind===(isChallenge?'stage-challenge':isPractice?'ally-practice':'friendly'),'STALE_OPERATION','房间对手或赛制已经变化。');
+    if(isChallenge)need(roomPlan.challengeId===active.challengeId,'STALE_OPERATION','高手挑战已变化，请重新约战。');
+    enemy=clone(roomPlan.enemy);
+    for(const c of enemy){
+      if(c.loanRef)loans[c.loanRef]=c;
+      else need(eligibleV7(w,catalog,npc.actorId,format.formatId,capabilities).some(i=>i.inventoryRef===c.inventoryRef&&i.eligible),'ROSTER_LOCKED','对方备战牌已不可用。');
+    }
+  }else if(isChallenge||isPractice){
     const loanStage=isChallenge?stage:w.progression.stages.find(s=>s.challengerId===npc.allyId&&s.status==='cleared');
     need(loanStage,'NOT_ELIGIBLE','伙伴的训练卡池记录不可用。');
     const roster=unwrap(B.buildChallengeLoanRoster({stage:loanStage,formatId:format.formatId,catalog:{cards:catalog.cards.filter(c=>!w.rules.compatibilityBlocks[c.generalId]&&!nativeBlocks(format.formatId,capabilities)[c.generalId])},seed}));
@@ -172,6 +180,34 @@ export function prepareV7(w,catalog,p,navigation,capabilities){
   table.matchId=matchId;table.reservation=null;w.matches.push(m);
   if(isChallenge){active.matchId=matchId;active.loanRoster=clone(enemy);}
   note(w,'matchRegistered',{matchId,mode:m.mode,serviceHeld:fee});return seriesView(w,matchId);
+}
+
+/** Freeze the rival's complete pool BEFORE the player's reserve is submitted. No UI-selected enemy refs. */
+export function planRoomOpponent(w,catalog,{formatId='bo3',opponentId=null,seed},capabilities){
+  const f=C.getFormat(formatId);need(f,'INVALID_INPUT','没有这个赛制。');unwrap(C.assertFormatAvailable(formatId,capabilities));
+  const active=ready(w)?w.progression.activeChallenge:null;
+  const challenge=active?.status==='accepted'&&(!opponentId||opponentId===active.actorId);
+  need(!challenge||formatId==='bo3','INVALID_INPUT','当前阶段高手挑战使用 BO3。');
+  if(challenge)opponentId=active.actorId;
+  const fee=challenge?0:managementEffects(w).tableFee;
+  const canJoin=n=>onSite(n)&&!n.currentMatchId&&!n.currentRoomId&&(!n.specialist||n.allyId||challenge&&n.actorId===opponentId);
+  const npc=opponentId?w.npcs.find(n=>n.actorId===opponentId&&canJoin(n)):w.npcs.find(n=>canJoin(n)&&!n.specialist&&opponentOptions(w,catalog,n,formatId,capabilities).length>=f.reservePerSide&&n.wallet.available-(n.wallet.reserved||0)>=fee);
+  if(!npc){need(!opponentId,'NOT_READY','对手已离店或正在其他房间/对局中。');return null;}
+  if(npc.currentQueueId)leaveQueue(w,npc.actorId,'joined-player-room');
+  const practice=!!npc.allyId,tableFee=challenge||practice?0:fee,kind=challenge?'stage-challenge':practice?'ally-practice':'friendly';
+  need(npc.wallet.available-(npc.wallet.reserved||0)>=tableFee,'INSUFFICIENT_FUNDS','对手支付不起本房间桌费。');
+  let enemy;
+  if(challenge&&active.roomOpponentPlan?.formatId===formatId)enemy=clone(active.roomOpponentPlan.enemy);
+  else if(challenge||practice){
+    const stage=challenge?activeStage(w):w.progression.stages.find(s=>s.challengerId===npc.allyId&&s.status==='cleared');
+    const roster=unwrap(B.buildChallengeLoanRoster({stage,formatId,catalog:{cards:catalog.cards.filter(c=>!w.rules.compatibilityBlocks[c.generalId]&&!nativeBlocks(formatId,capabilities)[c.generalId])},seed}));
+    need(roster.actualFormat===formatId,'INSUFFICIENT_ROSTER','对手主题没有足够兼容武将组成这个备战池。');
+    enemy=roster.loanCards.map(l=>{const c=catalog.byId.get(l.generalId);return {...l,purpose:practice?'recruited-ally-practice':'stage-challenge',name:c.name,cardKey:c.cardKey,imageUrl:c.imageUrl,rarity:c.currentRarity};});
+  }else enemy=unique(eligibleV7(w,catalog,npc.actorId,formatId,capabilities).filter(c=>c.eligible)).sort((a,b)=>(catalog.byKey.get(b.cardKey)?.power.modeScores?.[formatId]??catalog.byKey.get(b.cardKey)?.globalScore)-(catalog.byKey.get(a.cardKey)?.power.modeScores?.[formatId]??catalog.byKey.get(a.cardKey)?.globalScore)).slice(0,f.reservePerSide);
+  need(enemy.length===f.reservePerSide,'INSUFFICIENT_ROSTER',`对手需要 ${f.reservePerSide} 名不同武将，目前只有 ${enemy.length} 名可用。`);
+  const plan={formatId,challengeId:challenge?active.challengeId:null,actorId:npc.actorId,tableFee,kind,enemy,seed:challenge&&active.roomOpponentPlan?active.roomOpponentPlan.seed:seed};
+  if(challenge&&!active.roomOpponentPlan)active.roomOpponentPlan=clone(plan);
+  return plan;
 }
 function update(w,m,result){m.series=unwrap(result).series;const s=m.series;m.wins=s.score.mine;m.losses=s.score.enemy;m.bout=s.round.index;m.gameId=s.round.gameId;m.status=s.phase==='live'||s.phase==='mounting'?'running':s.phase==='interrupted'?'interrupted':s.rounds.length?'awaitingNext':'prepared';return s;}
 export function selectV7(w,p){checkProof(w,p.proof);const m=matchById(w,p.matchId);need(m.series,'INVALID_STATE','这场比赛不使用备战池。');update(w,m,C.selectRound(m.series,p));return seriesView(w,p.matchId);}

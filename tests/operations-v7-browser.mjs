@@ -30,8 +30,18 @@ try{
   await room().locator('[data-format-id]').first().waitFor({timeout:45000});
   for(const formatId of ['versus2v2-bo3','doudizhu-bo3']){
     if(!await room().count())await page.evaluate(()=>__cardShopApp.openPanel('combat',{opponentId:'fixture-rival'}));
-    await room().locator(`[data-format-id="${formatId}"]`).click();await room().getByRole('button',{name:'选择备战武将',exact:true}).click();
+    await room().locator(`[data-format-id="${formatId}"]`).click();await room().getByRole('button',{name:'创建房间并选将',exact:true}).click();
     const count=formatId==='doudizhu-bo3'?5:8;
+    await room().locator('[data-combat-room]').waitFor();
+    const frozenPool=await q('combat.rooms');assert.equal(frozenPool.active.pools.enemy.length,count);
+    await room().getByRole('button',{name:'查看对方备战池',exact:true}).click();
+    const poolWindow=page.getByRole('dialog',{name:'房间备战池',exact:true});await poolWindow.locator('[data-room-pools] .v7-roster-card').first().waitFor();assert.equal(await poolWindow.locator('[data-room-pools] .v7-roster-card').count(),count);
+    assert(await poolWindow.getByText(`固定名单 · ${count} 名武将`,{exact:true}).count());
+    await poolWindow.getByRole('button',{name:'卡面与技能',exact:true}).first().click();const detail=page.getByRole('dialog',{name:'卡牌详情',exact:true});await detail.getByText('四模式等权平均',{exact:true}).waitFor();for(const label of ['BO3 评分','KOF 评分','斗地主 评分','2v2 评分'])assert(await detail.getByText(label,{exact:true}).count());await detail.getByRole('button',{name:'关闭 (Esc)',exact:true}).click();
+    await page.screenshot({path:out+'/'+formatId+'-opponent-pool.png',animations:'disabled'});await poolWindow.getByRole('button',{name:'关闭 (Esc)',exact:true}).click();
+    if(formatId==='versus2v2-bo3'){
+      await page.setViewportSize({width:640,height:800});await room().getByRole('button',{name:'查看对方备战池',exact:true}).click();await poolWindow.locator('[data-room-pools] .v7-roster-card').first().waitFor();assert.equal(await poolWindow.locator('.v7-roster-card').count(),4);await poolWindow.getByRole('button',{name:'下一页',exact:true}).click();assert.equal(await poolWindow.locator('.v7-roster-card').count(),4);assert(await poolWindow.getByText('2/2',{exact:true}).count());await poolWindow.getByRole('button',{name:'关闭 (Esc)',exact:true}).click();await page.setViewportSize({width:1440,height:900});
+    }
     for(let i=0;i<count;i++){const card=room().locator(`[data-roster-key="ui-player-${i}"]`);if(!await card.count())await room().getByRole('button',{name:'下一页',exact:true}).click();await card.click();}
     assert.equal(await room().locator('.v7-roster-card__art').first().evaluate(i=>i.complete&&i.naturalWidth>0),true);
     await page.screenshot({path:out+'/'+formatId+'-reserve.png'});

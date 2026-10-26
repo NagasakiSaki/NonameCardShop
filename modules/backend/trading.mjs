@@ -1,3 +1,4 @@
+import {RATED_FORMATS,FOUR_MODE_VERSION} from './strength-modes.mjs';
 import {clone,need,integer,serial,sum,credit,debit,clamp,random,page} from './common.mjs';
 import {openPacket,unsealBox,makeSealed} from './products.mjs';
 import {note,enterCirculation} from './world.mjs';
@@ -28,10 +29,12 @@ export function updatePrices(w,catalog){
   for(const i of Object.values(w.items))if(i.location==='market')supplies.set(i.cardKey,(supplies.get(i.cardKey)||0)+1);
   for(const e of w.log)if(e.type==='secondaryTradeCompleted'&&e.day>=w.clock.day-3)trades.set(e.cardKey,(trades.get(e.cardKey)||0)+1);
   for(const c of catalog.cards){
-    const modes=['bo3','kof'].map(mode=>{const s=w.stats[`${c.cardKey}|${mode}`]||{wins:0,losses:0,draws:0};const n=s.wins+s.losses+s.draws;return clamp(1+2*n/(n+40)*((s.wins+.5*s.draws+10)/(n+20)-.5),.7,1.4);});
+    const formats=w.rules.scoring?.method===FOUR_MODE_VERSION?RATED_FORMATS:['bo3','kof'];
+    const modes=formats.map(mode=>{const s=w.stats[`${c.cardKey}|${mode}`]||{wins:0,losses:0,draws:0};const n=s.wins+s.losses+s.draws;return clamp(1+2*n/(n+40)*((s.wins+.5*s.draws+10)/(n+20)-.5),.7,1.4);});
     const supplied=supplies.get(c.cardKey)||0;
     const demand=1+Math.min(.15,(trades.get(c.cardKey)||0)/(10+supplied*5));
-    const target=Math.round(c.issuanceValue*(modes[0]*.65+modes[1]*.35)*demand),previous=w.prices[c.cardKey]||c.issuanceValue;
+    const performance=formats.length===4?modes.reduce((a,b)=>a+b,0)/4:modes[0]*.65+modes[1]*.35;
+    const target=Math.round(c.issuanceValue*performance*demand),previous=w.prices[c.cardKey]||c.issuanceValue;
     w.prices[c.cardKey]=Math.max(1,Math.round(clamp(target,previous*(1-w.rules.priceDailyLimit),previous*(1+w.rules.priceDailyLimit))));
   }
 }
@@ -169,7 +172,7 @@ export function tickEconomy(w,catalog,{map=null,seconds=0}={}){
   if(!['open','closing'].includes(w.clock.phase))return;
   for(const order of w.orders)if(order.status==='pending'&&w.clock.day*1440+w.clock.minute>=order.dueAt)order.status='arrived';
   const elapsed=Math.max(0,seconds)*w.clock.speed,behavior=customerBehavior(w);
-  if(map)for(const npc of w.npcs.filter(n=>!n.specialist&&!n.allyId&&onSite(n)&&n.roomId==='store'&&!n.playerInviteUntil&&!n.returnAfterMatch&&!n.currentMatchId&&n.trip?.kind!=='match')){
+  if(map)for(const npc of w.npcs.filter(n=>!n.specialist&&!n.allyId&&onSite(n)&&n.roomId==='store'&&!n.currentRoomId&&!n.playerInviteUntil&&!n.returnAfterMatch&&!n.currentMatchId&&n.trip?.kind!=='match')){
     if(npc.visit)npc.visit.elapsedSeconds+=elapsed;
     if(!npc.trip){
       if(npc.visit)npc.visit.idleSeconds=Math.max(0,(npc.visit.idleSeconds||0)-elapsed);
@@ -221,7 +224,7 @@ export function tickEconomy(w,catalog,{map=null,seconds=0}={}){
   const effects=managementEffects(w);
   for(const n of w.npcs.filter(n=>!n.specialist&&!n.allyId))ensureCustomerTraits(w,n);
   // Scavenging has its own cooldown and uses the same customer capacity and navigation as shopping.
-  for(const npc of w.npcs.filter(n=>!n.specialist&&!n.allyId&&onSite(n)&&!n.trip&&!n.currentMatchId&&n.roomId==='store'&&canScavenge(w,n))){
+  for(const npc of w.npcs.filter(n=>!n.currentRoomId&&!n.specialist&&!n.allyId&&onSite(n)&&!n.trip&&!n.currentMatchId&&n.roomId==='store'&&canScavenge(w,n))){
     if(!trashItems(w).length||w.npcs.filter(n=>!n.specialist&&!n.allyId&&n.trip&&n.trip.kind!=='match').length>=effects.concurrentCustomers)break;
     const anchor=map?.anchors['store.trash'];
     if(map&&anchor){try{const route=customerTarget(w,map,anchor,npc);if(route){npc.trip={stage:'scavenge',...route,waitSeconds:customerBehavior(w).searchSeconds};npc.activity='scavenging';npc.label='去翻垃圾桶';}}catch(error){note(w,'npcPathUnavailable',{actorId:npc.actorId,stage:'scavenge',reason:error.message});}}
@@ -232,7 +235,7 @@ export function tickEconomy(w,catalog,{map=null,seconds=0}={}){
   let npc;
   if(w.npcs.filter(n=>!n.specialist&&!n.allyId&&onSite(n)).length>=Math.min(w.rules.maxNpcs,effects.concurrentCustomers))return;
   const invited=w.experience?.events.find(e=>e.day===w.clock.day&&e.status==='scheduled')?.actorIds||[];
-  const visitors=w.npcs.filter(n=>!n.specialist&&!n.allyId&&!onSite(n)&&!n.currentMatchId&&(n.nextVisitAt||0)<=w.clock.day*1440+w.clock.minute).sort((a,b)=>Number(invited.includes(b.actorId))-Number(invited.includes(a.actorId))||(a.lastVisit?.leftAt||0)-(b.lastVisit?.leftAt||0));
+  const visitors=w.npcs.filter(n=>!n.specialist&&!n.allyId&&!n.currentRoomId&&!onSite(n)&&!n.currentMatchId&&(n.nextVisitAt||0)<=w.clock.day*1440+w.clock.minute).sort((a,b)=>Number(invited.includes(b.actorId))-Number(invited.includes(a.actorId))||(a.lastVisit?.leftAt||0)-(b.lastVisit?.leftAt||0));
   if(visitors.length&&(invited.includes(visitors[0].actorId)||w.npcs.filter(n=>!n.specialist&&!n.allyId).length>=w.rules.maxNpcs||random(w)<.5))npc=visitors[0];
   else {if(w.npcs.filter(n=>!n.specialist&&!n.allyId).length>=w.rules.maxNpcs)return;const i=w.npcs.length,actorId=serial(w,'npc'),purse=isV7(w)?initialCustomerWallet(w,actorId):null,scavenger=purse?purse.scavenger:random(w)<customerBehavior(w).scavengerChance,initialWallet=purse?purse.available:Math.round((scavenger?customerBehavior(w).poorInitialWallet:w.rules.npcInitialWallet)*effects.newCustomerWalletMultiplier);npc={actorId,name:customerBehavior(w).names[i%customerBehavior(w).names.length],appearanceId:customerAppearance(i),appearancePackVersion:1,wallet:purse||{available:initialWallet},roomId:'store',x:240,y:272,direction:'up',moving:false,activity:'shopping',scavenger};w.npcs.push(npc);note(w,'npcArrived',{actorId:npc.actorId,externalFunds:initialWallet});}
   const decision=customerDecision(w,catalog,npc);arriveCustomer(w,npc,map,invited.includes(npc.actorId)?{kind:'event',label:'参加新手交流会'}:decision.intent);
