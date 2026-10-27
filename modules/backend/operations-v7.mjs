@@ -249,7 +249,9 @@ export function planRoomOpponent(w,catalog,{formatId='kof',opponentId=null,seed}
 function update(w,m,result){m.series=unwrap(result).series;const s=m.series;m.wins=s.score.mine;m.losses=s.score.enemy;m.bout=s.round.index;m.gameId=s.round.gameId;m.status=s.phase==='live'||s.phase==='mounting'?'running':s.phase==='interrupted'?'interrupted':s.rounds.length?'awaitingNext':'prepared';return s;}
 export function selectV7(w,p){checkProof(w,p.proof);const m=matchById(w,p.matchId);need(m.series,'INVALID_STATE','这场比赛不使用备战池。');update(w,m,C.selectRound(m.series,p));return seriesView(w,p.matchId);}
 export function startV7(w,p){const m=matchById(w,p.matchId);need(m.series,'INVALID_STATE','缺少系列赛。');update(w,m,C.beginMount(m.series));m.timeSession??={startedAt:{day:w.clock.day,minute:w.clock.minute},minutes:30,applied:false};return clone(m);}
-export function interruptV7(w,m,reason){if(m.series.seriesVersion!==1)return;if(['live','mounting','confirmed'].includes(m.series.phase)){m.series.phase='interrupted';m.series.interrupt={reason:reason||'牌局窗口已关闭'};m.series.revision++;m.status='interrupted';}}
+// code 是可选的机器可读原因（ENGINE_TIMEOUT / RESULT_CONFLICT …），让房间能按类型给恢复入口；
+// reason 仍是给人看的文字，两者都持久化，读档后不丢。
+export function interruptV7(w,m,reason,code=null){if(m.series.seriesVersion!==1)return;if(['live','mounting','confirmed'].includes(m.series.phase)){m.series.phase='interrupted';m.series.interrupt={reason:reason||'牌局窗口已关闭',code:code||null};m.series.revision++;m.status='interrupted';}}
 export function restoreV7(w){for(const m of w.matches.filter(m=>m.series?.seriesVersion===1&&m.status!=='finished')){m.series.worldId=w.worldId;m.series.branchId=w.branchId;interruptV7(w,m,'读取存档后需要重开当前小局');}}
 function finishSeries(w,catalog,m,{trusted=false}={}){
   const s=m.series,r=s.officialResult;if(!r)return;

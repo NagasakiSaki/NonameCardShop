@@ -102,7 +102,20 @@ export async function openCombat(app,options={}){
         else if(['live','mounting'].includes(series.phase)){
           root.append(button(mounted?'返回牌局':'载入牌局',()=>mounted?(root.hidden=true,battle.hidden=false):mountRound()));
           if(!mounted&&!mounting)message.textContent='牌局已准备好，点击载入继续。';
-        }else if(series.phase==='interrupted')root.append(el('p',{text:(series.interrupt?.reason?series.interrupt.reason+'。':'')+'当前小局中断。重开会重新发牌，已完成的小局比分保留。'}),button('重开当前小局',async()=>{const r=await submit('combat.restartRound',{matchId:series.matchId});if(r?.ok){series=r.data;selected=[];paint();}}),button('放弃系列赛',async()=>{const r=await submit('combat.abandon',{matchId:series.matchId});if(r?.ok){series=r.data;paint();}}));
+        }else if(series.phase==='interrupted'){
+          // 异步中断（引擎超时/报错/赛果冲突）不会走 mount 的 catch，只会把 code 落在这里；
+          // 所以按 code 给出与同步失败一致的标题和说明，而不是只显示一行 reason。
+          const interrupted=series.interrupt||{};
+          const info=interrupted.code?classifyMountError({code:interrupted.code,message:interrupted.reason})
+            :{title:'牌局已中断',kind:'unknown',detail:interrupted.reason||''};
+          const hint=info.kind==='technical'?'这是技术中断：可以重开当前小局继续，阵容与比分保留，不会重复扣费。'
+            :info.kind==='conflict'?'同一小局收到不同赛果，已停止结算；重开不会记为胜利，也不会抹掉已结算小局。'
+            :'这一局无法继续，可以重开当前小局或放弃系列赛。';
+          root.append(el('div',{class:'note-card',dataset:{v7Interrupt:interrupted.code||'unknown'}},[
+            el('p',{class:'note-card__title',text:info.title}),
+            el('p',{class:'small',text:(interrupted.reason?interrupted.reason+'。':'')+hint}),
+          ]),button('重开当前小局',async()=>{const r=await submit('combat.restartRound',{matchId:series.matchId});if(r?.ok){series=r.data;selected=[];paint();}}),button('放弃系列赛',async()=>{const r=await submit('combat.abandon',{matchId:series.matchId});if(r?.ok){series=r.data;paint();}}));
+        }
         else root.append(el('p',{text:series.officialResult?.result==='win'?series.challengeKind==='stage-challenge'?'挑战成功：新主题已解锁，伙伴已加入！':series.challengeKind==='debt-challenge'?`获胜！本期抵扣 ${series.debtRelief||0} 币借款。请在经营目标中查看剩余还款，完成首期约定后再开启下一阶段。`:'你赢下了这场比赛。':series.officialResult?.result==='loss'?'本次未获胜。高手挑战可以再次交谈重试或改天再战。':'比赛已取消。'}),button('返回牌桌',()=>{series=null;room=null;step='format';selected=[];paint();}));
       }
       if(series?.phase==='finished'&&['stage-challenge','debt-challenge'].includes(series.challengeKind)&&series.officialResult?.result==='loss'){

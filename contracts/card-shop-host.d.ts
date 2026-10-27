@@ -126,6 +126,12 @@ export interface CardShopHost {
   subscribe(listener:(event:HostEvent)=>void):()=>void;
   pause:{acquire(input:{ownerId:string;reason:string}):Promise<PauseLease>;release(leaseId:string):Promise<void>};
   world:{input(input:{sessionId:string;inputSeq:number;roomId:string;navVersion:string;direction?:'up'|'down'|'left'|'right';vector?:{x:number;y:number};destination?:{x:number;y:number};stop?:boolean}):void};
-  battle:{mount(input:{container:HTMLElement;matchId:string;signal?:AbortSignal}):Promise<{dispose():void|Promise<void>}>;control(input:import('./operations-v7').BattleControl):{requestId:string}|Promise<{requestId:string}>};
+  /**
+   * battle.mount 成功返回句柄后，引擎超时/报错是**异步**发生的：适配器会调用
+   * runtime.interrupt(matchId, reason, code)，把结构化 code 写进 series.interrupt.code，
+   * 房间按 code 分类提示并给重开/放弃入口；不要在 interrupted 阶段直接重复 mount（会得到 RECOVERY_REQUIRED）。
+   * `loadTimeoutMs` 只用于测试/诊断缩短真实等待，正式界面不传。
+   */
+  battle:{mount(input:{container:HTMLElement;matchId:string;signal?:AbortSignal;loadTimeoutMs?:number}):Promise<{dispose():void|Promise<void>}>;control(input:import('./operations-v7').BattleControl):{requestId:string}|Promise<{requestId:string}>};
   disconnect():Promise<void>;
 }

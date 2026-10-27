@@ -31,6 +31,7 @@ export const groups={
     "tests/customer-trash-browser.mjs",
     "tests/frontend-movement.mjs",
     "tests/dialogue-navigation.mjs",
+    "tests/room-interruption.mjs",
     "tests/frontend-skins.mjs",
     "tests/frontend/assets.mjs",
     "tests/mount-errors.mjs",
