@@ -1,3 +1,4 @@
+import {createArchivePolicy} from './archive-policy.mjs';
 import * as Rooms from './battle-rooms.mjs';
 import * as Debt from './debt-challenge.mjs';
 import {loanBalance,repayLoan} from './campaign-loan.mjs';
@@ -47,6 +48,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
   const verifiedPacks=await Promise.all(storyPacks.map(p=>loadStoryPack(p,{registry:createRegistry(storyExtensions)})));
   const narrative=createNarrativeRuntime({packs:verifiedPacks,extensions:storyExtensions,diagnostics:storyDiagnostics,currentHashes:storyActiveHashes});
   const navigation=new Map(maps.map(m=>[m.mapId,validateMap(m)]));
+  const {archive,saveArchive}=createArchivePolicy({catalogFor,navigation,now});
   let catalog=catalogFor(rules),record=await repository.read();
   function upgradeDistribution(world){
     if(!world.rules.distribution||world.products.some(p=>p.collationVersion!==DEFAULT_DISTRIBUTION.version)){
@@ -111,23 +113,6 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
   const publish=()=>{emit('snapshotUpdated',snapshot(w(),reasons()));emit('actorsUpdated',[w().player,...w().npcs.filter(onSite)].map(({wallet,trip,...actor})=>actor));};
   function live(){need(connected&&!disconnected,'NOT_CONNECTED','请先连接新版世界。');}
   function eventPlayers(world){const fee=managementEffects(world).tableFee;return world.npcs.filter(n=>!n.currentRoomId&&!n.currentMatchId&&n.wallet.available-(n.wallet.reserved||0)>=fee&&eligible(world,catalog,n.actorId).some(i=>i.eligible)).map(n=>({actorId:n.actorId,name:n.name}));}
-  function archive(world,slot){
-    const saved=clone(world);
-    for(const event of saved.pendingEngineEvents||[]){const m=saved.matches.find(m=>m.matchId===event.matchId);if(m?.status==='running'&&m.gameId===event.message.matchId)engineMessage(saved,event.matchId,event.message);}
-    applyMatchTime(saved,catalogFor(saved.rules),navigation);
-    saved.pendingEngineEvents=[];let restarted=false;
-    for(const m of saved.matches){delete m.needsRestartAfterEvents;if(m.background&&!m.simulated&&m.status==='running'){m.status='interrupted';restarted=true;}}
-    return {id:id('archive'),format:'noname-shop-world-save',version:2,worldId:world.worldId,branchId:world.branchId,day:saved.clock.day,minute:saved.clock.minute,slot,createdAt:now(),...(restarted?{recoveryNote:'读取后 NPC 当前小局重开，已完成小局、费用和比分保留。'}:{}),world:saved};
-  }
-  function saveArchive(next,slot){
-    if(['start','close'].includes(slot)&&next.archives.some(a=>a.worldId===next.world.worldId&&a.branchId===next.world.branchId&&a.day===next.world.clock.day&&a.slot===slot))return;
-    next.archives.push(archive(next.world,slot));
-    const cutoff=next.world.clock.day-next.world.rules.maxDays+1;
-    const eligible=next.archives.filter(a=>a.slot==='before-load'||a.day>=cutoff),capacity=next.world.rules.maxArchives;
-    const daily=new Set(dayArchiveViews(eligible,next.world.branchId,next.world.branchLineage).slice(0,Math.max(0,capacity-2)).map(a=>a.id));
-    const recent=eligible.filter(a=>!daily.has(a.id)).slice(-Math.max(0,capacity-daily.size));
-    const kept=new Set([...daily,...recent.map(a=>a.id)]);next.archives=eligible.filter(a=>kept.has(a.id));
-  }
   async function persist(next,operation='tick'){
     const narrativeRevision=record.world.narrative?.revision;
     applyMatchTime(next.world,catalog,navigation);
