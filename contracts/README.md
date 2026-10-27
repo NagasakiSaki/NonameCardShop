@@ -94,7 +94,7 @@
 
 - `tasks.list` 新增 `scope:daily|starter`、`autoClaim:true`、`goal`、`claimed`；数字 `target` 与 `guide` 继续兼容。每日以当天累计值基线计进度，事务内完成即发奖励；`tasks.claim` 不再二次发奖。
 - `ledger.live` 返回 `{day,cash,debt,items:CashEntry[]}`；快照新增 `cashJournal` 最近六条。`amount` 是可用现金实际差额，`debtDelta` 是供应商欠款差额，任务可附 `grossIncome`。两者不得混算，也不能把奖励当商品利润。
-- `products.list` 新增 `averageStrength`、`priceTier:{id,label,version}`、`packExpectedValue`。前端仅展示服务端档位；供货按主题全局平均分分五档，旧实物/订单仍冻结原版内容与成本。
+- `products.list` 新增 `averageStrength`、`priceTier:{id,label,version}`、`packExpectedValue`。前端仅展示服务端档位；当前供货按主题全局平均分分三档，新档散包零售价为 210／360／510，旧实物和订单仍冻结原版内容与成本。完整规则见 [三赛制与定价规则](../docs/architecture/三赛制与定价规则.md)。
 - `opening.execute` 的站位改为 `store.opening`；采购和签收仍为 `store.counter`；NPC 结账位 `store.checkout`。地图生成器和静态导航已同步。
 - 玩家 `combat.eligible` 不要求全局流通，仍检查持有、副本锁定、保护、位置及技能兼容；NPC 保留流通限制。NPC 拆出的所有卡立即进入流通。
 - NPC 默认 `simulated:true`，使用实际持卡阵容、后台权威随机源和保存的 `simulation.elapsedSeconds/durationSeconds`。18 秒默认模拟时长（受倍率/暂停影响）；完赛自动付费并释放桌位。`simulation.feePaid` 为已结桌费；统计可含 `simulatedGames`，不能把模拟场次宣传为真实引擎实测。

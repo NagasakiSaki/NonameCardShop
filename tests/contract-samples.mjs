@@ -1,7 +1,7 @@
 // tests/contract-samples.mjs — 契约样本检查。
 //
-// 目的：用真实运行时返回核对 contracts/*.d.ts 的联合类型、必填字段和身份字段，
-// 让「声明漂移」在测试里暴露，而不是等前端拿错类型再排查。
+// 目的：用真实运行时返回核对预期的联合类型、必填字段和身份字段。
+// 此测试不读取或编译 contracts/*.d.ts；声明变更仍需另行核对。
 // 覆盖 2026-10-27 交接登记的差异：队列 mode、对话 kind、选将 DTO 字段、评分/身份分键名。
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -26,7 +26,7 @@ const command=async(type,payload={},extra={})=>host.command({requestId:`contract
 const formatView=await query('combat.formats');
 assert.ok(Array.isArray(formatView.formats),'combat.formats 应返回 {formats:[...]}');
 const formatIds=formatView.formats.map(entry=>entry.formatId).filter(Boolean);
-assert.deepEqual([...formatIds].sort(),[...DECLARED_FORMATS].sort(),`combat.formats 与声明不一致：${JSON.stringify(formatIds)}`);
+assert.deepEqual([...formatIds].sort(),[...DECLARED_FORMATS].sort(),`combat.formats 与预期不一致：${JSON.stringify(formatIds)}`);
 
 // ---- combat.eligible：mode 联合、slots、DTO 字段 ----
 const rejected=await host.query('combat.eligible',{formatId:'bo3'});
@@ -36,7 +36,7 @@ const eligibleByFormat={};
 for(const formatId of DECLARED_FORMATS){
   const data=await query('combat.eligible',{formatId});
   assert.equal(data.mode,formatId);
-  assert.ok(DECLARED_FORMATS.includes(data.mode),`mode 超出声明联合：${data.mode}`);
+  assert.ok(DECLARED_FORMATS.includes(data.mode),`mode 超出预期：${data.mode}`);
   assert.equal(data.slots,EXPECTED_SLOTS[formatId],`${formatId} 整场备战人数应为 ${EXPECTED_SLOTS[formatId]}`);
   eligibleByFormat[formatId]=data;
 }
@@ -46,7 +46,7 @@ assert.equal((await command('business.open')).ok,true);
 let offer=null;
 for(let attempt=0;attempt<40&&!offer;attempt+=1){await host.advance(30);offer=await query('dialogue.offer');}
 assert.ok(offer,'第 1 天营业后应出现海玲的开场借款对话');
-assert.ok(DECLARED_DIALOGUE_KINDS.includes(offer.kind),`对话 kind 超出声明联合：${offer.kind}`);
+assert.ok(DECLARED_DIALOGUE_KINDS.includes(offer.kind),`对话 kind 超出预期：${offer.kind}`);
 assert.equal(offer.kind,'debt-intro','新档开场对话应为 debt-intro');
 for(const field of ['offerId','actorId','kind','proof','speakerName','portrait','roleLabel','text','choices'])assert.ok(field in offer,`DialogueOffer 缺字段 ${field}`);
 assert.equal(offer.portrait,'bd-umiri');
@@ -95,7 +95,7 @@ assert.ok(DECLARED_QUEUE_MODES.includes(joined.data.mode));
 assert.equal(joined.data.lineup.length,3);
 const queue=await query('combat.queue');
 assert.equal(queue.player.mode,'kof');
-for(const waiting of queue.waiting)assert.ok(DECLARED_QUEUE_MODES.includes(waiting.mode),`等待列表出现未声明的 mode：${waiting.mode}`);
+for(const waiting of queue.waiting)assert.ok(DECLARED_QUEUE_MODES.includes(waiting.mode),`等待列表出现预期以外的 mode：${waiting.mode}`);
 
 // ---- catalog.detail 的 stats 只有三赛制键 ----
 const cardKey=sample.cardKey;
@@ -105,4 +105,4 @@ assert.equal('bo3' in detail.stats,false,'catalog.detail.stats 不应再有 bo3 
 assert.ok('sampleSufficient' in detail.stats&&'note' in detail.stats);
 
 await host.disconnect?.();
-console.log('PASS 契约样本：三赛制注册表、combat.eligible 的 mode/slots/评分身份字段、开局 debt-intro 对话、KOF-only 报名队列、catalog.detail 三键战绩与声明一致');
+console.log('PASS 运行时样本：三赛制注册表、选将评分与身份字段、债主开场对话、KOF 报名队列及三赛制战绩；未自动校验 .d.ts');

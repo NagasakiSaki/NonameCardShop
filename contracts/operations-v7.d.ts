@@ -6,7 +6,7 @@ export interface WorldProof {worldId:string;branchId:string;resourceRevision?:nu
  * - `talk`：普通顾客/经营伙伴闲聊，choices 含 challenge / allies / close；
  * - `stage-challenge`：高手约战，choices 为 accept|rematch / tomorrow；
  * - `debt-intro`：海玲（bd-umiri）开局借款说明，choices 为 begin；
- * - `debt-challenge`：每期还款目标会谈，choices 视进度出现 accept|rematch / goals / settled / tomorrow。
+ * - `debt-challenge`：每期还款目标会谈，choices 视进度出现 accept|rematch / goals / settled / tomorrow；无剩余目标时为 close。
  * 债主两种 kind 的 text/choices/roleLabel 由 data/lender-dialogue.zh-CN.json 与当前目标生成，
  * 不是固定文案；`available` 只在 talk 的 allies 选项上可能出现。
  */
