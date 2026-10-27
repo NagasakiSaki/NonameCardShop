@@ -1,6 +1,6 @@
 import {el,newRequestId} from './components.mjs';
 
-const DUTIES={attraction:'招呼顾客',checkout:'协助收银',wholesale:'联系供货'};
+const DUTIES={attraction:'招呼顾客',checkout:'协助收银',wholesale:'联系供货',duelist:'约战赚钱（有输赢）'};
 export function openAllies(app,options={}){
  const existing=app.windows.stack.find(w=>w.id==='allies-v7');if(existing){existing.handle.choosePartnerTab?.(options.tab||'partners');return app.windows.open({id:'allies-v7'});}
  let tab=options.tab||'partners';
@@ -15,13 +15,18 @@ export function openAllies(app,options={}){
    for(const [id,label]of [['partners','伙伴排班'],['challenges','高手来访'],['future','经营目标与借款']])nav.append(el('button',{class:'btn',text:label,'aria-pressed':tab===id,onclick:()=>{tab=id;paint();}}));
    if(tab==='partners'){
     content.append(el('p',{text:`当班 ${view.slots.used}/${view.slots.max} · 引客 +${Math.round(view.effects.attractionRate*100)}% · 收银用时 −${Math.round(view.effects.checkoutReductionRate*100)}% · 进货优惠 ${Math.round(view.effects.wholesaleDiscountRate*100)}%`}),el('p',{class:'small',text:'伙伴不收工资。每人选择一项工作；合计上限：引客 30%、收银减时 40%、进货优惠 15%。休息中的伙伴仍保留在名册。'}));
+    const policy=view.earning?.policy;
+    if(policy)content.append(el('p',{class:'small',text:`约战岗位会主动找持卡顾客下注，后台模拟、不暂停营业。常规本金 ${policy.baseStake} 币，稀有度差可调整，单场最多 ${policy.maxStake} 币；店内保留 ${policy.cashReserve} 币周转金。每人每天最多 ${policy.maxMatchesPerDay} 场、净亏 ${policy.dailyLossLimit} 币停手。顾客另付一次桌费，伙伴免桌费；有可能亏损。武将不足三名已流通卡种时等待。`}));
     if(!view.allies.length)content.append(el('p',{text:'第一位高手第 2 天到访。击败当前高手后，下一位次日来访；未通过就顺延。'}));
     const cards=el('div',{class:'partner-grid'});content.append(cards);
     for(const ally of view.allies){
      const row=el('article',{class:'partner-card'}),select=el('select',{'aria-label':ally.name+'工作'});
      select.append(el('option',{value:'',text:'休息'}));for(const [value,text]of Object.entries(DUTIES))select.append(el('option',{value,text}));select.value=ally.onDuty?ally.assignedDuty||ally.defaultDuty:'';
      const image=app.manifest.characters[ally.appearanceId]?.portrait;if(image)row.append(el('img',{src:image,alt:ally.name}));
-     const detail=el('div',{},[el('h3',{text:ally.name}),el('p',{text:ally.onDuty?'当班 · '+DUTIES[ally.assignedDuty||ally.defaultDuty]:'休息中'}),el('p',{class:'small',text:`个人效果 ${Math.round(ally.rate*100)}% · 第 ${ally.recruitedAtDay??'—'} 天加入`}),select]);row.append(detail);cards.append(row);
+     const activity=view.earning?.allies.find(a=>a.allyId===ally.allyId),today=activity?.today;
+     const detail=el('div',{},[el('h3',{text:ally.name}),el('p',{text:ally.onDuty?'当班 · '+DUTIES[ally.assignedDuty||ally.defaultDuty]:'休息中'}),el('p',{class:'small',text:(ally.assignedDuty==='duelist'?'后台模拟 · 有输有赢':`个人效果 ${Math.round(ally.rate*100)}%`)+` · 第 ${ally.recruitedAtDay??'—'} 天加入`}),select]);
+     if(today)detail.append(el('p',{class:'small',text:`今日约战 ${today.matches} 场 · ${today.wins} 胜 ${today.losses} 负 · 净胜负 ${today.net>=0?'+':''}${today.net} 币 · 桌费 +${today.fees} 币`}),el('p',{class:'small',text:`累计净胜负 ${activity.total.net>=0?'+':''}${activity.total.net} 币 · 桌费 +${activity.total.fees} 币`}));
+     row.append(detail);cards.append(row);
      select.onchange=async()=>{select.disabled=true;const r=await ctx.submit({requestId:newRequestId('ally-duty'),type:'allies.assign',payload:{allyId:ally.allyId,dutyId:select.value||null}});if(disposed)return;if(!r.ok)app.toast('error','安排未完成',r.error.message);await ctx.handle.refresh();};
     }
    }else if(tab==='challenges'){

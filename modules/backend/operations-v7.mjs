@@ -14,6 +14,7 @@ import {moveActor,pathfind} from './navigation.mjs';
 import * as B from '../progression/index.mjs';
 import * as C from '../combat-formats/index.mjs';
 import * as Debt from './debt-challenge.mjs';
+import {partnerActivityView} from './partner-activities.mjs';
 
 const unwrap=result=>{need(result?.ok,result?.error?.code||'INVALID_STATE',result?.error?.message||'操作未完成。');return result.data;};
 const ready=w=>isV7(w)&&w.progression?.version===1&&!w.progression.disabled;
@@ -88,8 +89,9 @@ export function tickV7(w,catalog,navigation,seconds=0){
       if(map)moveActor(map,n,n.trip,seconds);if(!map||!n.trip.path.length)departCustomer(w,n,'specialist-visit-ended');continue;
     }
     if(n.allyId){
-      const ally=p.allies.find(a=>a.allyId===n.allyId);n.customerCategory='经营伙伴';n.label=ally?.onDuty?{attraction:'招呼顾客',checkout:'协助收银',wholesale:'联系供货'}[ally.assignedDuty||ally.defaultDuty]:'休息中';
-      if(!open||!ally?.onDuty)leave(w,n,navigation);else if(map){const point=map.anchors[ally.assignedDuty==='checkout'?'store.checkout':ally.assignedDuty==='wholesale'?'store.counter':'store.retail'];if(point&&Math.hypot(n.x-point.x,n.y-point.y)>40&&!n.trip?.path.length){const route=customerTarget(w,map,{...point,radius:40},n);if(route)n.trip={stage:'ally-workstation',...route};}if(n.trip)moveActor(map,n,n.trip,seconds*w.clock.speed);}continue;
+      const ally=p.allies.find(a=>a.allyId===n.allyId);n.customerCategory='经营伙伴';n.label=ally?.onDuty?{attraction:'招呼顾客',checkout:'协助收银',wholesale:'联系供货',duelist:'寻找愿意约战的顾客'}[ally.assignedDuty||ally.defaultDuty]:'休息中';
+      if(n.trip?.kind==='match'||n.returnAfterMatch){n.label='返回岗位';continue;}
+      if(!open||!ally?.onDuty)leave(w,n,navigation);else if(map){const point=map.anchors[ally.assignedDuty==='checkout'?'store.checkout':ally.assignedDuty==='wholesale'?'store.counter':'store.retail'];if(point&&Math.hypot(n.x-point.x,n.y-point.y)>40&&!n.trip?.path.length){const route=customerTarget(w,map,{...point,radius:40},n);if(route)n.trip={stage:'ally-workstation',...route};}if(n.trip)moveActor(map,n,n.trip,seconds*w.clock.speed);if(!n.trip?.path?.length){n.trip=null;n.moving=false;n.direction='down';}}continue;
     }
     const visit=p.currentVisit,stage=activeStage(w);
     if(!open||visit?.actorId!==n.actorId||visit.status!=='onsite'||!stage){leave(w,n,navigation);continue;}
@@ -114,7 +116,7 @@ export function tickV7(w,catalog,navigation,seconds=0){
   // Recruited partners return each morning; they never enter the shopping/budget loop.
   for(const ally of p.allies){
     const n=w.npcs.find(n=>n.personId===ally.personId);if(!n)continue;n.allyId=ally.allyId;
-    if(open&&ally.onDuty&&!onSite(n)){arriveCustomer(w,n,navigation.get('store'));n.customerCategory='经营伙伴';n.trip=null;}
+    if(open&&ally.onDuty&&!onSite(n)&&!n.currentMatchId){arriveCustomer(w,n,navigation.get('store'));n.customerCategory='经营伙伴';n.trip=null;n.direction='down';n.moving=false;}
   }
 }
 export function dialogueView(w){
@@ -161,7 +163,7 @@ export function progressionQuery(w,name){
   need(ready(w),'FEATURE_UNAVAILABLE','当前存档的挑战数据版本不受支持，原记录已保留。');
   if(name==='progression.status')return {...B.queryProgressionStatus(w.progression),unlockedProductIds:unlockedProducts(w),schedule:w.progression.stages.map(({stageId,displayName,productName,dueDay,status})=>({stageId,displayName,productName,dueDay,status}))};
   if(name==='challenges.status')return {...B.queryChallengesStatus(w.progression),activeChallenge:clone(w.progression.activeChallenge)};
-  return {...B.queryAlliesList(w.progression),effects:B.deriveAllyEffects(w.progression)};
+  return {...B.queryAlliesList(w.progression),effects:B.deriveAllyEffects(w.progression),earning:partnerActivityView(w)};
 }
 export function assignV7(w,catalog,p){checkProof(w,p.proof);need(ready(w),'FEATURE_UNAVAILABLE','伙伴模块不可用。');const r=unwrap(B.assignAllyDuty(w.progression,p,context(w)));refreshProducts(w,catalog);return r;}
 export function formatsView(capabilities){return unwrap(C.listFormats(capabilities));}
@@ -265,7 +267,7 @@ function finishSeries(w,catalog,m,{trusted=false}={}){
       const before=new Set(w.progression.allies.map(a=>a.allyId));
       unwrap(B.settleChallenge(w.progression,{completed:true,simulated:false,originVerified:true,sourceVerified:true,challengeId:s.challengeId,stageId:s.stageId,productId:activeStage(w)?.productId,resultId:s.seriesId+':final',matchId:m.matchId,formatId:m.mode,winningTeamId:'mine',playerWins:s.score.mine,winsRequired:C.getFormat(m.mode).winsRequired},context(w)));
       const n=w.npcs.find(n=>n.actorId===m.opponentId),ally=w.progression.allies.find(a=>!before.has(a.allyId));
-      if(n&&ally){n.allyId=ally.allyId;n.customerCategory='经营伙伴';n.label='已成为伙伴';if(w.progression.allies.filter(a=>a.onDuty).length<3)unwrap(B.assignAllyDuty(w.progression,{allyId:ally.allyId,dutyId:ally.defaultDuty},context(w)));}
+      if(n&&ally){n.allyId=ally.allyId;n.customerCategory='经营伙伴';n.label='已成为伙伴';n.direction='down';n.moving=false;if(w.progression.allies.filter(a=>a.onDuty).length<3)unwrap(B.assignAllyDuty(w.progression,{allyId:ally.allyId,dutyId:ally.defaultDuty},context(w)));}
       refreshProducts(w,catalog);note(w,'challengeCleared',{stageId:s.stageId,productId:w.progression.stages.find(x=>x.stageId===s.stageId)?.productId});
     }else{
       B.reduceProgression(w.progression,{type:'CHALLENGE_FAILED',challengeId:s.challengeId,canRetry:true},context(w));

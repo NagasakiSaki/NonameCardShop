@@ -40,6 +40,7 @@ export function tickNpcTables(w,catalog,navigation,seconds,{schedule=true,routes
     }else if(npc.trip.stage==='room-exit'){
       const door=room.anchors['battleRoom.toStore'],entry=store.anchors[door.targetAnchor];need(entry,'INVALID_MAP','主店入口未匹配。');npc.roomId='store';npc.navVersion=store.navVersion;npc.x=entry.x;npc.y=entry.y;npc.trip={kind:'match',stage:'store-return',path:pathfind(store,npc,store.anchors['store.entry'])};
     }else if(npc.trip.stage==='seat'){npc.activity='seated';npc.trip=null;npc.moving=false;}
+    else if(npc.allyId&&w.clock.phase==='open'&&w.progression?.allies.some(a=>a.allyId===npc.allyId&&a.onDuty)){npc.trip=null;npc.activity='idle';npc.moving=false;npc.direction='down';}
     else departCustomer(w,npc,'match-finished');
     }catch(error){note(w,'npcTableRouteUnavailable',{actorId:npc.actorId,reason:error.message});if(npc.currentMatchId)voidNpcMatch(w,npc.currentMatchId,error.message);if(!npc.currentMatchId)departCustomer(w,npc,'table-route-unavailable');}
   }

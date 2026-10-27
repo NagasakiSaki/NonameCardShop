@@ -8,6 +8,7 @@
 
 | 文档 | 覆盖范围 | 对应实现 |
 | --- | --- | --- |
+| [伙伴约战与场景移动](伙伴约战与场景移动.md) | 伙伴主动下注、风险与托管、后台营业、镜头采样稳定及独立待机 | `partner-activities.mjs`、`partner-wager-accounting.mjs`、`pixel-camera.mjs` |
 | [三赛制与定价规则](三赛制与定价规则.md) | 三种对战格式、整场备战人数、210/360/510 基准档、固定发行与市场准入 | `modules/combat-formats/`、`modules/backend/v7-policy.mjs`、`data/print-editions.json` |
 | [两回合收益论与固定发行-v1](两回合收益论与固定发行-v1.md) | 模型 `ideal-two-round-1`、场景分/斗地主分/全局定价分公式、印刷与发行分离 | `modules/backend/strength-modes.mjs`、`modules/backend/ideal-yield.mjs`、`data/strength-modes.json` |
 | [长线经营与高手挑战-v1](长线经营与高手挑战-v1.md) | 高手链（第 2 天起、击败次日顺延）、伙伴岗位、四期借款目标、未来系统接口 | `modules/progression/`、`modules/backend/campaign-loan.mjs`、`modules/backend/debt-challenge.mjs` |

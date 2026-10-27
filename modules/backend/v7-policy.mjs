@@ -1,7 +1,7 @@
 import {buildEconomyPolicy,calculateBoxPrice} from '../economy-v7/pricing.mjs';
 import {need,clone} from './common.mjs';
 import {createProgressionState} from '../progression/state.mjs';
-import {deriveAllyEffects} from '../progression/allies.mjs';
+import {deriveAllyEffects,VALID_DUTIES} from '../progression/allies.mjs';
 import {determineBuyerClass,budgetForVisit,generateInitialWallet,dailyBudgetSupplement} from '../economy-v7/budget.mjs';
 import longTermPolicy from '../../data/long-term-policy.json' with {type:'json'};
 import {managementEffects} from './management.mjs';
@@ -60,7 +60,7 @@ export function validateV7(w){
   need(Array.isArray(p.stages)&&p.stages.length<=64&&Array.isArray(p.allies)&&p.allies.length<=64&&Array.isArray(p.unlockedProductIds)&&p.unlockedProductIds.every(s=>typeof s==='string')&&p.receipts&&Number.isSafeInteger(p.revision),'INVALID_SAVE','挑战或伙伴记录不完整。');
   need(p.stages.every(s=>typeof s.stageId==='string'&&Number.isSafeInteger(s.dueDay)&&s.dueDay>=1)&&new Set(p.unlockedProductIds).size===p.unlockedProductIds.length,'INVALID_SAVE','挑战日期或解锁记录不正确。');
   need(Array.isArray(p.stageQueue)&&p.stageQueue.every(id=>p.stages.some(s=>s.stageId===id))&&p.dailyVisitStatus&&typeof p.dailyVisitStatus.proactiveOfferGiven==='boolean'&&p.challenges&&p.deferrals&&Number.isSafeInteger(p.maxAllySlots)&&p.maxAllySlots>=0&&p.maxAllySlots<=3,'INVALID_SAVE','挑战排期不完整。');
-  need(p.allies.every(a=>typeof a.allyId==='string'&&typeof a.personId==='string'&&typeof a.onDuty==='boolean'&&Number.isFinite(a.rate)&&a.rate>=0&&a.rate<=1&&['attraction','checkout','wholesale'].includes(a.defaultDuty)&&(!a.assignedDuty||['attraction','checkout','wholesale'].includes(a.assignedDuty)))&&new Set(p.allies.map(a=>a.allyId)).size===p.allies.length&&p.allies.filter(a=>a.onDuty).length<=p.maxAllySlots,'INVALID_SAVE','经营伙伴或值班记录不合法。');
+  need(p.allies.every(a=>typeof a.allyId==='string'&&typeof a.personId==='string'&&typeof a.onDuty==='boolean'&&Number.isFinite(a.rate)&&a.rate>=0&&a.rate<=1&&['attraction','checkout','wholesale'].includes(a.defaultDuty)&&(!a.assignedDuty||VALID_DUTIES.includes(a.assignedDuty)))&&new Set(p.allies.map(a=>a.allyId)).size===p.allies.length&&p.allies.filter(a=>a.onDuty).length<=p.maxAllySlots,'INVALID_SAVE','经营伙伴或值班记录不合法。');
 }
 
 export function economyPolicy(rules){

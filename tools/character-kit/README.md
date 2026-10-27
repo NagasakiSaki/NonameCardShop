@@ -1,5 +1,18 @@
 # 人物工具 character-kit 1.0
 
+## 独立四向待机（2026-10-27）
+
+正式场景已使用独立 `idleSheet`，64×256、上/左/下/右各一帧，`idleColumns:1`。行走仍是原 512×256 八帧图集；立绘也保持独立。不要再把行走第 0 帧当侧向站立。
+
+```powershell
+npm run art:setup
+node tools/character-kit/build-idle.mjs --out .local/idle-review-new
+# 审查候选后，显式安装 25 人待机；不重写行走或立绘。
+node tools/character-kit/build-idle.mjs --out .local/idle-install-new --install
+```
+
+输出目录必须新建，位于 `.local` 下或工程外，不覆盖已有候选。该补充构建器使用 pngjs 读取原始 PNG；下面原 character-kit CLI 的枚举、校验与图册仍为零依赖。来源、许可与原文件哈希见 [LPC idle 来源](../../experiments/character-art/sources/lpc-idle/README.md)。`art:install` 的共享安装器也会补入待机，重建完整人物包不会丢失此字段。`buildIdle(preset)` 可以由其他 Node 脚本直接调用，返回 `{width,height,rgba}`，只读源文件、不写正式资源。
+
 零依赖 Node CLI，供其他模型/脚本操作现有像素人物配置。Node >=22.12，从任意工作目录使用 CLI 的绝对路径也可；`--config`、`--out` 相对调用目录解析。它枚举部件、校验输入和导出核对图册，不修改渲染器、正式 manifest、存档或游戏入口。
 
 在工程根目录：

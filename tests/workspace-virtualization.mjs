@@ -4,6 +4,7 @@
 //   连续滚动、全部行可达、跨筛选选择、实物定价绑定、焦点、滚动位置、卡面详情、关闭清理。
 // 另外覆盖：快速滚动（连续大跨度跳转）、缩放（CSS 视口变窄）后的可达性。
 import assert from 'node:assert/strict';
+import {visibleGridCard} from './fixtures/visible-grid-card.mjs';
 import fs from 'node:fs';
 import {chromium} from 'playwright';
 import {startShopServer} from '../server.mjs';
@@ -74,11 +75,9 @@ try{
 
   // 4) 滚动位置在选中后保持
   const scroller=page.locator('.facility-window:visible .window__body');
-  const beforeScroll=await scroller.evaluate(n=>n.scrollTop);
+  const visible=await visibleGridCard(page),beforeScroll=await scroller.evaluate(n=>n.scrollTop);
   // 必须点“当前可见”的行：Playwright 会先把目标滚进视野，点远处的行会改变滚动位置。
-  const visibleIndex=await tiles.evaluateAll(nodes=>nodes.findIndex(n=>{const r=n.getBoundingClientRect();return r.top>150&&r.bottom<650;}));
-  assert.ok(visibleIndex>=0,'应存在当前可见的行');
-  await tiles.nth(visibleIndex).click();
+  await visible.click();
   assert.ok(Math.abs(await scroller.evaluate(n=>n.scrollTop)-beforeScroll)<3,'选中可见行不应跳回顶部');
 
   // 5) 搜索/筛选：分批重置但逻辑行数正确，焦点不丢

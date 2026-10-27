@@ -9,7 +9,7 @@ export const ALLY_EFFECT_CAPS = {
   wholesaleDiscountRate: 0.15  // Max 15% wholesale cost discount
 };
 
-export const VALID_DUTIES = ['attraction', 'checkout', 'wholesale'];
+export const VALID_DUTIES = ['attraction', 'checkout', 'wholesale', 'duelist'];
 
 /**
  * Derives operational management effects from active on-duty allies.

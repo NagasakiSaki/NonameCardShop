@@ -24,7 +24,7 @@ export interface SelectRound {
   matchId:string;roundId:string;expectedRevision?:number;
   selections:Array<{seatId:string;inventoryRef:string}>;proof?:WorldProof;
 }
-export interface AllyDuty {allyId:string;dutyId:'attraction'|'checkout'|'wholesale'|null;proof?:WorldProof}
+export interface AllyDuty {allyId:string;dutyId:'attraction'|'checkout'|'wholesale'|'duelist'|null;proof?:WorldProof}
 export interface AllyEffects {attractionRate:number;checkoutReductionRate:number;wholesaleDiscountRate:number}
 /** Separate mounted-engine operation, never a UI-reported win or a series mutation. */
 export interface BattleControl {matchId:string;action:'takeover'|'release';seatId?:string;requestId:string}

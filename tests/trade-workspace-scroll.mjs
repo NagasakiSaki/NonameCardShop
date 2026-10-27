@@ -1,4 +1,5 @@
 import {finishOpeningDialogue} from './fixtures/opening-dialogue.mjs';
+import {visibleGridCard} from './fixtures/visible-grid-card.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {chromium} from 'playwright';
@@ -62,8 +63,8 @@ try{
   await lastTile.click();
   assert.equal(await lastTile.getAttribute('aria-pressed'),'true','最后一行必须可点中');
   await body.evaluate(n=>n.scrollTop=1000);
-  const visibleIndex=await tiles.evaluateAll(nodes=>nodes.findIndex(n=>{const r=n.getBoundingClientRect();return r.top>150&&r.bottom<650;}));assert.ok(visibleIndex>=0);
-  const before=await body.evaluate(n=>n.scrollTop);await tiles.nth(visibleIndex).click();assert.ok(Math.abs(await body.evaluate(n=>n.scrollTop)-before)<3,'selecting a visible card keeps the scroll offset');
+  const visible=await visibleGridCard(page);
+  const before=await body.evaluate(n=>n.scrollTop);await visible.click();assert.ok(Math.abs(await body.evaluate(n=>n.scrollTop)-before)<3,'selecting a visible card keeps the scroll offset');
   const search=page.getByRole('searchbox',{name:'搜索单卡',exact:true});await search.fill('不存在的卡牌测试词');assert.equal(await totalRows(),0);assert.equal(await search.evaluate(n=>n===document.activeElement),true);await search.fill('');assert.equal(await totalRows(),1000);
   await page.getByRole('combobox',{name:'全部印刷稀有度',exact:true}).selectOption('SR');assert.ok(await totalRows()>0);
   const selected=JSON.parse(await tiles.first().getAttribute('data-card'))[0];await tiles.first().click();await page.getByRole('spinbutton',{name:'单卡上架售价',exact:true}).fill('37');

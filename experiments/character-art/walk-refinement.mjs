@@ -221,7 +221,7 @@ function pokeOutline(sheet,c){
 }
 const SLEEVELESS=['mygo-offshoulder','ref-bluedress'];
 const SHOULDER_STRIP=['mygo-offshoulder','ref-bluedress','millsage-ruffle','millsage-crop','mew-yellow','mew-purple-lace'];
-export function composeWalk(c,sources,stage='final',diag){
+export function composeWalk(c,sources,stage='final',diag,{idle=false}={}){
   const names=walkLayerNames(c);
   if(!c.band){const out=blank(512,256);for(const name of names)blend(out,name==='head'?headIrisRecolor(sources.head,c):sources[name]);return walkFaces(out,c,sources.head);}
   const [body,pants,shirt,shoes,head,hair]=names.map(n=>sources[n]);
@@ -291,6 +291,12 @@ export function composeWalk(c,sources,stage='final',diag){
         const onBack=backDx!==0&&comp.some(([x])=>(x-cx)*backDx>4);
         if(track||onBack)near.push(...comp);else far.push(...comp);}
       const idx=pts=>pts.map(([x,y])=>((row*64+y)*512+f*64+x)*4);
+      // A planted side arm has no movement deviation. Restore its shaded sleeve
+      // and hand over the costume explicitly; never apply this to walking frames.
+      if(idle&&(row===1||row===3))for(let y=tops[f]+3;y<=47;y++)for(let x=cx-2;x<=cx+2;x++){
+        const j=((row*64+y)*512+f*64+x)*4;
+        if((body.data[j+3]||shirt.data[j+3])&&!legs(f,x,y-tops[f]))near.push([x,y]);
+      }
       const nearIdx=idx(near),farIdx=idx(far);
       const sleeve=nearIdx.concat(farIdx).filter(j=>shirtR.data[j+3]!==0);
       info.push({phase:trackCount>=30?'front':trackCount>=8?'mid':'pass',near:nearIdx,far:farIdx,sleeve,nearCount:near.length,farCount:far.length});

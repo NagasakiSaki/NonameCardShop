@@ -115,7 +115,9 @@
         "sha256": "1642cc1e3d580e401a48b8a3ceeada2e607bda706785aeaf1699c5cd3f738387",
         "method": "retouch",
         "palette": 64
-      }
+      },
+      "idleSheet": "/assets/frontend/characters/bd-tomori-idle.de457dc1f3.png",
+      "idleColumns": 1
     },
     "bd-anon": {
       "sheet": "/assets/frontend/characters/bd-anon.c32c4710da.png",
@@ -161,7 +163,9 @@
         "sha256": "dae884eca5905e6b191dc15258dac6d1a48b8510a2a926f499c65f9fe812d55e",
         "method": "retouch",
         "palette": 64
-      }
+      },
+      "idleSheet": "/assets/frontend/characters/bd-anon-idle.19aa3d1206.png",
+      "idleColumns": 1
     },
     "bd-rana": {
       "sheet": "/assets/frontend/characters/bd-rana.37dffee9ba.png",
@@ -207,7 +211,9 @@
         "sha256": "5a7bab6750fecfde14110d06322029f203e997ae14394cc416fb8e848137b107",
         "method": "retouch",
         "palette": 64
-      }
+      },
+      "idleSheet": "/assets/frontend/characters/bd-rana-idle.50ca6814fb.png",
+      "idleColumns": 1
     },
     "bd-soyo": {
       "sheet": "/assets/frontend/characters/bd-soyo.9c52830f6e.png",
@@ -253,7 +259,9 @@
         "sha256": "efad2b9acc7c9311610a111dd2fabd0ae7f8944f6bbb3108e12e785a7712b8db",
         "method": "retouch",
         "palette": 64
-      }
+      },
+      "idleSheet": "/assets/frontend/characters/bd-soyo-idle.33a26b5121.png",
+      "idleColumns": 1
     },
     "bd-taki": {
       "sheet": "/assets/frontend/characters/bd-taki.0c12852460.png",
@@ -299,7 +307,9 @@
         "sha256": "b53800217177afc8a6cddc055befb4a56750f27ed5a74cfc60e7758d1d66c822",
         "method": "retouch",
         "palette": 64
-      }
+      },
+      "idleSheet": "/assets/frontend/characters/bd-taki-idle.ff85b58f20.png",
+      "idleColumns": 1
     },
     "bd-uika": {
       "sheet": "/assets/frontend/characters/bd-uika.e04c7618f8.png",
@@ -345,7 +355,9 @@
         "sha256": "78863b2befc5db250f04c92aaf800f59be73e88159a0d332687c3fd43bc5ce69",
         "method": "retouch",
         "palette": 64
-      }
+      },
+      "idleSheet": "/assets/frontend/characters/bd-uika-idle.ba43b85668.png",
+      "idleColumns": 1
     },
     "bd-mutsumi": {
       "sheet": "/assets/frontend/characters/bd-mutsumi.228b53245b.png",
@@ -391,7 +403,9 @@
         "sha256": "2759fcb572b9c9b81b41eb414a5cb69e36cc94b4e337d9a3247d941d0ad39361",
         "method": "retouch",
         "palette": 64
-      }
+      },
+      "idleSheet": "/assets/frontend/characters/bd-mutsumi-idle.62ed46e307.png",
+      "idleColumns": 1
     },
     "bd-umiri": {
       "sheet": "/assets/frontend/characters/bd-umiri.80b698ccf0.png",
@@ -437,7 +451,9 @@
         "sha256": "118c565b9f5b07b1f2de1f40e21d171105d9279f641a14a9c621381a47c1b74d",
         "method": "retouch",
         "palette": 64
-      }
+      },
+      "idleSheet": "/assets/frontend/characters/bd-umiri-idle.2a432bf3fc.png",
+      "idleColumns": 1
     },
     "bd-nyamu": {
       "sheet": "/assets/frontend/characters/bd-nyamu.ffdd89a7d4.png",
@@ -483,7 +499,9 @@
         "sha256": "2581f4ac4187656ef46b3028ca20def32219c1675331e85c77a34be8234ccbd9",
         "method": "retouch",
         "palette": 64
-      }
+      },
+      "idleSheet": "/assets/frontend/characters/bd-nyamu-idle.235a908db2.png",
+      "idleColumns": 1
     },
     "bd-sakiko": {
       "sheet": "/assets/frontend/characters/bd-sakiko.213fce0606.png",
@@ -529,7 +547,9 @@
         "sha256": "8ecd42e534af14900c6013c980ad82c1ce07047c00a465d14c4c5e726ad4315b",
         "method": "retouch",
         "palette": 64
-      }
+      },
+      "idleSheet": "/assets/frontend/characters/bd-sakiko-idle.74e9e90e3a.png",
+      "idleColumns": 1
     },
     "bd-arale": {
       "sheet": "/assets/frontend/characters/bd-arale.96c48d7257.png",
@@ -575,7 +595,9 @@
         "sha256": "5446187adab565c14a26cc563fe5321ab6d0ea89a03935f9f55e1424df871217",
         "method": "retouch",
         "palette": 64
-      }
+      },
+      "idleSheet": "/assets/frontend/characters/bd-arale-idle.c51ae9f028.png",
+      "idleColumns": 1
     },
     "bd-nonoka": {
       "sheet": "/assets/frontend/characters/bd-nonoka.64edd19fb6.png",
@@ -621,7 +643,9 @@
         "sha256": "26359247dce9fd2d4fe626274dbb272122317a62d79e639da68edbf497b86480",
         "method": "retouch",
         "palette": 64
-      }
+      },
+      "idleSheet": "/assets/frontend/characters/bd-nonoka-idle.b09ff6860e.png",
+      "idleColumns": 1
     },
     "bd-ritsu": {
       "sheet": "/assets/frontend/characters/bd-ritsu.03ef4966fc.png",
@@ -667,7 +691,9 @@
         "sha256": "a1833bd730f4deca788b9ac53aae21aa88a75f93f4e576d34109be8612f5606a",
         "method": "retouch",
         "palette": 64
-      }
+      },
+      "idleSheet": "/assets/frontend/characters/bd-ritsu-idle.3861ac7933.png",
+      "idleColumns": 1
     },
     "bd-miyako": {
       "sheet": "/assets/frontend/characters/bd-miyako.4e39ed25be.png",
@@ -713,7 +739,9 @@
         "sha256": "b77f9287a99764486187bcf483f8df3b737f50223a1b94b0f7fc294adf8e889a",
         "method": "retouch",
         "palette": 64
-      }
+      },
+      "idleSheet": "/assets/frontend/characters/bd-miyako-idle.5ed917bfb1.png",
+      "idleColumns": 1
     },
     "bd-yuno": {
       "sheet": "/assets/frontend/characters/bd-yuno.a7c15461f8.png",
@@ -759,7 +787,9 @@
         "sha256": "023316424a70af283c6be630b985fc2172224c96a53b1b02b9d9520801f52ad4",
         "method": "retouch",
         "palette": 64
-      }
+      },
+      "idleSheet": "/assets/frontend/characters/bd-yuno-idle.ad1b66bf52.png",
+      "idleColumns": 1
     },
     "bd-nagi": {
       "sheet": "/assets/frontend/characters/bd-nagi.524af3d8c3.png",
@@ -805,7 +835,9 @@
         "sha256": "cad49fb034dbc7d3f247383b6d2a08a8e2b651d2f477116b95b2bda71fed7545",
         "method": "retouch",
         "palette": 64
-      }
+      },
+      "idleSheet": "/assets/frontend/characters/bd-nagi-idle.7ca49ff31d.png",
+      "idleColumns": 1
     },
     "bd-mahoro": {
       "sheet": "/assets/frontend/characters/bd-mahoro.22ed565fbe.png",
@@ -851,7 +883,9 @@
         "sha256": "cd4273ef1a1d86a96200606fa0651d8b2e14188a3383898c0b8331e4180f35ff",
         "method": "retouch",
         "palette": 64
-      }
+      },
+      "idleSheet": "/assets/frontend/characters/bd-mahoro-idle.07f3d78870.png",
+      "idleColumns": 1
     },
     "bd-hotaru": {
       "sheet": "/assets/frontend/characters/bd-hotaru.082c2c60af.png",
@@ -897,7 +931,9 @@
         "sha256": "56b55301df8e2dc2ad72c0e52d8c3879c51a23c88d7b3a357427c80050eb2c35",
         "method": "retouch",
         "palette": 64
-      }
+      },
+      "idleSheet": "/assets/frontend/characters/bd-hotaru-idle.6fcdb68441.png",
+      "idleColumns": 1
     },
     "bd-houka": {
       "sheet": "/assets/frontend/characters/bd-houka.4d45944cd7.png",
@@ -943,7 +979,9 @@
         "sha256": "e89834bae66b022aad16df6472b54f01669e5b574b09a4b1ae2daa410e42cdbf",
         "method": "retouch",
         "palette": 64
-      }
+      },
+      "idleSheet": "/assets/frontend/characters/bd-houka-idle.5d2632cf19.png",
+      "idleColumns": 1
     },
     "bd-natsume": {
       "sheet": "/assets/frontend/characters/bd-natsume.1a8e498436.png",
@@ -989,7 +1027,9 @@
         "sha256": "767f3ad144fdcd1016eedc08a6a010350bb7c4c39d9430d384871da28228aec3",
         "method": "retouch",
         "palette": 64
-      }
+      },
+      "idleSheet": "/assets/frontend/characters/bd-natsume-idle.fdeb9940c3.png",
+      "idleColumns": 1
     },
     "bd-raika": {
       "sheet": "/assets/frontend/characters/bd-raika.8f735904c6.png",
@@ -1035,7 +1075,9 @@
         "sha256": "3ce1e220b2f17d018dd79f0f04c9ce062779709d7d20fa591ddc6667155e7a23",
         "method": "retouch",
         "palette": 64
-      }
+      },
+      "idleSheet": "/assets/frontend/characters/bd-raika-idle.897ef60306.png",
+      "idleColumns": 1
     },
     "bd-miku": {
       "sheet": "/assets/frontend/characters/bd-miku.e9ba035ca6.png",
@@ -1081,7 +1123,9 @@
         "sha256": "5597974c4348f2494e7b6a08f9b4f6dd99d5091d4367b08a07cbf579c4998dba",
         "method": "retouch",
         "palette": 64
-      }
+      },
+      "idleSheet": "/assets/frontend/characters/bd-miku-idle.aafbd49660.png",
+      "idleColumns": 1
     },
     "bd-yomogi": {
       "sheet": "/assets/frontend/characters/bd-yomogi.e3704d44f5.png",
@@ -1127,7 +1171,9 @@
         "sha256": "943da67ff1bf257d58342dda28625c8a6ea5859051731688b083d6f1184ad26c",
         "method": "retouch",
         "palette": 64
-      }
+      },
+      "idleSheet": "/assets/frontend/characters/bd-yomogi-idle.7727586874.png",
+      "idleColumns": 1
     },
     "bd-chieri": {
       "sheet": "/assets/frontend/characters/bd-chieri.c700ddc3b3.png",
@@ -1173,7 +1219,9 @@
         "sha256": "9fea98676ee7fc1ec5b76756d7f024b09a5fcdcc3b8c5cefcb3eacce00b4f44e",
         "method": "retouch",
         "palette": 64
-      }
+      },
+      "idleSheet": "/assets/frontend/characters/bd-chieri-idle.2aea658fd1.png",
+      "idleColumns": 1
     },
     "bd-shizuku": {
       "sheet": "/assets/frontend/characters/bd-shizuku.693d5cd8d0.png",
@@ -1219,7 +1267,9 @@
         "sha256": "13a5947335803408cc02717f010a2e6297696a314bfb6c0a3a979beda7a07224",
         "method": "retouch",
         "palette": 64
-      }
+      },
+      "idleSheet": "/assets/frontend/characters/bd-shizuku-idle.9334d0997f.png",
+      "idleColumns": 1
     }
   },
   "characterOrder": [

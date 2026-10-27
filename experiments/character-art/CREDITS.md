@@ -43,6 +43,8 @@ License: **OGA-BY 3.0**. See the complete supplied component credit notices:
 
 License: https://static.opengameart.org/OGA-BY-3.0.txt
 
+2026-10-27：独立待机使用同一锁定提交的 LPC `Idle.png`，来源/哈希与完整署名入口见 [sources/lpc-idle](sources/lpc-idle/README.md)。正式待机图为 64×256，四向各一帧，不再冻结行走帧；原静态待机作者 Stephen Challener，动画、头发/服装扩展作者 Eliza Wyatt。修改是现有调色、服饰与侧向中立手臂合成。
+
 本工具组合选定的身体、头部、发型、上衣、长裤和鞋；源帧 64×64、四向八帧，图集 512×256。行序为上、左、下、右。新增头发和白衬衣来自相同锁定提交，继承已附的头发/服装署名。五团模板进一步改色并添加代码绘制的长发、双马尾、花饰、耳机和发夹；新覆盖层跟随每帧实际头部位置。头像与行走部件来自不同作者；本轮另按全身参考新绘分团服装覆盖，包括披尾、裙裤、腿装和鞋，仍需审美确认。
 
 ## BanG Dream 外观参考

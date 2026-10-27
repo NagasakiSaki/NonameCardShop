@@ -13,12 +13,16 @@ try{
  assert.equal(await page.locator('[data-skin="owner"],[data-skin="collector"]').count(),0);
  for(const {appearanceId:id}of PLAYER_SKINS){
   await page.locator('[data-skin="'+id+'"]').click();await page.waitForFunction(id=>document.querySelector('[data-skin="'+id+'"]').getAttribute('aria-pressed')==='true',id);
-  await page.waitForFunction(id=>__cardShopApp.getWorldScene().actorView.getSprite('actor:owner').texture.key==='char-'+id,id);
+  await page.waitForFunction(id=>__cardShopApp.getWorldScene().actorView.getSprite('actor:owner').texture.key==='char-idle-'+id,id);
   const state=await page.evaluate(()=>{const s=__cardShopApp.getWorldScene().actorView.getSprite('actor:owner');return [s.frame.width,s.frame.height,s.originX,s.originY,s.scaleX];});assert.deepEqual(state,[64,64,.5,61/64,1]);
  }
  const minute=await page.evaluate(()=>__cardShopApp.snapshot().clock.minute);await page.waitForTimeout(150);assert.equal(await page.evaluate(()=>__cardShopApp.snapshot().clock.minute),minute);
  await page.screenshot({path:out+'/25-skins.png',animations:'disabled'});await page.evaluate(()=>__cardShopApp.windows.closeAll());
- for(const [key,min,max]of [['ArrowLeft',8,15],['ArrowRight',24,31]]){await page.keyboard.down(key);await page.waitForTimeout(180);await page.keyboard.up(key);await page.waitForTimeout(80);const frame=await page.evaluate(()=>Number(__cardShopApp.getWorldScene().actorView.getSprite('actor:owner').frame.name));assert(frame>=min&&frame<=max);}
- await page.reload();await page.waitForFunction(()=>window.__cardShopReady===true);await finishOpeningDialogue(page);const last=PLAYER_SKINS.at(-1).appearanceId;await page.waitForFunction(id=>__cardShopApp.getWorldScene().actorView.getSprite('actor:owner')?.texture.key==='char-'+id,last);
+ for(const [key,direction,row,min,max]of [['ArrowLeft','left',1,8,15],['ArrowRight','right',3,24,31]]){
+  await page.keyboard.down(key);await page.waitForFunction(direction=>__cardShopApp.getWorldScene().actorView.getSprite('actor:owner').anims.currentAnim?.key.endsWith('-'+direction)&&__cardShopApp.getWorldScene().actorView.getSprite('actor:owner').texture.key.startsWith('char-bd-'),direction);
+  const frame=await page.evaluate(()=>Number(__cardShopApp.getWorldScene().actorView.getSprite('actor:owner').frame.name));assert(frame>=min&&frame<=max);
+  await page.keyboard.up(key);await page.waitForFunction(({direction,row})=>{const s=__cardShopApp.getWorldScene().actorView.getSprite('actor:owner');return s.anims.currentAnim?.key.endsWith('-'+direction)&&s.texture.key.startsWith('char-idle-')&&Number(s.frame.name)===row;},{direction,row});
+ }
+ await page.reload();await page.waitForFunction(()=>window.__cardShopReady===true);await finishOpeningDialogue(page);const last=PLAYER_SKINS.at(-1).appearanceId;await page.waitForFunction(id=>__cardShopApp.getWorldScene().actorView.getSprite('actor:owner')?.texture.key==='char-idle-'+id,last);
  assert.deepEqual(errors,[]);console.log('PASS only 25 BanG Dream skins; selection, owner identity, profile animation, original anchors, pause and persisted reload');
 }finally{await browser?.close();await server.close();}

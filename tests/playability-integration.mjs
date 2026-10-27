@@ -22,7 +22,12 @@ try{
  await go('store.opening','opening');await page.getByRole('button',{name:'开一盒',exact:true}).click();await page.getByRole('button',{name:'确认开包',exact:true}).click();
  await until(async()=>(await query('inventory.list',{kind:'card'})).total===120);
  await close();await go('store.opening','opening');await page.locator('[data-opening-result]').waitFor();assert.match(await page.locator('[data-opening-result]').innerText(),/已写入收藏/);
- await close();await go('store.secondaryMarket','market',{tab:'collection'});const sale=(await query('inventory.list',{kind:'card',limit:200})).items.find(c=>['SR','SSR'].includes(c.printedRarity)&&c.available);assert.ok(sale);const saleTiles=page.locator('[data-collection-root] [data-card]');const saleIndex=await saleTiles.evaluateAll((nodes,key)=>nodes.findIndex(n=>JSON.parse(n.dataset.card)[0]===key),sale.cardKey);assert.ok(saleIndex>=0);await saleTiles.nth(saleIndex).click();
+ await close();await go('store.secondaryMarket','market',{tab:'collection'});const sale=(await query('inventory.list',{kind:'card',limit:200})).items.find(c=>['SR','SSR'].includes(c.printedRarity)&&c.available);assert.ok(sale);
+ // The target can be outside the virtual DOM window. Use the player's search
+ // entry, then wait for that exact logical card before selecting it.
+ await page.getByRole('searchbox',{name:'搜索单卡',exact:true}).fill(sale.name);
+ await page.waitForFunction(key=>[...document.querySelectorAll('[data-collection-root] [data-card]')].some(n=>JSON.parse(n.dataset.card)[0]===key),sale.cardKey);
+ const saleTiles=page.locator('[data-collection-root] [data-card]'),saleIndex=await saleTiles.evaluateAll((nodes,key)=>nodes.findIndex(n=>JSON.parse(n.dataset.card)[0]===key),sale.cardKey);assert.ok(saleIndex>=0);await saleTiles.nth(saleIndex).click();
  await page.getByRole('button',{name:'确认单卡上架',exact:true}).click();await until(async()=>(await query('market.list',{tab:'mine'})).total===1);
  assert.equal((await query('inventory.list',{kind:'card'})).total,120,'listing does not duplicate/destroy cards');await close();
  for(const kind of ['report','guide','customers']){

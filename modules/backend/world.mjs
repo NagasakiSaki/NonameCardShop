@@ -6,6 +6,7 @@ import {initialiseExperience,recordExperienceEvent,validateExperience,experience
 import {storefrontView} from './presentation.mjs';
 import {validateNarrative,recordNarrativeEvent,narrativeSummary} from '../narrative/state.mjs';
 import {loanBalance,loanView} from './campaign-loan.mjs';
+import {validatePartnerWagers} from './partner-wager-accounting.mjs';
 export function createWorld(rules){
   const world={schemaVersion:2,customerVisitVersion:1,worldId:id('world'),branchId:id('branch'),revision:0,serial:0,seed:Math.floor(Math.random()*4294967296),rules:clone(rules),
     clock:{day:1,minute:480,phase:'preparing',speed:1,manualPaused:false},wallet:{available:rules.startingCash,debt:0,escrowLiability:0},
@@ -65,7 +66,8 @@ export function validateWorld(world){
     if(i.kind==='card')for(const key of ['finishId','artVariantId','editionId','serialNumber'])need(i[key]===undefined||typeof i[key]==='string'&&i[key].length>0&&i[key].length<=128,'INVALID_SAVE','卡片工艺或版本标识不正确。');
     if(i.kind==='pack'&&(!Array.isArray(i.cards)||i.cards.length!==5)||i.kind==='box'&&(!Array.isArray(i.packets)||i.packets.length!==24||i.packets.some(p=>p.length!==5)))throw new Error('密封商品内容不完整。');
   }
-  const escrow=world.matches.filter(m=>m.status!=='finished').reduce((n,m)=>n+m.stake*2+m.serviceHeld,0)+(world.management?.requests||[]).reduce((n,r)=>n+(r.fundsHeld||0),0);
+  validatePartnerWagers(world);
+  const escrow=world.matches.filter(m=>m.status!=='finished').reduce((n,m)=>n+m.stake*2+m.serviceHeld+(m.partnerWager&&!m.partnerWager.settled?m.partnerWager.pool+m.partnerWager.feeHeld:0),0)+(world.management?.requests||[]).reduce((n,r)=>n+(r.fundsHeld||0),0);
   for(const r of world.management?.requests||[])if(!Number.isSafeInteger(r.fundsHeld)||r.fundsHeld<0||r.fundsHeld>0&&(r.status!=='accepted'||r.kind!=='purchase'||r.fundsHeld!==r.amount))throw new Error('街坊订单托管数据不合法。');
   if(escrow!==world.wallet.escrowLiability)throw new Error('托管余额与未结比赛不一致。');
   validateExperience(world);validateNarrative(world);return world;

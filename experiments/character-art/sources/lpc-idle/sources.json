@@ -1,0 +1,73 @@
+{
+  "commit": "f07f7f5892e67c932c68f70bb04472f2c64e46bc",
+  "license": "OGA-BY-3.0",
+  "artists": [
+    "Stephen Challener (Redshrike)",
+    "Eliza Wyatt (DeathsDarling)"
+  ],
+  "files": [
+    {
+      "file": "body.png",
+      "upstreamPath": "Characters/Body/Body 01 - Feminine, Thin/Peach/Idle.png",
+      "url": "https://raw.githubusercontent.com/ElizaWy/LPC/f07f7f5892e67c932c68f70bb04472f2c64e46bc/Characters/Body/Body%2001%20-%20Feminine%2C%20Thin/Peach/Idle.png",
+      "blobSha": "2ddf021289e93c44019074d70c3581a4f2cf79b4",
+      "sha256": "3223e57fdfdcd502d1123cf4bb3dd3352afe795dc731f41d7bf2fb6dfd931904"
+    },
+    {
+      "file": "pants.png",
+      "upstreamPath": "Characters/Clothing/Feminine, Thin/Legs/Pants 03 - Pants/Charcoal/Idle.png",
+      "url": "https://raw.githubusercontent.com/ElizaWy/LPC/f07f7f5892e67c932c68f70bb04472f2c64e46bc/Characters/Clothing/Feminine%2C%20Thin/Legs/Pants%2003%20-%20Pants/Charcoal/Idle.png",
+      "blobSha": "a4ec0bfded174f43eb93c3aecc2729eea10a1704",
+      "sha256": "b57e94923fc6bc496e58c40c453b08688282ca1c3b2a33f24550347a00aa37d5"
+    },
+    {
+      "file": "jacket.png",
+      "upstreamPath": "Characters/Clothing/Feminine, Thin/Torso/Shirt 07 - Buttoned Longsleeve Shirt/White/Idle.png",
+      "url": "https://raw.githubusercontent.com/ElizaWy/LPC/f07f7f5892e67c932c68f70bb04472f2c64e46bc/Characters/Clothing/Feminine%2C%20Thin/Torso/Shirt%2007%20-%20Buttoned%20Longsleeve%20Shirt/White/Idle.png",
+      "blobSha": "54a9380ae6c8296bb3cf0e5dda635d1c91062756",
+      "sha256": "c33a60b70e50b0eff2dc9a22eafef70635108cca3c4e33383777419895321617"
+    },
+    {
+      "file": "shoes.png",
+      "upstreamPath": "Characters/Clothing/Feminine, Thin/Feet/Shoes 01 - Shoes/Brown/Idle.png",
+      "url": "https://raw.githubusercontent.com/ElizaWy/LPC/f07f7f5892e67c932c68f70bb04472f2c64e46bc/Characters/Clothing/Feminine%2C%20Thin/Feet/Shoes%2001%20-%20Shoes/Brown/Idle.png",
+      "blobSha": "b8ccf1bc4f0067b45469eadb720bd31ce8bc0cf7",
+      "sha256": "be1162dc1a4c82d7160195204e96f0d10b873c08561a7d338de356a44860641a"
+    },
+    {
+      "file": "head.png",
+      "upstreamPath": "Characters/Head/Head 01 - Feminine/Peach/Idle.png",
+      "url": "https://raw.githubusercontent.com/ElizaWy/LPC/f07f7f5892e67c932c68f70bb04472f2c64e46bc/Characters/Head/Head%2001%20-%20Feminine/Peach/Idle.png",
+      "blobSha": "85d02ee16eb00254a20ede390b3af10bdc167909",
+      "sha256": "0a40bf47264969f9852e2acb5313dde2fb7f781affb6a08f6945bf0ee58597a1"
+    },
+    {
+      "file": "hair.png",
+      "upstreamPath": "Characters/Hair/Medium 07 - Bob, Side Part/Brown/Idle.png",
+      "url": "https://raw.githubusercontent.com/ElizaWy/LPC/f07f7f5892e67c932c68f70bb04472f2c64e46bc/Characters/Hair/Medium%2007%20-%20Bob%2C%20Side%20Part/Brown/Idle.png",
+      "blobSha": "7fcf322b25498c34cc0eed271ae463eaaecec27e",
+      "sha256": "3a16370f21c5e80d16f6dfb241295b8c4343f45cf99d6fcf6e62b75ceee99cf2"
+    },
+    {
+      "file": "hair-bangs.png",
+      "upstreamPath": "Characters/Hair/Medium 08 - Bob, Bangs/Silver/Idle.png",
+      "url": "https://raw.githubusercontent.com/ElizaWy/LPC/f07f7f5892e67c932c68f70bb04472f2c64e46bc/Characters/Hair/Medium%2008%20-%20Bob%2C%20Bangs/Silver/Idle.png",
+      "blobSha": "19269729601c64431015c4f330e49125e806ace8",
+      "sha256": "5d185a4cd35a683aaefd7c43973717bd92ddc3d1a7173496c11073d27310af80"
+    },
+    {
+      "file": "hair-curly.png",
+      "upstreamPath": "Characters/Hair/Medium 02 - Curly/Silver/Idle.png",
+      "url": "https://raw.githubusercontent.com/ElizaWy/LPC/f07f7f5892e67c932c68f70bb04472f2c64e46bc/Characters/Hair/Medium%2002%20-%20Curly/Silver/Idle.png",
+      "blobSha": "e9e5525eeb5b273a1456106645e26f859aabe6de",
+      "sha256": "dac13cabbac706f09104285e5219eae525c4de40cdbb95de038c0c4b7d4a892f"
+    },
+    {
+      "file": "hair-page.png",
+      "upstreamPath": "Characters/Hair/Medium 01 - Page/Silver/Idle.png",
+      "url": "https://raw.githubusercontent.com/ElizaWy/LPC/f07f7f5892e67c932c68f70bb04472f2c64e46bc/Characters/Hair/Medium%2001%20-%20Page/Silver/Idle.png",
+      "blobSha": "e23d2e9e636458427d5b5f6daa35ab761f62b815",
+      "sha256": "0269eb3c30cee2b094e674ae5eb0e6488fd5c9512e11a6c6458e85e74f213d71"
+    }
+  ]
+}

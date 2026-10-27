@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "baseStake": 60,
+  "maxStake": 150,
+  "cashReserve": 1000,
+  "maxCashFraction": 0.03,
+  "maxMatchesPerDay": 3,
+  "dailyLossLimit": 180,
+  "cooldownMinutes": 90,
+  "searchIntervalMinutes": 10,
+  "expertScoreBonus": 6,
+  "durationSeconds": 18
+}

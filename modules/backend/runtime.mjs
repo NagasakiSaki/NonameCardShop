@@ -22,6 +22,7 @@ import {eligible,combatPreview,registerMatch,beginMatch,engineMessage,matchById,
 import {validateMap,pathfind,moveActor,canStand} from './navigation.mjs';
 import {initialiseManagement,configureManagement,validateManagement,managementEffects,shelfUsed,upgradesView,purchaseUpgrade,ensureRegulars,tickManagement,peopleView,neighborAct} from './management.mjs';
 import {tickNpcTables,backgroundState} from './npc-tables.mjs';
+import {tickPartnerActivities} from './partner-activities.mjs';
 import {voidNpcMatch} from './matches.mjs';
 import {inventoryView,cardDetailView,ledgerView,retailView,marketView,archiveMeta,sealedInventoryView,dayArchiveViews} from './views.mjs';
 import {DEFAULT_DISTRIBUTION,productEnabled} from './distribution.mjs';
@@ -122,8 +123,8 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
     next.revision=record.revision+1;next.world.revision=next.revision;
     if(!['saves.load','saves.loadDay','saves.import'].includes(operation)){
       const oldIds=new Set(w().log.map(e=>e.eventId)),events=next.world.log.filter(e=>!oldIds.has(e.eventId));
-      const names={packSaleCompleted:'顾客购买卡包/盒',secondaryTradeCompleted:'二级市场成交',npcSimulationSettled:'NPC 离桌付费',officialMatchSettled:'比赛结算',debtChallengeCleared:'牌局减免欠款'};
-      const lines=events.filter(e=>names[e.type]).map(e=>`${names[e.type]}${e.names?' · '+e.names.join(' / '):''}${e.amount?' '+e.amount+' 币':''}`);
+      const names={packSaleCompleted:'顾客购买卡包/盒',secondaryTradeCompleted:'二级市场成交',npcSimulationSettled:'NPC 离桌付费',officialMatchSettled:'比赛结算',debtChallengeCleared:'牌局减免欠款',partnerWagerFunded:'伙伴约战托管',partnerWagerSettled:'伙伴约战结算',partnerWagerRefunded:'伙伴约战退款'};
+      const lines=events.filter(e=>names[e.type]).map(e=>`${names[e.type]}${e.name?' · '+e.name:''}${e.names?' · '+e.names.join(' / '):''}${e.amount?' '+e.amount+' 币':''}${e.net!==undefined?` · 净胜负 ${e.net>=0?'+':''}${e.net} · 桌费 +${e.fee}`:''}`);
       recordWalletChange(next.world,w().wallet,{operation,campaignDebtDelta:loanBalance(next.world)-loanBalance(w()),...(lines.length?{label:lines.join('；')}:{})});
     }
     grantTaskRewards(next.world,(before,detail)=>recordWalletChange(next.world,before,detail));
@@ -359,6 +360,7 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
     if(clockRunning||world.clock.phase==='closing')tickEconomy(world,catalog,{map:navigation.get('store'),seconds});
     V7.tickV7(world,catalog,navigation,seconds);
     Debt.tickDebt(world,navigation,seconds);
+    tickPartnerActivities(world,catalog,navigation);
     tickNpcTables(world,catalog,navigation,seconds,{schedule:false});
     Rooms.tickRooms(world,catalog,modeCapabilities);
     tickMatchQueue(world,catalog,navigation,{schedule:world.rules.npcSimulation!==false||backgroundAvailable});

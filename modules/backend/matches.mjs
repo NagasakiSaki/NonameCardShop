@@ -3,6 +3,7 @@ import {owned,free,wallet,income} from './trading.mjs';
 import {note} from './world.mjs';
 import {managementEffects} from './management.mjs';
 import {onSite} from './visits.mjs';
+import {settlePartnerWager} from './partner-wager-accounting.mjs';
 
 export function eligible(w,catalog,ownerId='player'){
   // Query-local only: shared card metadata is reused across physical copies.
@@ -87,6 +88,7 @@ export function finish(w,m,result){
   if(result==='draw'){pay(w,mine,m.stake);pay(w,enemy,m.stake);}
   else {const rake=m.background?Math.floor(pool*w.rules.rake):0;pay(w,result==='win'?mine:enemy,pool-rake);if(rake){income(w,rake);w.daily.service+=rake;}}
   w.wallet.escrowLiability-=pool;
+  settlePartnerWager(w,m,result);
   if(mine==='player')w.daily.matchNet+=result==='win'?m.stake:result==='loss'?-m.stake:0;
   refundService(w,m);releaseMatch(w,m);
   for(const [side,team] of m.results.length||m.serviceRecognized?[['mine',m.mine],['enemy',m.enemy]]:[]){
@@ -124,21 +126,23 @@ export function surrender(w,matchId,scope){
 export function cancelPrepared(w,matchId){
   const m=matchById(w,matchId);need(m.status!=='finished'&&!m.serviceRecognized&&!m.results.length,'INVALID_STATE','只有尚未真正开局的比赛可以取消退款。');
   pay(w,ownerId(m,'mine'),m.stake);pay(w,ownerId(m,'enemy'),m.stake);w.wallet.escrowLiability-=m.stake*2;refundService(w,m);
-  m.status='finished';m.result='cancelled';releaseMatch(w,m);
+  settlePartnerWager(w,m,'draw',{cancelled:true});m.status='finished';m.result='cancelled';releaseMatch(w,m);
   note(w,'matchCancelled',{matchId});return clone(m);
 }
 
-export function registerNpcMatch(w,catalog,table,npcs,{mode='kof',tableFee=managementEffects(w).tableFee,inventoryRefs}={}){
+export function registerNpcMatch(w,catalog,table,npcs,{mode='kof',tableFee=managementEffects(w).tableFee,inventoryRefs,partnerTeam,forceSimulation=false}={}){
   need(w.clock.phase==='open'&&npcs.length===2&&!table.matchId&&!table.reservation,'NOT_READY','当前不能开 NPC 桌。');
   need(mode==='kof','INVALID_INPUT','自动报名桌使用三将接力。');
-  const teams=npcs.map((n,index)=>{need(onSite(n)&&!n.currentMatchId,'ITEM_LOCKED','顾客未在店或已在其他牌局。');const cards=eligible(w,catalog,n.actorId).filter(i=>i.eligible).sort((a,b)=>catalog.byKey.get(b.cardKey).globalScore-catalog.byKey.get(a.cardKey).globalScore),team=[];if(inventoryRefs){for(const ref of inventoryRefs[index]){const card=cards.find(c=>c.inventoryRef===ref);need(card,'NOT_ELIGIBLE','等待中的阵容已变化。');team.push(card);}}else for(const card of cards)if(!team.some(c=>c.generalId===card.generalId)&&team.length<(mode==='kof'?3:1))team.push(card);need(team.length===(mode==='kof'?3:1)&&new Set(team.map(c=>c.generalId)).size===team.length,'NOT_ELIGIBLE','顾客没有足够的不同流通武将。');return team;});
+  const teams=npcs.map((n,index)=>{need(onSite(n)&&!n.currentMatchId,'ITEM_LOCKED','顾客未在店或已在其他牌局。');
+    if(index===0&&partnerTeam){need(n.allyId&&w.progression?.allies.some(a=>a.allyId===n.allyId)&&partnerTeam.length===3&&new Set(partnerTeam.map(c=>c.generalId)).size===3&&partnerTeam.every(c=>c.loanRef&&!c.inventoryRef&&c.purpose==='partner-earning'&&w.circulation[c.cardKey]&&catalog.byKey.get(c.cardKey)?.generalId===c.generalId&&!w.rules.compatibilityBlocks[c.generalId]),'NOT_ELIGIBLE','伙伴仅能借用已经流通、可参赛的不同武将。');return clone(partnerTeam);}
+    const cards=eligible(w,catalog,n.actorId).filter(i=>i.eligible).sort((a,b)=>catalog.byKey.get(b.cardKey).globalScore-catalog.byKey.get(a.cardKey).globalScore),team=[];if(inventoryRefs){for(const ref of inventoryRefs[index]){const card=cards.find(c=>c.inventoryRef===ref);need(card,'NOT_ELIGIBLE','等待中的阵容已变化。');team.push(card);}}else for(const card of cards)if(!team.some(c=>c.generalId===card.generalId)&&team.length<(mode==='kof'?3:1))team.push(card);need(team.length===(mode==='kof'?3:1)&&new Set(team.map(c=>c.generalId)).size===team.length,'NOT_ELIGIBLE','顾客没有足够的不同流通武将。');return team;});
   const fee=tableFee;for(const npc of npcs)need(npc.wallet.available-(npc.wallet.reserved||0)>=fee,'INSUFFICIENT_FUNDS','顾客支付不起开桌费。');
-  const simulated=w.rules.npcSimulation!==false;
+  const simulated=forceSimulation||w.rules.npcSimulation!==false;
   if(!simulated)for(const npc of npcs)debit(npc.wallet,fee);
   const m={matchId:serial(w,'npc-match'),mode,mine:clone(teams[0]),enemy:clone(teams[1]),mineOwnerId:npcs[0].actorId,enemyOwnerId:npcs[1].actorId,opponentId:npcs[1].actorId,background:true,tableId:table.tableId,
     status:'prepared',wins:0,losses:0,bout:1,results:[],gameId:null,first:0,stake:0,serviceHeld:fee*2,serviceContributions:npcs.map(n=>({ownerId:n.actorId,amount:fee})),serviceRecognized:false,progress:{mine:0,enemy:0},rules:{initialHand:4,firstDrawPenalty:1,winsRequired:1,ratingVersion:w.rules.ratingVersion,aiRoundLimit:w.rules.npcRoundLimit||60},createdDay:w.clock.day};
   if(simulated){m.simulated=true;m.serviceDue=fee*2;m.serviceHeld=0;m.serviceContributions=[];m.simulation={elapsedSeconds:0,durationSeconds:w.rules.npcSimulationSeconds||18};for(const npc of npcs)npc.wallet.reserved=(npc.wallet.reserved||0)+fee;}
-  w.wallet.escrowLiability+=m.serviceHeld;table.matchId=m.matchId;w.matches.push(m);for(const team of teams)for(const c of team)w.items[c.inventoryRef].lock=m.matchId;for(const npc of npcs)npc.currentMatchId=m.matchId;
+  w.wallet.escrowLiability+=m.serviceHeld;table.matchId=m.matchId;w.matches.push(m);for(const team of teams)for(const c of team)if(c.inventoryRef)w.items[c.inventoryRef].lock=m.matchId;for(const npc of npcs)npc.currentMatchId=m.matchId;
   note(w,'npcMatchRegistered',{matchId:m.matchId,owners:npcs.map(n=>n.actorId),serviceHeld:fee*2});return m;
 }
 // NPC simulations are authoritative, seeded and saved. They never enter the real engine bridge.
@@ -150,23 +154,23 @@ export function advanceNpcSimulation(w,catalog,m,seconds){
   m.simulation.elapsedSeconds+=Math.max(0,seconds)*w.clock.speed;
   if(m.simulation.elapsedSeconds<m.simulation.durationSeconds)return;
   const strength=team=>sum(team.map(c=>catalog.byKey.get(c.cardKey)?.globalScore||0))/team.length;
-  const chance=clamp(1/(1+Math.exp((strength(m.enemy)-strength(m.mine))/15)),.15,.85);
+  const chance=clamp(1/(1+Math.exp((strength(m.enemy)-strength(m.mine)-(m.partnerWager?m.simulation.expertScoreBonus||0:0))/15)),.15,.85);
   const result=random(w)<chance?'win':'loss';
   if(m.mode==='kof'){m.progress={mine:result==='win'?Math.floor(random(w)*3):2,enemy:result==='loss'?Math.floor(random(w)*3):2};m.results.push({gameId:m.gameId,result,simulated:true});}
   const due=m.serviceDue||0,fee=due/2;
   for(const owner of [m.mineOwnerId,m.enemyOwnerId]){const purse=wallet(w,owner);purse.reserved=Math.max(0,(purse.reserved||0)-fee);debit(purse,fee);}
   income(w,due);w.daily.service+=due;m.serviceRecognized=true;m.serviceDue=0;m.simulation.feePaid=due;m.winChance=chance;
   finish(w,m,result);
-  note(w,'npcSimulationSettled',{matchId:m.matchId,amount:due,owners:[m.mineOwnerId,m.enemyOwnerId],names:[m.mineOwnerId,m.enemyOwnerId].map(id=>w.npcs.find(n=>n.actorId===id)?.name),result,simulated:true});
+  if(!m.partnerWager)note(w,'npcSimulationSettled',{matchId:m.matchId,amount:due,owners:[m.mineOwnerId,m.enemyOwnerId],names:[m.mineOwnerId,m.enemyOwnerId].map(id=>w.npcs.find(n=>n.actorId===id)?.name),result,simulated:true});
 }
 export function voidNpcMatch(w,matchId,reason){
   const m=matchById(w,matchId);need(m.background,'INVALID_STATE','该操作仅用于 NPC 后台牌局。');if(m.status==='finished')return clone(m);
-  need(m.stake===0,'RECOVERY_REQUIRED','带赌注牌局不能直接作废。');refundService(w,m);m.status='finished';m.result='cancelled';m.error=String(reason).slice(0,300);releaseMatch(w,m);note(w,'npcMatchVoided',{matchId,reason:m.error});return clone(m);
+  need(m.stake===0,'RECOVERY_REQUIRED','带赌注牌局不能直接作废。');settlePartnerWager(w,m,'draw',{cancelled:true});refundService(w,m);m.status='finished';m.result='cancelled';m.error=String(reason).slice(0,300);releaseMatch(w,m);note(w,'npcMatchVoided',{matchId,reason:m.error});return clone(m);
 }
 
 // Technical cancellation may follow settled rounds. It never produces a rated win.
 export function cancelSeriesAccounting(w,m){
   need(m.stake===0,'RECOVERY_REQUIRED','带赌注比赛不能技术取消。');
-  refundService(w,m);releaseMatch(w,m);m.status='finished';m.result='cancelled';
+  settlePartnerWager(w,m,'draw',{cancelled:true});refundService(w,m);releaseMatch(w,m);m.status='finished';m.result='cancelled';
   if(m.timeSession)m.timeSession.applied=true;if(m.series){m.series.time.applied=true;m.series.time.policy='cancelled-no-time';}note(w,'matchCancelled',{matchId:m.matchId});
 }

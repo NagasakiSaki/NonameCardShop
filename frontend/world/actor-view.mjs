@@ -19,7 +19,7 @@ export function ensureAnims(scene, characters) {
       if (!scene.anims.exists(idleKey)) {
         scene.anims.create({
           key: idleKey,
-          frames: [{ key: "char-" + id, frame: row * columns + entry.idleColumn }],
+          frames: [{ key: (entry.idleSheet ? 'char-idle-' : 'char-') + id, frame: row * (entry.idleSheet ? entry.idleColumns||1 : columns) + (entry.idleColumn||0) }],
           frameRate: 1,
           repeat: -1,
         });
@@ -84,7 +84,7 @@ export class ActorView {
   }
 
   update(dt, playerPosition) {
-    const lerp = Math.min(1, dt * 0.04),labels=[];
+    const lerp = 1-Math.exp(-Math.max(0,dt)/25),labels=[];
     for (const [id, entry] of this.sprites) {
       const { sprite, shadow } = entry;
       const dx = entry.targetX - sprite.x;
