@@ -1,0 +1,412 @@
+{
+  "version": 2,
+  "generatedAt": "2026-10-27T03:43:02.540Z",
+  "days": 3,
+  "notes": {
+    "advance": "runtime.advance 的参数是秒；本报告按 minutesPerSecond × clock.speed 换算，并记录实际推进的游戏分钟。",
+    "storage": "memoryMs=内存克隆、serializeMs=JSON.stringify、utf8Bytes=Buffer.byteLength 估算；均非磁盘/IndexedDB 落盘时间。",
+    "counts": "业务计数来自 world.log（上限 1000 条）；logCapped=true 时可能少计。",
+    "npcMatches": "NPC 自动开桌走 runtime.advance → tickMatchQueue(schedule) → registerNpcMatch → seatNpcMatch；match-queue 场景只调 advance。"
+  },
+  "environment": {
+    "node": "v22.22.2",
+    "platform": "win32/x64",
+    "cpu": "AMD Ryzen 7 8845H w/ Radeon 780M Graphics",
+    "logicalCpus": 16,
+    "totalMemoryMb": 28477
+  },
+  "resources": {
+    "cards": 2563,
+    "products": 16,
+    "maps": [
+      "store",
+      "battle-room"
+    ],
+    "rulesVersion": 1,
+    "ratingVersion": "global-ideal-two-round-1"
+  },
+  "scenarios": {
+    "startup": {
+      "catalogBuildMs": 241.02,
+      "runtimeCreateMs": 513.68,
+      "connectMs": 0.55,
+      "firstSnapshotMs": 0.62,
+      "note": "runtimeCreate 内部也会建目录；两段不可相加归因浏览器白屏",
+      "heapMb": 93.8
+    },
+    "queries": {
+      "items": 0,
+      "distinctCards": 0,
+      "queries": {
+        "shop.snapshot": {
+          "count": 25,
+          "mean": 0.072,
+          "p50": 0.052,
+          "p95": 0.134,
+          "max": 0.221
+        },
+        "inventory.list": {
+          "count": 25,
+          "mean": 0.011,
+          "p50": 0.003,
+          "p95": 0.011,
+          "max": 0.133
+        },
+        "catalog.list": {
+          "count": 25,
+          "mean": 5.191,
+          "p50": 4.683,
+          "p95": 5.851,
+          "max": 14.252
+        },
+        "market.list": {
+          "count": 25,
+          "mean": 0.015,
+          "p50": 0.003,
+          "p95": 0.009,
+          "max": 0.23
+        },
+        "combat.formats": {
+          "count": 25,
+          "mean": 0.054,
+          "p50": 0.033,
+          "p95": 0.085,
+          "max": 0.392
+        },
+        "combat.eligible": {
+          "count": 25,
+          "mean": 0.009,
+          "p50": 0.003,
+          "p95": 0.006,
+          "max": 0.147
+        },
+        "saves.days": {
+          "count": 25,
+          "mean": 0.008,
+          "p50": 0.003,
+          "p95": 0.011,
+          "max": 0.076
+        },
+        "ledger.daily": {
+          "count": 25,
+          "mean": 0.022,
+          "p50": 0.012,
+          "p95": 0.027,
+          "max": 0.164
+        }
+      },
+      "heapMb": 148.2
+    },
+    "cards-1000": {
+      "items": 1000,
+      "distinctCards": 1000,
+      "queries": {
+        "shop.snapshot": {
+          "count": 25,
+          "mean": 0.094,
+          "p50": 0.087,
+          "p95": 0.109,
+          "max": 0.169
+        },
+        "inventory.list": {
+          "count": 25,
+          "mean": 1.591,
+          "p50": 0.942,
+          "p95": 3.916,
+          "max": 5.368
+        },
+        "catalog.list": {
+          "count": 25,
+          "mean": 4.598,
+          "p50": 4.529,
+          "p95": 5.009,
+          "max": 5.76
+        },
+        "market.list": {
+          "count": 25,
+          "mean": 0.189,
+          "p50": 0.177,
+          "p95": 0.221,
+          "max": 0.308
+        },
+        "combat.formats": {
+          "count": 25,
+          "mean": 0.024,
+          "p50": 0.02,
+          "p95": 0.03,
+          "max": 0.077
+        },
+        "combat.eligible": {
+          "count": 25,
+          "mean": 4.916,
+          "p50": 4.68,
+          "p95": 5.677,
+          "max": 7.83
+        },
+        "saves.days": {
+          "count": 25,
+          "mean": 0.004,
+          "p50": 0.003,
+          "p95": 0.003,
+          "max": 0.027
+        },
+        "ledger.daily": {
+          "count": 25,
+          "mean": 0.137,
+          "p50": 0.108,
+          "p95": 0.184,
+          "max": 0.503
+        }
+      },
+      "heapMb": 203.7
+    },
+    "cards-5000": {
+      "items": 5000,
+      "distinctCards": 2563,
+      "queries": {
+        "shop.snapshot": {
+          "count": 25,
+          "mean": 1.257,
+          "p50": 1.1,
+          "p95": 1.411,
+          "max": 4.311
+        },
+        "inventory.list": {
+          "count": 25,
+          "mean": 5.784,
+          "p50": 5.286,
+          "p95": 7.352,
+          "max": 18.573
+        },
+        "catalog.list": {
+          "count": 25,
+          "mean": 4.509,
+          "p50": 4.433,
+          "p95": 5.113,
+          "max": 5.457
+        },
+        "market.list": {
+          "count": 25,
+          "mean": 2.14,
+          "p50": 1.874,
+          "p95": 3.284,
+          "max": 4.38
+        },
+        "combat.formats": {
+          "count": 25,
+          "mean": 0.038,
+          "p50": 0.033,
+          "p95": 0.04,
+          "max": 0.163
+        },
+        "combat.eligible": {
+          "count": 25,
+          "mean": 31.806,
+          "p50": 31.654,
+          "p95": 33.425,
+          "max": 39.316
+        },
+        "saves.days": {
+          "count": 25,
+          "mean": 0.005,
+          "p50": 0.003,
+          "p95": 0.004,
+          "max": 0.048
+        },
+        "ledger.daily": {
+          "count": 25,
+          "mean": 2.662,
+          "p50": 2.084,
+          "p95": 3.996,
+          "max": 5.678
+        }
+      },
+      "heapMb": 261
+    },
+    "storage": {
+      "commands": 63,
+      "memoryMs": {
+        "count": 63,
+        "mean": 2.286,
+        "p50": 2.13,
+        "p95": 3.485,
+        "max": 4.29
+      },
+      "serializeMs": {
+        "count": 63,
+        "mean": 2.053,
+        "p50": 2.019,
+        "p95": 2.167,
+        "max": 3.277
+      },
+      "utf8Bytes": {
+        "count": 63,
+        "mean": 342743.19,
+        "p50": 337546,
+        "p95": 346374,
+        "max": 674844
+      },
+      "saveCommandMs": 13.12,
+      "scope": "每次命令提交整个世界记录；日档另存为独立记录，未计入",
+      "caveat": "内存仓库；真实 IndexedDB 事务完成时间、写入对象范围与故障/并发行为需另测",
+      "heapMb": 327.5
+    },
+    "day-rollover": {
+      "nextDayMs": {
+        "count": 5,
+        "mean": 74.452,
+        "p50": 73.064,
+        "p95": 86.929,
+        "max": 104.847
+      },
+      "closeMs": {
+        "count": 5,
+        "mean": 55.096,
+        "p50": 54.746,
+        "p95": 72.968,
+        "max": 91.329
+      },
+      "loopMs": {
+        "count": 5,
+        "mean": 228.452,
+        "p50": 227.357,
+        "p95": 285.482,
+        "max": 358.311
+      },
+      "heapMb": 451.9
+    },
+    "busy-normal": {
+      "days": 3,
+      "items": 1043,
+      "distinctCards": 1007,
+      "shelf": 40,
+      "maxNpcs": 12,
+      "npcIntervalMinutes": 22,
+      "gameMinutesPerDay": 360,
+      "gameMinutesTotal": 1080,
+      "npcProfiles": 17,
+      "peaks": {
+        "onsite": 3,
+        "shopping": 2,
+        "playing": 0
+      },
+      "queuePeak": 0,
+      "totals": {
+        "sales": 3,
+        "openings": 3,
+        "rejected": 3,
+        "arrivals": 0,
+        "pathStalled": 0,
+        "pathUnavailable": 0
+      },
+      "logCapped": false,
+      "perDayMs": {
+        "count": 3,
+        "mean": 968.208,
+        "p50": 973.351,
+        "p95": 973.351,
+        "max": 1590.653
+      },
+      "perStepMs": {
+        "count": 36,
+        "mean": 26.369,
+        "p50": 26.884,
+        "p95": 42.483,
+        "max": 46.578
+      },
+      "memoryMs": {
+        "count": 47,
+        "mean": 12.896,
+        "p50": 11.74,
+        "p95": 23.73,
+        "max": 31.539
+      },
+      "serializeMs": {
+        "count": 47,
+        "mean": 7.534,
+        "p50": 6.961,
+        "p95": 12.818,
+        "max": 16.829
+      },
+      "heapMbStart": 516.3,
+      "heapMbEnd": 634.2,
+      "heapMbPeak": 634.2
+    },
+    "busy-stress": {
+      "days": 3,
+      "items": 5036,
+      "distinctCards": 2563,
+      "shelf": 200,
+      "maxNpcs": 12,
+      "npcIntervalMinutes": 8,
+      "gameMinutesPerDay": 360,
+      "gameMinutesTotal": 1080,
+      "npcProfiles": 17,
+      "peaks": {
+        "onsite": 4,
+        "shopping": 2,
+        "playing": 0
+      },
+      "queuePeak": 0,
+      "totals": {
+        "sales": 0,
+        "openings": 0,
+        "rejected": 6,
+        "arrivals": 0,
+        "pathStalled": 0,
+        "pathUnavailable": 0
+      },
+      "logCapped": false,
+      "perDayMs": {
+        "count": 3,
+        "mean": 3917.112,
+        "p50": 3937.394,
+        "p95": 3937.394,
+        "max": 6248.686
+      },
+      "perStepMs": {
+        "count": 36,
+        "mean": 108.764,
+        "p50": 103.075,
+        "p95": 172.564,
+        "max": 237.476
+      },
+      "memoryMs": {
+        "count": 47,
+        "mean": 52.225,
+        "p50": 47.146,
+        "p95": 98.303,
+        "max": 125.913
+      },
+      "serializeMs": {
+        "count": 47,
+        "mean": 31.017,
+        "p50": 27.615,
+        "p95": 54.762,
+        "max": 64.73
+      },
+      "heapMbStart": 438.1,
+      "heapMbEnd": 699.2,
+      "heapMbPeak": 866.8
+    },
+    "match-queue": {
+      "queueMatched": 1,
+      "settled": 1,
+      "feePaid": [
+        20
+      ],
+      "serviceIncome": 20,
+      "registerTickMs": 7.67,
+      "settleTickMs": 3.82,
+      "tickMs": {
+        "count": 103,
+        "mean": 2.997,
+        "p50": 2.797,
+        "p95": 3.363,
+        "max": 7.67
+      },
+      "queuePeak": 0,
+      "gameMinutes": 52
+    }
+  }
+}
