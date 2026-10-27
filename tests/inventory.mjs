@@ -4,7 +4,7 @@ import {taskChecks} from './check-map.mjs';
 export {taskChecks};
 export const registeredFiles=new Set(Object.values(groups).flat());
 export function checkMetadata(file,group){
-  const text=fs.readFileSync(new URL('../'+file,import.meta.url),'utf8'),browser=/from ['"]playwright|require\(['"]playwright/.test(text);
+  const text=fs.readFileSync(new URL('../'+file,import.meta.url),'utf8'),browser=/\bfrom\s*['"]playwright['"]|\brequire\(\s*['"]playwright['"]/.test(text);
   const tasks=Object.entries(taskChecks).filter(([,spec])=>spec.files.includes(file)).map(([id])=>id);
   const evidence=browser?['browser-controlled']:['component-or-host-fixture'];
   let estimatedCost=browser?'medium':'low';
@@ -14,7 +14,7 @@ export function checkMetadata(file,group){
   if(file==='tests/candidate-tools.mjs')evidence.push('filesystem-isolated','no-engine-execution');
   if(file==='tests/portrait-sources.mjs')evidence.push('asset-hashes-and-dimensions');
   if(file==='tests/contract-samples.mjs')evidence.push('runtime-dto-not-dts-compilation');
-  if(['legacy','engine'].includes(group))evidence.push('legacy-entry-not-current-gameplay');
+  if(['legacy','engine'].includes(group)||file==='tests/native-legacy-regression.mjs')evidence.push('legacy-entry-not-current-gameplay');
   if(file==='tests/desktop-host.cjs')evidence.push('desktop-test-user-directory');
   return {tasks,evidence,estimatedCost};
 }

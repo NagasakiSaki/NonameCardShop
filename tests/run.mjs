@@ -7,6 +7,7 @@ import {selectChecks} from './inventory.mjs';
 const args=process.argv.slice(2),selection=args.find(a=>!a.startsWith('--'))||'all',keepGoing=args.includes('--keep-going');
 const failedFrom=args.find(a=>a.startsWith('--failed-from='));
 const previous=failedFrom?JSON.parse(fs.readFileSync(path.resolve(root,failedFrom.slice('--failed-from='.length)),'utf8')):null;
+if(previous&&!Array.isArray(previous.results))throw Error('失败补跑报告缺少 results 数组，拒绝回退到全套执行。');
 const {task,scheduled,requirements}=selectChecks({selection,task:args.find(a=>a.startsWith('--task='))?.slice(7),failed:previous?.results});
 if(args.includes('--list')||args.includes('--json-list')){console.log(args.includes('--json-list')?JSON.stringify({selection,task,requirements,scheduled},null,2):scheduled.map(({group,file,evidence,estimatedCost})=>`${group}: ${file}${args.includes('--details')?' ['+estimatedCost+'; '+evidence.join(', ')+']':''}`).join('\n')+`\n共 ${scheduled.length} 个独立测试`+(requirements?'\n人工/测量要求：'+JSON.stringify(requirements):''));process.exit(0);}
 if(task&&!scheduled.length&&!previous)throw Error(`${task} 没有执行测试，请查看 --task=${task} --list 中的测量/人工验收要求。`);

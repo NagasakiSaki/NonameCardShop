@@ -1,4 +1,6 @@
 import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 import assert from 'node:assert/strict';
 import {spawnSync} from 'node:child_process';
 import {groups,DEFAULT_GROUPS} from './groups.mjs';
@@ -20,4 +22,6 @@ assert.throws(()=>selectChecks({failed:[{file:'not-a-registered-check.mjs',passe
 const natural=all.find(c=>c.file==='tests/native-modes-browser.mjs');assert.ok(natural.evidence.includes('native-ai-autoplay-natural'));assert.ok(natural.evidence.includes('native-controlled-death'));
 const child=spawnSync(process.execPath,['tests/run.mjs','--task=OPT-18','--json-list'],{encoding:'utf8',windowsHide:true});assert.equal(child.status,0,child.stderr);const list=JSON.parse(child.stdout);assert.equal(list.scheduled.length,2);
 const manual=spawnSync(process.execPath,['tests/run.mjs','--task=OPT-19'],{encoding:'utf8',windowsHide:true});assert.notEqual(manual.status,0);assert.match(manual.stderr,/没有执行测试/);
+const malformed=fs.mkdtempSync(path.join(os.tmpdir(),'card-shop-rerun-'));
+try{const file=path.join(malformed,'invalid.json');fs.writeFileSync(file,'{}');const bad=spawnSync(process.execPath,['tests/run.mjs','--failed-from='+file,'--list'],{encoding:'utf8',windowsHide:true});assert.notEqual(bad.status,0);assert.match(bad.stderr,/缺少 results/);}finally{fs.rmSync(malformed,{recursive:true,force:true});}
 console.log('PASS test inventory: 22 task mappings, default dedup, evidence/cost tags, real alias failure rerun, manual-only task rejection and CLI listing.');
