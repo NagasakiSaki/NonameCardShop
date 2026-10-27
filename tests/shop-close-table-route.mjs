@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createRuntime} from '../modules/backend/runtime.mjs';
+import {memoryRepository} from '../modules/backend/storage.mjs';
+const read=name=>JSON.parse(fs.readFileSync(new URL('../data/'+name+'.json',import.meta.url))),source=read('cards'),rules=read('backend-rules');
+const initial=await createRuntime({source,rules,repository:memoryRepository()}),record=initial.inspect();await initial.disconnect();
+record.world.clock.phase='open';record.world.clock.minute=1199;
+record.world.npcs.push({actorId:'settled-leaver',name:'离桌顾客',appearanceId:'bd-anon',appearancePackVersion:1,presence:'onsite',roomId:'store',x:240,y:272,activity:'leaving-table',wallet:{available:990,reserved:0},currentMatchId:null,returnAfterMatch:false,trip:{kind:'match',stage:'store-return',path:[]}});
+const repository=memoryRepository(record),host=await createRuntime({source,rules,repository});await host.connect({contractVersion:'card-shop-ui/1.0',clientId:'closed-route'});
+const wallet=structuredClone(host.inspect().world.npcs.find(n=>n.actorId==='settled-leaver').wallet),before=host.inspect().world;
+const result=await host.command({requestId:'close-settled-route',type:'business.close',payload:{}});assert.ok(result.ok,JSON.stringify(result));
+const closed=host.inspect().world,npc=closed.npcs.find(n=>n.actorId==='settled-leaver');assert.equal(npc.presence,'offsite');assert.equal(npc.trip,null);assert.equal(npc.returnAfterMatch,false);assert.deepEqual(npc.wallet,wallet);assert.equal(closed.daily.service,before.daily.service);assert.deepEqual(closed.stats,before.stats);
+assert.ok((await host.command({requestId:'next-route-day',type:'business.nextDay',payload:{}})).ok);assert.equal(host.inspect().world.npcs.find(n=>n.actorId==='settled-leaver').presence,'offsite');await host.disconnect();
+console.log('PASS closing after settled NPC match completes the exit route once, without duplicate fees/results or overnight customers.');

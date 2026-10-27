@@ -1,0 +1,277 @@
+{
+  "schema": 1,
+  "requestedSeconds": 600,
+  "elapsedMs": 600784.6953,
+  "cards": 5000,
+  "cycles": 396,
+  "peakRows": 32,
+  "baseline": {
+    "heapUsed": 53425644,
+    "listeners": {
+      "window": 30,
+      "document": 14
+    },
+    "dom": 128,
+    "persistentDom": 127
+  },
+  "final": {
+    "heapUsed": 54269968,
+    "listeners": {
+      "window": 30,
+      "document": 14
+    },
+    "dom": 128,
+    "persistentDom": 127
+  },
+  "checkpoints": [
+    {
+      "elapsedMs": 644.6032,
+      "cycles": 1,
+      "peakRows": 32,
+      "heapUsed": 53213232,
+      "listeners": {
+        "window": 30,
+        "document": 14
+      },
+      "dom": 84,
+      "persistentDom": 83
+    },
+    {
+      "elapsedMs": 30672.854900000002,
+      "cycles": 21,
+      "peakRows": 32,
+      "heapUsed": 54224200,
+      "listeners": {
+        "window": 30,
+        "document": 14
+      },
+      "dom": 128,
+      "persistentDom": 127
+    },
+    {
+      "elapsedMs": 60792.1338,
+      "cycles": 41,
+      "peakRows": 32,
+      "heapUsed": 54311392,
+      "listeners": {
+        "window": 30,
+        "document": 14
+      },
+      "dom": 128,
+      "persistentDom": 127
+    },
+    {
+      "elapsedMs": 90886.01180000001,
+      "cycles": 61,
+      "peakRows": 32,
+      "heapUsed": 54411860,
+      "listeners": {
+        "window": 30,
+        "document": 14
+      },
+      "dom": 128,
+      "persistentDom": 127
+    },
+    {
+      "elapsedMs": 121171.47570000001,
+      "cycles": 81,
+      "peakRows": 32,
+      "heapUsed": 54419936,
+      "listeners": {
+        "window": 30,
+        "document": 14
+      },
+      "dom": 128,
+      "persistentDom": 127
+    },
+    {
+      "elapsedMs": 151355.61099999998,
+      "cycles": 101,
+      "peakRows": 32,
+      "heapUsed": 54513916,
+      "listeners": {
+        "window": 30,
+        "document": 14
+      },
+      "dom": 128,
+      "persistentDom": 127
+    },
+    {
+      "elapsedMs": 181434.22639999999,
+      "cycles": 121,
+      "peakRows": 32,
+      "heapUsed": 54538672,
+      "listeners": {
+        "window": 30,
+        "document": 14
+      },
+      "dom": 128,
+      "persistentDom": 127
+    },
+    {
+      "elapsedMs": 210034.17979999998,
+      "cycles": 140,
+      "peakRows": 32,
+      "heapUsed": 54588820,
+      "listeners": {
+        "window": 30,
+        "document": 14
+      },
+      "dom": 128,
+      "persistentDom": 127
+    },
+    {
+      "elapsedMs": 240266.2151,
+      "cycles": 160,
+      "peakRows": 32,
+      "heapUsed": 53976556,
+      "listeners": {
+        "window": 30,
+        "document": 14
+      },
+      "dom": 128,
+      "persistentDom": 127
+    },
+    {
+      "elapsedMs": 270409.97969999997,
+      "cycles": 180,
+      "peakRows": 32,
+      "heapUsed": 54023168,
+      "listeners": {
+        "window": 30,
+        "document": 14
+      },
+      "dom": 128,
+      "persistentDom": 127
+    },
+    {
+      "elapsedMs": 300659.9611,
+      "cycles": 200,
+      "peakRows": 32,
+      "heapUsed": 54036804,
+      "listeners": {
+        "window": 30,
+        "document": 14
+      },
+      "dom": 128,
+      "persistentDom": 127
+    },
+    {
+      "elapsedMs": 330793.1461,
+      "cycles": 220,
+      "peakRows": 32,
+      "heapUsed": 54084272,
+      "listeners": {
+        "window": 30,
+        "document": 14
+      },
+      "dom": 128,
+      "persistentDom": 127
+    },
+    {
+      "elapsedMs": 360991.9667,
+      "cycles": 240,
+      "peakRows": 32,
+      "heapUsed": 54080328,
+      "listeners": {
+        "window": 30,
+        "document": 14
+      },
+      "dom": 128,
+      "persistentDom": 127
+    },
+    {
+      "elapsedMs": 391155.8476,
+      "cycles": 260,
+      "peakRows": 32,
+      "heapUsed": 54167664,
+      "listeners": {
+        "window": 30,
+        "document": 14
+      },
+      "dom": 128,
+      "persistentDom": 127
+    },
+    {
+      "elapsedMs": 420005.426,
+      "cycles": 279,
+      "peakRows": 32,
+      "heapUsed": 54157620,
+      "listeners": {
+        "window": 30,
+        "document": 14
+      },
+      "dom": 128,
+      "persistentDom": 127
+    },
+    {
+      "elapsedMs": 450042.4755,
+      "cycles": 299,
+      "peakRows": 32,
+      "heapUsed": 54219480,
+      "listeners": {
+        "window": 30,
+        "document": 14
+      },
+      "dom": 128,
+      "persistentDom": 127
+    },
+    {
+      "elapsedMs": 480289.055,
+      "cycles": 319,
+      "peakRows": 32,
+      "heapUsed": 54220804,
+      "listeners": {
+        "window": 30,
+        "document": 14
+      },
+      "dom": 128,
+      "persistentDom": 127
+    },
+    {
+      "elapsedMs": 510522.5859,
+      "cycles": 339,
+      "peakRows": 32,
+      "heapUsed": 54229052,
+      "listeners": {
+        "window": 30,
+        "document": 14
+      },
+      "dom": 128,
+      "persistentDom": 127
+    },
+    {
+      "elapsedMs": 540617.3188,
+      "cycles": 359,
+      "peakRows": 32,
+      "heapUsed": 54254284,
+      "listeners": {
+        "window": 30,
+        "document": 14
+      },
+      "dom": 128,
+      "persistentDom": 127
+    },
+    {
+      "elapsedMs": 571015.2053,
+      "cycles": 377,
+      "peakRows": 32,
+      "heapUsed": 54238112,
+      "listeners": {
+        "window": 30,
+        "document": 14
+      },
+      "dom": 128,
+      "persistentDom": 127
+    }
+  ],
+  "errors": [],
+  "passed": true,
+  "node": "v24.15.0",
+  "browser": "156.0.8078.4",
+  "limitations": [
+    "隔离 5000 实物的暂停世界，循环开关/滚动/右键详情；不是玩家对局或营业吞吐",
+    "强制GC只用于前后堆/全局监听器诊断，不能据此给出自然FPS承诺",
+    "堆保留包括图片/模块/草稿缓存；报告趋势，不以固定字节增量冒充泄漏证明"
+  ]
+}

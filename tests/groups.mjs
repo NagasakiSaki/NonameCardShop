@@ -8,7 +8,8 @@ export const groups={
     "tests/server.mjs",
     "tests/boxes.cjs",
     "tests/candidate-tools.mjs",
-    "tests/test-inventory.mjs"
+    "tests/test-inventory.mjs",
+    "tests/skill-texts.mjs"
   ],
   "ui": [
     "tests/trade-cards.mjs",
@@ -55,7 +56,8 @@ export const groups={
     "tests/world-story-browser.mjs",
     "tests/long-term-browser.mjs",
     "tests/pack-roster-browser.mjs",
-    "tests/storage-retry-browser.mjs"
+    "tests/storage-retry-browser.mjs",
+    "tests/skill-texts-browser.mjs"
   ],
   "legacy": [
     "tests/economy.cjs",
@@ -104,6 +106,8 @@ export const groups={
     "tests/contract-samples.mjs",
     "tests/eligibility-query.mjs",
     "tests/policy-preservation.mjs",
+    "tests/storage-two-tabs.mjs",
+    "tests/shop-close-table-route.mjs",
     "tests/profile-registry.mjs",
     "tests/npc-day-loop.mjs",
     "tests/catalog-cache.mjs",

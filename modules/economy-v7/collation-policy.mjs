@@ -1,5 +1,6 @@
 // Edition recipes and print grades are independent of combat scores and unlock order.
 import defaultEditions from '../../data/print-editions.json' with {type:'json'};
+export const PRINT_EDITION_VERSION=defaultEditions.version;
 export const RARITIES=Object.freeze(['N','R','SR','SSR']);
 export function planCollation({productId,catalog,editions=defaultEditions}){
  if(!productId||typeof productId!=='string')return {ok:false,error:{code:'INVALID_PRODUCT_ID',message:'必须指定有效的产品ID。'}};

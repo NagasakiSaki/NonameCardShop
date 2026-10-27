@@ -67,7 +67,11 @@
     "perf:eligible": "node tools/perf/eligible.mjs",
     "audit:policies": "node tools/audit/policy-sources.mjs",
     "art:reproduce": "node tools/frontend-art-bright/reproduce.mjs",
-    "engine:stage": "node tools/engine-upgrade.mjs"
+    "engine:stage": "node tools/engine-upgrade.mjs",
+    "skills:audit": "node tools/build-skill-texts.mjs",
+    "skills:build": "node tools/build-skill-texts.mjs --install",
+    "perf:soak": "node tools/perf/operations-soak.mjs",
+    "perf:windows": "node tools/perf/windows-soak.mjs"
   },
   "dependencies": {
     "noname": "file:tools/adapters/noname",

@@ -167,7 +167,10 @@ function finishShopping(w,map,npc){if(w.clock.phase==='open'){const invited=w.ex
 function discardSelected(w,npc,refs){for(const ref of refs||[]){const i=w.items[ref];if(i?.ownerId===npc.actorId&&i.location==='collection'&&free(i))discardCard(w,i,npc.actorId);}}
 // A manual early close completes paid visits once, so saves never strand sealed purchases or discard references across days.
 export function finishCustomerVisits(w,catalog){
-  for(const npc of w.npcs){const t=npc.trip;if(t?.kind==='match'||npc.currentMatchId)continue;
+  for(const npc of w.npcs){const t=npc.trip;if(npc.currentMatchId)continue;
+    // The round is already settled. A closed shop will no longer tick this exit route.
+    // Complete departure here without replaying fees/results or carrying it into tomorrow.
+    if(t?.kind==='match'){npc.returnAfterMatch=false;if(onSite(npc))departCustomer(w,npc,'business-closed');continue;}
     if(t?.stage==='opening'){const refs=openCustomerPurchase(w,catalog,npc,t.purchaseRef);discardSelected(w,npc,unwantedCards(w,catalog,npc,refs));}
     else if(t?.stage==='sorting'||t?.stage==='discard')discardSelected(w,npc,t.discardRefs);
     if(onSite(npc))departCustomer(w,npc,'business-closed');

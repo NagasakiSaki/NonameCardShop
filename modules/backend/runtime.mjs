@@ -1,4 +1,5 @@
 import {createArchivePolicy} from './archive-policy.mjs';
+import {PRINT_EDITION_VERSION} from '../economy-v7/collation-policy.mjs';
 import * as Rooms from './battle-rooms.mjs';
 import * as Debt from './debt-challenge.mjs';
 import {loanBalance,repayLoan} from './campaign-loan.mjs';
@@ -51,10 +52,11 @@ export async function createRuntime({source,rules,repository,maps=[],managementC
   const {archive,saveArchive}=createArchivePolicy({catalogFor,navigation,now});
   let catalog=catalogFor(rules),record=await repository.read();
   function upgradeDistribution(world){
-    if(!world.rules.distribution||world.products.some(p=>p.collationVersion!==DEFAULT_DISTRIBUTION.version)){
+    const expectedVersion=world.rules.operationsV7?PRINT_EDITION_VERSION:DEFAULT_DISTRIBUTION.version;
+    if(!world.rules.distribution||world.products.some(p=>p.collationVersion!==expectedVersion)){
       world.rules.distribution??=clone(rules.distribution||DEFAULT_DISTRIBUTION);
       world.products=publishProducts(catalogFor(world.rules),world.rules,world.clock.day,world.prices,world);
-      note(world,'distributionUpgraded',{version:DEFAULT_DISTRIBUTION.version,legacyContentsPreserved:true});
+      note(world,'distributionUpgraded',{version:expectedVersion,legacyContentsPreserved:true});
     }
     for(const item of Object.values(world.items))if(item.ownerId==='player'&&item.location==='retail'&&['pack','box'].includes(item.kind)&&!productEnabled(world.rules,item.productId))item.location='stock';
   }
