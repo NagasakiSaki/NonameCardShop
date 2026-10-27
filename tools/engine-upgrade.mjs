@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {argument} from './lib/candidate-output.mjs';
+import {stageEngine} from './engine-upgrade/stage.mjs';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),args=process.argv.slice(2);
+const source=argument(args,'source',null);
+if(!source)throw Error('显式指定 --source 无名杀目录；本工具不下载、不安装、不切换引擎。');
+const read=file=>JSON.parse(fs.readFileSync(path.join(root,file)));
+const {out,report}=stageEngine({root,source:path.resolve(root,source),output:argument(args,'out',`.local/engine-upgrade-${new Date().toISOString().replace(/[:.]/g,'-')}`),baselineDirectory:path.join(root,'vendor/noname'),baselineManifest:read('data/engine-manifest.json'),cards:read('data/cards.json').cards,printPolicy:read('data/print-editions.json')});
+console.log(JSON.stringify({report:path.join(out,'report.json'),version:report.candidate.version,files:report.candidate.files,diff:Object.fromEntries(Object.entries(report.diff).map(([key,list])=>[key,list.length])),capabilities:report.capabilities.map(c=>({formatId:c.formatId,staticQualification:c.staticQualification})),installed:false},null,2));

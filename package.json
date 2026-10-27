@@ -65,7 +65,9 @@
     "perf:baseline": "node tools/perf/baseline.mjs",
     "perf:browser": "node tools/perf/browser.mjs",
     "perf:eligible": "node tools/perf/eligible.mjs",
-    "audit:policies": "node tools/audit/policy-sources.mjs"
+    "audit:policies": "node tools/audit/policy-sources.mjs",
+    "art:reproduce": "node tools/frontend-art-bright/reproduce.mjs",
+    "engine:stage": "node tools/engine-upgrade.mjs"
   },
   "dependencies": {
     "noname": "file:tools/adapters/noname",

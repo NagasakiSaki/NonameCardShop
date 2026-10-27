@@ -1,0 +1,119 @@
+{
+  "schema": 1,
+  "createdAt": "2026-10-27T05:36:18.661Z",
+  "node": "v24.15.0",
+  "source": "D:\\GameDev\\NonameCardShop\\vendor\\noname",
+  "baseline": {
+    "directory": "D:\\GameDev\\NonameCardShop\\vendor\\noname",
+    "declaredVersion": "1.11.6",
+    "packageVersion": "1.11.6",
+    "inventoryHash": "f58a848abf2651aed5d274576f77c23954b5cd07d7d52ecca9146fb0e5457922",
+    "drift": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    }
+  },
+  "candidate": {
+    "directory": "D:\\GameDev\\NonameCardShop\\.local\\opt17-installed-engine\\engine",
+    "version": "1.11.6",
+    "files": 15876,
+    "bytes": 1340042134,
+    "inventoryHash": "f58a848abf2651aed5d274576f77c23954b5cd07d7d52ecca9146fb0e5457922"
+  },
+  "excludedRoots": [
+    "Home",
+    ".git",
+    ".cache"
+  ],
+  "diff": {
+    "added": [],
+    "removed": [],
+    "changed": []
+  },
+  "protocol": "card-shop-native-round/1",
+  "capabilities": [
+    {
+      "formatId": "doudizhu-bo3",
+      "profileId": "noname-1.11.6-doudizhu-normal-shop-1",
+      "profileHash": "d5c3dc28e32c7fe0b7363a9138fee36cc9227cf18b4e23283ed4cfff139c388f",
+      "profileEngineVersion": "1.11.6",
+      "versionMatches": true,
+      "mismatches": [],
+      "staticQualification": "pinned-files-match",
+      "runtimeHandshake": "not-run",
+      "controlledEvidence": "not-run",
+      "naturalEvidence": "not-run",
+      "approvedForInstall": false
+    },
+    {
+      "formatId": "versus2v2-bo3",
+      "profileId": "noname-1.11.6-versus-two-shop-1",
+      "profileHash": "0aa8744ce3a872ba7ac8c6b370c8d88d33435d039ec05098347fcb965e91a7e3",
+      "profileEngineVersion": "1.11.6",
+      "versionMatches": true,
+      "mismatches": [],
+      "staticQualification": "pinned-files-match",
+      "runtimeHandshake": "not-run",
+      "controlledEvidence": "not-run",
+      "naturalEvidence": "not-run",
+      "approvedForInstall": false
+    },
+    {
+      "formatId": "kof",
+      "profileId": null,
+      "staticQualification": "adapter-review-required",
+      "adapter": "integration/host-battle.mjs (legacy KOF bridge)",
+      "runtimeHandshake": "not-run",
+      "controlledEvidence": "not-run",
+      "naturalEvidence": "not-run",
+      "approvedForInstall": false
+    }
+  ],
+  "impacts": {
+    "cardKeys": {
+      "existingPrefix": "noname-1.11.6:",
+      "migrationApplied": false,
+      "note": "版本更新不能原地改旧 cardKey；新旧目录与版本映射需要单独迁移设计。",
+      "potentiallyAffected": []
+    },
+    "skills": {
+      "changedPackFiles": [],
+      "keys": [],
+      "semanticAnalysis": "not-performed",
+      "note": "按包保守标记；静态文件变化不能推断技能收益或自然对局兼容。共享引擎变化还可能影响所有技能。"
+    },
+    "prints": {
+      "policyVersion": "fixed-print-1",
+      "policyHash": "a09867e83503d2a44116ac0526a5140678238ff1d9486fd8833f466cf3eedbd0",
+      "mutated": false,
+      "note": "已印刷实物、已封装包盒、已付款订单内容及发行比例不重算。"
+    },
+    "saves": {
+      "opened": false,
+      "migrated": false,
+      "fieldsToReview": [
+        "inventory.cardKey",
+        "inventory.skillVersion",
+        "products/box contents",
+        "orders paid snapshots",
+        "match/series round state",
+        "archives/day-start snapshots"
+      ],
+      "note": "不读取玩家存档；升级前需使用复制的旧档做回退与结果接线验证。"
+    },
+    "resources": {
+      "changedFiles": [],
+      "note": "仅文件差异，动态拼接资源和可选音频仍需运行时检查。"
+    }
+  },
+  "requiredReview": [
+    "核对发行来源、版本与完整性及许可",
+    "审查差异及所有 profile 依赖，不自动改白名单",
+    "隔离原生握手与受控回归",
+    "自然完成 KOF、斗地主与 2v2 各局及整场回执",
+    "复制旧档的实物/发行/按天回退验证",
+    "人工决定发布与可回退版本"
+  ],
+  "installed": false
+}

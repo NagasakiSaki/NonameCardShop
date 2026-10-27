@@ -1,0 +1,1466 @@
+{
+  "schema": 1,
+  "node": "v24.15.0",
+  "platform": "win32",
+  "arch": "x64",
+  "parameters": {
+    "artScale": 4,
+    "characters": 25,
+    "buildRuns": 2,
+    "normalizedFields": [
+      "build-stats.json:elapsedMs"
+    ]
+  },
+  "inputs": [
+    {
+      "path": "assets/frontend-next/products/manifest.json",
+      "sha256": "26bcd662d8e1716be40326fd1ecc39984f4fd8f05e883d93ea757c5384301b7d"
+    },
+    {
+      "path": "assets/frontend/characters/bd-anon.c32c4710da.png",
+      "sha256": "c32c4710da4d31641e0b5d41a45d26ca20f8067ed8803d8e4f5e77eb7b2bd1a1"
+    },
+    {
+      "path": "assets/frontend/characters/bd-arale.96c48d7257.png",
+      "sha256": "96c48d7257d01de27e816022aed35147cf8054fc78997e71f8e5cb476803147e"
+    },
+    {
+      "path": "assets/frontend/characters/bd-chieri.c700ddc3b3.png",
+      "sha256": "c700ddc3b3357004fe5aff4037962d6fc5317d83de089caeee5eb894348dc2d5"
+    },
+    {
+      "path": "assets/frontend/characters/bd-hotaru.082c2c60af.png",
+      "sha256": "082c2c60af2b905566c395e6cbe8948a79723fe5b62391fddbdc8df5bafbee13"
+    },
+    {
+      "path": "assets/frontend/characters/bd-houka.4d45944cd7.png",
+      "sha256": "4d45944cd7d47dd67c678f92171c791398336e7d25d2f0e0270510d2d9d91cdf"
+    },
+    {
+      "path": "assets/frontend/characters/bd-mahoro.22ed565fbe.png",
+      "sha256": "22ed565fbe62b2c768ecd68f21b9d73c13470c5f5d0463a73dae9b1e532d4a17"
+    },
+    {
+      "path": "assets/frontend/characters/bd-miku.e9ba035ca6.png",
+      "sha256": "e9ba035ca6d142c46c7237cd866529b2bb449ca17cc1ce2e359e24f7cf609b7f"
+    },
+    {
+      "path": "assets/frontend/characters/bd-miyako.4e39ed25be.png",
+      "sha256": "4e39ed25be07917a58ccfc46edd9b3fe9de212ef5f7dc51ebbd7e2c1b1966b54"
+    },
+    {
+      "path": "assets/frontend/characters/bd-mutsumi.228b53245b.png",
+      "sha256": "228b53245b8567f8558676330d8fab84fae062b64f35908a99f60c2b17fd763f"
+    },
+    {
+      "path": "assets/frontend/characters/bd-nagi.524af3d8c3.png",
+      "sha256": "524af3d8c3ebb6249448c849442fe38fc4f9731115fd38df62ab74e5fba9c066"
+    },
+    {
+      "path": "assets/frontend/characters/bd-natsume.1a8e498436.png",
+      "sha256": "1a8e498436fc90376a56e1e2e1815ad6c8690d3d87d24e71af4512c8397c8f8b"
+    },
+    {
+      "path": "assets/frontend/characters/bd-nonoka.64edd19fb6.png",
+      "sha256": "64edd19fb6ef6cde9c610b891cb88fa7125d49148689bfacb72d6b02d74955f7"
+    },
+    {
+      "path": "assets/frontend/characters/bd-nyamu.ffdd89a7d4.png",
+      "sha256": "ffdd89a7d4e7a371ece3ad8d925f68267f41c4e04ec7e5b4a56cf1e1d9fa3562"
+    },
+    {
+      "path": "assets/frontend/characters/bd-raika.8f735904c6.png",
+      "sha256": "8f735904c6e59b1cf16bedd36157d927cc4a1b5e5b2755ae6ddd044fc5fad041"
+    },
+    {
+      "path": "assets/frontend/characters/bd-rana.37dffee9ba.png",
+      "sha256": "37dffee9ba38683fa9fe7c82966935cc92c2354167882a1e65a629b8e0e0158b"
+    },
+    {
+      "path": "assets/frontend/characters/bd-ritsu.03ef4966fc.png",
+      "sha256": "03ef4966fc38e40f722dc063f0b0029fd743a2b4735eddfe118bb62789ae1bf5"
+    },
+    {
+      "path": "assets/frontend/characters/bd-sakiko.213fce0606.png",
+      "sha256": "213fce0606f85a7f3b3648ba1d0af434b88ef8e2293511e33a0b7bca0698558c"
+    },
+    {
+      "path": "assets/frontend/characters/bd-shizuku.693d5cd8d0.png",
+      "sha256": "693d5cd8d04a34157af4396dce269544bd11fc4b5b2dcff8e24aec6c32ec19bc"
+    },
+    {
+      "path": "assets/frontend/characters/bd-soyo.9c52830f6e.png",
+      "sha256": "9c52830f6e0f223287111f83736e666c65a35a1b0f9b92f55b5bb005f6d11028"
+    },
+    {
+      "path": "assets/frontend/characters/bd-taki.0c12852460.png",
+      "sha256": "0c128524603a4b6e111843f3349a501e1fafd6c01ab7273566353b5b47355c17"
+    },
+    {
+      "path": "assets/frontend/characters/bd-tomori.41ae9f88ef.png",
+      "sha256": "41ae9f88efd6acb211aba68418fca3aba33eb6f08a27787aee2d9b3a9cff6126"
+    },
+    {
+      "path": "assets/frontend/characters/bd-uika.e04c7618f8.png",
+      "sha256": "e04c7618f893e54b1d82d30b46bab3593917cb58ada448ef55e8ebb378eb92b6"
+    },
+    {
+      "path": "assets/frontend/characters/bd-umiri.80b698ccf0.png",
+      "sha256": "80b698ccf0d26e6f73fde567cc319fe2c6509e14a5d7b90e2697e0570e5c436c"
+    },
+    {
+      "path": "assets/frontend/characters/bd-yomogi.e3704d44f5.png",
+      "sha256": "e3704d44f581c2e56da6259b2b63c861291831d98de04836b1cefff73e100c6c"
+    },
+    {
+      "path": "assets/frontend/characters/bd-yuno.a7c15461f8.png",
+      "sha256": "a7c15461f8d948a5efe8c784560eab654945a7c69f616dd959e3837d844563e8"
+    },
+    {
+      "path": "assets/frontend/manifest.json",
+      "sha256": "ed3b51a4642bc0a829f37808bfe040ab1c70494e6d02d174c7e738d41f921fb4"
+    },
+    {
+      "path": "assets/frontend/props/props.png",
+      "sha256": "660a915ee7e1e5edfc6aae4e834f9594a52a17bbf94f84af3e691a7043c16e49"
+    },
+    {
+      "path": "tools/frontend-art-bright/build.mjs",
+      "sha256": "e0f9f4c275d353c3a4d462f888757ce7ac4e656f2bbfa1598c91fec1847366e4"
+    },
+    {
+      "path": "tools/frontend-art-bright/canvas.mjs",
+      "sha256": "402420424a39822b9fe36d6fbe5b32d32d5b4886b79300fc53177b5f2d5c5f90"
+    },
+    {
+      "path": "tools/frontend-art-bright/characters.mjs",
+      "sha256": "176abe5123d9db06a48ce496ca8cb2042fbf5d5fb73ba8a63f489d2bde3d458c"
+    },
+    {
+      "path": "tools/frontend-art-bright/fx.mjs",
+      "sha256": "181c11c06fbf14daae19fb5fb732146c7ce267437f8454a68fd8ec1837aee028"
+    },
+    {
+      "path": "tools/frontend-art-bright/install.mjs",
+      "sha256": "e8dec8843e605e0258cc397ecb178a117adf9a883ffb912a0c450e2818347063"
+    },
+    {
+      "path": "tools/frontend-art-bright/kit.mjs",
+      "sha256": "3219a550ea6273bf1daed820b55f95e298e6a458776cd0c7213ccef2e1e00283"
+    },
+    {
+      "path": "tools/frontend-art-bright/palette.mjs",
+      "sha256": "bf127aef92f2afae4436fa6e2d420062d9ca04aff638c99f574fa39a84b0ec7c"
+    },
+    {
+      "path": "tools/frontend-art-bright/png.mjs",
+      "sha256": "7d6eb6831e8fc4b0dbec5851cd38e64c597dc16d98bbfe79f42455e5a988632e"
+    },
+    {
+      "path": "tools/frontend-art-bright/products.mjs",
+      "sha256": "2091eeb5f2974d030879564b3367dbdb2f14b026a20f4e683a9fef58135a8f82"
+    },
+    {
+      "path": "tools/frontend-art-bright/props.mjs",
+      "sha256": "19f14ae1844e6438f8597dbe5b7cef61f3f7982ed33750003cb8a79cf0ac6cf2"
+    },
+    {
+      "path": "tools/frontend-art-bright/reproduce.mjs",
+      "sha256": "2ef0e4ef7dd8adbe7b9d36e9c68950de18a56a03c8193b37ed3dce7c2a27bafb"
+    },
+    {
+      "path": "tools/frontend-art-bright/tiles.mjs",
+      "sha256": "4ce894abb6f5ee9dabdd07043ce87885782336ce15245f32d30c0ac8b2a22100"
+    }
+  ],
+  "formalBefore": {
+    "manifest": "ed3b51a4642bc0a829f37808bfe040ab1c70494e6d02d174c7e738d41f921fb4",
+    "assets": "6baf791821bf341ae019e31afd7b25f250e0fea10f8775ee6282a6cf7f39c419"
+  },
+  "formalAfter": {
+    "manifest": "ed3b51a4642bc0a829f37808bfe040ab1c70494e6d02d174c7e738d41f921fb4",
+    "assets": "6baf791821bf341ae019e31afd7b25f250e0fea10f8775ee6282a6cf7f39c419"
+  },
+  "runs": [
+    {
+      "name": "first",
+      "elapsedMs": 2428,
+      "hash": "337af0c7b423701c888092b0e5dbce1f0f3ab37dfd282cb769d2abead2893373",
+      "files": [
+        {
+          "path": "ASSET-INVENTORY-CHARACTERS.csv",
+          "bytes": 7700,
+          "sha256": "61ca349ac78e6b40384ecd01e4427ad87d76bcbb63c036638f2149e5ec5b7309"
+        },
+        {
+          "path": "ASSET-INVENTORY.csv",
+          "bytes": 32056,
+          "sha256": "69f8b24b06cc2878cc5e5a803cbc7652b0204cfc0863d7f62c32f507a362534e"
+        },
+        {
+          "path": "build-stats.json",
+          "bytes": 5813,
+          "sha256": "1d2941a5020083addb673eacf268fbd168223958dc528857dc45d2faddcb19b3"
+        },
+        {
+          "path": "characters/bd-anon.png",
+          "bytes": 10791,
+          "sha256": "fe7d52b5ee35c6fc625ed43d3d0bad6f54462693aa4f0c9b6ce85f364234f571"
+        },
+        {
+          "path": "characters/bd-arale.png",
+          "bytes": 11635,
+          "sha256": "ce5af22bc5efd5bbf7b46a947609cf22459ec873a972e2755505fc03d2976305"
+        },
+        {
+          "path": "characters/bd-chieri.png",
+          "bytes": 12100,
+          "sha256": "25d8b386f4dc1606958c2884051d3d69bd5b7a42d39570b08617f986c4881e1b"
+        },
+        {
+          "path": "characters/bd-hotaru.png",
+          "bytes": 10645,
+          "sha256": "ebefda750e6de6f87120691123bca159bb6faf2046b0ec991524d8cdac9d8e37"
+        },
+        {
+          "path": "characters/bd-houka.png",
+          "bytes": 10398,
+          "sha256": "f2717cea9117637179adeaeaceef6de014b575b80c68ebaf22c1f25774157774"
+        },
+        {
+          "path": "characters/bd-mahoro.png",
+          "bytes": 11760,
+          "sha256": "cb3956301a8ca96e2acfe973f938816cae618434b523555b8c3d765f9c4a1a64"
+        },
+        {
+          "path": "characters/bd-miku.png",
+          "bytes": 12256,
+          "sha256": "32986d2114d0a602e92632520bf6257b7f2f33d0afac17b9198ac0756c53b39c"
+        },
+        {
+          "path": "characters/bd-miyako.png",
+          "bytes": 11363,
+          "sha256": "0eba0cebbec578a0819661ba2ed9753ab1dc75e946446b467a88ba33746d134f"
+        },
+        {
+          "path": "characters/bd-mutsumi.png",
+          "bytes": 11582,
+          "sha256": "31a5ae28a2dd5b349bdb7dccc196d95093f5ba2601a28dd20db5f26e751edbcd"
+        },
+        {
+          "path": "characters/bd-nagi.png",
+          "bytes": 11522,
+          "sha256": "81b9712485827136866ad4fcd4eba06da291b5eb3def3b60ed9b49b947e96aeb"
+        },
+        {
+          "path": "characters/bd-natsume.png",
+          "bytes": 11251,
+          "sha256": "3fa92c6f9477fbcff8b75332b0578d3aaaf0212aa33001d5c5eaafa543a78f44"
+        },
+        {
+          "path": "characters/bd-nonoka.png",
+          "bytes": 11458,
+          "sha256": "5c673b898cceda4f09ca4c6083c7ca4c992b293ec9ec377bdd150ca43b0db4c3"
+        },
+        {
+          "path": "characters/bd-nyamu.png",
+          "bytes": 11996,
+          "sha256": "0c1dd80bfb91480e72490e2a562685f87b38318beb940fe774872e82ec0b76ce"
+        },
+        {
+          "path": "characters/bd-raika.png",
+          "bytes": 11996,
+          "sha256": "c9e1dad9235d609b277e42eee89f66ff0af418ec65c39c3bd8cc66ea8309a6ce"
+        },
+        {
+          "path": "characters/bd-rana.png",
+          "bytes": 12015,
+          "sha256": "c59c49af7e2cc7eae198d275f81e728f62aa2b7d4bbbbc09cb1a1b77ee3dafaf"
+        },
+        {
+          "path": "characters/bd-ritsu.png",
+          "bytes": 11794,
+          "sha256": "6b69fc19c1ff357da3525a59f04e777e56ff6969fc8501c1c7101287d6b646af"
+        },
+        {
+          "path": "characters/bd-sakiko.png",
+          "bytes": 11028,
+          "sha256": "bea7afd25a3a8eab5dfd918ec0f9e7941595e555a3f159b33c5d1d0df908b219"
+        },
+        {
+          "path": "characters/bd-shizuku.png",
+          "bytes": 12144,
+          "sha256": "ae55e95f07870e85a1747e88b417e615b7c5bd3dfb6c1a38f25b615cbcc505d7"
+        },
+        {
+          "path": "characters/bd-soyo.png",
+          "bytes": 11043,
+          "sha256": "233e852bd718c4d6de61b5c7aade2121b4728577343ed8b59104003c0c9a2fc7"
+        },
+        {
+          "path": "characters/bd-taki.png",
+          "bytes": 11756,
+          "sha256": "a99424f1c82d28fd7001c35dcac5e2a94e3c21382e82a1e8df4bcb90d5608016"
+        },
+        {
+          "path": "characters/bd-tomori.png",
+          "bytes": 12521,
+          "sha256": "2a4298de0bfcdfcf56ea89b85038c873cdbb16c2fba7660ec51cfabd37a66584"
+        },
+        {
+          "path": "characters/bd-uika.png",
+          "bytes": 12562,
+          "sha256": "fdeb86e9346c1560f4f632dc8f3e4116b3a7326f5c8b8d8feef98b4e6fa159f2"
+        },
+        {
+          "path": "characters/bd-umiri.png",
+          "bytes": 12454,
+          "sha256": "ce21dfa3c3e3506ebb0c0c5ebb9a286514987666f00e215bed64999921238e5a"
+        },
+        {
+          "path": "characters/bd-yomogi.png",
+          "bytes": 13102,
+          "sha256": "a59174e8db07cce2b03f4b156252857c4aa5b5d87f9198a7575c585bf4772739"
+        },
+        {
+          "path": "characters/bd-yuno.png",
+          "bytes": 11570,
+          "sha256": "313d206f77a5a3446d8c5c6ea6c85daac7b440ecd2f0eb9d9c701cfb9b3a3cdf"
+        },
+        {
+          "path": "fx/glow.png",
+          "bytes": 15071,
+          "sha256": "d84504b1ec9fe6856b65904b3c24fe65e99b7002631a10e4a0c66b079fc6a2aa"
+        },
+        {
+          "path": "fx/shadow.png",
+          "bytes": 2585,
+          "sha256": "049c1a61747345234b2769b1d097d09bbb15b1e16e6818ef423acad0253c4d02"
+        },
+        {
+          "path": "fx/sun-shaft.png",
+          "bytes": 16173,
+          "sha256": "b6a3b99009bc8c3d1ae1fd514f9f198ed2b6d9f4968cad401a461448222126b5"
+        },
+        {
+          "path": "manifest.characters.json",
+          "bytes": 20819,
+          "sha256": "3d8b5b0107c502de4dd8bf9819447d6861dccf2e0b9f9e49b67c597be6bc0fe9"
+        },
+        {
+          "path": "manifest.props.json",
+          "bytes": 48923,
+          "sha256": "50e5b370a6ffef7881f882f4387abfbca7114dce0d80c6256554aae51a42d97b"
+        },
+        {
+          "path": "products/box-butter.png",
+          "bytes": 15087,
+          "sha256": "b94ab5eccfc9fe82363ec308e627dd9242a6e2473c8aee9718ccd35d475f8009"
+        },
+        {
+          "path": "products/box-coral.png",
+          "bytes": 15536,
+          "sha256": "d74b70b5985f93e0c89afbe673a15261b692bb2250b94ceb00a7a01cca276f58"
+        },
+        {
+          "path": "products/box-lilac.png",
+          "bytes": 15648,
+          "sha256": "65eaece8224643826049524788d22cd8994f39e25b11dbe8fa49c50ebe78bfca"
+        },
+        {
+          "path": "products/box-mint.png",
+          "bytes": 15898,
+          "sha256": "b5e64376790b5b15149b0d8ca1d4806f8932a20a45f6f2a660673845f4278cdd"
+        },
+        {
+          "path": "products/box-rose.png",
+          "bytes": 15974,
+          "sha256": "5c5661e27c8ff665661e5616dcfa08f073970c11e7e4a499f848dfd9725721af"
+        },
+        {
+          "path": "products/box-sky.png",
+          "bytes": 15732,
+          "sha256": "1fbada0cc616043b0aac55c6ad9f3043f7ef3baa9e650016524344e8f6456427"
+        },
+        {
+          "path": "products/box-slate.png",
+          "bytes": 15690,
+          "sha256": "ac23cc018e0b53e096370d51e5a7040bc837e6bab7c9f460da56ef778d1f0f8d"
+        },
+        {
+          "path": "products/manifest.json",
+          "bytes": 3647,
+          "sha256": "79d85e3c475cd59ef77c7c1d257c5eff72842eae694e4b1679fc13025cb5ad48"
+        },
+        {
+          "path": "products/pack-butter.png",
+          "bytes": 19865,
+          "sha256": "62c4d7e6b327beae841f3db5249ee0968dce48f37ce7fb537a14e7b67cc5dae8"
+        },
+        {
+          "path": "products/pack-coral.png",
+          "bytes": 19819,
+          "sha256": "14a28bd47675984aaa621f442d4d7d8bdc6e24929fe54efcf066ca6221b1a910"
+        },
+        {
+          "path": "products/pack-lilac.png",
+          "bytes": 19901,
+          "sha256": "2015f9685bbc2f693740e0072848aa7c5a86ece995daaf9b7bb17bfa3dd3e7ef"
+        },
+        {
+          "path": "products/pack-mint.png",
+          "bytes": 19941,
+          "sha256": "50ea29946813b71220778a68d12f7fe665811491967b8445db679056dc05a16b"
+        },
+        {
+          "path": "products/pack-rose.png",
+          "bytes": 20222,
+          "sha256": "fd29867c69e6275476f16add15e83629f8c4a0975a867389911c3511f9735e68"
+        },
+        {
+          "path": "products/pack-sky.png",
+          "bytes": 19912,
+          "sha256": "f8c0d846087f8edc37f7bf34ddf498ae15dc5ae5633b00b895140481fef1f699"
+        },
+        {
+          "path": "products/pack-slate.png",
+          "bytes": 20016,
+          "sha256": "515f5b71d2600f053e42a963db0302ffa8d75e87b6793831413b532b87f66cd6"
+        },
+        {
+          "path": "props/individual/bench.png",
+          "bytes": 4628,
+          "sha256": "ca228fc0ae8e22ea6aacdf0b284b34dd0ee59874c213a1fc7a3733daf72bc9fa"
+        },
+        {
+          "path": "props/individual/board.png",
+          "bytes": 3511,
+          "sha256": "7176fed378b38704c2712a39e13e8d47a4aaed535c7da5911c2972e438bb0d68"
+        },
+        {
+          "path": "props/individual/case_stack.png",
+          "bytes": 2025,
+          "sha256": "365ce3e6ddf6e87118dbde3aca6396045e3ebd2f77ac6754894720b1de0abf03"
+        },
+        {
+          "path": "props/individual/chair.png",
+          "bytes": 1600,
+          "sha256": "ee2acf0ed8e630356f06b2b0ab82a37a2210cbe7df5d7304df8e6e09060ea652"
+        },
+        {
+          "path": "props/individual/clock.png",
+          "bytes": 753,
+          "sha256": "febdcaae722630c0d8d1d90ad6b346081cb6444dbba3f9f6a247a6f7c5265bba"
+        },
+        {
+          "path": "props/individual/counter_retail.png",
+          "bytes": 9157,
+          "sha256": "5c8a95f17df4b5bef5e44ec4fc4cf0da1123b6b804a5f6d6e020f36349df899c"
+        },
+        {
+          "path": "props/individual/counter_service.png",
+          "bytes": 7410,
+          "sha256": "cb29ad7cfa1c2c5fd787bc27afd0fad6459b4f12bcc221d92bbedbb0c1f54d34"
+        },
+        {
+          "path": "props/individual/display_boxes.png",
+          "bytes": 4380,
+          "sha256": "f9df854284c33ab0879c3029af89b56ec0dc97f791fb6a515d47f988b130cde6"
+        },
+        {
+          "path": "props/individual/display_packs.png",
+          "bytes": 4301,
+          "sha256": "f88cf3fb09e75f7e2d8a9ef1fc52512ed5d5be27174c0f7eb4c05709cc19a0d6"
+        },
+        {
+          "path": "props/individual/door_mat.png",
+          "bytes": 747,
+          "sha256": "7b5351b7a9c3210fdad219fccd3aafd7e169e196abc78db3be13b5440ce366d8"
+        },
+        {
+          "path": "props/individual/kiosk.png",
+          "bytes": 5766,
+          "sha256": "a70e901b5eebd9294b468f83cc4c67632e19f6bef7edcaacaf08fde51c70ddc4"
+        },
+        {
+          "path": "props/individual/lamp.png",
+          "bytes": 677,
+          "sha256": "d6f8409bdf15a0df89efda396dacff04ea65a41e4de261f764a3084027ef0adb"
+        },
+        {
+          "path": "props/individual/pa_box_rack.png",
+          "bytes": 3696,
+          "sha256": "ef70804d4f6156e37ef6a9fc9146e2ff929f756002fc046a34e2f005870e1da8"
+        },
+        {
+          "path": "props/individual/pa_cabinet_collect.png",
+          "bytes": 4061,
+          "sha256": "98477653df0e91a6a493a7888d96f452e25e3c50b5424be2d82867c72af45ab4"
+        },
+        {
+          "path": "props/individual/pa_counter_cashier_onduty.png",
+          "bytes": 7583,
+          "sha256": "8d7d2c7d441497c5d89e744470cc1516bc49c1eb1ff5b56f45fa6fc20855030b"
+        },
+        {
+          "path": "props/individual/pa_counter_cashier_resting.png",
+          "bytes": 7266,
+          "sha256": "969a1f86ea50f04f4fbc34c9b90b3ee5111a385699492559c9775b30a5b1fd55"
+        },
+        {
+          "path": "props/individual/pa_counter_cashier_unhired.png",
+          "bytes": 7618,
+          "sha256": "a9e2c593066144a19c93d19de95767134b757d6bc372e1846fee97d8cc8d9f7f"
+        },
+        {
+          "path": "props/individual/pa_counter_cashier.png",
+          "bytes": 7326,
+          "sha256": "9f8b9049c5083499d697d049dd04c737d30e46d4d4a84404917e48a4791a684e"
+        },
+        {
+          "path": "props/individual/pa_counter_market.png",
+          "bytes": 7230,
+          "sha256": "94ae5d43f1977e319e5db08ec95d17bcc4049d758027d98fd8ea0f00006c1956"
+        },
+        {
+          "path": "props/individual/pa_counter_opening.png",
+          "bytes": 5884,
+          "sha256": "ce18c1d7e5327f3931cbac709c67c70d2414eb4256bc4857f8f0150ce88b3f93"
+        },
+        {
+          "path": "props/individual/pa_counter_procure.png",
+          "bytes": 7234,
+          "sha256": "bac6f0517521cc928360c1d4754b5b233a6b9aa3606c1077686368d01d8ea8d0"
+        },
+        {
+          "path": "props/individual/pa_counter_stocker_onduty.png",
+          "bytes": 7788,
+          "sha256": "8774740ebeec5ed7f7bfe23ca680f4961be0f01a2a8f8ca066ef4ce76b904bbb"
+        },
+        {
+          "path": "props/individual/pa_counter_stocker_resting.png",
+          "bytes": 7217,
+          "sha256": "985c9ab27aa364be408d37d9b0f5650311b39e816d4eaabcab30f81d0749d1f1"
+        },
+        {
+          "path": "props/individual/pa_counter_stocker_unhired.png",
+          "bytes": 7568,
+          "sha256": "dbd636de6393231abdb94cbf1e72ad4d965a879a848626ce727bea8a31d34af5"
+        },
+        {
+          "path": "props/individual/pa_display_boxes.png",
+          "bytes": 4380,
+          "sha256": "f9df854284c33ab0879c3029af89b56ec0dc97f791fb6a515d47f988b130cde6"
+        },
+        {
+          "path": "props/individual/pa_display_packs.png",
+          "bytes": 4301,
+          "sha256": "f88cf3fb09e75f7e2d8a9ef1fc52512ed5d5be27174c0f7eb4c05709cc19a0d6"
+        },
+        {
+          "path": "props/individual/pa_lamp_hang.png",
+          "bytes": 931,
+          "sha256": "37abc728864623662063a9c3ad0e244e7ec79c863e7b7fd499341b0d1218f407"
+        },
+        {
+          "path": "props/individual/pa_rug_round.png",
+          "bytes": 3251,
+          "sha256": "dc9968b73775e7419459c2f5696695bdb19d3b6071d011b3841b5d8d8ab333f4"
+        },
+        {
+          "path": "props/individual/pa_shelf_empty.png",
+          "bytes": 5219,
+          "sha256": "64a48af79395898798978a9550f03d05c5c11d318a335ca892729522bc2930c8"
+        },
+        {
+          "path": "props/individual/pa_shelf_full.png",
+          "bytes": 13107,
+          "sha256": "82035d3e2fb5bc0098555f752cbd90b7f5452188bea47280e73c3fc5d52b173e"
+        },
+        {
+          "path": "props/individual/pa_shelf_low.png",
+          "bytes": 7772,
+          "sha256": "8d4deb89c807f11115715d227422c6dd6c95e32e4c18e86ea6cf3563c1f9afd8"
+        },
+        {
+          "path": "props/individual/pa_shelf_lv0_empty.png",
+          "bytes": 5219,
+          "sha256": "64a48af79395898798978a9550f03d05c5c11d318a335ca892729522bc2930c8"
+        },
+        {
+          "path": "props/individual/pa_shelf_lv0_full.png",
+          "bytes": 13107,
+          "sha256": "82035d3e2fb5bc0098555f752cbd90b7f5452188bea47280e73c3fc5d52b173e"
+        },
+        {
+          "path": "props/individual/pa_shelf_lv0_low.png",
+          "bytes": 7772,
+          "sha256": "8d4deb89c807f11115715d227422c6dd6c95e32e4c18e86ea6cf3563c1f9afd8"
+        },
+        {
+          "path": "props/individual/pa_shelf_lv1_empty.png",
+          "bytes": 5258,
+          "sha256": "5672e9b5f1e1804f78e0f577957d40417c17db74f08235f89e818b06292976da"
+        },
+        {
+          "path": "props/individual/pa_shelf_lv1_full.png",
+          "bytes": 12725,
+          "sha256": "8f62162e9689a12dc1ef6f5591966592b53aca4786433453362bf02012841ca3"
+        },
+        {
+          "path": "props/individual/pa_shelf_lv1_low.png",
+          "bytes": 7911,
+          "sha256": "3cc1dd83410119f242f1d1f143da8c0864f93b8c0b6c4a91929e2e742dd8e11a"
+        },
+        {
+          "path": "props/individual/pa_shelf_lv2_empty.png",
+          "bytes": 5303,
+          "sha256": "9d16abd51ea993d687a776e736ce49b8c02540b7fcae32dfecd0eb537eddef9c"
+        },
+        {
+          "path": "props/individual/pa_shelf_lv2_full.png",
+          "bytes": 13408,
+          "sha256": "bb3541e1a21b83b71634cc649db0c546ed7bfab9b30e2209ea82ffe2c999d536"
+        },
+        {
+          "path": "props/individual/pa_shelf_lv2_low.png",
+          "bytes": 7988,
+          "sha256": "b182ad96a508a9c83749e645a21f75e694524017594d332484b24f218de2b9ff"
+        },
+        {
+          "path": "props/individual/pa_shelf_lv3_empty.png",
+          "bytes": 5599,
+          "sha256": "82b74fc37f49adfa16b0f94e581c56c6f4bc65407d98e36eb29147ffc83c489e"
+        },
+        {
+          "path": "props/individual/pa_shelf_lv3_full.png",
+          "bytes": 13406,
+          "sha256": "fb0fadd2a89cdc821d5dce3eeda8471d40c18282d6958a6da083ae7f28e1a8c6"
+        },
+        {
+          "path": "props/individual/pa_shelf_lv3_low.png",
+          "bytes": 8113,
+          "sha256": "1d5617b532d7146db772284afbb8afdc671efa4055a4a4ab58e5fc6e05682ad0"
+        },
+        {
+          "path": "props/individual/pa_shelf_upgrade_before.png",
+          "bytes": 3106,
+          "sha256": "f5092498a80432d9f2736a80bb100f776e790eeaf86f1c360cc12a29d9aa14d4"
+        },
+        {
+          "path": "props/individual/pa_showcase_lv0_unbought.png",
+          "bytes": 3252,
+          "sha256": "47de1d56589b7255d2eb4176b5fbdece298ae692d8145b2734e43297d65324e9"
+        },
+        {
+          "path": "props/individual/pa_showcase_lv1_bought.png",
+          "bytes": 4061,
+          "sha256": "98477653df0e91a6a493a7888d96f452e25e3c50b5424be2d82867c72af45ab4"
+        },
+        {
+          "path": "props/individual/pa_table_end.png",
+          "bytes": 6441,
+          "sha256": "9d1bed1c8070e50e63bd0c6cc89bbd6e95f55e1edae75c4f9edf622fc740ca5a"
+        },
+        {
+          "path": "props/individual/pa_table_idle.png",
+          "bytes": 6334,
+          "sha256": "1fe8c90be98998841000f73196fa4d0ea42e493eac80a0a714ab3e2604bc0e86"
+        },
+        {
+          "path": "props/individual/pa_table_lv0_end.png",
+          "bytes": 6441,
+          "sha256": "9d1bed1c8070e50e63bd0c6cc89bbd6e95f55e1edae75c4f9edf622fc740ca5a"
+        },
+        {
+          "path": "props/individual/pa_table_lv0_idle.png",
+          "bytes": 6334,
+          "sha256": "1fe8c90be98998841000f73196fa4d0ea42e493eac80a0a714ab3e2604bc0e86"
+        },
+        {
+          "path": "props/individual/pa_table_lv0_reserved.png",
+          "bytes": 6519,
+          "sha256": "8499fe5927fedbe57415d17cc1c024ee633ae540fdf66cd84588b6c761056973"
+        },
+        {
+          "path": "props/individual/pa_table_lv0_sim.png",
+          "bytes": 6730,
+          "sha256": "76944df1834d4a211a947d0b4352b8a98bf9cb899d040e9a534668bf721055aa"
+        },
+        {
+          "path": "props/individual/pa_table_lv1_end.png",
+          "bytes": 6500,
+          "sha256": "77f2d5653fe7f42a9b223ab247bb0021947b0bddf84251914fee5ff0e8fe957b"
+        },
+        {
+          "path": "props/individual/pa_table_lv1_idle.png",
+          "bytes": 6390,
+          "sha256": "ab15afe24c5443769de84222e812d7ab19a66eded833d0d8b7dc90c9b17fad56"
+        },
+        {
+          "path": "props/individual/pa_table_lv1_reserved.png",
+          "bytes": 6578,
+          "sha256": "4cdff97f5d1bcbf20161eb5008b0330daab17098d4d0514d60dfb9c38b6e2ec0"
+        },
+        {
+          "path": "props/individual/pa_table_lv1_sim.png",
+          "bytes": 6783,
+          "sha256": "442386f1c329cb083a919a0b273dfafdf7ecf8d4a5c043b85288494476ccd0cf"
+        },
+        {
+          "path": "props/individual/pa_table_lv2_end.png",
+          "bytes": 6608,
+          "sha256": "8da2efcb377b6bc4ad9343a165d9f134144ec722aa6aba6ed9a6c63ef1091aaa"
+        },
+        {
+          "path": "props/individual/pa_table_lv2_idle.png",
+          "bytes": 6502,
+          "sha256": "29b99dfc8b5d05e261f3876764169a15d151fb6ce83582357a9ae2e126bd42c7"
+        },
+        {
+          "path": "props/individual/pa_table_lv2_reserved.png",
+          "bytes": 6679,
+          "sha256": "f4ae9ddf0f59c3e001ca13c70ef814661ccc0d72409a392772f7bc0cca37e494"
+        },
+        {
+          "path": "props/individual/pa_table_lv2_sim.png",
+          "bytes": 6893,
+          "sha256": "fbf856bc1f28d3ba56e0154fa3b6bbcdd5f880337ca737447fa2103c59cad89c"
+        },
+        {
+          "path": "props/individual/pa_table_reserved.png",
+          "bytes": 6519,
+          "sha256": "8499fe5927fedbe57415d17cc1c024ee633ae540fdf66cd84588b6c761056973"
+        },
+        {
+          "path": "props/individual/pa_table_sim.png",
+          "bytes": 6730,
+          "sha256": "76944df1834d4a211a947d0b4352b8a98bf9cb899d040e9a534668bf721055aa"
+        },
+        {
+          "path": "props/individual/pa_trash.png",
+          "bytes": 1005,
+          "sha256": "d0bcc6facecd81e84c90ad698ebde85305b5f63aa56445be1d650fdf8eed9b20"
+        },
+        {
+          "path": "props/individual/pa_wall_display.png",
+          "bytes": 1526,
+          "sha256": "21ff9408b577420655100742fda37b752bcb0b14d75d40a13f70f36dd40dfdd5"
+        },
+        {
+          "path": "props/individual/plant.png",
+          "bytes": 1184,
+          "sha256": "fdefb3fbbf9095ee399813941997b2641a40fafac0e2b96853adf8299e514610"
+        },
+        {
+          "path": "props/individual/poster.png",
+          "bytes": 1193,
+          "sha256": "95cbb9ff430313bf08bd18a87dd1399a9e2aaff294490600c31569e379eb7391"
+        },
+        {
+          "path": "props/individual/register.png",
+          "bytes": 661,
+          "sha256": "628717b8667677d3d1b6f3f11fc239be6ab253af27e29ad53323adf618f8ba34"
+        },
+        {
+          "path": "props/individual/rug.png",
+          "bytes": 2735,
+          "sha256": "a9454b98ef1793ea6476f6619e729feb45bddd34732d6aff1c4e0cc23fc71213"
+        },
+        {
+          "path": "props/individual/shelf.png",
+          "bytes": 13107,
+          "sha256": "82035d3e2fb5bc0098555f752cbd90b7f5452188bea47280e73c3fc5d52b173e"
+        },
+        {
+          "path": "props/individual/sign.png",
+          "bytes": 806,
+          "sha256": "8ea944ae710420f8ff0a369f4f316ac7f02184fb2df34390979cc573c57d64d2"
+        },
+        {
+          "path": "props/individual/sofa.png",
+          "bytes": 2697,
+          "sha256": "669760f378e9d49a5f357b8b460180db8f51db30ddee6e17435d7b278f34c338"
+        },
+        {
+          "path": "props/individual/speaker.png",
+          "bytes": 1671,
+          "sha256": "49de4558c271d56df1e6d9104827afa4b7526f385bb748383e626890ade9e73a"
+        },
+        {
+          "path": "props/individual/table.png",
+          "bytes": 6334,
+          "sha256": "1fe8c90be98998841000f73196fa4d0ea42e493eac80a0a714ab3e2604bc0e86"
+        },
+        {
+          "path": "props/individual/tea.png",
+          "bytes": 3675,
+          "sha256": "596dbd39754b19b2e386f714e36e534192bddb459ae79991cf09374de929158e"
+        },
+        {
+          "path": "props/individual/trash.png",
+          "bytes": 1005,
+          "sha256": "d0bcc6facecd81e84c90ad698ebde85305b5f63aa56445be1d650fdf8eed9b20"
+        },
+        {
+          "path": "props/individual/trophy.png",
+          "bytes": 788,
+          "sha256": "d8ef61b053f6ccbca02d14296f9d20a1edb5fc7197cd35e28ae34d0297d09916"
+        },
+        {
+          "path": "props/props.png",
+          "bytes": 397197,
+          "sha256": "b8ecd29ac4c2dbcb5e29cc27ca9b8fbcaaabd69cd2d41179e4499bf688966cff"
+        },
+        {
+          "path": "tiles/tileset.png",
+          "bytes": 7876,
+          "sha256": "b2603309d5b591094dbd7b23b224081cbb2af260bbdbcbc05dc09eafa96b817f"
+        }
+      ]
+    },
+    {
+      "name": "second",
+      "elapsedMs": 2430,
+      "hash": "337af0c7b423701c888092b0e5dbce1f0f3ab37dfd282cb769d2abead2893373",
+      "files": [
+        {
+          "path": "ASSET-INVENTORY-CHARACTERS.csv",
+          "bytes": 7700,
+          "sha256": "61ca349ac78e6b40384ecd01e4427ad87d76bcbb63c036638f2149e5ec5b7309"
+        },
+        {
+          "path": "ASSET-INVENTORY.csv",
+          "bytes": 32056,
+          "sha256": "69f8b24b06cc2878cc5e5a803cbc7652b0204cfc0863d7f62c32f507a362534e"
+        },
+        {
+          "path": "build-stats.json",
+          "bytes": 5813,
+          "sha256": "1d2941a5020083addb673eacf268fbd168223958dc528857dc45d2faddcb19b3"
+        },
+        {
+          "path": "characters/bd-anon.png",
+          "bytes": 10791,
+          "sha256": "fe7d52b5ee35c6fc625ed43d3d0bad6f54462693aa4f0c9b6ce85f364234f571"
+        },
+        {
+          "path": "characters/bd-arale.png",
+          "bytes": 11635,
+          "sha256": "ce5af22bc5efd5bbf7b46a947609cf22459ec873a972e2755505fc03d2976305"
+        },
+        {
+          "path": "characters/bd-chieri.png",
+          "bytes": 12100,
+          "sha256": "25d8b386f4dc1606958c2884051d3d69bd5b7a42d39570b08617f986c4881e1b"
+        },
+        {
+          "path": "characters/bd-hotaru.png",
+          "bytes": 10645,
+          "sha256": "ebefda750e6de6f87120691123bca159bb6faf2046b0ec991524d8cdac9d8e37"
+        },
+        {
+          "path": "characters/bd-houka.png",
+          "bytes": 10398,
+          "sha256": "f2717cea9117637179adeaeaceef6de014b575b80c68ebaf22c1f25774157774"
+        },
+        {
+          "path": "characters/bd-mahoro.png",
+          "bytes": 11760,
+          "sha256": "cb3956301a8ca96e2acfe973f938816cae618434b523555b8c3d765f9c4a1a64"
+        },
+        {
+          "path": "characters/bd-miku.png",
+          "bytes": 12256,
+          "sha256": "32986d2114d0a602e92632520bf6257b7f2f33d0afac17b9198ac0756c53b39c"
+        },
+        {
+          "path": "characters/bd-miyako.png",
+          "bytes": 11363,
+          "sha256": "0eba0cebbec578a0819661ba2ed9753ab1dc75e946446b467a88ba33746d134f"
+        },
+        {
+          "path": "characters/bd-mutsumi.png",
+          "bytes": 11582,
+          "sha256": "31a5ae28a2dd5b349bdb7dccc196d95093f5ba2601a28dd20db5f26e751edbcd"
+        },
+        {
+          "path": "characters/bd-nagi.png",
+          "bytes": 11522,
+          "sha256": "81b9712485827136866ad4fcd4eba06da291b5eb3def3b60ed9b49b947e96aeb"
+        },
+        {
+          "path": "characters/bd-natsume.png",
+          "bytes": 11251,
+          "sha256": "3fa92c6f9477fbcff8b75332b0578d3aaaf0212aa33001d5c5eaafa543a78f44"
+        },
+        {
+          "path": "characters/bd-nonoka.png",
+          "bytes": 11458,
+          "sha256": "5c673b898cceda4f09ca4c6083c7ca4c992b293ec9ec377bdd150ca43b0db4c3"
+        },
+        {
+          "path": "characters/bd-nyamu.png",
+          "bytes": 11996,
+          "sha256": "0c1dd80bfb91480e72490e2a562685f87b38318beb940fe774872e82ec0b76ce"
+        },
+        {
+          "path": "characters/bd-raika.png",
+          "bytes": 11996,
+          "sha256": "c9e1dad9235d609b277e42eee89f66ff0af418ec65c39c3bd8cc66ea8309a6ce"
+        },
+        {
+          "path": "characters/bd-rana.png",
+          "bytes": 12015,
+          "sha256": "c59c49af7e2cc7eae198d275f81e728f62aa2b7d4bbbbc09cb1a1b77ee3dafaf"
+        },
+        {
+          "path": "characters/bd-ritsu.png",
+          "bytes": 11794,
+          "sha256": "6b69fc19c1ff357da3525a59f04e777e56ff6969fc8501c1c7101287d6b646af"
+        },
+        {
+          "path": "characters/bd-sakiko.png",
+          "bytes": 11028,
+          "sha256": "bea7afd25a3a8eab5dfd918ec0f9e7941595e555a3f159b33c5d1d0df908b219"
+        },
+        {
+          "path": "characters/bd-shizuku.png",
+          "bytes": 12144,
+          "sha256": "ae55e95f07870e85a1747e88b417e615b7c5bd3dfb6c1a38f25b615cbcc505d7"
+        },
+        {
+          "path": "characters/bd-soyo.png",
+          "bytes": 11043,
+          "sha256": "233e852bd718c4d6de61b5c7aade2121b4728577343ed8b59104003c0c9a2fc7"
+        },
+        {
+          "path": "characters/bd-taki.png",
+          "bytes": 11756,
+          "sha256": "a99424f1c82d28fd7001c35dcac5e2a94e3c21382e82a1e8df4bcb90d5608016"
+        },
+        {
+          "path": "characters/bd-tomori.png",
+          "bytes": 12521,
+          "sha256": "2a4298de0bfcdfcf56ea89b85038c873cdbb16c2fba7660ec51cfabd37a66584"
+        },
+        {
+          "path": "characters/bd-uika.png",
+          "bytes": 12562,
+          "sha256": "fdeb86e9346c1560f4f632dc8f3e4116b3a7326f5c8b8d8feef98b4e6fa159f2"
+        },
+        {
+          "path": "characters/bd-umiri.png",
+          "bytes": 12454,
+          "sha256": "ce21dfa3c3e3506ebb0c0c5ebb9a286514987666f00e215bed64999921238e5a"
+        },
+        {
+          "path": "characters/bd-yomogi.png",
+          "bytes": 13102,
+          "sha256": "a59174e8db07cce2b03f4b156252857c4aa5b5d87f9198a7575c585bf4772739"
+        },
+        {
+          "path": "characters/bd-yuno.png",
+          "bytes": 11570,
+          "sha256": "313d206f77a5a3446d8c5c6ea6c85daac7b440ecd2f0eb9d9c701cfb9b3a3cdf"
+        },
+        {
+          "path": "fx/glow.png",
+          "bytes": 15071,
+          "sha256": "d84504b1ec9fe6856b65904b3c24fe65e99b7002631a10e4a0c66b079fc6a2aa"
+        },
+        {
+          "path": "fx/shadow.png",
+          "bytes": 2585,
+          "sha256": "049c1a61747345234b2769b1d097d09bbb15b1e16e6818ef423acad0253c4d02"
+        },
+        {
+          "path": "fx/sun-shaft.png",
+          "bytes": 16173,
+          "sha256": "b6a3b99009bc8c3d1ae1fd514f9f198ed2b6d9f4968cad401a461448222126b5"
+        },
+        {
+          "path": "manifest.characters.json",
+          "bytes": 20819,
+          "sha256": "3d8b5b0107c502de4dd8bf9819447d6861dccf2e0b9f9e49b67c597be6bc0fe9"
+        },
+        {
+          "path": "manifest.props.json",
+          "bytes": 48923,
+          "sha256": "50e5b370a6ffef7881f882f4387abfbca7114dce0d80c6256554aae51a42d97b"
+        },
+        {
+          "path": "products/box-butter.png",
+          "bytes": 15087,
+          "sha256": "b94ab5eccfc9fe82363ec308e627dd9242a6e2473c8aee9718ccd35d475f8009"
+        },
+        {
+          "path": "products/box-coral.png",
+          "bytes": 15536,
+          "sha256": "d74b70b5985f93e0c89afbe673a15261b692bb2250b94ceb00a7a01cca276f58"
+        },
+        {
+          "path": "products/box-lilac.png",
+          "bytes": 15648,
+          "sha256": "65eaece8224643826049524788d22cd8994f39e25b11dbe8fa49c50ebe78bfca"
+        },
+        {
+          "path": "products/box-mint.png",
+          "bytes": 15898,
+          "sha256": "b5e64376790b5b15149b0d8ca1d4806f8932a20a45f6f2a660673845f4278cdd"
+        },
+        {
+          "path": "products/box-rose.png",
+          "bytes": 15974,
+          "sha256": "5c5661e27c8ff665661e5616dcfa08f073970c11e7e4a499f848dfd9725721af"
+        },
+        {
+          "path": "products/box-sky.png",
+          "bytes": 15732,
+          "sha256": "1fbada0cc616043b0aac55c6ad9f3043f7ef3baa9e650016524344e8f6456427"
+        },
+        {
+          "path": "products/box-slate.png",
+          "bytes": 15690,
+          "sha256": "ac23cc018e0b53e096370d51e5a7040bc837e6bab7c9f460da56ef778d1f0f8d"
+        },
+        {
+          "path": "products/manifest.json",
+          "bytes": 3647,
+          "sha256": "79d85e3c475cd59ef77c7c1d257c5eff72842eae694e4b1679fc13025cb5ad48"
+        },
+        {
+          "path": "products/pack-butter.png",
+          "bytes": 19865,
+          "sha256": "62c4d7e6b327beae841f3db5249ee0968dce48f37ce7fb537a14e7b67cc5dae8"
+        },
+        {
+          "path": "products/pack-coral.png",
+          "bytes": 19819,
+          "sha256": "14a28bd47675984aaa621f442d4d7d8bdc6e24929fe54efcf066ca6221b1a910"
+        },
+        {
+          "path": "products/pack-lilac.png",
+          "bytes": 19901,
+          "sha256": "2015f9685bbc2f693740e0072848aa7c5a86ece995daaf9b7bb17bfa3dd3e7ef"
+        },
+        {
+          "path": "products/pack-mint.png",
+          "bytes": 19941,
+          "sha256": "50ea29946813b71220778a68d12f7fe665811491967b8445db679056dc05a16b"
+        },
+        {
+          "path": "products/pack-rose.png",
+          "bytes": 20222,
+          "sha256": "fd29867c69e6275476f16add15e83629f8c4a0975a867389911c3511f9735e68"
+        },
+        {
+          "path": "products/pack-sky.png",
+          "bytes": 19912,
+          "sha256": "f8c0d846087f8edc37f7bf34ddf498ae15dc5ae5633b00b895140481fef1f699"
+        },
+        {
+          "path": "products/pack-slate.png",
+          "bytes": 20016,
+          "sha256": "515f5b71d2600f053e42a963db0302ffa8d75e87b6793831413b532b87f66cd6"
+        },
+        {
+          "path": "props/individual/bench.png",
+          "bytes": 4628,
+          "sha256": "ca228fc0ae8e22ea6aacdf0b284b34dd0ee59874c213a1fc7a3733daf72bc9fa"
+        },
+        {
+          "path": "props/individual/board.png",
+          "bytes": 3511,
+          "sha256": "7176fed378b38704c2712a39e13e8d47a4aaed535c7da5911c2972e438bb0d68"
+        },
+        {
+          "path": "props/individual/case_stack.png",
+          "bytes": 2025,
+          "sha256": "365ce3e6ddf6e87118dbde3aca6396045e3ebd2f77ac6754894720b1de0abf03"
+        },
+        {
+          "path": "props/individual/chair.png",
+          "bytes": 1600,
+          "sha256": "ee2acf0ed8e630356f06b2b0ab82a37a2210cbe7df5d7304df8e6e09060ea652"
+        },
+        {
+          "path": "props/individual/clock.png",
+          "bytes": 753,
+          "sha256": "febdcaae722630c0d8d1d90ad6b346081cb6444dbba3f9f6a247a6f7c5265bba"
+        },
+        {
+          "path": "props/individual/counter_retail.png",
+          "bytes": 9157,
+          "sha256": "5c8a95f17df4b5bef5e44ec4fc4cf0da1123b6b804a5f6d6e020f36349df899c"
+        },
+        {
+          "path": "props/individual/counter_service.png",
+          "bytes": 7410,
+          "sha256": "cb29ad7cfa1c2c5fd787bc27afd0fad6459b4f12bcc221d92bbedbb0c1f54d34"
+        },
+        {
+          "path": "props/individual/display_boxes.png",
+          "bytes": 4380,
+          "sha256": "f9df854284c33ab0879c3029af89b56ec0dc97f791fb6a515d47f988b130cde6"
+        },
+        {
+          "path": "props/individual/display_packs.png",
+          "bytes": 4301,
+          "sha256": "f88cf3fb09e75f7e2d8a9ef1fc52512ed5d5be27174c0f7eb4c05709cc19a0d6"
+        },
+        {
+          "path": "props/individual/door_mat.png",
+          "bytes": 747,
+          "sha256": "7b5351b7a9c3210fdad219fccd3aafd7e169e196abc78db3be13b5440ce366d8"
+        },
+        {
+          "path": "props/individual/kiosk.png",
+          "bytes": 5766,
+          "sha256": "a70e901b5eebd9294b468f83cc4c67632e19f6bef7edcaacaf08fde51c70ddc4"
+        },
+        {
+          "path": "props/individual/lamp.png",
+          "bytes": 677,
+          "sha256": "d6f8409bdf15a0df89efda396dacff04ea65a41e4de261f764a3084027ef0adb"
+        },
+        {
+          "path": "props/individual/pa_box_rack.png",
+          "bytes": 3696,
+          "sha256": "ef70804d4f6156e37ef6a9fc9146e2ff929f756002fc046a34e2f005870e1da8"
+        },
+        {
+          "path": "props/individual/pa_cabinet_collect.png",
+          "bytes": 4061,
+          "sha256": "98477653df0e91a6a493a7888d96f452e25e3c50b5424be2d82867c72af45ab4"
+        },
+        {
+          "path": "props/individual/pa_counter_cashier_onduty.png",
+          "bytes": 7583,
+          "sha256": "8d7d2c7d441497c5d89e744470cc1516bc49c1eb1ff5b56f45fa6fc20855030b"
+        },
+        {
+          "path": "props/individual/pa_counter_cashier_resting.png",
+          "bytes": 7266,
+          "sha256": "969a1f86ea50f04f4fbc34c9b90b3ee5111a385699492559c9775b30a5b1fd55"
+        },
+        {
+          "path": "props/individual/pa_counter_cashier_unhired.png",
+          "bytes": 7618,
+          "sha256": "a9e2c593066144a19c93d19de95767134b757d6bc372e1846fee97d8cc8d9f7f"
+        },
+        {
+          "path": "props/individual/pa_counter_cashier.png",
+          "bytes": 7326,
+          "sha256": "9f8b9049c5083499d697d049dd04c737d30e46d4d4a84404917e48a4791a684e"
+        },
+        {
+          "path": "props/individual/pa_counter_market.png",
+          "bytes": 7230,
+          "sha256": "94ae5d43f1977e319e5db08ec95d17bcc4049d758027d98fd8ea0f00006c1956"
+        },
+        {
+          "path": "props/individual/pa_counter_opening.png",
+          "bytes": 5884,
+          "sha256": "ce18c1d7e5327f3931cbac709c67c70d2414eb4256bc4857f8f0150ce88b3f93"
+        },
+        {
+          "path": "props/individual/pa_counter_procure.png",
+          "bytes": 7234,
+          "sha256": "bac6f0517521cc928360c1d4754b5b233a6b9aa3606c1077686368d01d8ea8d0"
+        },
+        {
+          "path": "props/individual/pa_counter_stocker_onduty.png",
+          "bytes": 7788,
+          "sha256": "8774740ebeec5ed7f7bfe23ca680f4961be0f01a2a8f8ca066ef4ce76b904bbb"
+        },
+        {
+          "path": "props/individual/pa_counter_stocker_resting.png",
+          "bytes": 7217,
+          "sha256": "985c9ab27aa364be408d37d9b0f5650311b39e816d4eaabcab30f81d0749d1f1"
+        },
+        {
+          "path": "props/individual/pa_counter_stocker_unhired.png",
+          "bytes": 7568,
+          "sha256": "dbd636de6393231abdb94cbf1e72ad4d965a879a848626ce727bea8a31d34af5"
+        },
+        {
+          "path": "props/individual/pa_display_boxes.png",
+          "bytes": 4380,
+          "sha256": "f9df854284c33ab0879c3029af89b56ec0dc97f791fb6a515d47f988b130cde6"
+        },
+        {
+          "path": "props/individual/pa_display_packs.png",
+          "bytes": 4301,
+          "sha256": "f88cf3fb09e75f7e2d8a9ef1fc52512ed5d5be27174c0f7eb4c05709cc19a0d6"
+        },
+        {
+          "path": "props/individual/pa_lamp_hang.png",
+          "bytes": 931,
+          "sha256": "37abc728864623662063a9c3ad0e244e7ec79c863e7b7fd499341b0d1218f407"
+        },
+        {
+          "path": "props/individual/pa_rug_round.png",
+          "bytes": 3251,
+          "sha256": "dc9968b73775e7419459c2f5696695bdb19d3b6071d011b3841b5d8d8ab333f4"
+        },
+        {
+          "path": "props/individual/pa_shelf_empty.png",
+          "bytes": 5219,
+          "sha256": "64a48af79395898798978a9550f03d05c5c11d318a335ca892729522bc2930c8"
+        },
+        {
+          "path": "props/individual/pa_shelf_full.png",
+          "bytes": 13107,
+          "sha256": "82035d3e2fb5bc0098555f752cbd90b7f5452188bea47280e73c3fc5d52b173e"
+        },
+        {
+          "path": "props/individual/pa_shelf_low.png",
+          "bytes": 7772,
+          "sha256": "8d4deb89c807f11115715d227422c6dd6c95e32e4c18e86ea6cf3563c1f9afd8"
+        },
+        {
+          "path": "props/individual/pa_shelf_lv0_empty.png",
+          "bytes": 5219,
+          "sha256": "64a48af79395898798978a9550f03d05c5c11d318a335ca892729522bc2930c8"
+        },
+        {
+          "path": "props/individual/pa_shelf_lv0_full.png",
+          "bytes": 13107,
+          "sha256": "82035d3e2fb5bc0098555f752cbd90b7f5452188bea47280e73c3fc5d52b173e"
+        },
+        {
+          "path": "props/individual/pa_shelf_lv0_low.png",
+          "bytes": 7772,
+          "sha256": "8d4deb89c807f11115715d227422c6dd6c95e32e4c18e86ea6cf3563c1f9afd8"
+        },
+        {
+          "path": "props/individual/pa_shelf_lv1_empty.png",
+          "bytes": 5258,
+          "sha256": "5672e9b5f1e1804f78e0f577957d40417c17db74f08235f89e818b06292976da"
+        },
+        {
+          "path": "props/individual/pa_shelf_lv1_full.png",
+          "bytes": 12725,
+          "sha256": "8f62162e9689a12dc1ef6f5591966592b53aca4786433453362bf02012841ca3"
+        },
+        {
+          "path": "props/individual/pa_shelf_lv1_low.png",
+          "bytes": 7911,
+          "sha256": "3cc1dd83410119f242f1d1f143da8c0864f93b8c0b6c4a91929e2e742dd8e11a"
+        },
+        {
+          "path": "props/individual/pa_shelf_lv2_empty.png",
+          "bytes": 5303,
+          "sha256": "9d16abd51ea993d687a776e736ce49b8c02540b7fcae32dfecd0eb537eddef9c"
+        },
+        {
+          "path": "props/individual/pa_shelf_lv2_full.png",
+          "bytes": 13408,
+          "sha256": "bb3541e1a21b83b71634cc649db0c546ed7bfab9b30e2209ea82ffe2c999d536"
+        },
+        {
+          "path": "props/individual/pa_shelf_lv2_low.png",
+          "bytes": 7988,
+          "sha256": "b182ad96a508a9c83749e645a21f75e694524017594d332484b24f218de2b9ff"
+        },
+        {
+          "path": "props/individual/pa_shelf_lv3_empty.png",
+          "bytes": 5599,
+          "sha256": "82b74fc37f49adfa16b0f94e581c56c6f4bc65407d98e36eb29147ffc83c489e"
+        },
+        {
+          "path": "props/individual/pa_shelf_lv3_full.png",
+          "bytes": 13406,
+          "sha256": "fb0fadd2a89cdc821d5dce3eeda8471d40c18282d6958a6da083ae7f28e1a8c6"
+        },
+        {
+          "path": "props/individual/pa_shelf_lv3_low.png",
+          "bytes": 8113,
+          "sha256": "1d5617b532d7146db772284afbb8afdc671efa4055a4a4ab58e5fc6e05682ad0"
+        },
+        {
+          "path": "props/individual/pa_shelf_upgrade_before.png",
+          "bytes": 3106,
+          "sha256": "f5092498a80432d9f2736a80bb100f776e790eeaf86f1c360cc12a29d9aa14d4"
+        },
+        {
+          "path": "props/individual/pa_showcase_lv0_unbought.png",
+          "bytes": 3252,
+          "sha256": "47de1d56589b7255d2eb4176b5fbdece298ae692d8145b2734e43297d65324e9"
+        },
+        {
+          "path": "props/individual/pa_showcase_lv1_bought.png",
+          "bytes": 4061,
+          "sha256": "98477653df0e91a6a493a7888d96f452e25e3c50b5424be2d82867c72af45ab4"
+        },
+        {
+          "path": "props/individual/pa_table_end.png",
+          "bytes": 6441,
+          "sha256": "9d1bed1c8070e50e63bd0c6cc89bbd6e95f55e1edae75c4f9edf622fc740ca5a"
+        },
+        {
+          "path": "props/individual/pa_table_idle.png",
+          "bytes": 6334,
+          "sha256": "1fe8c90be98998841000f73196fa4d0ea42e493eac80a0a714ab3e2604bc0e86"
+        },
+        {
+          "path": "props/individual/pa_table_lv0_end.png",
+          "bytes": 6441,
+          "sha256": "9d1bed1c8070e50e63bd0c6cc89bbd6e95f55e1edae75c4f9edf622fc740ca5a"
+        },
+        {
+          "path": "props/individual/pa_table_lv0_idle.png",
+          "bytes": 6334,
+          "sha256": "1fe8c90be98998841000f73196fa4d0ea42e493eac80a0a714ab3e2604bc0e86"
+        },
+        {
+          "path": "props/individual/pa_table_lv0_reserved.png",
+          "bytes": 6519,
+          "sha256": "8499fe5927fedbe57415d17cc1c024ee633ae540fdf66cd84588b6c761056973"
+        },
+        {
+          "path": "props/individual/pa_table_lv0_sim.png",
+          "bytes": 6730,
+          "sha256": "76944df1834d4a211a947d0b4352b8a98bf9cb899d040e9a534668bf721055aa"
+        },
+        {
+          "path": "props/individual/pa_table_lv1_end.png",
+          "bytes": 6500,
+          "sha256": "77f2d5653fe7f42a9b223ab247bb0021947b0bddf84251914fee5ff0e8fe957b"
+        },
+        {
+          "path": "props/individual/pa_table_lv1_idle.png",
+          "bytes": 6390,
+          "sha256": "ab15afe24c5443769de84222e812d7ab19a66eded833d0d8b7dc90c9b17fad56"
+        },
+        {
+          "path": "props/individual/pa_table_lv1_reserved.png",
+          "bytes": 6578,
+          "sha256": "4cdff97f5d1bcbf20161eb5008b0330daab17098d4d0514d60dfb9c38b6e2ec0"
+        },
+        {
+          "path": "props/individual/pa_table_lv1_sim.png",
+          "bytes": 6783,
+          "sha256": "442386f1c329cb083a919a0b273dfafdf7ecf8d4a5c043b85288494476ccd0cf"
+        },
+        {
+          "path": "props/individual/pa_table_lv2_end.png",
+          "bytes": 6608,
+          "sha256": "8da2efcb377b6bc4ad9343a165d9f134144ec722aa6aba6ed9a6c63ef1091aaa"
+        },
+        {
+          "path": "props/individual/pa_table_lv2_idle.png",
+          "bytes": 6502,
+          "sha256": "29b99dfc8b5d05e261f3876764169a15d151fb6ce83582357a9ae2e126bd42c7"
+        },
+        {
+          "path": "props/individual/pa_table_lv2_reserved.png",
+          "bytes": 6679,
+          "sha256": "f4ae9ddf0f59c3e001ca13c70ef814661ccc0d72409a392772f7bc0cca37e494"
+        },
+        {
+          "path": "props/individual/pa_table_lv2_sim.png",
+          "bytes": 6893,
+          "sha256": "fbf856bc1f28d3ba56e0154fa3b6bbcdd5f880337ca737447fa2103c59cad89c"
+        },
+        {
+          "path": "props/individual/pa_table_reserved.png",
+          "bytes": 6519,
+          "sha256": "8499fe5927fedbe57415d17cc1c024ee633ae540fdf66cd84588b6c761056973"
+        },
+        {
+          "path": "props/individual/pa_table_sim.png",
+          "bytes": 6730,
+          "sha256": "76944df1834d4a211a947d0b4352b8a98bf9cb899d040e9a534668bf721055aa"
+        },
+        {
+          "path": "props/individual/pa_trash.png",
+          "bytes": 1005,
+          "sha256": "d0bcc6facecd81e84c90ad698ebde85305b5f63aa56445be1d650fdf8eed9b20"
+        },
+        {
+          "path": "props/individual/pa_wall_display.png",
+          "bytes": 1526,
+          "sha256": "21ff9408b577420655100742fda37b752bcb0b14d75d40a13f70f36dd40dfdd5"
+        },
+        {
+          "path": "props/individual/plant.png",
+          "bytes": 1184,
+          "sha256": "fdefb3fbbf9095ee399813941997b2641a40fafac0e2b96853adf8299e514610"
+        },
+        {
+          "path": "props/individual/poster.png",
+          "bytes": 1193,
+          "sha256": "95cbb9ff430313bf08bd18a87dd1399a9e2aaff294490600c31569e379eb7391"
+        },
+        {
+          "path": "props/individual/register.png",
+          "bytes": 661,
+          "sha256": "628717b8667677d3d1b6f3f11fc239be6ab253af27e29ad53323adf618f8ba34"
+        },
+        {
+          "path": "props/individual/rug.png",
+          "bytes": 2735,
+          "sha256": "a9454b98ef1793ea6476f6619e729feb45bddd34732d6aff1c4e0cc23fc71213"
+        },
+        {
+          "path": "props/individual/shelf.png",
+          "bytes": 13107,
+          "sha256": "82035d3e2fb5bc0098555f752cbd90b7f5452188bea47280e73c3fc5d52b173e"
+        },
+        {
+          "path": "props/individual/sign.png",
+          "bytes": 806,
+          "sha256": "8ea944ae710420f8ff0a369f4f316ac7f02184fb2df34390979cc573c57d64d2"
+        },
+        {
+          "path": "props/individual/sofa.png",
+          "bytes": 2697,
+          "sha256": "669760f378e9d49a5f357b8b460180db8f51db30ddee6e17435d7b278f34c338"
+        },
+        {
+          "path": "props/individual/speaker.png",
+          "bytes": 1671,
+          "sha256": "49de4558c271d56df1e6d9104827afa4b7526f385bb748383e626890ade9e73a"
+        },
+        {
+          "path": "props/individual/table.png",
+          "bytes": 6334,
+          "sha256": "1fe8c90be98998841000f73196fa4d0ea42e493eac80a0a714ab3e2604bc0e86"
+        },
+        {
+          "path": "props/individual/tea.png",
+          "bytes": 3675,
+          "sha256": "596dbd39754b19b2e386f714e36e534192bddb459ae79991cf09374de929158e"
+        },
+        {
+          "path": "props/individual/trash.png",
+          "bytes": 1005,
+          "sha256": "d0bcc6facecd81e84c90ad698ebde85305b5f63aa56445be1d650fdf8eed9b20"
+        },
+        {
+          "path": "props/individual/trophy.png",
+          "bytes": 788,
+          "sha256": "d8ef61b053f6ccbca02d14296f9d20a1edb5fc7197cd35e28ae34d0297d09916"
+        },
+        {
+          "path": "props/props.png",
+          "bytes": 397197,
+          "sha256": "b8ecd29ac4c2dbcb5e29cc27ca9b8fbcaaabd69cd2d41179e4499bf688966cff"
+        },
+        {
+          "path": "tiles/tileset.png",
+          "bytes": 7876,
+          "sha256": "b2603309d5b591094dbd7b23b224081cbb2af260bbdbcbc05dc09eafa96b817f"
+        }
+      ]
+    }
+  ],
+  "passed": true,
+  "limitations": [
+    "同机器 Node PNG 编码复现；未在第二台机器复验",
+    "不运行 portrait-kit 的 Python 重绘，不改变已审核立绘/头像",
+    "不安装生成的候选素材，不代表画面风格审核通过"
+  ]
+}

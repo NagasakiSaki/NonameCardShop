@@ -1,5 +1,5 @@
 // build.mjs — Rebuild the reviewed bright card-shop assets from editable drawing sources.
-// Writes assets/frontend-bright-anime only; install.mjs validates and changes visual mappings separately.
+// Writes an isolated candidate only; formal assets are never overwritten by this command.
 //
 // Usage: npm run art:bright
 
@@ -14,10 +14,11 @@ import { PROP_ORDER, PROP_META, paintProp } from './props.mjs';
 import { buildGlow, buildBlobShadow, buildSunShaft } from './fx.mjs';
 import { buildPack, buildBox } from './products.mjs';
 import { adaptCharacterSheet, listLpcCharacters } from './characters.mjs';
+import { reserveCandidateDirectory, argument } from '../lib/candidate-output.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT = path.resolve(HERE, '../..');
-const OUT = path.join(PROJECT, 'assets/frontend-bright-anime');
+const OUT = reserveCandidateDirectory({root:PROJECT,output:argument(process.argv.slice(2),'out',`.local/bright-build-${new Date().toISOString().replace(/[:.]/g,'-')}`)});
 
 export const PROP_CELL = 384; // 96 world px × ART_SCALE 4
 export const PROP_COLUMNS = 8;
@@ -128,10 +129,9 @@ function build() {
         frameRate: entry.frameRate ?? 9,
         regrade: '对比1.24/饱和1.08 + 暗部暖棕/亮部奶油 + 左上方向光 + 右下压暗 + 1px暖褐外描边 + 脚下内阴影',
       });
-    } catch (error) {
-      console.warn('人物适配失败 ' + id + ': ' + error.message);
-    }
+    } catch (error) { throw new Error('人物适配失败 ' + id + ': ' + error.message,{cause:error}); }
   }
+  if(characterList.length!==25)throw Error('正式角色应为 25 位，本次生成 '+characterList.length+' 位');
   fs.writeFileSync(
     path.join(OUT, 'manifest.characters.json'),
     JSON.stringify(
@@ -285,11 +285,6 @@ function build() {
     );
   });
   fs.writeFileSync(path.join(OUT, 'ASSET-INVENTORY.csv'), csv.join('\n') + '\n');
-  // 同步一份到交付根目录，方便主模型直接读
-  fs.writeFileSync(
-    path.join(OUT, 'ASSET-INVENTORY.csv'),
-    csv.join('\n') + '\n',
-  );
 
   // ---- 统计 ----
   const totalBytes = written.reduce((s, x) => s + x.bytes, 0);

@@ -1,0 +1,42 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import os from 'node:os';
+import assert from 'node:assert/strict';
+import {reserveCandidateDirectory} from '../tools/lib/candidate-output.mjs';
+import {fileInventory,sha256} from '../tools/lib/file-inventory.mjs';
+import {stageEngine} from '../tools/engine-upgrade/stage.mjs';
+const temp=fs.mkdtempSync(path.join(os.tmpdir(),'card-shop-candidates-'));
+try{
+  const root=path.join(temp,'project'),baseline=path.join(temp,'baseline'),source=path.join(temp,'upstream');
+  for(const dir of [root,baseline,source])fs.mkdirSync(dir);
+  assert.throws(()=>reserveCandidateDirectory({root,output:root}),/已存在/);
+  assert.throws(()=>reserveCandidateDirectory({root,output:'assets/new'}),/必须在/);
+  assert.throws(()=>reserveCandidateDirectory({root,output:path.join(source,'candidate'),sources:[source]}),/不能重叠/);
+  const target=reserveCandidateDirectory({root,output:'.local/first'});assert.ok(fs.existsSync(target));
+  assert.throws(()=>reserveCandidateDirectory({root,output:target}),/已存在/);
+  fs.symlinkSync(root,path.join(temp,'redirect'),'junction');
+  assert.throws(()=>reserveCandidateDirectory({root,output:path.join(temp,'redirect','assets','escape')}),/必须在/);
+  assert.throws(()=>fileInventory(temp),/符号链接/);
+  const original={'package.json':JSON.stringify({version:'1.0'}),'mode/test.js':'export const mode=1;','character/sample.js':'export const skill=1;'};
+  const write=(dir,name,content)=>{const file=path.join(dir,name);fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(file,content);};
+  for(const [name,value]of Object.entries(original)){write(baseline,name,value);write(source,name,value);}
+  write(source,'Home/private.json','not for staging');write(source,'.git/config','not for staging');
+  const baselineManifest={version:'1.0',manifest:fileInventory(baseline).map(f=>({file:f.path,bytes:f.bytes,sha256:f.sha256}))};
+  const profiles={'test-mode':{id:'reviewed-test',engineVersion:'1.0',hashes:{'mode/test.js':sha256(original['mode/test.js'])}}};
+  const args={root,source,baselineDirectory:baseline,baselineManifest,cards:[{id:'general',pack:'sample',skills:[{id:'skill',key:'sample:skill'}]}],printPolicy:{version:3},profiles};
+  const clean=stageEngine({...args,output:'.local/same'});
+  assert.equal(clean.report.capabilities[0].staticQualification,'pinned-files-match');assert.equal(clean.report.capabilities[0].approvedForInstall,false);
+  assert.deepEqual(clean.report.diff,{added:[],removed:[],changed:[]});assert.equal(fs.existsSync(path.join(clean.out,'engine/Home')),false);
+  write(source,'mode/test.js','throw new Error("must never execute");');write(source,'character/sample.js','export const skill=2;');write(source,'package.json',JSON.stringify({version:'2.0'}));
+  write(source,'new.js','export const added=true;');fs.unlinkSync(path.join(source,'character/sample.js'));write(source,'character/sample/skill.js','export const skill=3;');
+  const before=fileInventory(baseline),candidateBefore=fileInventory(source);
+  const changed=stageEngine({...args,output:'.local/changed'}).report;
+  assert.equal(changed.capabilities[0].staticQualification,'review-required');assert.equal(changed.capabilities[0].versionMatches,false);assert.equal(changed.capabilities[0].mismatches.length,1);
+  assert.equal(changed.diff.added.length,2);assert.equal(changed.diff.removed.length,1);assert.equal(changed.diff.changed.length,2);
+  assert.equal(changed.impacts.cardKeys.potentiallyAffected[0].cardKey,'noname-1.11.6:general');assert.deepEqual(changed.impacts.skills.keys,['sample:skill']);
+  assert.equal(changed.impacts.prints.mutated,false);assert.equal(changed.impacts.saves.opened,false);assert.equal(changed.installed,false);
+  assert.deepEqual(fileInventory(baseline),before);assert.deepEqual(fileInventory(source),candidateBefore);
+  write(baseline,'mode/test.js','drift');
+  assert.equal(stageEngine({...args,output:'.local/drift'}).report.baseline.drift.changed.length,1);
+  console.log('PASS candidate output: no overwrite/source overlap/junction escape; engine staging diffs, profile review, source read-only, user-data exclusion and impacts.');
+}finally{fs.rmSync(temp,{recursive:true,force:true});}
