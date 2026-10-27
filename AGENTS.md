@@ -1,6 +1,6 @@
 # 工程维护约定
 
-先读 `README.md` 和 `docs/architecture/工程目录与维护边界.md`。玩法以最新规则、配置和正式入口为准，历史任务书不能覆盖当前规则。
+先读 `README.md`、[架构与规则文档索引](docs/architecture/README.md) 和 `docs/architecture/工程目录与维护边界.md`。索引区分“现行”与“历史”，历史文档写着旧玩法不代表要回退实现。玩法以最新规则、配置和正式入口为准，历史任务书不能覆盖当前规则。
 
 - 正式入口为 `frontend/index.html` → `integration/frontend-host.mjs` → `modules/backend/runtime.mjs`。`frontend-next/` 仍是正式交易界面的一部分，不能因名字含 next 就删掉。
 - `modules/backend`、`modules/economy-v7`、`modules/progression`、`modules/narrative` 管理权威状态；前端提交意图。不得把资金、库存、奖励或真实胜负改为前端自行结算。
