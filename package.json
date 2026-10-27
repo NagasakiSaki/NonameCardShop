@@ -59,7 +59,9 @@
     "backup:stable": "node dev/backup.mjs",
     "audit:structure": "node tools/audit/project.mjs",
     "test:structure": "node tests/run.mjs structure",
-    "test:all": "node tests/run.mjs all --keep-going"
+    "test:all": "node tests/run.mjs all --keep-going",
+    "audit:art": "node tools/audit/missing-art.mjs",
+    "audit:native-resources": "node tools/audit/native-resource-404.mjs"
   },
   "dependencies": {
     "noname": "file:tools/adapters/noname",

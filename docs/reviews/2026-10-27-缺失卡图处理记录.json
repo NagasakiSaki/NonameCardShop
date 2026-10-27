@@ -1,0 +1,1176 @@
+{
+  "version": 1,
+  "date": "2026-10-27",
+  "evidenceType": "static-source-audit",
+  "tool": "tools/audit/missing-art.mjs",
+  "reproduce": "node tools/audit/missing-art.mjs --json <输出路径>",
+  "totals": {
+    "catalogCards": 2563,
+    "characterFiles": 2668,
+    "missing": 43,
+    "missingInActiveThemes": 21,
+    "withAlternativeCandidate": 0,
+    "keptPlaceholder": 43,
+    "activeThemes": 16,
+    "retiredThemes": 5
+  },
+  "byTheme": {
+    "bingshi": 5,
+    "clan": 3,
+    "huicui": 1,
+    "key": 2,
+    "mobile": 4,
+    "newjiang": 1,
+    "old": 1,
+    "onlyOL": 6,
+    "refresh": 2,
+    "sb": 1,
+    "sp": 3,
+    "sp2": 1,
+    "tw": 1,
+    "xianding": 12
+  },
+  "searchedRoots": [
+    {
+      "root": "vendor/noname/image",
+      "result": "只找到 2,668 个角色图，缺图不在其中"
+    },
+    {
+      "root": "assets/character",
+      "result": "2,484 个旧图，无同名或其他扩展命中"
+    },
+    {
+      "root": "D:/GameDev/NonameCardShop-migration-original",
+      "result": "同源迁移副本，未找到任一缺图文件"
+    },
+    {
+      "root": "D:/GameDev/NonameCardShop-Public",
+      "result": "公开过滤副本，未找到任一缺图文件"
+    },
+    {
+      "root": "D:/GameDev/StableBackups（全部本机快照）",
+      "result": "未找到任一缺图文件"
+    }
+  ],
+  "placeholderBehavior": "frontend/ui/components.mjs 的 imgWithFallback 在 img error 时替换为“缺图”文本块；服务端 /img/ 未命中返回 404 no image。",
+  "rows": [
+    {
+      "generalId": "pot_xiahouba",
+      "name": "势夏侯霸",
+      "themeId": "bingshi",
+      "expectedFile": "pot_xiahouba.jpg",
+      "expectedPath": "vendor/noname/image/character/pot_xiahouba.jpg",
+      "resolvedUrl": "/img/pot_xiahouba.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": true,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "在售主题：抽到该武将时卡面显示“缺图”占位，技能文本、实物身份、参赛与交易不受影响。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "pot_lvyi",
+      "name": "势吕壹",
+      "themeId": "bingshi",
+      "expectedFile": "pot_lvyi.jpg",
+      "expectedPath": "vendor/noname/image/character/pot_lvyi.jpg",
+      "resolvedUrl": "/img/pot_lvyi.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": true,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "在售主题：抽到该武将时卡面显示“缺图”占位，技能文本、实物身份、参赛与交易不受影响。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "pot_caoshuang",
+      "name": "势曹爽",
+      "themeId": "bingshi",
+      "expectedFile": "pot_caoshuang.jpg",
+      "expectedPath": "vendor/noname/image/character/pot_caoshuang.jpg",
+      "resolvedUrl": "/img/pot_caoshuang.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": true,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "在售主题：抽到该武将时卡面显示“缺图”占位，技能文本、实物身份、参赛与交易不受影响。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "pot_zhangren",
+      "name": "势张任",
+      "themeId": "bingshi",
+      "expectedFile": "pot_zhangren.jpg",
+      "expectedPath": "vendor/noname/image/character/pot_zhangren.jpg",
+      "resolvedUrl": "/img/pot_zhangren.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": true,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "在售主题：抽到该武将时卡面显示“缺图”占位，技能文本、实物身份、参赛与交易不受影响。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "pot_chenjiao",
+      "name": "势陈矫",
+      "themeId": "bingshi",
+      "expectedFile": "pot_chenjiao.jpg",
+      "expectedPath": "vendor/noname/image/character/pot_chenjiao.jpg",
+      "resolvedUrl": "/img/pot_chenjiao.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": true,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "在售主题：抽到该武将时卡面显示“缺图”占位，技能文本、实物身份、参赛与交易不受影响。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "clan_wuyi",
+      "name": "族吴懿",
+      "themeId": "clan",
+      "expectedFile": "clan_wuyi.jpg",
+      "expectedPath": "vendor/noname/image/character/clan_wuyi.jpg",
+      "resolvedUrl": "/img/clan_wuyi.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": true,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "在售主题：抽到该武将时卡面显示“缺图”占位，技能文本、实物身份、参赛与交易不受影响。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "clan_zhugeguo",
+      "name": "族诸葛果",
+      "themeId": "clan",
+      "expectedFile": "clan_zhugeguo.jpg",
+      "expectedPath": "vendor/noname/image/character/clan_zhugeguo.jpg",
+      "resolvedUrl": "/img/clan_zhugeguo.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": true,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "在售主题：抽到该武将时卡面显示“缺图”占位，技能文本、实物身份、参赛与交易不受影响。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "clan_zhugezhan",
+      "name": "族诸葛瞻",
+      "themeId": "clan",
+      "expectedFile": "clan_zhugezhan.jpg",
+      "expectedPath": "vendor/noname/image/character/clan_zhugezhan.jpg",
+      "resolvedUrl": "/img/clan_zhugezhan.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": true,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "在售主题：抽到该武将时卡面显示“缺图”占位，技能文本、实物身份、参赛与交易不受影响。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "dc_feiyi",
+      "name": "新杀费祎",
+      "themeId": "huicui",
+      "expectedFile": "dc_feiyi.jpg",
+      "expectedPath": "vendor/noname/image/character/dc_feiyi.jpg",
+      "resolvedUrl": "/img/dc_feiyi.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": true,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "在售主题：抽到该武将时卡面显示“缺图”占位，技能文本、实物身份、参赛与交易不受影响。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "key_umi2",
+      "name": "鹰原羽未",
+      "themeId": "key",
+      "expectedFile": "key_umi2.jpg",
+      "expectedPath": "vendor/noname/image/character/key_umi2.jpg",
+      "resolvedUrl": "/img/key_umi2.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": false,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "停产主题：不出货；只有历史实物或旧档引用时显示占位。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "key_crow",
+      "name": "小空",
+      "themeId": "key",
+      "expectedFile": "key_crow.jpg",
+      "expectedPath": "vendor/noname/image/character/key_crow.jpg",
+      "resolvedUrl": "/img/key_crow.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": false,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "停产主题：不出货；只有历史实物或旧档引用时显示占位。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "mb_dingshangwan",
+      "name": "手杀丁尚涴",
+      "themeId": "mobile",
+      "expectedFile": "mb_dingshangwan.jpg",
+      "expectedPath": "vendor/noname/image/character/mb_dingshangwan.jpg",
+      "resolvedUrl": "/img/mb_dingshangwan.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": true,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "在售主题：抽到该武将时卡面显示“缺图”占位，技能文本、实物身份、参赛与交易不受影响。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "mb_gaoxiang",
+      "name": "手杀高翔",
+      "themeId": "mobile",
+      "expectedFile": "mb_gaoxiang.jpg",
+      "expectedPath": "vendor/noname/image/character/mb_gaoxiang.jpg",
+      "resolvedUrl": "/img/mb_gaoxiang.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": true,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "在售主题：抽到该武将时卡面显示“缺图”占位，技能文本、实物身份、参赛与交易不受影响。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "mb_xiahoumao",
+      "name": "手杀夏侯楙",
+      "themeId": "mobile",
+      "expectedFile": "mb_xiahoumao.jpg",
+      "expectedPath": "vendor/noname/image/character/mb_xiahoumao.jpg",
+      "resolvedUrl": "/img/mb_xiahoumao.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": true,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "在售主题：抽到该武将时卡面显示“缺图”占位，技能文本、实物身份、参赛与交易不受影响。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "hanxuan",
+      "name": "韩玄",
+      "themeId": "mobile",
+      "expectedFile": "hanxuan.jpg",
+      "expectedPath": "vendor/noname/image/character/hanxuan.jpg",
+      "resolvedUrl": "/img/hanxuan.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": true,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "在售主题：抽到该武将时卡面显示“缺图”占位，技能文本、实物身份、参赛与交易不受影响。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "yao_yuanshu",
+      "name": "爻袁术",
+      "themeId": "newjiang",
+      "expectedFile": "yao_yuanshu.jpg",
+      "expectedPath": "vendor/noname/image/character/yao_yuanshu.jpg",
+      "resolvedUrl": "/img/yao_yuanshu.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": false,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "停产主题：不出货；只有历史实物或旧档引用时显示占位。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "x_yao_yuanshu",
+      "name": "牢爻袁术",
+      "themeId": "old",
+      "expectedFile": "yao_yuanshu.jpg",
+      "expectedPath": "vendor/noname/image/character/yao_yuanshu.jpg",
+      "resolvedUrl": "/img/yao_yuanshu.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": false,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "停产主题：不出货；只有历史实物或旧档引用时显示占位。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "ol_liufeng",
+      "name": "OL界刘封",
+      "themeId": "onlyOL",
+      "expectedFile": "ol_liufeng.jpg",
+      "expectedPath": "vendor/noname/image/character/ol_liufeng.jpg",
+      "resolvedUrl": "/img/ol_liufeng.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": false,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "停产主题：不出货；只有历史实物或旧档引用时显示占位。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "ol_quancong",
+      "name": "OL界全琮",
+      "themeId": "onlyOL",
+      "expectedFile": "ol_quancong.jpg",
+      "expectedPath": "vendor/noname/image/character/ol_quancong.jpg",
+      "resolvedUrl": "/img/ol_quancong.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": false,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "停产主题：不出货；只有历史实物或旧档引用时显示占位。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "ol_sunxiu",
+      "name": "OL界孙休",
+      "themeId": "onlyOL",
+      "expectedFile": "ol_sunxiu.jpg",
+      "expectedPath": "vendor/noname/image/character/ol_sunxiu.jpg",
+      "resolvedUrl": "/img/ol_sunxiu.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": false,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "停产主题：不出货；只有历史实物或旧档引用时显示占位。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "ol_sb_zhaoyun",
+      "name": "OL谋赵云",
+      "themeId": "onlyOL",
+      "expectedFile": "ol_sb_zhaoyun.jpg",
+      "expectedPath": "vendor/noname/image/character/ol_sb_zhaoyun.jpg",
+      "resolvedUrl": "/img/ol_sb_zhaoyun.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": false,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "停产主题：不出货；只有历史实物或旧档引用时显示占位。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "ol_sb_zhangfei",
+      "name": "OL谋张飞",
+      "themeId": "onlyOL",
+      "expectedFile": "ol_sb_zhangfei.jpg",
+      "expectedPath": "vendor/noname/image/character/ol_sb_zhangfei.jpg",
+      "resolvedUrl": "/img/ol_sb_zhangfei.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": false,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "停产主题：不出货；只有历史实物或旧档引用时显示占位。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "ol_sb_jushou",
+      "name": "OL谋沮授",
+      "themeId": "onlyOL",
+      "expectedFile": "ol_sb_jushou.jpg",
+      "expectedPath": "vendor/noname/image/character/ol_sb_jushou.jpg",
+      "resolvedUrl": "/img/ol_sb_jushou.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": false,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "停产主题：不出货；只有历史实物或旧档引用时显示占位。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "xin_zhangliang",
+      "name": "界张梁",
+      "themeId": "refresh",
+      "expectedFile": "xin_zhangliang.jpg",
+      "expectedPath": "vendor/noname/image/character/xin_zhangliang.jpg",
+      "resolvedUrl": "/img/xin_zhangliang.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": true,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "在售主题：抽到该武将时卡面显示“缺图”占位，技能文本、实物身份、参赛与交易不受影响。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "re_simalang",
+      "name": "界司马朗",
+      "themeId": "refresh",
+      "expectedFile": "re_simalang.jpg",
+      "expectedPath": "vendor/noname/image/character/re_simalang.jpg",
+      "resolvedUrl": "/img/re_simalang.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": true,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "在售主题：抽到该武将时卡面显示“缺图”占位，技能文本、实物身份、参赛与交易不受影响。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "sb_chentai",
+      "name": "谋陈泰",
+      "themeId": "sb",
+      "expectedFile": "sb_chentai.jpg",
+      "expectedPath": "vendor/noname/image/character/sb_chentai.jpg",
+      "resolvedUrl": "/img/sb_chentai.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": true,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "在售主题：抽到该武将时卡面显示“缺图”占位，技能文本、实物身份、参赛与交易不受影响。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "ol_fanyufeng",
+      "name": "OL樊氏",
+      "themeId": "sp",
+      "expectedFile": "ol_fanyufeng.jpg",
+      "expectedPath": "vendor/noname/image/character/ol_fanyufeng.jpg",
+      "resolvedUrl": "/img/ol_fanyufeng.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": true,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "在售主题：抽到该武将时卡面显示“缺图”占位，技能文本、实物身份、参赛与交易不受影响。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "ol_caizhenji",
+      "name": "OL蔡贞姬",
+      "themeId": "sp",
+      "expectedFile": "ol_caizhenji.jpg",
+      "expectedPath": "vendor/noname/image/character/ol_caizhenji.jpg",
+      "resolvedUrl": "/img/ol_caizhenji.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": true,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "在售主题：抽到该武将时卡面显示“缺图”占位，技能文本、实物身份、参赛与交易不受影响。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "ol_tw_zhangji",
+      "name": "张既",
+      "themeId": "sp",
+      "expectedFile": "ol_tw_zhangji.jpg",
+      "expectedPath": "vendor/noname/image/character/ol_tw_zhangji.jpg",
+      "resolvedUrl": "/img/ol_tw_zhangji.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": true,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "在售主题：抽到该武将时卡面显示“缺图”占位，技能文本、实物身份、参赛与交易不受影响。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "star_zhugejin",
+      "name": "星诸葛瑾",
+      "themeId": "sp2",
+      "expectedFile": "star_zhugejin.jpg",
+      "expectedPath": "vendor/noname/image/character/star_zhugejin.jpg",
+      "resolvedUrl": "/img/star_zhugejin.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": true,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "在售主题：抽到该武将时卡面显示“缺图”占位，技能文本、实物身份、参赛与交易不受影响。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "huan_fazheng",
+      "name": "幻法正",
+      "themeId": "tw",
+      "expectedFile": "huan_fazheng.jpg",
+      "expectedPath": "vendor/noname/image/character/huan_fazheng.jpg",
+      "resolvedUrl": "/img/huan_fazheng.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": true,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "在售主题：抽到该武将时卡面显示“缺图”占位，技能文本、实物身份、参赛与交易不受影响。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "cuizhi",
+      "name": "崔芷",
+      "themeId": "xianding",
+      "expectedFile": "cuizhi.jpg",
+      "expectedPath": "vendor/noname/image/character/cuizhi.jpg",
+      "resolvedUrl": "/img/cuizhi.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": false,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "停产主题：不出货；只有历史实物或旧档引用时显示占位。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "luwenyi",
+      "name": "陆文漪",
+      "themeId": "xianding",
+      "expectedFile": "luwenyi.jpg",
+      "expectedPath": "vendor/noname/image/character/luwenyi.jpg",
+      "resolvedUrl": "/img/luwenyi.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": false,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "停产主题：不出货；只有历史实物或旧档引用时显示占位。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "dc_sb_chengpu",
+      "name": "新杀谋程普",
+      "themeId": "xianding",
+      "expectedFile": "dc_sb_chengpu.jpg",
+      "expectedPath": "vendor/noname/image/character/dc_sb_chengpu.jpg",
+      "resolvedUrl": "/img/dc_sb_chengpu.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": false,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "停产主题：不出货；只有历史实物或旧档引用时显示占位。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "liupanxi",
+      "name": "刘盼兮",
+      "themeId": "xianding",
+      "expectedFile": "liupanxi.jpg",
+      "expectedPath": "vendor/noname/image/character/liupanxi.jpg",
+      "resolvedUrl": "/img/liupanxi.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": false,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "停产主题：不出货；只有历史实物或旧档引用时显示占位。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "dengwantang",
+      "name": "邓晚棠",
+      "themeId": "xianding",
+      "expectedFile": "dengwantang.jpg",
+      "expectedPath": "vendor/noname/image/character/dengwantang.jpg",
+      "resolvedUrl": "/img/dengwantang.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": false,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "停产主题：不出货；只有历史实物或旧档引用时显示占位。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "dc_sb_zhonghui",
+      "name": "新杀谋钟会",
+      "themeId": "xianding",
+      "expectedFile": "dc_sb_zhonghui.jpg",
+      "expectedPath": "vendor/noname/image/character/dc_sb_zhonghui.jpg",
+      "resolvedUrl": "/img/dc_sb_zhonghui.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": false,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "停产主题：不出货；只有历史实物或旧档引用时显示占位。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "dc_sb_yangfeng",
+      "name": "新杀谋杨奉",
+      "themeId": "xianding",
+      "expectedFile": "dc_sb_yangfeng.jpg",
+      "expectedPath": "vendor/noname/image/character/dc_sb_yangfeng.jpg",
+      "resolvedUrl": "/img/dc_sb_yangfeng.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": false,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "停产主题：不出货；只有历史实物或旧档引用时显示占位。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "v_guanyinping",
+      "name": "威关银屏",
+      "themeId": "xianding",
+      "expectedFile": "v_guanyinping.jpg",
+      "expectedPath": "vendor/noname/image/character/v_guanyinping.jpg",
+      "resolvedUrl": "/img/v_guanyinping.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": false,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "停产主题：不出货；只有历史实物或旧档引用时显示占位。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "dc_chenzhi",
+      "name": "新杀陈祗",
+      "themeId": "xianding",
+      "expectedFile": "dc_chenzhi.jpg",
+      "expectedPath": "vendor/noname/image/character/dc_chenzhi.jpg",
+      "resolvedUrl": "/img/dc_chenzhi.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": false,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "停产主题：不出货；只有历史实物或旧档引用时显示占位。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "wu_lukang",
+      "name": "武陆抗",
+      "themeId": "xianding",
+      "expectedFile": "wu_lukang.jpg",
+      "expectedPath": "vendor/noname/image/character/wu_lukang.jpg",
+      "resolvedUrl": "/img/wu_lukang.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": false,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "停产主题：不出货；只有历史实物或旧档引用时显示占位。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "zhangjian",
+      "name": "张臶",
+      "themeId": "xianding",
+      "expectedFile": "zhangjian.jpg",
+      "expectedPath": "vendor/noname/image/character/zhangjian.jpg",
+      "resolvedUrl": "/img/zhangjian.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": false,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "停产主题：不出货；只有历史实物或旧档引用时显示占位。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    },
+    {
+      "generalId": "sunhe",
+      "name": "孙和",
+      "themeId": "xianding",
+      "expectedFile": "sunhe.jpg",
+      "expectedPath": "vendor/noname/image/character/sunhe.jpg",
+      "resolvedUrl": "/img/sunhe.jpg",
+      "candidates": [],
+      "decision": "keep-placeholder-no-source",
+      "reason": "仓库内没有同名其他扩展、没有同武将前缀文件、旧图目录也没有；保持缺图占位。",
+      "activeTheme": false,
+      "provenance": {
+        "localSourcesChecked": [
+          "vendor/noname/image",
+          "assets/character",
+          "D:/GameDev/NonameCardShop-migration-original",
+          "D:/GameDev/NonameCardShop-Public",
+          "D:/GameDev/StableBackups（全部本机快照）"
+        ],
+        "found": false,
+        "conclusion": "本机没有可核实的同武将图源；上游仓库以外的第三方图源未核对授权，不采用。"
+      },
+      "handling": "keep-placeholder",
+      "playerImpact": "停产主题：不出货；只有历史实物或旧档引用时显示占位。",
+      "nextAction": "取得带来源与授权记录的上游图源后，按 generalId + image 文件名补入 vendor/noname/image/character，再跑 npm run verify:engine 与本审计复核。不得用别将图片顶替、不得删卡或改 catalog ID 消除 404。"
+    }
+  ]
+}

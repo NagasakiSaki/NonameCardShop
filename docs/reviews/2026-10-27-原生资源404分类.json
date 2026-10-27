@@ -1,0 +1,626 @@
+{
+  "version": 1,
+  "generatedAt": "2026-10-27T02:07:37.250Z",
+  "evidenceType": "natural-native-run-resource-capture",
+  "note": "记录原生挂载与短时对局期间的资源错误；不代表全武将全技能自然对局已覆盖。ERR_ABORTED 归为 aborted（拆帧中断），不算缺失资源。",
+  "scenarios": [
+    "landlord",
+    "versus"
+  ],
+  "engineDialogs": [
+    {
+      "type": "confirm",
+      "message": "①无名杀是一款基于GPLv3协议的开源软件"
+    }
+  ],
+  "totals": {
+    "distinct": 40,
+    "blocking": 0,
+    "optional": 1,
+    "aborted": 39,
+    "unknown": 0,
+    "occurrences": 42
+  },
+  "rows": [
+    {
+      "path": "engine:/audio/card/male/tao.mp3",
+      "url": "http://127.0.0.1:55206/audio/card/male/tao.mp3",
+      "status": 404,
+      "resourceType": "media",
+      "method": "GET",
+      "scenario": "landlord",
+      "classification": "optional",
+      "phase": "play",
+      "count": 3,
+      "scenarios": [
+        "landlord",
+        "versus"
+      ]
+    },
+    {
+      "path": "engine:/card/extra.js",
+      "url": "http://127.0.0.1:55206/card/extra.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/card/guozhan.js",
+      "url": "http://127.0.0.1:55206/card/guozhan.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/card/huodong.js",
+      "url": "http://127.0.0.1:55206/card/huodong.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/card/sp.js",
+      "url": "http://127.0.0.1:55206/card/sp.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/card/standard.js",
+      "url": "http://127.0.0.1:55206/card/standard.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/card/xianxia.js",
+      "url": "http://127.0.0.1:55206/card/xianxia.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/card/yingbian.js",
+      "url": "http://127.0.0.1:55206/card/yingbian.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/card/yongjian.js",
+      "url": "http://127.0.0.1:55206/card/yongjian.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/card/zhulu.js",
+      "url": "http://127.0.0.1:55206/card/zhulu.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/character/bingshi.js",
+      "url": "http://127.0.0.1:55206/character/bingshi.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/character/clan.js",
+      "url": "http://127.0.0.1:55206/character/clan.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/character/collab.js",
+      "url": "http://127.0.0.1:55206/character/collab.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/character/diy.js",
+      "url": "http://127.0.0.1:55206/character/diy.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/character/extra.js",
+      "url": "http://127.0.0.1:55206/character/extra.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/character/huicui.js",
+      "url": "http://127.0.0.1:55206/character/huicui.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/character/jsrg.js",
+      "url": "http://127.0.0.1:55206/character/jsrg.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/character/key.js",
+      "url": "http://127.0.0.1:55206/character/key.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/character/mobile.js",
+      "url": "http://127.0.0.1:55206/character/mobile.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/character/newjiang.js",
+      "url": "http://127.0.0.1:55206/character/newjiang.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/character/offline.js",
+      "url": "http://127.0.0.1:55206/character/offline.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/character/old.js",
+      "url": "http://127.0.0.1:55206/character/old.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/character/onlyOL.js",
+      "url": "http://127.0.0.1:55206/character/onlyOL.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/character/perfectPairs.js",
+      "url": "http://127.0.0.1:55206/character/perfectPairs.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/character/rank.js",
+      "url": "http://127.0.0.1:55206/character/rank.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/character/refresh.js",
+      "url": "http://127.0.0.1:55206/character/refresh.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/character/replace.js",
+      "url": "http://127.0.0.1:55206/character/replace.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/character/sb.js",
+      "url": "http://127.0.0.1:55206/character/sb.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/character/shenhua.js",
+      "url": "http://127.0.0.1:55206/character/shenhua.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/character/shiji.js",
+      "url": "http://127.0.0.1:55206/character/shiji.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/character/sixiang.js",
+      "url": "http://127.0.0.1:55206/character/sixiang.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/character/sp.js",
+      "url": "http://127.0.0.1:55206/character/sp.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/character/sp2.js",
+      "url": "http://127.0.0.1:55206/character/sp2.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/character/standard.js",
+      "url": "http://127.0.0.1:55206/character/standard.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/character/sxrm.js",
+      "url": "http://127.0.0.1:55206/character/sxrm.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/character/tw.js",
+      "url": "http://127.0.0.1:55206/character/tw.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/character/xianding.js",
+      "url": "http://127.0.0.1:55206/character/xianding.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/character/yijiang.js",
+      "url": "http://127.0.0.1:55206/character/yijiang.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/character/yingbian.js",
+      "url": "http://127.0.0.1:55206/character/yingbian.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    },
+    {
+      "path": "engine:/mode/doudizhu.js",
+      "url": "http://127.0.0.1:55206/mode/doudizhu.js",
+      "status": 0,
+      "resourceType": "script",
+      "method": "GET",
+      "scenario": "landlord",
+      "failure": "net::ERR_ABORTED",
+      "classification": "aborted",
+      "phase": "load",
+      "count": 1,
+      "scenarios": [
+        "landlord"
+      ]
+    }
+  ]
+}
