@@ -47,14 +47,22 @@ try{
     for(let i=0;i<15;i+=1){scroller.scrollTop=i%2===0?scroller.scrollHeight:0;await new Promise(r=>requestAnimationFrame(r));}
     scroller.scrollTop=scroller.scrollHeight;
   });
-  await page.waitForFunction(()=>{
-    const scroller=document.querySelector('.facility-window:not([hidden]) .window__body');
-    const total=Number(document.querySelector('[data-card-grid]')?.getAttribute('data-total-rows')||0);
-    const last=document.querySelector('[data-card-grid] [data-card][data-row-index="'+(total-1)+'"]');
-    if(!last)return false;
-    const box=last.getBoundingClientRect(),view=scroller.getBoundingClientRect();
-    return box.bottom<=view.bottom+2&&box.top>=view.top-2;
-  },null,{timeout:25000});
+  let reached=false;
+  for(let attempt=0;attempt<160&&!reached;attempt+=1){
+    reached=await page.evaluate(async()=>{
+      const scroller=document.querySelector('.facility-window:not([hidden]) .window__body');
+      const total=Number(document.querySelector('[data-card-grid]')?.getAttribute('data-total-rows')||0);
+      if(!scroller||!total)return false;
+      scroller.scrollTop=scroller.scrollHeight;
+      await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+      const last=document.querySelector('[data-card-grid] [data-card][data-row-index="'+(total-1)+'"]');
+      if(!last)return false;
+      const box=last.getBoundingClientRect(),view=scroller.getBoundingClientRect();
+      return box.bottom<=view.bottom+2&&box.top>=view.top-2;
+    });
+    if(!reached)await page.waitForTimeout(20);
+  }
+  assert.ok(reached,'快速滚动后应能到达最后一条逻辑数据');
   assert.equal(await renderedRows(),1000,'到达末行后应已补全全部行');
 
   // 3) 跨批次选择：点中最后一行，详情面板必须跟着它
@@ -88,16 +96,104 @@ try{
   await tiles.first().click();
   assert.equal(await tiles.first().getAttribute('aria-pressed'),'true','清空搜索后首行仍可点');
 
-  // 6) 缩放：视口变窄（等效放大）后仍能滚到末行，首行仍可点
+  // 6) 普通滚轮跨批边界：每次追加不超过一批，不能在一次回调里补齐全表
+  // 重新加载页面拿到全新的组件状态（窗口复用会保留已渲染行数，这是刻意的）。
+  await page.reload();
+  await page.waitForFunction(()=>window.__cardShopReady===true);
+  await page.evaluate(()=>__cardShopApp.openPanel('market',{tab:'collection'}));
+  await tiles.first().waitFor();
+  const freshBatch=await renderedRows();
+  assert.equal(freshBatch,120,'新列表应只有首批');
+  await tiles.first().hover();
+  const wheelSteps=[];
+  for(let i=0;i<5;i+=1){
+    const before=await renderedRows();
+    await page.mouse.wheel(0,2600);
+    await page.waitForTimeout(140);
+    const after=await renderedRows();
+    wheelSteps.push(after-before);
+    assert.ok(after-before<=120,`一次滚轮最多追加一批，实际 +${after-before}`);
+  }
+  assert.ok(wheelSteps.some(delta=>delta>0),'普通滚轮跨过首批边界时应追加下一批');
+  const afterWheel=await renderedRows();
+  assert.ok(afterWheel<1000,`普通滚轮不应把整表一次补完，实际 ${afterWheel}`);
+
+  // 7) 排队回调失效：滚动回调还在队列里时立刻筛选，旧网格不能再被追加，也不能污染共享状态
+  const stale=await page.evaluate(async()=>{
+    const scroller=document.querySelector('.facility-window:not([hidden]) .window__body');
+    const oldGrid=document.querySelector('[data-card-grid]');
+    const oldRows=Number(oldGrid.getAttribute('data-rendered-rows'));
+    // 先制造一次滚动（同步派发 scroll 让监听器排队 rAF），紧接着在同一个任务里改筛选
+    scroller.scrollTop=scroller.scrollHeight;
+    scroller.dispatchEvent(new Event('scroll'));
+    const input=document.querySelector('input[aria-label="搜索单卡"]');
+    input.value='曹';input.dispatchEvent(new Event('input',{bubbles:true}));
+    await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+    await new Promise(r=>setTimeout(r,120));
+    const newGrid=document.querySelector('[data-card-grid]');
+    return {
+      oldRows,
+      oldConnected:oldGrid.isConnected,
+      oldRowsAfter:Number(oldGrid.getAttribute('data-rendered-rows')),
+      newRows:Number(newGrid.getAttribute('data-rendered-rows')),
+      newTotal:Number(newGrid.getAttribute('data-total-rows')),
+      sameGrid:oldGrid===newGrid,
+    };
+  });
+  assert.equal(stale.oldConnected,false,'筛选后旧网格应已脱离文档');
+  assert.equal(stale.sameGrid,false,'筛选后应换成新网格');
+  assert.equal(stale.oldRowsAfter,stale.oldRows,`旧网格不能再被追加：${stale.oldRows} → ${stale.oldRowsAfter}`);
+  assert.ok(stale.newRows<=120,`新网格只应渲染自己的首批，实际 ${stale.newRows}`);
+  assert.ok(stale.newTotal>0&&stale.newTotal<1000,`筛选后的逻辑行数应小于全部，实际 ${stale.newTotal}`);
+  // 旧回调若写入共享的 chunkRows，清空筛选后新网格会被“恢复”成整表；这里必须回到首批。
+  await page.evaluate(()=>{const box=document.querySelector('.facility-window:not([hidden]) .window__body');if(box)box.scrollTop=0;});
+  await page.evaluate(()=>{
+    const input=document.querySelector('input[aria-label="搜索单卡"]');
+    input.value='';input.dispatchEvent(new Event('input',{bubbles:true}));
+  });
+  await page.waitForFunction(()=>Number(document.querySelector('[data-card-grid]')?.getAttribute('data-total-rows')||0)===1000);
+  await page.waitForTimeout(150);
+  const afterClear=await renderedRows();
+  assert.ok(afterClear<1000,`清空筛选后不应被旧回调污染成整表，实际 ${afterClear}`);
+  assert.ok(afterClear<=afterWheel*2,`清空筛选后最多再追加一批（批次按已渲染量翻倍），实际 ${afterClear}（筛选前 ${afterWheel}）`);
+
+  // 8) 排队回调失效（切页签）：同样的保护对页签切换生效
+  const staleTab=await page.evaluate(async()=>{
+    const scroller=document.querySelector('.facility-window:not([hidden]) .window__body');
+    const oldGrid=document.querySelector('[data-card-grid]');
+    const oldRows=Number(oldGrid.getAttribute('data-rendered-rows'));
+    scroller.scrollTop=scroller.scrollHeight;
+    scroller.dispatchEvent(new Event('scroll'));
+    const tab=[...document.querySelectorAll('.pbc-toolbar button')].find(node=>(node.textContent||'').trim()==='市场买入');
+    tab.click();
+    await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+    await new Promise(r=>setTimeout(r,120));
+    const newGrid=document.querySelector('[data-card-grid]');
+    return {oldRows,oldRowsAfter:Number(oldGrid.getAttribute('data-rendered-rows')),oldConnected:oldGrid.isConnected,newRows:newGrid?Number(newGrid.getAttribute('data-rendered-rows')):0};
+  });
+  assert.equal(staleTab.oldConnected,false,'切页签后旧网格应已脱离文档');
+  assert.equal(staleTab.oldRowsAfter,staleTab.oldRows,`切页签后旧网格不能再被追加：${staleTab.oldRows} → ${staleTab.oldRowsAfter}`);
+  await page.evaluate(()=>{
+    const tab=[...document.querySelectorAll('.pbc-toolbar button')].find(node=>(node.textContent||'').trim()==='收藏');
+    if(tab)tab.click();
+  });
+  await tiles.first().waitFor();
+  // 切页签不会清空搜索词，后面的缩放测试要的是完整列表。
+  await search.fill('');
+  await page.waitForFunction(()=>Number(document.querySelector('[data-card-grid]')?.getAttribute('data-total-rows')||0)===1000);
+
+  // 9) 缩放：视口变窄（等效放大）后仍能滚到末行，首行仍可点
   const beforeWidth=await tiles.first().evaluate(n=>Math.round(n.getBoundingClientRect().width));
   await page.setViewportSize({width:1024,height:720});
   await page.waitForTimeout(250);
   const afterWidth=await tiles.first().evaluate(n=>Math.round(n.getBoundingClientRect().width));
   assert.notEqual(beforeWidth,afterWidth,'视口变窄后列宽应变化');
   await page.evaluate(async()=>{
-    const box=document.querySelector('.facility-window:not([hidden]) .window__body');
     const deadline=performance.now()+20000;
     while(performance.now()<deadline){
+      // 改视口可能重建窗口，每轮重新取滚动体，避免对着已脱离的节点设置 scrollTop。
+      const box=document.querySelector('.facility-window:not([hidden]) .window__body');
+      if(!box){await new Promise(r=>requestAnimationFrame(r));continue;}
       box.scrollTop=box.scrollHeight;
       const total=Number(document.querySelector('[data-card-grid]')?.getAttribute('data-total-rows')||0);
       const last=document.querySelector('[data-card-grid] [data-card][data-row-index="'+(total-1)+'"]');

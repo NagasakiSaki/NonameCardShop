@@ -38,17 +38,24 @@ try{
   assert.equal(new Set(keys).size,keys.length,'首批内不能有重复行');
   const firstKey=keys[0];assert.equal(cards.find(c=>c.cardKey===firstKey).globalScore,Math.max(...cards.map(c=>c.globalScore)));
   // 滚到底必须能看到并点中**最后一条逻辑数据**（data-row-index = total-1），不能只看 DOM 最后一行。
+  // 每帧只追加一批，所以这里要“设置滚动 → 等两帧 → 再检查”，反复推进直到末行出现。
   const body=page.locator('.facility-window:visible .window__body');
-  await page.waitForFunction(async()=>{
-    const scroller=document.querySelector('.facility-window:not([hidden]) .window__body');
-    const total=Number(document.querySelector('[data-card-grid]')?.getAttribute('data-total-rows')||0);
-    if(!scroller||!total)return false;
-    scroller.scrollTop=scroller.scrollHeight;
-    const last=document.querySelector('[data-card-grid] [data-card][data-row-index="'+(total-1)+'"]');
-    if(!last)return false;
-    const box=last.getBoundingClientRect(),view=scroller.getBoundingClientRect();
-    return box.bottom<=view.bottom+2&&box.top>=view.top-2;
-  },null,{timeout:20000});
+  let reached=false;
+  for(let attempt=0;attempt<120&&!reached;attempt+=1){
+    reached=await page.evaluate(async()=>{
+      const scroller=document.querySelector('.facility-window:not([hidden]) .window__body');
+      const total=Number(document.querySelector('[data-card-grid]')?.getAttribute('data-total-rows')||0);
+      if(!scroller||!total)return false;
+      scroller.scrollTop=scroller.scrollHeight;
+      await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+      const last=document.querySelector('[data-card-grid] [data-card][data-row-index="'+(total-1)+'"]');
+      if(!last)return false;
+      const box=last.getBoundingClientRect(),view=scroller.getBoundingClientRect();
+      return box.bottom<=view.bottom+2&&box.top>=view.top-2;
+    });
+    if(!reached)await page.waitForTimeout(20);
+  }
+  assert.ok(reached,'滚到底应能到达最后一条逻辑数据');
   // 世界刷新会重绘，断言用轮询而不是单次计数，避免在重绘间隙取样。
   await page.waitForFunction(()=>Boolean(document.querySelector('[data-card-grid] [data-card][data-row-index="999"]')),null,{timeout:15000});
   const lastTile=page.locator('[data-card-grid] [data-card][data-row-index="999"]');

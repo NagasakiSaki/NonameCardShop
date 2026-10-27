@@ -150,6 +150,7 @@ export const STYLES = String.raw`
 /* ── 收藏 / 市场 ─────────────────────────────── */
 .pbc-market { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 14px; align-items: start; }
 .pbc-catalog__label { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; color: var(--pbc-muted); font-size: 13px; }
+.pbc-card-grid-stack { display: flex; flex-direction: column; gap: 10px; }
 .pbc-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(158px, 1fr)); gap: 10px; }
 .pbc-card-tile { display: flex; flex-direction: column; gap: 6px; padding: 8px; text-align: left; background: var(--pbc-panel); border: 1px solid var(--pbc-line); border-radius: 8px; cursor: pointer; min-width: 0; }
 .pbc-card-tile:hover { border-color: var(--pbc-gold); }

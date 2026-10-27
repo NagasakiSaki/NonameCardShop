@@ -222,8 +222,15 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
 
     // 分批渲染：一次只建一屏多的行，滚动接近底部再追加下一批。
     // 不做定高虚拟化（卡名可能换行、缩放会改列数），因此保留原生布局与连续滚动。
+    // 关键约束：
+    //   1) 每帧最多追加一批，绝不在一个回调里同步补齐全表；
+    //   2) 追加时不改 scrollTop，当前可见卡与滚动位置保持不变；
+    //   3) 每次重绘递增代次，旧网格排队的 rAF 直接失效，不能向脱离页面的旧网格追加、
+    //      也不能写共享的 state.chunkRows。
     const CHUNK_ROWS = 120;
+    const PREFETCH_PX = 600;
     let chunkCleanup = null;
+    let gridGeneration = 0;
     function scrollParent(node) {
       let current = node;
       while (current && current !== document.body) {
@@ -235,6 +242,7 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
     }
     function paintGridArea(rows) {
       chunkCleanup?.(); chunkCleanup = null;
+      const generation = ++gridGeneration;
       const area = el('div');
       const page = pageRows(rows);
       const pages = Math.max(1, Math.ceil(rows.length / pageSize()));
@@ -242,45 +250,61 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
         el('span', { text: '共 ' + rows.length + ' 条 · ' + tabCaption() }),
         state.tab === 'collection' ? chip('印刷稀有度与全局强度分开显示') : null,
       ]);
-      const grid = el('div', { class: 'pbc-card-grid', 'data-card-grid': 'true', 'data-total-rows': String(page.length), 'data-rendered-rows': '0' });
+      // 外层是纵向堆叠容器，每个批次是独立的一张网格：
+      // 追加新批次只布局它自己，不会把已渲染的几千行整表重排。
+      const grid = el('div', { class: 'pbc-card-grid-stack', 'data-card-grid': 'true', 'data-total-rows': String(page.length), 'data-rendered-rows': '0' });
       if (!rows.length) grid.append(emptyState(emptyText(), emptyHint()));
       else {
         let rendered = 0;
-        const restore = Math.min(page.length, Math.max(CHUNK_ROWS, state.chunkRows || 0));
-        const appendChunk = () => {
+        let rafId = 0;
+        let columns = 1;
+        const measureColumns = () => {
+          const first = grid.querySelector('.pbc-card-grid');
+          if (!first) return 1;
+          const template = getComputedStyle(first).gridTemplateColumns;
+          return Math.max(1, template.split(' ').filter(part => part.trim()).length);
+        };
+        // 初次渲染时 grid 还没挂到文档上，同步恢复阶段允许未连接；异步回调必须要求已连接。
+        const isCurrent = (allowDetached = false) => !disposed && generation === gridGeneration && (allowDetached || grid.isConnected);
+        const appendChunk = (allowDetached = false) => {
+          if (!isCurrent(allowDetached) || rendered >= page.length) return false;
+          // 首批保持小（先让玩家能操作）；后续批次按列数取整并翻倍，避免批次边界出现半行。
+          const rawSize = rendered === 0 ? CHUNK_ROWS : Math.min(page.length - rendered, rendered);
+          const size = rendered === 0 ? rawSize : Math.max(columns, Math.ceil(rawSize / columns) * columns);
+          const end = Math.min(page.length, rendered + size);
+          const chunk = el('div', { class: 'pbc-card-grid' });
           const fragment = document.createDocumentFragment();
-          for (const row of page.slice(rendered, rendered + CHUNK_ROWS)) { fragment.append(cardTile(row, rendered)); rendered += 1; }
-          grid.append(fragment);
+          for (let index = rendered; index < end; index += 1) fragment.append(cardTile(page[index], index));
+          chunk.append(fragment);
+          rendered = end;
+          grid.append(chunk);
+          if (columns === 1 && grid.isConnected) columns = measureColumns();
           grid.setAttribute('data-rendered-rows', String(rendered));
           state.chunkRows = rendered;
+          return true;
         };
         // 世界刷新会整体重绘；恢复用户已经滚到的位置，不能把他扔回第一批。
-        while (rendered < restore) appendChunk();
+        const restore = Math.min(page.length, Math.max(CHUNK_ROWS, state.chunkRows || 0));
+        while (rendered < restore && appendChunk(true)) { /* 只恢复到重绘前已有的行数，不增长 */ }
         const scroller = scrollParent(body);
-        // 用户在硬底部时贴住底部继续补，直到真正渲染到最后一行；
-        // 否则一次跳到底只会补一批，内容变高后又不在底部，永远到不了末行。
-        const fillToBottom = () => {
-          let guard = 0;
-          while (rendered < page.length && guard < 500) {
-            const atBottom = scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 8;
-            if (!atBottom) break;
+        const nearBottom = () => scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - PREFETCH_PX;
+        const schedule = () => {
+          if (rafId || !isCurrent() || rendered >= page.length) return;
+          rafId = requestAnimationFrame(() => {
+            rafId = 0;
+            if (!isCurrent() || rendered >= page.length) return;
+            if (!nearBottom()) return;
             appendChunk();
-            scroller.scrollTop = scroller.scrollHeight;
-            guard += 1;
-          }
-        };
-        let scheduled = false;
-        const onScroll = () => {
-          if (scheduled || rendered >= page.length) return;
-          scheduled = true;
-          requestAnimationFrame(() => {
-            scheduled = false;
-            if (disposed || rendered >= page.length) return;
-            if (scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 600) fillToBottom();
+            if (nearBottom() && rendered < page.length) schedule();
           });
         };
+        const onScroll = () => { if (columns === 1 && grid.isConnected) columns = measureColumns(); if (nearBottom()) schedule(); };
         scroller.addEventListener('scroll', onScroll, { passive: true });
-        chunkCleanup = () => scroller.removeEventListener('scroll', onScroll);
+        chunkCleanup = () => {
+          scroller.removeEventListener('scroll', onScroll);
+          if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
+          if (generation === gridGeneration) gridGeneration += 1;
+        };
       }
       area.append(label);
       if (pages > 1) {
