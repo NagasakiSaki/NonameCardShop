@@ -35,7 +35,10 @@ try{
         await page.evaluate(({id,action,seatId})=>nativeHarness.mount.control({requestId:id,action,seatId}),{id,action,seatId});
         await page.waitForFunction(id=>nativeHarness.events.some(e=>e.requestId===id),id);
         await frame.evaluate(async()=>{const {game,lib,ui,_status}=await import('/noname.js');lib.config.game_speed='vvfast';lib.config.duration=20;if(!_status.auto)ui.click.auto('forced');game.resume();});
-        await page.waitForFunction(id=>nativeHarness.events.some(e=>e.requestId===id&&e.type==='controlChanged'),id,{timeout:25000});
+        // 接管在下个回合边界生效：引擎在 vvfast 下通常 1~3 秒，但整组回归时机器被前序
+        // 浏览器拖慢过，25 秒会偶发超时（2026-10-27 记录一次）。这里只放宽等待上限，
+        // 不放宽断言：仍然必须真的收到 controlChanged 才算通过。
+        await page.waitForFunction(id=>nativeHarness.events.some(e=>e.requestId===id&&e.type==='controlChanged'),id,{timeout:60000});
       }
       await switchControl('takeover',ally.seatId);assert.equal(await frame.evaluate(async()=>(await import('/noname.js')).game.me._shopSeatId),ally.seatId);
       await switchControl('release');assert.equal(await frame.evaluate(async()=>{const {game}=await import('/noname.js');return game.me._shopSeatId===game.shopNative.plan.controlledSeatId;}),true);
