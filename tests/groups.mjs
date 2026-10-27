@@ -99,6 +99,7 @@ export const groups={
     "tests/package-closure.mjs",
     "tests/contract-samples.mjs",
     "tests/profile-registry.mjs",
+    "tests/npc-day-loop.mjs",
     "tests/catalog-cache.mjs",
     "tests/operations-v7.mjs",
     "tests/operations-v7-mount.mjs",
