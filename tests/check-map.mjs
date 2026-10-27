@@ -11,7 +11,7 @@ export const taskChecks={
   'OPT-09':{files:['tests/three-formats.mjs','tests/native-modes-unit.mjs','tests/native-modes-browser.mjs','tests/native-modes-series.mjs','tests/native-legacy-regression.mjs'],evidence:['docs/reviews/2026-10-27-三模式边界覆盖对照.md']},
   'OPT-10':{files:['tests/npc-day-loop.mjs','tests/customer-trash.mjs','tests/customer-visits.mjs','tests/shop-close-table-route.mjs'],evidence:[]},
   'OPT-11':{files:['tests/pack-roster-browser.mjs','tests/trade-workspace-scroll.mjs','tests/workspace-short-screen.mjs','tests/scroll-and-album-browser.mjs','tests/skill-texts.mjs','tests/skill-texts-browser.mjs'],evidence:[]},
-  'OPT-12':{files:[],evidence:['docs/reviews/2026-10-27-阶段C-性能基线.md'],commands:['npm run perf:baseline','npm run perf:browser'],manual:'保留原始 JSON、相同夹具/环境/终点；测量完成不等于性能达标。'},
+  'OPT-12':{files:[],evidence:['docs/reviews/2026-10-27-阶段C-性能基线.md','tools/perf/README.md'],commands:['npm run perf:baseline','npm run perf:browser','npm run perf:soak','npm run perf:windows'],manual:'保留原始 JSON、相同夹具/环境/终点；区分真实IDB、内存和并行功能长测，完成测量不等于性能达标。'},
   'OPT-13':{files:['tests/eligibility-query.mjs','tests/trade-workspace-scroll.mjs','tests/workspace-virtualization.mjs','tests/catalog-cache.mjs'],evidence:['docs/reviews/2026-10-27-阶段C接手与查询优化.md'],commands:['npm run perf:eligible','npm run perf:browser']},
   'OPT-14':{files:['tests/day-starts.mjs','tests/storage-archives-browser.mjs','tests/narrative-runtime.mjs','tests/three-formats.mjs'],evidence:['docs/reviews/2026-10-27-阶段C日档策略拆分.md']},
   'OPT-15':{files:['tests/policy-preservation.mjs','tests/ideal-yield-and-editions.mjs','tests/catalog-cache.mjs'],evidence:['docs/architecture/策略来源与失效链.md'],commands:['npm run audit:policies']},

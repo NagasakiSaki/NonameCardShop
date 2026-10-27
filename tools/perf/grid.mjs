@@ -13,6 +13,7 @@ import {sha256} from '../lib/file-inventory.mjs';
 import {argument} from '../lib/candidate-output.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..'),args=process.argv.slice(2);
 const count=Number(argument(args,'cards',1000)),rounds=Number(argument(args,'rounds',3)),baseline=argument(args,'baseline-ref',null),output=argument(args,'json',null);
+if(args.some(a=>a==='--render-mode'||a.startsWith('--render-mode=')))throw Error('v5 不再支持 render-mode；请用 --baseline-ref 提交SHA，或在对应历史版本运行v4。');
 if(!Number.isSafeInteger(count)||count<1||!Number.isSafeInteger(rounds)||rounds<1)throw Error('cards/rounds 必须为正整数');
 if(output&&fs.existsSync(path.resolve(root,output)))throw Error('报告已存在，拒绝改写旧证据');
 if(baseline&&!/^[a-f0-9]{7,40}$/i.test(baseline))throw Error('baseline-ref 必须是明确的提交 SHA');

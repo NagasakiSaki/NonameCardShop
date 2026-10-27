@@ -1,0 +1,39 @@
+{
+  "selection": "all",
+  "requirements": null,
+  "rerunFrom": "test-results/2026-10-27T07-42-47-727Z-27432/summary.json",
+  "output": "D:\\GameDev\\NonameCardShop\\test-results\\2026-10-27T07-50-50-626Z-22072",
+  "startedAt": "2026-10-27T07:50:50.628Z",
+  "results": [
+    {
+      "group": "frontend",
+      "file": "tests/scroll-and-album-browser.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 15.3,
+      "tasks": [
+        "OPT-11"
+      ],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/skill-texts-browser.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 3.5,
+      "tasks": [
+        "OPT-11"
+      ],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    }
+  ],
+  "finishedAt": "2026-10-27T07:51:09.435Z",
+  "passed": true
+}
