@@ -1,0 +1,113 @@
+{
+  "version": 5,
+  "generatedAt": "2026-10-27T06:23:47.731Z",
+  "cards": 5000,
+  "mode": "historical-collection-only",
+  "baselineRef": "3747a6ba",
+  "node": "v24.15.0",
+  "cpu": "AMD Ryzen 7 8845H w/ Radeon 780M Graphics",
+  "logicalCpus": 16,
+  "collectionHash": "3834658f1177b03199436e41e86bcf9d8bd85b4d6febec085a8c5ed367f041e1",
+  "inputs": {
+    "data/cards.json": "932981bc8013a92081c5b1915e9e60e1ecd045a187a9e2e41da970fd2c22c26b",
+    "data/backend-rules.json": "fa7f10c7bc7b1d87b21013125b7e4e93257efdb2a6d01f403c49c7f8127eb286",
+    "frontend-next/components/workspace/styles.mjs": "43f38d5b0eefeb061741f3f92149e8dc504f913411fa9ef789ce7495974a157f",
+    "frontend-next/components/workspace/virtual-grid.mjs": "465f7a5502009d9d00dd9486127be404bac997f6121a1ef8ad3eb7f74080d039",
+    "frontend/ui/scroll-state.mjs": "14c1a8fb6effffca6ccea211e4ec7ea8ea7bb9895caeea15a8e1de9c65a4bcab"
+  },
+  "rounds": [
+    {
+      "firstInteractiveMs": 257.80000000074506,
+      "lastReachableMs": 2187.800000000745,
+      "initialRows": 120,
+      "lastRows": 2563,
+      "total": 2563,
+      "scroll": {
+        "before": {
+          "top": 0,
+          "key": "0",
+          "rows": 2563,
+          "total": 2563
+        },
+        "after": {
+          "top": 3462,
+          "key": "48",
+          "rows": 2563,
+          "total": 2563
+        },
+        "frames": 6,
+        "intervals": [
+          0.30000000298059604,
+          16.599999999999454,
+          16.800000000000182,
+          33.19999999999982,
+          66.80000000000018,
+          883.1999999999998
+        ],
+        "peakRows": 2563,
+        "longtasks": [
+          66,
+          881,
+          65,
+          800
+        ],
+        "longtaskMs": 1812
+      },
+      "searchMs": 41.5,
+      "focusKept": true,
+      "domAfterClose": 128
+    },
+    {
+      "firstInteractiveMs": 219.60000000149012,
+      "lastReachableMs": 2208.60000000149,
+      "initialRows": 120,
+      "lastRows": 2563,
+      "total": 2563,
+      "scroll": {
+        "before": {
+          "top": 0,
+          "key": "0",
+          "rows": 2563,
+          "total": 2563
+        },
+        "after": {
+          "top": 2384,
+          "key": "32",
+          "rows": 2563,
+          "total": 2563
+        },
+        "frames": 8,
+        "intervals": [
+          -10.100000000000364,
+          16.600000000000364,
+          16.699999999999818,
+          33.400000000000546,
+          50,
+          749.8999999999996,
+          33.399999999999636,
+          816.6000000000004
+        ],
+        "peakRows": 2563,
+        "longtasks": [
+          52,
+          733,
+          810,
+          54,
+          802
+        ],
+        "longtaskMs": 2451
+      },
+      "searchMs": 38.5,
+      "focusKept": true,
+      "domAfterClose": 128
+    }
+  ],
+  "limitations": [
+    "只替换基线 collection 模块，其余使用当前代码；不是历史整版重放",
+    "短时桌面样本，不是低端机/长时 FPS 保证",
+    "比较相同逻辑行的可达性；虚拟化不要求全量 DOM"
+  ],
+  "browser": "156.0.8078.4",
+  "errors": [],
+  "passed": true
+}
