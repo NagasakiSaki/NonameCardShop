@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-10-27T04:10:49.433Z",
+  "generatedAt": "2026-10-27T04:49:59.883Z",
   "cards": 5000,
-  "rounds": 5,
+  "rounds": 4,
   "environment": {
     "node": "v22.22.2",
     "platform": "win32/x64",
@@ -17,15 +17,15 @@
   },
   "scenarios": {
     "boot": {
-      "coldEmptyMs": 917,
+      "coldEmptyMs": 985,
       "coldEmptyState": {
         "dom": 83,
-        "heap": 62.3
+        "heap": 61.6
       },
-      "warmStockedMs": 684,
+      "warmStockedMs": 693,
       "warmStockedState": {
         "dom": 85,
-        "heap": 144.5,
+        "heap": 163.4,
         "listeners": {
           "add": 99,
           "remove": 0,
@@ -73,51 +73,51 @@
       }
     },
     "windows": {
-      "rounds": 5,
+      "rounds": 4,
       "openMs": {
-        "count": 5,
-        "mean": 210.8,
-        "p50": 191,
-        "p95": 206,
-        "max": 306
+        "count": 4,
+        "mean": 210.5,
+        "p50": 163,
+        "p95": 209,
+        "max": 308
       },
       "closeMs": {
-        "count": 5,
-        "mean": 12.6,
-        "p50": 11,
-        "p95": 13,
-        "max": 24
+        "count": 4,
+        "mean": 10.25,
+        "p50": 5,
+        "p95": 14,
+        "max": 18
       },
       "domOpen": {
-        "count": 5,
-        "mean": 1624.6,
-        "p50": 1607,
-        "p95": 1651,
-        "max": 1651
+        "count": 4,
+        "mean": 1619,
+        "p50": 1608,
+        "p95": 1608,
+        "max": 1652
       },
       "domClosed": {
-        "count": 5,
-        "mean": 102.6,
+        "count": 4,
+        "mean": 96,
         "p50": 85,
-        "p95": 129,
+        "p95": 85,
         "max": 129
       },
       "heapOpen": {
-        "count": 5,
-        "mean": 94.7,
-        "p50": 93.7,
-        "p95": 99.9,
-        "max": 111.3
+        "count": 4,
+        "mean": 91.98,
+        "p50": 88.4,
+        "p95": 92.6,
+        "max": 108.2
       },
       "heapClosed": {
-        "count": 5,
-        "mean": 90.12,
-        "p50": 88.9,
-        "p95": 94.9,
-        "max": 100.2
+        "count": 4,
+        "mean": 92.28,
+        "p50": 88.8,
+        "p95": 92.8,
+        "max": 108.5
       },
       "tiles": {
-        "count": 5,
+        "count": 4,
         "mean": 120,
         "p50": 120,
         "p95": 120,
@@ -127,10 +127,9 @@
         374,
         649,
         924,
-        1207,
-        1482
+        1207
       ],
-      "listenerGrowth": 1108,
+      "listenerGrowth": 833,
       "stackLeak": false,
       "listenersBefore": {
         "window": 30,
@@ -143,10 +142,10 @@
       "note": "netAddRemoveCalls 是 add/remove 调用次数差，节点销毁时监听器随节点回收、不会调用 remove，所以它不能单独证明泄漏；真正的泄漏看 listenersBefore/After（window/document 上的残留）。"
     },
     "interactive": {
-      "firstInteractiveMs": 171,
+      "firstInteractiveMs": 181,
       "firstInteractiveRow": 0,
       "rowsInDomAtFirstInteractive": 120,
-      "allRowsReachableMs": 3004,
+      "allRowsReachableMs": 3307,
       "lastReachableRow": 2562,
       "rowsInDomBeforeLastClick": 2563,
       "rowsTotal": 2563,
@@ -154,27 +153,46 @@
       "hasScroller": true,
       "ok": true
     },
+    "boundary": {
+      "rowsAtStart": 120,
+      "rowsAfter": 240,
+      "appended": 120,
+      "frames": 17,
+      "ms": 397,
+      "longtasks": [],
+      "longtaskTotal": 0
+    },
     "scroll": {
       "valid": true,
       "moved": true,
       "visibleRowChanged": true,
-      "beforeTop": 0,
-      "afterTop": 5160,
-      "scrollHeight": 171997,
+      "beforeTop": 7368,
+      "afterTop": 15353,
+      "scrollHeight": 16289,
       "clientHeight": 767,
-      "frames": 5,
-      "elapsedMs": 1998,
+      "frames": 52,
+      "elapsedMs": 1055,
       "longtasks": [
-        1899
+        89,
+        78
       ],
-      "longtaskTotal": 1899,
-      "displayedRows": 2563
+      "longtaskTotal": 167,
+      "displayedRows": 240,
+      "stage": "已加载全部行后的重复滚动（不是首批追加）",
+      "rowsAtStart": 240
     },
     "fastScroll": {
       "valid": true,
-      "jumps": 6,
-      "longtasks": [],
-      "longtaskTotal": 0,
+      "jumps": 67,
+      "longtasks": [
+        79,
+        102,
+        196,
+        216,
+        165,
+        582
+      ],
+      "longtaskTotal": 1340,
       "lastRowReached": true,
       "total": 2563
     },
@@ -185,7 +203,7 @@
       "lastRowVisible": true
     },
     "cleanup": {
-      "beforeDom": 30962,
+      "beforeDom": 30960,
       "afterDom": 129,
       "rootRemoved": true,
       "gridRemoved": true,
@@ -195,18 +213,18 @@
       "valid": true,
       "failedTerms": [],
       "samples": [
-        2023,
-        54,
-        60,
-        151,
-        96
+        951,
+        64,
+        122,
+        127,
+        112
       ],
       "ms": {
         "count": 5,
-        "mean": 476.8,
-        "p50": 96,
-        "p95": 151,
-        "max": 2023
+        "mean": 275.2,
+        "p50": 122,
+        "p95": 127,
+        "max": 951
       },
       "focusKept": true,
       "totalsPerTerm": [

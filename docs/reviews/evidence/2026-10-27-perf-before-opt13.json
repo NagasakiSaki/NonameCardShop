@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generatedAt": "2026-10-27T04:09:16.548Z",
+  "generatedAt": "2026-10-27T04:48:21.803Z",
   "cards": 1000,
-  "rounds": 6,
+  "rounds": 4,
   "environment": {
     "node": "v22.22.2",
     "platform": "win32/x64",
@@ -17,15 +17,15 @@
   },
   "scenarios": {
     "boot": {
-      "coldEmptyMs": 1226,
+      "coldEmptyMs": 1298,
       "coldEmptyState": {
         "dom": 83,
-        "heap": 62
+        "heap": 61.9
       },
-      "warmStockedMs": 644,
+      "warmStockedMs": 706,
       "warmStockedState": {
         "dom": 85,
-        "heap": 138.2,
+        "heap": 138,
         "listeners": {
           "add": 99,
           "remove": 0,
@@ -73,51 +73,51 @@
       }
     },
     "windows": {
-      "rounds": 6,
+      "rounds": 4,
       "openMs": {
-        "count": 6,
-        "mean": 621.5,
-        "p50": 612,
-        "p95": 639,
-        "max": 671
+        "count": 4,
+        "mean": 721.25,
+        "p50": 693,
+        "p95": 750,
+        "max": 778
       },
       "closeMs": {
-        "count": 6,
-        "mean": 33.33,
-        "p50": 30,
-        "p95": 41,
+        "count": 4,
+        "mean": 31.25,
+        "p50": 27,
+        "p95": 32,
         "max": 42
       },
       "domOpen": {
-        "count": 6,
-        "mean": 12204.67,
-        "p50": 12212,
-        "p95": 12212,
-        "max": 12212
+        "count": 4,
+        "mean": 12202,
+        "p50": 12213,
+        "p95": 12213,
+        "max": 12213
       },
       "domClosed": {
-        "count": 6,
+        "count": 4,
         "mean": 129,
         "p50": 129,
         "p95": 129,
         "max": 129
       },
       "heapOpen": {
-        "count": 6,
-        "mean": 75.3,
-        "p50": 72.8,
-        "p95": 78.7,
-        "max": 79.9
+        "count": 4,
+        "mean": 76.05,
+        "p50": 75.6,
+        "p95": 76.4,
+        "max": 80.9
       },
       "heapClosed": {
-        "count": 6,
-        "mean": 75.48,
-        "p50": 73,
-        "p95": 78.9,
-        "max": 80.1
+        "count": 4,
+        "mean": 76.25,
+        "p50": 75.7,
+        "p95": 76.6,
+        "max": 81.1
       },
       "tiles": {
-        "count": 6,
+        "count": 4,
         "mean": 1000,
         "p50": 1000,
         "p95": 1000,
@@ -127,11 +127,9 @@
         2142,
         4185,
         6228,
-        8271,
-        10314,
-        12349
+        8271
       ],
-      "listenerGrowth": 10207,
+      "listenerGrowth": 6129,
       "stackLeak": false,
       "listenersBefore": {
         "window": 30,
@@ -144,10 +142,10 @@
       "note": "netAddRemoveCalls 是 add/remove 调用次数差，节点销毁时监听器随节点回收、不会调用 remove，所以它不能单独证明泄漏；真正的泄漏看 listenersBefore/After（window/document 上的残留）。"
     },
     "interactive": {
-      "firstInteractiveMs": 186,
+      "firstInteractiveMs": 249,
       "firstInteractiveRow": 0,
       "rowsInDomAtFirstInteractive": 1000,
-      "allRowsReachableMs": 863,
+      "allRowsReachableMs": 1031,
       "lastReachableRow": 999,
       "rowsInDomBeforeLastClick": 1000,
       "rowsTotal": 1000,
@@ -155,30 +153,37 @@
       "hasScroller": true,
       "ok": true
     },
+    "boundary": {
+      "skipped": "已全部渲染，无跨批边界",
+      "rowsAtStart": 1000,
+      "total": 1000
+    },
     "scroll": {
       "valid": true,
       "moved": true,
       "visibleRowChanged": true,
       "beforeTop": 0,
-      "afterTop": 5376,
+      "afterTop": 4704,
       "scrollHeight": 67209,
       "clientHeight": 767,
-      "frames": 12,
-      "elapsedMs": 1070,
+      "frames": 11,
+      "elapsedMs": 1091,
       "longtasks": [
-        395,
-        408
+        418,
+        406
       ],
-      "longtaskTotal": 803,
-      "displayedRows": 1000
+      "longtaskTotal": 824,
+      "displayedRows": 1000,
+      "stage": "已加载全部行后的重复滚动（不是首批追加）",
+      "rowsAtStart": 1000
     },
     "fastScroll": {
       "valid": true,
-      "jumps": 44,
+      "jumps": 41,
       "longtasks": [
-        412
+        401
       ],
-      "longtaskTotal": 412,
+      "longtaskTotal": 401,
       "lastRowReached": true,
       "total": 1000
     },
@@ -189,7 +194,7 @@
       "lastRowVisible": true
     },
     "cleanup": {
-      "beforeDom": 12208,
+      "beforeDom": 12209,
       "afterDom": 129,
       "rootRemoved": true,
       "gridRemoved": true,
@@ -199,18 +204,18 @@
       "valid": true,
       "failedTerms": [],
       "samples": [
-        530,
-        35,
-        38,
-        57,
-        50
+        598,
+        44,
+        39,
+        56,
+        60
       ],
       "ms": {
         "count": 5,
-        "mean": 142,
-        "p50": 50,
-        "p95": 57,
-        "max": 530
+        "mean": 159.4,
+        "p50": 56,
+        "p95": 60,
+        "max": 598
       },
       "focusKept": true,
       "totalsPerTerm": [

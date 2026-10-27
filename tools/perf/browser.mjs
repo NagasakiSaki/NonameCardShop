@@ -163,17 +163,23 @@ try{
     });
     const rowsAtFirst=document.querySelectorAll('[data-collection-root] [data-card-grid] [data-card]').length;
 
-    // 完整可达：滚到底，必须看到 data-row-index === total-1 的那一行，并且能点中。
+    // 滚动容器（阶段 C 用）。
     let scroller=null,node=document.querySelector('[data-collection-root]');
     while(node&&node!==document.body){const style=getComputedStyle(node);if(/auto|scroll/.test(style.overflowY)&&node.scrollHeight>node.clientHeight+8){scroller=node;break;}node=node.parentElement;}
+
+    // 阶段 C：完整可达：滚到底，必须看到 data-row-index === total-1 的那一行，并且能点中。
     let lastRow=null;
     if(scroller){
+      // 先滚到“全部行都已渲染”（只读属性，不每帧强制布局），再做一次可见性检查与点击。
       lastRow=await until(()=>{
         const lastIndex=total()-1;
         if(lastIndex<0)return 'empty';
         scroller.scrollTop=scroller.scrollHeight;
+        const rendered=Number(document.querySelector('[data-card-grid]')?.getAttribute('data-rendered-rows')||0);
+        if(rendered<total())return null;
         const tile=document.querySelector('[data-collection-root] [data-card-grid] [data-card][data-row-index="'+lastIndex+'"]');
         if(!tile)return null;
+        scroller.scrollTop=scroller.scrollHeight;
         const box=tile.getBoundingClientRect(),view=scroller.getBoundingClientRect();
         if(!(box.bottom<=view.bottom+2&&box.top>=view.top-2))return null;
         const rowsBeforeClick=document.querySelectorAll('[data-collection-root] [data-card-grid] [data-card]').length;
@@ -197,6 +203,40 @@ try{
     return result;
   });
   report.scenarios.interactive=interactive;
+
+  // ---- 首批跨批边界：单独一次全新打开，不把它的耗时混进“末行可达” ----
+  // 重新加载页面，确保是全新列表（窗口复用会恢复已渲染行数）。
+  await page.reload();
+  await page.waitForFunction(()=>window.__cardShopReady===true);
+  await page.evaluate(()=>__cardShopApp.openPanel('market',{tab:'collection'}));
+  await page.locator('[data-collection-root] [data-card-grid] [data-card]').first().waitFor();
+  report.scenarios.boundary=await page.evaluate(async()=>{
+    const t0=performance.now();
+    const elapsed=()=>performance.now()-t0;
+    const grid=()=>document.querySelector('[data-card-grid]');
+    const total=()=>Number(grid()?.getAttribute('data-total-rows')||0);
+    const rowsNow=()=>Number(grid()?.getAttribute('data-rendered-rows')||0);
+    const startRows=rowsNow();
+    if(startRows>=total())return {skipped:'已全部渲染，无跨批边界',rowsAtStart:startRows,total:total()};
+    let scroller=null,node=document.querySelector('[data-collection-root]');
+    while(node&&node!==document.body){const style=getComputedStyle(node);if(/auto|scroll/.test(style.overflowY)&&node.scrollHeight>node.clientHeight+8){scroller=node;break;}node=node.parentElement;}
+    if(!scroller)return {skipped:'无滚动容器',rowsAtStart:startRows,total:total()};
+    const longtasks=[];
+    const observer=new PerformanceObserver(list=>{for(const entry of list.getEntries())longtasks.push(Math.round(entry.duration));});
+    try{observer.observe({entryTypes:['longtask']});}catch{}
+    const startAt=elapsed();
+    let frames=0,appendedTo=startRows;
+    while(elapsed()-startAt<8000){
+      scroller.scrollTop+=Math.max(200,Math.round(scroller.clientHeight*0.8));
+      frames+=1;
+      await new Promise(r=>requestAnimationFrame(r));
+      const now=rowsNow();
+      if(now>startRows){appendedTo=now;break;}
+    }
+    observer.disconnect();
+    scroller.scrollTop=0;
+    return {rowsAtStart:startRows,rowsAfter:appendedTo,appended:appendedTo-startRows,frames,ms:Math.round(elapsed()-startAt),longtasks,longtaskTotal:longtasks.reduce((a,b)=>a+b,0)};
+  });
 
   // ---- 滚动：找真正的滚动体，断言位置与可见行变化 ----
   await page.evaluate(()=>__cardShopApp.openPanel('market',{tab:'collection'}));
@@ -241,7 +281,7 @@ try{
       frames,elapsedMs:Math.round(elapsed),longtasks,longtaskTotal:longtasks.reduce((a,b)=>a+b,0),
     };
   });
-  report.scenarios.scroll={...scroll,displayedRows:rowsInfo.tiles};
+  report.scenarios.scroll={...scroll,displayedRows:rowsInfo.tiles,stage:'已加载全部行后的重复滚动（不是首批追加）',rowsAtStart:rowsInfo.tiles};
 
   // ---- 快速滚动：连续大跨度跳转，观察长任务与末行是否仍可达 ----
   report.scenarios.fastScroll=await page.evaluate(async()=>{
@@ -370,6 +410,10 @@ console.log(scrollReport.valid
   :`滚动：无效（${scrollReport.reason||'未移动或可见行未变化'}）`);
 const interactiveReport=report.scenarios.interactive;
 console.log(`首批可交互 ${interactiveReport.firstInteractiveMs}ms（第 ${interactiveReport.firstInteractiveRow} 行可点，DOM 中 ${interactiveReport.rowsInDomAtFirstInteractive} 行） · 末行可达 ${interactiveReport.allRowsReachableMs}ms（第 ${interactiveReport.lastReachableRow}/${interactiveReport.rowsTotal-1} 行，DOM 中 ${interactiveReport.rowsInDomAtEnd} 行） · ${interactiveReport.ok?'两端点成立':'端点未成立'}`);
+const boundary=report.scenarios.boundary;
+if(!boundary)console.log('首批跨边界：未测得（无滚动容器）');
+else if(boundary.skipped)console.log(`首批跨边界：不适用（${boundary.skipped}，起始 ${boundary.rowsAtStart}/${boundary.total} 行）`);
+else console.log(`首批跨边界：起始 ${boundary.rowsAtStart} 行 → 追加 ${boundary.appended} 行（共 ${boundary.rowsAfter}）· ${boundary.frames} 帧 / ${boundary.ms}ms · 长任务 ${boundary.longtasks.length}/${boundary.longtaskTotal}ms`);
 const fastReport=report.scenarios.fastScroll;
 console.log(fastReport.valid
   ?`快速滚动：${fastReport.jumps} 次跳转 · 长任务 ${fastReport.longtasks.length}/${fastReport.longtaskTotal}ms · 末行可达 ${fastReport.lastRowReached}`
