@@ -1,5 +1,7 @@
 # card-shop-ui/1.0 集成约定
 
+**状态（2026-10-27 校准）**：本文描述当前已接入的 Host 契约。玩法以 [三赛制与定价规则](../docs/architecture/三赛制与定价规则.md)、[两回合收益论与固定发行](../docs/architecture/两回合收益论与固定发行-v1.md) 和源码为准；历史版本（单将 BO3、四模式、旧价格、固定八张分页、标准包）只作记录，见 [测试规格归档](../docs/archive/test-specs/README.md)。类型以 `card-shop-host.d.ts`、`operations-v7.d.ts`、`native-round.d.ts` 为准，三者与实际返回的差异登记在 `tests/contract-samples.mjs`。
+
 经营操作接入补充：`neighbors.act` 的 `buy` / `deliver` 与其他单卡交易一样需要店长站在 `store.secondaryMarket`；交谈、接单、取消、雇佣与排班仍可在经营窗口管理。缺导航的隔离运行沿用原能力边界。未到柜台返回 `NOT_IN_RANGE`，不扣款或转移实物。
 
 只读补充：`world.maps` 返回当前已验证导航图数组；`snapshot.storefront.staff` 返回 cashier/stocker 的 `unhired / onduty / resting`，不推进员工或结算。后台取消命令 `room.cancelNpcMatch({matchId})` 仅能作废无赌注 NPC 比赛，释放实物/预留并按既有规则退款，不制造正常战绩。
@@ -19,7 +21,7 @@
 
 ## 目录、库存、开包
 
-第三版配盒：新发行仅保留 19 主题，商品含 `collationVersion`，每包 4 个 N/R 基础槽与 1 个 R/SR/SSR 进阶槽；配比、价格与历史实物兼容见 [卡包配盒与角色第三版](../docs/卡包配盒与角色第三版.md)。`catalog.list` 默认在售目录，`includeRetired:true` 查询历史完整卡种；旧 `catalog.detail` 引用保持有效。
+第三版配盒：当前在售 16 个主题（另有 10 个已登记停产主题，只保留旧卡身份、不再供货），商品含 `collationVersion`，每包 4 个 N/R 基础槽与 1 个 R+ 进阶槽（只有小保底，卡盒有固定配额）；配比、价格与历史实物兼容见 [卡包配盒与角色第三版](../docs/卡包配盒与角色第三版.md)。`catalog.list` 默认在售目录，`includeRetired:true` 查询历史完整卡种；旧 `catalog.detail` 引用保持有效。
 
 | 接口 | 具体约定 |
 | --- | --- |
@@ -29,7 +31,7 @@
 | supplier.placeOrder / receive | 成功返回 orderId / `{inventoryRefs,stock:{packs}}` |
 | inventory.list | 默认每个实物一行；指定 grouped:true 返回按 cardKey/printVersion/printedRarity/location 聚合的卡片行；含 inventoryRefs、owned、available、protected、locked、listed。状态可重叠，available 由后端计算 |
 | inventory.sealedSummary | `{items,total}`；按 productId/productVersion/kind 聚合包/盒；含 owned/warehouse/available/onShelf/protected/locked、可用仓库 inventoryRefs、可用货架 retailRefs、公开 spec。不得包含 cards/packets 等密封内容 |
-| catalog.detail | 输入 cardKey、可选 includeCode；返回真实 holdings、copies、printings、referencePrice.amount、当前全局分级、技能、stats.bo3/kof（games/sessions、胜负平）、流通和准入说明 |
+| catalog.detail | 输入 cardKey、可选 includeCode；返回真实 holdings、copies、printings、referencePrice.amount、当前全局分级、技能、`stats`（按 `kof` / `doudizhu-bo3` / `versus2v2-bo3` 三键分组，每组含 games/sessions、胜负平、winRate、insufficientSamples，另有 `stats.sampleSufficient` 与 `stats.note`）、流通和准入说明。没有 `stats.bo3` |
 | opening.preview | 输入 quantity?、includeBoxes?、inventoryRefs?、productId?；省略 quantity 为全部可用包；返回 previewId、packs、cards、boxes、excluded。部分拆盒剩余包保持原内容 |
 | opening.execute | 顶层 previewId；返回 `{operationId,cards,packs,opening:{packs,byRarity,results}}`；results 含名字/卡图/印刷稀有度/isNew 与实物引用 |
 | inventory.surplusPreview | 返回 previewId、keep=1、newListings、alreadyListed、lockedExcluded、estimatedFee、quantity；market.listSurplus 带顶层 previewId，返回 created 与真实 listings |

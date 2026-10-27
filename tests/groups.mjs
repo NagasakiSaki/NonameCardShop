@@ -93,6 +93,7 @@ export const groups={
     "tests/ideal-yield-and-editions.mjs",
     "tests/project-structure.mjs",
     "tests/package-closure.mjs",
+    "tests/contract-samples.mjs",
     "tests/catalog-cache.mjs",
     "tests/operations-v7.mjs",
     "tests/operations-v7-mount.mjs",

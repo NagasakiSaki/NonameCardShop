@@ -47,11 +47,20 @@ export interface TableSettings {amount:number;automaticAmount:number;source:'aut
 /** Applied only when creating a world, before its first day-start archive; never on load/import. */
 export interface StarterGiftConfig {enabled:boolean;unit:'pack'|'box';quantity:number;productId:string|null}
 export interface StarterGift {version:1;status:'granted'|'disabled';productId?:string;productVersion?:string;name?:string;unit?:'pack'|'box';quantity?:number;inventoryRefs?:string[];day?:number}
-/** combat.joinQueue({mode,inventoryRefs,tableId?}), combat.leaveQueue(), combat.setWaitMode({mode}). Waiting itself never pauses the world. */
-export interface MatchQueueEntry {queueId:string;ownerId:string;tableId:string|null;mode:'bo3'|'kof';inventoryRefs:string[];lineup?:Array<{cardKey:string;name:string;inventoryRef:string}>;fee:number;createdAt:number;expiresAt:number;waitMode:'manual'|'wander'}
+/**
+ * combat.joinQueue({mode,inventoryRefs,tableId?}), combat.leaveQueue(), combat.setWaitMode({mode}).
+ * Waiting itself never pauses the world.
+ * 现行自动报名队列只服务三将接力（KOF）：`joinQueue` 对任何其他 mode 返回 INVALID_INPUT
+ * 「等候报名使用三将接力；斗地主和双人对决请创建对应房间」。斗地主换边与 2v2 走
+ * `combat.room.create`，不进这个队列，因此 `mode` 不是三赛制联合类型。
+ */
+export interface MatchQueueEntry {queueId:string;ownerId:string;tableId:string|null;mode:'kof';inventoryRefs:string[];lineup?:Array<{cardKey:string;name:string;inventoryRef:string}>;fee:number;createdAt:number;expiresAt:number;waitMode:'manual'|'wander'}
 /** combat.queue. Match creation is separate from queue entry and requires an actual compatible opponent. */
-export interface MatchQueueView {player:MatchQueueEntry|null;waiting:Array<{queueId:string;ownerId:string;name:string;mode:'bo3'|'kof';tableId:string|null;fee:number;expiresAt:number}>;playerMatch:Record<string,unknown>|null}
-/** One session for a player KOF/BO3 match; persisted applied prevents repeated thirty-minute advancement. NPC matches never freeze business or add post-match time. */
+export interface MatchQueueView {player:MatchQueueEntry|null;waiting:Array<{queueId:string;ownerId:string;name:string;mode:'kof';tableId:string|null;fee:number;expiresAt:number}>;playerMatch:Record<string,unknown>|null}
+/**
+ * One session for a player's real match, in any of the three formats (kof / doudizhu-bo3 / versus2v2-bo3).
+ * persisted `applied` prevents repeated thirty-minute advancement. NPC matches never freeze business or add post-match time.
+ */
 export interface MatchTimeSession {startedAt:{day:number;minute:number};minutes:30;applied:boolean;appliedAt?:{day:number;minute:number}}
 export interface HostEvent { contractVersion:'card-shop-ui/1.0'; worldId:string; branchId:string; seq:number; revision:number; type:string; data:unknown }
 export interface PauseLease {leaseId:string; ownerId:string; reason:string}
@@ -92,10 +101,20 @@ export interface NeighborAction {
   personId:string; action:'talk'|'hire'|'schedule'|'accept'|'deliver'|'decline'|'buy';
   orderId?:string; inventoryRef?:string; onDuty?:boolean;
 }
+/**
+ * combat.eligible({formatId}) — 未登记格式（含已删除的单将 `bo3`）返回 INVALID_INPUT。
+ * slots 是整场备战人数：kof=3、doudizhu-bo3=5、versus2v2-bo3=8（来自 combat-formats 注册表）。
+ * `rarity` 是实物印刷等级（printedRarity → issuanceRarity → currentRarity 回退），只用于展示；
+ * 市场准入、参赛资格分别由 marketEligibility / eligible 判定，不能用它自己推算。
+ * `modeScores` 按赛制、`roleScores` 按身份（kof / landlord / farmer / versus2v2-bo3）给两回合收益论分。
+ * `reasons` 与 `disabledReasons` 当前内容相同（运行时为兼容旧调用方同时返回）。
+ */
 export interface CombatEligibleView {
-  mode:'bo3'|'kof'|'doudizhu-bo3'|'versus2v2-bo3'; slots:number;
+  mode:import('./operations-v7').CombatFormatId; slots:number;
   items:Array<{inventoryRef:string;cardKey:string;generalId:string;name:string;rarity:Rarity;eligible:boolean;
-    imageUrl?:string;favorite:boolean;reasons:Array<{code:string;message:string}>;disabledReasons:Array<{code:string;message:string}>;reviewStatus:string}>;
+    imageUrl?:string;globalScore?:number;modeScores?:Record<string,number>;roleScores?:Record<string,number>;
+    themeId?:string;themeName?:string;favorite:boolean;
+    reasons:Array<{code:string;message:string}>;disabledReasons:Array<{code:string;message:string}>;reviewStatus:string}>;
 }
 export interface CardShopHost {
   connect(input:{contractVersion:'card-shop-ui/1.0';clientId:string}):Promise<{
