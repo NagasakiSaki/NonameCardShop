@@ -14,6 +14,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {createHash} from 'node:crypto';
 import {chromium} from 'playwright';
 import {startShopServer} from '../../server.mjs';
 import {createRuntime} from '../../modules/backend/runtime.mjs';
@@ -27,6 +28,14 @@ const args=process.argv.slice(2);
 const argOf=name=>{const i=args.indexOf(name);return i>=0?args[i+1]:null;};
 const CARDS=Number(argOf('--cards')||1000);
 const ROUNDS=Number(argOf('--rounds')||8);
+const renderMode=argOf('--render-mode')||'batched';
+if(!['batched','full'].includes(renderMode))throw Error('--render-mode 必须是 batched 或 full');
+if(!Number.isSafeInteger(CARDS)||CARDS<1||!Number.isSafeInteger(ROUNDS)||ROUNDS<1)throw Error('cards/rounds 必须是正整数');
+const collectionFile=path.join(root,'frontend-next/components/workspace/collection.mjs');
+const collectionSource=fs.readFileSync(collectionFile,'utf8');
+if(!collectionSource.includes('const CHUNK_ROWS = 120;'))throw Error('基准渲染开关需随实现复核');
+const servedCollection=renderMode==='full'?collectionSource.replace('const CHUNK_ROWS = 120;','const CHUNK_ROWS = Number.MAX_SAFE_INTEGER;'):collectionSource;
+const digest=text=>createHash('sha256').update(text).digest('hex');
 
 const source=read('data/cards.json'),rules=read('data/backend-rules.json');
 const catalog=buildCatalog(source,rules);
@@ -43,11 +52,14 @@ for(let i=0;i<CARDS;i+=1){
 }
 const archive={format:'noname-shop-world-save',version:2,worldId:fixture.worldId,branchId:fixture.branchId,day:1,minute:480,slot:'start',world:fixture};
 
-const report={version:2,generatedAt:new Date().toISOString(),cards:CARDS,rounds:ROUNDS,environment:{
+const report={version:4,generatedAt:new Date().toISOString(),cards:CARDS,rounds:ROUNDS,renderMode,environment:{
   node:process.version,platform:`${process.platform}/${process.arch}`,cpu:os.cpus()?.[0]?.model||'unknown',logicalCpus:os.cpus()?.length||null,totalMemoryMb:Math.round(os.totalmem()/1048576),
-},resources:{catalogCards:catalog.cards.length,fixtureItems:CARDS},scenarios:{}};
+},resources:{catalogCards:catalog.cards.length,fixtureItems:CARDS,sourceHash:digest(collectionSource),servedHash:digest(servedCollection),inputs:Object.fromEntries(['data/cards.json','data/backend-rules.json','assets/frontend/manifest.json'].map(file=>[file,digest(fs.readFileSync(path.join(root,file)))]))},scenarios:{}};
 
-const server=await startShopServer({port:0,enginePort:0});
+const server=await startShopServer({port:0,enginePort:0,interceptRequest(req,res){
+  if(renderMode!=='full'||req.url.split('?')[0]!=='/frontend-next/components/workspace/collection.mjs')return false;
+  res.writeHead(200,{'content-type':'text/javascript; charset=utf-8','cache-control':'no-store'});res.end(servedCollection);return true;
+}});
 let browser;
 try{
   browser=await chromium.launch({args:['--enable-precise-memory-info'],...(fs.existsSync(chromium.executablePath())?{}:{channel:'chrome'})});
@@ -204,6 +216,58 @@ try{
   });
   report.scenarios.interactive=interactive;
 
+  // ---- 滚动：找真正的滚动体，断言位置与可见行变化 ----
+  await page.evaluate(()=>__cardShopApp.openPanel('market',{tab:'collection'}));
+  await page.locator('[data-collection-root] [data-card-grid] [data-card]').first().waitFor();
+  const rowsInfo=await page.evaluate(()=>({
+    tiles:document.querySelectorAll('[data-collection-root] [data-card-grid] [data-card]').length,
+    total:Number(document.querySelector('[data-card-grid]')?.dataset.totalRows),
+  }));
+  if(rowsInfo.tiles!==rowsInfo.total)throw Error(`全量重复滚动前置状态不成立：${rowsInfo.tiles}/${rowsInfo.total}`);
+  const scroll=await page.evaluate(async()=>{
+    const rootNode=document.querySelector('[data-collection-root]');
+    const chain=[];let node=rootNode,scroller=null;
+    while(node&&node!==document.body){
+      const style=getComputedStyle(node);
+      chain.push({tag:node.tagName,cls:String(node.className||'').slice(0,40),overflowY:style.overflowY,scrollHeight:node.scrollHeight,clientHeight:node.clientHeight});
+      if(!scroller&&/auto|scroll/.test(style.overflowY)&&node.scrollHeight>node.clientHeight+8)scroller=node;
+      node=node.parentElement;
+    }
+    if(!scroller)return {valid:false,reason:'未找到有滚动范围的容器',chain};
+    // 前一阶段点过末行；等待 UI 的滚动恢复完成后统一回到顶部。
+    scroller.scrollTop=0;
+    await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+    scroller.scrollTop=0;
+    await new Promise(resolve=>requestAnimationFrame(resolve));
+    const visibleKey=()=>{
+      const tiles=[...scroller.querySelectorAll('[data-card]')];
+      const box=scroller.getBoundingClientRect();
+      const hit=tiles.find(tile=>{const r=tile.getBoundingClientRect();return r.top>=box.top-2&&r.bottom<=box.bottom+2;});
+      return hit?hit.getAttribute('data-card'):null;
+    };
+    const before={top:scroller.scrollTop,key:visibleKey(),scrollHeight:scroller.scrollHeight,clientHeight:scroller.clientHeight};
+    const longtasks=[];
+    const observer=new PerformanceObserver(list=>{for(const entry of list.getEntries())longtasks.push(Math.round(entry.duration));});
+    try{observer.observe({entryTypes:['longtask']});}catch{}
+    let frames=0;const t0=performance.now();
+    await new Promise(resolve=>{
+      const step=()=>{frames+=1;scroller.scrollTop+=Math.max(60,Math.round(scroller.scrollHeight/100));if(performance.now()-t0<1000)requestAnimationFrame(step);else resolve();};
+      requestAnimationFrame(step);
+    });
+    const elapsed=performance.now()-t0;
+    await new Promise(resolve=>setTimeout(resolve,60));
+    observer.disconnect();
+    const after={top:scroller.scrollTop,key:visibleKey()};
+    return {
+      valid:after.top>before.top&&after.key!==before.key,
+      moved:after.top>before.top,visibleRowChanged:after.key!==before.key,
+      beforeTop:before.top,afterTop:Math.round(after.top),scrollHeight:before.scrollHeight,clientHeight:before.clientHeight,
+      frames,elapsedMs:Math.round(elapsed),longtasks,longtaskTotal:longtasks.reduce((a,b)=>a+b,0),rowsAtEnd:document.querySelectorAll('[data-card-grid] [data-card]').length,
+    };
+  });
+  report.scenarios.scroll={...scroll,displayedRows:rowsInfo.tiles,stage:'已加载全部行后的重复滚动（不是首批追加）',rowsAtStart:rowsInfo.tiles};
+  if(scroll.beforeTop!==0||scroll.rowsAtEnd!==rowsInfo.total)throw Error('全量重复滚动的视口或行数发生漂移');
+
   // ---- 首批跨批边界：单独一次全新打开，不把它的耗时混进“末行可达” ----
   // 重新加载页面，确保是全新列表（窗口复用会恢复已渲染行数）。
   await page.reload();
@@ -237,51 +301,6 @@ try{
     scroller.scrollTop=0;
     return {rowsAtStart:startRows,rowsAfter:appendedTo,appended:appendedTo-startRows,frames,ms:Math.round(elapsed()-startAt),longtasks,longtaskTotal:longtasks.reduce((a,b)=>a+b,0)};
   });
-
-  // ---- 滚动：找真正的滚动体，断言位置与可见行变化 ----
-  await page.evaluate(()=>__cardShopApp.openPanel('market',{tab:'collection'}));
-  await page.locator('[data-collection-root] [data-card-grid] [data-card]').first().waitFor();
-  const rowsInfo=await page.evaluate(()=>({
-    tiles:document.querySelectorAll('[data-collection-root] [data-card-grid] [data-card]').length,
-    items:__cardShopApp.snapshot().inventory?null:null,
-  }));
-  const scroll=await page.evaluate(async()=>{
-    const rootNode=document.querySelector('[data-collection-root]');
-    const chain=[];let node=rootNode,scroller=null;
-    while(node&&node!==document.body){
-      const style=getComputedStyle(node);
-      chain.push({tag:node.tagName,cls:String(node.className||'').slice(0,40),overflowY:style.overflowY,scrollHeight:node.scrollHeight,clientHeight:node.clientHeight});
-      if(!scroller&&/auto|scroll/.test(style.overflowY)&&node.scrollHeight>node.clientHeight+8)scroller=node;
-      node=node.parentElement;
-    }
-    if(!scroller)return {valid:false,reason:'未找到有滚动范围的容器',chain};
-    const visibleKey=()=>{
-      const tiles=[...scroller.querySelectorAll('[data-card]')];
-      const box=scroller.getBoundingClientRect();
-      const hit=tiles.find(tile=>{const r=tile.getBoundingClientRect();return r.top>=box.top-2&&r.bottom<=box.bottom+2;});
-      return hit?hit.getAttribute('data-card'):null;
-    };
-    const before={top:scroller.scrollTop,key:visibleKey(),scrollHeight:scroller.scrollHeight,clientHeight:scroller.clientHeight};
-    const longtasks=[];
-    const observer=new PerformanceObserver(list=>{for(const entry of list.getEntries())longtasks.push(Math.round(entry.duration));});
-    try{observer.observe({entryTypes:['longtask']});}catch{}
-    let frames=0;const t0=performance.now();
-    await new Promise(resolve=>{
-      const step=()=>{frames+=1;scroller.scrollTop+=Math.max(60,Math.round(scroller.scrollHeight/100));if(performance.now()-t0<1000)requestAnimationFrame(step);else resolve();};
-      requestAnimationFrame(step);
-    });
-    const elapsed=performance.now()-t0;
-    await new Promise(resolve=>setTimeout(resolve,60));
-    observer.disconnect();
-    const after={top:scroller.scrollTop,key:visibleKey()};
-    return {
-      valid:after.top>before.top&&after.key!==before.key,
-      moved:after.top>before.top,visibleRowChanged:after.key!==before.key,
-      beforeTop:before.top,afterTop:Math.round(after.top),scrollHeight:before.scrollHeight,clientHeight:before.clientHeight,
-      frames,elapsedMs:Math.round(elapsed),longtasks,longtaskTotal:longtasks.reduce((a,b)=>a+b,0),
-    };
-  });
-  report.scenarios.scroll={...scroll,displayedRows:rowsInfo.tiles,stage:'已加载全部行后的重复滚动（不是首批追加）',rowsAtStart:rowsInfo.tiles};
 
   // ---- 快速滚动：连续大跨度跳转，观察长任务与末行是否仍可达 ----
   report.scenarios.fastScroll=await page.evaluate(async()=>{

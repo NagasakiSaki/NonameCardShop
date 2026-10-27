@@ -5,14 +5,22 @@ import {managementEffects} from './management.mjs';
 import {onSite} from './visits.mjs';
 
 export function eligible(w,catalog,ownerId='player'){
-  return owned(w,ownerId).filter(i=>i.kind==='card').map(i=>{
-    const c=catalog.byKey.get(i.cardKey),reasons=[];
+  // Query-local only: shared card metadata is reused across physical copies.
+  // Locks/protection/location/circulation remain per-copy live decisions, with no stale cache.
+  const metadata=new Map(),favorites=new Set(ownerId==='player'?w.player.favoriteCardKeys||[]:[]),pinned=[],rows=[];
+  for(const i of Object.values(w.items)){
+    if(i.ownerId!==ownerId||i.kind!=='card')continue;
+    let entry=metadata.get(i.cardKey);
+    if(!entry){const card=catalog.byKey.get(i.cardKey);entry={card,roles:Object.fromEntries(Object.entries(card?.power.roles||{}).map(([role,value])=>[role,value.score]))};metadata.set(i.cardKey,entry);}
+    const c=entry.card,reasons=[];
     if(ownerId!=='player'&&!w.circulation[i.cardKey])reasons.push({code:'NOT_IN_CIRCULATION',message:'NPC 只能使用已流入市场的卡种。'});
     if(!free(i))reasons.push({code:'ITEM_LOCKED',message:'副本受保护或被交易/其他比赛占用。'});
     if(i.location!=='collection')reasons.push({code:'NOT_IN_COLLECTION',message:'参赛副本必须在收藏中；请先捡回垃圾桶里的卡。'});
     const blocked=w.rules.compatibilityBlocks[c?.generalId];if(blocked)reasons.push({code:'SKILL_INCOMPATIBLE',message:blocked});
-    return {inventoryRef:i.inventoryRef,cardKey:i.cardKey,generalId:c?.generalId,name:c?.name,imageUrl:c?.imageUrl,rarity:i.printedRarity||c?.issuanceRarity||c?.currentRarity,globalScore:c?.globalScore,modeScores:c?.power.modeScores,roleScores:Object.fromEntries(Object.entries(c?.power.roles||{}).map(([role,value])=>[role,value.score])),themeId:c?.pack,themeName:catalog.packNames?.[c?.pack]||c?.pack,favorite:ownerId==='player'&&(w.player.favoriteCardKeys||[]).includes(i.cardKey),eligible:!reasons.length,disabledReasons:reasons,reviewStatus:c?.reviewStatus};
-  }).sort((a,b)=>Number(b.favorite)-Number(a.favorite));
+    const favorite=ownerId==='player'&&favorites.has(i.cardKey);
+    (favorite?pinned:rows).push({inventoryRef:i.inventoryRef,cardKey:i.cardKey,generalId:c?.generalId,name:c?.name,imageUrl:c?.imageUrl,rarity:i.printedRarity||c?.issuanceRarity||c?.currentRarity,globalScore:c?.globalScore,modeScores:c?.power.modeScores,roleScores:{...entry.roles},themeId:c?.pack,themeName:catalog.packNames?.[c?.pack]||c?.pack,favorite,eligible:!reasons.length,disabledReasons:reasons,reviewStatus:c?.reviewStatus});
+  }
+  return pinned.concat(rows);
 }
 export function combatPreview(w,catalog,p,{tableFee=managementEffects(w).tableFee}={}){
   need(w.clock.phase==='open','SHOP_CLOSED','只在营业中接受新比赛登记。');

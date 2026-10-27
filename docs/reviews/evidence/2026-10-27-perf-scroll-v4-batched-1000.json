@@ -1,0 +1,249 @@
+{
+  "version": 4,
+  "generatedAt": "2026-10-27T05:23:18.124Z",
+  "cards": 1000,
+  "rounds": 3,
+  "renderMode": "batched",
+  "environment": {
+    "node": "v24.15.0",
+    "platform": "win32/x64",
+    "cpu": "AMD Ryzen 7 8845H w/ Radeon 780M Graphics",
+    "logicalCpus": 16,
+    "totalMemoryMb": 28477,
+    "browser": "156.0.8078.4"
+  },
+  "resources": {
+    "catalogCards": 2563,
+    "fixtureItems": 1000,
+    "sourceHash": "3834658f1177b03199436e41e86bcf9d8bd85b4d6febec085a8c5ed367f041e1",
+    "servedHash": "3834658f1177b03199436e41e86bcf9d8bd85b4d6febec085a8c5ed367f041e1",
+    "inputs": {
+      "data/cards.json": "932981bc8013a92081c5b1915e9e60e1ecd045a187a9e2e41da970fd2c22c26b",
+      "data/backend-rules.json": "fa7f10c7bc7b1d87b21013125b7e4e93257efdb2a6d01f403c49c7f8127eb286",
+      "assets/frontend/manifest.json": "ed3b51a4642bc0a829f37808bfe040ab1c70494e6d02d174c7e738d41f921fb4"
+    }
+  },
+  "scenarios": {
+    "boot": {
+      "coldEmptyMs": 1118,
+      "coldEmptyState": {
+        "dom": 83,
+        "heap": 62.2
+      },
+      "warmStockedMs": 668,
+      "warmStockedState": {
+        "dom": 85,
+        "heap": 138.3,
+        "listeners": {
+          "add": 99,
+          "remove": 0,
+          "byType": {
+            "click": 15,
+            "error": 1,
+            "pagehide": 1,
+            "__playwright_global_listeners_check__": 1,
+            "mousemove": 2,
+            "pointerdown": 9,
+            "pointerup": 9,
+            "touchstart": 3,
+            "touchend": 3,
+            "touchcancel": 3,
+            "mousedown": 3,
+            "mouseup": 3,
+            "auxclick": 1,
+            "dblclick": 1,
+            "contextmenu": 1,
+            "visibilitychange": 3,
+            "keydown": 3,
+            "keyup": 2,
+            "blur": 1,
+            "mouseover": 1,
+            "mouseout": 1,
+            "wheel": 1,
+            "pointerlockchange": 1,
+            "mozpointerlockchange": 1,
+            "webkitpointerlockchange": 1,
+            "touchmove": 1,
+            "change": 1,
+            "resize": 2,
+            "webkitfullscreenchange": 1,
+            "webkitfullscreenerror": 1,
+            "mozfullscreenchange": 1,
+            "mozfullscreenerror": 1,
+            "fullscreenchange": 1,
+            "fullscreenerror": 1,
+            "MSFullscreenChange": 1,
+            "MSFullscreenError": 1,
+            "pointercancel": 8,
+            "lostpointercapture": 8
+          }
+        }
+      }
+    },
+    "windows": {
+      "rounds": 3,
+      "openMs": {
+        "count": 3,
+        "mean": 107.33,
+        "p50": 89,
+        "p95": 89,
+        "max": 155
+      },
+      "closeMs": {
+        "count": 3,
+        "mean": 9.67,
+        "p50": 12,
+        "p95": 12,
+        "max": 15
+      },
+      "domOpen": {
+        "count": 3,
+        "mean": 1609.33,
+        "p50": 1609,
+        "p95": 1609,
+        "max": 1610
+      },
+      "domClosed": {
+        "count": 3,
+        "mean": 85,
+        "p50": 85,
+        "p95": 85,
+        "max": 85
+      },
+      "heapOpen": {
+        "count": 3,
+        "mean": 97.07,
+        "p50": 99.1,
+        "p95": 99.1,
+        "max": 112.2
+      },
+      "heapClosed": {
+        "count": 3,
+        "mean": 97.13,
+        "p50": 99.2,
+        "p95": 99.2,
+        "max": 112.3
+      },
+      "tiles": {
+        "count": 3,
+        "mean": 120,
+        "p50": 120,
+        "p95": 120,
+        "max": 120
+      },
+      "netAddRemoveCalls": [
+        374,
+        649,
+        924
+      ],
+      "listenerGrowth": 550,
+      "stackLeak": false,
+      "listenersBefore": {
+        "window": 30,
+        "document": 14
+      },
+      "listenersAfter": {
+        "window": 30,
+        "document": 14
+      },
+      "note": "netAddRemoveCalls 是 add/remove 调用次数差，节点销毁时监听器随节点回收、不会调用 remove，所以它不能单独证明泄漏；真正的泄漏看 listenersBefore/After（window/document 上的残留）。"
+    },
+    "interactive": {
+      "firstInteractiveMs": 49,
+      "firstInteractiveRow": 0,
+      "rowsInDomAtFirstInteractive": 120,
+      "allRowsReachableMs": 1112,
+      "lastReachableRow": 999,
+      "rowsInDomBeforeLastClick": 1000,
+      "rowsTotal": 1000,
+      "rowsInDomAtEnd": 1000,
+      "hasScroller": true,
+      "ok": true
+    },
+    "scroll": {
+      "valid": true,
+      "moved": true,
+      "visibleRowChanged": true,
+      "beforeTop": 0,
+      "afterTop": 14112,
+      "scrollHeight": 67209,
+      "clientHeight": 767,
+      "frames": 29,
+      "elapsedMs": 1013,
+      "longtasks": [
+        148,
+        146,
+        156,
+        149
+      ],
+      "longtaskTotal": 599,
+      "rowsAtEnd": 1000,
+      "displayedRows": 1000,
+      "stage": "已加载全部行后的重复滚动（不是首批追加）",
+      "rowsAtStart": 1000
+    },
+    "boundary": {
+      "rowsAtStart": 120,
+      "rowsAfter": 240,
+      "appended": 120,
+      "frames": 15,
+      "ms": 323,
+      "longtasks": [],
+      "longtaskTotal": 0
+    },
+    "fastScroll": {
+      "valid": true,
+      "jumps": 69,
+      "longtasks": [
+        65,
+        93,
+        151
+      ],
+      "longtaskTotal": 309,
+      "lastRowReached": true,
+      "total": 1000
+    },
+    "zoom": {
+      "total": 1000,
+      "firstRowVisible": true,
+      "lastRowInDom": true,
+      "lastRowVisible": true
+    },
+    "cleanup": {
+      "beforeDom": 12211,
+      "afterDom": 129,
+      "rootRemoved": true,
+      "gridRemoved": true,
+      "stack": 0
+    },
+    "search": {
+      "valid": true,
+      "failedTerms": [],
+      "samples": [
+        254,
+        29,
+        16,
+        42,
+        45
+      ],
+      "ms": {
+        "count": 5,
+        "mean": 77.2,
+        "p50": 42,
+        "p95": 45,
+        "max": 254
+      },
+      "focusKept": true,
+      "totalsPerTerm": [
+        48,
+        17,
+        12,
+        60,
+        34
+      ],
+      "totalAfterClear": 1000,
+      "note": "等待条件是“可见行文本都包含关键词”，即筛选已应用且已渲染；超时记为失败，不计入有效样本"
+    }
+  },
+  "errors": []
+}
