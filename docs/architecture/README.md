@@ -16,6 +16,7 @@
 | [策略来源与失效链](策略来源与失效链.md) | 现行/历史配置、版本、缓存和冻结实物 | `catalog-cache.mjs`、`v7-policy.mjs`、`audit:policies` |
 | [上游内核升级暂存流程](上游内核升级暂存流程.md) | 新版本独立暂存、差异、静态资格与旧内容影响 | `npm run engine:stage` |
 | [测试范围与证据等级](测试范围与证据等级.md) | OPT 任务选测、成本标签、原生/受控证据、失败补跑 | `tests/check-map.mjs`、`tests/run.mjs` |
+| [技能描述提取与复核](技能描述提取与复核.md) | 术语恢复、动态文案边界、展示与评分分离 | `skills:audit`、`modules/backend/skill-descriptions.mjs` |
 | [明亮素材工具](../../tools/frontend-art-bright/README.md) | 隔离构建、源图只读、25 人和几何双次复现 | `npm run art:reproduce` |
 | [原生多人牌局适配与队友接管](原生多人牌局适配与队友接管.md) | 原生 profile、挂载校验、可选队友接管（页面顶部有 2026-10-27 校准块） | `integration/modes/`、`integration/host-battle.mjs` |
 | [剧情运行器与兼容接口](剧情运行器与兼容接口.md) | 剧情源→包→游标、条件/动作注册、场景对话（页面顶部有 2026-10-27 校准块） | `modules/narrative/`、`frontend/v7-dialogue.mjs`、`content/story/` |

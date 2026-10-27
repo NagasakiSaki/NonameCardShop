@@ -7,6 +7,7 @@ import {trashItems} from './trash.mjs';
 import {productEnabled} from './distribution.mjs';
 import {marketEligible} from './market-policy.mjs';
 import {physicalGroupKey,printingMeta} from './card-finishes.mjs';
+import {describeSkill} from './skill-descriptions.mjs';
 
 export function inventoryView(w,catalog,input={}){
   let items=(input.location==='trash'?trashItems(w):owned(w)).filter(i=>i.kind==='card'&&(input.location?i.location===input.location:i.location!=='trash'));
@@ -25,7 +26,7 @@ export function cardDetailView(w,catalog,card,stats){
   const items=owned(w).filter(i=>i.kind==='card'&&i.cardKey===card.cardKey&&i.location!=='trash'),available=items.filter(i=>i.location==='collection'&&free(i));
   const holdings={owned:items.length,available:available.length,protected:items.filter(i=>i.protected).length,locked:items.filter(i=>i.lock).length,listed:items.filter(i=>i.location==='market').length};
   const printings=[...new Set(items.map(i=>i.printedRarity))],marketCopies=available.filter(i=>marketEligible(catalog,i));
-  return {...cardSummary(card),title:card.title,faction:card.group,pack:card.pack,printedRarity:printings.length===1?printings[0]:printings.length?'多印刷版':'未持有',printings,skills:clone(card.skills),power:clone(card.power),holdings,
+  return {...cardSummary(card),title:card.title,faction:card.group,pack:card.pack,printedRarity:printings.length===1?printings[0]:printings.length?'多印刷版':'未持有',printings,skills:card.skills.map(skill=>describeSkill(card.pack,skill)),power:clone(card.power),holdings,
     copies:items.map(i=>({inventoryRef:i.inventoryRef,printedRarity:i.printedRarity,printVersion:i.printVersion,...printingMeta(i),location:i.location,protected:i.protected,locked:!!i.lock,available:i.location==='collection'&&free(i)})),
     price:referencePrice(w,catalog,card.cardKey),referencePrice:{amount:referencePrice(w,catalog,card.cardKey)},circulation:w.circulation[card.cardKey]||null,
     marketEligibility:{eligible:marketCopies.length>0,reasons:marketCopies.length?[]:[{code:'MARKET_RARITY',message:'仅可出售未保护、未锁定的 SR / SSR 印刷卡。'}]},

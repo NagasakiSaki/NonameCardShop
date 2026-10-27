@@ -1,5 +1,7 @@
 # card-shop-ui/1.0 集成约定
 
+2026-10-27 技能展示补充：`catalog.detail.skills` 保留 id/name/key/code，正文补全术语和解释，新增可选 `descriptionVersion`、`dynamicDescription`、`descriptionVariants`（见 `SkillDescriptionView`）。动态技能须提示以对局实时状态为准，其他状态文案可折叠。自定义或更新的 description 不匹配编译基准时不覆盖。展示语料不进入评分、定价或发行算法，原技能代码仍由 includeCode 读取。运行时/浏览器已检查这些字段；尚未引入 TypeScript 编译校验。
+
 **状态（2026-10-27 校准）**：本文描述当前已接入的 Host 契约。玩法以 [三赛制与定价规则](../docs/architecture/三赛制与定价规则.md)、[两回合收益论与固定发行](../docs/architecture/两回合收益论与固定发行-v1.md) 和源码为准；历史版本（单将 BO3、四模式、旧价格、固定八张分页、标准包）只作记录，见 [测试规格归档](../docs/archive/test-specs/README.md)。类型以 `card-shop-host.d.ts`、`operations-v7.d.ts`、`native-round.d.ts` 为准，三者与实际返回的差异登记在 `tests/contract-samples.mjs`。
 
 经营操作接入补充：`neighbors.act` 的 `buy` / `deliver` 与其他单卡交易一样需要店长站在 `store.secondaryMarket`；交谈、接单、取消、雇佣与排班仍可在经营窗口管理。缺导航的隔离运行沿用原能力边界。未到柜台返回 `NOT_IN_RANGE`，不扣款或转移实物。

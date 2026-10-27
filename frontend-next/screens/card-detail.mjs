@@ -27,7 +27,7 @@ export function openCardDetail(app,options={}){
         .hero-art img{width:100%;height:100%;object-fit:contain}.detail-copy-column{min-width:0;display:grid;gap:16px}.detail-copy-column h2{font-size:26px}
         .detail-badges{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.detail-badges .rarity{font-size:13px;padding:4px 8px}
         .detail-skill{border-top:1px solid var(--line);padding-top:14px;margin-top:14px}.detail-skill h4{margin:0 0 8px;color:var(--gold);font-size:17px}
-        .detail-skill p{font-size:15px;line-height:1.9;overflow-wrap:anywhere}.detail-sections{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;grid-column:1/-1;margin-top:20px}
+        .detail-skill p{font-size:15px;line-height:1.9;overflow-wrap:anywhere;white-space:pre-wrap}.detail-sections{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;grid-column:1/-1;margin-top:20px}
         .detail-sections .surface-card{margin:0}.detail-table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}.detail-table th,.detail-table td{padding:10px 6px;border-bottom:1px solid var(--line);text-align:right}.detail-table th:first-child,.detail-table td:first-child{text-align:left}
         .detail-source{background:#0d1618;border:1px solid var(--line);border-radius:6px;padding:16px;line-height:1.7;font:13px/1.7 Consolas,monospace;white-space:pre;overflow-x:auto;max-width:100%;tab-size:2}
         .detail-source-status{color:var(--muted);line-height:1.8}.detail-copies{grid-column:1/-1;margin-top:20px;min-width:0}.copy-card{border-top:1px solid var(--line);padding:14px 0}.copy-card p{overflow-wrap:anywhere}.copy-card .surface-actions{margin-top:8px}
@@ -110,7 +110,8 @@ export function openCardDetail(app,options={}){
       function skillsSection(){
         const section=el('section',{class:'surface-card','aria-label':'完整技能'},[el('h3',{text:'武将技能'})]);
         if(!card.skills?.length)section.append(el('p',{class:'muted',text:'当前版本未提供技能说明。'}));
-        for(const skill of card.skills||[])section.append(el('section',{class:'detail-skill'},[el('h4',{text:skill.name||skill.id}),el('p',{text:skill.description||'暂无技能说明。'})]));
+        for(const skill of card.skills||[])section.append(el('section',{class:'detail-skill'},[el('h4',{text:skill.name||skill.id}),el('p',{text:skill.description||'暂无技能说明。'}),
+          skill.descriptionVariants?.length?el('details',{},[el('summary',{text:'补充与其他状态说明'}),...skill.descriptionVariants.map(v=>el('section',{},[el('h4',{text:v.name}),el('p',{text:v.description})]))]):null]));
         section.append(button(sourceVisible?'收起技能源码':'查看技能源码',()=>{
           if(sourceVisible){sourceVisible=false;render();return;}
           sourceVisible=true;if(sourceState==='idle')loadSource();else render();

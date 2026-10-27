@@ -1,4 +1,10 @@
 export type Rarity = 'N' | 'R' | 'SR' | 'SSR';
+/** catalog.detail.skills: display text and optional state notes; not a rating input. */
+export interface SkillDescriptionView {
+  id:string;name:string;description?:string;key?:string|null;code?:string|null;
+  descriptionVersion?:string;dynamicDescription?:boolean;
+  descriptionVariants?:Array<{id:string;name:string;description:string}>;
+}
 export type * from './shop-experience';
 export type * from './narrative';
 export type * from './operations-v7';

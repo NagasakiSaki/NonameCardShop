@@ -167,7 +167,8 @@ export const STYLES = String.raw`
 .pbc-detail__badges { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
 .pbc-detail__skill { border-top: 1px solid var(--pbc-line); padding-top: 8px; }
 .pbc-detail__skill h4 { color: var(--pbc-gold); font-size: 14px; margin-bottom: 2px; }
-.pbc-detail__skill p { font-size: 13px; line-height: 1.8; overflow-wrap: anywhere; }
+.pbc-detail__skill p { font-size: 13px; line-height: 1.8; overflow-wrap: anywhere; white-space: pre-wrap; }
+.pbc-detail[data-detail-page="skills"] p { white-space: pre-wrap; }
 .pbc-detail__source { margin-top: 6px; padding: 10px; background: #0c1416; border: 1px solid var(--pbc-line); border-radius: 6px; font: 12px/1.6 Consolas, monospace; white-space: pre; overflow-x: auto; }
 .pbc-bid-row { display: flex; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--pbc-line); }
 .pbc-bid-row:last-child { border-bottom: 0; }
