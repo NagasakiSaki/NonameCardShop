@@ -1,4 +1,16 @@
-# 无名卡店 Windows 桌面版 0.8.0
+# 无名卡店 Windows 桌面版 0.8.2
+
+当前安装包：`NonameCardShop-0.8.2-Setup-x64.exe`，发布页 https://github.com/NagasakiSaki/NonameCardShop/releases/tag/v0.8.2 。Windows x64，自带运行环境，无需另装 Node.js。双击安装，可选择位置；桌面/开始菜单的「无名卡店」启动游戏。
+
+0.8.2 同步当前经营界面、三种赛制（KOF 三将接力 / 斗地主换边 BO3 / 2v2 BO3）、按天回退存档、高手顺延与借款目标。此次新增地板移动采样优化、25 人四向独立待机、伙伴正面到岗，以及「高手伙伴 → 伙伴排班 → 约战赚钱（有输赢）」。伙伴下注采用后台模拟、营业不暂停，含游戏币托管、每日止损和收益流水。见根目录的 `docs/releases/v0.8.2.md` 和规则文档。
+
+安装版仍用本机 51740/51741 端口，玩家资料保留在 `%APPDATA%\NonameCardShop`，更新不清空。开发页面 5190 和安装版分开保存；通过游戏内「存档」导出/导入新版世界 JSON，不直接复制浏览器数据库。每 30 秒及正常退出自动备份；进行中的原生牌局沿用中断恢复规则。F11 全屏，WASD/方向键移动，B 打开卡册。安装包未配置在线自动更新。
+
+本地重建：先在根目录初始化依赖，运行 `npm run build:exe`。`npm run test:release` 针对真实 `desktop/dist/win-unpacked/NonameCardShop.exe` 使用独立档案验证原生菜单、导入导出、按天存档、沙箱与退出；不访问玩家目录。角色、场景与剧情资源均由 `config/project-layout.cjs` 统一纳入。
+
+发布包没有发布者代码签名证书，未添加联网账号或遥测。游戏内权利与开源许可见安装目录 `resources/game/THIRD_PARTY_NOTICES.md`、`LICENSE` 与 `NONAME-LICENSE`。
+
+## 历史记录：0.8.0（以下不作为当前玩法及维护口径）
 
 源码更新（2026-10-24）：当前开发源码的原生菜单已适配新版 Host 世界存档与日档，构建清单已补新版前端/资源。验证命令为 `npm run test:desktop`；尚未重新发布 EXE。新版世界 JSON 与旧试玩 JSON 分开校验，不自动互转；下面 0.8.0 安装/旧数值说明保留为历史发布记录。
 

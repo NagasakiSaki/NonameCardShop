@@ -5,10 +5,23 @@ const packaged=process.env.CARD_SHOP_TEST_PACKAGED==='1';
 (async()=>{
  const profile=fs.mkdtempSync(path.join(out,'profile-')),exportFile=path.join(out,'world-export.json');
  const env={...process.env,CARD_SHOP_DEVELOPMENT:'1',CARD_SHOP_TEST_MODE:'1',CARD_SHOP_TEST_PROFILE:profile,CARD_SHOP_TEST_PORT:'0',CARD_SHOP_TEST_ENGINE_PORT:'0'};delete env.ELECTRON_RUN_AS_NODE;
- const app=await _electron.launch({executablePath:path.join(root,packaged?'desktop/dist/win-unpacked/NonameCardShop.exe':'desktop/node_modules/electron/dist/electron.exe'),args:packaged?[]:[path.join(root,'desktop')],env,timeout:60000});let origin;
+ const executablePath=packaged&&process.env.CARD_SHOP_TEST_EXECUTABLE?path.resolve(process.env.CARD_SHOP_TEST_EXECUTABLE):path.join(root,packaged?'desktop/dist/win-unpacked/NonameCardShop.exe':'desktop/node_modules/electron/dist/electron.exe');
+ const app=await _electron.launch({executablePath,args:packaged?[]:[path.join(root,'desktop')],env,timeout:60000});let origin;
  try{
   const page=await app.firstWindow();origin=new URL(page.url()).origin;await page.locator('#start-menu').waitFor();await page.getByRole('textbox',{name:'新存档名称',exact:true}).fill('桌面审计隔离档');await page.getByRole('button',{name:'新建存档并开始',exact:true}).click();await page.waitForFunction(()=>window.__cardShopReady===true);
   const {finishOpeningDialogue}=await import('./fixtures/opening-dialogue.mjs');await finishOpeningDialogue(page);
+  if(packaged){
+   assert.equal(await app.evaluate(({app})=>app.getVersion()),require('../desktop/package.json').version);
+   const resources=path.dirname(await app.evaluate(({app})=>app.getAppPath()));
+   assert(['experiments/character-art/CREDITS.md','experiments/character-art/sources/lpc/credits.txt','experiments/character-art/sources/lpc-idle/sources.json','experiments/character-art/sources/portraits/LICENSE.txt'].every(p=>fs.existsSync(path.join(resources,'game',p))),'packaged component attribution must be present');
+   const runtimeAssets=await page.evaluate(async()=>{
+    const manifest=__cardShopApp.manifest,ids=Object.keys(manifest.characters);
+    const assets=[manifest.tileset.image,manifest.props.image,...ids.map(id=>manifest.characters[id].idleSheet)];
+    const responses=await Promise.all(assets.map(url=>fetch(url).then(r=>({url,status:r.status,type:r.headers.get('content-type')}))));
+    return {count:ids.length,responses,idle:__cardShopApp.getWorldScene().actorView.getSprite(__cardShopApp.getPlayer().actorId).texture.key,allies:await __cardShopApp.query('allies.list'),formats:await __cardShopApp.query('combat.formats')};
+   });
+   assert.equal(runtimeAssets.count,25);assert(runtimeAssets.responses.every(r=>r.status===200&&r.type?.startsWith('image/')),'packaged bright art and all 25 neutral sheets must load');assert(runtimeAssets.idle.startsWith('char-idle-'));assert(runtimeAssets.allies.ok&&runtimeAssets.allies.data.earning.policy.baseStake===60);assert(runtimeAssets.formats.ok);assert.equal((Array.isArray(runtimeAssets.formats.data)?runtimeAssets.formats.data:runtimeAssets.formats.data.items||runtimeAssets.formats.data.formats).length,3);
+  }
   await app.evaluate(({dialog},file)=>{globalThis.__auditDialogs=[];dialog.showSaveDialog=async()=>({canceled:false,filePath:file});dialog.showOpenDialog=async()=>({canceled:false,filePaths:[file]});dialog.showMessageBox=async(...args)=>{__auditDialogs.push(args.at(-1));return {response:1};};},exportFile);
   const click=label=>app.evaluate(async({Menu},label)=>{const item=Menu.getApplicationMenu().items.find(i=>i.label==='存档').submenu.items.find(i=>i.label===label);await item.click();},label);
   const until=async fn=>{const end=Date.now()+10000;while(!await fn()){const errors=await app.evaluate(()=>__auditDialogs.filter(d=>d.type==='error'));if(errors.length)throw Error(JSON.stringify(errors));if(Date.now()>end)throw Error('native menu action timed out');await new Promise(r=>setTimeout(r,60));}};

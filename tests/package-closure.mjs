@@ -43,6 +43,8 @@ const SCENE_ASSETS=[
   'assets/frontend-bright-anime/fx/sun-shaft.png',
 ];
 const scope=runtimeScope();
+const NOTICE_FILES=['experiments/character-art/CREDITS.md','experiments/character-art/source-manifest.json','experiments/character-art/sources/portraits/LICENSE.txt','experiments/character-art/sources/portraits/CODE-LICENSE.txt','experiments/character-art/sources/lpc/credits.txt','experiments/character-art/sources/lpc/hair-credits.txt','experiments/character-art/sources/lpc/clothing-credits.txt','experiments/character-art/sources/lpc-idle/README.md','experiments/character-art/sources/lpc-idle/sources.json'];
+for(const file of NOTICE_FILES){assert.ok(fs.existsSync(path.join(projectRoot,file)),file);assert(scope.isPackaged(file),file+' attribution must be packaged');assert(scope.isTraversed(path.posix.dirname(file)),file+' attribution parent must be traversed');}
 for(const asset of SCENE_ASSETS){
   assert.ok(fs.existsSync(path.join(projectRoot,asset)),`场景素材缺失：${asset}`);
   assert.equal(scope.isPackaged(asset),true,`场景素材未进入运行范围：${asset}`);
@@ -65,7 +67,7 @@ try{
     const absolute=path.join(projectRoot,asset.reference.replace(/^\/+/,''));
     assert.equal(filter(absolute,stat),true,`electron-builder 官方 filter 判定未入包：${asset.reference}`);
   }
-  for(const asset of SCENE_ASSETS){
+  for(const asset of [...SCENE_ASSETS,...NOTICE_FILES]){
     assert.equal(filter(path.join(projectRoot,asset),stat),true,`electron-builder 官方 filter 判定未入包：${asset}`);
   }
   builderEngine=`app-builder-lib@${require(path.join(desktopRoot,'node_modules/app-builder-lib/package.json')).version}`;
