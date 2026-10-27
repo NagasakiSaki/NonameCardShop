@@ -1,0 +1,200 @@
+{
+  "version": 2,
+  "generatedAt": "2026-10-27T03:46:46.651Z",
+  "cards": 1000,
+  "rounds": 6,
+  "environment": {
+    "node": "v22.22.2",
+    "platform": "win32/x64",
+    "cpu": "AMD Ryzen 7 8845H w/ Radeon 780M Graphics",
+    "logicalCpus": 16,
+    "totalMemoryMb": 28477,
+    "browser": "156.0.8078.4"
+  },
+  "resources": {
+    "catalogCards": 2563,
+    "fixtureItems": 1000
+  },
+  "scenarios": {
+    "boot": {
+      "coldEmptyMs": 1272,
+      "coldEmptyState": {
+        "dom": 83,
+        "heap": 61.9
+      },
+      "warmStockedMs": 689,
+      "warmStockedState": {
+        "dom": 85,
+        "heap": 138,
+        "listeners": {
+          "add": 99,
+          "remove": 0,
+          "byType": {
+            "click": 15,
+            "error": 1,
+            "pagehide": 1,
+            "__playwright_global_listeners_check__": 1,
+            "mousemove": 2,
+            "pointerdown": 9,
+            "pointerup": 9,
+            "touchstart": 3,
+            "touchend": 3,
+            "touchcancel": 3,
+            "mousedown": 3,
+            "mouseup": 3,
+            "auxclick": 1,
+            "dblclick": 1,
+            "contextmenu": 1,
+            "visibilitychange": 3,
+            "keydown": 3,
+            "keyup": 2,
+            "blur": 1,
+            "mouseover": 1,
+            "mouseout": 1,
+            "wheel": 1,
+            "pointerlockchange": 1,
+            "mozpointerlockchange": 1,
+            "webkitpointerlockchange": 1,
+            "touchmove": 1,
+            "change": 1,
+            "resize": 2,
+            "webkitfullscreenchange": 1,
+            "webkitfullscreenerror": 1,
+            "mozfullscreenchange": 1,
+            "mozfullscreenerror": 1,
+            "fullscreenchange": 1,
+            "fullscreenerror": 1,
+            "MSFullscreenChange": 1,
+            "MSFullscreenError": 1,
+            "pointercancel": 8,
+            "lostpointercapture": 8
+          }
+        }
+      }
+    },
+    "windows": {
+      "rounds": 6,
+      "openMs": {
+        "count": 6,
+        "mean": 533.17,
+        "p50": 494,
+        "p95": 557,
+        "max": 669
+      },
+      "closeMs": {
+        "count": 6,
+        "mean": 28,
+        "p50": 23,
+        "p95": 35,
+        "max": 37
+      },
+      "domOpen": {
+        "count": 6,
+        "mean": 12204.67,
+        "p50": 12212,
+        "p95": 12212,
+        "max": 12212
+      },
+      "domClosed": {
+        "count": 6,
+        "mean": 129,
+        "p50": 129,
+        "p95": 129,
+        "max": 129
+      },
+      "heapOpen": {
+        "count": 6,
+        "mean": 73.88,
+        "p50": 72.7,
+        "p95": 76,
+        "max": 77.4
+      },
+      "heapClosed": {
+        "count": 6,
+        "mean": 74.02,
+        "p50": 72.8,
+        "p95": 76.1,
+        "max": 77.6
+      },
+      "tiles": {
+        "count": 6,
+        "mean": 1000,
+        "p50": 1000,
+        "p95": 1000,
+        "max": 1000
+      },
+      "netAddRemoveCalls": [
+        2142,
+        4177,
+        6220,
+        8255,
+        10298,
+        12333
+      ],
+      "listenerGrowth": 10191,
+      "stackLeak": false,
+      "listenersBefore": {
+        "window": 30,
+        "document": 14
+      },
+      "listenersAfter": {
+        "window": 30,
+        "document": 14
+      },
+      "note": "netAddRemoveCalls 是 add/remove 调用次数差，节点销毁时监听器随节点回收、不会调用 remove，所以它不能单独证明泄漏；真正的泄漏看 listenersBefore/After（window/document 上的残留）。"
+    },
+    "interactive": {
+      "firstInteractiveMs": 141,
+      "rowsAtFirstInteractive": 1000,
+      "allRowsReachableMs": 0,
+      "rowsTotal": 1000,
+      "totalElapsedMs": 143,
+      "hasScroller": true
+    },
+    "scroll": {
+      "valid": true,
+      "moved": true,
+      "visibleRowChanged": true,
+      "beforeTop": 0,
+      "afterTop": 8064,
+      "scrollHeight": 67209,
+      "clientHeight": 767,
+      "frames": 18,
+      "elapsedMs": 1286,
+      "longtasks": [
+        318,
+        319,
+        323
+      ],
+      "longtaskTotal": 960,
+      "displayedRows": 1000
+    },
+    "search": {
+      "samples": [
+        84,
+        30,
+        22,
+        55,
+        53
+      ],
+      "ms": {
+        "count": 5,
+        "mean": 48.8,
+        "p50": 53,
+        "p95": 55,
+        "max": 84
+      },
+      "focusKept": true,
+      "tilesPerTerm": [
+        48,
+        17,
+        12,
+        60,
+        34
+      ],
+      "tilesAfterClear": 1000,
+      "note": "等待条件是“可见行文本都包含关键词”，即筛选已应用且已渲染；不是固定延时"
+    }
+  },
+  "errors": []
+}

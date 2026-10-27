@@ -139,6 +139,49 @@ try{
     note:'netAddRemoveCalls 是 add/remove 调用次数差，节点销毁时监听器随节点回收、不会调用 remove，所以它不能单独证明泄漏；真正的泄漏看 listenersBefore/After（window/document 上的残留）。',
   };
 
+  // ---- 首批可交互 vs 完整数据可达（OPT-13 的前置口径）----
+  // 只把工作延后不算加速：必须同时记录“第一行可点”和“最后一行可达”两个终点。
+  const interactive=await page.evaluate(async()=>{
+    const t0=performance.now();
+    __cardShopApp.openPanel('market',{tab:'collection'});
+    const until=async(predicate,limit=20000)=>{
+      const start=performance.now();
+      while(performance.now()-start<limit){if(predicate())return performance.now()-start;await new Promise(r=>requestAnimationFrame(r));}
+      return null;
+    };
+    const firstRow=await until(()=>{
+      const tile=document.querySelector('[data-collection-root] [data-card-grid] [data-card]');
+      if(!tile)return false;
+      const box=tile.getBoundingClientRect();
+      return box.width>0&&box.height>0;
+    });
+    const rowsAtFirstRow=document.querySelectorAll('[data-collection-root] [data-card-grid] [data-card]').length;
+    const rootNode=document.querySelector('[data-collection-root]');
+    let scroller=null,node=rootNode;
+    while(node&&node!==document.body){const style=getComputedStyle(node);if(/auto|scroll/.test(style.overflowY)&&node.scrollHeight>node.clientHeight+8){scroller=node;break;}node=node.parentElement;}
+    let allReachable=null;
+    if(scroller){
+      allReachable=await until(()=>{
+        scroller.scrollTop=scroller.scrollHeight;
+        const tiles=[...scroller.querySelectorAll('[data-card]')];
+        if(!tiles.length)return false;
+        const last=tiles[tiles.length-1].getBoundingClientRect();
+        const box=scroller.getBoundingClientRect();
+        return last.bottom<=box.bottom+2&&last.top>=box.top-2;
+      });
+      scroller.scrollTop=0;
+    }
+    return {
+      firstInteractiveMs:firstRow===null?null:Math.round(firstRow),
+      rowsAtFirstInteractive:rowsAtFirstRow,
+      allRowsReachableMs:allReachable===null?null:Math.round(allReachable),
+      rowsTotal:document.querySelectorAll('[data-collection-root] [data-card-grid] [data-card]').length,
+      totalElapsedMs:Math.round(performance.now()-t0),
+      hasScroller:Boolean(scroller),
+    };
+  });
+  report.scenarios.interactive=interactive;
+
   // ---- 滚动：找真正的滚动体，断言位置与可见行变化 ----
   await page.evaluate(()=>__cardShopApp.openPanel('market',{tab:'collection'}));
   await page.locator('[data-collection-root] [data-card-grid] [data-card]').first().waitFor();
