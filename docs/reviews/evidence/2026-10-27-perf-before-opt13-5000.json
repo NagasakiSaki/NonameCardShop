@@ -1,0 +1,228 @@
+{
+  "version": 2,
+  "generatedAt": "2026-10-27T04:09:35.180Z",
+  "cards": 5000,
+  "rounds": 5,
+  "environment": {
+    "node": "v22.22.2",
+    "platform": "win32/x64",
+    "cpu": "AMD Ryzen 7 8845H w/ Radeon 780M Graphics",
+    "logicalCpus": 16,
+    "totalMemoryMb": 28477,
+    "browser": "156.0.8078.4"
+  },
+  "resources": {
+    "catalogCards": 2563,
+    "fixtureItems": 5000
+  },
+  "scenarios": {
+    "boot": {
+      "coldEmptyMs": 883,
+      "coldEmptyState": {
+        "dom": 83,
+        "heap": 62.1
+      },
+      "warmStockedMs": 676,
+      "warmStockedState": {
+        "dom": 85,
+        "heap": 144,
+        "listeners": {
+          "add": 99,
+          "remove": 0,
+          "byType": {
+            "click": 15,
+            "error": 1,
+            "pagehide": 1,
+            "__playwright_global_listeners_check__": 1,
+            "mousemove": 2,
+            "pointerdown": 9,
+            "pointerup": 9,
+            "touchstart": 3,
+            "touchend": 3,
+            "touchcancel": 3,
+            "mousedown": 3,
+            "mouseup": 3,
+            "auxclick": 1,
+            "dblclick": 1,
+            "contextmenu": 1,
+            "visibilitychange": 3,
+            "keydown": 3,
+            "keyup": 2,
+            "blur": 1,
+            "mouseover": 1,
+            "mouseout": 1,
+            "wheel": 1,
+            "pointerlockchange": 1,
+            "mozpointerlockchange": 1,
+            "webkitpointerlockchange": 1,
+            "touchmove": 1,
+            "change": 1,
+            "resize": 2,
+            "webkitfullscreenchange": 1,
+            "webkitfullscreenerror": 1,
+            "mozfullscreenchange": 1,
+            "mozfullscreenerror": 1,
+            "fullscreenchange": 1,
+            "fullscreenerror": 1,
+            "MSFullscreenChange": 1,
+            "MSFullscreenError": 1,
+            "pointercancel": 8,
+            "lostpointercapture": 8
+          }
+        }
+      }
+    },
+    "windows": {
+      "rounds": 5,
+      "openMs": {
+        "count": 5,
+        "mean": 3371.2,
+        "p50": 2826,
+        "p95": 3222,
+        "max": 5280
+      },
+      "closeMs": {
+        "count": 5,
+        "mean": 46,
+        "p50": 41,
+        "p95": 42,
+        "max": 67
+      },
+      "domOpen": {
+        "count": 5,
+        "mean": 30967,
+        "p50": 30967,
+        "p95": 30967,
+        "max": 30967
+      },
+      "domClosed": {
+        "count": 5,
+        "mean": 129,
+        "p50": 129,
+        "p95": 129,
+        "max": 129
+      },
+      "heapOpen": {
+        "count": 5,
+        "mean": 99.98,
+        "p50": 104.6,
+        "p95": 106.1,
+        "max": 106.4
+      },
+      "heapClosed": {
+        "count": 5,
+        "mean": 100.3,
+        "p50": 105,
+        "p95": 106.4,
+        "max": 106.7
+      },
+      "tiles": {
+        "count": 5,
+        "mean": 2563,
+        "p50": 2563,
+        "p95": 2563,
+        "max": 2563
+      },
+      "netAddRemoveCalls": [
+        5268,
+        10437,
+        15606,
+        20775,
+        25944
+      ],
+      "listenerGrowth": 20676,
+      "stackLeak": false,
+      "listenersBefore": {
+        "window": 30,
+        "document": 14
+      },
+      "listenersAfter": {
+        "window": 30,
+        "document": 14
+      },
+      "note": "netAddRemoveCalls 是 add/remove 调用次数差，节点销毁时监听器随节点回收、不会调用 remove，所以它不能单独证明泄漏；真正的泄漏看 listenersBefore/After（window/document 上的残留）。"
+    },
+    "interactive": {
+      "firstInteractiveMs": 723,
+      "firstInteractiveRow": 0,
+      "rowsInDomAtFirstInteractive": 2563,
+      "allRowsReachableMs": 3722,
+      "lastReachableRow": 2562,
+      "rowsInDomBeforeLastClick": 2563,
+      "rowsTotal": 2563,
+      "rowsInDomAtEnd": 2563,
+      "hasScroller": true,
+      "ok": true
+    },
+    "scroll": {
+      "valid": true,
+      "moved": true,
+      "visibleRowChanged": true,
+      "beforeTop": 0,
+      "afterTop": 5160,
+      "scrollHeight": 171997,
+      "clientHeight": 767,
+      "frames": 5,
+      "elapsedMs": 2313,
+      "longtasks": [
+        50,
+        2160
+      ],
+      "longtaskTotal": 2210,
+      "displayedRows": 2563
+    },
+    "fastScroll": {
+      "valid": true,
+      "jumps": 6,
+      "longtasks": [
+        70,
+        2113
+      ],
+      "longtaskTotal": 2183,
+      "lastRowReached": true,
+      "total": 2563
+    },
+    "zoom": {
+      "total": 2563,
+      "firstRowVisible": true,
+      "lastRowInDom": true,
+      "lastRowVisible": true
+    },
+    "cleanup": {
+      "beforeDom": 30962,
+      "afterDom": 129,
+      "rootRemoved": true,
+      "gridRemoved": true,
+      "stack": 0
+    },
+    "search": {
+      "valid": true,
+      "failedTerms": [],
+      "samples": [
+        2942,
+        67,
+        161,
+        146,
+        90
+      ],
+      "ms": {
+        "count": 5,
+        "mean": 681.2,
+        "p50": 146,
+        "p95": 161,
+        "max": 2942
+      },
+      "focusKept": true,
+      "totalsPerTerm": [
+        145,
+        30,
+        49,
+        172,
+        101
+      ],
+      "totalAfterClear": 2563,
+      "note": "等待条件是“可见行文本都包含关键词”，即筛选已应用且已渲染；超时记为失败，不计入有效样本"
+    }
+  },
+  "errors": []
+}

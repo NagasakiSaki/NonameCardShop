@@ -139,46 +139,62 @@ try{
     note:'netAddRemoveCalls 是 add/remove 调用次数差，节点销毁时监听器随节点回收、不会调用 remove，所以它不能单独证明泄漏；真正的泄漏看 listenersBefore/After（window/document 上的残留）。',
   };
 
-  // ---- 首批可交互 vs 完整数据可达（OPT-13 的前置口径）----
-  // 只把工作延后不算加速：必须同时记录“第一行可点”和“最后一行可达”两个终点。
+  // ---- 首批可交互 vs 完整数据可达（OPT-13 口径）----
+  // 两个终点都从**同一次打开操作**起算；首批可交互要真的点一下；完整可达要看到**最后一条逻辑数据**。
   const interactive=await page.evaluate(async()=>{
     const t0=performance.now();
+    const elapsed=()=>performance.now()-t0;
     __cardShopApp.openPanel('market',{tab:'collection'});
-    const until=async(predicate,limit=20000)=>{
-      const start=performance.now();
-      while(performance.now()-start<limit){if(predicate())return performance.now()-start;await new Promise(r=>requestAnimationFrame(r));}
+    const until=async(predicate,limit=30000)=>{
+      while(elapsed()<limit){const value=predicate();if(value)return {ms:elapsed(),value};await new Promise(r=>requestAnimationFrame(r));}
       return null;
     };
-    const firstRow=await until(()=>{
+    const grid=()=>document.querySelector('[data-collection-root] [data-card-grid]');
+    const total=()=>Number(grid()?.getAttribute('data-total-rows')||0);
+
+    // 首批可交互：第一行可见且**点击真的生效**（aria-pressed 变 true）。
+    const firstHit=await until(()=>{
       const tile=document.querySelector('[data-collection-root] [data-card-grid] [data-card]');
-      if(!tile)return false;
+      if(!tile)return null;
       const box=tile.getBoundingClientRect();
-      return box.width>0&&box.height>0;
+      if(!(box.width>0&&box.height>0))return null;
+      tile.click();
+      return tile.getAttribute('aria-pressed')==='true'?tile.getAttribute('data-row-index'):null;
     });
-    const rowsAtFirstRow=document.querySelectorAll('[data-collection-root] [data-card-grid] [data-card]').length;
-    const rootNode=document.querySelector('[data-collection-root]');
-    let scroller=null,node=rootNode;
+    const rowsAtFirst=document.querySelectorAll('[data-collection-root] [data-card-grid] [data-card]').length;
+
+    // 完整可达：滚到底，必须看到 data-row-index === total-1 的那一行，并且能点中。
+    let scroller=null,node=document.querySelector('[data-collection-root]');
     while(node&&node!==document.body){const style=getComputedStyle(node);if(/auto|scroll/.test(style.overflowY)&&node.scrollHeight>node.clientHeight+8){scroller=node;break;}node=node.parentElement;}
-    let allReachable=null;
+    let lastRow=null;
     if(scroller){
-      allReachable=await until(()=>{
+      lastRow=await until(()=>{
+        const lastIndex=total()-1;
+        if(lastIndex<0)return 'empty';
         scroller.scrollTop=scroller.scrollHeight;
-        const tiles=[...scroller.querySelectorAll('[data-card]')];
-        if(!tiles.length)return false;
-        const last=tiles[tiles.length-1].getBoundingClientRect();
-        const box=scroller.getBoundingClientRect();
-        return last.bottom<=box.bottom+2&&last.top>=box.top-2;
+        const tile=document.querySelector('[data-collection-root] [data-card-grid] [data-card][data-row-index="'+lastIndex+'"]');
+        if(!tile)return null;
+        const box=tile.getBoundingClientRect(),view=scroller.getBoundingClientRect();
+        if(!(box.bottom<=view.bottom+2&&box.top>=view.top-2))return null;
+        const rowsBeforeClick=document.querySelectorAll('[data-collection-root] [data-card-grid] [data-card]').length;
+        tile.click();
+        return tile.getAttribute('aria-pressed')==='true'?{index:lastIndex,rowsBeforeClick}:null;
       });
-      scroller.scrollTop=0;
     }
-    return {
-      firstInteractiveMs:firstRow===null?null:Math.round(firstRow),
-      rowsAtFirstInteractive:rowsAtFirstRow,
-      allRowsReachableMs:allReachable===null?null:Math.round(allReachable),
-      rowsTotal:document.querySelectorAll('[data-collection-root] [data-card-grid] [data-card]').length,
-      totalElapsedMs:Math.round(performance.now()-t0),
+    const result={
+      firstInteractiveMs:firstHit?Math.round(firstHit.ms):null,
+      firstInteractiveRow:firstHit?Number(firstHit.value):null,
+      rowsInDomAtFirstInteractive:rowsAtFirst,
+      allRowsReachableMs:lastRow?Math.round(lastRow.ms):null,
+      lastReachableRow:lastRow&&lastRow.value!=='empty'?Number(lastRow.value.index):null,
+      rowsInDomBeforeLastClick:lastRow&&lastRow.value!=='empty'?lastRow.value.rowsBeforeClick:null,
+      rowsTotal:total(),
+      rowsInDomAtEnd:document.querySelectorAll('[data-collection-root] [data-card-grid] [data-card]').length,
       hasScroller:Boolean(scroller),
+      ok:Boolean(firstHit)&&Boolean(lastRow)&&lastRow.value!=='empty',
     };
+    if(scroller)scroller.scrollTop=0;
+    return result;
   });
   report.scenarios.interactive=interactive;
 
@@ -227,33 +243,101 @@ try{
   });
   report.scenarios.scroll={...scroll,displayedRows:rowsInfo.tiles};
 
-  // ---- 搜索：输入 → 结果已应用 → 布局可用 ----
+  // ---- 快速滚动：连续大跨度跳转，观察长任务与末行是否仍可达 ----
+  report.scenarios.fastScroll=await page.evaluate(async()=>{
+    const rootNode=document.querySelector('[data-collection-root]');
+    let scroller=null,node=rootNode;
+    while(node&&node!==document.body){const style=getComputedStyle(node);if(/auto|scroll/.test(style.overflowY)&&node.scrollHeight>node.clientHeight+8){scroller=node;break;}node=node.parentElement;}
+    if(!scroller)return {valid:false,reason:'未找到滚动容器'};
+    const total=Number(document.querySelector('[data-card-grid]')?.getAttribute('data-total-rows')||0);
+    const longtasks=[];
+    const observer=new PerformanceObserver(list=>{for(const entry of list.getEntries())longtasks.push(Math.round(entry.duration));});
+    try{observer.observe({entryTypes:['longtask']});}catch{}
+    const t0=performance.now();let jumps=0;
+    while(performance.now()-t0<1200){
+      scroller.scrollTop=(jumps%2===0?scroller.scrollHeight:0);
+      jumps+=1;
+      await new Promise(r=>requestAnimationFrame(r));
+    }
+    // 跳到底之后必须等它真的补到最后一行，不能假设一次设置就到位。
+    const deadline=performance.now()+15000;
+    let reached=false;
+    while(performance.now()<deadline){
+      scroller.scrollTop=scroller.scrollHeight;
+      const lastTile=document.querySelector('[data-card-grid] [data-card][data-row-index="'+(total-1)+'"]');
+      const box=lastTile?.getBoundingClientRect(),view=scroller.getBoundingClientRect();
+      if(lastTile&&box.bottom<=view.bottom+2&&box.top>=view.top-2){reached=true;break;}
+      await new Promise(r=>requestAnimationFrame(r));
+    }
+    observer.disconnect();
+    scroller.scrollTop=0;
+    return {valid:true,jumps,longtasks,longtaskTotal:longtasks.reduce((a,b)=>a+b,0),lastRowReached:reached,total};
+  });
+
+  // ---- 缩放（等效放大 25%：CSS 视口变窄），仍要能滚到底、首行可点 ----
+  await page.setViewportSize({width:1152,height:720});
+  await page.waitForTimeout(200);
+  report.scenarios.zoom=await page.evaluate(async()=>{
+    const grid=document.querySelector('[data-card-grid]');
+    const total=Number(grid?.getAttribute('data-total-rows')||0);
+    const first=document.querySelector('[data-card-grid] [data-card]');
+    const firstBox=first?.getBoundingClientRect();
+    let scroller=null,node=document.querySelector('[data-collection-root]');
+    while(node&&node!==document.body){const style=getComputedStyle(node);if(/auto|scroll/.test(style.overflowY)){scroller=node;break;}node=node.parentElement;}
+    if(scroller)scroller.scrollTop=scroller.scrollHeight;
+    await new Promise(r=>setTimeout(r,150));
+    const last=document.querySelector('[data-card-grid] [data-card][data-row-index="'+(total-1)+'"]');
+    const view=scroller?.getBoundingClientRect();
+    const lastBox=last?.getBoundingClientRect();
+    if(scroller)scroller.scrollTop=0;
+    return {total,firstRowVisible:Boolean(firstBox&&firstBox.width>0&&firstBox.height>0),lastRowInDom:Boolean(last),lastRowVisible:Boolean(last&&view&&lastBox.bottom<=view.bottom+2)};
+  });
+  await page.setViewportSize({width:1440,height:900});
+  await page.waitForTimeout(200);
+
+  // ---- 关闭清理：组件移除、DOM 回落 ----
+  const beforeClose=await page.evaluate(()=>({dom:document.getElementsByTagName('*').length}));
+  await page.evaluate(()=>__cardShopApp.windows.closeAll());
+  await page.waitForTimeout(150);
+  report.scenarios.cleanup=await page.evaluate(before=>({
+    beforeDom:before.dom,
+    afterDom:document.getElementsByTagName('*').length,
+    rootRemoved:!document.querySelector('[data-collection-root]'),
+    gridRemoved:!document.querySelector('[data-card-grid]'),
+    stack:__cardShopApp.windows.stack.length,
+  }),beforeClose);
+
+  // ---- 搜索：输入 → 结果已应用 → 布局可用（超时=失败，不静默算有效）----
+  // 搜索前重新打开（清理场景已经关过窗口）。
+  await page.evaluate(()=>__cardShopApp.openPanel('market',{tab:'collection'}));
+  await page.locator('[data-collection-root] [data-card-grid] [data-card]').first().waitFor();
   const search=page.getByRole('searchbox',{name:'搜索单卡',exact:true});
   const inputs=[];
+  let searchFailed=false;
   for(const term of ['曹','曹操','关','张','刘']){
     const t0=Date.now();
     await search.fill(term);
-    await page.waitForFunction(expected=>{
-      const tiles=[...document.querySelectorAll('[data-collection-root] [data-card-grid] [data-card]')];
-      if(!tiles.length)return false;
-      const matches=tiles.every(tile=>{
-        const card=tile.querySelector('[data-card-name],[data-name]');
-        const text=(tile.textContent||'');
-        return text.includes(expected);
-      });
-      return matches;
-    },term,{timeout:8000}).catch(()=>null);
+    let applied=true;
+    try{
+      await page.waitForFunction(expected=>{
+        const tiles=[...document.querySelectorAll('[data-collection-root] [data-card-grid] [data-card]')];
+        if(!tiles.length)return false;
+        return tiles.every(tile=>(tile.textContent||'').includes(expected));
+      },term,{timeout:8000});
+    }catch{applied=false;searchFailed=true;}
     const elapsed=Date.now()-t0;
-    inputs.push({term,ms:elapsed,tiles:await page.locator('[data-collection-root] [data-card-grid] [data-card]').count(),focus:await search.evaluate(node=>node===document.activeElement)});
+    inputs.push({term,ms:elapsed,applied,total:await page.evaluate(()=>Number(document.querySelector('[data-card-grid]')?.getAttribute('data-total-rows')||0)),focus:await search.evaluate(node=>node===document.activeElement)});
   }
   await search.fill('');
   await page.waitForTimeout(250);
   report.scenarios.search={
-    samples:inputs.map(row=>row.ms),ms:statsOf(inputs.map(row=>row.ms)),
+    valid:!searchFailed,
+    failedTerms:inputs.filter(row=>!row.applied).map(row=>row.term),
+    samples:inputs.map(row=>row.ms),ms:searchFailed?null:statsOf(inputs.map(row=>row.ms)),
     focusKept:inputs.every(row=>row.focus),
-    tilesPerTerm:inputs.map(row=>row.tiles),
-    tilesAfterClear:await page.locator('[data-collection-root] [data-card-grid] [data-card]').count(),
-    note:'等待条件是“可见行文本都包含关键词”，即筛选已应用且已渲染；不是固定延时',
+    totalsPerTerm:inputs.map(row=>row.total),
+    totalAfterClear:await page.evaluate(()=>Number(document.querySelector('[data-card-grid]')?.getAttribute('data-total-rows')||0)),
+    note:'等待条件是“可见行文本都包含关键词”，即筛选已应用且已渲染；超时记为失败，不计入有效样本',
   };
 
   report.errors=errors;
@@ -284,5 +368,23 @@ const scrollReport=report.scenarios.scroll;
 console.log(scrollReport.valid
   ?`滚动 1s：有效 · ${scrollReport.frames} 帧 · scrollTop ${scrollReport.beforeTop}→${scrollReport.afterTop} · 可见行变化 ${scrollReport.visibleRowChanged} · 长任务 ${scrollReport.longtasks.length}/${scrollReport.longtaskTotal}ms`
   :`滚动：无效（${scrollReport.reason||'未移动或可见行未变化'}）`);
-console.log(`搜索：${report.scenarios.search.ms.p50}/${report.scenarios.search.ms.p95}ms · 焦点保持 ${report.scenarios.search.focusKept} · 各词行数 ${report.scenarios.search.tilesPerTerm.join('/')}`);
+const interactiveReport=report.scenarios.interactive;
+console.log(`首批可交互 ${interactiveReport.firstInteractiveMs}ms（第 ${interactiveReport.firstInteractiveRow} 行可点，DOM 中 ${interactiveReport.rowsInDomAtFirstInteractive} 行） · 末行可达 ${interactiveReport.allRowsReachableMs}ms（第 ${interactiveReport.lastReachableRow}/${interactiveReport.rowsTotal-1} 行，DOM 中 ${interactiveReport.rowsInDomAtEnd} 行） · ${interactiveReport.ok?'两端点成立':'端点未成立'}`);
+const fastReport=report.scenarios.fastScroll;
+console.log(fastReport.valid
+  ?`快速滚动：${fastReport.jumps} 次跳转 · 长任务 ${fastReport.longtasks.length}/${fastReport.longtaskTotal}ms · 末行可达 ${fastReport.lastRowReached}`
+  :`快速滚动：无效（${fastReport.reason}）`);
+console.log(`缩放 125%：首行可见 ${report.scenarios.zoom.firstRowVisible} · 末行在 DOM ${report.scenarios.zoom.lastRowInDom} · 末行可见 ${report.scenarios.zoom.lastRowVisible}`);
+console.log(`关闭清理：DOM ${report.scenarios.cleanup.beforeDom}→${report.scenarios.cleanup.afterDom} · 组件已移除 ${report.scenarios.cleanup.rootRemoved} · 窗口栈 ${report.scenarios.cleanup.stack}`);
+console.log(report.scenarios.search.valid
+  ?`搜索：${report.scenarios.search.ms.p50}/${report.scenarios.search.ms.p95}ms · 焦点保持 ${report.scenarios.search.focusKept} · 各词行数 ${report.scenarios.search.totalsPerTerm.join('/')}`
+  :`搜索：失败（未应用：${report.scenarios.search.failedTerms.join('、')}）`);
 if(report.errors.length)console.log('页面异常：',report.errors.slice(0,3));
+
+// 失败必须可见：端点不成立、搜索未应用、组件未清理都返回非零。
+const failures=[];
+if(!interactiveReport.ok)failures.push('首批可交互/末行可达端点未成立');
+if(!report.scenarios.search.valid)failures.push('搜索筛选未在超时内应用');
+if(report.scenarios.fastScroll.valid&&!report.scenarios.fastScroll.lastRowReached)failures.push('快速滚动后末行不可达');
+if(!report.scenarios.cleanup.rootRemoved)failures.push('关闭后组件未移除');
+if(failures.length){console.log('失败：'+failures.join('；'));process.exitCode=1;}
