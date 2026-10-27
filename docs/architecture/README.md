@@ -13,6 +13,7 @@
 | [长线经营与高手挑战-v1](长线经营与高手挑战-v1.md) | 高手链（第 2 天起、击败次日顺延）、伙伴岗位、四期借款目标、未来系统接口 | `modules/progression/`、`modules/backend/campaign-loan.mjs`、`modules/backend/debt-challenge.mjs` |
 | [V7经营挑战与赛制接入](V7经营挑战与赛制接入.md) | 房间、系列赛、选将、挑战与经营窗口的接线 | `modules/backend/operations-v7.mjs`、`modules/backend/battle-rooms.mjs` |
 | [工程目录与维护边界](工程目录与维护边界.md) | 目录职责、运行范围、备份与审计边界 | `config/project-layout.cjs`、`desktop/electron-builder.cjs`、`tools/audit/` |
+| [策略来源与失效链](策略来源与失效链.md) | 现行/历史配置、版本、缓存和冻结实物 | `catalog-cache.mjs`、`v7-policy.mjs`、`audit:policies` |
 | [原生多人牌局适配与队友接管](原生多人牌局适配与队友接管.md) | 原生 profile、挂载校验、可选队友接管（页面顶部有 2026-10-27 校准块） | `integration/modes/`、`integration/host-battle.mjs` |
 | [剧情运行器与兼容接口](剧情运行器与兼容接口.md) | 剧情源→包→游标、条件/动作注册、场景对话（页面顶部有 2026-10-27 校准块） | `modules/narrative/`、`frontend/v7-dialogue.mjs`、`content/story/` |
 | [`contracts/README.md`](../../contracts/README.md) | Host 契约负载说明 | `contracts/*.d.ts`、`modules/backend/runtime.mjs` |

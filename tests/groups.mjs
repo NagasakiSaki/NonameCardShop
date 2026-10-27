@@ -101,6 +101,7 @@ export const groups={
     "tests/package-closure.mjs",
     "tests/contract-samples.mjs",
     "tests/eligibility-query.mjs",
+    "tests/policy-preservation.mjs",
     "tests/profile-registry.mjs",
     "tests/npc-day-loop.mjs",
     "tests/catalog-cache.mjs",
