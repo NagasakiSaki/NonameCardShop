@@ -17,12 +17,17 @@ export async function showStartMenu({onStart}={}){
     if(!profiles.length)content.append(el('p',{class:'start-menu__empty',text:'还没有卡店存档。新建后会从第 1 天 08:00 开始。'}));
     const list=el('div',{class:'start-menu__list'});
     for(const p of profiles){
-      const card=el('article',{class:'start-menu__profile','data-profile-id':p.profileId},[el('h2',{text:p.name}),el('p',{text:p.phase==='new'?'尚未开始经营':`第 ${p.day} 天 · ${Math.floor(p.minute/60)}:${String(Math.floor(p.minute%60)).padStart(2,'0')} · ${p.cash.toLocaleString('zh-CN')} 游戏币`})]);
+      const unreadable=p.phase==='unreadable'||p.ok===false;
+      const summary=unreadable?`存档读取失败（${p.unreadable||'STORAGE_ERROR'}）：${p.message||'无法读取这间卡店的数据。'}`
+        :p.phase==='new'?'尚未开始经营'
+        :`第 ${p.day} 天 · ${Math.floor(p.minute/60)}:${String(Math.floor(p.minute%60)).padStart(2,'0')} · ${(p.cash??0).toLocaleString('zh-CN')} 游戏币`;
+      const card=el('article',{class:'start-menu__profile','data-profile-id':p.profileId},[el('h2',{text:p.name}),el('p',{text:summary})]);
       card.append(el('div',{class:'toolbar'},[
-        button(p.phase==='new'?'开始经营':'继续当前进度',()=>onStart({profileId:p.profileId}),true),
-        button('选择日期读档',async()=>{expanded={id:p.profileId,kind:'days'};days=await registry.days(p.profileId);}),
+        button(p.phase==='new'?'开始经营':'继续当前进度',()=>onStart({profileId:p.profileId}),!unreadable),
+        button('选择日期读档',async()=>{expanded={id:p.profileId,kind:'days'};days=await registry.days(p.profileId);},unreadable),
         button('重命名',()=>{expanded={id:p.profileId,kind:'rename'};}),button('删除',()=>{expanded={id:p.profileId,kind:'delete'};})
       ]));
+      if(unreadable)card.append(el('p',{class:'small muted',text:'这份存档暂时打不开：数据没有被清除，也不会被自动重建。可以先删除它释放位置，或用导出的存档文件恢复。'}));
       if(expanded?.id===p.profileId){
         if(expanded.kind==='days'){
           card.append(el('p',{class:'small muted',text:'日档会回到所选日期的 08:00 开店前；当天的采购、成交和比赛结果一起回退。继续当前进度则保留最近时刻。'}));
