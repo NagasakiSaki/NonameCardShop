@@ -17,8 +17,8 @@ const remaining=Object.values(world.items).filter(i=>i.kind==='pack').flatMap(i=
 const all=openingPreview(world,{});assert.equal(all.packs,21);executeOpening(world,all,catalog);assert.equal(Object.values(world.items).length,120);
 const groups=inventoryView(world,catalog,{limit:200});assert.ok(groups.items.some(i=>i.owned>1));assert.equal(groups.items.reduce((n,i)=>n+i.owned,0),120);
 const sample=Object.values(world.items)[0];sample.protected=true;
-const c=catalog.byKey.get(sample.cardKey),stats=['bo3','kof'].map(mode=>({mode,games:3,wins:2,losses:1,draws:0}));
-const detail=cardDetailView(world,catalog,c,stats);assert.ok(detail.holdings.owned>0);assert.equal(detail.stats.bo3.sessions,3);assert.equal(detail.referencePrice.amount,detail.price);assert.equal(detail.copies.find(i=>i.inventoryRef===sample.inventoryRef).available,false);
+const c=catalog.byKey.get(sample.cardKey),stats=['kof','doudizhu-bo3','versus2v2-bo3'].map(mode=>({mode,games:3,wins:2,losses:1,draws:0}));
+const detail=cardDetailView(world,catalog,c,stats);assert.ok(detail.holdings.owned>0);for(const mode of ['kof','doudizhu-bo3','versus2v2-bo3'])assert.equal(detail.stats[mode].sessions,3);assert.equal(detail.referencePrice.amount,detail.price);assert.equal(detail.copies.find(i=>i.inventoryRef===sample.inventoryRef).available,false);
 const low=Object.values(world.items).find(i=>i.kind==='card'&&['N','R'].includes(i.printedRarity));assert.throws(()=>placeListing(world,catalog,low,80),e=>e.code==='MARKET_RARITY');
 const sale=Object.values(world.items).find(i=>i.kind==='card'&&!i.protected&&['SR','SSR'].includes(i.printedRarity));placeListing(world,catalog,sale,80);
 assert.equal(marketView(world,catalog,{tab:'mine'}).total,1);assert.equal(marketView(world,catalog,{tab:'buy'}).total,0);assert.equal(inventoryView(world,catalog,{filter:'listed'}).items[0].available,0);

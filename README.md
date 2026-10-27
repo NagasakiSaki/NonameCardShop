@@ -52,6 +52,8 @@ npm run test:long-term
 
 最近三赛制、房间、经营与滚动交互检查记录见 [验收文档](docs/reviews/2026-10-26-滚动选将与卡包图鉴修复.md)。受控引擎夹具通过不代表所有武将技能、自然难度或长期经济平衡已验证。
 
+维护时可用 `node tests/run.mjs --task=OPT-13 --list --details` 查必要范围，再按任务执行；完整结构回归和失败补跑见 [测试范围与证据等级](docs/architecture/测试范围与证据等级.md)。素材默认生成隔离候选，`npm run art:reproduce` 检查可复现；内核候选先用 `npm run engine:stage -- --source 目录` 生成差异报告，[不会自动替换正式引擎](docs/architecture/上游内核升级暂存流程.md)。
+
 高手顺延、设施升级、借款阶段目标及未来镀层/交易所接口见 [长线经营规则与维护说明](docs/architecture/长线经营与高手挑战-v1.md)。
 
 最新评分假设、固定发行和选将接口见 [两回合收益论与分包选将](docs/architecture/两回合收益论与固定发行-v1.md)，专项检查为 `npm run test:ideal-yield`。复杂技能的理论初估与已校准技能分开标记。

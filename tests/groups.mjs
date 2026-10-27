@@ -6,7 +6,9 @@ export const groups={
     "tools/test-modules.cjs",
     "tools/test-balance.cjs",
     "tests/server.mjs",
-    "tests/boxes.cjs"
+    "tests/boxes.cjs",
+    "tests/candidate-tools.mjs",
+    "tests/test-inventory.mjs"
   ],
   "ui": [
     "tests/trade-cards.mjs",
