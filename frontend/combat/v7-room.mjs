@@ -6,6 +6,7 @@ import {renderPackSelector,scoreFor} from './pack-selector.mjs';
 import {formatOptions,renderFormatPicker} from './format-picker.mjs';
 import {buildSelectRoundIntent,roundSelectionRequirement} from './round-select.mjs';
 import {seriesBanner,takeoverControlInfo,sideSwapNote} from './series-panel.mjs';
+import {classifyMountError,mountErrorAction} from './mount-errors.mjs';
 
 export function ensureV7Styles(){if(!document.getElementById('v7-room-style'))document.head.append(el('link',{id:'v7-room-style',rel:'stylesheet',href:'/frontend/combat/v7-room.css'}));}
 const idOf=app=>app.snapshot().worldId+':'+app.snapshot().branchId;
@@ -19,7 +20,7 @@ export async function openCombat(app,options={}){
   let series=room?.series||(existing.ok?existing.data:null),formatId=room?.formatId||'kof',selected=[],page=0,items=[],formats=[],opponentId=room?.opponentId||options.opponentId||null,step=series?'series':room?'reserve':'format',pending=null;
   const pickerStates={reserve:{pack:null,scroll:{}},round:{pack:null,scroll:{}}};let roundPickerId=null;
   return app.windows.open({id:'combat-v7',title:'对战房间',pauseReason:'准备牌局',width:'window--wide',render:async ctx=>{
-    fitPanel(ctx);ctx.element.classList.add('v7-room');let disposed=false,busy=false,mounted=null,mountedGame=null,mounting=false,refreshing=false,menuOpen=false;
+    fitPanel(ctx);ctx.element.classList.add('v7-room');let disposed=false,busy=false,mounted=null,mountedGame=null,mounting=false,refreshing=false,menuOpen=false,mountIssue=null;
     const branch=idOf(app),active=()=>!disposed&&!ctx.handle.closed&&idOf(app)===branch;
     const message=el('p',{role:'status',class:'v7-message'}),root=el('div',{class:'v7-combat-body'}),battle=el('div',{class:'v7-battle',hidden:true}),head=el('div'),choiceBar=el('div',{class:'v7-choice-bar','data-choice-bar':'true'});ctx.body.append(message,root,battle);ctx.foot.append(choiceBar);
     const button=(text,fn,disabled=false)=>el('button',{class:'btn btn--sm',text,disabled:disabled||busy,onclick:fn});
@@ -39,8 +40,14 @@ export async function openCombat(app,options={}){
     }
     async function mountRound(){
       if(!active()||mounting||mounted)return;mounting=true;battle.hidden=false;root.hidden=true;
-      try{const handle=await app.host.battle.mount({container:battle,matchId:series.matchId});if(!active()){await handle.dispose();return;}mounted=handle;mountedGame=series.round.gameId;await reload();}
-      catch(e){message.textContent=e.message;root.hidden=false;await reload();}finally{mounting=false;}
+      try{const handle=await app.host.battle.mount({container:battle,matchId:series.matchId});if(!active()){await handle.dispose();return;}mounted=handle;mountedGame=series.round.gameId;mountIssue=null;await reload();}
+      catch(e){
+        // 技术中断（超时/连不上）与不兼容/状态问题分开：只有前者给“重试载入”。
+        mountIssue=classifyMountError(e);
+        message.textContent=mountIssue.kind==='cancelled'?'':mountIssue.title+'：'+mountIssue.detail;
+        battle.replaceChildren();battle.hidden=true;root.hidden=false;
+        await reload();paint();
+      }finally{mounting=false;}
     }
     const preview=item=>app.openPanel('cardDetail',{cardKey:item.cardKey});
     async function favorite(item){const favorite=!item.favorite,r=await submit('player.setFavorite',{cardKey:item.cardKey,favorite});if(r?.ok){for(const c of items)if(c.cardKey===item.cardKey)c.favorite=favorite;for(const c of series?.reserveItems||[])if(c.cardKey===item.cardKey)c.favorite=favorite;paint();}}
@@ -104,6 +111,15 @@ export async function openCombat(app,options={}){
       }
       if(series&&['live','mounting','confirmed'].includes(series.phase))root.append(button('整场认输',async()=>{const r=await submit('combat.surrender',{matchId:series.matchId});if(r?.ok){await stopBattle();series=r.data;paint();}}));
       if(series?.cancellationOffer?.available)root.append(button('取消连续平局的比赛',async()=>{const r=await submit('combat.cancel',{matchId:series.matchId,reason:'draw-cancellation'});if(r?.ok){await stopBattle();series=r.data;paint();}}));
+      if(mountIssue&&['live','mounting','confirmed'].includes(series?.phase)){
+        const action=mountErrorAction(mountIssue),box=el('div',{class:'note-card',dataset:{v7MountIssue:mountIssue.kind}},[
+          el('p',{class:'note-card__title',text:mountIssue.title}),
+          el('p',{class:'small',text:mountIssue.detail}),
+          el('p',{class:'small muted',text:mountIssue.retryable?'这是技术中断：阵容与比分保留，重试不会重复扣费或改判。':'重试不会改变结果，请按上面的提示处理。'}),
+        ]);
+        if(action?.id==='retry')box.append(el('div',{class:'toolbar'},[button(action.label,()=>{mountIssue=null;paint();void mountRound();})]));
+        root.append(box);
+      }
       ctx.body.scrollTop=savedScroll;paintControls();if(mounted&&!menuOpen)root.hidden=true;
     }
     function roomHeader(){if(!room)return;const end=room.expiresAt%1440,until=Number.isFinite(end)?String(Math.floor(end/60)).padStart(2,'0')+':'+String(Math.floor(end%60)).padStart(2,'0'):null;const header=el('div',{class:'v7-room-summary','data-combat-room':room.roomId},[el('strong',{text:(room.roomLabel||'房间')+' · '+room.formatLabel+' · '+room.opponentName}),el('span',{class:'small',text:'我方'+(room.readiness.mine?'已确认':'待确认')+' · 对手'+(room.readiness.enemy?'已准备':'等待入房')+' · 备战池 '+room.pools.enemy.length+'/'+room.capacity+' · 桌费 '+app.formatMoney(room.tableFee)+(room.kind!=='friendly'?'（免费）':'（对手整场一次）')}),button('查看对方备战池',()=>openRoomPools(app,room),!room.pools.enemy.length)]);if(!room.readiness.enemy)header.append(el('p',{text:room.waitReason||'等待持卡足够且空闲的顾客入房；可以收起窗口继续经营。'}));if(until&&!room.matchId)header.append(el('span',{class:'small',text:'待开局房间保留至 '+until+'，或打烊时关闭'}));root.append(header);}
