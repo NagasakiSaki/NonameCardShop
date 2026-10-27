@@ -1,0 +1,3806 @@
+{
+  "version": 1,
+  "generatedAt": "2026-10-27T01:49:21.249Z",
+  "scope": {
+    "from": "..",
+    "to": "game",
+    "engine": "minimatch@10.2.6",
+    "engineSource": "desktop\\node_modules\\minimatch",
+    "directories": [
+      "frontend",
+      "frontend-next",
+      "assets/frontend",
+      "assets/frontend-bright-anime",
+      "assets/frontend-next",
+      "assets/shop",
+      "data",
+      "modules",
+      "integration",
+      "contracts",
+      "content",
+      "config",
+      "vendor"
+    ],
+    "rootFiles": [
+      "*.html",
+      "*.js",
+      "*.mjs",
+      "*.css",
+      "package.json",
+      "package-lock.json",
+      "LICENSE",
+      "NONAME-LICENSE",
+      "THIRD_PARTY_NOTICES.md",
+      "README.md"
+    ],
+    "exclusions": [
+      "!data/balance-build.log",
+      "!vendor/noname/Home/**/*"
+    ],
+    "patterns": [
+      "*.html",
+      "*.js",
+      "*.mjs",
+      "*.css",
+      "package.json",
+      "package-lock.json",
+      "LICENSE",
+      "NONAME-LICENSE",
+      "THIRD_PARTY_NOTICES.md",
+      "README.md",
+      "frontend/**/*",
+      "frontend-next/**/*",
+      "assets/frontend/**/*",
+      "assets/frontend-bright-anime/**/*",
+      "assets/frontend-next/**/*",
+      "assets/shop/**/*",
+      "data/**/*",
+      "modules/**/*",
+      "integration/**/*",
+      "contracts/**/*",
+      "content/**/*",
+      "config/**/*",
+      "vendor/**/*",
+      "!data/balance-build.log",
+      "!vendor/noname/Home/**/*"
+    ]
+  },
+  "totals": {
+    "manifests": 5,
+    "assetReferences": 159,
+    "runtimeAssetReferences": 134,
+    "packaged": 159,
+    "missingOnDisk": 0,
+    "excluded": 0
+  },
+  "manifests": [
+    {
+      "file": "assets/frontend/manifest.json",
+      "role": "runtime",
+      "loadedBy": "frontend/world/map-loader.mjs、frontend/app-shell.mjs（角色图集/立绘/头像、地图、瓦片、道具、光效）",
+      "total": 83,
+      "assets": 82,
+      "references": [
+        {
+          "reference": "/assets/frontend-bright-anime/fx/glow.png",
+          "pointer": "fx.lampGlow",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/fx/shadow.png",
+          "pointer": "fx.shadow",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/fx/sun-shaft.png",
+          "pointer": "fx.sunShaft",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/props/props.png",
+          "pointer": "props.image",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/tiles/tileset.png",
+          "pointer": "tileset.image",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-anon.c32c4710da.png",
+          "pointer": "characters.bd-anon.sheet",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-arale.96c48d7257.png",
+          "pointer": "characters.bd-arale.sheet",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-chieri.c700ddc3b3.png",
+          "pointer": "characters.bd-chieri.sheet",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-hotaru.082c2c60af.png",
+          "pointer": "characters.bd-hotaru.sheet",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-houka.4d45944cd7.png",
+          "pointer": "characters.bd-houka.sheet",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-mahoro.22ed565fbe.png",
+          "pointer": "characters.bd-mahoro.sheet",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-miku.e9ba035ca6.png",
+          "pointer": "characters.bd-miku.sheet",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-miyako.4e39ed25be.png",
+          "pointer": "characters.bd-miyako.sheet",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-mutsumi.228b53245b.png",
+          "pointer": "characters.bd-mutsumi.sheet",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-nagi.524af3d8c3.png",
+          "pointer": "characters.bd-nagi.sheet",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-natsume.1a8e498436.png",
+          "pointer": "characters.bd-natsume.sheet",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-nonoka.64edd19fb6.png",
+          "pointer": "characters.bd-nonoka.sheet",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-nyamu.ffdd89a7d4.png",
+          "pointer": "characters.bd-nyamu.sheet",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-raika.8f735904c6.png",
+          "pointer": "characters.bd-raika.sheet",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-rana.37dffee9ba.png",
+          "pointer": "characters.bd-rana.sheet",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-ritsu.03ef4966fc.png",
+          "pointer": "characters.bd-ritsu.sheet",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-sakiko.213fce0606.png",
+          "pointer": "characters.bd-sakiko.sheet",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-shizuku.693d5cd8d0.png",
+          "pointer": "characters.bd-shizuku.sheet",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-soyo.9c52830f6e.png",
+          "pointer": "characters.bd-soyo.sheet",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-taki.0c12852460.png",
+          "pointer": "characters.bd-taki.sheet",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-tomori.41ae9f88ef.png",
+          "pointer": "characters.bd-tomori.sheet",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-uika.e04c7618f8.png",
+          "pointer": "characters.bd-uika.sheet",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-umiri.80b698ccf0.png",
+          "pointer": "characters.bd-umiri.sheet",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-yomogi.e3704d44f5.png",
+          "pointer": "characters.bd-yomogi.sheet",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-yuno.a7c15461f8.png",
+          "pointer": "characters.bd-yuno.sheet",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/maps/battle-room.json",
+          "pointer": "maps.battle-room",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/maps/store.json",
+          "pointer": "maps.store",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-anon.56c98768ed.png",
+          "pointer": "characters.bd-anon.portrait",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-anon.79cfda23ed.png",
+          "pointer": "characters.bd-anon.avatar",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-arale.cc3a183a55.png",
+          "pointer": "characters.bd-arale.portrait",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-arale.fc8b68255f.png",
+          "pointer": "characters.bd-arale.avatar",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-chieri.0632e4a848.png",
+          "pointer": "characters.bd-chieri.avatar",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-chieri.ce27d41686.png",
+          "pointer": "characters.bd-chieri.portrait",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-hotaru.0af30dcb60.png",
+          "pointer": "characters.bd-hotaru.portrait",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-hotaru.a81134af45.png",
+          "pointer": "characters.bd-hotaru.avatar",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-houka.774a0c05ba.png",
+          "pointer": "characters.bd-houka.avatar",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-houka.f7728b3d7d.png",
+          "pointer": "characters.bd-houka.portrait",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-mahoro.6f7b297acb.png",
+          "pointer": "characters.bd-mahoro.avatar",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-mahoro.f92f1d9157.png",
+          "pointer": "characters.bd-mahoro.portrait",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-miku.81c9513fd0.png",
+          "pointer": "characters.bd-miku.portrait",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-miku.b4c657f949.png",
+          "pointer": "characters.bd-miku.avatar",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-miyako.4e4bf7702d.png",
+          "pointer": "characters.bd-miyako.portrait",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-miyako.ee39994c29.png",
+          "pointer": "characters.bd-miyako.avatar",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-mutsumi.dd76fc39d2.png",
+          "pointer": "characters.bd-mutsumi.portrait",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-mutsumi.fdc4f1e343.png",
+          "pointer": "characters.bd-mutsumi.avatar",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-nagi.954a04e853.png",
+          "pointer": "characters.bd-nagi.portrait",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-nagi.e9e56964b2.png",
+          "pointer": "characters.bd-nagi.avatar",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-natsume.2b7feceefd.png",
+          "pointer": "characters.bd-natsume.avatar",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-natsume.bf97a9518e.png",
+          "pointer": "characters.bd-natsume.portrait",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-nonoka.8a0c693121.png",
+          "pointer": "characters.bd-nonoka.avatar",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-nonoka.8a7e51a0a2.png",
+          "pointer": "characters.bd-nonoka.portrait",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-nyamu.8237400e0c.png",
+          "pointer": "characters.bd-nyamu.avatar",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-nyamu.a932b82faa.png",
+          "pointer": "characters.bd-nyamu.portrait",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-raika.2787fe4c1b.png",
+          "pointer": "characters.bd-raika.portrait",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-raika.cc17918655.png",
+          "pointer": "characters.bd-raika.avatar",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-rana.021e2c4022.png",
+          "pointer": "characters.bd-rana.avatar",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-rana.f81b2f6466.png",
+          "pointer": "characters.bd-rana.portrait",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-ritsu.6d97f08d96.png",
+          "pointer": "characters.bd-ritsu.portrait",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-ritsu.7b17dcbb21.png",
+          "pointer": "characters.bd-ritsu.avatar",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-sakiko.08fe1ab48a.png",
+          "pointer": "characters.bd-sakiko.avatar",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-sakiko.2a4e7b28ac.png",
+          "pointer": "characters.bd-sakiko.portrait",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-shizuku.038c16f4ae.png",
+          "pointer": "characters.bd-shizuku.avatar",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-shizuku.7eae9de347.png",
+          "pointer": "characters.bd-shizuku.portrait",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-soyo.8cf1adc0bd.png",
+          "pointer": "characters.bd-soyo.avatar",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-soyo.d0e4a798c5.png",
+          "pointer": "characters.bd-soyo.portrait",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-taki.3b36dfa895.png",
+          "pointer": "characters.bd-taki.avatar",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-taki.8a795a12b8.png",
+          "pointer": "characters.bd-taki.portrait",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-tomori.11fe94c1b6.png",
+          "pointer": "characters.bd-tomori.portrait",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-tomori.2e555cd2d0.png",
+          "pointer": "characters.bd-tomori.avatar",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-uika.9bba0a55c5.png",
+          "pointer": "characters.bd-uika.portrait",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-uika.f480dd60ea.png",
+          "pointer": "characters.bd-uika.avatar",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-umiri.cc9cf8b202.png",
+          "pointer": "characters.bd-umiri.avatar",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-umiri.fd42539f78.png",
+          "pointer": "characters.bd-umiri.portrait",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-yomogi.2e3cd15788.png",
+          "pointer": "characters.bd-yomogi.portrait",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-yomogi.b93ba6638f.png",
+          "pointer": "characters.bd-yomogi.avatar",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-yuno.d8eaab8333.png",
+          "pointer": "characters.bd-yuno.avatar",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/portraits/bd-yuno.e58d540f25.png",
+          "pointer": "characters.bd-yuno.portrait",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/experiments/character-art/CREDITS.md",
+          "pointer": "characterCredits",
+          "role": "runtime",
+          "kind": "non-asset",
+          "allowlisted": true
+        }
+      ]
+    },
+    {
+      "file": "assets/frontend-next/products/manifest.json",
+      "role": "runtime",
+      "loadedBy": "frontend-next/screens/supplier.mjs、frontend-next/screens/workspace.mjs（包装图）",
+      "total": 38,
+      "assets": 38,
+      "references": [
+        {
+          "reference": "/assets/frontend-next/products/bingshi-box.9f61171b14.png",
+          "pointer": "products.bingshi.box",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/bingshi-pack.bd28fd2d07.png",
+          "pointer": "products.bingshi.pack",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/clan-box.4700a9c6fd.png",
+          "pointer": "products.clan.box",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/clan-pack.673f8aba09.png",
+          "pointer": "products.clan.pack",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/extra-box.9f61171b14.png",
+          "pointer": "products.extra.box",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/extra-pack.bd28fd2d07.png",
+          "pointer": "products.extra.pack",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/huicui-box.787a97712c.png",
+          "pointer": "products.huicui.box",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/huicui-pack.fca285404e.png",
+          "pointer": "products.huicui.pack",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/jsrg-box.4700a9c6fd.png",
+          "pointer": "products.jsrg.box",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/jsrg-pack.673f8aba09.png",
+          "pointer": "products.jsrg.pack",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/mobile-box.9f61171b14.png",
+          "pointer": "products.mobile.box",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/mobile-pack.bd28fd2d07.png",
+          "pointer": "products.mobile.pack",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/newjiang-box.787a97712c.png",
+          "pointer": "products.newjiang.box",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/newjiang-pack.fca285404e.png",
+          "pointer": "products.newjiang.pack",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/offline-box.66e6aa4bb3.png",
+          "pointer": "products.offline.box",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/offline-pack.108bb0f538.png",
+          "pointer": "products.offline.pack",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/refresh-box.66e6aa4bb3.png",
+          "pointer": "products.refresh.box",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/refresh-pack.108bb0f538.png",
+          "pointer": "products.refresh.pack",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/sb-box.d5926b63a0.png",
+          "pointer": "products.sb.box",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/sb-pack.2c39385c25.png",
+          "pointer": "products.sb.pack",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/shenhua-box.6ac2c0a25d.png",
+          "pointer": "products.shenhua.box",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/shenhua-pack.7f37c9d1e1.png",
+          "pointer": "products.shenhua.pack",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/shiji-box.66e6aa4bb3.png",
+          "pointer": "products.shiji.box",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/shiji-pack.108bb0f538.png",
+          "pointer": "products.shiji.pack",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/sp-box.787a97712c.png",
+          "pointer": "products.sp.box",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/sp-pack.fca285404e.png",
+          "pointer": "products.sp.pack",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/sp2-box.66e6aa4bb3.png",
+          "pointer": "products.sp2.box",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/sp2-pack.108bb0f538.png",
+          "pointer": "products.sp2.pack",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/standard-box.d5926b63a0.png",
+          "pointer": "products.standard.box",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/standard-pack.2c39385c25.png",
+          "pointer": "products.standard.pack",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/sxrm-box.9f61171b14.png",
+          "pointer": "products.sxrm.box",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/sxrm-pack.bd28fd2d07.png",
+          "pointer": "products.sxrm.pack",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/tw-box.66e6aa4bb3.png",
+          "pointer": "products.tw.box",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/tw-pack.108bb0f538.png",
+          "pointer": "products.tw.pack",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/yijiang-box.d5926b63a0.png",
+          "pointer": "products.yijiang.box",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/yijiang-pack.2c39385c25.png",
+          "pointer": "products.yijiang.pack",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/yingbian-box.d5926b63a0.png",
+          "pointer": "products.yingbian.box",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-next/products/yingbian-pack.2c39385c25.png",
+          "pointer": "products.yingbian.pack",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        }
+      ]
+    },
+    {
+      "file": "assets/frontend-bright-anime/products/manifest.json",
+      "role": "runtime",
+      "loadedBy": "frontend-next/screens/stations.mjs（明亮二次元包装图）",
+      "total": 14,
+      "assets": 14,
+      "references": [
+        {
+          "reference": "/assets/frontend-bright-anime/products/box-butter.png",
+          "pointer": "products.standard.box",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/products/box-coral.png",
+          "pointer": "products.sp.box",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/products/box-lilac.png",
+          "pointer": "products.shenhua.box",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/products/box-mint.png",
+          "pointer": "products.yijiang.box",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/products/box-rose.png",
+          "pointer": "products.extra.box",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/products/box-sky.png",
+          "pointer": "products.refresh.box",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/products/box-slate.png",
+          "pointer": "products.tw.box",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/products/pack-butter.png",
+          "pointer": "products.standard.pack",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/products/pack-coral.png",
+          "pointer": "products.sp.pack",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/products/pack-lilac.png",
+          "pointer": "products.shenhua.pack",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/products/pack-mint.png",
+          "pointer": "products.yijiang.pack",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/products/pack-rose.png",
+          "pointer": "products.extra.pack",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/products/pack-sky.png",
+          "pointer": "products.refresh.pack",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/products/pack-slate.png",
+          "pointer": "products.tw.pack",
+          "role": "runtime",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        }
+      ]
+    },
+    {
+      "file": "assets/frontend-bright-anime/manifest.characters.json",
+      "role": "art-source",
+      "loadedBy": "素材工具源清单，运行时不读取",
+      "total": 50,
+      "assets": 50,
+      "references": [
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-anon.png",
+          "pointer": "characters[1].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-arale.png",
+          "pointer": "characters[10].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-chieri.png",
+          "pointer": "characters[23].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-hotaru.png",
+          "pointer": "characters[17].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-houka.png",
+          "pointer": "characters[18].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-mahoro.png",
+          "pointer": "characters[16].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-miku.png",
+          "pointer": "characters[21].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-miyako.png",
+          "pointer": "characters[13].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-mutsumi.png",
+          "pointer": "characters[6].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-nagi.png",
+          "pointer": "characters[15].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-natsume.png",
+          "pointer": "characters[19].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-nonoka.png",
+          "pointer": "characters[11].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-nyamu.png",
+          "pointer": "characters[8].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-raika.png",
+          "pointer": "characters[20].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-rana.png",
+          "pointer": "characters[2].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-ritsu.png",
+          "pointer": "characters[12].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-sakiko.png",
+          "pointer": "characters[9].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-shizuku.png",
+          "pointer": "characters[24].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-soyo.png",
+          "pointer": "characters[3].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-taki.png",
+          "pointer": "characters[4].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-tomori.png",
+          "pointer": "characters[0].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-uika.png",
+          "pointer": "characters[5].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-umiri.png",
+          "pointer": "characters[7].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-yomogi.png",
+          "pointer": "characters[22].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-yuno.png",
+          "pointer": "characters[14].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-anon.c32c4710da.png",
+          "pointer": "characters[1].source",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-arale.96c48d7257.png",
+          "pointer": "characters[10].source",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-chieri.c700ddc3b3.png",
+          "pointer": "characters[23].source",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-hotaru.082c2c60af.png",
+          "pointer": "characters[17].source",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-houka.4d45944cd7.png",
+          "pointer": "characters[18].source",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-mahoro.22ed565fbe.png",
+          "pointer": "characters[16].source",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-miku.e9ba035ca6.png",
+          "pointer": "characters[21].source",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-miyako.4e39ed25be.png",
+          "pointer": "characters[13].source",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-mutsumi.228b53245b.png",
+          "pointer": "characters[6].source",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-nagi.524af3d8c3.png",
+          "pointer": "characters[15].source",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-natsume.1a8e498436.png",
+          "pointer": "characters[19].source",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-nonoka.64edd19fb6.png",
+          "pointer": "characters[11].source",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-nyamu.ffdd89a7d4.png",
+          "pointer": "characters[8].source",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-raika.8f735904c6.png",
+          "pointer": "characters[20].source",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-rana.37dffee9ba.png",
+          "pointer": "characters[2].source",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-ritsu.03ef4966fc.png",
+          "pointer": "characters[12].source",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-sakiko.213fce0606.png",
+          "pointer": "characters[9].source",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-shizuku.693d5cd8d0.png",
+          "pointer": "characters[24].source",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-soyo.9c52830f6e.png",
+          "pointer": "characters[3].source",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-taki.0c12852460.png",
+          "pointer": "characters[4].source",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-tomori.41ae9f88ef.png",
+          "pointer": "characters[0].source",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-uika.e04c7618f8.png",
+          "pointer": "characters[5].source",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-umiri.80b698ccf0.png",
+          "pointer": "characters[7].source",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-yomogi.e3704d44f5.png",
+          "pointer": "characters[22].source",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend/characters/bd-yuno.a7c15461f8.png",
+          "pointer": "characters[14].source",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        }
+      ]
+    },
+    {
+      "file": "assets/frontend-bright-anime/manifest.props.json",
+      "role": "art-source",
+      "loadedBy": "素材工具源清单，运行时不读取",
+      "total": 44,
+      "assets": 44,
+      "references": [
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-anon.png",
+          "pointer": "characters[1].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-arale.png",
+          "pointer": "characters[10].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-chieri.png",
+          "pointer": "characters[23].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-hotaru.png",
+          "pointer": "characters[17].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-houka.png",
+          "pointer": "characters[18].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-mahoro.png",
+          "pointer": "characters[16].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-miku.png",
+          "pointer": "characters[21].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-miyako.png",
+          "pointer": "characters[13].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-mutsumi.png",
+          "pointer": "characters[6].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-nagi.png",
+          "pointer": "characters[15].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-natsume.png",
+          "pointer": "characters[19].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-nonoka.png",
+          "pointer": "characters[11].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-nyamu.png",
+          "pointer": "characters[8].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-raika.png",
+          "pointer": "characters[20].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-rana.png",
+          "pointer": "characters[2].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-ritsu.png",
+          "pointer": "characters[12].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-sakiko.png",
+          "pointer": "characters[9].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-shizuku.png",
+          "pointer": "characters[24].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-soyo.png",
+          "pointer": "characters[3].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-taki.png",
+          "pointer": "characters[4].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-tomori.png",
+          "pointer": "characters[0].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-uika.png",
+          "pointer": "characters[5].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-umiri.png",
+          "pointer": "characters[7].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-yomogi.png",
+          "pointer": "characters[22].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/characters/bd-yuno.png",
+          "pointer": "characters[14].sheet",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/fx/glow.png",
+          "pointer": "fx.lampGlow",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/fx/shadow.png",
+          "pointer": "fx.shadow",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/fx/sun-shaft.png",
+          "pointer": "fx.sunShaft",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/products/box-butter.png",
+          "pointer": "products[3].box",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/products/box-coral.png",
+          "pointer": "products[6].box",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/products/box-lilac.png",
+          "pointer": "products[4].box",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/products/box-mint.png",
+          "pointer": "products[2].box",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/products/box-rose.png",
+          "pointer": "products[0].box",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/products/box-sky.png",
+          "pointer": "products[1].box",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/products/box-slate.png",
+          "pointer": "products[5].box",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/products/pack-butter.png",
+          "pointer": "products[3].pack",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/products/pack-coral.png",
+          "pointer": "products[6].pack",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/products/pack-lilac.png",
+          "pointer": "products[4].pack",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/products/pack-mint.png",
+          "pointer": "products[2].pack",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/products/pack-rose.png",
+          "pointer": "products[0].pack",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/products/pack-sky.png",
+          "pointer": "products[1].pack",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/products/pack-slate.png",
+          "pointer": "products[5].pack",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/props/props.png",
+          "pointer": "props.image",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        },
+        {
+          "reference": "/assets/frontend-bright-anime/tiles/tileset.png",
+          "pointer": "tileset.image",
+          "role": "art-source",
+          "kind": "asset",
+          "exists": true,
+          "packaged": true
+        }
+      ]
+    }
+  ],
+  "assets": [
+    {
+      "reference": "/assets/frontend-bright-anime/characters/bd-anon.png",
+      "pointer": "characters[1].sheet",
+      "role": "art-source",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/manifest.characters.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/characters/bd-arale.png",
+      "pointer": "characters[10].sheet",
+      "role": "art-source",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/manifest.characters.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/characters/bd-chieri.png",
+      "pointer": "characters[23].sheet",
+      "role": "art-source",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/manifest.characters.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/characters/bd-hotaru.png",
+      "pointer": "characters[17].sheet",
+      "role": "art-source",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/manifest.characters.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/characters/bd-houka.png",
+      "pointer": "characters[18].sheet",
+      "role": "art-source",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/manifest.characters.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/characters/bd-mahoro.png",
+      "pointer": "characters[16].sheet",
+      "role": "art-source",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/manifest.characters.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/characters/bd-miku.png",
+      "pointer": "characters[21].sheet",
+      "role": "art-source",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/manifest.characters.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/characters/bd-miyako.png",
+      "pointer": "characters[13].sheet",
+      "role": "art-source",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/manifest.characters.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/characters/bd-mutsumi.png",
+      "pointer": "characters[6].sheet",
+      "role": "art-source",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/manifest.characters.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/characters/bd-nagi.png",
+      "pointer": "characters[15].sheet",
+      "role": "art-source",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/manifest.characters.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/characters/bd-natsume.png",
+      "pointer": "characters[19].sheet",
+      "role": "art-source",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/manifest.characters.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/characters/bd-nonoka.png",
+      "pointer": "characters[11].sheet",
+      "role": "art-source",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/manifest.characters.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/characters/bd-nyamu.png",
+      "pointer": "characters[8].sheet",
+      "role": "art-source",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/manifest.characters.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/characters/bd-raika.png",
+      "pointer": "characters[20].sheet",
+      "role": "art-source",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/manifest.characters.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/characters/bd-rana.png",
+      "pointer": "characters[2].sheet",
+      "role": "art-source",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/manifest.characters.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/characters/bd-ritsu.png",
+      "pointer": "characters[12].sheet",
+      "role": "art-source",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/manifest.characters.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/characters/bd-sakiko.png",
+      "pointer": "characters[9].sheet",
+      "role": "art-source",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/manifest.characters.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/characters/bd-shizuku.png",
+      "pointer": "characters[24].sheet",
+      "role": "art-source",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/manifest.characters.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/characters/bd-soyo.png",
+      "pointer": "characters[3].sheet",
+      "role": "art-source",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/manifest.characters.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/characters/bd-taki.png",
+      "pointer": "characters[4].sheet",
+      "role": "art-source",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/manifest.characters.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/characters/bd-tomori.png",
+      "pointer": "characters[0].sheet",
+      "role": "art-source",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/manifest.characters.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/characters/bd-uika.png",
+      "pointer": "characters[5].sheet",
+      "role": "art-source",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/manifest.characters.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/characters/bd-umiri.png",
+      "pointer": "characters[7].sheet",
+      "role": "art-source",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/manifest.characters.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/characters/bd-yomogi.png",
+      "pointer": "characters[22].sheet",
+      "role": "art-source",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/manifest.characters.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/characters/bd-yuno.png",
+      "pointer": "characters[14].sheet",
+      "role": "art-source",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/manifest.characters.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/fx/glow.png",
+      "pointer": "fx.lampGlow",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/fx/shadow.png",
+      "pointer": "fx.shadow",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/fx/sun-shaft.png",
+      "pointer": "fx.sunShaft",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/products/box-butter.png",
+      "pointer": "products.standard.box",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/products/manifest.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/products/box-coral.png",
+      "pointer": "products.sp.box",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/products/manifest.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/products/box-lilac.png",
+      "pointer": "products.shenhua.box",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/products/manifest.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/products/box-mint.png",
+      "pointer": "products.yijiang.box",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/products/manifest.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/products/box-rose.png",
+      "pointer": "products.extra.box",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/products/manifest.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/products/box-sky.png",
+      "pointer": "products.refresh.box",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/products/manifest.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/products/box-slate.png",
+      "pointer": "products.tw.box",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/products/manifest.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/products/pack-butter.png",
+      "pointer": "products.standard.pack",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/products/manifest.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/products/pack-coral.png",
+      "pointer": "products.sp.pack",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/products/manifest.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/products/pack-lilac.png",
+      "pointer": "products.shenhua.pack",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/products/manifest.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/products/pack-mint.png",
+      "pointer": "products.yijiang.pack",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/products/manifest.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/products/pack-rose.png",
+      "pointer": "products.extra.pack",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/products/manifest.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/products/pack-sky.png",
+      "pointer": "products.refresh.pack",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/products/manifest.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/products/pack-slate.png",
+      "pointer": "products.tw.pack",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-bright-anime/products/manifest.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/props/props.png",
+      "pointer": "props.image",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-bright-anime/tiles/tileset.png",
+      "pointer": "tileset.image",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json",
+        "assets/frontend-bright-anime/manifest.props.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/bingshi-box.9f61171b14.png",
+      "pointer": "products.bingshi.box",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/bingshi-pack.bd28fd2d07.png",
+      "pointer": "products.bingshi.pack",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/clan-box.4700a9c6fd.png",
+      "pointer": "products.clan.box",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/clan-pack.673f8aba09.png",
+      "pointer": "products.clan.pack",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/extra-box.9f61171b14.png",
+      "pointer": "products.extra.box",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/extra-pack.bd28fd2d07.png",
+      "pointer": "products.extra.pack",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/huicui-box.787a97712c.png",
+      "pointer": "products.huicui.box",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/huicui-pack.fca285404e.png",
+      "pointer": "products.huicui.pack",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/jsrg-box.4700a9c6fd.png",
+      "pointer": "products.jsrg.box",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/jsrg-pack.673f8aba09.png",
+      "pointer": "products.jsrg.pack",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/mobile-box.9f61171b14.png",
+      "pointer": "products.mobile.box",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/mobile-pack.bd28fd2d07.png",
+      "pointer": "products.mobile.pack",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/newjiang-box.787a97712c.png",
+      "pointer": "products.newjiang.box",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/newjiang-pack.fca285404e.png",
+      "pointer": "products.newjiang.pack",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/offline-box.66e6aa4bb3.png",
+      "pointer": "products.offline.box",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/offline-pack.108bb0f538.png",
+      "pointer": "products.offline.pack",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/refresh-box.66e6aa4bb3.png",
+      "pointer": "products.refresh.box",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/refresh-pack.108bb0f538.png",
+      "pointer": "products.refresh.pack",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/sb-box.d5926b63a0.png",
+      "pointer": "products.sb.box",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/sb-pack.2c39385c25.png",
+      "pointer": "products.sb.pack",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/shenhua-box.6ac2c0a25d.png",
+      "pointer": "products.shenhua.box",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/shenhua-pack.7f37c9d1e1.png",
+      "pointer": "products.shenhua.pack",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/shiji-box.66e6aa4bb3.png",
+      "pointer": "products.shiji.box",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/shiji-pack.108bb0f538.png",
+      "pointer": "products.shiji.pack",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/sp-box.787a97712c.png",
+      "pointer": "products.sp.box",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/sp-pack.fca285404e.png",
+      "pointer": "products.sp.pack",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/sp2-box.66e6aa4bb3.png",
+      "pointer": "products.sp2.box",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/sp2-pack.108bb0f538.png",
+      "pointer": "products.sp2.pack",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/standard-box.d5926b63a0.png",
+      "pointer": "products.standard.box",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/standard-pack.2c39385c25.png",
+      "pointer": "products.standard.pack",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/sxrm-box.9f61171b14.png",
+      "pointer": "products.sxrm.box",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/sxrm-pack.bd28fd2d07.png",
+      "pointer": "products.sxrm.pack",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/tw-box.66e6aa4bb3.png",
+      "pointer": "products.tw.box",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/tw-pack.108bb0f538.png",
+      "pointer": "products.tw.pack",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/yijiang-box.d5926b63a0.png",
+      "pointer": "products.yijiang.box",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/yijiang-pack.2c39385c25.png",
+      "pointer": "products.yijiang.pack",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/yingbian-box.d5926b63a0.png",
+      "pointer": "products.yingbian.box",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend-next/products/yingbian-pack.2c39385c25.png",
+      "pointer": "products.yingbian.pack",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend-next/products/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/characters/bd-anon.c32c4710da.png",
+      "pointer": "characters.bd-anon.sheet",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json",
+        "assets/frontend-bright-anime/manifest.characters.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/characters/bd-arale.96c48d7257.png",
+      "pointer": "characters.bd-arale.sheet",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json",
+        "assets/frontend-bright-anime/manifest.characters.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/characters/bd-chieri.c700ddc3b3.png",
+      "pointer": "characters.bd-chieri.sheet",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json",
+        "assets/frontend-bright-anime/manifest.characters.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/characters/bd-hotaru.082c2c60af.png",
+      "pointer": "characters.bd-hotaru.sheet",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json",
+        "assets/frontend-bright-anime/manifest.characters.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/characters/bd-houka.4d45944cd7.png",
+      "pointer": "characters.bd-houka.sheet",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json",
+        "assets/frontend-bright-anime/manifest.characters.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/characters/bd-mahoro.22ed565fbe.png",
+      "pointer": "characters.bd-mahoro.sheet",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json",
+        "assets/frontend-bright-anime/manifest.characters.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/characters/bd-miku.e9ba035ca6.png",
+      "pointer": "characters.bd-miku.sheet",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json",
+        "assets/frontend-bright-anime/manifest.characters.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/characters/bd-miyako.4e39ed25be.png",
+      "pointer": "characters.bd-miyako.sheet",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json",
+        "assets/frontend-bright-anime/manifest.characters.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/characters/bd-mutsumi.228b53245b.png",
+      "pointer": "characters.bd-mutsumi.sheet",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json",
+        "assets/frontend-bright-anime/manifest.characters.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/characters/bd-nagi.524af3d8c3.png",
+      "pointer": "characters.bd-nagi.sheet",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json",
+        "assets/frontend-bright-anime/manifest.characters.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/characters/bd-natsume.1a8e498436.png",
+      "pointer": "characters.bd-natsume.sheet",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json",
+        "assets/frontend-bright-anime/manifest.characters.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/characters/bd-nonoka.64edd19fb6.png",
+      "pointer": "characters.bd-nonoka.sheet",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json",
+        "assets/frontend-bright-anime/manifest.characters.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/characters/bd-nyamu.ffdd89a7d4.png",
+      "pointer": "characters.bd-nyamu.sheet",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json",
+        "assets/frontend-bright-anime/manifest.characters.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/characters/bd-raika.8f735904c6.png",
+      "pointer": "characters.bd-raika.sheet",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json",
+        "assets/frontend-bright-anime/manifest.characters.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/characters/bd-rana.37dffee9ba.png",
+      "pointer": "characters.bd-rana.sheet",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json",
+        "assets/frontend-bright-anime/manifest.characters.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/characters/bd-ritsu.03ef4966fc.png",
+      "pointer": "characters.bd-ritsu.sheet",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json",
+        "assets/frontend-bright-anime/manifest.characters.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/characters/bd-sakiko.213fce0606.png",
+      "pointer": "characters.bd-sakiko.sheet",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json",
+        "assets/frontend-bright-anime/manifest.characters.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/characters/bd-shizuku.693d5cd8d0.png",
+      "pointer": "characters.bd-shizuku.sheet",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json",
+        "assets/frontend-bright-anime/manifest.characters.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/characters/bd-soyo.9c52830f6e.png",
+      "pointer": "characters.bd-soyo.sheet",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json",
+        "assets/frontend-bright-anime/manifest.characters.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/characters/bd-taki.0c12852460.png",
+      "pointer": "characters.bd-taki.sheet",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json",
+        "assets/frontend-bright-anime/manifest.characters.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/characters/bd-tomori.41ae9f88ef.png",
+      "pointer": "characters.bd-tomori.sheet",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json",
+        "assets/frontend-bright-anime/manifest.characters.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/characters/bd-uika.e04c7618f8.png",
+      "pointer": "characters.bd-uika.sheet",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json",
+        "assets/frontend-bright-anime/manifest.characters.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/characters/bd-umiri.80b698ccf0.png",
+      "pointer": "characters.bd-umiri.sheet",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json",
+        "assets/frontend-bright-anime/manifest.characters.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/characters/bd-yomogi.e3704d44f5.png",
+      "pointer": "characters.bd-yomogi.sheet",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json",
+        "assets/frontend-bright-anime/manifest.characters.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/characters/bd-yuno.a7c15461f8.png",
+      "pointer": "characters.bd-yuno.sheet",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json",
+        "assets/frontend-bright-anime/manifest.characters.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/maps/battle-room.json",
+      "pointer": "maps.battle-room",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/maps/store.json",
+      "pointer": "maps.store",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-anon.56c98768ed.png",
+      "pointer": "characters.bd-anon.portrait",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-anon.79cfda23ed.png",
+      "pointer": "characters.bd-anon.avatar",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-arale.cc3a183a55.png",
+      "pointer": "characters.bd-arale.portrait",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-arale.fc8b68255f.png",
+      "pointer": "characters.bd-arale.avatar",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-chieri.0632e4a848.png",
+      "pointer": "characters.bd-chieri.avatar",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-chieri.ce27d41686.png",
+      "pointer": "characters.bd-chieri.portrait",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-hotaru.0af30dcb60.png",
+      "pointer": "characters.bd-hotaru.portrait",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-hotaru.a81134af45.png",
+      "pointer": "characters.bd-hotaru.avatar",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-houka.774a0c05ba.png",
+      "pointer": "characters.bd-houka.avatar",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-houka.f7728b3d7d.png",
+      "pointer": "characters.bd-houka.portrait",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-mahoro.6f7b297acb.png",
+      "pointer": "characters.bd-mahoro.avatar",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-mahoro.f92f1d9157.png",
+      "pointer": "characters.bd-mahoro.portrait",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-miku.81c9513fd0.png",
+      "pointer": "characters.bd-miku.portrait",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-miku.b4c657f949.png",
+      "pointer": "characters.bd-miku.avatar",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-miyako.4e4bf7702d.png",
+      "pointer": "characters.bd-miyako.portrait",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-miyako.ee39994c29.png",
+      "pointer": "characters.bd-miyako.avatar",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-mutsumi.dd76fc39d2.png",
+      "pointer": "characters.bd-mutsumi.portrait",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-mutsumi.fdc4f1e343.png",
+      "pointer": "characters.bd-mutsumi.avatar",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-nagi.954a04e853.png",
+      "pointer": "characters.bd-nagi.portrait",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-nagi.e9e56964b2.png",
+      "pointer": "characters.bd-nagi.avatar",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-natsume.2b7feceefd.png",
+      "pointer": "characters.bd-natsume.avatar",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-natsume.bf97a9518e.png",
+      "pointer": "characters.bd-natsume.portrait",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-nonoka.8a0c693121.png",
+      "pointer": "characters.bd-nonoka.avatar",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-nonoka.8a7e51a0a2.png",
+      "pointer": "characters.bd-nonoka.portrait",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-nyamu.8237400e0c.png",
+      "pointer": "characters.bd-nyamu.avatar",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-nyamu.a932b82faa.png",
+      "pointer": "characters.bd-nyamu.portrait",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-raika.2787fe4c1b.png",
+      "pointer": "characters.bd-raika.portrait",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-raika.cc17918655.png",
+      "pointer": "characters.bd-raika.avatar",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-rana.021e2c4022.png",
+      "pointer": "characters.bd-rana.avatar",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-rana.f81b2f6466.png",
+      "pointer": "characters.bd-rana.portrait",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-ritsu.6d97f08d96.png",
+      "pointer": "characters.bd-ritsu.portrait",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-ritsu.7b17dcbb21.png",
+      "pointer": "characters.bd-ritsu.avatar",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-sakiko.08fe1ab48a.png",
+      "pointer": "characters.bd-sakiko.avatar",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-sakiko.2a4e7b28ac.png",
+      "pointer": "characters.bd-sakiko.portrait",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-shizuku.038c16f4ae.png",
+      "pointer": "characters.bd-shizuku.avatar",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-shizuku.7eae9de347.png",
+      "pointer": "characters.bd-shizuku.portrait",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-soyo.8cf1adc0bd.png",
+      "pointer": "characters.bd-soyo.avatar",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-soyo.d0e4a798c5.png",
+      "pointer": "characters.bd-soyo.portrait",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-taki.3b36dfa895.png",
+      "pointer": "characters.bd-taki.avatar",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-taki.8a795a12b8.png",
+      "pointer": "characters.bd-taki.portrait",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-tomori.11fe94c1b6.png",
+      "pointer": "characters.bd-tomori.portrait",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-tomori.2e555cd2d0.png",
+      "pointer": "characters.bd-tomori.avatar",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-uika.9bba0a55c5.png",
+      "pointer": "characters.bd-uika.portrait",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-uika.f480dd60ea.png",
+      "pointer": "characters.bd-uika.avatar",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-umiri.cc9cf8b202.png",
+      "pointer": "characters.bd-umiri.avatar",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-umiri.fd42539f78.png",
+      "pointer": "characters.bd-umiri.portrait",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-yomogi.2e3cd15788.png",
+      "pointer": "characters.bd-yomogi.portrait",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-yomogi.b93ba6638f.png",
+      "pointer": "characters.bd-yomogi.avatar",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-yuno.d8eaab8333.png",
+      "pointer": "characters.bd-yuno.avatar",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    },
+    {
+      "reference": "/assets/frontend/portraits/bd-yuno.e58d540f25.png",
+      "pointer": "characters.bd-yuno.portrait",
+      "role": "runtime",
+      "kind": "asset",
+      "exists": true,
+      "packaged": true,
+      "sources": [
+        "assets/frontend/manifest.json"
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "from": "..",
+      "to": "game",
+      "resolved": "",
+      "exists": true,
+      "generated": false
+    },
+    {
+      "from": "../node_modules/noname",
+      "to": "game/node_modules/noname",
+      "resolved": "node_modules\\noname",
+      "exists": true,
+      "generated": false
+    },
+    {
+      "from": "../node_modules/dedent",
+      "to": "game/node_modules/dedent",
+      "resolved": "node_modules\\dedent",
+      "exists": true,
+      "generated": false
+    },
+    {
+      "from": "build/desktop-source",
+      "to": "desktop-source",
+      "resolved": "desktop\\build\\desktop-source",
+      "exists": true,
+      "generated": true
+    }
+  ],
+  "errors": [],
+  "warnings": []
+}

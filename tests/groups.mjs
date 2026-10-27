@@ -92,6 +92,7 @@ export const groups={
     "tests/long-term-operations.mjs",
     "tests/ideal-yield-and-editions.mjs",
     "tests/project-structure.mjs",
+    "tests/package-closure.mjs",
     "tests/catalog-cache.mjs",
     "tests/operations-v7.mjs",
     "tests/operations-v7-mount.mjs",
@@ -184,6 +185,7 @@ export const groups={
   ],
   "structure": [
     "tests/project-structure.mjs",
+    "tests/package-closure.mjs",
     "tests/catalog-cache.mjs",
     "tests/storage-retry-browser.mjs"
   ]
