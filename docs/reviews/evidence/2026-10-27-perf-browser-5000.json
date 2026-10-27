@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "generatedAt": "2026-10-27T03:29:41.393Z",
+  "cards": 5000,
+  "rounds": 6,
+  "environment": {
+    "node": "v22.22.2",
+    "platform": "win32/x64",
+    "cpu": "AMD Ryzen 7 8845H w/ Radeon 780M Graphics",
+    "cores": 16,
+    "totalMemoryMb": 28477
+  },
+  "scenarios": {
+    "boot": {
+      "runsMs": [
+        1253,
+        695,
+        666
+      ],
+      "medianMs": 695,
+      "domNodes": 85,
+      "readyState": "complete",
+      "heapMb": 72.5,
+      "canvas": 1
+    },
+    "windows": {
+      "rounds": 6,
+      "openMs": {
+        "count": 6,
+        "mean": 2674.83,
+        "p50": 2345,
+        "p95": 2433,
+        "max": 4292
+      },
+      "closeMs": {
+        "count": 6,
+        "mean": 47.83,
+        "p50": 41,
+        "p95": 62,
+        "max": 64
+      },
+      "domOpen": {
+        "count": 6,
+        "mean": 30967,
+        "p50": 30967,
+        "p95": 30967,
+        "max": 30967
+      },
+      "domClosed": {
+        "count": 6,
+        "mean": 129,
+        "p50": 129,
+        "p95": 129,
+        "max": 129
+      },
+      "heapOpen": {
+        "count": 6,
+        "mean": 108.95,
+        "p50": 112.8,
+        "p95": 114,
+        "max": 117.6
+      },
+      "heapTrend": [
+        75.7,
+        112.9,
+        114.2,
+        117.9,
+        113.3,
+        113.1
+      ],
+      "stackLeak": false
+    },
+    "scroll": {
+      "frames": 1,
+      "elapsedMs": 1814,
+      "longtasks": [],
+      "longtaskTotal": 0,
+      "scrollHeight": 171938,
+      "clientHeight": 171938,
+      "finalScrollTop": 0
+    },
+    "search": {
+      "samples": [
+        224,
+        62,
+        59,
+        82,
+        69,
+        77,
+        59,
+        71,
+        49,
+        65
+      ],
+      "ms": {
+        "count": 10,
+        "mean": 81.7,
+        "p50": 65,
+        "p95": 82,
+        "max": 224
+      },
+      "focusKept": true,
+      "tilesAfterClear": 2563
+    }
+  },
+  "errors": []
+}

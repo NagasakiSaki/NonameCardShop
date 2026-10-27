@@ -61,7 +61,9 @@
     "test:structure": "node tests/run.mjs structure",
     "test:all": "node tests/run.mjs all --keep-going",
     "audit:art": "node tools/audit/missing-art.mjs",
-    "audit:native-resources": "node tools/audit/native-resource-404.mjs"
+    "audit:native-resources": "node tools/audit/native-resource-404.mjs",
+    "perf:baseline": "node tools/perf/baseline.mjs",
+    "perf:browser": "node tools/perf/browser.mjs"
   },
   "dependencies": {
     "noname": "file:tools/adapters/noname",

@@ -1,0 +1,109 @@
+{
+  "version": 1,
+  "generatedAt": "2026-10-27T03:29:18.266Z",
+  "cards": 1000,
+  "rounds": 8,
+  "environment": {
+    "node": "v22.22.2",
+    "platform": "win32/x64",
+    "cpu": "AMD Ryzen 7 8845H w/ Radeon 780M Graphics",
+    "cores": 16,
+    "totalMemoryMb": 28477
+  },
+  "scenarios": {
+    "boot": {
+      "runsMs": [
+        1290,
+        685,
+        625
+      ],
+      "medianMs": 685,
+      "domNodes": 85,
+      "readyState": "complete",
+      "heapMb": 201.9,
+      "canvas": 1
+    },
+    "windows": {
+      "rounds": 8,
+      "openMs": {
+        "count": 8,
+        "mean": 510.63,
+        "p50": 478,
+        "p95": 498,
+        "max": 717
+      },
+      "closeMs": {
+        "count": 8,
+        "mean": 30.63,
+        "p50": 32,
+        "p95": 33,
+        "max": 33
+      },
+      "domOpen": {
+        "count": 8,
+        "mean": 12206.5,
+        "p50": 12212,
+        "p95": 12212,
+        "max": 12212
+      },
+      "domClosed": {
+        "count": 8,
+        "mean": 129,
+        "p50": 129,
+        "p95": 129,
+        "max": 129
+      },
+      "heapOpen": {
+        "count": 8,
+        "mean": 204.18,
+        "p50": 213.9,
+        "p95": 216.2,
+        "max": 217.3
+      },
+      "heapTrend": [
+        184.1,
+        186.8,
+        186.1,
+        214.5,
+        214,
+        215,
+        216.3,
+        217.3
+      ],
+      "stackLeak": false
+    },
+    "scroll": {
+      "frames": 62,
+      "elapsedMs": 1010,
+      "longtasks": [],
+      "longtaskTotal": 0,
+      "scrollHeight": 67150,
+      "clientHeight": 67150,
+      "finalScrollTop": 0
+    },
+    "search": {
+      "samples": [
+        86,
+        43,
+        42,
+        60,
+        74,
+        58,
+        43,
+        48,
+        59,
+        56
+      ],
+      "ms": {
+        "count": 10,
+        "mean": 56.9,
+        "p50": 56,
+        "p95": 74,
+        "max": 86
+      },
+      "focusKept": true,
+      "tilesAfterClear": 1000
+    }
+  },
+  "errors": []
+}

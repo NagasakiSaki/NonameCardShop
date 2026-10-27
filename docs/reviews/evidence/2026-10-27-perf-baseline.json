@@ -1,0 +1,338 @@
+{
+  "version": 1,
+  "generatedAt": "2026-10-27T03:27:49.889Z",
+  "days": 5,
+  "environment": {
+    "node": "v22.22.2",
+    "platform": "win32/x64",
+    "cpu": "AMD Ryzen 7 8845H w/ Radeon 780M Graphics",
+    "cores": 16,
+    "totalMemoryMb": 28477
+  },
+  "scenarios": {
+    "startup": {
+      "catalogBuild": 241.08,
+      "runtimeCreate": 496.69,
+      "connect": 0.56,
+      "firstSnapshot": 0.64,
+      "heapMb": 101.6,
+      "cards": 2563
+    },
+    "queries": {
+      "cards": 0,
+      "queries": {
+        "shop.snapshot": {
+          "count": 25,
+          "mean": 0.064,
+          "p50": 0.046,
+          "p95": 0.123,
+          "max": 0.202
+        },
+        "inventory.list": {
+          "count": 25,
+          "mean": 0.01,
+          "p50": 0.003,
+          "p95": 0.01,
+          "max": 0.115
+        },
+        "catalog.list": {
+          "count": 25,
+          "mean": 4.752,
+          "p50": 4.483,
+          "p95": 5.126,
+          "max": 13.259
+        },
+        "market.list": {
+          "count": 25,
+          "mean": 0.016,
+          "p50": 0.003,
+          "p95": 0.009,
+          "max": 0.247
+        },
+        "combat.formats": {
+          "count": 25,
+          "mean": 0.045,
+          "p50": 0.02,
+          "p95": 0.074,
+          "max": 0.382
+        },
+        "combat.eligible": {
+          "count": 25,
+          "mean": 0.009,
+          "p50": 0.003,
+          "p95": 0.006,
+          "max": 0.135
+        },
+        "saves.days": {
+          "count": 25,
+          "mean": 0.008,
+          "p50": 0.003,
+          "p95": 0.01,
+          "max": 0.068
+        },
+        "ledger.daily": {
+          "count": 25,
+          "mean": 0.022,
+          "p50": 0.012,
+          "p95": 0.029,
+          "max": 0.161
+        }
+      },
+      "heapMb": 156.7
+    },
+    "cards-1000": {
+      "cards": 1000,
+      "queries": {
+        "shop.snapshot": {
+          "count": 25,
+          "mean": 0.24,
+          "p50": 0.256,
+          "p95": 0.276,
+          "max": 0.339
+        },
+        "inventory.list": {
+          "count": 25,
+          "mean": 1.697,
+          "p50": 0.945,
+          "p95": 3.725,
+          "max": 6.721
+        },
+        "catalog.list": {
+          "count": 25,
+          "mean": 4.451,
+          "p50": 4.503,
+          "p95": 4.84,
+          "max": 5.342
+        },
+        "market.list": {
+          "count": 25,
+          "mean": 0.188,
+          "p50": 0.174,
+          "p95": 0.221,
+          "max": 0.335
+        },
+        "combat.formats": {
+          "count": 25,
+          "mean": 0.022,
+          "p50": 0.019,
+          "p95": 0.024,
+          "max": 0.062
+        },
+        "combat.eligible": {
+          "count": 25,
+          "mean": 5.14,
+          "p50": 4.748,
+          "p95": 6.156,
+          "max": 9.002
+        },
+        "saves.days": {
+          "count": 25,
+          "mean": 0.004,
+          "p50": 0.003,
+          "p95": 0.003,
+          "max": 0.03
+        },
+        "ledger.daily": {
+          "count": 25,
+          "mean": 0.143,
+          "p50": 0.11,
+          "p95": 0.182,
+          "max": 0.605
+        }
+      },
+      "heapMb": 214.8
+    },
+    "cards-5000": {
+      "cards": 5000,
+      "queries": {
+        "shop.snapshot": {
+          "count": 25,
+          "mean": 1.24,
+          "p50": 0.979,
+          "p95": 1.301,
+          "max": 6.228
+        },
+        "inventory.list": {
+          "count": 25,
+          "mean": 5.523,
+          "p50": 5.03,
+          "p95": 7.403,
+          "max": 17.741
+        },
+        "catalog.list": {
+          "count": 25,
+          "mean": 4.563,
+          "p50": 4.573,
+          "p95": 4.882,
+          "max": 5.39
+        },
+        "market.list": {
+          "count": 25,
+          "mean": 2.119,
+          "p50": 1.834,
+          "p95": 3.19,
+          "max": 4.683
+        },
+        "combat.formats": {
+          "count": 25,
+          "mean": 0.024,
+          "p50": 0.019,
+          "p95": 0.023,
+          "max": 0.117
+        },
+        "combat.eligible": {
+          "count": 25,
+          "mean": 31.558,
+          "p50": 31.082,
+          "p95": 33.362,
+          "max": 38.043
+        },
+        "saves.days": {
+          "count": 25,
+          "mean": 0.006,
+          "p50": 0.003,
+          "p95": 0.005,
+          "max": 0.069
+        },
+        "ledger.daily": {
+          "count": 25,
+          "mean": 2.608,
+          "p50": 2.157,
+          "p95": 3.828,
+          "max": 4.496
+        }
+      },
+      "heapMb": 282.8
+    },
+    "persist": {
+      "commands": 63,
+      "commitMs": {
+        "count": 63,
+        "mean": 2.285,
+        "p50": 2.108,
+        "p95": 3.383,
+        "max": 4.377
+      },
+      "bytes": {
+        "count": 63,
+        "mean": 338077.286,
+        "p50": 332953,
+        "p95": 341781,
+        "max": 665658
+      },
+      "saveCommandMs": 12.85,
+      "archiveId": true,
+      "heapMb": 328.4
+    },
+    "day-rollover": {
+      "nextDayMs": {
+        "count": 5,
+        "mean": 68.341,
+        "p50": 67.232,
+        "p95": 82.36,
+        "max": 103.604
+      },
+      "closeMs": {
+        "count": 5,
+        "mean": 52.477,
+        "p50": 52.783,
+        "p95": 72.151,
+        "max": 87.609
+      },
+      "loopMs": {
+        "count": 5,
+        "mean": 198.976,
+        "p50": 201.449,
+        "p95": 254.163,
+        "max": 317.505
+      },
+      "commitMs": {
+        "count": 17,
+        "mean": 18.386,
+        "p50": 19.295,
+        "p95": 34.981,
+        "max": 35.535
+      },
+      "heapMb": 444.3
+    },
+    "busy-normal": {
+      "days": 5,
+      "cards": 1000,
+      "shelf": 40,
+      "npcMax": 12,
+      "npcIntervalMinutes": 22,
+      "npcPeak": 17,
+      "matchesPeak": 0,
+      "perDayMs": {
+        "count": 5,
+        "mean": 1024.164,
+        "p50": 1053.308,
+        "p95": 1384.336,
+        "max": 1788.751
+      },
+      "perAdvanceMs": {
+        "count": 60,
+        "mean": 40.814,
+        "p50": 41.995,
+        "p95": 71.181,
+        "max": 77.576
+      },
+      "commitMs": {
+        "count": 77,
+        "mean": 22.236,
+        "p50": 22.823,
+        "p95": 40.644,
+        "max": 47.052
+      },
+      "heapMbStart": 508.1,
+      "heapMbEnd": 474.2,
+      "heapMbPeak": 720.8
+    },
+    "busy-stress": {
+      "days": 5,
+      "cards": 5000,
+      "shelf": 200,
+      "npcMax": 12,
+      "npcIntervalMinutes": 8,
+      "npcPeak": 17,
+      "matchesPeak": 0,
+      "perDayMs": {
+        "count": 5,
+        "mean": 3943.904,
+        "p50": 3986.085,
+        "p95": 5221.466,
+        "max": 6800.924
+      },
+      "perAdvanceMs": {
+        "count": 60,
+        "mean": 159.718,
+        "p50": 160.613,
+        "p95": 278.14,
+        "max": 335.599
+      },
+      "commitMs": {
+        "count": 77,
+        "mean": 89.448,
+        "p50": 83.44,
+        "p95": 169.147,
+        "max": 230.529
+      },
+      "heapMbStart": 656.5,
+      "heapMbEnd": 811.4,
+      "heapMbPeak": 1084.8
+    },
+    "match-settle": {
+      "registerMs": null,
+      "settleMs": null,
+      "tickMs": {
+        "count": 4000,
+        "mean": 0.002,
+        "p50": 0.001,
+        "p95": 0.001,
+        "max": 4.51
+      },
+      "matches": 0,
+      "settled": 0
+    }
+  }
+}
