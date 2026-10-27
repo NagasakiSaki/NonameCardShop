@@ -41,7 +41,11 @@ try{
   const until=async(fn,ms=30000)=>{const end=Date.now()+ms;while(!await fn()){if(Date.now()>end)throw Error('房间中断条件超时');await page.waitForTimeout(120);}};
   const wallet=async()=>{const s=await q('shop.snapshot');return {available:s.wallet.available,debt:s.wallet.debt,escrow:s.wallet.escrowLiability};};
   const lockedRefs=async()=>{const rows=await q('inventory.list',{kind:'card',limit:200});return rows.items.filter(row=>row.locked).map(row=>row.inventoryRef).sort();};
-  const pauseState=async()=>{const s=await q('shop.snapshot');return {paused:s.paused,reasons:(s.pauseReasons||[]).map(r=>r.code||r.label||r)};};
+  const pauseState=async()=>{
+    const s=await q('shop.snapshot');
+    assert.ok(Array.isArray(s.clock?.pauseReasons),'快照必须提供 clock.pauseReasons，不能把读错字段当作没有暂停');
+    return {running:s.clock.running,reasons:s.clock.pauseReasons.map(r=>r.code).sort()};
+  };
 
   await page.goto(server.origin+'/?profile=legacy');
   await page.waitForFunction(()=>window.__cardShopReady===true);
@@ -64,6 +68,8 @@ try{
   const matchId=series.matchId;
   const beforeWallet=await wallet();
   const beforeLocked=await lockedRefs();
+  const beforePause=await pauseState();
+  assert.deepEqual(beforePause.reasons,['manual','window:combat-v7'],'夹具的手动暂停与真实房间租约应当可见');
   assert.ok(beforeLocked.length>=3,`备战应锁定至少 3 张实物，实际 ${beforeLocked.length}`);
 
   // 真实挂载 + 真实计时器：把等待预算缩到 300ms，让异步超时必然先于引擎就绪。
@@ -84,7 +90,7 @@ try{
   assert.deepEqual(await wallet(),beforeWallet,'异步中断不能改钱包');
   assert.deepEqual(await lockedRefs(),beforeLocked,'中断后实物仍应锁定在系列赛里');
   const afterPause=await pauseState();
-  assert.deepEqual(afterPause.reasons,[],`中断后不应残留暂停租约：${JSON.stringify(afterPause.reasons)}`);
+  assert.deepEqual(afterPause.reasons,[...beforePause.reasons,'match-time'].sort(),'中断应保留整场比赛与房间暂停，但不残留引擎暂停租约');
 
   // 正式房间必须按分类显示，而不是只显示一行 reason。
   await page.evaluate(()=>__cardShopApp.openPanel('combat'));
@@ -117,7 +123,11 @@ try{
   assert.equal(afterCancel.debt,beforeWallet.debt,'取消系列赛不能产生欠款');
   assert.equal(afterCancel.escrow,0,'取消后桌费托管应释放');
   assert.deepEqual(await lockedRefs(),[],'放弃后应释放全部卡锁');
-  assert.deepEqual(await pauseState().then(s=>s.reasons),[]);
+  assert.deepEqual(await pauseState().then(s=>s.reasons),beforePause.reasons,'取消后只应保留原有手动暂停和房间租约');
+  await page.evaluate(()=>__cardShopApp.windows.closeAll());
+  await until(async()=>JSON.stringify((await pauseState()).reasons)===JSON.stringify(['manual']));
+  await c('clock.setManualPause',{paused:false});
+  await until(async()=>{const s=await pauseState();return s.running&&s.reasons.length===0;});
 
   assert.deepEqual(errors,[],`页面不应有异常：${errors.join(' | ')}`);
   console.log('PASS 正式房间异步超时：ENGINE_TIMEOUT 落到系列赛 → 分类提示 → 重开不清比分不重复扣费 → 放弃释放卡锁，全程无残留暂停租约');

@@ -48,6 +48,7 @@ export const groups={
     "tests/playability-integration.mjs",
     "tests/high-quality-pass.mjs",
     "tests/trade-workspace-scroll.mjs",
+    "tests/workspace-short-screen.mjs",
     "tests/world-story-browser.mjs",
     "tests/long-term-browser.mjs",
     "tests/pack-roster-browser.mjs",
