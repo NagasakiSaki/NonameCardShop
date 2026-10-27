@@ -1,0 +1,1023 @@
+{
+  "selection": "all",
+  "requirements": null,
+  "rerunFrom": null,
+  "output": "D:\\GameDev\\NonameCardShop\\test-results\\2026-10-27T05-39-25-828Z-34268",
+  "startedAt": "2026-10-27T05:39:25.831Z",
+  "results": [
+    {
+      "group": "unit",
+      "file": "tools/test-business.cjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 0.2,
+      "tasks": [],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "unit",
+      "file": "tools/test-modules.cjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 0.2,
+      "tasks": [],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "unit",
+      "file": "tools/test-balance.cjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 1.8,
+      "tasks": [],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "unit",
+      "file": "tests/server.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 0.2,
+      "tasks": [],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "unit",
+      "file": "tests/boxes.cjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 0.8,
+      "tasks": [],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "unit",
+      "file": "tests/candidate-tools.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 0.3,
+      "tasks": [
+        "OPT-16",
+        "OPT-17"
+      ],
+      "evidence": [
+        "component-or-host-fixture",
+        "filesystem-isolated",
+        "no-engine-execution"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "unit",
+      "file": "tests/test-inventory.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 0.5,
+      "tasks": [
+        "OPT-18"
+      ],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/rooms-and-strength.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 2.7,
+      "tasks": [
+        "OPT-02"
+      ],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/backend.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 2,
+      "tasks": [],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/backend-views.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 0.5,
+      "tasks": [],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/customer-identity.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 0.1,
+      "tasks": [],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/customer-trash.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 1.6,
+      "tasks": [
+        "OPT-10"
+      ],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/battle-lifecycle.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 0.2,
+      "tasks": [],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/storage-archives-browser.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 0.9,
+      "tasks": [
+        "OPT-08",
+        "OPT-14"
+      ],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "backend",
+      "file": "tests/basket.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 2,
+      "tasks": [],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/customer-visits.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 1.6,
+      "tasks": [
+        "OPT-10"
+      ],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/day-starts.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 1.5,
+      "tasks": [
+        "OPT-14"
+      ],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/gameplay-adjustments.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 1.7,
+      "tasks": [],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/shop-experience.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 1.9,
+      "tasks": [],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/customer-demand.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 0.5,
+      "tasks": [],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/narrative-runtime.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 5.1,
+      "tasks": [
+        "OPT-14"
+      ],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/core4-foundations.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 2.3,
+      "tasks": [],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/core4-economy.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 1,
+      "tasks": [],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/resource-balance.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 0.5,
+      "tasks": [],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/campaign-loan.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 3.2,
+      "tasks": [],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/long-term-operations.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 3.8,
+      "tasks": [],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/ideal-yield-and-editions.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 1.3,
+      "tasks": [
+        "OPT-15"
+      ],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/project-structure.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 1.5,
+      "tasks": [
+        "OPT-03",
+        "OPT-04",
+        "OPT-18"
+      ],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/package-closure.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 0.7,
+      "tasks": [
+        "OPT-01",
+        "OPT-05"
+      ],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/contract-samples.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 0.9,
+      "tasks": [
+        "OPT-02"
+      ],
+      "evidence": [
+        "component-or-host-fixture",
+        "runtime-dto-not-dts-compilation"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/eligibility-query.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 0.2,
+      "tasks": [
+        "OPT-13"
+      ],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/policy-preservation.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 1.7,
+      "tasks": [
+        "OPT-15"
+      ],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/profile-registry.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 1.8,
+      "tasks": [
+        "OPT-08"
+      ],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "backend",
+      "file": "tests/npc-day-loop.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 1,
+      "tasks": [
+        "OPT-10"
+      ],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/catalog-cache.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 0.2,
+      "tasks": [
+        "OPT-13",
+        "OPT-15"
+      ],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/operations-v7.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 2.5,
+      "tasks": [],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/operations-v7-mount.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 0.1,
+      "tasks": [],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/native-modes-unit.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 0.2,
+      "tasks": [
+        "OPT-09",
+        "OPT-17"
+      ],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/three-formats.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 2.9,
+      "tasks": [
+        "OPT-09",
+        "OPT-14"
+      ],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "backend",
+      "file": "tests/native-modes-series.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 8,
+      "tasks": [
+        "OPT-09"
+      ],
+      "evidence": [
+        "browser-controlled",
+        "native-controlled-fixture"
+      ],
+      "estimatedCost": "high"
+    },
+    {
+      "group": "backend",
+      "file": "tests/native-legacy-regression.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 7.4,
+      "tasks": [
+        "OPT-09"
+      ],
+      "evidence": [
+        "browser-controlled",
+        "native-controlled-fixture"
+      ],
+      "estimatedCost": "high"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/operations-v7-browser.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 33.1,
+      "tasks": [],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/room-format-selection-browser.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 3.8,
+      "tasks": [],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/scroll-and-album-browser.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 15.6,
+      "tasks": [
+        "OPT-11"
+      ],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/native-modes-browser.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 97.1,
+      "tasks": [
+        "OPT-09"
+      ],
+      "evidence": [
+        "browser-controlled",
+        "native-startup",
+        "native-controlled-death",
+        "native-ai-autoplay-natural"
+      ],
+      "estimatedCost": "high"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/bright-frontend-browser.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 6.9,
+      "tasks": [],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/band-only-appearances.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 0.8,
+      "tasks": [
+        "OPT-16"
+      ],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/character-art.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 4.4,
+      "tasks": [],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/customer-trash-browser.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 19.9,
+      "tasks": [],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/frontend-movement.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 10.9,
+      "tasks": [],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/dialogue-navigation.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 5.9,
+      "tasks": [
+        "OPT-07"
+      ],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/room-interruption.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 4.2,
+      "tasks": [
+        "OPT-06"
+      ],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/frontend-skins.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 6.1,
+      "tasks": [],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/frontend/assets.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 0.3,
+      "tasks": [],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/mount-errors.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 0.1,
+      "tasks": [
+        "OPT-06"
+      ],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/interaction-queue.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 0.1,
+      "tasks": [
+        "OPT-07"
+      ],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/frontend-next/card-trade.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 2.1,
+      "tasks": [],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/trade-cards.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 2.4,
+      "tasks": [],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/trade-opening.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 2.2,
+      "tasks": [],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/trade-card-detail.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 2,
+      "tasks": [],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/trade-formal.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 10.6,
+      "tasks": [],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/profile-menu.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 7.5,
+      "tasks": [],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/gameplay-ui.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 4.3,
+      "tasks": [],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/portrait-sources.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 0.3,
+      "tasks": [
+        "OPT-16"
+      ],
+      "evidence": [
+        "component-or-host-fixture",
+        "asset-hashes-and-dimensions"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/portrait-preview.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 2.9,
+      "tasks": [],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/playability-integration.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 11.3,
+      "tasks": [],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/high-quality-pass.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 11.8,
+      "tasks": [
+        "OPT-07"
+      ],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/trade-workspace-scroll.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 9.7,
+      "tasks": [
+        "OPT-11",
+        "OPT-13"
+      ],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/workspace-short-screen.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 6.6,
+      "tasks": [
+        "OPT-11"
+      ],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/workspace-virtualization.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 11.3,
+      "tasks": [
+        "OPT-13"
+      ],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/world-story-browser.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 19.2,
+      "tasks": [],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/long-term-browser.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 6.4,
+      "tasks": [],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/pack-roster-browser.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 7.7,
+      "tasks": [
+        "OPT-11"
+      ],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "frontend",
+      "file": "tests/storage-retry-browser.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 1.1,
+      "tasks": [
+        "OPT-08"
+      ],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "dev",
+      "file": "tests/frontend-development.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 5.9,
+      "tasks": [],
+      "evidence": [
+        "browser-controlled"
+      ],
+      "estimatedCost": "medium"
+    },
+    {
+      "group": "dev",
+      "file": "tests/service-health.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 0.2,
+      "tasks": [],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    },
+    {
+      "group": "dev",
+      "file": "tests/character-kit/cli.mjs",
+      "passed": true,
+      "code": 0,
+      "seconds": 4.6,
+      "tasks": [],
+      "evidence": [
+        "component-or-host-fixture"
+      ],
+      "estimatedCost": "low"
+    }
+  ],
+  "finishedAt": "2026-10-27T05:46:12.612Z",
+  "passed": true
+}

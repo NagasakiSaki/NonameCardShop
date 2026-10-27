@@ -1,0 +1,62 @@
+{
+  "evidenceType": "engine-real-ai-autoplay",
+  "injectedDeathOrWinner": false,
+  "result": {
+    "type": "result",
+    "protocol": "card-shop-native-round/1",
+    "worldId": "native-fixture-world",
+    "branchId": "native-fixture-branch",
+    "matchId": "native-harness-5-fee211c6-9111-434f-9d23-460955380c6d-series",
+    "gameId": "native-harness-5-fee211c6-9111-434f-9d23-460955380c6d",
+    "roundId": "round-1",
+    "profileId": "noname-1.11.6-doudizhu-normal-shop-1",
+    "reserveDigest": "fixture-reserve-only",
+    "planHash": "2fc9f8dd579a005b8ce5f167ad0d6deb51444e187e362cf28feb3a5adf91ae9e",
+    "seats": [
+      {
+        "seatId": "landlord",
+        "teamId": "landlord",
+        "role": "landlord",
+        "controller": "human",
+        "generalId": "caocao",
+        "alive": true,
+        "hp": 2,
+        "maxHp": 5,
+        "handCount": 2,
+        "controlled": true
+      },
+      {
+        "seatId": "farmer-main",
+        "teamId": "farmers",
+        "role": "farmer",
+        "controller": "ai",
+        "generalId": "guanyu",
+        "alive": false,
+        "hp": 0,
+        "maxHp": 4,
+        "handCount": 0,
+        "controlled": false
+      },
+      {
+        "seatId": "farmer-ally",
+        "teamId": "farmers",
+        "role": "farmer",
+        "controller": "ai",
+        "generalId": "zhangfei",
+        "alive": false,
+        "hp": 0,
+        "maxHp": 4,
+        "handCount": 0,
+        "controlled": false
+      }
+    ],
+    "resultId": "native-harness-5-fee211c6-9111-434f-9d23-460955380c6d:result",
+    "winningTeamId": "landlord",
+    "completed": true,
+    "simulated": false,
+    "round": 7,
+    "result": "win",
+    "originVerified": true,
+    "sourceVerified": true
+  }
+}

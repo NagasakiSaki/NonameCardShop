@@ -1,0 +1,74 @@
+{
+  "evidenceType": "engine-real-ai-autoplay",
+  "injectedDeathOrWinner": false,
+  "result": {
+    "type": "result",
+    "protocol": "card-shop-native-round/1",
+    "worldId": "native-fixture-world",
+    "branchId": "native-fixture-branch",
+    "matchId": "native-harness-6-4075cbb9-8c3a-460b-ba48-0d99ee616d96-series",
+    "gameId": "native-harness-6-4075cbb9-8c3a-460b-ba48-0d99ee616d96",
+    "roundId": "round-1",
+    "profileId": "noname-1.11.6-versus-two-shop-1",
+    "reserveDigest": "fixture-reserve-only",
+    "planHash": "1af213ca467b86e02862506eddeadef6163fe213f78e9ae5bec007cd9146a763",
+    "seats": [
+      {
+        "seatId": "left-main",
+        "teamId": "left",
+        "role": "teammate",
+        "controller": "human",
+        "generalId": "guanyu",
+        "alive": false,
+        "hp": 0,
+        "maxHp": 4,
+        "handCount": 0,
+        "controlled": true
+      },
+      {
+        "seatId": "right-main",
+        "teamId": "right",
+        "role": "teammate",
+        "controller": "ai",
+        "generalId": "caocao",
+        "alive": true,
+        "hp": 2,
+        "maxHp": 4,
+        "handCount": 0,
+        "controlled": false
+      },
+      {
+        "seatId": "left-ally",
+        "teamId": "left",
+        "role": "teammate",
+        "controller": "ai",
+        "generalId": "zhangfei",
+        "alive": false,
+        "hp": 0,
+        "maxHp": 4,
+        "handCount": 0,
+        "controlled": false
+      },
+      {
+        "seatId": "right-ally",
+        "teamId": "right",
+        "role": "teammate",
+        "controller": "ai",
+        "generalId": "zhangliao",
+        "alive": false,
+        "hp": 0,
+        "maxHp": 4,
+        "handCount": 0,
+        "controlled": false
+      }
+    ],
+    "resultId": "native-harness-6-4075cbb9-8c3a-460b-ba48-0d99ee616d96:result",
+    "winningTeamId": "right",
+    "completed": true,
+    "simulated": false,
+    "round": 9,
+    "result": "loss",
+    "originVerified": true,
+    "sourceVerified": true
+  }
+}
