@@ -80,8 +80,14 @@ for(const mode of DECLARED_FORMATS.filter(mode=>mode!=='kof')){
   assert.equal(result.error.code,'INVALID_INPUT');
   assert.match(result.error.message,/三将接力/);
 }
-const team=kofItems.filter(item=>item.eligible).slice(0,3).map(item=>item.inventoryRef);
-assert.equal(team.length,3);
+// 一盒里可能有同一武将的重复副本；joinQueue 要求三张**不同**武将，必须按 generalId 去重。
+const team=[];const picked=new Set();
+for(const item of kofItems){
+  if(!item.eligible||picked.has(item.generalId))continue;
+  picked.add(item.generalId);team.push(item.inventoryRef);
+  if(team.length===3)break;
+}
+assert.equal(team.length,3,`可参赛的不同武将不足 3 个：${JSON.stringify(kofItems.map(item=>[item.generalId,item.eligible]))}`);
 const joined=await command('combat.joinQueue',{mode:'kof',inventoryRefs:team});
 assert.equal(joined.ok,true,JSON.stringify(joined.error));
 assert.equal(joined.data.mode,'kof');
