@@ -8,7 +8,7 @@ export function installWorldDialogue(app,{stopMovement}){
   let lease=null,opening=false,disposed=false,busy=false,offer=null,presentation=null,pending=null,epoch=0,reading=false,lastScene='';
   const identity=()=>app.snapshot().worldId+':'+app.snapshot().branchId;
   const overlay=createDialogueOverlay({mount:document.body,getPortraitSrc:id=>app.manifest.characters[id]?.portrait,onIntent:intent=>void act(intent)});
-  async function close(){epoch++;overlay.close();offer=null;presentation=null;pending=null;document.body.removeAttribute('data-v7-input-lock');const old=lease;lease=null;if(old)await app.host.pause.release(old.leaseId);}
+  async function close(){epoch++;overlay.close();offer=null;presentation=null;pending=null;document.body.removeAttribute('data-v7-input-lock');const old=lease;lease=null;if(old)await app.host.pause.release(old.leaseId);app.resumeAfterDialogue?.();}
   async function show(next){
     if(disposed||opening||app.windows.depth)return;opening=true;const generation=epoch,branch=identity();
     try{

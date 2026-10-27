@@ -6,6 +6,7 @@ import { createWindowManager } from "./ui/window-manager.mjs";
 import { createMapLoader, assetUrl } from "./world/map-loader.mjs";
 import { createMovementView } from "./world/movement-view.mjs";
 import { createInteractionRouter } from "./world/interaction-router.mjs";
+import { createInteractionQueue } from "./world/interaction-queue.mjs";
 import { setSceneContext, createWorldSceneClass, worldSceneZoom } from "./scenes/world-scene.mjs";
 import { nearestInteraction, exitAt } from "./world/map-loader.mjs";
 import { normalizeQuery } from "./host/normalize.mjs";
@@ -78,6 +79,8 @@ export async function startApp({ host, connection, mode, fixture }) {
   }
 
   let queueStatus=null,v7=null,pendingActor=null;
+  // 场景对话打断点击时记住原本要开的窗口；对话结束后补做一次，换档则丢弃。
+  const interactionQueue=createInteractionQueue({branchOf:()=>`${snapshot.worldId}:${snapshot.branchId}`});
   const windows = createWindowManager({
     host,
     mount: document.getElementById("windows"),
@@ -147,6 +150,13 @@ export async function startApp({ host, connection, mode, fixture }) {
       }
       return false;
     },
+    /** 对话关闭后补做被打断的事：先处理“已到站位”的点击意图，再恢复没走完的路。 */
+    resumeAfterDialogue() {
+      if (destroying || v7?.blocked || windows.depth > 0) return false;
+      const queued = interactionQueue.take({ blocked: false });
+      if (queued.status === 'ready') { handleInteraction(queued.interaction); return true; }
+      return resumeInterruptedWalk();
+    },
     navigateScene(mapId) {
       if (!maps[mapId] || mapId===currentMapId) return;
       const exit=maps[currentMapId].exits.find(e=>e.target?.mapId===mapId);
@@ -193,8 +203,36 @@ export async function startApp({ host, connection, mode, fixture }) {
     },
   });
 
+  // 对话会打断“走过去再开窗”。记下被打断的目标，对话结束后接着走完，
+  // 避免玩家点了柜台却停在半路、还得重新点一次。
+  let interruptedWalk = null;
+  function stopWalkForDialogue() {
+    const pending = router.pending;
+    movement.releaseAll();
+    router.clearPending();
+    interruptedWalk = pending && pending.interaction
+      ? { interaction: pending.interaction, branch: `${snapshot.worldId}:${snapshot.branchId}`, mapId: currentMapId }
+      : null;
+    return Boolean(interruptedWalk);
+  }
+  function resumeInterruptedWalk() {
+    const intent = interruptedWalk;
+    interruptedWalk = null;
+    if (!intent || destroying || v7?.blocked || windows.depth > 0) return false;
+    if (`${snapshot.worldId}:${snapshot.branchId}` !== intent.branch || currentMapId !== intent.mapId) return false;
+    const stand = intent.interaction.stand;
+    if (!stand) return false;
+    scheduleWalk(() => {
+      movement.moveTo(stand.x, stand.y);
+      router.walkThenActivate(intent.interaction);
+    });
+    return true;
+  }
+
   function handleInteraction(interaction) {
     if (!interaction) return;
+    // 对话正在进行时不能把窗口盖在对话上：记住意图，等对话结束后补做一次。
+    if (v7?.blocked) { interactionQueue.push(interaction); return; }
     if(interaction.panel){app.openPanel(interaction.panel,interaction.panelOptions);return;}
     switch (interaction.kind) {
       case "retail":
@@ -527,7 +565,7 @@ export async function startApp({ host, connection, mode, fixture }) {
     flushWalk();
   });
 
-  if(connection.capabilities?.operationsV7)v7=installWorldDialogue(app,{stopMovement:()=>movement.releaseAll()});
+  if(connection.capabilities?.operationsV7)v7=installWorldDialogue(app,{stopMovement:stopWalkForDialogue});
   movement.bindTouchpad(document.getElementById("touchpad"));
   window.__cardShopApp = app;
   render();
