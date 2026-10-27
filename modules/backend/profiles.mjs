@@ -24,7 +24,17 @@ export function profileRegistry(indexedDB=globalThis.indexedDB){
   // 单个存档库打不开（被别的页面占用、磁盘错误、结构损坏）不能拖垮整个目录：
   // 只把这一条标成不可读，其他卡店照常列出，也不清理它的数据。
   async function readHeader(profileId){
-    try{return {ok:true,record:await header(profileId)};}
+    try{
+      const record=await header(profileId),w=record?.world;
+      // 只核查目录展示必需的概要，完整业务校验仍由连接世界时负责。
+      // 没有 active 记录是尚未开店；已有但不完整的记录不能当成新档重建。
+      need(record===null||(typeof w?.worldId==='string'&&w.worldId.length>0
+        &&Number.isSafeInteger(w.clock?.day)&&w.clock.day>=1
+        &&Number.isFinite(w.clock?.minute)&&typeof w.clock?.phase==='string'
+        &&Number.isSafeInteger(w.wallet?.available)),
+      'INVALID_SAVE','这份存档的时间或资金概要不完整，原数据已保留，请从备份恢复或联系维护者。');
+      return {ok:true,record};
+    }
     catch(error){return {ok:false,error:{code:error?.code||'STORAGE_ERROR',message:error?.message||'存档读取失败。'}};}
   }
   const dayCount=record=>{try{return dayArchiveViews(record?.archives||[],record?.world?.branchId,record?.world?.branchLineage).length;}catch{return 0;}};
@@ -44,7 +54,8 @@ export function profileRegistry(indexedDB=globalThis.indexedDB){
     async get(profileId){profileDatabase(profileId);return (await metadata('read')).find(p=>p.profileId===profileId)||null;},
     async create(name){const meta={profileId:id('profile'),name:cleanName(name),createdAt:Date.now()};await metadata('put',meta);return clone(meta);},
     async rename(profileId,name){profileDatabase(profileId);const p=(await metadata('read')).find(p=>p.profileId===profileId);need(p,'NOT_FOUND','这份存档不存在。');return metadata('put',{...p,name:cleanName(name)});},
-    async days(profileId){const record=await header(profileId);return dayArchiveViews(record?.archives||[],record?.world?.branchId,record?.world?.branchLineage);},    async remove(profileId){
+    async days(profileId){const record=await header(profileId);return dayArchiveViews(record?.archives||[],record?.world?.branchId,record?.world?.branchLineage);},
+    async remove(profileId){
       const name=profileDatabase(profileId),p=(await metadata('read')).find(p=>p.profileId===profileId);need(p,'NOT_FOUND','这份存档不存在。');
       // Clear only this profile's store. Concurrent old sessions then fail their revision
       // check instead of recreating deleted data; no cross-profile/origin clearing.

@@ -82,7 +82,7 @@ export interface CustomerBehaviorConfig {
 /** saves.days and saves.loadDay always target an actual 08:00 start snapshot. */
 export interface DayStartArchive {id:string;archiveId:string;day:number;minute:480;slot:'start';branchId:string;source:'day-start';restoresDayStart:true;status:'readable'}
 /** Startup registry is separate from a connected Host. Each profile has its own world database. */
-export interface ProfileSummary {profileId:string;name:string;createdAt:number;worldId:string|null;day:number;minute:number;phase:string;cash:number|null;revision:number|null;days:number}
+export interface ProfileSummary {profileId:string;name:string;createdAt:number;worldId:string|null;day:number;minute:number;phase:string;cash:number|null;revision:number|null;days:number;ok?:boolean;unreadable?:string;message?:string}
 export interface UpgradeView {
   upgradeId:string; name:string; description:string; level:number; maxLevel:number;
   nextCost:number; dailyCost:number; effect:string; unlocked:boolean; unlockHint:string;

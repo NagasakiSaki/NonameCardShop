@@ -5,7 +5,7 @@ import {profileRegistry} from '../../modules/backend/profiles.mjs';
 export async function showStartMenu({onStart}={}){
   document.getElementById('start-menu')?.remove();const registry=profileRegistry(),root=el('section',{id:'start-menu',class:'start-menu','aria-label':'卡店存档管理'});document.body.append(root);
   let profiles=[],busy=false,message='',expanded=null,days=[],disposed=false;
-  const button=(text,fn,primary=false)=>el('button',{class:'btn'+(primary?' btn--primary':''),type:'button',text,disabled:busy,onclick:()=>run(fn)});
+  const button=(text,fn,primary=false,disabled=false)=>el('button',{class:'btn'+(primary?' btn--primary':''),type:'button',text,disabled:busy||disabled,onclick:()=>{if(!disabled)return run(fn);}});
   async function run(fn){if(busy||disposed)return;busy=true;try{await fn();}catch(e){message=e.message;}finally{busy=false;if(!disposed)render();}}
   async function load(){profiles=await registry.list();render();}
   function render(){
@@ -23,11 +23,11 @@ export async function showStartMenu({onStart}={}){
         :`第 ${p.day} 天 · ${Math.floor(p.minute/60)}:${String(Math.floor(p.minute%60)).padStart(2,'0')} · ${(p.cash??0).toLocaleString('zh-CN')} 游戏币`;
       const card=el('article',{class:'start-menu__profile','data-profile-id':p.profileId},[el('h2',{text:p.name}),el('p',{text:summary})]);
       card.append(el('div',{class:'toolbar'},[
-        button(p.phase==='new'?'开始经营':'继续当前进度',()=>onStart({profileId:p.profileId}),!unreadable),
-        button('选择日期读档',async()=>{expanded={id:p.profileId,kind:'days'};days=await registry.days(p.profileId);},unreadable),
+        button(p.phase==='new'?'开始经营':'继续当前进度',()=>onStart({profileId:p.profileId}),true,unreadable),
+        button('选择日期读档',async()=>{expanded={id:p.profileId,kind:'days'};days=await registry.days(p.profileId);},false,unreadable),
         button('重命名',()=>{expanded={id:p.profileId,kind:'rename'};}),button('删除',()=>{expanded={id:p.profileId,kind:'delete'};})
       ]));
-      if(unreadable)card.append(el('p',{class:'small muted',text:'这份存档暂时打不开：数据没有被清除，也不会被自动重建。可以先删除它释放位置，或用导出的存档文件恢复。'}));
+      if(unreadable)card.append(el('p',{class:'small muted',text:'这份存档暂时打不开，原数据仍保留。可以稍后重试；如有导出备份，可在另一间卡店导入恢复。'}));
       if(expanded?.id===p.profileId){
         if(expanded.kind==='days'){
           card.append(el('p',{class:'small muted',text:'日档会回到所选日期的 08:00 开店前；当天的采购、成交和比赛结果一起回退。继续当前进度则保留最近时刻。'}));

@@ -36,6 +36,37 @@ try{
     // 坏掉的数据没有被删除：用正常注册表重新读，条目仍在。
     const after=await registry.get(broken.profileId);
     const relisted=await registry.list();
+
+    // 检查真实菜单按钮；第三个参数是主按钮样式，不能拿它代替 disabled。
+    const {showStartMenu}=await import('/frontend/ui/start-menu.mjs');
+    const originalOpen=indexedDB.open;
+    let starts=0,disposeMenu,menu;
+    try{
+      indexedDB.open=function(name,...rest){
+        if(name==='noname-card-shop-'+broken.profileId)throw Error('模拟：存档读取失败');
+        return originalOpen.call(this,name,...rest);
+      };
+      disposeMenu=await showStartMenu({onStart:()=>{starts+=1;}});
+      const card=document.querySelector(`[data-profile-id="${broken.profileId}"]`);
+      const buttons=[...card.querySelectorAll('button')];
+      const resume=buttons.find(b=>b.textContent==='继续当前进度');
+      const days=buttons.find(b=>b.textContent==='选择日期读档');
+      menu={resumeDisabled:resume.disabled,daysDisabled:days.disabled};
+      resume.click();
+      await new Promise(resolve=>setTimeout(resolve,0));
+      menu.starts=starts;
+    }finally{disposeMenu?.();indexedDB.open=originalOpen;}
+
+    // 数据库打开成功，但世界头的嵌套字段损坏，同样不能拖垮健康卡店。
+    const malformed=await registry.create('结构损坏的卡店');
+    const malformedRepo=browserRepository(indexedDB,'noname-card-shop-'+malformed.profileId);
+    await malformedRepo.commit({revision:0,world:{worldId:'w-malformed'},archives:[]},null);
+    await malformedRepo.close();
+    let malformedError=null,malformedRows=[];
+    try{malformedRows=await registry.list();}catch(error){malformedError=error.message;}
+    const stillMalformed=browserRepository(indexedDB,'noname-card-shop-'+malformed.profileId);
+    const storedMalformed=await stillMalformed.read();
+    await stillMalformed.close();
     await registry.close();
     return {
       listError,
@@ -45,6 +76,11 @@ try{
       broken:{ok:brokenRow?.ok,phase:brokenRow?.phase,unreadable:brokenRow?.unreadable,hasMessage:typeof brokenRow?.message==='string'&&brokenRow.message.length>0},
       stillExists:Boolean(after),
       relistedIds:relisted.map(row=>row.profileId).sort(),
+      menu,
+      malformedError,
+      malformedRow:malformedRows.find(row=>row.profileId===malformed.profileId),
+      healthyAfterMalformed:malformedRows.find(row=>row.profileId===healthy.profileId)?.worldId,
+      malformedPreserved:storedMalformed?.world?.worldId==='w-malformed',
     };
   });
 
@@ -55,5 +91,11 @@ try{
   assert.deepEqual(result.broken,{ok:false,phase:'unreadable',unreadable:'STORAGE_ERROR',hasMessage:true},'坏掉的卡店应标为不可读并给出原因');
   assert.equal(result.stillExists,true,'不可读不等于删除，条目必须保留');
   assert.equal(result.relistedIds.length,2,'重新读取时两间卡店都还在');
-  console.log('PASS 存档目录容错：单库打不开只标记该条不可读，健康卡店照常可读，数据未被删除');
+  assert.deepEqual(result.menu,{resumeDisabled:true,daysDisabled:true,starts:0},'不可读存档的继续和读档按钮必须真正禁用，不能触发启动');
+  assert.equal(result.malformedError,null,'世界头缺少 clock/wallet 不能让整个目录失败');
+  assert.equal(result.malformedRow.ok,false,'结构损坏的世界头必须标为不可读');
+  assert.equal(result.malformedRow.phase,'unreadable');
+  assert.equal(result.healthyAfterMalformed,'w-healthy','结构损坏不能影响健康卡店');
+  assert.equal(result.malformedPreserved,true,'只读核查不能重建或清除损坏的原数据');
+  console.log('PASS 存档目录容错：单库打开失败或世界头损坏只隔离该条，健康卡店可读、原数据保留、真实菜单禁止启动及读档');
 }finally{await browser?.close();await server.close();}
