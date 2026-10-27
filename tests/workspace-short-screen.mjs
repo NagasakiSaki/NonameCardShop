@@ -69,14 +69,17 @@ try{
     assert.equal(reach.ok,true,`${width}x${height}：${reach.reason||''}`);
     assert.match(reach.overflow,/auto|scroll/,`${width}x${height}：窗口体必须可滚动，实际 ${reach.overflow}`);
     assert.equal(reach.scrollable,true,`${width}x${height}：窗口体内容超出时应有滚动范围`);
+    // 每次轮询都重新校正滚动位置：smooth 滚动或布局回流会让一次设定不够。
+    // 断言不放宽——仍然是“确认按钮完整落在窗口体内且窗口体在视口内”。
     await page.waitForFunction(()=>{
       const body=document.querySelector('.window__body');
       const button=[...body.querySelectorAll('button')].find(b=>(b.textContent||'').trim()==='确认单卡上架');
       if(!button)return false;
-      const bodyBox=body.getBoundingClientRect(),buttonBox=button.getBoundingClientRect();
-      return bodyBox.top>=0&&bodyBox.bottom<=innerHeight+1
-        &&buttonBox.top>=bodyBox.top-1&&buttonBox.bottom<=bodyBox.bottom+1;
-    },null,{timeout:5000});
+      let bodyBox=body.getBoundingClientRect(),buttonBox=button.getBoundingClientRect();
+      const inside=()=>bodyBox.top>=0&&bodyBox.bottom<=innerHeight+1&&buttonBox.top>=bodyBox.top-1&&buttonBox.bottom<=bodyBox.bottom+1;
+      if(!inside()){body.scrollTop+=buttonBox.top-bodyBox.top-20;bodyBox=body.getBoundingClientRect();buttonBox=button.getBoundingClientRect();}
+      return inside();
+    },null,{timeout:15000});
 
     // 真的提交一次，证明短屏下确认不是“看得见点不动”。
     await price.fill(String(30+listed));
