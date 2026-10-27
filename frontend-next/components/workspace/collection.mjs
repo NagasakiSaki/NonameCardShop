@@ -29,7 +29,7 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
       tab: 'collection', search: '', rarity: '', statusFilter: 'all', sort: 'score-desc',
       selected: null, page: 0, detailPage:'trade',detailSegment:0,mobileView:'cards',op: createOperationState(), busy: false,
       quote: null, detail: null, detailLoading: false, detailVersion: 0, detailOpen: false,
-      sellRef: {}, sellAmount: {}, expandedCopy: null,
+      sellRef: {}, sellAmount: {}, expandedCopy: null, chunkRows: 0,
       ...draft, op:createOperationState(draft.operation),busy:false,
     };
     let disposed = false;
@@ -125,7 +125,7 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
     // Keep the toolbar/input mounted while filtering, so typing does not lose focus.
     function paintGrid() {
       if (disposed) return;
-      state.page = 0; state.selected = null;
+      state.page = 0; state.selected = null; state.chunkRows = 0;
       const rows = visibleRows();
       ensureSelection(rows);
       body.querySelector('.pbc-market')?.replaceChildren(paintGridArea(rows), paintDetail());
@@ -220,7 +220,21 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
       body.append(market);
     }
 
+    // 分批渲染：一次只建一屏多的行，滚动接近底部再追加下一批。
+    // 不做定高虚拟化（卡名可能换行、缩放会改列数），因此保留原生布局与连续滚动。
+    const CHUNK_ROWS = 120;
+    let chunkCleanup = null;
+    function scrollParent(node) {
+      let current = node;
+      while (current && current !== document.body) {
+        const style = getComputedStyle(current);
+        if (/auto|scroll/.test(style.overflowY)) return current;
+        current = current.parentElement;
+      }
+      return document.scrollingElement || document.documentElement;
+    }
     function paintGridArea(rows) {
+      chunkCleanup?.(); chunkCleanup = null;
       const area = el('div');
       const page = pageRows(rows);
       const pages = Math.max(1, Math.ceil(rows.length / pageSize()));
@@ -228,9 +242,46 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
         el('span', { text: '共 ' + rows.length + ' 条 · ' + tabCaption() }),
         state.tab === 'collection' ? chip('印刷稀有度与全局强度分开显示') : null,
       ]);
-      const grid = el('div', { class: 'pbc-card-grid', 'data-card-grid': 'true' });
+      const grid = el('div', { class: 'pbc-card-grid', 'data-card-grid': 'true', 'data-total-rows': String(page.length), 'data-rendered-rows': '0' });
       if (!rows.length) grid.append(emptyState(emptyText(), emptyHint()));
-      else for (const row of page) grid.append(cardTile(row));
+      else {
+        let rendered = 0;
+        const restore = Math.min(page.length, Math.max(CHUNK_ROWS, state.chunkRows || 0));
+        const appendChunk = () => {
+          const fragment = document.createDocumentFragment();
+          for (const row of page.slice(rendered, rendered + CHUNK_ROWS)) { fragment.append(cardTile(row, rendered)); rendered += 1; }
+          grid.append(fragment);
+          grid.setAttribute('data-rendered-rows', String(rendered));
+          state.chunkRows = rendered;
+        };
+        // 世界刷新会整体重绘；恢复用户已经滚到的位置，不能把他扔回第一批。
+        while (rendered < restore) appendChunk();
+        const scroller = scrollParent(body);
+        // 用户在硬底部时贴住底部继续补，直到真正渲染到最后一行；
+        // 否则一次跳到底只会补一批，内容变高后又不在底部，永远到不了末行。
+        const fillToBottom = () => {
+          let guard = 0;
+          while (rendered < page.length && guard < 500) {
+            const atBottom = scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 8;
+            if (!atBottom) break;
+            appendChunk();
+            scroller.scrollTop = scroller.scrollHeight;
+            guard += 1;
+          }
+        };
+        let scheduled = false;
+        const onScroll = () => {
+          if (scheduled || rendered >= page.length) return;
+          scheduled = true;
+          requestAnimationFrame(() => {
+            scheduled = false;
+            if (disposed || rendered >= page.length) return;
+            if (scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 600) fillToBottom();
+          });
+        };
+        scroller.addEventListener('scroll', onScroll, { passive: true });
+        chunkCleanup = () => scroller.removeEventListener('scroll', onScroll);
+      }
       area.append(label);
       if (pages > 1) {
         const changePage = next => {
@@ -267,14 +318,14 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
       }[state.tab];
     }
 
-    function cardTile(row) {
+    function cardTile(row, index) {
       const img = art(row.artUrl, row.name);
       img.classList.add('pbc-card-tile__img');
       img.append(rarityChip(row.printed));
       if (row.owned != null) img.append(el('span', { class: 'pbc-owned', text: '×' + row.owned }));
       return el('button', {
         class: 'pbc-card-tile' + (row.id === state.selected ? ' is-selected' : ''),
-        type: 'button', 'data-card': row.id, 'data-card-key':row.cardKey, 'aria-pressed': String(row.id === state.selected),
+        type: 'button', 'data-card': row.id, 'data-card-key':row.cardKey, 'data-row-index': String(index ?? 0), 'aria-pressed': String(row.id === state.selected),
         'aria-label': row.name + ' 查看详情',
         onclick: () => select(row),
       }, [
@@ -513,7 +564,7 @@ export function mountCollection({ root, view, actions, assets, format, notify, d
         if (nextView.worldId+':'+nextView.branchId!==previous) { state.quote = null; state.detail = null; state.detailOpen = false; state.detailLoading = false; state.detailVersion++; state.selected = null; state.page = 0; surplusPreview = null; }
         paint();
       },
-      dispose() { disposed = true; observer?.disconnect();root.replaceChildren(); },
+      dispose() { disposed = true; chunkCleanup?.(); chunkCleanup = null; observer?.disconnect();root.replaceChildren(); },
     };
   }
 }

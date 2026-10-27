@@ -27,18 +27,44 @@ try{
   await page.evaluate(()=>__cardShopApp.goToInteraction('store.secondaryMarket','market',{tab:'collection'}));
   await tiles.first().waitFor();await page.waitForFunction(()=>__cardShopApp.isNearInteraction('store.secondaryMarket'));
 
-  assert.equal(await tiles.count(),1000);assert.equal(await page.getByRole('button',{name:'下一页',exact:true}).count(),0);
-  const keys=await tiles.evaluateAll(nodes=>nodes.map(n=>JSON.parse(n.dataset.card)[0]));assert.equal(new Set(keys).size,1000);
+  // 分批渲染后：DOM 里只有首批行，但“共 N 条”的逻辑行数必须仍是全部，且不能出现分页。
+  const totalRows=()=>page.evaluate(()=>Number(document.querySelector('[data-card-grid]')?.getAttribute('data-total-rows')||0));
+  const renderedRows=()=>page.evaluate(()=>Number(document.querySelector('[data-card-grid]')?.getAttribute('data-rendered-rows')||0));
+  assert.equal(await totalRows(),1000);
+  assert.ok(await tiles.count()<1000,'首批只渲染一部分行（分批）');
+  assert.equal(await renderedRows(),await tiles.count(),'data-rendered-rows 必须与实际渲染行数一致');
+  assert.equal(await page.getByRole('button',{name:'下一页',exact:true}).count(),0);
+  const keys=await tiles.evaluateAll(nodes=>nodes.map(n=>JSON.parse(n.dataset.card)[0]));
+  assert.equal(new Set(keys).size,keys.length,'首批内不能有重复行');
   const firstKey=keys[0];assert.equal(cards.find(c=>c.cardKey===firstKey).globalScore,Math.max(...cards.map(c=>c.globalScore)));
-  const body=page.locator('.facility-window:visible .window__body');await body.evaluate(n=>n.scrollTop=1000);
+  // 滚到底必须能看到并点中**最后一条逻辑数据**（data-row-index = total-1），不能只看 DOM 最后一行。
+  const body=page.locator('.facility-window:visible .window__body');
+  await page.waitForFunction(async()=>{
+    const scroller=document.querySelector('.facility-window:not([hidden]) .window__body');
+    const total=Number(document.querySelector('[data-card-grid]')?.getAttribute('data-total-rows')||0);
+    if(!scroller||!total)return false;
+    scroller.scrollTop=scroller.scrollHeight;
+    const last=document.querySelector('[data-card-grid] [data-card][data-row-index="'+(total-1)+'"]');
+    if(!last)return false;
+    const box=last.getBoundingClientRect(),view=scroller.getBoundingClientRect();
+    return box.bottom<=view.bottom+2&&box.top>=view.top-2;
+  },null,{timeout:20000});
+  // 世界刷新会重绘，断言用轮询而不是单次计数，避免在重绘间隙取样。
+  await page.waitForFunction(()=>Boolean(document.querySelector('[data-card-grid] [data-card][data-row-index="999"]')),null,{timeout:15000});
+  const lastTile=page.locator('[data-card-grid] [data-card][data-row-index="999"]');
+  await lastTile.click();
+  assert.equal(await lastTile.getAttribute('aria-pressed'),'true','最后一行必须可点中');
+  await body.evaluate(n=>n.scrollTop=1000);
   const visibleIndex=await tiles.evaluateAll(nodes=>nodes.findIndex(n=>{const r=n.getBoundingClientRect();return r.top>150&&r.bottom<650;}));assert.ok(visibleIndex>=0);
   const before=await body.evaluate(n=>n.scrollTop);await tiles.nth(visibleIndex).click();assert.ok(Math.abs(await body.evaluate(n=>n.scrollTop)-before)<3,'selecting a visible card keeps the scroll offset');
-  const search=page.getByRole('searchbox',{name:'搜索单卡',exact:true});await search.fill('不存在的卡牌测试词');assert.equal(await tiles.count(),0);assert.equal(await search.evaluate(n=>n===document.activeElement),true);await search.fill('');assert.equal(await tiles.count(),1000);
-  await page.getByRole('combobox',{name:'全部印刷稀有度',exact:true}).selectOption('SR');assert.ok(await tiles.count()>0);
+  const search=page.getByRole('searchbox',{name:'搜索单卡',exact:true});await search.fill('不存在的卡牌测试词');assert.equal(await totalRows(),0);assert.equal(await search.evaluate(n=>n===document.activeElement),true);await search.fill('');assert.equal(await totalRows(),1000);
+  await page.getByRole('combobox',{name:'全部印刷稀有度',exact:true}).selectOption('SR');assert.ok(await totalRows()>0);
   const selected=JSON.parse(await tiles.first().getAttribute('data-card'))[0];await tiles.first().click();await page.getByRole('spinbutton',{name:'单卡上架售价',exact:true}).fill('37');
   await page.getByRole('button',{name:'确认单卡上架',exact:true}).click();await page.waitForFunction(async()=>((await __cardShopApp.query('market.list',{tab:'mine'})).data.items||[]).some(i=>i.unitAmount===37));
-  assert.ok((await query('market.list',{tab:'mine'})).items.some(i=>i.cardKey===selected&&i.unitAmount===37));
+  const listing=(await query('market.list',{tab:'mine'})).items.find(i=>i.unitAmount===37);
+  assert.ok(listing&&listing.cardKey===selected);
+  assert.ok(listing.inventoryRef.startsWith('pagination:card:'),'上架必须绑定真实实物引用，而不是按卡名猜');
   assert.equal(await page.locator('[data-purchase-root]').count(),0);assert.equal(await page.locator('[data-unbox-root]').count(),0);assert.deepEqual(errors,[]);
   await page.screenshot({path:out+'/scrolling-collection.png'});await close();
-  console.log('PASS current scrolling collection: all 1000 rows reachable, score order, no pagination, preserved selection scroll, complete search/filter and real SR listing');
+  console.log('PASS current scrolling collection: 1000 logical rows, batched DOM, last row reachable and clickable, score order, no pagination, preserved selection scroll, complete search/filter and real SR listing');
 }finally{await browser?.close();await server.close();}

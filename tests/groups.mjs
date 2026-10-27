@@ -157,7 +157,8 @@ export const groups={
     "tests/trade-formal.mjs",
     "tests/playability-integration.mjs",
     "tests/trade-workspace-scroll.mjs",
-    "tests/workspace-short-screen.mjs"
+    "tests/workspace-short-screen.mjs",
+    "tests/workspace-virtualization.mjs"
   ],
   "npc": [
     "tests/customer-visits.mjs",
